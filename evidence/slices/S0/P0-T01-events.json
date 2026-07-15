@@ -1,0 +1,23 @@
+[
+  {
+    "event_id": "P0-T01#0",
+    "task_id": "P0-T01",
+    "candidate_sha": "70b7c51",
+    "produced_by": {
+      "role": "adapter",
+      "model_id": "claude-opus-4-8",
+      "mode": "supervisor"
+    },
+    "validator_ids": [
+      "state_schema",
+      "partition_unique_ownership",
+      "upstream_pin_schema",
+      "clean_tree"
+    ],
+    "result": "pass",
+    "supersedes": null,
+    "notes_zh": "S0基线审计通过",
+    "artifact_sha256": "f431ee87a96f1f3aa010dc4afe32a169372ea617fbcd05fc7e704c0302822f9b",
+    "recorded_at_index": 0
+  }
+]
