@@ -1,0 +1,221 @@
+# ContinuityOps Agent Contract
+
+## Authority order
+
+When sources conflict, use this order:
+
+1. explicit human instruction and signed human approval receipts;
+2. `PLAN.md` machine-readable task authority;
+3. frozen slice rubric and task policy;
+4. `OPERATING_STATE.md` current state and open issues;
+5. `RALPHY_ORCHESTRATION.md`;
+6. `MASTER_PLAN.md`;
+7. other documentation.
+
+Chat history is never authoritative. A new orchestrator must reconstruct state
+from durable repository artifacts.
+
+## Model and execution topology
+
+ContinuityOps uses a layered control plane. Model names are explicit runtime
+configuration, not inferred aliases.
+
+- **Portfolio supervisor:** one Claude Opus 4.8 cloud agent supervises the
+  complete program, maintains the integrated objective, approves stream
+  creation/closure, and may appoint Claude Sonnet or Opus co-orchestrators for
+  bounded streams. It does not replace deterministic gates or human approvals.
+- **Ralphy orchestration and council reasoning:** Grok 4.5 High Fast is the
+  default model for stream orchestrators, judges, nixers, fixers, and bottleneck
+  analysts unless the supervisor records a task-specific exception.
+- **Code execution:** Codex 5.4 CLI Cloud Agents in `/fast` mode implement the
+  project code and tests through bounded Ralphy tasks. They edit repositories;
+  they are not the live cloud apply control plane.
+- **Claude execution location:** Claude agents run in cloud environments only.
+  They do not rely on the user's laptop shell, browser session, cookies, or
+  local cloud login.
+
+The supervisor records the actual model ID, provider, mode, and role for every
+dispatch. If a named model is unavailable, the task stops or uses a
+human-approved substitution; agents never invent model availability.
+
+### Optional Claude proxy profile
+
+Cloud Claude agents may use the pinned `pxpipe-proxy@0.9.0` profile:
+
+```bash
+npx --yes pxpipe-proxy@0.9.0
+export ANTHROPIC_BASE_URL=http://127.0.0.1:47821
+```
+
+This is an experiment, not a guaranteed quota multiplier. Before activation:
+
+- verify package integrity and repository provenance;
+- confirm provider, organization, and security policy permit its use;
+- keep credentials out of proxy logs and repository artifacts;
+- test direct and proxied health paths;
+- measure input-token, latency, failure, and quality effects;
+- retain a direct-provider fallback;
+- never weaken judge independence or evidence fidelity because context is
+  rendered/compressed.
+
+### Language protocol
+
+All worker assignments, updates, retained handoffs, orchestration messages, and
+inter-agent communication are in **Simplified Chinese only**. External
+repository artifacts intended for recruiters—including code comments where
+appropriate, README, diagrams, runbooks, evidence indexes, portfolio copy, and
+resume wording—remain English.
+
+Required worker handoff field names may stay in English for machine parsing,
+but every free-text value must be Simplified Chinese.
+
+## Roles
+
+- **Portfolio supervisor:** owns integrated intent, stream topology, cross-stream
+  dependencies, and final convergence.
+- **Lead orchestrator:** selects ready work, checks dependencies and scopes,
+  creates/joins Ralphy streams, dispatches roles, changes authoritative state
+  atomically, logs break/fix events, and assembles gates. It does not self-
+  approve high-risk work.
+- **Co-orchestrator:** a Sonnet/Opus cloud agent appointed to one named stream;
+  it has no authority over other streams or final certification.
+- **Codex implementation worker:** executes the bounded code/test task in `/fast`
+  mode within a stream.
+- **Rubric setter:** read-only reviewer who freezes a checkable slice rubric
+  before implementation.
+- **Judge:** independent, read-only scorer. Judges do not see implementation
+  transcripts, previous scores, thresholds as targets, or other judge reports.
+- **Nixer:** read-only gap analyst who converts failed rubric findings into
+  deduplicated, reproducible issue records.
+- **Fixer:** bounded implementation worker assigned disjoint issue IDs and a
+  narrow write scope.
+- **QA reviewer:** independently executes approved checks and preserves raw
+  evidence; it does not repair code.
+- **Security reviewer:** independently evaluates identities, secrets, supply
+  chain, network boundaries, untrusted inputs, and authority expansion.
+- **Evidence reviewer:** checks evidence freshness, commit binding, hashes,
+  claims, and cross-artifact consistency.
+- **Bottleneck subagent:** a short-lived specialist dispatched in the same
+  supervisory session for authentication, hosted CI, cloud identity, Kubernetes,
+  observability/dashboard, browser, or toolchain blockers. It diagnoses and
+  returns a bounded handoff; it does not silently expand authority.
+
+Record actual runtime model identifiers at dispatch. Historical role names such
+as Terra/Sol may appear in imported Project A evidence but are not the default
+ContinuityOps routing contract.
+
+## Thin-orchestrator prohibitions
+
+The orchestrator must not:
+
+- implement routine task code;
+- mint human approval receipts;
+- grant itself credentials or expand cloud/GitHub authority;
+- weaken validators, delete failing tests, or edit rubrics merely to raise a
+  score;
+- give untrusted pull-request jobs write tokens, cloud credentials, or secrets;
+- permit judges to modify implementation;
+- disclose prior judge scores or desired thresholds to a judge;
+- combine overlapping fixer scopes;
+- claim hosted, cloud, production, rollback, recovery, or security behavior
+  without evidence at the required claim level.
+
+## Worker handoff schema
+
+Every worker returns this exact shape. Empty values are empty lists, not omitted.
+
+```yaml
+task_id:
+role:
+status: complete|blocked|waiting_human|failed
+candidate_sha:
+baseline_sha:
+completed: []
+modified_files: []
+validation_commands: []
+validation_results: []
+failed_checks: []
+remaining_risks: []
+issue_ids: []
+evidence_paths: []
+recommended_next_step: []
+requires_escalation: false
+```
+
+The orchestrator rejects a handoff if:
+
+- a changed path is outside `write_scope`;
+- the candidate SHA or baseline SHA is absent;
+- a validation result lacks command, exit code, time, and evidence path;
+- a blocked/failed result lacks a reproducible failed check;
+- an escalation lacks an issue ID;
+- secrets or user/customer data appear in evidence;
+- the worker directly changed authoritative task state.
+
+## Write and concurrency rules
+
+- Several Ralphy streams may run simultaneously after interfaces and partition
+  ownership are frozen. The default ceiling is three implementation streams
+  plus the portfolio supervisor; the supervisor may lower it when integration
+  risk rises.
+- Each individual Ralphy stream is sequential and has one mutation owner.
+- Concurrent streams require disjoint partition paths, dependency-safe
+  interfaces, isolated branches/workspaces, distinct evidence namespaces, and
+  an integration-queue order recorded before dispatch.
+- No stream may merge itself. The lead orchestrator validates and serializes
+  integration into the candidate branch.
+- Independent judges may run concurrently because they are read-only and write
+  to distinct report paths.
+- QA, security, and evidence reviews may run concurrently only after the exact
+  candidate commit is frozen.
+- A shared schema, interface, Helm values contract, Terraform output, workflow,
+  evidence manifest, or authoritative state edit freezes dependent lanes.
+- Workers never communicate directly. The orchestrator mediates through durable
+  artifacts and Mandarin-only handoffs.
+
+## Retry, fresh repair, and bottleneck dispatch
+
+A Codex implementation worker gets one implementation and one repair pass on a
+normalized error. After two same-class failures, no meaningful diff, 25 active
+minutes, scope escape, security ambiguity, or an unreachable tool/control
+plane, the lead orchestrator must dispatch a bottleneck subagent or a fresh
+replacement worker rather than leaving the user to open a new conversation.
+
+The packet contains only task contract, current diff, failing evidence, issue
+IDs, exact checks, allowed paths, and claim ceiling. After a fresh clean-room
+judge failure, prior nixers/fixers are retired and a new nixer/fixer cohort is
+required.
+
+## Immediate human gates
+
+Stop and request human action for:
+
+- production or shared-account deployment;
+- new or changed cloud/GitHub credentials, OIDC trust, role assumption, or
+  branch/environment protection;
+- destructive data migration, restore over authoritative data, or teardown of
+  resources outside the isolated lab;
+- cost-cap increase;
+- external/customer communication;
+- acceptance of residual critical/high security risk;
+- any scope or architecture change that materially changes the approved plan.
+
+## Delivery invariants
+
+- Build once; promote an immutable digest. Tags are aliases, never identity.
+- Use GitHub OIDC and short-lived cloud credentials for hosted cloud operations.
+- Keep development, staging, lab-production, and destructive-test boundaries
+  explicit.
+- Every repair invalidates earlier candidate-bound evidence and judge results.
+- Every remediation is followed by fresh full validation and fresh independent
+  judging.
+- Backups are not proven until restore is tested.
+- Rollback is not proven until digest, health, version, telemetry, and business
+  behavior are verified after restoration.
+- An agent may recommend a production mutation but may not execute it without a
+  protected human approval gate.
+- When TypeScript is used, pin stable TypeScript 7.x (initial verified baseline
+  `typescript@7.0.2`), use strict type checking, and record any version change
+  through an explicit dependency decision and full revalidation.
+- Maintain `BREAK_FIX_LOG.md` continuously; no stream or judge loop closes while
+  an observed break remains unrecorded.
