@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "continuityops/task-state.schema.json",
+  "title": "ContinuityOps authoritative task-state",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "plan_id", "revision", "authorized_through_phase", "baseline_sha", "tasks"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "plan_id": { "type": "string" },
+    "revision": { "type": "integer", "minimum": 0 },
+    "authorized_through_phase": { "type": "integer", "minimum": 0 },
+    "baseline_sha": { "type": "string", "minLength": 7 },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "phase", "slice", "state", "depends_on"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^P[0-9]+-T[0-9]+$" },
+          "phase": { "type": "integer", "minimum": 0 },
+          "slice": { "type": "string" },
+          "title": { "type": "string" },
+          "state": {
+            "type": "string",
+            "enum": ["planned", "ready", "running", "blocked", "review", "verified", "done"]
+          },
+          "depends_on": { "type": "array", "items": { "type": "string" } },
+          "stream": { "type": ["string", "null"] },
+          "owner": { "type": "string" },
+          "attempts": { "type": "integer", "minimum": 0 },
+          "evidence": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "manifest_of": "construction-partition",
+  "baseline_sha": "39eaf03f749ec828c39d2e3da75efaf3392be2e8",
+  "note": "Each retained path has exactly one primary slice owner. Shared interfaces (harness/schemas) are their own partition and are certified before dependent slices.",
+  "slices": [
+    {
+      "id": "S0-IFACE",
+      "capability": "shared frozen interfaces (schemas)",
+      "paths": [
+        "harness/schemas/task-state.schema.json",
+        "harness/schemas/evidence-event.schema.json",
+        "harness/schemas/handoff.schema.json"
+      ]
+    },
+    {
+      "id": "S0-CLI",
+      "capability": "authoritative task-state CLI and lifecycle",
+      "paths": [
+        "scripts/project.mjs",
+        "harness/lib/state.mjs",
+        "harness/lib/lifecycle.mjs",
+        "harness/lib/authorization.mjs",
+        "harness/lib/streams.mjs",
+        "harness/state/tasks.json"
+      ]
+    },
+    {
+      "id": "S0-VALIDATE",
+      "capability": "validator registry, evidence adapter, partition tooling",
+      "paths": [
+        "harness/lib/validators/registry.mjs",
+        "harness/lib/validators/impl.mjs",
+        "harness/lib/evidence.mjs",
+        "harness/lib/partition.mjs",
+        "harness/lib/hashing.mjs",
+        "harness/partition-manifest.json"
+      ]
+    },
+    {
+      "id": "S0-TESTS",
+      "capability": "harness test suite",
+      "paths": [
+        "tests/harness/lifecycle.test.mjs",
+        "tests/harness/state.test.mjs",
+        "tests/harness/streams.test.mjs",
+        "tests/validators/registry.test.mjs",
+        "tests/validators/impl.test.mjs"
+      ]
+    },
+    {
+      "id": "S0-DOCS",
+      "capability": "baseline audit and append-only surfaces",
+      "paths": [
+        "docs/scaffold-audit.md",
+        "STATUS.md",
+        "ISSUES.md",
+        "DECISIONS.md"
+      ]
+    }
+  ]
+}

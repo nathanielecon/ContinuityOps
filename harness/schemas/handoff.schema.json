@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "continuityops/handoff.schema.json",
+  "title": "ContinuityOps worker handoff (worker communication is zh-CN)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_id", "candidate_sha", "modified_paths", "recommended_state", "summary_zh"],
+  "properties": {
+    "task_id": { "type": "string" },
+    "candidate_sha": { "type": "string" },
+    "modified_paths": { "type": "array", "items": { "type": "string" } },
+    "recommended_state": {
+      "type": "string",
+      "description": "A worker may only recommend review or blocked, never verified or done.",
+      "enum": ["review", "blocked"]
+    },
+    "summary_zh": { "type": "string", "description": "Simplified Chinese summary of work performed" },
+    "blockers_zh": { "type": "array", "items": { "type": "string" } }
+  }
+}
