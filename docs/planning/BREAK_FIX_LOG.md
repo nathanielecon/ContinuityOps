@@ -141,5 +141,54 @@ ContinuityOps incidents yet.
 
 ## Log
 
-No ContinuityOps execution failures have been recorded. The project is still at
-candidate-plan stage.
+## 2026-07-15 — CO-005 — CODEX_AUTH_JSON_GZB64 injected but unusable
+
+- **Slice/task:** preflight before P0-T01 (no P0 dispatch)
+- **Baseline SHA:** `39eaf03f749ec828c39d2e3da75efaf3392be2e8`
+- **Candidate SHA at break:** n/a (no implementation candidate)
+- **Environment/identity:** Cursor Cloud Agent `bc-1f545fcc-c315-41f3-bafb-2c151b1991ad` (“P0 start conditions”); model `cursor-grok-4.5-high-fast`; GitHub App installation scoped to `nathanielecon/ContinuityOps` only
+- **Symptom:** `CODEX_AUTH_JSON_GZB64` is set (len=37, path-like `/tmp/...`) but the referenced path does not exist; no `~/.codex/auth.json`; no usable Codex auth material
+- **Exact failed check and exit:** path resolve / auth decode → fail (missing file; cannot gunzip+JSON-parse auth)
+- **Raw failure evidence:** env present=`true`; path_resolves=`false`; installation cannot stage Codex CLI auth
+- **Attempts:** inspect env, `/proc/self/environ`, path existence, `/tmp` CODEX* glob, `~/.codex`
+- **Root cause:** secret name injected without a resolvable payload/file in this run’s filesystem
+- **Why earlier gates missed it:** first live Cloud Agent preflight for Codex worker auth
+- **Blast radius:** blocks all Codex `/fast` implementation workers; P0 must not start
+- **Decision:** stop; escalate to human; do not dispatch P0
+- **Fix and files changed:** none (human credential injection required)
+- **Regression control added:** OPERATING_STATE `preflight.codex_auth_json_gzb64` + issue CO-005
+- **New candidate SHA:** n/a
+- **Fresh verification commands/results:** recheck after human injects usable auth
+- **Hosted/cloud verification:** n/a
+- **Superseded evidence:** n/a
+- **New evidence:** this log entry; OPERATING_STATE revision 3
+- **Claim/status changes:** `current_gate=preflight-codex-auth-and-ac-visibility`; all P0 tasks blocked
+- **Judge round impact:** none (pre-implementation)
+- **Remaining risk/follow-up:** human must inject real gzip+base64 auth JSON or create the referenced file before recheck
+- **Verified by:** orchestrator preflight (failed closed)
+
+## 2026-07-15 — CO-006 — Project A/C repos not visible to Cloud Agent installation
+
+- **Slice/task:** preflight before P0-T01 (no P0 dispatch)
+- **Baseline SHA:** `39eaf03f749ec828c39d2e3da75efaf3392be2e8`
+- **Candidate SHA at break:** n/a
+- **Environment/identity:** same Cloud Agent run; `GET /installation/repositories` → only `nathanielecon/ContinuityOps`
+- **Symptom:** pinned A/C repos and legacy names all 404 / “Repository not found” for API and `git ls-remote`; pin commits unreachable
+- **Exact failed check and exit:** `gh api repos/<A|C>` → HTTP 404; `git ls-remote` → fatal repository not found
+- **Raw failure evidence:** checked `nathanielecon/aws-landing-zone-lab`, `nathanielecon/local-first-governed-cicd`, `nathanielecon/cloud`, `nathanielecon/project-c-cloud`; `visible_repos=[]`; `pin_commits_reachable=false`
+- **Attempts:** REST metadata, commit fetch for lock pins, ls-remote, installation repo list, repo search
+- **Root cause:** GitHub App/installation lacks access to private Project A/C repositories (or repos are absent under those names for this principal)
+- **Why earlier gates missed it:** lockfile pins were updated in `39eaf03` without a Cloud Agent visibility recheck in this environment
+- **Blast radius:** P0-T01 upstream pin/inventory and all A/C consumption tasks blocked
+- **Decision:** stop; escalate to human; do not dispatch P0
+- **Fix and files changed:** none (human must grant installation read access or correct pin identity)
+- **Regression control added:** OPERATING_STATE `preflight.project_ac_visibility` + issue CO-006
+- **New candidate SHA:** n/a
+- **Fresh verification commands/results:** after access grant, `gh api repos/<pin>` and commit fetch must succeed
+- **Hosted/cloud verification:** n/a
+- **Superseded evidence:** n/a
+- **New evidence:** this log entry; OPERATING_STATE revision 3
+- **Claim/status changes:** P0 dispatch remains forbidden until A/C visibility passes
+- **Judge round impact:** none
+- **Remaining risk/follow-up:** README/MASTER_PLAN still cite legacy `cloud` / `project-c-cloud` names while lockfile uses renamed paths — human should confirm canonical identity when granting access
+- **Verified by:** orchestrator preflight (failed closed)

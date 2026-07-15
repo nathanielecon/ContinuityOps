@@ -9,19 +9,23 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 2,
+  "revision": 3,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
-  "current_gate": "phase-0-baseline-audit",
+  "current_gate": "preflight-codex-auth-and-ac-visibility",
   "running_tasks": [],
-  "blocked_tasks": [],
-  "waiting_human": ["H0-after-P0-T04"],
+  "blocked_tasks": ["P0-T01", "P0-T02", "P0-T03", "P0-T04", "P0-T05"],
+  "waiting_human": [
+    "H-preflight-CODEX_AUTH_JSON_GZB64",
+    "H-preflight-AC-visibility",
+    "H0-after-P0-T04"
+  ],
   "completed_gates": [],
   "next_actions": [
-    "Record candidate baseline and upstream SHAs in integration/upstreams.lock.json",
-    "Run P0-T01 inventory and partition audit",
-    "Install harness CLI contracts (P0-T02)",
+    "Human: inject usable CODEX_AUTH_JSON_GZB64 (payload or resolvable auth file) into this Cloud Agent environment",
+    "Human: grant GitHub App/installation read access to pinned Project A and C repos",
+    "Orchestrator: re-verify both preflight gates; only then dispatch P0-T01",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -31,8 +35,36 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   ],
   "verified_baseline": [],
   "unverified": [
-    "All ContinuityOps implementation and runtime capabilities"
-  ]
+    "All ContinuityOps implementation and runtime capabilities",
+    "CODEX_AUTH_JSON_GZB64 usable Codex auth material",
+    "Project A/C repository visibility from this Cloud Agent installation"
+  ],
+  "preflight": {
+    "checked_at": "2026-07-15T21:50:00Z",
+    "baseline_sha": "39eaf03f749ec828c39d2e3da75efaf3392be2e8",
+    "codex_auth_json_gzb64": {
+      "env_present": true,
+      "env_value_len": 37,
+      "looks_like_path": true,
+      "path_resolves": false,
+      "usable_auth_material": false,
+      "verdict": "fail"
+    },
+    "project_ac_visibility": {
+      "installation_repo_count": 1,
+      "installation_repos": ["nathanielecon/ContinuityOps"],
+      "checked_repos": [
+        "nathanielecon/aws-landing-zone-lab",
+        "nathanielecon/local-first-governed-cicd",
+        "nathanielecon/cloud",
+        "nathanielecon/project-c-cloud"
+      ],
+      "visible_repos": [],
+      "pin_commits_reachable": false,
+      "verdict": "fail"
+    },
+    "p0_dispatch_allowed": false
+  }
 }
 ```
 
@@ -67,7 +99,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 1,
+  "revision": 2,
   "issues": [
     {
       "id": "CO-001",
@@ -108,6 +140,26 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "status": "open",
       "owner": "P1-T01",
       "resolution_criterion": "A verified digest/rollback contract is consumed, or a clearly labeled ContinuityOps lab artifact and first-release policy are established."
+    },
+    {
+      "id": "CO-005",
+      "phase": 0,
+      "severity": "blocking",
+      "category": "credential",
+      "summary": "CODEX_AUTH_JSON_GZB64 is present as an env name but does not resolve to usable Codex auth material (path-like value, target missing).",
+      "status": "open",
+      "owner": "human H-preflight-CODEX_AUTH_JSON_GZB64",
+      "resolution_criterion": "Env injects gzip+base64 auth JSON or a resolvable file path whose contents decode to a usable Codex auth.json; orchestrator recheck passes."
+    },
+    {
+      "id": "CO-006",
+      "phase": 0,
+      "severity": "blocking",
+      "category": "integration",
+      "summary": "Pinned Project A/C repositories are not visible to this Cloud Agent GitHub installation (only ContinuityOps is installed).",
+      "status": "open",
+      "owner": "human H-preflight-AC-visibility",
+      "resolution_criterion": "Installation can read nathanielecon/aws-landing-zone-lab and nathanielecon/local-first-governed-cicd at the pinned commits (or human updates pins to visible canonical repos); gh api/git fetch succeed."
     }
   ]
 }
