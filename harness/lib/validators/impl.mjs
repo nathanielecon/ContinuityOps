@@ -83,11 +83,15 @@ register('clean_tree', async ({ repoRoot }) => {
 // -- secret_scan: obvious credential patterns in tracked files ---------------
 const SECRET_PATTERNS = [
   [/AKIA[0-9A-Z]{16}/, 'AWS access key id'],
-  [/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/, 'private key block'],
+  [/-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY(?: BLOCK)?-----/, 'private key block'],
   [/aws_secret_access_key\s*=\s*['"][^'"]{20,}/i, 'aws secret access key literal'],
   [/xox[baprs]-[0-9A-Za-z-]{10,}/, 'slack token'],
   [/ghp_[0-9A-Za-z]{36}/, 'github PAT'],
 ];
+/** Return the labels of every secret pattern present in `text`. */
+export function scanText(text) {
+  return SECRET_PATTERNS.filter(([re]) => re.test(text)).map(([, label]) => label);
+}
 register('secret_scan', async ({ repoRoot }) => {
   const findings = [];
   let files = [];
@@ -103,9 +107,7 @@ register('secret_scan', async ({ repoRoot }) => {
     // self-skip that would create a blind spot.
     let content;
     try { content = readFileSync(`${repoRoot}/${f}`, 'utf8'); } catch { continue; }
-    for (const [re, label] of SECRET_PATTERNS) {
-      if (re.test(content)) findings.push(`${label} pattern in ${f}`);
-    }
+    for (const label of scanText(content)) findings.push(`${label} pattern in ${f}`);
   }
   return { ok: findings.length === 0, findings };
 });

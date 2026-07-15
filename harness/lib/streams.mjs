@@ -19,7 +19,14 @@ const ACTIVE = new Set(['ready', 'running', 'blocked', 'review']);
 export function normalizeScope(p) {
   let s = String(p).replace(/^\.\//, '');
   const star = s.indexOf('*');
-  if (star !== -1) s = s.slice(0, star);
+  if (star !== -1) {
+    // Reduce to the last path segment boundary at/before the glob, so a
+    // partial-segment glob like 'src/app*' collapses to its containing dir
+    // 'src/' (which conservatively overlaps 'src/application') rather than the
+    // misleading literal prefix 'src/app'. A leading glob yields '' (repo-wide).
+    const lastSlash = s.lastIndexOf('/', star);
+    s = lastSlash === -1 ? '' : s.slice(0, lastSlash + 1);
+  }
   return s.replace(/\/{2,}/g, '/');
 }
 

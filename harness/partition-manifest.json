@@ -34,6 +34,7 @@
         "harness/lib/evidence.mjs",
         "harness/lib/partition.mjs",
         "harness/lib/hashing.mjs",
+        "harness/lib/model-id.mjs",
         "harness/partition-manifest.json"
       ]
     },

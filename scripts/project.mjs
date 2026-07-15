@@ -18,7 +18,8 @@ import { dirname, resolve } from 'node:path';
 import { readFileSync, existsSync } from 'node:fs';
 import { StateStore } from '../harness/lib/state.mjs';
 import { EvidenceLog } from '../harness/lib/evidence.mjs';
-import { verifyUniqueOwnership, hashSlices } from '../harness/lib/partition.mjs';
+import { verifyUniqueOwnership, verifyCoverage, hashSlices } from '../harness/lib/partition.mjs';
+import { execFileSync } from 'node:child_process';
 import { runAll, listValidators } from '../harness/lib/validators/registry.mjs';
 import '../harness/lib/validators/impl.mjs'; // registers pinned validators
 
@@ -59,6 +60,14 @@ const cmds = {
     const uniq = verifyUniqueOwnership(manifest);
     if (!uniq.ok) {
       console.error('DUPLICATE OWNERSHIP:', uniq.duplicates);
+      process.exit(1);
+    }
+    // Every tracked *.mjs must be owned by some slice (no coverage gaps).
+    const tracked = execFileSync('git', ['ls-files', '*.mjs'], { cwd: REPO, encoding: 'utf8' })
+      .split('\n').filter(Boolean);
+    const cov = verifyCoverage(manifest, tracked);
+    if (!cov.ok) {
+      console.error('UNOWNED CODE FILES:', cov.unowned);
       process.exit(1);
     }
     const hashes = hashSlices(manifest, REPO);

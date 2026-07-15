@@ -26,6 +26,13 @@ test('leading-glob scope is repo-wide and overlaps concrete paths', () => {
   assert.ok(scopesOverlap(['*'], ['anything/at/all']));
 });
 
+test('partial-segment trailing glob collapses to its containing dir', () => {
+  // regression: 'src/app*' normalized to 'src/app' and missed 'src/application'.
+  assert.ok(scopesOverlap(['src/app*'], ['src/application']));
+  // still no false-positive between genuinely disjoint dirs.
+  assert.equal(scopesOverlap(['src/app*'], ['lib/application']), false);
+});
+
 test('a stream is sequential internally', () => {
   const all = [mk('T1', 'running', 'A', ['a/']), mk('T2', 'ready', 'A', ['b/'])];
   const res = canActivateInStream(all[1], 'A', all);

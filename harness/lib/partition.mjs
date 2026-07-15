@@ -25,6 +25,18 @@ export function verifyUniqueOwnership(manifest) {
   return { ok: duplicates.length === 0, duplicates };
 }
 
+/**
+ * Detect tracked code files that no slice owns. `trackedCodeFiles` is the list
+ * of repo-relative paths that MUST be partitioned (e.g. all tracked *.mjs).
+ * Returns { ok, unowned: [] }. Complements verifyUniqueOwnership, which only
+ * finds duplicate ownership, never absent ownership.
+ */
+export function verifyCoverage(manifest, trackedCodeFiles) {
+  const owned = new Set(manifest.slices.flatMap((s) => s.paths));
+  const unowned = trackedCodeFiles.filter((f) => !owned.has(f));
+  return { ok: unowned.length === 0, unowned };
+}
+
 /** Compute a content hash for each slice's existing files. */
 export function hashSlices(manifest, repoRoot) {
   const out = {};

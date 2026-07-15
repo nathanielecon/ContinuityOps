@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { scopeCheck, looksSimplifiedChinese, isBinaryPath } from '../../harness/lib/validators/impl.mjs';
+import { scopeCheck, looksSimplifiedChinese, isBinaryPath, scanText } from '../../harness/lib/validators/impl.mjs';
+import { verifyCoverage } from '../../harness/lib/partition.mjs';
 import { runValidator } from '../../harness/lib/validators/registry.mjs';
 import { EvidenceLog } from '../../harness/lib/evidence.mjs';
 import { mkdtempSync } from 'node:fs';
@@ -21,6 +22,27 @@ test('svg/drawio are NOT treated as binary (still secret-scanned)', () => {
   assert.equal(isBinaryPath('docs/architecture/x.drawio'), false);
   assert.equal(isBinaryPath('docs/architecture/x.png'), true);
   assert.equal(isBinaryPath('a/b/keys.p12'), true);
+});
+
+test('secret_scan catches DSA/PGP private-key blocks (not just RSA/EC)', () => {
+  // regression: private-key regex only allowed RSA|EC|OPENSSH prefixes.
+  // Build the PEM headers dynamically so the literal secret-shaped string does
+  // NOT sit in this tracked file (which would make secret_scan flag the test).
+  const dashes = '-'.repeat(5);
+  const pem = (kind, block) => `${dashes}BEGIN ${kind ? kind + ' ' : ''}PRIVATE KEY${block ? ' BLOCK' : ''}${dashes}`;
+  assert.deepEqual(scanText(pem('DSA')), ['private key block']);
+  assert.deepEqual(scanText(pem('PGP', true)), ['private key block']);
+  assert.deepEqual(scanText(pem()), ['private key block']); // PKCS8 bare
+  assert.deepEqual(scanText('nothing secret here'), []);
+});
+
+test('verifyCoverage flags an unowned code file', () => {
+  // regression: partition_unique_ownership only detected duplicates, not gaps.
+  const manifest = { slices: [{ id: 'S', paths: ['a.mjs', 'b.mjs'] }] };
+  assert.equal(verifyCoverage(manifest, ['a.mjs', 'b.mjs']).ok, true);
+  const gap = verifyCoverage(manifest, ['a.mjs', 'b.mjs', 'orphan.mjs']);
+  assert.equal(gap.ok, false);
+  assert.deepEqual(gap.unowned, ['orphan.mjs']);
 });
 
 test('simplified-chinese heuristic', () => {
