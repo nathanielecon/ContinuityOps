@@ -2,14 +2,18 @@
   "schema_version": "1.0",
   "project_a": {
     "repository": "nathanielecon/cloud",
-    "commit_sha": "REQUIRED",
+    "commit_sha": "5bd4fc0e2a3bbddb895412c05c2d8dcd9e31ac72",
+    "access_status": "documented_reference_only_gh_404",
+    "notes": "GitHub API access returned HTTP 404 in this environment. The pinned SHA comes from docs/planning/SOURCE_ANALYSIS.md and is the only in-repo Project A reference available to this audit.",
     "consumed_contracts": [],
     "evidence_refs": []
   },
   "project_c": {
     "repository": "nathanielecon/project-c-cloud",
-    "commit_sha": "REQUIRED",
-    "image_digest": "REQUIRED_OR_EXPLICITLY_UNAVAILABLE",
+    "commit_sha": "EXPLICITLY_UNAVAILABLE_GH_404",
+    "image_digest": "EXPLICITLY_UNAVAILABLE_GH_404",
+    "access_status": "repository_unavailable_gh_404",
+    "notes": "GitHub API access returned HTTP 404 in this environment, and the baseline repository provides no verifiable Project C tip SHA or immutable image digest. No upstream value was fabricated.",
     "consumed_contracts": [],
     "evidence_refs": []
   }

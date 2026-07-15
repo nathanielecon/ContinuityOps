@@ -1,0 +1,298 @@
+{
+  "schema_version": "1.0",
+  "baseline_sha": "e40a153a31c9a89587dff41666d128a7bb07d1c9",
+  "generated_at": "2026-07-15T20:45:44Z",
+  "ownership": "unique_primary_slice",
+  "notes": [
+    "sha256 values are current candidate file hashes in the isolated audit worktree.",
+    "harness/partition-manifest.json omits its own file hash to avoid a self-referential digest cycle.",
+    "Only S0 and S8 own paths at this bootstrap baseline; S1-S7 remain intentionally empty."
+  ],
+  "slices": [
+    {
+      "slice_id": "S0",
+      "ownership": "primary",
+      "sha256": "08384b9f5d05ce5cbe24694b41750073cea3abf14182741ae2426b5ab98b986c",
+      "paths": [
+        {
+          "path": ".gitignore",
+          "sha256": "1c89ffe0f25b1d0044668fc5109868d6f363ed96d4d776eea59867130a6dd07f"
+        },
+        {
+          "path": "AGENTS.md",
+          "sha256": "7e53501e4600afd5c8305356af47f27935c1ab156bca8fd04f91b4765c3eb956"
+        },
+        {
+          "path": "BREAK_FIX_LOG.md",
+          "sha256": "26486d996bca3ccd8907eaf97774294b6be5f082817be4d1beb43787a123fd4f"
+        },
+        {
+          "path": "EVIDENCE_AND_CLAIMS.md",
+          "sha256": "862941082919dbfe2907e9aae5a7875867209905bcadc69f9750d3f269c63adf"
+        },
+        {
+          "path": "OPERATING_STATE.md",
+          "sha256": "7e8f5a4f378d3a7833c521e8577fdb113f6c9103187db732dd17b6f5055c7de1"
+        },
+        {
+          "path": "PLAN.md",
+          "sha256": "68081ca9f091984bfe2609db06714b779f9c8004ded4f99e9a1bdea121dfda2c"
+        },
+        {
+          "path": "docs/decisions/README.md",
+          "sha256": "b6c50f966d39b6c4ecfe18b4ab988e08483cad04479fdb1201777c1b167bb07c"
+        },
+        {
+          "path": "docs/planning/AGENTS.md",
+          "sha256": "efa7227eb0dce847c29ed90b6fe22c24379cb4a4960ac375a091f4fa941a7989"
+        },
+        {
+          "path": "docs/planning/BREAK_FIX_LOG.md",
+          "sha256": "26486d996bca3ccd8907eaf97774294b6be5f082817be4d1beb43787a123fd4f"
+        },
+        {
+          "path": "docs/planning/EVIDENCE_AND_CLAIMS.md",
+          "sha256": "862941082919dbfe2907e9aae5a7875867209905bcadc69f9750d3f269c63adf"
+        },
+        {
+          "path": "docs/planning/JUDGE_RUBRICS.md",
+          "sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31"
+        },
+        {
+          "path": "docs/planning/MANDARIN_PROMPT_PACK.md",
+          "sha256": "8a043b52b5d5135bb6c28ddb2e9c6ee837a547eaada32b627323f14adf029f40"
+        },
+        {
+          "path": "docs/planning/MASTER_PLAN.md",
+          "sha256": "800a056b04b11e41548e6a0b02c292c9cb772de09a14ae448f1f68e3df496c7a"
+        },
+        {
+          "path": "docs/planning/MODEL_AND_STREAM_TOPOLOGY.md",
+          "sha256": "725fbcba4159ec0ea7fb0e261d6637ac21fe6f36d8b89a615f21d724d32763b8"
+        },
+        {
+          "path": "docs/planning/OPERATING_STATE.md",
+          "sha256": "7e8f5a4f378d3a7833c521e8577fdb113f6c9103187db732dd17b6f5055c7de1"
+        },
+        {
+          "path": "docs/planning/PLAN.md",
+          "sha256": "68081ca9f091984bfe2609db06714b779f9c8004ded4f99e9a1bdea121dfda2c"
+        },
+        {
+          "path": "docs/planning/PROMPT_PACK.md",
+          "sha256": "db938dc44fb3e483e8ebb4db0fc9a7f9cdc117af74183776bf65e38cfaf47168"
+        },
+        {
+          "path": "docs/planning/RALPHY_ORCHESTRATION.md",
+          "sha256": "3b0d9bb8537fc4a2605613c049d63856f49b57b3249e7a540e2daf1a2d16d41c"
+        },
+        {
+          "path": "docs/planning/README.md",
+          "sha256": "56e677b0a2afae205ca2acf9c3322f38c0180d6af0c22f889235ad5a81ca11b9"
+        },
+        {
+          "path": "docs/planning/SOURCE_ANALYSIS.md",
+          "sha256": "16fe0ca42862468da32f617bade4c9cc94f6f14eb159307658d733ab7c05cf21"
+        },
+        {
+          "path": "docs/scaffold-audit.md",
+          "sha256": "2ac4b8319583bd36e8f6967afce56bb59613ed0ac904a0f5a7cf03bb06292cb0"
+        },
+        {
+          "path": "evidence/README.md",
+          "sha256": "06783de1ea6199ab003c37f4d8d7e6bf2c858e4751496207b58736ae94eec969"
+        },
+        {
+          "path": "harness/partition-manifest.json"
+        },
+        {
+          "path": "integration/upstreams.lock.json",
+          "sha256": "13fa169b42511b6b6a284968e6fd74aac7041cdb9ba445bb4e1190eea0bc8352"
+        }
+      ]
+    },
+    {
+      "slice_id": "S1",
+      "ownership": "primary",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "paths": []
+    },
+    {
+      "slice_id": "S2",
+      "ownership": "primary",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "paths": []
+    },
+    {
+      "slice_id": "S3",
+      "ownership": "primary",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "paths": []
+    },
+    {
+      "slice_id": "S4",
+      "ownership": "primary",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "paths": []
+    },
+    {
+      "slice_id": "S5",
+      "ownership": "primary",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "paths": []
+    },
+    {
+      "slice_id": "S6",
+      "ownership": "primary",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "paths": []
+    },
+    {
+      "slice_id": "S7",
+      "ownership": "primary",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "paths": []
+    },
+    {
+      "slice_id": "S8",
+      "ownership": "primary",
+      "sha256": "236298e2d606f2d9c4c726c457285d3a6eaaed447871648531cd5991c4cdf497",
+      "paths": [
+        {
+          "path": "README.md",
+          "sha256": "c5e2252ab346a05263d9abb1ca98a887a0b8a130224d91e1dbe37a54dbefdc57"
+        },
+        {
+          "path": "docs/architecture/continuityops-architecture.png",
+          "sha256": "0008b3d26478826d9ae4351003f412baa6845d1769bc5041bbb749f5348a4799"
+        },
+        {
+          "path": "docs/architecture/continuityops-architecture.svg",
+          "sha256": "0da8f058b8ef18cf4d6cd35bd4ef7ae819f69dc06bc27fbb68dd4f55e8872917"
+        },
+        {
+          "path": "docs/architecture/continuityops.drawio",
+          "sha256": "a447db8d8f870ef944b1412019790949cd2ba21dea6ce578ac03e3f45879b4e0"
+        },
+        {
+          "path": "docs/evidence-index.md",
+          "sha256": "8047533bd0b7b716f4908745ea0faa3073e24d9d2adaff78c0d4f3779ebdcf89"
+        },
+        {
+          "path": "docs/planning/IMAGE2_INFOGRAPHIC_PROMPT.md",
+          "sha256": "f40114d55481f89c519de0b2b7851f0758dd060dda7b884848fe57701f5febe6"
+        },
+        {
+          "path": "docs/planning/RECRUITER_FRONT_PAGE_SPEC.md",
+          "sha256": "34dd734fce7dca3cc77a2aef48776280021ff22e4ab52b7b298f35b6a034d1fa"
+        },
+        {
+          "path": "docs/planning/REPO_README_TEMPLATE.md",
+          "sha256": "afcf517a87ae5d170e4f280befb0ebe55284273ab5c5f7b1c031f063f9e0f659"
+        },
+        {
+          "path": "docs/portfolio/continuityops-infographic.png",
+          "sha256": "0008b3d26478826d9ae4351003f412baa6845d1769bc5041bbb749f5348a4799"
+        }
+      ]
+    }
+  ],
+  "shared_interfaces": [
+    {
+      "path": "AGENTS.md",
+      "primary_slice": "S0",
+      "consumer_slices": [
+        "S0",
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6",
+        "S7",
+        "S8"
+      ],
+      "notes": "Global worker contract, language policy, and authority limits."
+    },
+    {
+      "path": "EVIDENCE_AND_CLAIMS.md",
+      "primary_slice": "S0",
+      "consumer_slices": [
+        "S0",
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6",
+        "S7",
+        "S8"
+      ],
+      "notes": "Evidence freshness and claim ceilings bind every later slice."
+    },
+    {
+      "path": "PLAN.md",
+      "primary_slice": "S0",
+      "consumer_slices": [
+        "S0",
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6",
+        "S7",
+        "S8"
+      ],
+      "notes": "Machine-readable task authority and phase gate."
+    },
+    {
+      "path": "evidence/README.md",
+      "primary_slice": "S0",
+      "consumer_slices": [
+        "S0",
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6",
+        "S7",
+        "S8"
+      ],
+      "notes": "Evidence namespace contract consumed by adapters, reviewers, and judges."
+    },
+    {
+      "path": "harness/partition-manifest.json",
+      "primary_slice": "S0",
+      "consumer_slices": [
+        "S0",
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6",
+        "S7",
+        "S8"
+      ],
+      "notes": "Primary ownership map that gates concurrent streams and downstream certification."
+    },
+    {
+      "path": "integration/upstreams.lock.json",
+      "primary_slice": "S0",
+      "consumer_slices": [
+        "S0",
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6",
+        "S7",
+        "S8"
+      ],
+      "notes": "Pinned upstream boundary for all downstream integration and runtime claims."
+    }
+  ]
+}
