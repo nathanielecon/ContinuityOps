@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 0,
+  "revision": 2,
   "authorized_through_phase": 0,
   "baseline_sha": "39eaf03f749ec828c39d2e3da75efaf3392be2e8",
   "tasks": [
@@ -15,37 +15,76 @@
       "stream": "A",
       "owner": "baseline-audit-worker",
       "attempts": 1,
-      "write_scope": ["docs/scaffold-audit.md", "integration/upstreams.lock.json", "harness/partition-manifest.json"],
-      "validators": ["state_schema", "partition_unique_ownership", "upstream_pin_schema", "clean_tree"],
-      "evidence": ["evidence/slices/S0/baseline-audit.json"]
+      "write_scope": [
+        "docs/scaffold-audit.md",
+        "integration/upstreams.lock.json",
+        "harness/partition-manifest.json"
+      ],
+      "validators": [
+        "state_schema",
+        "partition_unique_ownership",
+        "upstream_pin_schema",
+        "clean_tree"
+      ],
+      "evidence": [
+        "evidence/slices/S0/baseline-audit.json"
+      ]
     },
     {
       "id": "P0-T02",
       "phase": 0,
       "slice": "S0",
       "title": "Install authoritative multi-stream CLI and state contracts",
-      "state": "review",
-      "depends_on": ["P0-T01"],
+      "state": "verified",
+      "depends_on": [
+        "P0-T01"
+      ],
       "stream": "A",
       "owner": "harness-worker",
       "attempts": 1,
-      "write_scope": ["scripts/", "harness/", "tests/harness/", "STATUS.md", "ISSUES.md", "DECISIONS.md"],
-      "validators": ["state_schema", "clean_tree", "scope"],
-      "evidence": ["evidence/slices/S0/harness.json"]
+      "write_scope": [
+        "scripts/",
+        "harness/",
+        "tests/harness/",
+        "STATUS.md",
+        "ISSUES.md",
+        "DECISIONS.md"
+      ],
+      "validators": [
+        "state_schema",
+        "clean_tree",
+        "scope"
+      ],
+      "evidence": [
+        "evidence/slices/S0/harness.json"
+      ]
     },
     {
       "id": "P0-T03",
       "phase": 0,
       "slice": "S0",
       "title": "Implement validators, model routing, and evidence adapters",
-      "state": "review",
-      "depends_on": ["P0-T02"],
+      "state": "verified",
+      "depends_on": [
+        "P0-T02"
+      ],
       "stream": "B",
       "owner": "validator-worker",
       "attempts": 1,
-      "write_scope": ["harness/lib/validators/", "tests/validators/", "evidence/schema/"],
-      "validators": ["secret_scan", "model_routing", "worker_language", "clean_tree"],
-      "evidence": ["evidence/slices/S0/validator-contract.json"]
+      "write_scope": [
+        "harness/lib/validators/",
+        "tests/validators/",
+        "evidence/schema/"
+      ],
+      "validators": [
+        "secret_scan",
+        "model_routing",
+        "worker_language",
+        "clean_tree"
+      ],
+      "evidence": [
+        "evidence/slices/S0/validator-contract.json"
+      ]
     },
     {
       "id": "P0-T04",
@@ -53,12 +92,23 @@
       "slice": "S0",
       "title": "Freeze rubrics and pin execution bundles",
       "state": "planned",
-      "depends_on": ["P0-T01", "P0-T03"],
+      "depends_on": [
+        "P0-T01",
+        "P0-T03"
+      ],
       "owner": "rubric-controller",
       "attempts": 0,
-      "write_scope": ["harness/rubrics/", "harness/approvals/", "docs/reviews/rubric-review.md"],
-      "validators": ["clean_tree"],
-      "evidence": ["evidence/slices/S0/rubric-freeze.json"],
+      "write_scope": [
+        "harness/rubrics/",
+        "harness/approvals/",
+        "docs/reviews/rubric-review.md"
+      ],
+      "validators": [
+        "clean_tree"
+      ],
+      "evidence": [
+        "evidence/slices/S0/rubric-freeze.json"
+      ],
       "human_gate": "H0"
     },
     {
@@ -67,12 +117,24 @@
       "slice": "S0",
       "title": "Prove streams, worker replacement, saved/fresh councils, Phase 0 cert",
       "state": "planned",
-      "depends_on": ["P0-T02", "P0-T03", "P0-T04"],
+      "depends_on": [
+        "P0-T02",
+        "P0-T03",
+        "P0-T04"
+      ],
       "owner": "orchestrator",
       "attempts": 0,
-      "write_scope": ["evidence/slices/S0/", "BREAK_FIX_LOG.md"],
-      "validators": ["clean_tree"],
-      "evidence": ["evidence/slices/S0/integrated-gate.json", "evidence/judges/S0/"]
+      "write_scope": [
+        "evidence/slices/S0/",
+        "BREAK_FIX_LOG.md"
+      ],
+      "validators": [
+        "clean_tree"
+      ],
+      "evidence": [
+        "evidence/slices/S0/integrated-gate.json",
+        "evidence/judges/S0/"
+      ]
     },
     {
       "id": "P1-T01",
@@ -80,12 +142,21 @@
       "slice": "S1",
       "title": "Verify and adapt Project A and Project C contracts (UNAUTHORIZED)",
       "state": "planned",
-      "depends_on": ["P0-T05"],
+      "depends_on": [
+        "P0-T05"
+      ],
       "owner": "integration-worker",
       "attempts": 0,
-      "write_scope": ["integration/", "app-contract/"],
-      "validators": ["clean_tree"],
-      "evidence": ["evidence/slices/S1/upstream-integration.json"]
+      "write_scope": [
+        "integration/",
+        "app-contract/"
+      ],
+      "validators": [
+        "clean_tree"
+      ],
+      "evidence": [
+        "evidence/slices/S1/upstream-integration.json"
+      ]
     }
   ]
 }
