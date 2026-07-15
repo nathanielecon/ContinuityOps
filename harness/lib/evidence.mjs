@@ -21,8 +21,12 @@ export class EvidenceLog {
   /**
    * Append one evidence event. Refuses to mutate existing events.
    * @param event partial event; event_id, artifact_sha256 and index are filled.
+   * @param opts.actorRole  the real role of the caller ('adapter' | 'worker').
+   *        A worker attempting to write an adapter-owned event is rejected here,
+   *        so the anti-forgery guard is enforced on every append, not optionally.
    */
-  append(event) {
+  append(event, opts = {}) {
+    EvidenceLog.assertNotForged(event, opts.actorRole || 'adapter');
     if (!event.produced_by || !event.produced_by.model_id) {
       throw new Error('evidence event must record the ACTUAL producing model_id');
     }

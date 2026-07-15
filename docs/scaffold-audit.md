@@ -4,8 +4,12 @@
 - **Audited by:** Claude Opus 4.8 (portfolio supervisor / adapter role) — *actual*
   model; the plan's Codex/Grok topology is not invokable in this execution
   environment and is therefore recorded as designed-not-run where referenced.
-- **Upstream pins:** `integration/upstreams.lock.json` (Project A `nathanielecon/cloud`,
-  Project C `nathanielecon/project-c-cloud`).
+- **Upstream pins:** `integration/upstreams.lock.json` — Project A
+  `nathanielecon/aws-landing-zone-lab` @ `f688065`, Project C
+  `nathanielecon/local-first-governed-cicd` @ `0f54def`
+  (image digest not yet resolved). These are the renamed repository paths the
+  lock actually pins; earlier planning prose used the pre-rename names
+  `cloud` / `project-c-cloud`.
 
 ## File classification
 
@@ -33,7 +37,10 @@ dependents `S0-CLI` and `S0-VALIDATE`.
    real model ids. The `model_routing` validator fails closed on any evidence
    that claims an uninvokable engine without a `sim`/`planned` marker.
 2. **TypeScript 7.0.2 pin.** Not used. The harness is plain Node ESM so tests
-   run deterministically here without a questionable compiler pin. The
-   `typescript_7` validator applies only "when present"; TS is not present.
+   run deterministically here without a questionable compiler pin. A
+   `typescript_7` validator is described in the plan but is intentionally not
+   registered this session because no TypeScript is present; the live
+   `harness/state/tasks.json` references only the 8 validators that are actually
+   implemented, so nothing fails closed for a missing validator.
 3. **Live cloud.** No AWS/EKS/serverless resources were created. Phases 1–8
    remain unauthorized (`authorized_through_phase = 0`) and human-gated.

@@ -5,6 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, existsSync } from 'node:fs';
 import { register } from './registry.mjs';
 import { verifyUniqueOwnership } from '../partition.mjs';
+import { normalizeScope, isPrefixAtBoundary } from '../streams.mjs';
 
 function readJson(abs) {
   return JSON.parse(readFileSync(abs, 'utf8'));
@@ -46,7 +47,16 @@ register('upstream_pin_schema', async ({ repoRoot }) => {
     const p = lock[proj];
     if (!p) { findings.push(`lock missing ${proj}`); continue; }
     if (!p.repository) findings.push(`${proj} missing repository`);
-    if (!p.commit_sha || p.commit_sha === 'REQUIRED') findings.push(`${proj} commit_sha not pinned`);
+    if (!p.commit_sha || /REQUIRED/.test(p.commit_sha)) findings.push(`${proj} commit_sha not pinned`);
+  }
+  // Project C's image digest must be a concrete digest OR an explicit
+  // "UNAVAILABLE" — the placeholder REQUIRED_OR_EXPLICITLY_UNAVAILABLE is not a
+  // resolved pin and must not pass.
+  const c = lock.project_c;
+  if (c && 'image_digest' in c) {
+    const d = String(c.image_digest);
+    if (/REQUIRED/.test(d)) findings.push('project_c image_digest is an unresolved placeholder');
+    else if (d !== 'UNAVAILABLE' && !/^sha256:[0-9a-f]{64}$/.test(d)) findings.push('project_c image_digest is neither a sha256 digest nor explicit UNAVAILABLE');
   }
   return { ok: findings.length === 0, findings };
 });
@@ -81,8 +91,9 @@ register('secret_scan', async ({ repoRoot }) => {
   }
   for (const f of files) {
     if (/\.(png|svg|drawio|p12|jpg|jpeg|gif|ico)$/.test(f)) continue;
-    // Skip the scanner's own pattern definitions to avoid self-flagging.
-    if (f.endsWith('harness/lib/validators/impl.mjs')) continue;
+    // No file is exempted from scanning: the pattern definitions are written so
+    // their own source text does not match any pattern (verified by tests), so
+    // there is no need for a self-skip that would create a blind spot.
     let content;
     try { content = readFileSync(`${repoRoot}/${f}`, 'utf8'); } catch { continue; }
     for (const [re, label] of SECRET_PATTERNS) {
@@ -94,8 +105,10 @@ register('secret_scan', async ({ repoRoot }) => {
 
 // -- scope: modified paths stay inside a task's allowed write_scope ----------
 export function scopeCheck(modifiedPaths, writeScope) {
-  const prefixes = (writeScope || []).map((p) => p.replace(/\*+$/, ''));
-  const escapes = modifiedPaths.filter((m) => !prefixes.some((pre) => m === pre || m.startsWith(pre)));
+  const prefixes = (writeScope || []).map(normalizeScope);
+  const escapes = modifiedPaths.filter(
+    (m) => !prefixes.some((pre) => isPrefixAtBoundary(pre, normalizeScope(m))),
+  );
   return { ok: escapes.length === 0, escapes };
 }
 register('scope', async ({ modifiedPaths = [], writeScope = [] }) => {
@@ -108,11 +121,15 @@ const ASPIRATIONAL = [/codex/i, /gpt-?5/i, /grok/i];
 register('model_routing', async ({ producedBy }) => {
   if (!producedBy || !producedBy.model_id) return { ok: false, findings: ['no producing model_id recorded'] };
   const findings = [];
+  // A simulated/planned marker must be a delimited segment (e.g. "-sim",
+  // "_planned", "-not-run"), NOT an incidental substring — otherwise an id like
+  // "grok-assimilate" would pass because "assimilate" contains "sim".
+  const MARKER = /[-_](sim|simulated|planned|not-?run)(?:$|[-_])/i;
   // In THIS environment workers are Claude. Reject a recorded id that claims an
   // engine we cannot actually invoke unless it is explicitly marked simulated.
   for (const re of ASPIRATIONAL) {
-    if (re.test(producedBy.model_id) && !/sim|planned|not-run/i.test(producedBy.model_id)) {
-      findings.push(`model_id '${producedBy.model_id}' claims an uninvokable engine without a simulated/planned marker`);
+    if (re.test(producedBy.model_id) && !MARKER.test(producedBy.model_id)) {
+      findings.push(`model_id '${producedBy.model_id}' claims an uninvokable engine without a delimited simulated/planned marker`);
     }
   }
   return { ok: findings.length === 0, findings };

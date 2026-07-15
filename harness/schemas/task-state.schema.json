@@ -30,6 +30,9 @@
           "stream": { "type": ["string", "null"] },
           "owner": { "type": "string" },
           "attempts": { "type": "integer", "minimum": 0 },
+          "write_scope": { "type": "array", "items": { "type": "string" } },
+          "validators": { "type": "array", "items": { "type": "string" } },
+          "human_gate": { "type": "string" },
           "evidence": { "type": "array", "items": { "type": "string" } }
         }
       }

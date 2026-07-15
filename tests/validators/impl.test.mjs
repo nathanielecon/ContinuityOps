@@ -27,6 +27,32 @@ test('model_routing rejects an uninvokable claimed engine', async () => {
   assert.equal(good.ok, true);
   const simMarked = await runValidator('model_routing', { producedBy: { role: 'worker', model_id: 'codex-5.4-sim' } });
   assert.equal(simMarked.ok, true);
+  // regression: incidental substring 'sim' inside 'assimilate' must NOT pass.
+  const sneaky = await runValidator('model_routing', { producedBy: { role: 'worker', model_id: 'grok-assimilate' } });
+  assert.equal(sneaky.ok, false);
+});
+
+test('upstream_pin_schema rejects unresolved image_digest placeholder', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'cops-pin-'));
+  // Build two temp repos with an integration/ lock each.
+  const { writeFileSync, mkdirSync } = await import('node:fs');
+  const bad = join(dir, 'bad');
+  mkdirSync(join(bad, 'integration'), { recursive: true });
+  writeFileSync(join(bad, 'integration/upstreams.lock.json'), JSON.stringify({
+    project_a: { repository: 'r/a', commit_sha: 'a'.repeat(40) },
+    project_c: { repository: 'r/c', commit_sha: 'c'.repeat(40), image_digest: 'REQUIRED_OR_EXPLICITLY_UNAVAILABLE' },
+  }));
+  const rBad = await runValidator('upstream_pin_schema', { repoRoot: bad });
+  assert.equal(rBad.ok, false);
+
+  const good = join(dir, 'good');
+  mkdirSync(join(good, 'integration'), { recursive: true });
+  writeFileSync(join(good, 'integration/upstreams.lock.json'), JSON.stringify({
+    project_a: { repository: 'r/a', commit_sha: 'a'.repeat(40) },
+    project_c: { repository: 'r/c', commit_sha: 'c'.repeat(40), image_digest: 'UNAVAILABLE' },
+  }));
+  const rGood = await runValidator('upstream_pin_schema', { repoRoot: good });
+  assert.equal(rGood.ok, true);
 });
 
 test('worker_language validator wants zh-CN handoff', async () => {
@@ -53,4 +79,18 @@ test('worker cannot forge adapter evidence', () => {
     () => EvidenceLog.assertNotForged({ produced_by: { role: 'adapter', model_id: 'x' } }, 'worker'),
     /forge/,
   );
+});
+
+test('append() itself blocks a worker forging an adapter event', () => {
+  // regression: assertNotForged was never called inside append().
+  const dir = mkdtempSync(join(tmpdir(), 'cops-forge-'));
+  const log = new EvidenceLog(join(dir, 'ev.json'));
+  assert.throws(
+    () => log.append(
+      { task_id: 'T', candidate_sha: 'x', result: 'pass', produced_by: { role: 'adapter', model_id: 'm' } },
+      { actorRole: 'worker' },
+    ),
+    /forge/,
+  );
+  assert.equal(log.events.length, 0, 'forged event not persisted');
 });

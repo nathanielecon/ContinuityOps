@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { readFileSync, existsSync } from 'node:fs';
 import { StateStore } from '../harness/lib/state.mjs';
+import { EvidenceLog } from '../harness/lib/evidence.mjs';
 import { verifyUniqueOwnership, hashSlices } from '../harness/lib/partition.mjs';
 import { runAll, listValidators } from '../harness/lib/validators/registry.mjs';
 import '../harness/lib/validators/impl.mjs'; // registers pinned validators
@@ -81,6 +82,25 @@ const cmds = {
     if (!ok) process.exit(1);
   },
   validators() { console.log(listValidators().join('\n')); },
+  // Adapter-owned evidence append. Records the ACTUAL producing model id.
+  // Refuses to write when invoked with --actor worker against an adapter event.
+  evidence([id], flags) {
+    const s = store();
+    const task = s.task(id);
+    const log = new EvidenceLog(`${REPO}/evidence/slices/${task.slice}/${id}-events.json`);
+    const e = log.append(
+      {
+        task_id: id,
+        candidate_sha: flags.sha || 'WORKTREE',
+        produced_by: { role: 'adapter', model_id: flags.model || 'claude-opus-4-8', mode: flags.mode || 'supervisor' },
+        validator_ids: task.validators || [],
+        result: flags.result || 'pass',
+        notes_zh: flags.notes || '',
+      },
+      { actorRole: flags.actor || 'adapter' },
+    );
+    console.log(`appended ${e.event_id} (index ${e.recorded_at_index}) sha=${e.artifact_sha256.slice(0, 12)}`);
+  },
 };
 
 const [, , cmd, ...rest] = process.argv;

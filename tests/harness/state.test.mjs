@@ -57,3 +57,11 @@ test('dependency must be verified before dependent becomes ready', () => {
   const s = freshStore();
   assert.throws(() => s.transition('P0-T02', 'ready'), /dependencies not satisfied/);
 });
+
+test('running transition re-checks phase authorization (defense in depth)', () => {
+  // Seed a phase-1 task straight into 'blocked' with auth=0, then try running.
+  const s = freshStore();
+  s.data.tasks.find((t) => t.id === 'P1-T01').state = 'blocked';
+  s.data.tasks.find((t) => t.id === 'P1-T01').stream = 'A';
+  assert.throws(() => s.transition('P1-T01', 'running', { stream: 'A' }), /not authorized/);
+});

@@ -26,6 +26,12 @@ test('worker may recommend review or blocked', () => {
   assert.ok(assertTransition('running', 'blocked', 'worker'));
 });
 
+test('worker cannot drive ready or running (WORKER_RECOMMENDABLE enforced)', () => {
+  // regression: WORKER_RECOMMENDABLE was declared but not enforced.
+  assert.throws(() => assertTransition('planned', 'ready', 'worker'), /worker may only recommend/);
+  assert.throws(() => assertTransition('ready', 'running', 'worker'), /worker may only recommend/);
+});
+
 test('illegal transitions rejected regardless of actor', () => {
   assert.throws(() => assertTransition('planned', 'verified', 'adapter'), /illegal transition/);
 });

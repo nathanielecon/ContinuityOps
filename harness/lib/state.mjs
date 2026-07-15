@@ -36,9 +36,11 @@ export class StateStore {
   }
 
   _persist() {
-    const tmp = `${this.path}.tmp`;
+    // Unique temp name per write so concurrent writers cannot clobber a shared
+    // temp file; rename is atomic on POSIX, so readers always see a whole file.
+    const tmp = `${this.path}.${process.pid}.${(StateStore._seq = (StateStore._seq || 0) + 1)}.tmp`;
     writeFileSync(tmp, JSON.stringify(this.data, null, 2) + '\n');
-    renameSync(tmp, this.path); // atomic on POSIX
+    renameSync(tmp, this.path);
   }
 
   /**
@@ -67,6 +69,9 @@ export class StateStore {
       }
     }
     if (toState === 'running') {
+      // Defense in depth: re-verify phase authorization on activation, so an
+      // inconsistently-seeded blocked/running path cannot escape the gate.
+      assertPhaseAuthorized(task, this.data.authorized_through_phase);
       const chosenStream = stream ?? task.stream;
       if (!chosenStream) throw new Error(`task ${id} needs a stream assignment to run`);
       const check = canActivateInStream({ ...task, stream: chosenStream }, chosenStream, this.data.tasks);

@@ -9,6 +9,17 @@ test('scope overlap detection', () => {
   assert.equal(scopesOverlap(['terraform/'], ['kubernetes/']), false);
 });
 
+test('scope overlap normalizes ./ and respects segment boundaries', () => {
+  // regression: './src/' vs 'src/' was a false-negative isolation bypass.
+  assert.ok(scopesOverlap(['./src/**'], ['src/']));
+  // regression: sibling prefixes must NOT be treated as overlapping.
+  assert.equal(scopesOverlap(['src/app'], ['src/application']), false);
+  // 'terraform2/' is a distinct directory, not inside 'terraform/'.
+  assert.equal(scopesOverlap(['terraform/'], ['terraform2/']), false);
+  // conservative mid-glob: 'tf/*/foo' reduces to 'tf/' and overlaps 'tf/prod/foo'.
+  assert.ok(scopesOverlap(['tf/*/foo'], ['tf/prod/foo']));
+});
+
 test('a stream is sequential internally', () => {
   const all = [mk('T1', 'running', 'A', ['a/']), mk('T2', 'ready', 'A', ['b/'])];
   const res = canActivateInStream(all[1], 'A', all);

@@ -38,8 +38,10 @@ export function assertTransition(from, to, actor) {
   if (!isLegalTransition(from, to)) {
     throw new Error(`illegal transition ${from} -> ${to}`);
   }
-  if (actor === 'worker' && ADAPTER_ONLY.has(to)) {
-    throw new Error(`worker may not set state '${to}' (adapter-only)`);
+  if (actor === 'worker' && !WORKER_RECOMMENDABLE.has(to)) {
+    // A worker may only ever recommend `review` or `blocked`. Every other
+    // target (ready/running/verified/done) is an adapter/orchestrator action.
+    throw new Error(`worker may only recommend review|blocked, not '${to}' (adapter-only)`);
   }
   return true;
 }

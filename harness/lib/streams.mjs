@@ -10,16 +10,42 @@
 export const MAX_STREAMS = 3;
 const ACTIVE = new Set(['ready', 'running', 'blocked', 'review']);
 
-/** Normalize a write-scope glob list to comparable prefixes. */
-function scopePrefixes(task) {
-  return (task.write_scope || []).map((p) => p.replace(/\*+$/, ''));
+/**
+ * Reduce a write-scope entry to its literal directory prefix: drop a leading
+ * `./`, keep everything up to the first glob character, and collapse repeated
+ * slashes. Reducing at the first glob is conservative — it errs toward
+ * detecting overlap (blocking), which is the safe direction for isolation.
+ */
+export function normalizeScope(p) {
+  let s = String(p).replace(/^\.\//, '');
+  const star = s.indexOf('*');
+  if (star !== -1) s = s.slice(0, star);
+  return s.replace(/\/{2,}/g, '/');
 }
 
-/** True if two prefix lists share any overlapping path root. */
+/** Normalize a task's whole write-scope list. */
+function scopePrefixes(task) {
+  return (task.write_scope || []).map(normalizeScope);
+}
+
+/**
+ * True when `prefix` contains `path` at a path-segment boundary — i.e. they are
+ * equal, or `prefix` is an ancestor directory of `path`. Prevents `src/app`
+ * from being treated as a prefix of `src/application`.
+ */
+export function isPrefixAtBoundary(prefix, path) {
+  if (prefix === path) return true;
+  if (!path.startsWith(prefix)) return false;
+  return prefix.endsWith('/') || path[prefix.length] === '/';
+}
+
+/** True if any normalized scope in one list contains/equals one in the other. */
 export function scopesOverlap(aPrefixes, bPrefixes) {
-  for (const a of aPrefixes) {
-    for (const b of bPrefixes) {
-      if (a.startsWith(b) || b.startsWith(a)) return true;
+  const a = aPrefixes.map(normalizeScope);
+  const b = bPrefixes.map(normalizeScope);
+  for (const x of a) {
+    for (const y of b) {
+      if (isPrefixAtBoundary(x, y) || isPrefixAtBoundary(y, x)) return true;
     }
   }
   return false;
