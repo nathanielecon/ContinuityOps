@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "project_a": {
+    "repository": "nathanielecon/cloud",
+    "commit_sha": "REQUIRED",
+    "consumed_contracts": [],
+    "evidence_refs": []
+  },
+  "project_c": {
+    "repository": "nathanielecon/project-c-cloud",
+    "commit_sha": "REQUIRED",
+    "image_digest": "REQUIRED_OR_EXPLICITLY_UNAVAILABLE",
+    "consumed_contracts": [],
+    "evidence_refs": []
+  }
+}

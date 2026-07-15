@@ -1,0 +1,47 @@
+# Secrets and local env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+**/secrets/**
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# Language / build
+node_modules/
+dist/
+build/
+coverage/
+.turbo/
+.next/
+*.tsbuildinfo
+__pycache__/
+*.pyc
+.venv/
+venv/
+target/
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+crash.log
+
+# Agent / local runtime
+.cursor/
+.codex/
+*.log
+tmp/
+.cache/
+
+# Cloud / kube local
+kubeconfig
+*.kubeconfig
+.aws/
