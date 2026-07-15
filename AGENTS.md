@@ -219,3 +219,36 @@ Stop and request human action for:
   through an explicit dependency decision and full revalidation.
 - Maintain `BREAK_FIX_LOG.md` continuously; no stream or judge loop closes while
   an observed break remains unrecorded.
+
+## Cursor Cloud specific instructions
+
+Durable, non-obvious notes for future cloud agents working in this environment.
+
+- **Repository type:** This is a planning/governance repository at Phase 0
+  bootstrap. There is no application service, no dependency manifest
+  (`package.json`/`requirements.txt`/`go.mod`), and no committed build/test/lint
+  configuration. The "deliverables" are the Markdown governance docs, the
+  machine-readable JSON contracts (`PLAN.md` task authority, `OPERATING_STATE.md`
+  state/issues, `integration/upstreams.lock.json` upstream pins), and the
+  architecture assets in `docs/architecture/`. Do not fabricate a build system or
+  claim runtime capability; implementation begins only when a human advances
+  `authorized_through_phase` per `PLAN.md`.
+- **Pre-installed runtimes (no install needed):** Node 22, npm 10, Python 3.12,
+  Go 1.22, and `jq`. The update script is intentionally a near no-op because
+  there are no dependencies to install yet; it only installs deps if a manifest
+  later appears.
+- **Validate the contracts (the closest thing to a test suite):** parse every
+  standalone `*.json` and every fenced ```json block embedded in the Markdown
+  (all 12 currently parse). This is the core "does the repo still hold together"
+  check. `python3 -c "import json"` is sufficient; no framework is installed.
+- **Expected Phase-0 link gaps:** internal Markdown links to `evidence/*`
+  subdirectories (hosted/slices/postbuild/judges) and the root-relative links
+  inside `docs/planning/REPO_README_TEMPLATE.md` do NOT resolve yet by design —
+  those namespaces/assets are created in later phases. Only `evidence/README.md`
+  exists today. Treat these as known-not-yet-created, not as regressions.
+- **Render the architecture diagram (build/run demo):** the README Mermaid block
+  renders with `npx --yes @mermaid-js/mermaid-cli -i <file>.mmd -o out.png`; its
+  bundled Chromium works headless in this VM with no extra system libs. The
+  committed renders (`docs/architecture/continuityops-architecture.{png,svg}`,
+  `continuityops.drawio`) are valid and the drawio XML is well-formed.
+- **No secrets required** for planning/validation work in this environment.
