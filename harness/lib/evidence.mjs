@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { hashJson } from './hashing.mjs';
+import { isAspirationalModelId } from './model-id.mjs';
 
 export class EvidenceLog {
   constructor(path) {
@@ -29,6 +30,11 @@ export class EvidenceLog {
     EvidenceLog.assertNotForged(event, opts.actorRole || 'adapter');
     if (!event.produced_by || !event.produced_by.model_id) {
       throw new Error('evidence event must record the ACTUAL producing model_id');
+    }
+    if (isAspirationalModelId(event.produced_by.model_id)) {
+      // Enforce at write time so the "not an aspirational one" guarantee is real,
+      // not merely checked by a later validation pass.
+      throw new Error(`evidence model_id '${event.produced_by.model_id}' claims an uninvokable engine without a simulated/planned marker`);
     }
     const index = this.events.length;
     const body = {

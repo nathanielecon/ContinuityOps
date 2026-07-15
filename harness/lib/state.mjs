@@ -88,6 +88,9 @@ export class StateStore {
   /** Raise authorized_through_phase — the human-gated, monotonic advance. */
   authorizePhase(newPhase, opts = {}) {
     const { expectedRevision } = opts;
+    if (!Number.isInteger(newPhase) || newPhase < 0) {
+      throw new Error(`authorized phase must be a non-negative integer, got ${newPhase}`);
+    }
     if (expectedRevision !== undefined && expectedRevision !== this.data.revision) {
       throw new Error(`stale revision: expected ${expectedRevision} but store is at ${this.data.revision}`);
     }

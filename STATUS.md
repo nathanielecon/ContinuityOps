@@ -10,4 +10,7 @@ Append-only. Newest entries at the bottom. Only the adapter/orchestrator writes.
 | 3 | 68c1c29 | 0 | accuracy-check round 1 | 3 fresh judges; 11 deduped defects found (0 critical/high); slice exit failed |
 | 4 | (pending commit) | 0 | nixer/fixer applied | all 11 fixed; 32/32 tests pass; +5 regression tests; see BF-001 |
 
+| 5 | 7d2d896 | 0 | accuracy-check round 2 | fresh council 0.72/0.85/0.90; 4 defects (1 high regression) |
+| 6 | (pending commit) | 0 | nixer/fixer round 2 | all 4 fixed; 36/36 tests; +4 regression tests; see BF-002 |
+
 Current authorized phase: **0**. Phases 1–8: unauthorized, human-gated.

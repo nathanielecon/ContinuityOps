@@ -6,6 +6,13 @@ import { readFileSync, existsSync } from 'node:fs';
 import { register } from './registry.mjs';
 import { verifyUniqueOwnership } from '../partition.mjs';
 import { normalizeScope, isPrefixAtBoundary } from '../streams.mjs';
+import { isAspirationalModelId } from '../model-id.mjs';
+
+// Truly-binary extensions only. Text-based formats (.svg, .drawio are XML) are
+// NOT exempt — a secret embedded as text in them must still be caught.
+export function isBinaryPath(f) {
+  return /\.(png|p12|jpg|jpeg|gif|ico|woff2?|ttf)$/i.test(f);
+}
 
 function readJson(abs) {
   return JSON.parse(readFileSync(abs, 'utf8'));
@@ -90,10 +97,10 @@ register('secret_scan', async ({ repoRoot }) => {
     return { ok: false, findings: [`git ls-files failed: ${err.message}`] };
   }
   for (const f of files) {
-    if (/\.(png|svg|drawio|p12|jpg|jpeg|gif|ico)$/.test(f)) continue;
-    // No file is exempted from scanning: the pattern definitions are written so
-    // their own source text does not match any pattern (verified by tests), so
-    // there is no need for a self-skip that would create a blind spot.
+    if (isBinaryPath(f)) continue; // only truly-binary files skipped; .svg/.drawio ARE scanned
+    // No text file is exempted: the pattern definitions are written so their own
+    // source text does not match any pattern (verified by tests), so there is no
+    // self-skip that would create a blind spot.
     let content;
     try { content = readFileSync(`${repoRoot}/${f}`, 'utf8'); } catch { continue; }
     for (const [re, label] of SECRET_PATTERNS) {
@@ -117,20 +124,14 @@ register('scope', async ({ modifiedPaths = [], writeScope = [] }) => {
 });
 
 // -- model_routing: evidence records an ACTUAL model id, never aspirational --
-const ASPIRATIONAL = [/codex/i, /gpt-?5/i, /grok/i];
 register('model_routing', async ({ producedBy }) => {
   if (!producedBy || !producedBy.model_id) return { ok: false, findings: ['no producing model_id recorded'] };
   const findings = [];
-  // A simulated/planned marker must be a delimited segment (e.g. "-sim",
-  // "_planned", "-not-run"), NOT an incidental substring — otherwise an id like
-  // "grok-assimilate" would pass because "assimilate" contains "sim".
-  const MARKER = /[-_](sim|simulated|planned|not-?run)(?:$|[-_])/i;
   // In THIS environment workers are Claude. Reject a recorded id that claims an
-  // engine we cannot actually invoke unless it is explicitly marked simulated.
-  for (const re of ASPIRATIONAL) {
-    if (re.test(producedBy.model_id) && !MARKER.test(producedBy.model_id)) {
-      findings.push(`model_id '${producedBy.model_id}' claims an uninvokable engine without a delimited simulated/planned marker`);
-    }
+  // engine we cannot actually invoke unless it carries a delimited simulated/
+  // planned marker. Logic is shared with the evidence adapter via model-id.mjs.
+  if (isAspirationalModelId(producedBy.model_id)) {
+    findings.push(`model_id '${producedBy.model_id}' claims an uninvokable engine without a delimited simulated/planned marker`);
   }
   return { ok: findings.length === 0, findings };
 });

@@ -20,6 +20,12 @@ test('scope overlap normalizes ./ and respects segment boundaries', () => {
   assert.ok(scopesOverlap(['tf/*/foo'], ['tf/prod/foo']));
 });
 
+test('leading-glob scope is repo-wide and overlaps concrete paths', () => {
+  // regression: '**/*.md' / '*' normalized to '' and overlapped nothing.
+  assert.ok(scopesOverlap(['**/*.md'], ['docs/index.md']));
+  assert.ok(scopesOverlap(['*'], ['anything/at/all']));
+});
+
 test('a stream is sequential internally', () => {
   const all = [mk('T1', 'running', 'A', ['a/']), mk('T2', 'ready', 'A', ['b/'])];
   const res = canActivateInStream(all[1], 'A', all);

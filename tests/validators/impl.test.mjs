@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { scopeCheck, looksSimplifiedChinese } from '../../harness/lib/validators/impl.mjs';
+import { scopeCheck, looksSimplifiedChinese, isBinaryPath } from '../../harness/lib/validators/impl.mjs';
 import { runValidator } from '../../harness/lib/validators/registry.mjs';
 import { EvidenceLog } from '../../harness/lib/evidence.mjs';
 import { mkdtempSync } from 'node:fs';
@@ -13,6 +13,14 @@ test('scope check flags path escapes', () => {
   const bad = scopeCheck(['terraform/main.tf'], ['harness/']);
   assert.equal(bad.ok, false);
   assert.deepEqual(bad.escapes, ['terraform/main.tf']);
+});
+
+test('svg/drawio are NOT treated as binary (still secret-scanned)', () => {
+  // regression: .svg/.drawio were in the skiplist despite being text XML.
+  assert.equal(isBinaryPath('docs/architecture/x.svg'), false);
+  assert.equal(isBinaryPath('docs/architecture/x.drawio'), false);
+  assert.equal(isBinaryPath('docs/architecture/x.png'), true);
+  assert.equal(isBinaryPath('a/b/keys.p12'), true);
 });
 
 test('simplified-chinese heuristic', () => {
@@ -93,4 +101,17 @@ test('append() itself blocks a worker forging an adapter event', () => {
     /forge/,
   );
   assert.equal(log.events.length, 0, 'forged event not persisted');
+});
+
+test('append() rejects an aspirational (uninvokable-engine) model id', () => {
+  // regression: model_routing was not enforced at evidence write time.
+  const dir = mkdtempSync(join(tmpdir(), 'cops-asp-'));
+  const log = new EvidenceLog(join(dir, 'ev.json'));
+  assert.throws(
+    () => log.append({ task_id: 'T', candidate_sha: 'x', result: 'pass', produced_by: { role: 'adapter', model_id: 'codex-5.4-cli' } }),
+    /uninvokable engine/,
+  );
+  // a real id, or one with a delimited sim marker, is accepted
+  assert.ok(log.append({ task_id: 'T', candidate_sha: 'x', result: 'pass', produced_by: { role: 'adapter', model_id: 'claude-opus-4-8' } }));
+  assert.ok(log.append({ task_id: 'T', candidate_sha: 'y', result: 'pass', produced_by: { role: 'adapter', model_id: 'codex-5.4-sim' } }));
 });

@@ -53,6 +53,15 @@ test('authorizing phase 1 lets the phase-1 task become ready; monotonic', () => 
   assert.throws(() => s.authorizePhase(0), /monotonic/);
 });
 
+test('authorizePhase rejects non-integer / NaN (no state bricking)', () => {
+  // regression: authorize-phase abc -> Number('abc')=NaN slipped past the guard.
+  const s = freshStore();
+  assert.throws(() => s.authorizePhase(NaN), /non-negative integer/);
+  assert.throws(() => s.authorizePhase(1.5), /non-negative integer/);
+  assert.throws(() => s.authorizePhase(-1), /non-negative integer/);
+  assert.equal(s.data.authorized_through_phase, 0, 'state untouched after rejected authorize');
+});
+
 test('dependency must be verified before dependent becomes ready', () => {
   const s = freshStore();
   assert.throws(() => s.transition('P0-T02', 'ready'), /dependencies not satisfied/);

@@ -34,6 +34,10 @@ function scopePrefixes(task) {
  * from being treated as a prefix of `src/application`.
  */
 export function isPrefixAtBoundary(prefix, path) {
+  // An empty prefix means the scope reduced to a bare/leading glob (e.g. '*',
+  // '**/*.md'), which is effectively repo-wide: it contains every path. Return
+  // true so such a scope is detected as overlapping (the safe direction).
+  if (prefix === '') return true;
   if (prefix === path) return true;
   if (!path.startsWith(prefix)) return false;
   return prefix.endsWith('/') || path[prefix.length] === '/';
