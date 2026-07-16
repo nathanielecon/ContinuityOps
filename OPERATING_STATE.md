@@ -9,23 +9,24 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 4,
+  "revision": 5,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
-  "current_gate": "preflight-codex-auth-and-ac-visibility",
+  "current_gate": "codex-cloud-environment-bootstrap",
   "running_tasks": [],
   "blocked_tasks": ["P0-T01", "P0-T02", "P0-T03", "P0-T04", "P0-T05"],
   "waiting_human": [
-    "H-preflight-CODEX_AUTH_JSON_GZB64",
-    "H-preflight-AC-visibility",
+    "H-codex-env-create",
     "H0-after-P0-T04"
   ],
   "completed_gates": [],
   "next_actions": [
-    "Human: inject usable CODEX_AUTH_JSON_GZB64 auth material into the Codex worker environment (resolves CO-005)",
-    "Human: grant the Cursor GitHub App installation read access to pinned Project A and C repos (resolves CO-006)",
-    "Orchestrator: re-verify both preflight gates, then re-dispatch P0-T01 on a stream/S0-baseline-audit branch",
+    "Orchestrator: land the .codex warm-start scripts and README on this branch (this commit)",
+    "Human: merge the .codex scripts to the default branch (merge is human-owned, D-012)",
+    "Owner: create the ContinuityOps Codex Cloud Environment in the Codex UI under the owner ChatGPT login (H-codex-env-create, resolves the CO-007 creation step)",
+    "Control center: register the Environment in the machine-local registry and run the -Force first warm",
+    "Control center: run the warm gate, then dispatch P0-T01 on a stream/S0-baseline-audit branch via codex cloud exec",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -36,8 +37,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   "verified_baseline": [],
   "unverified": [
     "All ContinuityOps implementation and runtime capabilities",
-    "CODEX_AUTH_JSON_GZB64 usable Codex auth material (CO-005, fails preflight)",
-    "Project A/C repository visibility from the Cursor Cloud Agent installation (CO-006, fails preflight)"
+    "ContinuityOps Codex Cloud Environment creation, registration, and first warm (CO-007)",
+    "Cross-repo Project A/C context packaging by the control center (CO-006)"
   ]
 }
 ```
@@ -71,13 +72,16 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-023 | Code executors are warm Codex CLI 5.4 cloud workers in default mode (not /high, not /fast) with environments pre-set-up before work begins | accepted | Supersedes the `/fast` portion of D-014 |
 | D-024 | Workers report remaining context on every handoff; the orchestrator may retire a low-context worker and dispatch a fresh replacement | accepted | Handoff schema gains a `context_remaining` field |
 | D-025 | The supervisor operates minimal-intervention and reviews a stream branch only upon the orchestrator's durable completion signal | accepted | Branch-check protocol documented as BF-PRE-015 in BREAK_FIX_LOG.md |
+| D-026 | Adopt the warm-start Codex Cloud specification in full: one Codex Cloud Environment per repo (cache On), the two in-repo scripts `.codex/cloud-setup.sh` and `.codex/cloud-maintenance.sh` are the only content pasted into the Environment, zero credentials in the container, a warm gate before every dispatch, and `codex cloud exec --env <ENV_ID> --branch <branch>` dispatch where the task never touches git and the orchestrator owns integration | accepted | Acceptance red lines: adding a secret to the Environment, editing the setup scripts ad hoc, or bypassing the warm gate are all out of bounds; warmth is a per-Environment toolchain cache (~12h), not credential material |
+| D-027 | The owner's Windows control-center session (local Claude Code with codex-cli, pwsh, and the machine-local `environments.json` registry) is the sole dispatch point; cloud containers and cloud workers are receive-only and never run the warm gate, attempt `codex cloud exec`, or hold Codex credentials | accepted | A cloud orchestrator that needs a Codex cloud task must either request it in its report to the control center or leave a durable GitHub marker (issue/comment) as a dispatch backlog the control center polls |
+| D-028 | Cross-repo material follows "the worker gets data, not permission": the control center supplies upstream context per task by priority (1) context packaging, default, control-center gh extracts the needed files/logs/contracts into the prompt or pre-committed; (2) read-only vendored snapshot of a standing dependency with recorded source SHA; (3) submodule/multi-repo authorization, unverified, must be smoke-verified before reliance and is second choice even if it works; (4) local-lane exception, a control-center worktree subagent inherits the owner gh login for multi-repo read-heavy tasks | accepted | Cloud worker containers clone only their own Environment repo and hold no environment credentials; the Cursor variant of this workflow is superseded |
 
 ## Initial issue ledger
 
 ```json
 {
   "schema_version": "1.0",
-  "revision": 2,
+  "revision": 3,
   "issues": [
     {
       "id": "CO-001",
@@ -124,20 +128,30 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "phase": 0,
       "severity": "blocking",
       "category": "credential",
-      "summary": "CODEX_AUTH_JSON_GZB64 does not resolve to usable Codex auth material, so no warm Codex worker can be dispatched.",
-      "status": "open",
-      "owner": "human H-preflight-CODEX_AUTH_JSON_GZB64",
-      "resolution_criterion": "The Codex worker environment receives gzip+base64 auth JSON or a resolvable path decoding to a usable Codex auth.json; orchestrator preflight recheck passes."
+      "summary": "Prior assumption that a CODEX_AUTH_JSON_GZB64 secret must be injected to dispatch workers. Rejected: no auth material is ever injected. Codex Cloud is authenticated through the platform under the owner ChatGPT account; warmth is only a toolchain cache and a secret would invalidate that cache.",
+      "status": "rejected-by-human",
+      "owner": "human decision (D-026/D-027)",
+      "resolution_criterion": "N/A. Superseded by the receive-only dispatch topology; no credential is placed in any cloud Environment or container."
     },
     {
       "id": "CO-006",
       "phase": 0,
       "severity": "blocking",
       "category": "integration",
-      "summary": "Pinned Project A/C repositories are not visible to the Cursor Cloud Agent GitHub installation (only ContinuityOps is installed); independently reconfirmed 404 from the orchestrator channel.",
+      "summary": "Upstream Project A/C material must reach a worker as data, not permission. The Cursor App framing is void. The control center supplies A/C context per task via packaging or a read-only vendored snapshot (D-028); readability of the pinned SHAs is a control-center capability, not a worker-container grant.",
       "status": "open",
-      "owner": "human H-preflight-AC-visibility",
-      "resolution_criterion": "The installation can read nathanielecon/aws-landing-zone-lab and nathanielecon/local-first-governed-cicd at the pinned commits, or the human updates the pins to visible canonical repos; fetch/API succeed."
+      "owner": "control-center (per-task context supply, D-028)",
+      "resolution_criterion": "The first task that needs A/C is served a validated context package or vendored snapshot with recorded source SHAs; closed after that first packaging is verified."
+    },
+    {
+      "id": "CO-007",
+      "phase": 0,
+      "severity": "blocking",
+      "category": "environment",
+      "summary": "The ContinuityOps Codex Cloud Environment is not yet created, registered, or first-warmed. The only unavoidable human step is Environment creation in the Codex UI under the owner ChatGPT login; registration and the -Force first warm can be performed by control-center agent scripts.",
+      "status": "open",
+      "owner": "human H-codex-env-create (creation) + control-center (register/warm)",
+      "resolution_criterion": "Environment created in the Codex UI (cache On, the two .codex scripts pasted, zero secrets), registered in the machine-local registry, and a -Force first warm stamps lastWarmUtc; warm gate then passes."
     }
   ]
 }
