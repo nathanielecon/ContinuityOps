@@ -1,55 +1,48 @@
-# ContinuityOps — Codex Cloud Environment
+# Codex Cloud Environment (keep-warm) — ContinuityOps
 
-This directory holds the **only** two scripts pasted into the ContinuityOps
-Codex Cloud Environment. They are versioned and change-controlled in the repo
-(decision **D-026**). Editing them ad hoc, adding a secret to the Environment,
-or bypassing the warm gate are all out of bounds.
+Codex Cloud agents use the Codex universal image plus the dashboard **setup
+script**; Codex caches that container state ~12 hours. Warmth is **per
+Environment/repo** — another project's warm cache does not help this one.
 
-> Note: these scripts follow the described dailydigits warm-start pattern. The
-> reference repository was not readable when they were authored; they are
-> **pending owner cross-check against the dailydigits reference**.
+## Wire once (owner, Codex web UI)
 
-## Environment configuration (Codex UI)
+1. Codex → Environments → `nathanielecon/ContinuityOps` → caching **On**.
+2. Setup script: `bash .codex/cloud-setup.sh`
+3. Maintenance script: `bash .codex/cloud-maintenance.sh`
+4. Pin Node 24 in the UI if offered (or closest; setup upgrades). Save.
+5. **No** environment variables. **No** secrets.
+6. Register the Environment id on the orchestrator machine (local only, never
+   committed):
 
-- **One Environment for this repo**, created in the Codex UI under the owner's
-  ChatGPT login.
-- **Caching: On.**
-- **Setup script:** `bash .codex/cloud-setup.sh`
-- **Maintenance script:** `bash .codex/cloud-maintenance.sh`
-- **Zero secrets / zero environment variables.** Codex Cloud is authenticated
-  through the platform (owner ChatGPT account); the container needs no
-  credentials. Adding any variable or secret invalidates the ~12h warm cache
-  and violates D-026/D-027.
+```powershell
+pwsh -File scripts/Register-CodexCloudEnvironment.ps1 `
+  -Repo 'nathanielecon/ContinuityOps' `
+  -EnvId '<ENV_ID>'
+```
 
-## What the scripts do
+## Warm gate (orchestrator, forever)
 
-- `cloud-setup.sh` (cold, at Environment build): verifies the toolchain this
-  planning/governance repo relies on (`git`, `python3`, `jq`; Node 22 is
-  preinstalled, mermaid rendering optional), installs dependencies **only if** a
-  manifest later appears (`package.json` / `requirements.txt` / `go.mod`), then
-  runs the warm smoke step.
-- `cloud-maintenance.sh` (warm refresh + warm-gate smoke): validates every
-  standalone `*.json` and every fenced ```json block in Markdown. This is the
-  repo's closest thing to a test suite; it exits non-zero on any parse failure.
+Before **any** Codex Cloud task for this repo:
 
-## Bootstrap order (four steps)
+```powershell
+pwsh -File scripts/Invoke-CodexCloudWarm.ps1 -Repo 'nathanielecon/ContinuityOps'
+```
 
-1. **Land the scripts** on a branch and get them merged to the default branch
-   (merge is human-owned, D-012).
-2. **Owner creates the Environment** in the Codex UI (cache On, the two scripts
-   above, zero secrets) — this is the one unavoidable human step,
-   gate `H-codex-env-create` (resolves the CO-007 creation step).
-3. **Control center registers** the Environment `ENV_ID` in the machine-local
-   `environments.json` registry (never committed) and runs the `-Force` first
-   warm.
-4. **Control center warm-gates and dispatches** work with
-   `codex cloud exec --env <ENV_ID> --branch <branch> "<task>"`. Tasks never run
-   git; the orchestrator owns integration.
+If `lastWarmUtc` is missing/older than ~10 h it submits a smoke task via
+`codex cloud exec` and stamps `%LOCALAPPDATA%\codex-cloud-warm\environments.json`.
 
-## Dispatch topology (recap)
+## What gets installed
 
-The owner's Windows control-center session is the sole dispatch point (D-027).
-Cloud containers and workers are **receive-only**: no warm gate, no
-`codex cloud exec`, no credentials. Cross-repo material reaches a worker as
-**data, not permission** (D-028) — via context packaging or a read-only vendored
-snapshot, never a widened repository grant.
+| Tool | Version |
+| --- | --- |
+| Node.js | 24.x |
+| PowerShell | 7.x |
+| Terraform | 1.15.5 |
+| AWS CLI | v2 |
+| Ralphy CLI | 4.7.2 |
+| git / jq / Docker (when apt provides it) | distro |
+
+Notes: laptop `codex` ChatGPT login ≠ credentials inside cloud containers —
+this system warms the **toolchain cache** only. Don't reinstall tools per task;
+don't edit the setup script casually (cache invalidation). Live cloud apply is
+GitOps/CI, not the Cloud agent.

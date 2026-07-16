@@ -37,10 +37,11 @@ crash.log
 # Agent / local runtime
 .cursor/
 # .codex/ holds change-controlled Codex Cloud Environment scripts (D-026) and is
-# tracked. Only ever-local credential/cache material inside it is ignored.
+# tracked. Only ever-local credential/cache/clutter material inside it is ignored.
 .codex/auth.json
 .codex/*.local
 .codex/cache/
+.codex-last-message-*
 *.log
 tmp/
 .cache/
