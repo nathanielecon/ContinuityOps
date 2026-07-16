@@ -192,3 +192,18 @@ ContinuityOps incidents yet.
 - **Judge round impact:** none
 - **Remaining risk/follow-up:** README/MASTER_PLAN still cite legacy `cloud` / `project-c-cloud` names while lockfile uses renamed paths — human should confirm canonical identity when granting access
 - **Verified by:** orchestrator preflight (failed closed)
+
+## 2026-07-16 — CO-006 — A/C visibility recheck still fail (no secret rotate from agent)
+
+- **Slice/task:** preflight recheck on human claim that A/C permission was granted
+- **Baseline SHA:** `39eaf03f749ec828c39d2e3da75efaf3392be2e8`
+- **Candidate SHA at break:** n/a
+- **Environment/identity:** same Cloud Agent; `ghs_` installation token; `repository_selection=selected`; repos=`ContinuityOps` only
+- **Symptom:** `nathanielecon/aws-landing-zone-lab` and `nathanielecon/local-first-governed-cicd` still HTTP 404 / git not found
+- **Exact failed check and exit:** `gh api repos/<A|C>` → 404; `/installation/repositories` total_count=1
+- **Raw failure evidence:** OPERATING_STATE `preflight.checked_at=2026-07-16T00:16:52Z`
+- **Attempts:** API, ls-remote, installation list; no Cursor secret-admin API; `gh secret list` 403/404
+- **Root cause:** access is installation-scoped, not fixed by ContinuityOps Actions secrets; agent cannot delete/create Cursor dashboard secrets or add repos to the GitHub App install
+- **Decision:** escalate to human immediately; do not invent or mint credentials
+- **Remaining risk/follow-up:** human must add A+C to the Cursor GitHub App installation (or provide a permitted PAT secret and a new agent run that injects it); separately replace broken `CODEX_AUTH_JSON_GZB64`
+- **Verified by:** orchestrator recheck (failed closed)

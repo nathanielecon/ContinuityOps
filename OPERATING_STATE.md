@@ -40,8 +40,9 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Project A/C repository visibility from this Cloud Agent installation"
   ],
   "preflight": {
-    "checked_at": "2026-07-15T21:50:00Z",
+    "checked_at": "2026-07-16T00:16:52Z",
     "baseline_sha": "39eaf03f749ec828c39d2e3da75efaf3392be2e8",
+    "previous_check_at": "2026-07-15T21:50:00Z",
     "codex_auth_json_gzb64": {
       "env_present": true,
       "env_value_len": 37,
@@ -53,15 +54,16 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "project_ac_visibility": {
       "installation_repo_count": 1,
       "installation_repos": ["nathanielecon/ContinuityOps"],
+      "repository_selection": "selected",
+      "auth_kind": "ghs_installation",
       "checked_repos": [
         "nathanielecon/aws-landing-zone-lab",
-        "nathanielecon/local-first-governed-cicd",
-        "nathanielecon/cloud",
-        "nathanielecon/project-c-cloud"
+        "nathanielecon/local-first-governed-cicd"
       ],
       "visible_repos": [],
       "pin_commits_reachable": false,
-      "verdict": "fail"
+      "verdict": "fail",
+      "note": "Recheck after human permission claim still 404; agent cannot expand GitHub App install or rotate Cursor secrets from this pod"
     },
     "p0_dispatch_allowed": false
   }
