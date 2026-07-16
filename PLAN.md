@@ -8,7 +8,7 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 4,
+  "revision": 6,
   "authorized_through_phase": 0,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
@@ -33,7 +33,7 @@ Initial authorization stops at Phase 0.
       "phase": 0,
       "slice": "S0",
       "title": "Audit and freeze the completed candidate baseline",
-      "state": "blocked",
+      "state": "ready",
       "depends_on": [],
       "owner": "baseline-audit-worker",
       "risk": "medium",
