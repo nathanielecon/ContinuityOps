@@ -32,11 +32,24 @@ configuration, not inferred aliases.
   (supersedes the earlier Grok 4.5 High Fast assignment; see D-022).
 - **Code execution:** warm Codex 5.4 CLI Cloud Agents in default mode (not
   `/high`, not `/fast`) implement the project code and tests through bounded
-  Ralphy tasks. "Warm" means the worker's environment is already set up before
-  work begins (see the `nathanielecon/cloud-tools` reference). Workers report
-  remaining context on every handoff; the orchestrator may retire a
-  low-context worker and dispatch a fresh replacement. They edit repositories;
-  they are not the live cloud apply control plane.
+  Ralphy tasks. "Warm" is a per-Environment toolchain cache (~12h), never
+  credential material. The concrete specification (D-026):
+  - one Codex Cloud Environment per repository, created in the Codex UI with
+    caching On;
+  - the two in-repo scripts `.codex/cloud-setup.sh` (Setup) and
+    `.codex/cloud-maintenance.sh` (Maintenance) are the *only* content pasted
+    into the Environment; they live in the repo and are change-controlled;
+  - zero credentials in the container — adding any environment variable or
+    secret to the Environment invalidates the ~12h cache and is out of bounds;
+  - a warm gate (`scripts/Invoke-CodexCloudWarm.ps1`, control-center only) runs
+    before every dispatch and re-warms via a smoke task when `lastWarmUtc` is
+    missing or older than ~10h;
+  - dispatch is `codex cloud exec --env <ENV_ID> --branch <branch> "<task>"`;
+    the task never runs git itself, and the orchestrator owns integration.
+  Warmth is isolated per Environment/repo and does not carry across repos.
+  Workers report remaining context on every handoff; the orchestrator may
+  retire a low-context worker and dispatch a fresh replacement. They edit
+  repositories; they are not the live cloud apply control plane.
 - **Claude execution location:** Claude agents run in cloud environments only.
   They do not rely on the user's laptop shell, browser session, cookies, or
   local cloud login.
@@ -44,6 +57,24 @@ configuration, not inferred aliases.
 The supervisor records the actual model ID, provider, mode, and role for every
 dispatch. If a named model is unavailable, the task stops or uses a
 human-approved substitution; agents never invent model availability.
+
+### Dispatch topology
+
+The owner's Windows control-center session (local Claude Code with codex-cli,
+`pwsh`, and the machine-local `environments.json` registry) is the **sole
+dispatch point** (D-027). The warm gate and every `codex cloud exec` run only
+there. Cloud containers and cloud workers are **receive-only**: they never run
+the warm gate, never attempt `codex cloud exec`, and never hold Codex
+credentials. A cloud orchestrator that needs a Codex cloud task uses one of two
+compliant paths:
+
+1. request the task in its report to the control center; or
+2. leave a durable GitHub marker (issue/comment) as the dispatch backlog the
+   control center polls.
+
+Cross-repo rule: **the worker gets data, not permission** (D-028) — the control
+center supplies upstream material per task via context packaging or a read-only
+vendored snapshot, never by widening a worker container's repository grants.
 
 ### Optional Claude proxy profile
 

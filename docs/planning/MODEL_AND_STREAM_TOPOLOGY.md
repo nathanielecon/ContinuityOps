@@ -37,6 +37,43 @@ Suggested construction waves:
 The exact wave map is produced from the repository dependency graph; this table
 does not authorize overlapping interfaces.
 
+## Warm Codex Cloud environment
+
+The authoritative worker specification (D-026). Five points:
+
+1. **One Environment per repo.** Create it in the Codex UI with caching On.
+2. **Two in-repo scripts only.** `.codex/cloud-setup.sh` (Setup) and
+   `.codex/cloud-maintenance.sh` (Maintenance) are the only content pasted into
+   the Environment; they are versioned and change-controlled in the repo.
+3. **Zero credentials in the container.** Adding any environment variable or
+   secret to the Environment invalidates the ~12h cache and is out of bounds.
+4. **Warm gate before every dispatch.** `scripts/Invoke-CodexCloudWarm.ps1`
+   (control-center only) re-warms through a smoke task when `lastWarmUtc` is
+   missing or older than ~10h, then stamps the machine-local registry.
+5. **Dispatch pattern.** `codex cloud exec --env <ENV_ID> --branch <branch>
+   "<task>"`, then poll status, local diff/apply, verify, and open a PR. The
+   task never runs git itself; the orchestrator owns integration. Warmth is
+   isolated per Environment/repo (~12h) and never carried across repos.
+
+Red lines: adding a secret to the Environment, editing the setup scripts ad
+hoc, or bypassing the warm gate are all out of bounds.
+
+## Dispatch topology
+
+The owner's Windows control-center session (local Claude Code, codex-cli,
+`pwsh`, machine-local `environments.json` registry) is the sole dispatch point
+(D-027). Cloud containers and cloud workers are receive-only: no warm gate, no
+`codex cloud exec`, no Codex credentials. A cloud orchestrator requests a Codex
+cloud task either in its report to the control center or by leaving a durable
+GitHub marker (issue/comment) as the dispatch backlog the control center polls.
+
+Cross-repo material follows "the worker gets data, not permission" (D-028):
+context packaging (default) or a read-only vendored snapshot with recorded
+source SHA, never a widened worker-container repository grant.
+
+The earlier Cursor Cloud Agent framing of this workflow is **superseded** by the
+control-center dispatch topology above.
+
 ## Bottleneck subagents
 
 The lead orchestrator provisions a bottleneck subagent in the current

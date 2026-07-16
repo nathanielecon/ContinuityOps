@@ -135,9 +135,10 @@ ContinuityOps incidents yet.
      covers Cursor-platform auto-generated `cursor/*` branches, which are never
      valid completion signals on their own.
   7. `STREAM_COMPLETE.json` must include a `preflight_ok` field: a snapshot of
-     the dispatch-time preflight verdict (for example Codex auth and upstream
-     visibility gates), so the supervisor can confirm the branch was not
-     produced under a blocked preflight state.
+     the dispatch-time warm-gate verdict (`lastWarmUtc` freshness for the
+     Environment) plus whether the required cross-repo context package was in
+     place at dispatch. It does not carry any credential check — no auth
+     material exists in the worker container (D-026/D-027).
 
 ### BF-PRE-016 — Credential variables are reported by metadata only
 
