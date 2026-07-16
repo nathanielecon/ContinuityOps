@@ -109,6 +109,27 @@ ContinuityOps incidents yet.
 - Control: exact draw.io source, evidence-locked prompt, visual parity review,
   required honest footer, and regeneration after architecture/evidence drift.
 
+### BF-PRE-015 — Supervisor branch-check protocol (minimal intervention)
+
+- Risk: a token-constrained supervisor either polls live streams (wasteful) or
+  misses completed work (unreviewed merges).
+- Control: the supervisor reviews a stream branch only upon a durable
+  completion signal from the orchestrator. Mechanism:
+  1. Each Ralphy stream works on an isolated branch named
+     `stream/<slice-id>-<short-name>`.
+  2. When the orchestrator judges the stream complete, it commits
+     `evidence/slices/<slice>/STREAM_COMPLETE.json` on that branch containing:
+     candidate SHA, baseline SHA, validation commands/results, evidence
+     manifest path, and the final worker-reported `context_remaining`.
+  3. The orchestrator then notifies the supervisor (Simplified Chinese,
+     durable-artifact pointer only — no transcript).
+  4. The supervisor reviews only the signaled branch: the completion file,
+     the diff against `write_scope`, and evidence freshness. It does not
+     inspect live or unsignaled streams.
+  5. The supervisor's verdict is recorded as a durable file under
+     `evidence/slices/<slice>/` (approve, or issue IDs for rework), never as
+     chat-only feedback.
+
 ## Entry template
 
 ```markdown
