@@ -4,10 +4,10 @@
 
 | Layer | Default | Responsibility |
 | --- | --- | --- |
-| Portfolio supervision | Claude Opus 4.8 cloud | Global objective, stream creation, co-orchestrator appointment, convergence |
+| Portfolio supervision | Claude 5 cloud (minimal intervention) | Global objective, stream creation, co-orchestrator appointment, convergence; reviews branches only on completion signal |
 | Co-orchestration | Claude Sonnet/Opus cloud | One bounded stream when appointed |
-| Ralphy orchestration/councils | Grok 4.5 High Fast | Stream control, judges, nixers, fixers, bottleneck reasoning |
-| Code execution | Codex 5.4 CLI Cloud Agent `/fast` | Complete bounded implementation and tests |
+| Ralphy orchestration/councils | Claude Opus 4.8 cloud | Stream control, judges, nixers, fixers, bottleneck reasoning (supersedes Grok 4.5 High Fast; D-022) |
+| Code execution | Warm Codex 5.4 CLI Cloud Agent, default mode (not `/high`, not `/fast`) | Complete bounded implementation and tests; pre-set-up environment; reports `context_remaining` on handoff (D-023/D-024) |
 | Cloud apply | Protected GitHub Actions OIDC | Live cloud mutation and evidence, never Cloud Agent credentials |
 
 All worker-facing instructions and communication are Simplified Chinese.

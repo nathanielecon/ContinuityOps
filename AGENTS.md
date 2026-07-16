@@ -20,15 +20,22 @@ from durable repository artifacts.
 ContinuityOps uses a layered control plane. Model names are explicit runtime
 configuration, not inferred aliases.
 
-- **Portfolio supervisor:** one Claude Opus 4.8 cloud agent supervises the
-  complete program, maintains the integrated objective, approves stream
-  creation/closure, and may appoint Claude Sonnet or Opus co-orchestrators for
-  bounded streams. It does not replace deterministic gates or human approvals.
-- **Ralphy orchestration and council reasoning:** Grok 4.5 High Fast is the
-  default model for stream orchestrators, judges, nixers, fixers, and bottleneck
-  analysts unless the supervisor records a task-specific exception.
-- **Code execution:** Codex 5.4 CLI Cloud Agents in `/fast` mode implement the
-  project code and tests through bounded Ralphy tasks. They edit repositories;
+- **Portfolio supervisor:** one Claude 5 cloud agent supervises the complete
+  program under a minimal-intervention policy, maintains the integrated
+  objective, approves stream creation/closure, and may appoint Claude Sonnet
+  or Opus co-orchestrators for bounded streams. It reviews a stream branch
+  only upon the orchestrator's durable completion signal (BF-PRE-015). It does
+  not replace deterministic gates or human approvals.
+- **Ralphy orchestration and council reasoning:** Claude Opus 4.8 is the
+  default model for the lead orchestrator, judges, nixers, fixers, and
+  bottleneck analysts unless the supervisor records a task-specific exception
+  (supersedes the earlier Grok 4.5 High Fast assignment; see D-022).
+- **Code execution:** warm Codex 5.4 CLI Cloud Agents in default mode (not
+  `/high`, not `/fast`) implement the project code and tests through bounded
+  Ralphy tasks. "Warm" means the worker's environment is already set up before
+  work begins (see the `nathanielecon/cloud-tools` reference). Workers report
+  remaining context on every handoff; the orchestrator may retire a
+  low-context worker and dispatch a fresh replacement. They edit repositories;
   they are not the live cloud apply control plane.
 - **Claude execution location:** Claude agents run in cloud environments only.
   They do not rely on the user's laptop shell, browser session, cookies, or
@@ -60,8 +67,9 @@ This is an experiment, not a guaranteed quota multiplier. Before activation:
 
 ### Language protocol
 
-All worker assignments, updates, retained handoffs, orchestration messages, and
-inter-agent communication are in **Simplified Chinese only**. External
+All worker assignments, updates, retained handoffs, orchestration messages,
+supervisor↔orchestrator communication, and all other inter-agent communication
+are in **Simplified Chinese only**. External
 repository artifacts intended for recruiters—including code comments where
 appropriate, README, diagrams, runbooks, evidence indexes, portfolio copy, and
 resume wording—remain English.
@@ -140,6 +148,7 @@ issue_ids: []
 evidence_paths: []
 recommended_next_step: []
 requires_escalation: false
+context_remaining: percent_or_token_estimate
 ```
 
 The orchestrator rejects a handoff if:
@@ -150,7 +159,9 @@ The orchestrator rejects a handoff if:
 - a blocked/failed result lacks a reproducible failed check;
 - an escalation lacks an issue ID;
 - secrets or user/customer data appear in evidence;
-- the worker directly changed authoritative task state.
+- the worker directly changed authoritative task state;
+- `context_remaining` is absent (the orchestrator uses it to decide whether to
+  retire the worker and dispatch a fresh replacement).
 
 ## Write and concurrency rules
 

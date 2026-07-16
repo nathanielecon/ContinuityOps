@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 2,
+  "revision": 3,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
@@ -53,7 +53,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-011 | Agentic workflow is read-mostly and human-gated for mutation | accepted | Modern automation without uncontrolled production authority |
 | D-012 | Human owns cloud authority, destructive drills, cost increases, teardown, merge, and publication | accepted | Agents cannot silently expand authority |
 | D-013 | Opus 4.8 cloud supervisor may appoint Sonnet/Opus cloud co-orchestrators | accepted | Global intent and per-stream authority remain separate |
-| D-014 | Grok 4.5 High Fast handles Ralphy orchestration/councils; Codex 5.4 CLI Cloud Agents `/fast` implement | accepted | Actual model/mode recorded on dispatch |
+| D-014 | Grok 4.5 High Fast handles Ralphy orchestration/councils; Codex 5.4 CLI Cloud Agents `/fast` implement | superseded by D-022/D-023 | Actual model/mode recorded on dispatch |
 | D-015 | All worker communication is Simplified Chinese; recruiter artifacts are English | accepted | Machine fields may stay English, free text is Mandarin |
 | D-016 | Up to three disjoint simultaneous Ralphy streams, sequential internally | accepted | Integration queue serializes merges and shared interfaces freeze dependents |
 | D-017 | Saved judge/nixer/fixer cohort repairs until provisional pass; fresh judges certify | accepted | Fresh failure requires fresh nixer/fixer cohort and another fresh council |
@@ -61,6 +61,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-019 | Stable TypeScript 7.x is mandatory where TypeScript is used | accepted | Initial pinned baseline `7.0.2`; upgrades require full review |
 | D-020 | Final codebase is logically repartitioned and recertified | accepted | Construction ownership does not define final certification boundaries |
 | D-021 | Root README begins with an evidence-constrained draw.io/Image2 infographic | accepted | Recruiter comprehension and visual honesty are final gates |
+| D-022 | Claude Opus 4.8 is the lead orchestrator and absorbs all council roles (judges, nixers, fixers, bottleneck reasoning); a Claude 5 cloud session is portfolio supervisor | accepted | Supersedes the Grok 4.5 portion of D-014; supervisor↔orchestrator communication is Simplified Chinese |
+| D-023 | Code executors are warm Codex CLI 5.4 cloud workers in default mode (not /high, not /fast) with environments pre-set-up before work begins | accepted | Supersedes the `/fast` portion of D-014 |
+| D-024 | Workers report remaining context on every handoff; the orchestrator may retire a low-context worker and dispatch a fresh replacement | accepted | Handoff schema gains a `context_remaining` field |
+| D-025 | The supervisor operates minimal-intervention and reviews a stream branch only upon the orchestrator's durable completion signal | accepted | Branch-check protocol documented as BF-PRE-015 in BREAK_FIX_LOG.md |
 
 ## Initial issue ledger
 
