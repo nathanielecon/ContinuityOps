@@ -9,35 +9,41 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 5,
+  "revision": 6,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
-  "current_gate": "codex-cloud-environment-bootstrap",
+  "current_gate": "phase-0-baseline-audit",
   "running_tasks": [],
-  "blocked_tasks": ["P0-T01", "P0-T02", "P0-T03", "P0-T04", "P0-T05"],
+  "blocked_tasks": ["P0-T02", "P0-T03", "P0-T04", "P0-T05"],
   "waiting_human": [
-    "H-codex-env-create",
     "H0-after-P0-T04"
   ],
+  "codex_cloud_environment": {
+    "repo": "nathanielecon/ContinuityOps",
+    "env_id": "6a594ee667608191ab53cae15202815e",
+    "cache": "on",
+    "registered": true,
+    "first_warm": true,
+    "secrets": "none"
+  },
   "completed_gates": [],
   "next_actions": [
-    "Orchestrator: land the .codex warm-start scripts and README on this branch (this commit)",
-    "Human: merge the .codex scripts to the default branch (merge is human-owned, D-012)",
-    "Owner: create the ContinuityOps Codex Cloud Environment in the Codex UI under the owner ChatGPT login (H-codex-env-create, resolves the CO-007 creation step)",
-    "Control center: register the Environment in the machine-local registry and run the -Force first warm",
-    "Control center: run the warm gate, then dispatch P0-T01 on a stream/S0-baseline-audit branch via codex cloud exec",
+    "Control center: run the warm gate for nathanielecon/ContinuityOps, then dispatch P0-T01 on stream/S0-baseline-audit via codex cloud exec (env 6a594ee667608191ab53cae15202815e)",
+    "Worker: produce changes only within the P0-T01 write_scope, never run git, report context_remaining on handoff",
+    "Orchestrator: on worker completion apply the diff to stream/S0-baseline-audit, run validators, commit STREAM_COMPLETE.json with preflight_ok, and notify the supervisor",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
     "Copied planning package into docs/planning/",
-    "Installed root contracts and architecture assets"
+    "Installed root contracts and architecture assets",
+    "Merged .codex Codex Cloud Environment scripts to the default branch",
+    "Created, registered, and first-warmed the ContinuityOps Codex Cloud Environment (env 6a594ee667608191ab53cae15202815e, zero secrets)"
   ],
   "verified_baseline": [],
   "unverified": [
     "All ContinuityOps implementation and runtime capabilities",
-    "ContinuityOps Codex Cloud Environment creation, registration, and first warm (CO-007)",
     "Cross-repo Project A/C context packaging by the control center (CO-006)"
   ]
 }
@@ -81,7 +87,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 3,
+  "revision": 4,
   "issues": [
     {
       "id": "CO-001",
@@ -148,10 +154,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "phase": 0,
       "severity": "blocking",
       "category": "environment",
-      "summary": "The ContinuityOps Codex Cloud Environment is not yet created, registered, or first-warmed. The only unavoidable human step is Environment creation in the Codex UI under the owner ChatGPT login; registration and the -Force first warm can be performed by control-center agent scripts.",
-      "status": "open",
+      "summary": "The ContinuityOps Codex Cloud Environment (env 6a594ee667608191ab53cae15202815e) is created in the Codex UI (cache On, the two .codex scripts pasted, zero secrets), registered in the machine-local registry, and first-warmed via -Force. Warm gate can now run before dispatch.",
+      "status": "resolved",
       "owner": "human H-codex-env-create (creation) + control-center (register/warm)",
-      "resolution_criterion": "Environment created in the Codex UI (cache On, the two .codex scripts pasted, zero secrets), registered in the machine-local registry, and a -Force first warm stamps lastWarmUtc; warm gate then passes."
+      "resolution_criterion": "Environment created (cache On, two scripts, zero secrets), registered, and -Force first warm stamped lastWarmUtc. Confirmed by the owner on 2026-07-16."
     }
   ]
 }
