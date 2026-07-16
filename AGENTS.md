@@ -24,12 +24,19 @@ configuration, not inferred aliases.
   complete program, maintains the integrated objective, approves stream
   creation/closure, and may appoint Claude Sonnet or Opus co-orchestrators for
   bounded streams. It does not replace deterministic gates or human approvals.
-- **Ralphy orchestration and council reasoning:** Grok 4.5 High Fast is the
-  default model for stream orchestrators, judges, nixers, fixers, and bottleneck
-  analysts unless the supervisor records a task-specific exception.
-- **Code execution:** Codex 5.4 CLI Cloud Agents in `/fast` mode implement the
-  project code and tests through bounded Ralphy tasks. They edit repositories;
-  they are not the live cloud apply control plane.
+- **Ralphy orchestration:** Claude Opus 4.8 (cloud) is the lead Ralphy
+  orchestrator (D-022, superseding D-014). Grok 4.5 High Fast remains the
+  default model for judges, nixers, fixers, and bottleneck analysts unless the
+  supervisor records a task-specific exception.
+- **Code execution:** Codex 5.4 CLI Cloud Agents in **default mode** (not
+  `/fast`, not `/high`; D-022) implement the project code and tests through
+  bounded Ralphy tasks. They edit repositories; they are not the live cloud
+  apply control plane. Workers are sub-subagents under the orchestrator and run
+  in **warm** pre-provisioned Codex Cloud environments per
+  `nathanielecon/cloud-tools` (D-023): environment/cache state is set up before
+  work begins, so a dispatch never pays cold setup cost. Every worker reports
+  `context_remaining` when submitting work; the orchestrator has discretion to
+  retire a low-context worker and dispatch a fresh replacement (D-024).
 - **Claude execution location:** Claude agents run in cloud environments only.
   They do not rely on the user's laptop shell, browser session, cookies, or
   local cloud login.
@@ -140,7 +147,13 @@ issue_ids: []
 evidence_paths: []
 recommended_next_step: []
 requires_escalation: false
+context_remaining: null
 ```
+
+`context_remaining` is the worker's estimate of remaining usable context
+(percentage 0–100) at submission time. The orchestrator uses it to decide
+whether the same warm worker can safely take follow-up work or must be retired
+and replaced by a fresh worker (D-024).
 
 The orchestrator rejects a handoff if:
 
@@ -150,7 +163,8 @@ The orchestrator rejects a handoff if:
 - a blocked/failed result lacks a reproducible failed check;
 - an escalation lacks an issue ID;
 - secrets or user/customer data appear in evidence;
-- the worker directly changed authoritative task state.
+- the worker directly changed authoritative task state;
+- `context_remaining` is missing or not a number in 0–100.
 
 ## Write and concurrency rules
 
