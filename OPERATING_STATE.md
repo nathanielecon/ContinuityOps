@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 6,
+  "revision": 7,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
@@ -29,9 +29,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "Control center: run the warm gate for nathanielecon/ContinuityOps, then dispatch P0-T01 on stream/S0-baseline-audit via codex cloud exec (env 6a594ee667608191ab53cae15202815e)",
-    "Worker: produce changes only within the P0-T01 write_scope, never run git, report context_remaining on handoff",
-    "Orchestrator: on worker completion apply the diff to stream/S0-baseline-audit, run validators, commit STREAM_COMPLETE.json with preflight_ok, and notify the supervisor",
+    "Cloud orchestrator: publish a codex-dispatch GitHub issue for P0-T01 with the full run sheet (warm gate + codex cloud exec + status/diff/apply/push), ENV_ID, target branch, contract path, baseline SHA",
+    "Control-center supervisor lane: poll the codex-dispatch queue, run the warm gate, execute codex cloud exec, comment the task ID, relabel the issue to dispatched",
+    "Control-center: codex cloud diff/apply to stream/S0-baseline-audit and push; comment the result and close the issue",
+    "Orchestrator: on worker completion run validators, commit STREAM_COMPLETE.json with preflight_ok, notify the supervisor",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -81,6 +82,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-026 | Adopt the warm-start Codex Cloud specification in full: one Codex Cloud Environment per repo (cache On), the two in-repo scripts `.codex/cloud-setup.sh` and `.codex/cloud-maintenance.sh` are the only content pasted into the Environment, zero credentials in the container, a warm gate before every dispatch, and `codex cloud exec --env <ENV_ID> --branch <branch>` dispatch where the task never touches git and the orchestrator owns integration | accepted | Acceptance red lines: adding a secret to the Environment, editing the setup scripts ad hoc, or bypassing the warm gate are all out of bounds; warmth is a per-Environment toolchain cache (~12h), not credential material |
 | D-027 | The owner's Windows control-center session (local Claude Code with codex-cli, pwsh, and the machine-local `environments.json` registry) is the sole dispatch point; cloud containers and cloud workers are receive-only and never run the warm gate, attempt `codex cloud exec`, or hold Codex credentials | accepted | A cloud orchestrator that needs a Codex cloud task must either request it in its report to the control center or leave a durable GitHub marker (issue/comment) as a dispatch backlog the control center polls |
 | D-028 | Cross-repo material follows "the worker gets data, not permission": the control center supplies upstream context per task by priority (1) context packaging, default, control-center gh extracts the needed files/logs/contracts into the prompt or pre-committed; (2) read-only vendored snapshot of a standing dependency with recorded source SHA; (3) submodule/multi-repo authorization, unverified, must be smoke-verified before reliance and is second choice even if it works; (4) local-lane exception, a control-center worktree subagent inherits the owner gh login for multi-repo read-heavy tasks | accepted | Cloud worker containers clone only their own Environment repo and hold no environment credentials; the Cursor variant of this workflow is superseded |
+| D-029 | Codex dispatch runs through a repository queue polled by the control-center supervisor lane, not by human copy-paste: (1) the cloud orchestrator emits intent only, as a durable GitHub issue labeled `codex-dispatch` (or titled `[codex-dispatch] ...`) carrying the full run sheet (warm command, `codex cloud exec` text, target branch, ENV_ID, contract path); (2) the control-center Claude Code lane (codex CLI + keychain + registry co-located) polls the queue, runs the warm gate then `codex cloud exec`, comments the returned task ID, relabels to `dispatched`, and after diff/apply/push comments the result and closes; (3) results flow back through the repo (diff applied to the stream branch and pushed, visible to the cloud); (4) `codex login` inside any cloud container is prohibited (equivalent to the rejected CO-005); a Codex GitHub App + @codex mention + scheduled keep-warm Action is recorded but NOT enabled — it requires moving the warm stamp out of `%LOCALAPPDATA%` and a CODEOWNERS-style gate on who may trigger dispatch, and is reserved as a fallback for when the supervisor lane is unavailable | accepted | Cloud emits intent, the local lane executes, credentials never move; the container never authenticates Codex |
 
 ## Initial issue ledger
 

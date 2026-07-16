@@ -63,9 +63,24 @@ hoc, or bypassing the warm gate are all out of bounds.
 The owner's Windows control-center session (local Claude Code, codex-cli,
 `pwsh`, machine-local `environments.json` registry) is the sole dispatch point
 (D-027). Cloud containers and cloud workers are receive-only: no warm gate, no
-`codex cloud exec`, no Codex credentials. A cloud orchestrator requests a Codex
-cloud task either in its report to the control center or by leaving a durable
-GitHub marker (issue/comment) as the dispatch backlog the control center polls.
+`codex cloud exec`, no Codex credentials. `codex login` inside a cloud container
+is prohibited (equivalent to the rejected CO-005).
+
+Dispatch runs through a repository queue polled by the control-center
+supervisor lane, not by human copy-paste (D-029):
+
+- **Primary — `codex-dispatch` queue.** The cloud orchestrator opens a durable
+  GitHub issue labeled `codex-dispatch` (or titled `[codex-dispatch] ...`) with
+  the full run sheet (warm command, `codex cloud exec` text, target branch,
+  ENV_ID, contract path). The control-center lane
+  (`scripts/Watch-CodexDispatchQueue.ps1`) polls, warms, execs, comments the
+  task ID, relabels to `dispatched`, then applies/pushes and closes.
+- **Fallback — manual.** A human runs the same run sheet when the supervisor
+  lane is unavailable.
+- **Recorded, not enabled.** A Codex GitHub App + `@codex` mention + scheduled
+  keep-warm Action is documented as an emergency alternative; it requires
+  moving the warm stamp out of `%LOCALAPPDATA%` and a CODEOWNERS-style gate on
+  who may trigger dispatch, and stays off until then.
 
 Cross-repo material follows "the worker gets data, not permission" (D-028):
 context packaging (default) or a read-only vendored snapshot with recorded

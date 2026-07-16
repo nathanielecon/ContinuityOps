@@ -65,12 +65,23 @@ The owner's Windows control-center session (local Claude Code with codex-cli,
 dispatch point** (D-027). The warm gate and every `codex cloud exec` run only
 there. Cloud containers and cloud workers are **receive-only**: they never run
 the warm gate, never attempt `codex cloud exec`, and never hold Codex
-credentials. A cloud orchestrator that needs a Codex cloud task uses one of two
-compliant paths:
+credentials. **`codex login` inside any cloud container is prohibited** — it is
+equivalent to the rejected CO-005; the container never authenticates Codex.
 
-1. request the task in its report to the control center; or
-2. leave a durable GitHub marker (issue/comment) as the dispatch backlog the
-   control center polls.
+A cloud orchestrator emits **intent only** and dispatches through a queue
+(D-029):
+
+- **Primary path — `codex-dispatch` queue.** The orchestrator opens a durable
+  GitHub issue labeled `codex-dispatch` (or titled `[codex-dispatch] ...`)
+  carrying the full run sheet: warm command, `codex cloud exec` text, target
+  branch, ENV_ID, and contract path. The control-center supervisor lane (a
+  local Claude Code session) polls the queue, runs the warm gate then
+  `codex cloud exec`, comments the returned task ID, relabels the issue to
+  `dispatched`, and after diff/apply/push comments the result and closes it.
+  Results flow back through the repo (diff applied to the stream branch and
+  pushed).
+- **Fallback path — manual.** A human runs the same run sheet directly when the
+  supervisor lane is unavailable.
 
 Cross-repo rule: **the worker gets data, not permission** (D-028) — the control
 center supplies upstream material per task via context packaging or a read-only
