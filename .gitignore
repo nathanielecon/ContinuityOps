@@ -36,7 +36,8 @@ crash.log
 
 # Agent / local runtime
 .cursor/
-.codex/
+# Track .codex/ Environment scripts (cloud-setup/maintenance); ignore local Codex clutter
+.codex-last-message-*
 *.log
 tmp/
 .cache/
