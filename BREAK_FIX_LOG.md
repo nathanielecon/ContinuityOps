@@ -129,6 +129,25 @@ ContinuityOps incidents yet.
   5. The supervisor's verdict is recorded as a durable file under
      `evidence/slices/<slice>/` (approve, or issue IDs for rework), never as
      chat-only feedback.
+  6. Naming compliance: a branch that does not use the
+     `stream/<slice-id>-<short-name>` convention AND lacks a committed
+     `STREAM_COMPLETE.json` is treated as unsignaled and is not reviewed. This
+     covers Cursor-platform auto-generated `cursor/*` branches, which are never
+     valid completion signals on their own.
+  7. `STREAM_COMPLETE.json` must include a `preflight_ok` field: a snapshot of
+     the dispatch-time preflight verdict (for example Codex auth and upstream
+     visibility gates), so the supervisor can confirm the branch was not
+     produced under a blocked preflight state.
+
+### BF-PRE-016 — Credential variables are reported by metadata only
+
+- Observed risk: reconnaissance or diagnostics can echo fragments of a secret
+  environment variable (name, prefix, or slice), leaking material into
+  transcripts and evidence in violation of the no-secrets-in-evidence rule.
+- Control: when reporting on any credential-class variable (for example
+  `CODEX_AUTH_JSON_GZB64`), report only presence, length, and whether it
+  resolves/decodes to usable material. Never echo any prefix, suffix, or
+  substring of the value, in any tool call, log, or report.
 
 ## Entry template
 

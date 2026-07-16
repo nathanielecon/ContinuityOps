@@ -9,19 +9,23 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 3,
+  "revision": 4,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
-  "current_gate": "phase-0-baseline-audit",
+  "current_gate": "preflight-codex-auth-and-ac-visibility",
   "running_tasks": [],
-  "blocked_tasks": [],
-  "waiting_human": ["H0-after-P0-T04"],
+  "blocked_tasks": ["P0-T01", "P0-T02", "P0-T03", "P0-T04", "P0-T05"],
+  "waiting_human": [
+    "H-preflight-CODEX_AUTH_JSON_GZB64",
+    "H-preflight-AC-visibility",
+    "H0-after-P0-T04"
+  ],
   "completed_gates": [],
   "next_actions": [
-    "Record candidate baseline and upstream SHAs in integration/upstreams.lock.json",
-    "Run P0-T01 inventory and partition audit",
-    "Install harness CLI contracts (P0-T02)",
+    "Human: inject usable CODEX_AUTH_JSON_GZB64 auth material into the Codex worker environment (resolves CO-005)",
+    "Human: grant the Cursor GitHub App installation read access to pinned Project A and C repos (resolves CO-006)",
+    "Orchestrator: re-verify both preflight gates, then re-dispatch P0-T01 on a stream/S0-baseline-audit branch",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -31,7 +35,9 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   ],
   "verified_baseline": [],
   "unverified": [
-    "All ContinuityOps implementation and runtime capabilities"
+    "All ContinuityOps implementation and runtime capabilities",
+    "CODEX_AUTH_JSON_GZB64 usable Codex auth material (CO-005, fails preflight)",
+    "Project A/C repository visibility from the Cursor Cloud Agent installation (CO-006, fails preflight)"
   ]
 }
 ```
@@ -71,7 +77,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 1,
+  "revision": 2,
   "issues": [
     {
       "id": "CO-001",
@@ -112,6 +118,26 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "status": "open",
       "owner": "P1-T01",
       "resolution_criterion": "A verified digest/rollback contract is consumed, or a clearly labeled ContinuityOps lab artifact and first-release policy are established."
+    },
+    {
+      "id": "CO-005",
+      "phase": 0,
+      "severity": "blocking",
+      "category": "credential",
+      "summary": "CODEX_AUTH_JSON_GZB64 does not resolve to usable Codex auth material, so no warm Codex worker can be dispatched.",
+      "status": "open",
+      "owner": "human H-preflight-CODEX_AUTH_JSON_GZB64",
+      "resolution_criterion": "The Codex worker environment receives gzip+base64 auth JSON or a resolvable path decoding to a usable Codex auth.json; orchestrator preflight recheck passes."
+    },
+    {
+      "id": "CO-006",
+      "phase": 0,
+      "severity": "blocking",
+      "category": "integration",
+      "summary": "Pinned Project A/C repositories are not visible to the Cursor Cloud Agent GitHub installation (only ContinuityOps is installed); independently reconfirmed 404 from the orchestrator channel.",
+      "status": "open",
+      "owner": "human H-preflight-AC-visibility",
+      "resolution_criterion": "The installation can read nathanielecon/aws-landing-zone-lab and nathanielecon/local-first-governed-cicd at the pinned commits, or the human updates the pins to visible canonical repos; fetch/API succeed."
     }
   ]
 }
