@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "verdict_type": "supervisor_stream_boundary",
+  "task_id": "P0-T03",
+  "decision": "approve",
+  "recorded_at": "2026-07-17T21:43:00Z",
+  "baseline_sha": "832ce38baa2d8d776fd93169b32e317f3da17a30",
+  "candidate_sha": "15234664b41af9e1a99db0cffd6b010233493af0",
+  "evidence": {
+    "worker_issue": 35,
+    "reviewer_issue": 38,
+    "worker_pr": 36,
+    "superseded_pr": 32,
+    "ci": {
+      "check": "contracts",
+      "conclusion": "success",
+      "head_sha": "4ee5b699ec2b0cda6c84664461f171546943c9ee"
+    },
+    "d037": {
+      "verdict": "pass",
+      "co010_idempotent": true,
+      "scope_clean": true
+    },
+    "merge_path": "supervisor_git_merge_fallback",
+    "merge_note": "PAT merge API returned 403; content integrated to main at 1523466; PR #36 closed as integrated"
+  },
+  "conditions": [],
+  "human_routing": {
+    "redo": true,
+    "no_opus": true,
+    "gh_token_expanded": true
+  },
+  "next": ["P0-T04", "H0-human-receipt"]
+}

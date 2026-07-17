@@ -9,13 +9,13 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 22,
+  "revision": 23,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
-  "current_gate": "phase-0-baseline-audit",
-  "running_tasks": ["P0-T03"],
-  "blocked_tasks": ["P0-T04", "P0-T05"],
+  "current_gate": "phase-0-rubric-freeze-h0",
+  "running_tasks": ["P0-T04"],
+  "blocked_tasks": ["P0-T05"],
   "waiting_human": [
     "REPO_SETTINGS_ADMIN_TOKEN",
     "PR-20",
@@ -31,13 +31,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "Status revision 22: portfolio supervisor resume seat with expanded owner GH_TOKEN (Issues + Pull Requests); CO-011 resolved for this seat; human directed P0-T03 redo (do not merge draft PR #32)",
-    "BF-2026-006: accidental Issues #33 during plan-mode capability probe — closed not_planned; never mutate to probe permissions",
-    "Supersede PR #32; dispatch fresh warm-Codex P0-T03 fixer under D-039 write_scope → D-037 independent reviewer → merge only on CI green + verdict pass",
-    "Keep-warm: issue #4 cloud-native stamp; smoke if >9h heartbeat / >10h before real dispatch; this seat can post @codex via GH_TOKEN",
-    "After P0-T03 verified: P0-T04 rubric freeze → package H0 → stop for human receipt; do not authorize Phase 1 until S0 + H0",
-    "Owner pending (parallel, non-blocking for P0-T03 redo): REPO_SETTINGS_ADMIN_TOKEN, PR #20",
-    "D-039 write_scope stands (human chose redo of implementation, not veto); PR #30/#32 are not merge vehicles",
+    "Status revision 23: P0-T03 verified on main 1523466 (PR #36 content; CI green; D-037 #38 verdict pass; PR #32 superseded)",
+    "Dispatch P0-T04 rubric freeze via warm Codex; package H0 hash-bound receipt inputs; STOP for human H0 signature (agents cannot mint)",
+    "After H0: P0-T05 S0 multi-stream/council proof; then human advances authorized_through_phase for Phases 1–8",
+    "Owner pending (parallel): REPO_SETTINGS_ADMIN_TOKEN, PR #20",
+    "Keep-warm issue #4 via GH_TOKEN @codex when stamp >9h",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -50,7 +48,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed (PRs #8–#11)",
     "D-034: patch-in-comment GHA publisher smoked (issue #12 → PR #13; Actions create-PR permission required)",
     "P0-T01 verified; P0-T02 verified with condition CO-010; ORCH-ROUND-06 governance landed via supervisor git-push fallback after #29 publish-failed",
-    "Owner GH_TOKEN restored Issues+PR actuation for supervisor seat; human directed P0-T03 fresh fixer/reviewer redo"
+    "Owner GH_TOKEN restored Issues+PR actuation for supervisor seat; human directed P0-T03 fresh fixer/reviewer redo",
+    "P0-T03 verified after redo (issue #35 → PR #36 → D-037 #38 pass → main 1523466)"
   ],
   "verified_baseline": [],
   "unverified": [

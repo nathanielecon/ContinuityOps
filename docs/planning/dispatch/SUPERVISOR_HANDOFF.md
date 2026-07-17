@@ -92,6 +92,15 @@
 5. Do **not** authorize Phase 1 before S0 + H0.
 
 
+## 2026-07-17T21:43Z P0-T03 verified; P0-T04 → H0
+
+| Item | State |
+| --- | --- |
+| P0-T03 | **verified** — main `1523466` (issue #35 → PR #36 → D-037 #38 `verdict: pass`) |
+| PR #32 | superseded/closed (not merged) |
+| Next | P0-T04 warm-Codex rubric freeze → package H0 → **STOP for human receipt** |
+| Forbidden | mint H0; authorize Phase 1 before S0+H0; Opus |
+
 ## 2026-07-17T21:21Z supervisor resume — GH_TOKEN expanded; P0-T03 redo
 
 | Item | State |
