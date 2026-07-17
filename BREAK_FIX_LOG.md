@@ -140,6 +140,19 @@ ContinuityOps incidents yet.
      place at dispatch. It does not carry any credential check — no auth
      material exists in the worker container (D-026/D-027).
 
+### BF-PRE-017 — Dispatch polling must be durable and idempotent
+
+- Observed risk: an in-session background dispatch loop dies silently on app
+  restart (a neighbouring project lost three workers this way), and a
+  non-idempotent poller re-dispatches the same task when runs overlap or a
+  relabel fails.
+- Control: carry dispatch polling in a Scheduled Task/service using the `-Once`
+  single-pass mode; claim the item first (`codex-dispatch -> dispatching`)
+  before any work; enforce a machine-local lock-file mutex (with stale
+  fallback) against overlapping runs; restrict execution to an author
+  allowlist; and never auto-retry a failure — mark `dispatch-failed` and require
+  a human to requeue.
+
 ### BF-PRE-016 — Credential variables are reported by metadata only
 
 - Observed risk: reconnaissance or diagnostics can echo fragments of a secret
