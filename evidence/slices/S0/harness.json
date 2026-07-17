@@ -1,0 +1,25 @@
+{
+  "task_id": "P0-T02",
+  "baseline_sha": "ea18cfc9fb29153078652434b7e64ff0cf71e27b",
+  "candidate_sha": "ea18cfc9fb29153078652434b7e64ff0cf71e27b",
+  "started_at": "2026-07-17T13:34:25.322Z",
+  "completed_at": "2026-07-17T13:34:25.364Z",
+  "validators": {
+    "harness_unit": true,
+    "authorization_boundary": true,
+    "state_reconciliation": true,
+    "stream_isolation": true,
+    "integration_queue": true,
+    "scope": true
+  },
+  "passed": [
+    "harness_unit",
+    "authorization_boundary",
+    "state_reconciliation",
+    "stream_isolation",
+    "integration_queue",
+    "scope"
+  ],
+  "failed": [],
+  "evidence_path": "evidence/slices/S0/harness.json"
+}
