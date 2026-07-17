@@ -4,6 +4,11 @@
 # <!-- continuityops-patch-v1 --> on a codex-dispatch issue. Extracts the
 # unified diff, applies at the declared base_sha, pushes a branch, opens a PR.
 # Uses only GITHUB_TOKEN (no new secrets). Create PR / control-center apply remain fallbacks.
+#
+# Repo prerequisite (Settings → Actions → General → Workflow permissions):
+#   - Read and write permissions
+#   - Allow GitHub Actions to create and approve pull requests
+# Without the create-PR checkbox, apply+push succeed but `gh pr create` fails.
 name: codex-patch-publish
 
 on:
