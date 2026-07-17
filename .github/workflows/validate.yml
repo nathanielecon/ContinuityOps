@@ -1,0 +1,69 @@
+# ContinuityOps — real validation checks on every PR and main push.
+#
+# This is the brake pedal for the D-034/D-035 loop: the supervisor merges a
+# PR only when this workflow is green. Making it a *required* status check is
+# a branch-protection change, which is an explicit human gate (AGENTS.md);
+# until the owner flips that switch, the supervisor enforces it procedurally
+# by reading check runs before every merge.
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse all JSON contracts (standalone + fenced blocks)
+        run: |
+          python3 - <<'PY'
+          import json, re, pathlib, sys
+          ok = fail = 0
+          for p in pathlib.Path('.').rglob('*.json'):
+              if '.git' in p.parts: continue
+              try: json.loads(p.read_text()); ok += 1
+              except Exception as e: fail += 1; print(f"FAIL {p}: {e}")
+          for p in pathlib.Path('.').rglob('*.md'):
+              if '.git' in p.parts: continue
+              for i, b in enumerate(re.findall(r'```json\n(.*?)```', p.read_text(), re.S)):
+                  try: json.loads(b); ok += 1
+                  except Exception as e: fail += 1; print(f"FAIL {p} block {i}: {e}")
+          print(f"parsed OK: {ok}, failed: {fail}")
+          sys.exit(1 if fail else 0)
+          PY
+
+      - name: Whitespace / conflict-marker hygiene
+        run: |
+          git diff --check HEAD~1 HEAD 2>/dev/null || git diff --check $(git hash-object -t tree /dev/null) HEAD
+          ! grep -rn --include='*.md' --include='*.json' -E '^(<{7}|>{7}|={7})( |$)' . || { echo "conflict markers found"; exit 1; }
+
+      - name: Harness tests (when present)
+        run: |
+          if [ -d tests/harness ] && ls tests/harness/*.mjs >/dev/null 2>&1 || ls tests/harness/*.test.* >/dev/null 2>&1; then
+            node --test tests/harness/
+          else
+            echo "no harness tests yet (pre-P0-T02) — skipping"
+          fi
+
+      - name: Schema samples conform (stream-complete example)
+        run: |
+          python3 - <<'PY'
+          import json, re, sys, pathlib
+          sch_p = pathlib.Path('harness/schemas/stream-complete.schema.json')
+          ex_p = pathlib.Path('harness/schemas/stream-complete.example.json')
+          if not (sch_p.exists() and ex_p.exists()):
+              print('schema/example not present — skipping'); sys.exit(0)
+          sch, ex = json.loads(sch_p.read_text()), json.loads(ex_p.read_text())
+          req, props = set(sch.get('required', [])), set(sch.get('properties', {}))
+          missing, extra = req - set(ex), (set(ex) - props if sch.get('additionalProperties') is False else set())
+          assert not missing, f'example missing required: {missing}'
+          assert not extra, f'example has unallowed keys: {extra}'
+          print('stream-complete example conforms')
+          PY
