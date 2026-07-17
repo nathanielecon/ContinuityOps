@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "task_id": "P0-T04",
+  "role": "rubric-setter",
+  "slice": "S0",
+  "baseline_sha": "a195e74c51e758d1e655915c8a063760153e3b53",
+  "candidate_context": "working_tree_before_commit",
+  "rubric": {
+    "path": "harness/rubrics/S0.freeze.v1.json",
+    "version": "S0-freeze-v1",
+    "status": "frozen_pending_H0"
+  },
+  "bundle_hashes": {
+    "plan_sha256": "f01f3144d507986e0a8cfbec297818e9327e7df77c875d87e3c2bb68f7ff1adc",
+    "execution_contract_sha256": "5a3eff5d41baf5afac2a8c82d9b0312df1e65d86bce142ba07ed088f3cc184bf",
+    "validator_bundle_sha256": "b8c1b48235315d183e34978f79544294d958cc0b95dd520f9005002be9d3c6bc",
+    "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+    "partition_bundle_sha256": "52c4aefe62b7355e5abea13f4ee79967b5a28363b8f1866cde6b399c1fcbeab3",
+    "partition_bundle_note": "当前 main 未包含 harness/partition-manifest.json；P0-T04 在允许写入范围内以 integration/upstreams.lock.json 作为现有分区/上游 pin bundle 输入并明确记录该限制。"
+  },
+  "approval_binding": {
+    "path": "harness/approvals/H0.binding.json",
+    "status": "waiting_human",
+    "receipt_sha256": null,
+    "agent_minted_receipt": false
+  },
+  "mutation_policy_tests": {
+    "positive": "rubric hash matches pinned SHA-256",
+    "negative": "temporary threshold mutation changes SHA-256 and is rejected as rubric_mutated"
+  },
+  "validation_commands": [
+    "node harness/rubrics/validate-rubric-freeze.mjs",
+    "node --test tests/",
+    "python3 - <<'PY'\nimport json, pathlib, re, sys\n...\nPY",
+    "git diff --check"
+  ],
+  "validation_results": [
+    {
+      "command": "node harness/rubrics/validate-rubric-freeze.mjs",
+      "exit_code": 0,
+      "time": "2026-07-17T00:00:00Z",
+      "evidence_path": "/tmp/rubric-validator.txt",
+      "result": "通过：rubric_schema、bundle_hashes、approval_binding、rubric_mutation_policy 均通过。"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "time": "2026-07-17T00:00:00Z",
+      "evidence_path": "/tmp/node-tests.txt",
+      "result": "通过：13 个 node:test 子测试全部通过。"
+    },
+    {
+      "command": "python3 - <<'PY'\nimport json, pathlib, re, sys\n...\nPY",
+      "exit_code": 1,
+      "time": "2026-07-17T00:00:00Z",
+      "evidence_path": "/tmp/json-parse.txt",
+      "result": "失败：既有 BREAK_FIX_LOG.md 中一个 ```json fence 内容不是 JSON；本任务未修改该文件，按 AGENTS.md 记录为 Phase-0 已知合约解析阻塞。"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "time": "2026-07-17T00:00:00Z",
+      "evidence_path": "/tmp/diff-check.txt",
+      "result": "通过：无 whitespace error。"
+    }
+  ],
+  "remaining_risks": [
+    "H0 人工批准尚未签署；不得授权 Phase 1 或声明 S0 通过。",
+    "当前 main 缺少 harness/partition-manifest.json；后续编排应确认 P0-T01 分区清单是否需恢复到 main。"
+  ],
+  "evidence_paths": [
+    "evidence/slices/S0/rubric-freeze.json"
+  ],
+  "recorded_at": "2026-07-17T21:45:59.335Z"
+}
