@@ -4,10 +4,10 @@
 
 | Layer | Default | Responsibility |
 | --- | --- | --- |
-| Portfolio supervision | Claude Opus 4.8 cloud | Global objective, stream creation, co-orchestrator appointment, convergence |
+| Portfolio supervision | Claude 5 cloud (minimal intervention) | Global objective, stream creation, co-orchestrator appointment, convergence; reviews branches only on completion signal |
 | Co-orchestration | Claude Sonnet/Opus cloud | One bounded stream when appointed |
-| Ralphy orchestration/councils | Grok 4.5 High Fast | Stream control, judges, nixers, fixers, bottleneck reasoning |
-| Code execution | Codex 5.4 CLI Cloud Agent `/fast` | Complete bounded implementation and tests |
+| Ralphy orchestration/councils | Claude Opus 4.8 cloud | Stream control, judges, nixers, fixers, bottleneck reasoning (supersedes Grok 4.5 High Fast; D-022) |
+| Code execution | Warm Codex 5.4 CLI Cloud Agent, default mode (not `/high`, not `/fast`) | Complete bounded implementation and tests; pre-set-up environment; reports `context_remaining` on handoff (D-023/D-024) |
 | Cloud apply | Protected GitHub Actions OIDC | Live cloud mutation and evidence, never Cloud Agent credentials |
 
 All worker-facing instructions and communication are Simplified Chinese.
@@ -36,6 +36,61 @@ Suggested construction waves:
 
 The exact wave map is produced from the repository dependency graph; this table
 does not authorize overlapping interfaces.
+
+## Warm Codex Cloud environment
+
+The authoritative worker specification (D-026). Five points:
+
+1. **One Environment per repo.** Create it in the Codex UI with caching On.
+2. **Two in-repo scripts only.** `.codex/cloud-setup.sh` (Setup) and
+   `.codex/cloud-maintenance.sh` (Maintenance) are the only content pasted into
+   the Environment; they are versioned and change-controlled in the repo.
+3. **Zero credentials in the container.** Adding any environment variable or
+   secret to the Environment invalidates the ~12h cache and is out of bounds.
+4. **Warm gate before every dispatch.** `scripts/Invoke-CodexCloudWarm.ps1`
+   (control-center only) re-warms through a smoke task when `lastWarmUtc` is
+   missing or older than ~10h, then stamps the machine-local registry.
+5. **Dispatch pattern.** `codex cloud exec --env <ENV_ID> --branch <branch>
+   "<task>"`, then poll status, local diff/apply, verify, and open a PR. The
+   task never runs git itself; the orchestrator owns integration. Warmth is
+   isolated per Environment/repo (~12h) and never carried across repos.
+
+Red lines: adding a secret to the Environment, editing the setup scripts ad
+hoc, or bypassing the warm gate are all out of bounds.
+
+## Dispatch topology
+
+The owner's Windows control-center session (local Claude Code, codex-cli,
+`pwsh`, machine-local `environments.json` registry) is the sole dispatch point
+(D-027). Cloud containers and cloud workers are receive-only: no warm gate, no
+`codex cloud exec`, no Codex credentials. `codex login` inside a cloud container
+is prohibited (equivalent to the rejected CO-005).
+
+Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
+(D-031, amending D-029; the App is installed on this repo):
+
+- **Primary — `@codex` mention on a supervisor-authored `codex-dispatch`
+  issue.** The mention carries/points to the task contract, target branch, and
+  constraints. Gating: mentions count as dispatch only on queue issues authored
+  by the supervisor or owner. Results return as Codex PRs/branches; the
+  supervisor integrates into stream branches only (`main` and D-012 gates stay
+  human).
+- **Keep-warm.** Warm freshness is evidenced by the latest Codex task timestamp
+  on the keep-warm record; the supervisor's scheduled self-checks post an
+  `@codex` smoke roughly every 9 hours. A scheduled GitHub Action is a
+  documented backup pending verification that the App responds to bot-authored
+  mentions.
+- **Fallback — control-center sweep.** The owner's Windows session runs the
+  classic run sheet (`Invoke-CodexCloudWarm.ps1` warm gate → `codex cloud exec`
+  → diff/apply/push, `Watch-CodexDispatchQueue.ps1 -Once`) when the App path is
+  unavailable. The machine-local registry applies to this path only.
+
+Cross-repo material follows "the worker gets data, not permission" (D-028):
+context packaging (default) or a read-only vendored snapshot with recorded
+source SHA, never a widened worker-container repository grant.
+
+The earlier Cursor Cloud Agent framing of this workflow is **superseded** by the
+control-center dispatch topology above.
 
 ## Bottleneck subagents
 

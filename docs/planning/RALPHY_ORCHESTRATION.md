@@ -47,12 +47,12 @@ stale, start a fresh orchestrator turn and reload this set.
 
 ```mermaid
 flowchart TD
-    O["Opus 4.8 portfolio supervisor"] --> L["Grok 4.5 High Fast lead orchestrator"]
+    O["Claude 5 cloud portfolio supervisor"] --> L["Opus 4.8 lead orchestrator"]
     O --> C["Optional Sonnet/Opus co-orchestrators"]
     L --> R1["Ralphy stream A — sequential"]
     L --> R2["Ralphy stream B — sequential"]
     C --> R3["Ralphy stream C — sequential"]
-    R1 --> X["Codex 5.4 CLI Cloud Agents /fast"]
+    R1 --> X["Warm Codex 5.4 CLI Cloud Agents (default mode)"]
     R2 --> X
     R3 --> X
     L --> B["Bottleneck subagents"]
@@ -62,10 +62,12 @@ flowchart TD
 ```
 
 The portfolio supervisor owns the global objective and may appoint cloud-only
-Sonnet/Opus co-orchestrators. Grok 4.5 High Fast is the default Ralphy
-orchestration and council model. Codex 5.4 CLI Cloud Agents in `/fast` mode own
-implementation. All worker and inter-agent communication is Simplified Chinese;
-recruiter-facing repository artifacts are English.
+Sonnet/Opus co-orchestrators. Claude Opus 4.8 is the default Ralphy
+orchestration and council model (D-022). Warm Codex 5.4 CLI Cloud Agents in
+default mode (not `/high`, not `/fast`) own implementation with pre-set-up
+environments, and report remaining context on every handoff (D-023/D-024). All
+worker, supervisor↔orchestrator, and inter-agent communication is Simplified
+Chinese; recruiter-facing repository artifacts are English.
 
 Up to three implementation streams may run concurrently by default. Every
 stream remains sequential internally. A stream starts only when:
@@ -157,8 +159,8 @@ For each ready task:
 1. Adapter verifies bundle hashes, task policy, candidate SHA, allowed paths,
    dependency states, claim ceiling, and receipts.
 2. Adapter captures a pre-task tree manifest.
-3. Orchestrator dispatches a Codex 5.4 CLI Cloud Agent in `/fast` with a fresh
-   Mandarin short contract.
+3. Orchestrator dispatches a warm Codex 5.4 CLI Cloud Agent (default mode)
+   with a fresh Mandarin short contract.
 4. The worker implements only within `allowed_paths` and returns the handoff
    schema with Simplified Chinese free-text values.
 5. Adapter reconciles modified paths, forbidden operations, isolation dirs,
@@ -345,9 +347,9 @@ If any slice-exit condition fails:
 4. Orchestrator checks proposed changes against plan and claim boundaries.
 5. Dispatch fixers sequentially or concurrently only for demonstrably disjoint
    scopes.
-6. Each fixer is a bounded Grok 4.5 High Fast repair role or dispatches a Codex
-   5.4 `/fast` code executor under the same scope; a failed fresh council always
-   gets a fresh repair cohort.
+6. Each fixer is a bounded Opus 4.8 repair role or dispatches a warm Codex 5.4
+   default-mode code executor under the same scope; a failed fresh council
+   always gets a fresh repair cohort.
 7. After fixes, rerun narrow validation, full slice validation, full repository
    validation, and required hosted checks.
 8. Regenerate all candidate-bound evidence after the fix.

@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "continuityops/stream-complete.schema.json",
+  "title": "ContinuityOps stream completion signal (BF-PRE-015)",
+  "description": "Committed by the orchestrator as evidence/slices/<slice>/STREAM_COMPLETE.json on a stream branch to signal the supervisor that a stream is ready for review. Free-text values are Simplified Chinese; machine field names stay English.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "slice",
+    "candidate_sha",
+    "baseline_sha",
+    "validation_results",
+    "evidence_manifest_path",
+    "context_remaining",
+    "preflight_ok"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "task_id": { "type": "string", "pattern": "^P[0-9]+-T[0-9]+$" },
+    "slice": { "type": "string" },
+    "candidate_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "40-hex commit that the completion signal binds to"
+    },
+    "baseline_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "40-hex stream baseline the candidate descends from"
+    },
+    "validation_results": {
+      "type": "array",
+      "minItems": 1,
+      "description": "One entry per validation command; each carries its command, exit code, wall-clock timestamp, and the evidence path it produced.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["command", "exit", "time", "evidence_path"],
+        "properties": {
+          "command": { "type": "string" },
+          "exit": { "type": "integer" },
+          "time": { "type": "string", "description": "ISO-8601 UTC timestamp when the command completed" },
+          "evidence_path": { "type": "string" }
+        }
+      }
+    },
+    "evidence_manifest_path": { "type": "string" },
+    "context_remaining": {
+      "type": ["string", "number"],
+      "description": "Final worker-reported remaining context: percent string or token estimate"
+    },
+    "preflight_ok": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Snapshot of the dispatch-time warm-gate verdict. Carries no credential check; no auth material exists in the worker container (D-026/D-027). The authoritative source is the persisted evidence/slices/<slice>/preflight-<taskid>.json, not an issue comment.",
+      "required": ["warm_fresh", "last_warm_utc", "context_package_ready"],
+      "properties": {
+        "warm_fresh": {
+          "type": "boolean",
+          "description": "Whether lastWarmUtc for the Environment was within the ~10h freshness window at dispatch"
+        },
+        "last_warm_utc": {
+          "type": ["string", "null"],
+          "description": "ISO-8601 UTC of the warm stamp at dispatch, or null if the gate re-warmed/failed"
+        },
+        "context_package_ready": {
+          "oneOf": [
+            { "type": "boolean" },
+            { "type": "string", "enum": ["n/a"] }
+          ],
+          "description": "Whether the required cross-repo context package was in place at dispatch; 'n/a' when the task needs no upstream material"
+        },
+        "preflight_evidence_path": {
+          "type": "string",
+          "description": "Path to the persisted warm snapshot written back to the stream branch by the control center"
+        }
+      }
+    },
+    "notes_zh": { "type": "string", "description": "Simplified Chinese orchestrator notes" }
+  }
+}
