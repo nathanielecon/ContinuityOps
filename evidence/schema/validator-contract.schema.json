@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ContinuityOps P0-T03 Validator Contract Evidence",
+  "type": "object",
+  "required": ["schema_version", "task_id", "baseline_sha", "candidate_sha", "command", "exit_code", "recorded_at", "environment", "validators", "model_record"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "task_id": { "const": "P0-T03" },
+    "baseline_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "candidate_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "command": { "type": "string", "minLength": 1 },
+    "exit_code": { "type": "integer" },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "environment": { "type": "object", "required": ["id", "zero_secrets"] },
+    "validators": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "model_record": { "type": "object", "required": ["provider", "model", "mode", "role"] }
+  }
+}
