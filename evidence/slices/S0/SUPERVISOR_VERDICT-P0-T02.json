@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "decision": "approve",
+  "candidate_sha": "f9b698add11d63c10d7cc547b384b6ed78fa91ad",
+  "reviewed_paths": [
+    "scripts/project.mjs",
+    "tests/harness/index.js",
+    "tests/harness/project.test.mjs",
+    "STATUS.md",
+    "ISSUES.md",
+    "DECISIONS.md",
+    "evidence/slices/S0/harness.json",
+    "evidence/slices/S0/STREAM_COMPLETE-P0-T02.json",
+    "evidence/slices/S0/validation/p0-t02-postmerge.txt",
+    "PLAN.md",
+    "BREAK_FIX_LOG.md"
+  ],
+  "issue_ids": ["CO-010"],
+  "reviewer": "claude-5-cloud-supervisor",
+  "at": "2026-07-17T18:05:42Z",
+  "notes_zh": "批准(附条件)。独立复核:node --test tests/harness/ 全部通过;STREAM_COMPLETE-P0-T02.json 严格符合 schema(warm_fresh=false 如实);越界检查干净;PLAN 状态迁移合法(T02 仅推进至 review,harness 自身强制该上限)。编排轮验证记录(exit=0 × 4,先验证后迁移)诚实完整。条件 CO-010:validate CLI 与任务生命周期位置耦合(内部演练 ready→running),任务进入 review 后重跑退出码 2,验证器不幂等;修复归 P0-T03 写域(scripts/validators/),要求改为基于固定 fixture 的迁移演练,不依赖权威 PLAN 的当前状态。P0-T02 → verified 的正式置位随本裁决由监督者执行。"
+}
