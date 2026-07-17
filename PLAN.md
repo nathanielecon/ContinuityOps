@@ -8,13 +8,13 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 6,
+  "revision": 7,
   "authorized_through_phase": 0,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
     "portfolio_supervisor": "claude-5-cloud-supervisor",
     "optional_co_orchestrators": ["claude-sonnet-cloud", "claude-opus-cloud"],
-    "ralphy_orchestrator_and_council": "claude-opus-4.8-cloud",
+    "ralphy_orchestrator_and_council": "codex-5.4-cloud-episodic-orchestrator (gpt); claude-opus-4.8-cloud (reserve)",
     "code_executor": "codex-5.4-cli-cloud-warm-default-mode",
     "worker_language": "zh-CN",
     "external_artifact_language": "en",
