@@ -146,13 +146,16 @@ ContinuityOps incidents yet.
      `preflight_ok` uses the object form
      `{warm_fresh, last_warm_utc, context_package_ready}`.
   8. Source of the `preflight_ok` data. The `preflight_ok` snapshot is not
-     authoritative as an issue comment. After running the warm gate at dispatch,
-     the control-center lane MUST write the warm snapshot back to the stream
-     branch as a persistent artifact
-     `evidence/slices/<slice>/preflight-<taskid>.json` carrying at least
-     `lastWarmUtc` and `verdict`. The orchestrator populates `preflight_ok` in
-     `STREAM_COMPLETE.json` from that committed file (referenced via
-     `preflight_evidence_path`), never from a transient issue comment.
+     authoritative as an issue comment. The committed artifact
+     `evidence/slices/<slice>/preflight-<taskid>.json` (at least `lastWarmUtc`
+     and `verdict`) is the authoritative source, and the orchestrator populates
+     `preflight_ok` in `STREAM_COMPLETE.json` from it (referenced via
+     `preflight_evidence_path`), never from a transient issue comment. Who
+     writes it depends on the dispatch path (D-031): on the App path, the
+     orchestration round commits it with its diff, deriving `lastWarmUtc` from
+     the most recent Codex task timestamp on the keep-warm record; on the
+     fallback control-center path, the sweep lane writes it after running the
+     warm gate.
 
 ### BF-PRE-017 — Dispatch polling must be durable and idempotent
 

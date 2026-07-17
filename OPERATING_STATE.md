@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 9,
+  "revision": 10,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
@@ -29,10 +29,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "Cloud orchestrator: publish a codex-dispatch GitHub issue for P0-T01 with the full run sheet (warm gate + codex cloud exec + status/diff/apply/push), ENV_ID, target branch, contract path, baseline SHA",
-    "Control-center supervisor lane: poll the codex-dispatch queue, run the warm gate, execute codex cloud exec, comment the task ID, relabel the issue to dispatched",
-    "Control-center: codex cloud diff/apply to stream/S0-baseline-audit and push; comment the result and close the issue",
-    "Orchestrator: on worker completion run validators, commit STREAM_COMPLETE.json with preflight_ok, notify the supervisor",
+    "Supervisor: dispatch ORCH-SMOKE-01 (issue #3) via @codex mention — doubles as the App platform smoke (D-031)",
+    "Supervisor: on smoke pass, dispatch P0-T01 (issue #2) via @codex mention targeting stream/S0-baseline-audit",
+    "Supervisor: integrate Codex-returned PRs into stream branches only; record per-round model IDs",
+    "Episodic GPT orchestrator round: on worker completion run validators, produce STREAM_COMPLETE.json with preflight_ok as a diff",
+    "Keep-warm: supervisor posts @codex smoke on the keep-warm record roughly every 9 hours",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -85,6 +86,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-028 | Cross-repo material follows "the worker gets data, not permission": the control center supplies upstream context per task by priority (1) context packaging, default, control-center gh extracts the needed files/logs/contracts into the prompt or pre-committed; (2) read-only vendored snapshot of a standing dependency with recorded source SHA; (3) submodule/multi-repo authorization, unverified, must be smoke-verified before reliance and is second choice even if it works; (4) local-lane exception, a control-center worktree subagent inherits the owner gh login for multi-repo read-heavy tasks | accepted | Cloud worker containers clone only their own Environment repo and hold no environment credentials; the Cursor variant of this workflow is superseded |
 | D-029 | Codex dispatch runs through a repository queue polled by the control-center supervisor lane, not by human copy-paste: (1) the cloud orchestrator emits intent only, as a durable GitHub issue labeled `codex-dispatch` (or titled `[codex-dispatch] ...`) carrying the full run sheet (warm command, `codex cloud exec` text, target branch, ENV_ID, contract path); (2) the control-center Claude Code lane (codex CLI + keychain + registry co-located) polls the queue, runs the warm gate then `codex cloud exec`, comments the returned task ID, relabels to `dispatched`, and after diff/apply/push comments the result and closes; (3) results flow back through the repo (diff applied to the stream branch and pushed, visible to the cloud); (4) `codex login` inside any cloud container is prohibited (equivalent to the rejected CO-005); a Codex GitHub App + @codex mention + scheduled keep-warm Action is recorded but NOT enabled — it requires moving the warm stamp out of `%LOCALAPPDATA%` and a CODEOWNERS-style gate on who may trigger dispatch, and is reserved as a fallback for when the supervisor lane is unavailable | accepted | Cloud emits intent, the local lane executes, credentials never move; the container never authenticates Codex |
 | D-030 | The orchestrator seat moves from a resident Claude session to **episodic GPT rounds** to conserve Anthropic quota (human decision, verbatim "stick with GPT orchestrator"). Each orchestration round is carried by a Codex 5.4 Cloud task dispatched through the `codex-dispatch` queue; the ORCH-SMOKE-01 smoke (issue #3) and the P0-T01 validation round are its acceptance steps. Amends D-022: the resident Opus 4.8 orchestrator is retained as the **reserve seat** (cold-start is losslessly reconstructable from durable artifacts, enabled when a GPT round is unavailable or fails). The supervisor may publish the queue issue that carries an orchestration round's intent (this is bookkeeping, not an orchestration decision); episodic rounds hold zero credentials, return work as a diff applied to the branch, and have their bookkeeping/intent output executed by the on-station sweep lane. The actual model ID of every round is still recorded at dispatch | accepted | Default orchestration is episodic GPT via the queue; Opus 4.8 is reserve; credentials never move; per-round model IDs recorded |
+| D-031 | **Activate the Codex GitHub App dispatch path** (human decision, verbatim "go with A — app installed"): dispatch is now an `@codex` mention posted **by the cloud supervisor via its existing GitHub MCP authority** on a supervisor-authored `codex-dispatch` queue issue. Amends D-027/D-029: the Windows control-center ceases to be the sole dispatch point; the manual sweep becomes the fallback path. Gating: dispatch mentions are valid only on queue issues authored by the supervisor or the owner (this private repo has no other commenters); any other mention is not a dispatch. Results flow back as Codex-created PRs/branches; the supervisor integrates into **stream branches only** via MCP — merges to `main` and all D-012 gates remain human. Warm stamp leaves `%LOCALAPPDATA%`: warm freshness is now evidenced by the timestamp of the most recent Codex task on the keep-warm record (issue-based), maintained by the supervisor's scheduled self-checks posting an `@codex` smoke roughly every 9 hours; a scheduled GitHub Action is a documented backup pending verification that the App responds to bot-authored mentions. App platform behavior (branch targeting, PR flow) is unproven until the first dispatch — ORCH-SMOKE-01 doubles as that platform smoke | accepted | Fully autonomous dispatch loop with zero new credentials; human retains only D-012 constitutional gates; first App dispatch is itself the platform smoke |
 
 ## Initial issue ledger
 
