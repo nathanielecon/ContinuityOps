@@ -35,16 +35,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Keep-warm: supervisor-authored @codex on issue #4 ~9h; GHA bot keepwarm stays disabled",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
-  "completed_bootstrap_extra": [
-    "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed"
-  ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
     "Copied planning package into docs/planning/",
     "Installed root contracts and architecture assets",
     "Merged .codex Codex Cloud Environment scripts to the default branch",
     "Created, registered, and first-warmed the ContinuityOps Codex Cloud Environment (env 6a594ee667608191ab53cae15202815e, zero secrets)",
-    "Rotated the orchestrator seat per D-024: predecessor retired at ~17% context_remaining; successor Opus 4.8 reconstructed state from durable artifacts only"
+    "Rotated the orchestrator seat per D-024: predecessor retired at ~17% context_remaining; successor Opus 4.8 reconstructed state from durable artifacts only",
+    "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed (PRs #8–#11)"
   ],
   "verified_baseline": [],
   "unverified": [
