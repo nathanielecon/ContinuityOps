@@ -256,5 +256,28 @@ ContinuityOps incidents yet.
 
 ## Log
 
-No ContinuityOps execution failures have been recorded. The project is still at
-candidate-plan stage.
+## 2026-07-17 — BF-2026-001 — Patch publisher truncates diffs containing nested code fences
+
+- **Slice/task:** dispatch infrastructure (D-034 publisher); blocked rounds #17 (ORCH-ROUND-04) and #18 (P0-T02)
+- **Baseline SHA:** ea18cfc9fb29153078652434b7e64ff0cf71e27b
+- **Candidate SHA at break:** worker-side commits only (881e512 in-sandbox); nothing landed
+- **Environment/identity:** GitHub Actions `codex-patch-publish` / ephemeral GITHUB_TOKEN
+- **Symptom:** `publish-failed (D-034): git apply failed … corrupt patch at patch.diff:10` on both rounds
+- **Exact failed check and exit:** `git apply --index patch.diff` exit ≠ 0 in the publish job
+- **Raw failure evidence:** issue #18 comment 5003849152; issue #17 analogous
+- **Attempts:** 1 per round (no auto-retry, by design)
+- **Root cause:** `scripts/extract-codex-patch.sh` captured the fenced diff with a non-greedy regex ending at the FIRST ``` — but both patches legitimately add file content containing ```json fences, so extraction truncated the patch mid-hunk
+- **Why earlier gates missed it:** both D-034 smokes (#12/#14) were single-line text files with no nested fences; the failure class needs markdown/code content inside the diff
+- **Blast radius:** publish path only; worker computations intact in task pages; no repo corruption (failed apply aborts before push)
+- **Decision:** fix the parser structurally; re-nudge workers to repost patches unchanged (fresh bot comment re-triggers the fixed publisher; no recompute)
+- **Fix and files changed:** line-based structural fence scan in `scripts/extract-codex-patch.sh` — inside a unified diff every content line carries a prefix, so a bare ``` at column 0 can only be the closing fence
+- **Regression control added:** nested-fence fixture (json fence inside an added file) run through extract + `git apply --check` — passing locally; CI-fixture step queued as follow-up
+- **New candidate SHA:** (this commit)
+- **Fresh verification commands/results:** fixture extract → `OK: wrote patch.diff (2 paths, 1 chunk(s))`; `git apply --check` → OK
+- **Hosted/cloud verification:** next publisher run on reposted #17/#18 patches
+- **Superseded evidence:** none (no evidence was produced by the failed runs)
+- **New evidence:** publisher run logs on the reposted rounds
+- **Claim/status changes:** none (infrastructure)
+- **Judge round impact:** none (pre-slice-freeze)
+- **Remaining risk/follow-up:** a bare ``` as literal diff *content* at column 0 (e.g. a patch adding an unindented fence line to a md file appears as `+```` so it is safe; only a context line consisting of ``` could confuse — not producible in our added-file patches); CI fixture step to make the regression control permanent
+- **Verified by:** supervisor (fixture), publisher (pending live rerun)
