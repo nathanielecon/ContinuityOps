@@ -1,0 +1,18 @@
+# clean_tree evidence for P0-T01 validation round
+#
+# Authoritative measurement: the pinned clean_tree validator was run FIRST,
+# against the audited candidate edd414769e09f5a5a874bd3d0dd3d883d7d02a77,
+# BEFORE any orchestrator evidence file was created. Result at that point:
+#
+#   {"id":"clean_tree","ok":true,"findings":[]}     (git status --porcelain == empty)
+#
+# See pinned-validators.txt for the full pinned run (clean_tree PASS there).
+#
+# After this validation round, the working tree legitimately shows the
+# orchestrator-owned completion-signal artifacts as untracked until committed:
+#   ?? evidence/slices/S0/validation/
+#   ?? evidence/slices/S0/preflight-pr6.json
+#   ?? evidence/slices/S0/STREAM_COMPLETE.json   (added in the signal commit)
+# These are BF-PRE-015 evidence, all under evidence/slices/S0/, not code
+# changes to the audited products. Once committed, the tree is clean again;
+# clean_tree therefore PASSES at the certified candidate commit as well.

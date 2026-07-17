@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "task_id": "P0-T01",
+  "dispatch_taskid": "pr6",
+  "codex_task_id": "task_e_6a599d879654832b878ac7b737be874e",
+  "carrier": "codex-github-app-pr",
+  "lastWarmUtc": "n/a",
+  "verdict": "n/a",
+  "context_package_ready": "n/a",
+  "recorded_by": "reserve-orchestrator (Opus 4.8) during P0-T01 validation round",
+  "recorded_at_utc": "2026-07-17T03:50:29Z",
+  "notes_zh": "本轮 worker 经 Codex GitHub App（PR #6）承载，而非控制中心温门派遣路径，故温门 lastWarmUtc 与 verdict 数据在本轮不可得，按 BF-PRE-015.8 App 模式填 n/a 并由编排轮随 diff 提交。App 容器仅克隆默认分支 main、无 origin remote，无法读取流分支上的任务契约与目标分支——这也是 preflight 温门快照缺失的根因（见 STREAM_COMPLETE.json 的 deviations_zh 第 (a) 条）。此文件为 preflight_ok 的权威仓内来源，非 issue 评论。"
+}

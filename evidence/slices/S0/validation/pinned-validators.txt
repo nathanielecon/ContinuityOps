@@ -1,0 +1,10 @@
+# P0-T01 validation round — pinned validators (impl @ origin/claude/cloud-gpt-ralphy-validation-6m0gkz 2c9026b)
+# command: node run-p0t01.mjs /home/user/ContinuityOps  (validators run against stream/S0-baseline-audit tree)
+# run_utc: 2026-07-17T03:50:29Z ; candidate audited: edd414769e09f5a5a874bd3d0dd3d883d7d02a77
+#
+{"id":"state_schema","ok":false,"findings":["missing harness/state/tasks.json"]}
+{"id":"partition_unique_ownership","ok":false,"findings":["validator 'partition_unique_ownership' threw: manifest.slices is not iterable"]}
+{"id":"upstream_pin_schema","ok":true,"findings":[]}
+{"id":"clean_tree","ok":false,"findings":["working tree not clean:\n?? evidence/slices/S0/validation/"]}
+{"overall":"FAIL"}
+# exit: 1

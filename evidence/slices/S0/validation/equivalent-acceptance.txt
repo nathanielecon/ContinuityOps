@@ -1,0 +1,23 @@
+# P0-T01 equivalent-semantics acceptance (worker manifest shape retained_paths[].primary_slice)
+# command: python3 equiv-check.py ; run_utc: 2026-07-17T03:50:29Z
+#
+== P0-T01 equivalent-semantics acceptance checks ==
+retained_paths total: 38
+[A1 every retained path classified (category)]      PASS missing=[]
+[A2 baseline_sha recorded]                          PASS baseline_sha=6ed243564ddb46f4a46608496d6f05db53c93788
+[A2 project_a.commit_sha recorded]                  PASS f688065c7705ab7d3febcd9ec2842bea4d8bed87
+[A2 project_c.commit_sha recorded]                  PASS 0f54def53fbfda9747c8ea27235eaac1da831aec
+[A2 project_c.image_digest explicit UNAVAILABLE]    PASS image_digest=UNAVAILABLE
+[A3 unique ownership: no duplicate paths]           PASS duplicates=[]
+[A3 each retained path has exactly one primary_slice]PASS missing_slice=[]
+[A3 each retained path has sha256]                  PASS missing_sha256=[]
+[A4 shared interfaces explicit]                     PASS shared_interface_count=6
+
+== coverage note (tracked-on-stream not listed in manifest) ==
+count=3
+  UNLISTED docs/planning/dispatch/P0-T01.zh.md
+  UNLISTED evidence/slices/S0/baseline-audit.json
+  UNLISTED harness/partition-manifest.json
+
+EQUIV_OVERALL: PASS
+# exit: 0
