@@ -115,6 +115,10 @@ gh label create dispatch-failed --color b60205 --description "温门或派遣失
 ## 备选状态更新（D-031）
 
 原"记录但未启用"的 Codex GitHub App 路径**已启用为主路径**(见文首 D-031 段):
-暖戳已移出 `%LOCALAPPDATA%`(改以保暖记录时间戳为证),触发门控为"仅监督者/所有者
-所建队列 issue 上的提及"。定时 GitHub Action 保暖仍为**待验证备份**(App 是否响应
-bot 作者的提及未证);当前保暖由监督者定时自查执行。控制中心巡查降为后备路径。
+暖戳已移出 `%LOCALAPPDATA%`(改以保暖记录 issue **#4** 上最近一次 Codex 任务时间戳
+为证),触发门控为"仅监督者/所有者所建队列 issue 上的提及"。定时保暖工作流
+`.github/workflows/codex-keepwarm.yml` 已编写(约每 8 小时在 #4 发 `@codex` 冒烟;
+仅用临时 GITHUB_TOKEN,零机密):**合并到默认分支后激活**,激活后须以一次
+`workflow_dispatch` 实测 App 是否响应 bot 作者的提及——若不响应,禁用该工作流,
+保暖回落到监督者心跳(约 3–4 小时一次的后备唤醒,兼作看门失效兜底)。
+控制中心巡查降为后备路径。
