@@ -74,20 +74,24 @@ the warm gate, never attempt `codex cloud exec`, and never hold Codex
 credentials. **`codex login` inside any cloud container is prohibited** — it is
 equivalent to the rejected CO-005; the container never authenticates Codex.
 
-A cloud orchestrator emits **intent only** and dispatches through a queue
-(D-029):
+Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
+(D-031, amending D-027/D-029):
 
-- **Primary path — `codex-dispatch` queue.** The orchestrator opens a durable
-  GitHub issue labeled `codex-dispatch` (or titled `[codex-dispatch] ...`)
-  carrying the full run sheet: warm command, `codex cloud exec` text, target
-  branch, ENV_ID, and contract path. The control-center supervisor lane (a
-  local Claude Code session) polls the queue, runs the warm gate then
-  `codex cloud exec`, comments the returned task ID, relabels the issue to
-  `dispatched`, and after diff/apply/push comments the result and closes it.
-  Results flow back through the repo (diff applied to the stream branch and
-  pushed).
-- **Fallback path — manual.** A human runs the same run sheet directly when the
-  supervisor lane is unavailable.
+- **Primary path — `@codex` mention on a queue issue.** The supervisor (or the
+  cloud orchestrator via the supervisor's bookkeeping) authors a durable
+  `codex-dispatch` GitHub issue carrying the task contract pointer, target
+  branch, and constraints, then posts an `@codex` mention to trigger the App.
+  A mention is a valid dispatch only on a queue issue authored by the
+  supervisor or the owner. Results flow back as Codex-created PRs/branches;
+  the supervisor integrates into **stream branches only** — `main` merges and
+  all D-012 gates remain human.
+- **Warm freshness** is evidenced by the most recent Codex task timestamp on
+  the keep-warm record (issue-based); the supervisor's scheduled self-checks
+  post an `@codex` smoke roughly every 9 hours. The `%LOCALAPPDATA%` registry
+  and `Invoke-CodexCloudWarm.ps1` warm gate apply only to the fallback path.
+- **Fallback path — control-center sweep.** The owner's Windows session (codex
+  CLI + keychain + registry) runs the classic run sheet (warm gate →
+  `codex cloud exec` → diff/apply/push) when the App path is unavailable.
 
 Cross-repo rule: **the worker gets data, not permission** (D-028) — the control
 center supplies upstream material per task via context packaging or a read-only

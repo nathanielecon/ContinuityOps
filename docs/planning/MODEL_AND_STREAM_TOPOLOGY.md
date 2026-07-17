@@ -66,21 +66,24 @@ The owner's Windows control-center session (local Claude Code, codex-cli,
 `codex cloud exec`, no Codex credentials. `codex login` inside a cloud container
 is prohibited (equivalent to the rejected CO-005).
 
-Dispatch runs through a repository queue polled by the control-center
-supervisor lane, not by human copy-paste (D-029):
+Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
+(D-031, amending D-029; the App is installed on this repo):
 
-- **Primary — `codex-dispatch` queue.** The cloud orchestrator opens a durable
-  GitHub issue labeled `codex-dispatch` (or titled `[codex-dispatch] ...`) with
-  the full run sheet (warm command, `codex cloud exec` text, target branch,
-  ENV_ID, contract path). The control-center lane
-  (`scripts/Watch-CodexDispatchQueue.ps1`) polls, warms, execs, comments the
-  task ID, relabels to `dispatched`, then applies/pushes and closes.
-- **Fallback — manual.** A human runs the same run sheet when the supervisor
-  lane is unavailable.
-- **Recorded, not enabled.** A Codex GitHub App + `@codex` mention + scheduled
-  keep-warm Action is documented as an emergency alternative; it requires
-  moving the warm stamp out of `%LOCALAPPDATA%` and a CODEOWNERS-style gate on
-  who may trigger dispatch, and stays off until then.
+- **Primary — `@codex` mention on a supervisor-authored `codex-dispatch`
+  issue.** The mention carries/points to the task contract, target branch, and
+  constraints. Gating: mentions count as dispatch only on queue issues authored
+  by the supervisor or owner. Results return as Codex PRs/branches; the
+  supervisor integrates into stream branches only (`main` and D-012 gates stay
+  human).
+- **Keep-warm.** Warm freshness is evidenced by the latest Codex task timestamp
+  on the keep-warm record; the supervisor's scheduled self-checks post an
+  `@codex` smoke roughly every 9 hours. A scheduled GitHub Action is a
+  documented backup pending verification that the App responds to bot-authored
+  mentions.
+- **Fallback — control-center sweep.** The owner's Windows session runs the
+  classic run sheet (`Invoke-CodexCloudWarm.ps1` warm gate → `codex cloud exec`
+  → diff/apply/push, `Watch-CodexDispatchQueue.ps1 -Once`) when the App path is
+  unavailable. The machine-local registry applies to this path only.
 
 Cross-repo material follows "the worker gets data, not permission" (D-028):
 context packaging (default) or a read-only vendored snapshot with recorded
