@@ -59,3 +59,12 @@
 - `evidence/slices/S0/SUPERVISOR_ACTUATION-2026-07-17.json`
 - `BREAK_FIX_LOG.md` — BF-2026-004 / BF-2026-005
 - `OPERATING_STATE.md` — revision 20；D-037..D-040；CO-011/CO-012
+
+
+## 2026-07-17T20:35Z successor actuation update
+
+- Main tip after governance repair: `679f808`
+- P0-T03 fixer branch: `cursor/p0-t03-fixer-d039-2d6f` @ `fd8c8c3` — draft PR https://github.com/nathanielecon/ContinuityOps/pull/32
+- Local validation green under D-039; **merge blocked** until owner/control-center dispatches D-037 reviewer via `@codex` (CO-011)
+- Heartbeat armed: `scripts/supervisor-heartbeat.sh` (3.5h ls-remote loop); keep-warm still needs Issues write
+- Owner open items unchanged: `REPO_SETTINGS_ADMIN_TOKEN`, PR #20, H0 after P0-T04
