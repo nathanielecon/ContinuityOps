@@ -12,48 +12,36 @@
 > 本文其余"控制中心巡查"流程(warm/exec 围栏块、`Watch-CodexDispatchQueue.ps1`、
 > 本机注册表与温门脚本)自 D-031 起为**后备路径**,仅在 App 路径不可用时启用。
 
-> **D-033 生效(App 发布硬门槛,经实测修订)**:App 路径已实证能执行并回帖,但
-> Codex UI 的 `make_pr` **只写 PR 元数据**。进一步实测(issues #3/#5 重催):App
-> **容器内**无法完成 GitHub 发布——无 `gh` CLI、`git push`/`fetch` 对
-> `github.com` 报 `CONNECT tunnel failed, response 403`、checkout 常无 `origin`。
-> 因此**容器内** `git push` + `gh pr create` **不是**可用过夜路径。
-> **唯一已实证的发布面**是 Codex 任务页的平台级 **Create PR**(App 凭据在沙箱外)。
-> 监督者心跳**不得**把 bot 摘要/`make_pr` 当作完成——仅当 `gh pr list` 可见开放
-> PR URL 才算回流。无 PR → 监督者(云会话,非用户本机)对任务页执行平台
-> Create PR / 或控制中心 `codex cloud apply`+push+`gh pr create`;仍无 → 诊断 +
-> Opus 后备(仅推理),不得假装集成。`github-actions[bot]` 的 `@codex` 保暖提及
-> 实测未被 App 响应——保暖回落到监督者心跳,勿把 GHA keepwarm 当已验证。
+> **D-033**(历史):App 沙箱无法自发布;`make_pr` 仅元数据;平台 Create PR /
+> 控制中心 apply 曾为过夜发布面。
+>
+> **D-034 生效(主发布面)**:过夜/无人值守发布改为 **patch-in-comment + GHA**。
+> 工人最终回复须含 `<!-- continuityops-patch-v1 -->`、`base_branch`、`base_sha`
+> 与完整 fenced unified diff。工作流
+> `.github/workflows/codex-patch-publish.yml` 由 `chatgpt-codex-connector[bot]`
+> 的 `issue_comment` 触发,用 ephemeral `GITHUB_TOKEN` apply/push/开 PR,并回评
+> URL。平台 Create PR 与 `scripts/Publish-CodexCloudTask.ps1` 降为**后备**。
+> 监督者心跳以 PR 评审/集成为主:有 `publish-ok`/开放 PR → 集成;有 bot 摘要但
+> 无 patch 标记且无 PR → 重催 D-034 片段;有 `publish-failed` → 诊断或后备路径。
+> 勿把 `make_pr` 文本当完成。`github-actions[bot]` `@codex` 保暖仍未验证。
 
 ## App 路径完成契约(每次 `@codex` 派遣必贴)
 
-````text
-完成定义(硬门槛):变更必须以 GitHub 可见 PR 回流(开放 PR URL)。
-禁止:停在 make_pr / "PR 元数据" / 仅 issue 评论并宣称完成。
-容器内若无 origin / 无 gh / git 对 github.com 403:在摘要中显式报告环境限制,
-并给出任务链接(View task);不要伪造 PR URL。
-监督者/发布席位随后用平台 Create PR 或控制中心 codex cloud apply 完成发布。
-摘要结尾必须含 context_remaining;若已有 PR URL 则必须写出。
-````
+完整模板见 [`CODEX_DISPATCH_SNIPPET.zh.md`](./CODEX_DISPATCH_SNIPPET.zh.md)。
 
 目标分支填 issue 正文指定的流/编排分支(例如 `stream/S0-baseline-audit` 或
-`claude/orchestrator-supervisor-setup-yyd3bu`),**不要**默认 `main`。
-注意:平台 **Create PR** 常默认 base=`main`;监督者发布后须核对 base,必要时
-改 target 或 cherry-pick 进流/编排分支后再关闭队列 issue。
+`claude/orchestrator-supervisor-setup-yyd3bu`),写入 `base_branch` 字段。
 
-## 监督者心跳 — 平台 Create PR 发布步骤(D-033,必做)
+## 监督者心跳 — D-034(评审 PR;发布由 GHA 完成)
 
 每次心跳(或 D-032 批量唤醒)对**每个**开放且带 `codex-dispatch` 的 issue:
 
-1. `gh pr list --repo nathanielecon/ContinuityOps --state open` — 已有对应该
-   任务的开放 PR URL → 可进入集成/关闭流程;跳过本 issue。
-2. 若仅有 `chatgpt-codex-connector[bot]` 摘要/`make_pr` 字样、**无** PR:
-   - 从 bot 评论提取 `View task` / `chatgpt.com/s/cd_…` 链接;
-   - 打开任务页 → 点击 **Create PR**(平台级,勿要求工人重跑 `gh`);
-   - 再跑 `gh pr list` / `gh pr view <N>` 确认 URL;
-   - 在 issue 评论写入 PR URL;核对 base 分支。
-3. Create PR 失败或任务页无按钮 → issue 诊断评论 + 启用 Opus 后备(仅推理);
-   **禁止**把 bot 文本当完成、禁止假装集成。
-4. 在站后备:`pwsh -File scripts/Publish-CodexCloudTask.ps1 -TaskId … -BaseBranch …`
+1. `gh pr list` / issue 上 `publish-ok` — 已有开放 PR → 进入集成/关闭流程。
+2. 若 bot 已回复但**无** `continuityops-patch-v1` 且无 PR → 重催一次,粘贴
+   `CODEX_DISPATCH_SNIPPET.zh.md`(要求输出 patch 块)。
+3. 若见 `publish-failed` → 读失败评论;可后备平台 Create PR 或
+   `Publish-CodexCloudTask.ps1`;仍失败则 Opus 后备(仅推理),禁止假装集成。
+4. **禁止**把 `make_pr` / 无 PR URL 的 bot 摘要当完成。
 
 保暖:仅**监督者/所有者**在 issue **#4** 发 `@codex` 冒烟(~9h)。勿依赖
 `github-actions[bot]` 提及。

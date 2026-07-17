@@ -88,19 +88,17 @@ Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
   supervisor or the owner. Results flow back as Codex-created PRs/branches;
   the supervisor integrates into **stream branches only** — `main` merges and
   all D-012 gates remain human.
-- **App publish hard gate (D-033, empirically revised):** every App-path
-  `@codex` prompt must include the completion contract from
-  `docs/planning/dispatch/QUEUE.md`. Completion means a **GitHub-visible open
-  PR URL**. Stopping at Codex UI `make_pr` / bot summaries is **incomplete**.
-  App **sandboxes cannot publish** (`gh` missing; `git` to GitHub often
-  `CONNECT 403`). The proven publish surfaces are: (1) Codex task-page
-  **Create PR** (platform, outside sandbox) actuated by the cloud supervisor
-  heartbeat, or (2) control-center `codex cloud apply` + push + `gh pr create`.
-  **Heartbeat algorithm** (mandatory): open `codex-dispatch` issues → if bot
-  reply without PR → open `View task` → **Create PR** → confirm with
-  `gh pr list` → comment PR URL (check base branch; Create PR often defaults
-  to `main`). Never close/integrate on `make_pr` alone. If Create PR fails →
-  Opus reserve (reasoning-only). Do not treat GHA `@codex` keepwarm as verified.
+- **App publish hard gate (D-034):** every App-path `@codex` prompt must include
+  [`docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md`](docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md).
+  Workers must end with `<!-- continuityops-patch-v1 -->`, `base_branch`,
+  `base_sha`, and a full fenced unified diff. GitHub Actions
+  `codex-patch-publish` mechanically applies the patch with `GITHUB_TOKEN` and
+  opens the PR (primary overnight path). App sandboxes still cannot
+  `git push`/`gh`. Platform **Create PR** and
+  `scripts/Publish-CodexCloudTask.ps1` are **fallbacks**. **Heartbeat:** review
+  PRs / `publish-ok`; re-nudge if bot reply lacks the patch marker; on
+  `publish-failed` use fallback or Opus reserve (reasoning-only). Never treat
+  `make_pr` text alone as complete. Do not treat GHA `@codex` keepwarm as verified.
 - **Warm freshness** is evidenced by the most recent Codex task timestamp on
   the keep-warm record (issue-based); the supervisor's scheduled self-checks
   post an `@codex` smoke roughly every 9 hours. The `%LOCALAPPDATA%` registry

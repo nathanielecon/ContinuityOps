@@ -1,0 +1,143 @@
+# ContinuityOps — mechanical publisher for Codex App patch-in-comment (D-034)
+#
+# Triggered when chatgpt-codex-connector[bot] posts a comment containing
+# <!-- continuityops-patch-v1 --> on a codex-dispatch issue. Extracts the
+# unified diff, applies at the declared base_sha, pushes a branch, opens a PR.
+# Uses only GITHUB_TOKEN (no new secrets). Create PR / control-center apply remain fallbacks.
+name: codex-patch-publish
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  publish:
+    if: |
+      github.event.issue.pull_request == null &&
+      github.event.comment.user.login == 'chatgpt-codex-connector[bot]' &&
+      contains(github.event.comment.body, '<!-- continuityops-patch-v1') &&
+      contains(join(github.event.issue.labels.*.name, ','), 'codex-dispatch')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (default branch for scripts)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Write comment body
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: |
+          printf '%s' "$COMMENT_BODY" > /tmp/codex-comment.md
+
+      - name: Extract patch metadata
+        id: extract
+        run: |
+          set -euo pipefail
+          chmod +x scripts/extract-codex-patch.sh
+          scripts/extract-codex-patch.sh /tmp/codex-comment.md /tmp/codex-patch-out
+          echo "base_branch=$(cat /tmp/codex-patch-out/base_branch)" >> "$GITHUB_OUTPUT"
+          echo "base_sha=$(cat /tmp/codex-patch-out/base_sha)" >> "$GITHUB_OUTPUT"
+          echo "context_remaining=$(cat /tmp/codex-patch-out/context_remaining)" >> "$GITHUB_OUTPUT"
+
+      - name: Fail comment on extract error
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --body \
+            "publish-failed (D-034): could not extract continuityops-patch-v1 metadata/diff from bot comment. Re-nudge worker to emit marker + base_branch + base_sha + fenced \`\`\`diff."
+
+      - name: Idempotency — skip if open PR already exists
+        id: idem
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          set -euo pipefail
+          existing="$(gh pr list --repo "${{ github.repository }}" --state open --json number,url,headRefName,body \
+            --jq "[.[] | select(.headRefName | test(\"^codex/issue-${ISSUE}-\")) | {number,url,headRefName}] | .[0] // empty")"
+          if [[ -n "$existing" && "$existing" != "null" ]]; then
+            url="$(echo "$existing" | jq -r .url)"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            gh issue comment "$ISSUE" --repo "${{ github.repository }}" --body \
+              "publish-skipped (D-034 idempotency): open PR already exists for this issue: $url"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Apply patch, push, open PR
+        if: steps.idem.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+          BASE_BRANCH: ${{ steps.extract.outputs.base_branch }}
+          BASE_SHA: ${{ steps.extract.outputs.base_sha }}
+          CONTEXT_REMAINING: ${{ steps.extract.outputs.context_remaining }}
+        run: |
+          set -euo pipefail
+          SHORT="$(echo "$BASE_SHA" | cut -c1-7)"
+          HEAD_BRANCH="codex/issue-${ISSUE}-${SHORT}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin "$BASE_SHA" --depth=1 || git fetch origin
+          git checkout -B "$HEAD_BRANCH" "$BASE_SHA"
+
+          set +e
+          git apply --index /tmp/codex-patch-out/patch.diff 2>/tmp/apply.err
+          rc=$?
+          if [[ $rc -ne 0 ]]; then
+            git apply --3way --index /tmp/codex-patch-out/patch.diff 2>>/tmp/apply.err
+            rc=$?
+          fi
+          set -e
+          if [[ $rc -ne 0 ]]; then
+            {
+              echo "publish-failed (D-034): git apply failed at \`$BASE_SHA\` (base \`$BASE_BRANCH\`)."
+              echo ""
+              echo '```'
+              head -c 4000 /tmp/apply.err || true
+              echo '```'
+            } > /tmp/fail-body.md
+            gh issue comment "$ISSUE" --repo "${{ github.repository }}" --body-file /tmp/fail-body.md
+            exit 1
+          fi
+
+          if git diff --cached --quiet; then
+            gh issue comment "$ISSUE" --repo "${{ github.repository }}" --body \
+              "publish-failed (D-034): patch applied with empty index (no changes)."
+            exit 1
+          fi
+
+          git commit -m "codex-dispatch: apply patch from issue #${ISSUE} (D-034)"
+          git push -u origin "HEAD:refs/heads/${HEAD_BRANCH}"
+
+          TITLE="codex-dispatch #${ISSUE}: mechanical publish (D-034)"
+          BODY="$(cat <<EOF
+          Mechanically published from chatgpt-codex-connector[bot] patch comment (D-034).
+
+          - Issue: #${ISSUE}
+          - Base: \`${BASE_BRANCH}\` @ \`${BASE_SHA}\`
+          - context_remaining: ${CONTEXT_REMAINING}
+
+          Closes #${ISSUE}
+          EOF
+          )"
+          # Trim leading spaces from heredoc indentation for cleaner PR body
+          BODY="$(printf '%s\n' "$BODY" | sed 's/^          //')"
+
+          URL="$(gh pr create --repo "${{ github.repository }}" \
+            --base "$BASE_BRANCH" \
+            --head "$HEAD_BRANCH" \
+            --title "$TITLE" \
+            --body "$BODY")"
+
+          gh issue comment "$ISSUE" --repo "${{ github.repository }}" --body \
+            "publish-ok (D-034): ${URL}"
