@@ -1,0 +1,13 @@
+{
+  "comment": "Desired-state repo settings (D-036 settings-as-code). Changing this file is the ONLY sanctioned way to change branch protection. Applied by .github/workflows/apply-repo-settings.yml on merge to main. Workers cannot edit this path (publisher denylist); supervisor PRs + CI + merge gate + git history are the audit trail.",
+  "branch_protection": {
+    "main": {
+      "required_status_checks": { "strict": true, "contexts": ["contracts"] },
+      "enforce_admins": false,
+      "required_pull_request_reviews": null,
+      "restrictions": null,
+      "allow_force_pushes": false,
+      "allow_deletions": false
+    }
+  }
+}
