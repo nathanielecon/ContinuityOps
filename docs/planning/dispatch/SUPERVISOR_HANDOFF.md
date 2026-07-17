@@ -2,6 +2,8 @@
 
 > 面向所有者 / 控制中心的持久交接。机器字段英文；自由文本简体中文。
 
+> **Full successor appendix (Q&A + resume order):** [`SUPERVISOR_APPENDIX.md`](./SUPERVISOR_APPENDIX.md)
+
 ## 当前基线
 
 | 字段 | 值 |
