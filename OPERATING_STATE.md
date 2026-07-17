@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 7,
+  "revision": 8,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
@@ -40,7 +40,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Copied planning package into docs/planning/",
     "Installed root contracts and architecture assets",
     "Merged .codex Codex Cloud Environment scripts to the default branch",
-    "Created, registered, and first-warmed the ContinuityOps Codex Cloud Environment (env 6a594ee667608191ab53cae15202815e, zero secrets)"
+    "Created, registered, and first-warmed the ContinuityOps Codex Cloud Environment (env 6a594ee667608191ab53cae15202815e, zero secrets)",
+    "Rotated the orchestrator seat per D-024: predecessor retired at ~17% context_remaining; successor Opus 4.8 reconstructed state from durable artifacts only"
   ],
   "verified_baseline": [],
   "unverified": [

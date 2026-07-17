@@ -29,6 +29,13 @@ codex cloud exec --env <ENV_ID> --branch <target-branch> "<单行简体中文任
 
 > **当前队列**：issue #2（`[codex-dispatch] P0-T01 — S0 baseline audit`）**已贴
 > `codex-dispatch` 标签**,等待下次监督者巡查处理。
+>
+> **P0-T01 契约真实所在（消除"按路径读落空"）**：定稿的 P0-T01 工作者契约**不在**
+> 本编排分支,而在流分支 `origin/stream/S0-baseline-audit` 的
+> `docs/planning/dispatch/P0-T01.zh.md`（pinned commit `648791d`）。
+> 用 `git show origin/stream/S0-baseline-audit:docs/planning/dispatch/P0-T01.zh.md` 读取。
+> 权威*任务定义*仍是 `PLAN.md` 中的 `P0-T01`。验证器实现来源与运行方式见
+> `harness/README.md`（候选实现分支 `claude/cloud-gpt-ralphy-validation-6m0gkz`）。
 
 ## 所需标签（自动创建，四个现已存在）
 
@@ -65,9 +72,14 @@ gh label create dispatch-failed --color b60205 --description "温门或派遣失
 3. 解析 `warm` / `exec` 块（缺失则 `dispatch-failed`）；
 4. **先认领**：`codex-dispatch → dispatching`;随后重新拉取标签双重校验,认领失败/丢失竞态即跳过；
 5. 运行温门（**不带 `-Force`**）——失败则 `dispatch-failed` + 评论,**不自动重试**；
-6. 运行 `codex cloud exec`,评论任务 ID,标签改 `dispatched`；失败则 `dispatch-failed` + 评论；
-7. 轮询 `codex cloud status` → `codex cloud diff/apply` 到目标流分支 → `git push`；
-8. 评论结果并关闭 issue（`done`）。
+6. **持久化温门快照(preflight 权威来源)**：把温门结果作为持久工件写回目标流分支
+   `evidence/slices/<slice>/preflight-<taskid>.json`,至少含 `lastWarmUtc` 与 `verdict`。
+   编排器随后据此文件填充 `STREAM_COMPLETE.json` 的 `preflight_ok`
+   （见 BF-PRE-015.8 与 `harness/schemas/stream-complete.schema.json`）。
+   **issue 评论不是 `preflight_ok` 的权威来源**——评论仅供人读,权威一律取仓内持久工件；
+7. 运行 `codex cloud exec`,评论任务 ID,标签改 `dispatched`；失败则 `dispatch-failed` + 评论；
+8. 轮询 `codex cloud status` → `codex cloud diff/apply` 到目标流分支 → `git push`；
+9. 评论结果并关闭 issue（`done`）。
 
 ## 监督者巡查（sweep）模式
 

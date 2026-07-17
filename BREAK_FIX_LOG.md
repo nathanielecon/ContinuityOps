@@ -126,9 +126,11 @@ ContinuityOps incidents yet.
   4. The supervisor reviews only the signaled branch: the completion file,
      the diff against `write_scope`, and evidence freshness. It does not
      inspect live or unsignaled streams.
-  5. The supervisor's verdict is recorded as a durable file under
-     `evidence/slices/<slice>/` (approve, or issue IDs for rework), never as
-     chat-only feedback.
+  5. The supervisor's verdict is recorded as a durable file with the fixed name
+     `evidence/slices/<slice>/SUPERVISOR_VERDICT.json` (approve, or issue IDs
+     for rework), never as chat-only feedback. Its shape is pinned by
+     `harness/schemas/supervisor-verdict.schema.json` (`decision`,
+     `candidate_sha`, `reviewed_paths`, `issue_ids`, `reviewer`, `at`).
   6. Naming compliance: a branch that does not use the
      `stream/<slice-id>-<short-name>` convention AND lacks a committed
      `STREAM_COMPLETE.json` is treated as unsignaled and is not reviewed. This
@@ -138,7 +140,19 @@ ContinuityOps incidents yet.
      the dispatch-time warm-gate verdict (`lastWarmUtc` freshness for the
      Environment) plus whether the required cross-repo context package was in
      place at dispatch. It does not carry any credential check — no auth
-     material exists in the worker container (D-026/D-027).
+     material exists in the worker container (D-026/D-027). The whole file's
+     shape is pinned by `harness/schemas/stream-complete.schema.json` (with a
+     conforming sample at `harness/schemas/stream-complete.example.json`), and
+     `preflight_ok` uses the object form
+     `{warm_fresh, last_warm_utc, context_package_ready}`.
+  8. Source of the `preflight_ok` data. The `preflight_ok` snapshot is not
+     authoritative as an issue comment. After running the warm gate at dispatch,
+     the control-center lane MUST write the warm snapshot back to the stream
+     branch as a persistent artifact
+     `evidence/slices/<slice>/preflight-<taskid>.json` carrying at least
+     `lastWarmUtc` and `verdict`. The orchestrator populates `preflight_ok` in
+     `STREAM_COMPLETE.json` from that committed file (referenced via
+     `preflight_evidence_path`), never from a transient issue comment.
 
 ### BF-PRE-017 — Dispatch polling must be durable and idempotent
 
@@ -146,12 +160,25 @@ ContinuityOps incidents yet.
   restart (a neighbouring project lost three workers this way), and a
   non-idempotent poller re-dispatches the same task when runs overlap or a
   relabel fails.
-- Control: carry dispatch polling in a Scheduled Task/service using the `-Once`
-  single-pass mode; claim the item first (`codex-dispatch -> dispatching`)
-  before any work; enforce a machine-local lock-file mutex (with stale
-  fallback) against overlapping runs; restrict execution to an author
-  allowlist; and never auto-retry a failure — mark `dispatch-failed` and require
-  a human to requeue.
+- Control: the dispatch-polling invariants are unchanged — single-pass idempotent
+  runs, claim-first relabel (`codex-dispatch -> dispatching`) before any work, a
+  machine-local lock-file mutex (with stale fallback) against overlapping runs,
+  an author allowlist, and no auto-retry on failure (mark `dispatch-failed` and
+  require a human to requeue).
+- Carrier of the poll (revised): the adopted model is **owner-on-station sweep**
+  — the queue watcher runs only while the owner's live supervisory session is on
+  station, via `Watch-CodexDispatchQueue.ps1 -Once` or by hand. Items wait
+  between sweeps. This supersedes the earlier "must be carried in a Scheduled
+  Task/service" phrasing; a standing scheduled task/service is explicitly NOT
+  required and the control center registers none (see `QUEUE.md` sweep model and
+  commit 4a30412). The idempotency/claim-first/lock-mutex/author-allowlist/
+  no-auto-retry controls above stay in force precisely because sweeps may overlap
+  (manual + `-Once`, or repeated triggers).
+- Retained lesson (unchanged): an in-session background loop dies silently on app
+  restart (a neighbouring project lost three workers this way), so an
+  unattended in-session background loop is not a reliable carrier. The sweep
+  model avoids that failure surface by running only when on station, rather than
+  by depending on a long-lived background process.
 
 ### BF-PRE-016 — Credential variables are reported by metadata only
 

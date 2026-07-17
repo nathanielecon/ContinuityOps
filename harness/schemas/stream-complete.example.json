@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "task_id": "P0-T01",
+  "slice": "S0",
+  "candidate_sha": "0000000000000000000000000000000000000000",
+  "baseline_sha": "6ed243564ddb46f4a46608496d6f05db53c93788",
+  "validation_results": [
+    {
+      "command": "node scripts/project.mjs validate P0-T01",
+      "exit": 0,
+      "time": "2026-07-17T00:00:00Z",
+      "evidence_path": "evidence/slices/S0/baseline-audit.json"
+    },
+    {
+      "command": "node scripts/project.mjs partition-verify",
+      "exit": 0,
+      "time": "2026-07-17T00:01:00Z",
+      "evidence_path": "evidence/slices/S0/partition-verify.txt"
+    }
+  ],
+  "evidence_manifest_path": "evidence/slices/S0/P0-T01-events.json",
+  "context_remaining": "62%",
+  "preflight_ok": {
+    "warm_fresh": true,
+    "last_warm_utc": "2026-07-16T23:40:00Z",
+    "context_package_ready": "n/a",
+    "preflight_evidence_path": "evidence/slices/S0/preflight-P0-T01.json"
+  },
+  "notes_zh": "S0 基线审计流已完成；四个验证器全部通过，工作树干净，证据已绑定候选 SHA。示例文件中的 candidate_sha 为占位，正式信号由编排器在 apply/push 后回填真实 40 位十六进制。"
+}
