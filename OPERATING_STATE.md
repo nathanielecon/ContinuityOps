@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 24,
+  "revision": 25,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
@@ -31,12 +31,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "STOP for human H0: package at evidence/slices/S0/H0_PACKAGE.md (hashes + binding shell). Agents cannot mint receipts.",
-    "P0-T03 verified; P0-T04 in review on main 9a58cbd (PR #40; D-037 #41 pass; H0 waiting_human)",
-    "After H0 signed: dispatch P0-T05 (multi-stream/council/unauthorized-Phase-1 rejection) per docs/planning/dispatch/P0-T05.zh.md",
-    "After P0-T05/S0 certified: human advances authorized_through_phase for Phases 1–8 under PLAN.md (≤3 streams, D-037/D-038, stop at H1–H6)",
+    "H0 BLOCKED ON AMENDMENT: issue #42 comment 5007863678 is decision=approve from nathanielecon but still has template placeholders in candidate_sha and signature_or_signed_comment_url; conditions empty. See evidence/slices/S0/H0_WAITING_AMENDMENT.json. Supervisor will not mint/bind agent fill-ins.",
+    "Owner must edit that comment (or post JSON-only replacement) with real 40-hex candidate_sha (tip 1b66065 at last validator pass), real permalink, and conditions covering treatise 6ca0ec1 seat doctrine + engagement no Opus",
+    "After complete human receipt: bind into harness/approvals/H0.binding.json from that artifact only; then dispatch orch round for P0-T05 prep (supervisor actuates, does not author full orch content)",
+    "P0-T03 verified; P0-T04 in review; validate-rubric-freeze.mjs pass on 1b66065",
     "Owner pending (parallel): REPO_SETTINGS_ADMIN_TOKEN, PR #20",
-    "Keep-warm issue #4 via GH_TOKEN @codex when stamp >9h",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
