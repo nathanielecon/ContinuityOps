@@ -9,17 +9,17 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 23,
+  "revision": 24,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
-  "current_gate": "phase-0-rubric-freeze-h0",
-  "running_tasks": ["P0-T04"],
+  "current_gate": "H0-human-receipt",
+  "running_tasks": [],
   "blocked_tasks": ["P0-T05"],
   "waiting_human": [
+    "H0-after-P0-T04",
     "REPO_SETTINGS_ADMIN_TOKEN",
-    "PR-20",
-    "H0-after-P0-T04"
+    "PR-20"
   ],
   "codex_cloud_environment": {
     "repo": "nathanielecon/ContinuityOps",
@@ -31,9 +31,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "Status revision 23: P0-T03 verified on main 1523466 (PR #36 content; CI green; D-037 #38 verdict pass; PR #32 superseded)",
-    "Dispatch P0-T04 rubric freeze via warm Codex; package H0 hash-bound receipt inputs; STOP for human H0 signature (agents cannot mint)",
-    "After H0: P0-T05 S0 multi-stream/council proof; then human advances authorized_through_phase for Phases 1–8",
+    "STOP for human H0: package at evidence/slices/S0/H0_PACKAGE.md (hashes + binding shell). Agents cannot mint receipts.",
+    "P0-T03 verified; P0-T04 in review on main 9a58cbd (PR #40; D-037 #41 pass; H0 waiting_human)",
+    "After H0 signed: dispatch P0-T05 (multi-stream/council/unauthorized-Phase-1 rejection) per docs/planning/dispatch/P0-T05.zh.md",
+    "After P0-T05/S0 certified: human advances authorized_through_phase for Phases 1–8 under PLAN.md (≤3 streams, D-037/D-038, stop at H1–H6)",
     "Owner pending (parallel): REPO_SETTINGS_ADMIN_TOKEN, PR #20",
     "Keep-warm issue #4 via GH_TOKEN @codex when stamp >9h",
     "Do not authorize Phase 1 until S0 and H0 pass"
@@ -49,7 +50,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "D-034: patch-in-comment GHA publisher smoked (issue #12 → PR #13; Actions create-PR permission required)",
     "P0-T01 verified; P0-T02 verified with condition CO-010; ORCH-ROUND-06 governance landed via supervisor git-push fallback after #29 publish-failed",
     "Owner GH_TOKEN restored Issues+PR actuation for supervisor seat; human directed P0-T03 fresh fixer/reviewer redo",
-    "P0-T03 verified after redo (issue #35 → PR #36 → D-037 #38 pass → main 1523466)"
+    "P0-T03 verified after redo (issue #35 → PR #36 → D-037 #38 pass → main 1523466)",
+    "P0-T04 rubric freeze integrated (issue #39 → PR #40 → D-037 #41 pass → main 9a58cbd); H0 package waiting_human"
   ],
   "verified_baseline": [],
   "unverified": [

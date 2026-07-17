@@ -92,6 +92,17 @@
 5. Do **not** authorize Phase 1 before S0 + H0.
 
 
+## 2026-07-17T21:55Z STOP — H0 human gate
+
+| Item | State |
+| --- | --- |
+| Main tip | `9a58cbd` |
+| P0-T03 | verified |
+| P0-T04 | review (integrated; D-037 #41 pass) |
+| **H0** | **waiting_human** — [`evidence/slices/S0/H0_PACKAGE.md`](../../../evidence/slices/S0/H0_PACKAGE.md) |
+| After H0 | [`POST_H0_RESUME.md`](./POST_H0_RESUME.md) → P0-T05 → Phases 1–8 |
+| Hard stop | Agents **must not** mint H0 or authorize Phase 1 |
+
 ## 2026-07-17T21:43Z P0-T03 verified; P0-T04 → H0
 
 | Item | State |

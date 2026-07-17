@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "verdict_type": "supervisor_stream_boundary",
+  "task_id": "P0-T04",
+  "decision": "approve_pending_human_H0",
+  "recorded_at": "2026-07-17T21:55:00Z",
+  "baseline_sha": "a195e74c51e758d1e655915c8a063760153e3b53",
+  "candidate_sha": "9a58cbd1b420452b3216de33602ee58868b5d87a",
+  "evidence": {
+    "worker_issue": 39,
+    "reviewer_issue": 41,
+    "worker_pr": 40,
+    "ci": {
+      "check": "contracts",
+      "conclusion": "success",
+      "head_sha": "b20ba94ded4ed474185643d15cdfb36db8b2db05"
+    },
+    "d037": {
+      "verdict": "pass",
+      "h0_forged": false
+    },
+    "h0_package": "evidence/slices/S0/H0_PACKAGE.md",
+    "merge_path": "supervisor_git_merge_fallback"
+  },
+  "conditions": [
+    "H0 human receipt required before P0-T05 / Phase 1 authorization"
+  ],
+  "next": ["waiting_human:H0", "then P0-T05"]
+}
