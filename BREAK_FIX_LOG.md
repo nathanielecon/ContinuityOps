@@ -109,6 +109,90 @@ ContinuityOps incidents yet.
 - Control: exact draw.io source, evidence-locked prompt, visual parity review,
   required honest footer, and regeneration after architecture/evidence drift.
 
+### BF-PRE-015 — Supervisor branch-check protocol (minimal intervention)
+
+- Risk: a token-constrained supervisor either polls live streams (wasteful) or
+  misses completed work (unreviewed merges).
+- Control: the supervisor reviews a stream branch only upon a durable
+  completion signal from the orchestrator. Mechanism:
+  1. Each Ralphy stream works on an isolated branch named
+     `stream/<slice-id>-<short-name>`.
+  2. When the orchestrator judges the stream complete, it commits
+     `evidence/slices/<slice>/STREAM_COMPLETE.json` on that branch containing:
+     candidate SHA, baseline SHA, validation commands/results, evidence
+     manifest path, and the final worker-reported `context_remaining`.
+  3. The orchestrator then notifies the supervisor (Simplified Chinese,
+     durable-artifact pointer only — no transcript).
+  4. The supervisor reviews only the signaled branch: the completion file,
+     the diff against `write_scope`, and evidence freshness. It does not
+     inspect live or unsignaled streams.
+  5. The supervisor's verdict is recorded as a durable file with the fixed name
+     `evidence/slices/<slice>/SUPERVISOR_VERDICT.json` (approve, or issue IDs
+     for rework), never as chat-only feedback. Its shape is pinned by
+     `harness/schemas/supervisor-verdict.schema.json` (`decision`,
+     `candidate_sha`, `reviewed_paths`, `issue_ids`, `reviewer`, `at`).
+  6. Naming compliance: a branch that does not use the
+     `stream/<slice-id>-<short-name>` convention AND lacks a committed
+     `STREAM_COMPLETE.json` is treated as unsignaled and is not reviewed. This
+     covers Cursor-platform auto-generated `cursor/*` branches, which are never
+     valid completion signals on their own.
+  7. `STREAM_COMPLETE.json` must include a `preflight_ok` field: a snapshot of
+     the dispatch-time warm-gate verdict (`lastWarmUtc` freshness for the
+     Environment) plus whether the required cross-repo context package was in
+     place at dispatch. It does not carry any credential check — no auth
+     material exists in the worker container (D-026/D-027). The whole file's
+     shape is pinned by `harness/schemas/stream-complete.schema.json` (with a
+     conforming sample at `harness/schemas/stream-complete.example.json`), and
+     `preflight_ok` uses the object form
+     `{warm_fresh, last_warm_utc, context_package_ready}`.
+  8. Source of the `preflight_ok` data. The `preflight_ok` snapshot is not
+     authoritative as an issue comment. The committed artifact
+     `evidence/slices/<slice>/preflight-<taskid>.json` (at least `lastWarmUtc`
+     and `verdict`) is the authoritative source, and the orchestrator populates
+     `preflight_ok` in `STREAM_COMPLETE.json` from it (referenced via
+     `preflight_evidence_path`), never from a transient issue comment. Who
+     writes it depends on the dispatch path (D-031): on the App path, the
+     orchestration round commits it with its diff, deriving `lastWarmUtc` from
+     the most recent Codex task timestamp on the keep-warm record; on the
+     fallback control-center path, the sweep lane writes it after running the
+     warm gate.
+
+### BF-PRE-017 — Dispatch polling must be durable and idempotent
+
+- Observed risk: an in-session background dispatch loop dies silently on app
+  restart (a neighbouring project lost three workers this way), and a
+  non-idempotent poller re-dispatches the same task when runs overlap or a
+  relabel fails.
+- Control: the dispatch-polling invariants are unchanged — single-pass idempotent
+  runs, claim-first relabel (`codex-dispatch -> dispatching`) before any work, a
+  machine-local lock-file mutex (with stale fallback) against overlapping runs,
+  an author allowlist, and no auto-retry on failure (mark `dispatch-failed` and
+  require a human to requeue).
+- Carrier of the poll (revised): the adopted model is **owner-on-station sweep**
+  — the queue watcher runs only while the owner's live supervisory session is on
+  station, via `Watch-CodexDispatchQueue.ps1 -Once` or by hand. Items wait
+  between sweeps. This supersedes the earlier "must be carried in a Scheduled
+  Task/service" phrasing; a standing scheduled task/service is explicitly NOT
+  required and the control center registers none (see `QUEUE.md` sweep model and
+  commit 4a30412). The idempotency/claim-first/lock-mutex/author-allowlist/
+  no-auto-retry controls above stay in force precisely because sweeps may overlap
+  (manual + `-Once`, or repeated triggers).
+- Retained lesson (unchanged): an in-session background loop dies silently on app
+  restart (a neighbouring project lost three workers this way), so an
+  unattended in-session background loop is not a reliable carrier. The sweep
+  model avoids that failure surface by running only when on station, rather than
+  by depending on a long-lived background process.
+
+### BF-PRE-016 — Credential variables are reported by metadata only
+
+- Observed risk: reconnaissance or diagnostics can echo fragments of a secret
+  environment variable (name, prefix, or slice), leaking material into
+  transcripts and evidence in violation of the no-secrets-in-evidence rule.
+- Control: when reporting on any credential-class variable (for example
+  `CODEX_AUTH_JSON_GZB64`), report only presence, length, and whether it
+  resolves/decodes to usable material. Never echo any prefix, suffix, or
+  substring of the value, in any tool call, log, or report.
+
 ## Entry template
 
 ```markdown

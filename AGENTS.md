@@ -20,16 +20,45 @@ from durable repository artifacts.
 ContinuityOps uses a layered control plane. Model names are explicit runtime
 configuration, not inferred aliases.
 
-- **Portfolio supervisor:** one Claude Opus 4.8 cloud agent supervises the
-  complete program, maintains the integrated objective, approves stream
-  creation/closure, and may appoint Claude Sonnet or Opus co-orchestrators for
-  bounded streams. It does not replace deterministic gates or human approvals.
-- **Ralphy orchestration and council reasoning:** Grok 4.5 High Fast is the
-  default model for stream orchestrators, judges, nixers, fixers, and bottleneck
-  analysts unless the supervisor records a task-specific exception.
-- **Code execution:** Codex 5.4 CLI Cloud Agents in `/fast` mode implement the
-  project code and tests through bounded Ralphy tasks. They edit repositories;
-  they are not the live cloud apply control plane.
+- **Portfolio supervisor:** one Claude 5 cloud agent supervises the complete
+  program under a minimal-intervention policy, maintains the integrated
+  objective, approves stream creation/closure, and may appoint Claude Sonnet
+  or Opus co-orchestrators for bounded streams. It reviews a stream branch
+  only upon the orchestrator's durable completion signal (BF-PRE-015), and
+  certifies at **stream boundaries only** — per-round checking belongs to the
+  deterministic validators inside orchestration rounds, and actuation of
+  orchestrator intents batches into evented wakes plus a 3–4h heartbeat
+  (D-032). It does not replace deterministic gates or human approvals.
+- **Ralphy orchestration and council reasoning:** the default carrier is an
+  **episodic GPT round** — a Codex 5.4 Cloud task dispatched through the
+  `codex-dispatch` queue that plays the lead orchestrator (and council roles:
+  judges, nixers, fixers, bottleneck analysts) for one bounded round, returning
+  work as a diff and holding zero credentials. Claude Opus 4.8 is retained as
+  the **reserve seat**, enabled when a GPT round is unavailable or fails; a cold
+  orchestrator reconstructs state losslessly from durable artifacts. The actual
+  model ID of every round is recorded at dispatch, and the supervisor may record
+  a task-specific exception (amends D-022; supersedes the earlier Grok 4.5 High
+  Fast assignment; see D-030).
+- **Code execution:** warm Codex 5.4 CLI Cloud Agents in default mode (not
+  `/high`, not `/fast`) implement the project code and tests through bounded
+  Ralphy tasks. "Warm" is a per-Environment toolchain cache (~12h), never
+  credential material. The concrete specification (D-026):
+  - one Codex Cloud Environment per repository, created in the Codex UI with
+    caching On;
+  - the two in-repo scripts `.codex/cloud-setup.sh` (Setup) and
+    `.codex/cloud-maintenance.sh` (Maintenance) are the *only* content pasted
+    into the Environment; they live in the repo and are change-controlled;
+  - zero credentials in the container — adding any environment variable or
+    secret to the Environment invalidates the ~12h cache and is out of bounds;
+  - a warm gate (`scripts/Invoke-CodexCloudWarm.ps1`, control-center only) runs
+    before every dispatch and re-warms via a smoke task when `lastWarmUtc` is
+    missing or older than ~10h;
+  - dispatch is `codex cloud exec --env <ENV_ID> --branch <branch> "<task>"`;
+    the task never runs git itself, and the orchestrator owns integration.
+  Warmth is isolated per Environment/repo and does not carry across repos.
+  Workers report remaining context on every handoff; the orchestrator may
+  retire a low-context worker and dispatch a fresh replacement. They edit
+  repositories; they are not the live cloud apply control plane.
 - **Claude execution location:** Claude agents run in cloud environments only.
   They do not rely on the user's laptop shell, browser session, cookies, or
   local cloud login.
@@ -37,6 +66,39 @@ configuration, not inferred aliases.
 The supervisor records the actual model ID, provider, mode, and role for every
 dispatch. If a named model is unavailable, the task stops or uses a
 human-approved substitution; agents never invent model availability.
+
+### Dispatch topology
+
+The owner's Windows control-center session (local Claude Code with codex-cli,
+`pwsh`, and the machine-local `environments.json` registry) is the **sole
+dispatch point** (D-027). The warm gate and every `codex cloud exec` run only
+there. Cloud containers and cloud workers are **receive-only**: they never run
+the warm gate, never attempt `codex cloud exec`, and never hold Codex
+credentials. **`codex login` inside any cloud container is prohibited** — it is
+equivalent to the rejected CO-005; the container never authenticates Codex.
+
+Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
+(D-031, amending D-027/D-029):
+
+- **Primary path — `@codex` mention on a queue issue.** The supervisor (or the
+  cloud orchestrator via the supervisor's bookkeeping) authors a durable
+  `codex-dispatch` GitHub issue carrying the task contract pointer, target
+  branch, and constraints, then posts an `@codex` mention to trigger the App.
+  A mention is a valid dispatch only on a queue issue authored by the
+  supervisor or the owner. Results flow back as Codex-created PRs/branches;
+  the supervisor integrates into **stream branches only** — `main` merges and
+  all D-012 gates remain human.
+- **Warm freshness** is evidenced by the most recent Codex task timestamp on
+  the keep-warm record (issue-based); the supervisor's scheduled self-checks
+  post an `@codex` smoke roughly every 9 hours. The `%LOCALAPPDATA%` registry
+  and `Invoke-CodexCloudWarm.ps1` warm gate apply only to the fallback path.
+- **Fallback path — control-center sweep.** The owner's Windows session (codex
+  CLI + keychain + registry) runs the classic run sheet (warm gate →
+  `codex cloud exec` → diff/apply/push) when the App path is unavailable.
+
+Cross-repo rule: **the worker gets data, not permission** (D-028) — the control
+center supplies upstream material per task via context packaging or a read-only
+vendored snapshot, never by widening a worker container's repository grants.
 
 ### Optional Claude proxy profile
 
@@ -60,8 +122,9 @@ This is an experiment, not a guaranteed quota multiplier. Before activation:
 
 ### Language protocol
 
-All worker assignments, updates, retained handoffs, orchestration messages, and
-inter-agent communication are in **Simplified Chinese only**. External
+All worker assignments, updates, retained handoffs, orchestration messages,
+supervisor↔orchestrator communication, and all other inter-agent communication
+are in **Simplified Chinese only**. External
 repository artifacts intended for recruiters—including code comments where
 appropriate, README, diagrams, runbooks, evidence indexes, portfolio copy, and
 resume wording—remain English.
@@ -140,6 +203,7 @@ issue_ids: []
 evidence_paths: []
 recommended_next_step: []
 requires_escalation: false
+context_remaining: percent_or_token_estimate
 ```
 
 The orchestrator rejects a handoff if:
@@ -150,7 +214,9 @@ The orchestrator rejects a handoff if:
 - a blocked/failed result lacks a reproducible failed check;
 - an escalation lacks an issue ID;
 - secrets or user/customer data appear in evidence;
-- the worker directly changed authoritative task state.
+- the worker directly changed authoritative task state;
+- `context_remaining` is absent (the orchestrator uses it to decide whether to
+  retire the worker and dispatch a fresh replacement).
 
 ## Write and concurrency rules
 
