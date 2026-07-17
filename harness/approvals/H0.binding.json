@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "approval_id": "H0-S0-rubric-freeze",
+  "human_gate": "H0",
+  "slice": "S0",
+  "task_id": "P0-T04",
+  "baseline_sha": "a195e74c51e758d1e655915c8a063760153e3b53",
+  "status": "waiting_human",
+  "receipt": null,
+  "receipt_sha256": null,
+  "binding_rule": "只有真实人类签署的 H0 receipt 可以填入 receipt 并计算 receipt_sha256；代理、worker、脚本或模型输出不得创建、模拟或替代该 receipt。",
+  "required_receipt_fields": [
+    "gate_id",
+    "approver",
+    "approved_at",
+    "approved_bundle_sha256",
+    "approved_rubric_sha256",
+    "baseline_sha",
+    "candidate_sha",
+    "signature_or_signed_comment_url"
+  ],
+  "agent_attestation": "本文件仅准备绑定结构；未声明、未模拟、未获得 H0 人工批准。"
+}
