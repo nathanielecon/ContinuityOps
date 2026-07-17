@@ -1,16 +1,24 @@
 {
   "schema_version": "1.0",
+  "claim_ceiling": "repo-only",
+  "baseline_sha": "6ed243564ddb46f4a46608496d6f05db53c93788",
+  "generated_at_utc": "2026-07-17T03:14:12.487033Z",
   "project_a": {
     "repository": "nathanielecon/aws-landing-zone-lab",
     "commit_sha": "f688065c7705ab7d3febcd9ec2842bea4d8bed87",
+    "availability": "locked_from_existing_repo_contract_not_directly_read",
     "consumed_contracts": [],
     "evidence_refs": []
   },
   "project_c": {
     "repository": "nathanielecon/local-first-governed-cicd",
     "commit_sha": "0f54def53fbfda9747c8ea27235eaac1da831aec",
-    "image_digest": "REQUIRED_OR_EXPLICITLY_UNAVAILABLE",
+    "image_digest": "UNAVAILABLE",
+    "availability": "locked_from_existing_repo_contract_not_directly_read",
     "consumed_contracts": [],
     "evidence_refs": []
-  }
+  },
+  "notes": [
+    "未直接读取 Project A/C 仓库；沿用仓内既有锁定 SHA，不伪造额外上游内容。"
+  ]
 }
