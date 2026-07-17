@@ -1,0 +1,37 @@
+# ContinuityOps — Codex Cloud Environment keep-warm (D-031)
+#
+# Posts an @codex smoke mention on the keep-warm record (issue #4) roughly
+# every 8 hours so the per-Environment toolchain cache (~12h) stays warm with
+# zero supervisor wakes.
+#
+# Notes:
+# - Scheduled workflows only fire from the default branch: this activates when
+#   the branch carrying it is merged to main (human-owned merge, D-012).
+# - EMPIRICAL CAVEAT: whether the Codex GitHub App responds to a mention
+#   authored by github-actions[bot] is UNVERIFIED. Verify with one manual
+#   workflow_dispatch run after merge; if the App ignores bot mentions, the
+#   supervisor's fallback heartbeat remains the keep-warm carrier and this
+#   workflow should be disabled rather than worked around with stored
+#   credentials.
+# - Uses only the ephemeral GITHUB_TOKEN (issues:write). No third-party
+#   actions, nothing to pin, no secrets (D-026 red lines untouched).
+name: codex-keepwarm
+
+on:
+  schedule:
+    - cron: "0 */8 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+
+jobs:
+  keepwarm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post @codex keep-warm smoke on the keep-warm record
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment 4 --repo "${{ github.repository }}" --body \
+            "@codex 保暖冒烟(自动,零派遣):请启动一次最小任务——读取仓库根 README.md 的第一行并原样回复,勿改动任何文件、勿开 PR。本提及仅用于保持 Environment 缓存温热(见本 issue 顶部说明)。"
