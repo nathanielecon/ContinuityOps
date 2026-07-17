@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "task_id": "P0-T01",
+  "slice": "S0",
+  "candidate_sha": "ea2c27513305badfeafe98500e8fefe603bc97cb",
+  "baseline_sha": "6ed243564ddb46f4a46608496d6f05db53c93788",
+  "validation_results": [
+    {
+      "command": "node run-p0t01.mjs (pinned state_schema @ 2c9026b) vs stream tree",
+      "exit": 1,
+      "time": "2026-07-17T03:50:29Z",
+      "evidence_path": "evidence/slices/S0/validation/pinned-validators.txt"
+    },
+    {
+      "command": "node run-p0t01.mjs (pinned partition_unique_ownership @ 2c9026b) vs stream tree",
+      "exit": 1,
+      "time": "2026-07-17T03:50:29Z",
+      "evidence_path": "evidence/slices/S0/validation/pinned-validators.txt"
+    },
+    {
+      "command": "node run-p0t01.mjs (pinned upstream_pin_schema @ 2c9026b) vs stream tree",
+      "exit": 0,
+      "time": "2026-07-17T03:50:29Z",
+      "evidence_path": "evidence/slices/S0/validation/pinned-validators.txt"
+    },
+    {
+      "command": "node run-p0t01.mjs (pinned clean_tree @ 2c9026b) vs audited candidate edd4147",
+      "exit": 0,
+      "time": "2026-07-17T03:50:29Z",
+      "evidence_path": "evidence/slices/S0/validation/clean-tree.txt"
+    },
+    {
+      "command": "python3 equiv-check.py (equivalent-semantics P0-T01 acceptance, actual manifest shape)",
+      "exit": 0,
+      "time": "2026-07-17T03:50:29Z",
+      "evidence_path": "evidence/slices/S0/validation/equivalent-acceptance.txt"
+    }
+  ],
+  "evidence_manifest_path": "evidence/slices/S0/baseline-audit.json",
+  "context_remaining": "worker 未提供百分比/token 估计（交接格式缺陷，见 notes_zh 偏差 (b)）",
+  "preflight_ok": {
+    "warm_fresh": false,
+    "last_warm_utc": null,
+    "context_package_ready": "n/a",
+    "preflight_evidence_path": "evidence/slices/S0/preflight-pr6.json"
+  },
+  "notes_zh": "编排裁定：接受并记录偏差（不重派）。理由：产物实质满足 PLAN.md P0-T01 全部四条验收（等效语义检查全 PASS：38 条保留路径均已分类、唯一 primary_slice、附 sha256；baseline 与上游 A/C commit_sha 均记录，Project C image_digest 显式 UNAVAILABLE；6 条共享接口显式）。diff 严格 ⊆ 契约四路径写入范围，无机密，无迟到路径。\\n\\n非产物性验证器失败两项（如实记录，非产物缺陷）：state_schema 目标 harness/state/tasks.json 属 P0-T02/T03 harness 工件，本 P0-T01 流分支按设计不存在；partition_unique_ownership 抛错 'manifest.slices is not iterable'，因候选 harness 期望 {slices:[{id,paths}]} 形状，而 worker 产出 {retained_paths:[{path,primary_slice}]} 形状——两个均未合入、未冻结的候选之间的结构分歧，无冻结的 partition-manifest schema 供 worker 遵循；唯一归属属性本身成立（等效检查已证）。\\n\\n偏差记录（BF-PRE-015 临时，正式 BF 条目待合并后由编排分支补录）：(a) Codex GitHub App 容器仅克隆默认分支 main、无 origin remote → 无法读取流分支上的任务契约 docs/planning/dispatch/P0-T01.zh.md（故 baseline-audit.json 记 contract_read=UNAVAILABLE，且清单未列该契约文件——唯一实质覆盖缺口）与目标分支；后续所有需读非默认分支的轮次必须用上下文打包或等 main 合并。(b) worker 交接两处格式缺陷：context_remaining 为文字说明而非百分比/token 估计（AGENTS.md 要求缺失即拒收）；validation_results 证据路径为『终端输出』而非仓内路径。裁定为格式缺陷而非实质，产物如实、未伪造 A/C、未越界，重派成本与收益不成比例；本验证轮已通过把原始输出持久化到 evidence/slices/S0/validation/ 修复 (b) 的证据路径问题。\\n\\n候选与提交结构：candidate_sha=ea2c275 为验证证据提交（验证后流分支 tip），其相对被审计的 worker 产物 edd4147 仅新增 evidence/slices/S0/ 下编排器证据，未改动任何被审计产物；clean_tree 在 edd4147 与 ea2c275 两处均为干净。本 STREAM_COMPLETE 作为 BF-PRE-015 完成信号提交于其上一层信号提交。evidence_manifest_path 暂指向 baseline-audit.json；正式追加式证据清单待 P0-T03 证据适配器安装后生成。preflight_ok 权威来源为 evidence/slices/S0/preflight-pr6.json（非 issue 评论）。"
+}
