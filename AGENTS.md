@@ -96,9 +96,11 @@ Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
   `CONNECT 403`). The proven publish surfaces are: (1) Codex task-page
   **Create PR** (platform, outside sandbox) actuated by the cloud supervisor
   heartbeat, or (2) control-center `codex cloud apply` + push + `gh pr create`.
-  Supervisor advances only on an observable PR; otherwise one re-nudge, then
-  diagnose + Opus reserve (reasoning-only). Do not treat GHA `@codex` keepwarm
-  as verified — App ignored `github-actions[bot]` mentions in smoke.
+  **Heartbeat algorithm** (mandatory): open `codex-dispatch` issues → if bot
+  reply without PR → open `View task` → **Create PR** → confirm with
+  `gh pr list` → comment PR URL (check base branch; Create PR often defaults
+  to `main`). Never close/integrate on `make_pr` alone. If Create PR fails →
+  Opus reserve (reasoning-only). Do not treat GHA `@codex` keepwarm as verified.
 - **Warm freshness** is evidenced by the most recent Codex task timestamp on
   the keep-warm record (issue-based); the supervisor's scheduled self-checks
   post an `@codex` smoke roughly every 9 hours. The `%LOCALAPPDATA%` registry

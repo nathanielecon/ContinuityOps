@@ -37,6 +37,26 @@
 
 目标分支填 issue 正文指定的流/编排分支(例如 `stream/S0-baseline-audit` 或
 `claude/orchestrator-supervisor-setup-yyd3bu`),**不要**默认 `main`。
+注意:平台 **Create PR** 常默认 base=`main`;监督者发布后须核对 base,必要时
+改 target 或 cherry-pick 进流/编排分支后再关闭队列 issue。
+
+## 监督者心跳 — 平台 Create PR 发布步骤(D-033,必做)
+
+每次心跳(或 D-032 批量唤醒)对**每个**开放且带 `codex-dispatch` 的 issue:
+
+1. `gh pr list --repo nathanielecon/ContinuityOps --state open` — 已有对应该
+   任务的开放 PR URL → 可进入集成/关闭流程;跳过本 issue。
+2. 若仅有 `chatgpt-codex-connector[bot]` 摘要/`make_pr` 字样、**无** PR:
+   - 从 bot 评论提取 `View task` / `chatgpt.com/s/cd_…` 链接;
+   - 打开任务页 → 点击 **Create PR**(平台级,勿要求工人重跑 `gh`);
+   - 再跑 `gh pr list` / `gh pr view <N>` 确认 URL;
+   - 在 issue 评论写入 PR URL;核对 base 分支。
+3. Create PR 失败或任务页无按钮 → issue 诊断评论 + 启用 Opus 后备(仅推理);
+   **禁止**把 bot 文本当完成、禁止假装集成。
+4. 在站后备:`pwsh -File scripts/Publish-CodexCloudTask.ps1 -TaskId … -BaseBranch …`
+
+保暖:仅**监督者/所有者**在 issue **#4** 发 `@codex` 冒烟(~9h)。勿依赖
+`github-actions[bot]` 提及。
 
 ## 角色
 
