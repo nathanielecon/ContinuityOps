@@ -193,15 +193,18 @@ ContinuityOps incidents yet.
   resolves/decodes to usable material. Never echo any prefix, suffix, or
   substring of the value, in any tool call, log, or report.
 
-### BF-PRE-018 — App path `make_pr` is not a GitHub PR
+### BF-PRE-018 — App path cannot publish from inside the sandbox
 
-- Observed risk: `@codex` workers complete, call Codex UI `make_pr`, and post
-  bot summaries claiming commits/PRs while no GitHub PR or commit exists until
-  a human clicks **Create PR** in the Codex UI — fatal for laptop-off overnight.
-- Control (D-033): every App-path `@codex` prompt includes the publish contract
-  (`git push` + `gh pr create`, forbid `make_pr`-only). Supervisor heartbeat
-  advances only on an observable open PR URL; otherwise one re-nudge, then
-  diagnosis + Opus reserve (reasoning-only). Never integrate from bot text alone.
+- Observed risk: `@codex` workers complete, call `make_pr`, and claim commits
+  while nothing lands on GitHub until **Create PR** on the Codex task page.
+  Re-nudge with in-container `git push`/`gh pr create` still failed: no `gh`,
+  GitHub git HTTPS `CONNECT tunnel failed, response 403`, often no `origin`.
+  Separately, `github-actions[bot]` `@codex` keepwarm on issue #4 got no App reply.
+- Control (D-033 revised): treat worker bot text as incomplete until an open PR
+  URL exists. Cloud supervisor heartbeat actuates platform **Create PR** (or
+  control-center `codex cloud apply`+push). Keepwarm carrier = supervisor-authored
+  `@codex` smoke, not GHA bot mentions, until proven otherwise. Opus reserve for
+  reasoning-only if publish actuation is unavailable overnight.
 
 ## Entry template
 

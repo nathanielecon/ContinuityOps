@@ -12,20 +12,27 @@
 > 本文其余"控制中心巡查"流程(warm/exec 围栏块、`Watch-CodexDispatchQueue.ps1`、
 > 本机注册表与温门脚本)自 D-031 起为**后备路径**,仅在 App 路径不可用时启用。
 
-> **D-033 生效(App 发布硬门槛)**:App 路径已实证能执行并回帖,但 Codex UI 的
-> `make_pr` **只写 PR 元数据**,不会自动打开 GitHub PR(需人工点 Create PR ——
-> 过夜路径禁止)。因此每次 `@codex` 派遣/重催必须粘贴下方**发布契约**;监督者
-> 心跳**不得**把 bot 摘要/`make_pr` 字样当作完成——仅当 `gh pr list`/`gh pr view`
-> 可见到针对目标分支的开放 PR(含 URL)才算回流成功。无 PR → 重催一次发布契约;
-> 仍无 → 诊断 + Opus 后备(仅推理),不得假装集成。
+> **D-033 生效(App 发布硬门槛,经实测修订)**:App 路径已实证能执行并回帖,但
+> Codex UI 的 `make_pr` **只写 PR 元数据**。进一步实测(issues #3/#5 重催):App
+> **容器内**无法完成 GitHub 发布——无 `gh` CLI、`git push`/`fetch` 对
+> `github.com` 报 `CONNECT tunnel failed, response 403`、checkout 常无 `origin`。
+> 因此**容器内** `git push` + `gh pr create` **不是**可用过夜路径。
+> **唯一已实证的发布面**是 Codex 任务页的平台级 **Create PR**(App 凭据在沙箱外)。
+> 监督者心跳**不得**把 bot 摘要/`make_pr` 当作完成——仅当 `gh pr list` 可见开放
+> PR URL 才算回流。无 PR → 监督者(云会话,非用户本机)对任务页执行平台
+> Create PR / 或控制中心 `codex cloud apply`+push+`gh pr create`;仍无 → 诊断 +
+> Opus 后备(仅推理),不得假装集成。`github-actions[bot]` 的 `@codex` 保暖提及
+> 实测未被 App 响应——保暖回落到监督者心跳,勿把 GHA keepwarm 当已验证。
 
-## App 路径发布契约(每次 `@codex` 派遣必贴)
+## App 路径完成契约(每次 `@codex` 派遣必贴)
 
 ````text
-完成定义(硬门槛):必须把变更推到 GitHub 可见分支,并用 `gh pr create` 打开针对目标分支的 PR。
-禁止:停在 Codex UI 的 make_pr / "PR 元数据" / 仅 issue 评论。
-若 make_pr 不产生 GitHub PR URL,立即改用 `git push -u origin HEAD` + `gh pr create --base <目标分支> --head <工作分支>`。
-PR 描述结尾必须含 GitHub PR URL 与 context_remaining。没有 URL = 未完成。
+完成定义(硬门槛):变更必须以 GitHub 可见 PR 回流(开放 PR URL)。
+禁止:停在 make_pr / "PR 元数据" / 仅 issue 评论并宣称完成。
+容器内若无 origin / 无 gh / git 对 github.com 403:在摘要中显式报告环境限制,
+并给出任务链接(View task);不要伪造 PR URL。
+监督者/发布席位随后用平台 Create PR 或控制中心 codex cloud apply 完成发布。
+摘要结尾必须含 context_remaining;若已有 PR URL 则必须写出。
 ````
 
 目标分支填 issue 正文指定的流/编排分支(例如 `stream/S0-baseline-audit` 或
