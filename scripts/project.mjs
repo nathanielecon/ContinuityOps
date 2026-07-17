@@ -3,12 +3,10 @@ import { readFileSync, writeFileSync, renameSync, existsSync, mkdirSync } from '
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
-import { createEvidenceAdapter, runValidators, verifyEvidenceAdapter } from './validators/index.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PLAN_PATH = resolve(ROOT, 'PLAN.md');
-const HARNESS_EVIDENCE_PATH = resolve(ROOT, 'evidence/slices/S0/harness.json');
-const VALIDATOR_EVIDENCE_PATH = resolve(ROOT, 'evidence/slices/S0/validator-contract.json');
+const EVIDENCE_PATH = resolve(ROOT, 'evidence/slices/S0/harness.json');
 
 export const TASK_STATES = ['planned', 'ready', 'running', 'blocked', 'review', 'verified', 'done'];
 export const ALLOWED_TRANSITIONS = new Map([
@@ -132,27 +130,19 @@ export function enqueueIntegration(queue, item) {
   return [...queue, { order, streamId: item.streamId, candidateSha: item.candidateSha, evidence: item.evidence }];
 }
 
-function runHarnessValidationSuite(taskId = 'P0-T02') {
+export function runValidationSuite(taskId = 'P0-T02') {
   const startedAt = new Date().toISOString();
   const baselineSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
-  const fixture = {
-    schema_version: '1.0',
-    revision: 1,
-    authorized_through_phase: 0,
-    tasks: [
-      { id: 'P0-T02', phase: 0, state: 'ready', write_scope: ['scripts/project*'], evidence: ['evidence/slices/S0/harness.json'] },
-      { id: 'P1-T01', phase: 1, state: 'planned', write_scope: [], evidence: [] }
-    ]
-  };
-  const task = assertPhaseAuthorized(fixture, taskId);
+  const plan = readPlan();
+  const task = assertPhaseAuthorized(plan, taskId);
 
-  const transitioned = transitionTask(fixture, { taskId, fromRevision: fixture.revision, toState: 'running', actorRole: 'worker' });
+  const transitioned = transitionTask(plan, { taskId, fromRevision: plan.revision, toState: 'running', actorRole: 'worker' });
   let staleRejected = false;
-  try { transitionTask(transitioned, { taskId, fromRevision: fixture.revision, toState: 'blocked', actorRole: 'worker' }); } catch (error) { staleRejected = error.code === 'stale_revision'; }
+  try { transitionTask(transitioned, { taskId, fromRevision: plan.revision, toState: 'blocked', actorRole: 'worker' }); } catch (error) { staleRejected = error.code === 'stale_revision'; }
   let workerRejected = false;
-  try { transitionTask({ ...fixture, tasks: fixture.tasks.map((entry) => entry.id === taskId ? { ...entry, state: 'review' } : entry) }, { taskId, fromRevision: fixture.revision, toState: 'verified', actorRole: 'worker' }); } catch (error) { workerRejected = error.code === 'worker_forbidden_state'; }
+  try { transitionTask({ ...plan, tasks: plan.tasks.map((entry) => entry.id === taskId ? { ...entry, state: 'review' } : entry) }, { taskId, fromRevision: plan.revision, toState: 'verified', actorRole: 'worker' }); } catch (error) { workerRejected = error.code === 'worker_forbidden_state'; }
   let phaseRejected = false;
-  try { assertPhaseAuthorized(fixture, 'P1-T01'); } catch (error) { phaseRejected = error.code === 'phase_unauthorized'; }
+  try { assertPhaseAuthorized(plan, 'P1-T01'); } catch (error) { phaseRejected = error.code === 'phase_unauthorized'; }
 
   const streams = createStreamState([
     { id: 'stream-a', owner: 'owner-a', writeScope: ['scripts/project.mjs'] },
@@ -163,7 +153,7 @@ function runHarnessValidationSuite(taskId = 'P0-T02') {
   const queue = enqueueIntegration(enqueueIntegration([], { streamId: 'stream-a', candidateSha: 'a'.repeat(40), evidence: 'evidence/slices/S0/harness.json' }), { streamId: 'stream-b', candidateSha: 'b'.repeat(40), evidence: 'evidence/slices/S0/harness.json' });
 
   const checks = {
-    harness_unit: task.state === 'ready' && transitioned.revision === fixture.revision + 1,
+    harness_unit: task.state === 'ready' && transitioned.revision === plan.revision + 1,
     authorization_boundary: task.phase === 0 && phaseRejected,
     state_reconciliation: staleRejected,
     stream_isolation: sequenced.streams.length === 3 && sequenced.streams[0].sequence.map((entry) => entry.order).join(',') === '1,2',
@@ -176,27 +166,13 @@ function runHarnessValidationSuite(taskId = 'P0-T02') {
   return { task_id: taskId, baseline_sha: baselineSha, candidate_sha: candidateSha, started_at: startedAt, completed_at: new Date().toISOString(), validators: checks, passed, failed };
 }
 
-export function runValidationSuite(taskId = 'P0-T02') {
-  if (taskId !== 'P0-T03') return runHarnessValidationSuite(taskId);
-  const startedAt = new Date().toISOString();
-  const baselineSha = '09e271643326b6e55a24e96e6b9c7841c0342813';
-  const validatorResults = runValidators();
-  const completedAt = new Date().toISOString();
-  const adapter = createEvidenceAdapter({ taskId, validatorId: 'validator_contract', command: 'node scripts/project.mjs validate P0-T03', exitCode: 0, startedAt, completedAt });
-  verifyEvidenceAdapter(adapter);
-  const candidateSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
-  return { task_id: taskId, baseline_sha: baselineSha, candidate_sha: candidateSha, started_at: startedAt, completed_at: completedAt, validators: validatorResults, adapter_evidence: adapter, passed: validatorResults.map((entry) => entry.id), failed: [] };
-}
-
 function writeEvidence(result) {
-  const evidencePath = result.task_id === 'P0-T03' ? VALIDATOR_EVIDENCE_PATH : HARNESS_EVIDENCE_PATH;
-  const relativePath = result.task_id === 'P0-T03' ? 'evidence/slices/S0/validator-contract.json' : 'evidence/slices/S0/harness.json';
-  mkdirSync(dirname(evidencePath), { recursive: true });
-  writeFileSync(evidencePath, `${JSON.stringify({ ...result, evidence_path: relativePath }, null, 2)}\n`);
+  mkdirSync(dirname(EVIDENCE_PATH), { recursive: true });
+  writeFileSync(EVIDENCE_PATH, `${JSON.stringify({ ...result, evidence_path: 'evidence/slices/S0/harness.json' }, null, 2)}\n`);
 }
 
 function usage(exitCode = 2) {
-  console.error('Usage: node scripts/project.mjs validate P0-T02|P0-T03');
+  console.error('Usage: node scripts/project.mjs validate P0-T02');
   process.exit(exitCode);
 }
 
