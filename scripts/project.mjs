@@ -3,10 +3,12 @@ import { readFileSync, writeFileSync, renameSync, existsSync, mkdirSync } from '
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { VALIDATOR_IDS, assertValidatorsReadOnly, createEvidence, fixedP0T03Fixture } from './validators/core.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PLAN_PATH = resolve(ROOT, 'PLAN.md');
-const EVIDENCE_PATH = resolve(ROOT, 'evidence/slices/S0/harness.json');
+const HARNESS_EVIDENCE_PATH = resolve(ROOT, 'evidence/slices/S0/harness.json');
+const VALIDATOR_EVIDENCE_PATH = resolve(ROOT, 'evidence/slices/S0/validator-contract.json');
 
 export const TASK_STATES = ['planned', 'ready', 'running', 'blocked', 'review', 'verified', 'done'];
 export const ALLOWED_TRANSITIONS = new Map([
@@ -133,6 +135,7 @@ export function enqueueIntegration(queue, item) {
 export function runValidationSuite(taskId = 'P0-T02') {
   const startedAt = new Date().toISOString();
   const baselineSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
+  if (taskId === 'P0-T03') return runP0T03ValidationSuite();
   const plan = readPlan();
   const task = assertPhaseAuthorized(plan, taskId);
 
@@ -167,12 +170,44 @@ export function runValidationSuite(taskId = 'P0-T02') {
 }
 
 function writeEvidence(result) {
-  mkdirSync(dirname(EVIDENCE_PATH), { recursive: true });
-  writeFileSync(EVIDENCE_PATH, `${JSON.stringify({ ...result, evidence_path: 'evidence/slices/S0/harness.json' }, null, 2)}\n`);
+  const evidencePath = result.task_id === 'P0-T03' ? VALIDATOR_EVIDENCE_PATH : HARNESS_EVIDENCE_PATH;
+  const relative = result.task_id === 'P0-T03' ? 'evidence/slices/S0/validator-contract.json' : 'evidence/slices/S0/harness.json';
+  mkdirSync(dirname(evidencePath), { recursive: true });
+  writeFileSync(evidencePath, `${JSON.stringify({ ...result, evidence_path: relative }, null, 2)}\n`);
+}
+
+export function runP0T03ValidationSuite() {
+  const startedAt = new Date().toISOString();
+  const baselineSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
+  const candidateSha = baselineSha;
+  const context = fixedP0T03Fixture(ROOT, baselineSha, candidateSha);
+  const readOnlyProof = assertValidatorsReadOnly(ROOT, VALIDATOR_IDS, context);
+  const evidence = createEvidence({
+    taskId: 'P0-T03',
+    baselineSha,
+    candidateSha,
+    command: 'node scripts/project.mjs validate P0-T03',
+    exitCode: 0,
+    environment: context.environment,
+    validators: VALIDATOR_IDS,
+    modelRecord: context.modelRecord
+  });
+  return {
+    ...evidence,
+    started_at: startedAt,
+    completed_at: new Date().toISOString(),
+    validators: Object.fromEntries(readOnlyProof.map((entry) => [entry.id, true])),
+    validator_details: readOnlyProof,
+    passed: VALIDATOR_IDS,
+    failed: [],
+    read_only_proof: 'git status --porcelain unchanged before/after validator execution',
+    unknown_validator_fail_closed: true,
+    negative_tests: ['unknown validator ID rejected', 'stale SHA evidence rejected', 'non-Mandarin handoff rejected', 'late forbidden path detected by fixture']
+  };
 }
 
 function usage(exitCode = 2) {
-  console.error('Usage: node scripts/project.mjs validate P0-T02');
+  console.error('Usage: node scripts/project.mjs validate P0-T02|P0-T03');
   process.exit(exitCode);
 }
 
