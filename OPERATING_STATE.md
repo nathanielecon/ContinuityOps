@@ -9,13 +9,13 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 13,
+  "revision": 14,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
   "current_gate": "phase-0-baseline-audit",
   "running_tasks": [],
-  "blocked_tasks": ["P0-T02", "P0-T03", "P0-T04", "P0-T05"],
+  "blocked_tasks": ["P0-T03", "P0-T04", "P0-T05"],
   "waiting_human": [
     "H0-after-P0-T04"
   ],
@@ -34,6 +34,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "If platform Create PR unavailable overnight: Opus reserve for reasoning-only; leave clear diagnosis; do not fake integrate",
     "Keep-warm: supervisor @codex smoke on issue #4 every ~9h (GHA bot mention smoke FAILED — App did not reply); leave codex-keepwarm schedule disabled until owner-authored mentions only",
     "Integrate only GitHub-visible PRs into stream branches; record per-round model IDs",
+    "P0-T01 verified (candidate ea2c275, supervisor approve with CO-008/CO-009); P0-T02 is ready",
+    "P0-T02 dispatch waits until the morning merge completes (freeze the authoritative baseline first) so this high-risk task is not built on a stale main; refresh the P0-T01 audit/partition manifest and re-run full validation once the baseline is frozen (CO-008)",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -95,7 +97,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 4,
+  "revision": 5,
   "issues": [
     {
       "id": "CO-001",
@@ -166,6 +168,26 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "status": "resolved",
       "owner": "human H-codex-env-create (creation) + control-center (register/warm)",
       "resolution_criterion": "Environment created (cache On, two scripts, zero secrets), registered, and -Force first warm stamped lastWarmUtc. Confirmed by the owner on 2026-07-16."
+    },
+    {
+      "id": "CO-008",
+      "phase": 0,
+      "severity": "conditional",
+      "category": "baseline",
+      "summary": "P0-T01 audit classification and partition manifest were computed against the main tree visible to the App container (base 7e8a525), while baseline_sha is recorded as 6ed243564ddb46f4a46608496d6f05db53c93788; the two trees are not identical. Raised as a condition on the supervisor approve verdict for candidate ea2c27513305badfeafe98500e8fefe603bc97cb.",
+      "status": "open",
+      "owner": "P0-T01 refresh (post-baseline-freeze)",
+      "resolution_criterion": "After the setup branch is merged to main and the authoritative baseline is frozen, refresh the scaffold classification and partition manifest against the frozen baseline and re-run full validation; a changed binding invalidates candidate-bound evidence and must be regenerated."
+    },
+    {
+      "id": "CO-009",
+      "phase": 0,
+      "severity": "conditional",
+      "category": "environment",
+      "summary": "The Codex GitHub App container clones only the default branch (main) and has no origin remote, so it cannot read non-default-branch material (e.g. a stream-branch task contract) and cannot publish outbound from inside the sandbox. Observed during the P0-T01 App round (PR #6) and the ORCH-SMOKE-01/PREP rounds.",
+      "status": "open",
+      "owner": "orchestrator dispatch discipline (BF-PRE-019)",
+      "resolution_criterion": "Any round needing non-default-branch material supplies it via issue-body context packaging or waits for a main merge; publication is actuated by the owner (platform Create PR) or the control center (codex cloud apply + push), never from inside the App sandbox."
     }
   ]
 }
