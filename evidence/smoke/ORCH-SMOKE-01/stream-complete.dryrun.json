@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "task_id": "P0-T01",
+  "slice": "S0",
+  "candidate_sha": "a62aa3e429ebe72351356c13486ff6af92612d5a",
+  "baseline_sha": "a62aa3e429ebe72351356c13486ff6af92612d5a",
+  "validation_results": [
+    {
+      "command": "node scripts/project.mjs validate P0-T01",
+      "exit": 0,
+      "time": "2026-07-17T00:00:00Z",
+      "evidence_path": "evidence/smoke/ORCH-SMOKE-01/stream-complete.dryrun.json"
+    }
+  ],
+  "evidence_manifest_path": "evidence/smoke/ORCH-SMOKE-01/stream-complete.dryrun.json",
+  "context_remaining": "74%",
+  "preflight_ok": {
+    "warm_fresh": false,
+    "last_warm_utc": null,
+    "context_package_ready": "n/a",
+    "preflight_evidence_path": "evidence/slices/S0/preflight-P0-T01.json"
+  },
+  "notes_zh": "本文件为 ORCH-SMOKE-01 演练样例，演练标记由文件名承载；温门持久数据在本容器不可得，未伪造通过结论。正式完成信号必须从仓内持久预检证据读取真实 preflight_ok。"
+}
