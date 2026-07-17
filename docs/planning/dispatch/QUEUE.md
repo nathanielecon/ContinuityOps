@@ -21,9 +21,11 @@
 > `.github/workflows/codex-patch-publish.yml` 由 `chatgpt-codex-connector[bot]`
 > 的 `issue_comment` 触发,用 ephemeral `GITHUB_TOKEN` apply/push/开 PR,并回评
 > URL。平台 Create PR 与 `scripts/Publish-CodexCloudTask.ps1` 降为**后备**。
-> 监督者心跳以 PR 评审/集成为主:有 `publish-ok`/开放 PR → 集成;有 bot 摘要但
-> 无 patch 标记且无 PR → 重催 D-034 片段;有 `publish-failed` → 诊断或后备路径。
-> 勿把 `make_pr` 文本当完成。`github-actions[bot]` `@codex` 保暖仍未验证。
+> 监督者心跳以 PR 评审/集成为主:有 `publish-ok`/开放 PR → 派遣 D-037 GPT
+> reviewer 轮;reviewer 在声明 `base_sha` 应用该 PR patch、亲自跑声明验证命令、
+> 结构化 verdict 回评;**CI green + reviewer verdict pass** 后监督者才集成。若有
+> bot 摘要但无 patch 标记且无 PR → 重催 D-034 片段;有 `publish-failed` → 诊断或
+> 后备路径。勿把 `make_pr` 文本当完成。`github-actions[bot]` `@codex` 保暖仍未验证。
 
 ## App 路径完成契约(每次 `@codex` 派遣必贴)
 
@@ -36,12 +38,14 @@
 
 每次心跳(或 D-032 批量唤醒)对**每个**开放且带 `codex-dispatch` 的 issue:
 
-1. `gh pr list` / issue 上 `publish-ok` — 已有开放 PR → 进入集成/关闭流程。
-2. 若 bot 已回复但**无** `continuityops-patch-v1` 且无 PR → 重催一次,粘贴
+1. `gh pr list` / issue 上 `publish-ok` — 已有开放 PR → 派遣 D-037 GPT reviewer 轮。
+2. reviewer 轮必须在沙箱内以该 PR 声明的 `base_sha` 应用 patch、亲自运行 PR 声明的验证命令、以结构化 verdict 评论回报;reviewer 只提 findings,不改实现。
+3. 监督者合并信号为 **CI green + reviewer verdict pass**;失败 findings 进入独立 fixer 轮,随后重新发布/评审。
+4. 若 bot 已回复但**无** `continuityops-patch-v1` 且无 PR → 重催一次,粘贴
    `CODEX_DISPATCH_SNIPPET.zh.md`(要求输出 patch 块)。
-3. 若见 `publish-failed` → 读失败评论;可后备平台 Create PR 或
+5. 若见 `publish-failed` → 读失败评论;可后备平台 Create PR 或
    `Publish-CodexCloudTask.ps1`;仍失败则 Opus 后备(仅推理),禁止假装集成。
-4. **禁止**把 `make_pr` / 无 PR URL 的 bot 摘要当完成。
+6. **禁止**把 `make_pr` / 无 PR URL 的 bot 摘要当完成。
 
 保暖(D-035):暖戳为保暖 issue **#4** 上最近一次 Codex 任务时间戳,不再依赖本地注册表。派遣时若暖戳旧于约 10h,先由**监督者/所有者**在 #4 发一个平凡 `@codex` 冒烟并等待回复落戳;禁止把真实工作派进冷环境。监督者心跳在暖戳超过 >9h 时主动冒烟。`Invoke-CodexCloudWarm.ps1` 只属于后备车道。勿依赖 `github-actions[bot]` 提及。
 

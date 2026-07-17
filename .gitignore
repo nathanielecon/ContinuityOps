@@ -42,6 +42,8 @@ crash.log
 .codex/*.local
 .codex/cache/
 .codex-last-message-*
+# Local stamp for scripts/Watch-CodexRefs.sh (never credentials)
+.codex-warm/
 *.log
 tmp/
 .cache/

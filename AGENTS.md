@@ -101,7 +101,12 @@ Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
   `git push`/`gh`. Platform **Create PR** and
   `scripts/Publish-CodexCloudTask.ps1` are **fallbacks**. **Heartbeat:** review
   PRs / `publish-ok`; re-nudge if bot reply lacks the patch marker; on
-  `publish-failed` use fallback or Opus reserve (reasoning-only). Never treat
+  `publish-failed` use fallback or Opus reserve (reasoning-only). For every
+  worker PR, D-037 adds an independent GPT reviewer round: dispatch the reviewer
+  through `codex-dispatch`, apply that PR patch at its declared `base_sha`, run
+  the declared validation commands, and require a structured verdict pass. The
+  supervisor merge signal is **CI green + reviewer verdict pass**; repair
+  findings go to an independent fixer round, not the reviewer. Never treat
   `make_pr` text alone as complete. The supervisor also owns the warm-cloud
   heartbeat review: check the issue #4 warm stamp before dispatch, post a
   trivial `@codex` smoke when the latest Codex task timestamp is older than

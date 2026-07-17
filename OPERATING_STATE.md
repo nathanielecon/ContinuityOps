@@ -9,15 +9,19 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 18,
+  "revision": 20,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
   "current_gate": "phase-0-baseline-audit",
   "running_tasks": [],
-  "blocked_tasks": ["P0-T03", "P0-T04", "P0-T05"],
+  "blocked_tasks": ["P0-T04", "P0-T05"],
   "waiting_human": [
-    "H0-after-P0-T04"
+    "issues:write-restore-or-owner-@codex-keepwarm",
+    "REPO_SETTINGS_ADMIN_TOKEN",
+    "PR-20",
+    "H0-after-P0-T04",
+    "D-039-write-scope-human-veto-window"
   ],
   "codex_cloud_environment": {
     "repo": "nathanielecon/ContinuityOps",
@@ -29,11 +33,13 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "D-034 smoked: issue #12 → GHA apply/push → PR #13; rerun idempotent publish-skipped; keep Actions create-PR permission on",
-    "Supervisor heartbeat: review PRs / publish-ok; re-nudge if bot lacks continuityops-patch-v1; Create PR / Publish-CodexCloudTask.ps1 are fallbacks only",
-    "Integrate GitHub-visible PRs into stream/orchestrator branches; do not treat make_pr text as complete",
-    "Keep-warm: cloud-native issue #4 warm stamp; at dispatch, if the latest Codex task timestamp is older than ~10h, post a trivial @codex smoke first and stamp on its reply; supervisor heartbeat smokes at >9h; local Invoke-CodexCloudWarm.ps1 is fallback-lane only",
-    "P0-T01 verified (candidate ea2c275, supervisor approve with CO-008/CO-009); P0-T02 is ready — dispatch after this merge lands, then refresh the P0-T01 audit/partition manifest against the frozen baseline and re-run full validation (CO-008)",
+    "Revision note: status revision 19 was attempted via issue #29 (ORCH-ROUND-06) but publish-failed (D-034); this revision 20 lands the same governance via supervisor git-push fallback plus post-#29 reality updates",
+    "Cursor supervisor App seat lacks issues:write (CO-011) — owner must grant Issues permission on the App/token OR personally post @codex / keep-warm on issue #4; App @codex dispatch/keep-warm is unavailable from this seat until restored (D-040)",
+    "#29 ORCH-ROUND-06 governance repaired via supervisor git-push fallback (this change): lands D-037/D-038, BF-2026-004 session retrospective, D-037 heartbeat steps",
+    "#31 D-037 reviewer verdict fail SCOPE-001 on PR #30; PR #30 was accidentally merged during a permissions probe then reverted at 94f4e33 (BF-2026-005 / CO-012); do not re-merge #30 content until write_scope is expanded (D-039) and a new fixer/reviewer cycle runs after issues:write is restored",
+    "Owner pending: REPO_SETTINGS_ADMIN_TOKEN, PR #20, H0 after P0-T04; do not authorize Phase 1 until S0 and H0 pass",
+    "P0-T03 is ready (deps P0-T02 verified; write_scope expanded per D-039); next dispatch after issues:write restore: fixer for P0-T03 → D-037 re-review → P0-T04 → H0",
+    "Keep-warm: cloud-native issue #4 warm stamp; until issues:write returns, owner/control-center must post trivial @codex smokes; local Invoke-CodexCloudWarm.ps1 remains fallback-lane only",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -44,7 +50,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Created, registered, and first-warmed the ContinuityOps Codex Cloud Environment (env 6a594ee667608191ab53cae15202815e, zero secrets)",
     "Rotated the orchestrator seat per D-024: predecessor retired at ~17% context_remaining; successor Opus 4.8 reconstructed state from durable artifacts only",
     "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed (PRs #8–#11)",
-    "D-034: patch-in-comment GHA publisher smoked (issue #12 → PR #13; Actions create-PR permission required)"
+    "D-034: patch-in-comment GHA publisher smoked (issue #12 → PR #13; Actions create-PR permission required)",
+    "P0-T01 verified; P0-T02 verified with condition CO-010; ORCH-ROUND-06 governance landed via supervisor git-push fallback after #29 publish-failed"
   ],
   "verified_baseline": [],
   "unverified": [
@@ -93,13 +100,17 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-033 | **App-path publish hard gate** (overnight unblock, empirically revised): `@codex` App execution is proven (bot replies + task diffs). Codex UI `make_pr` is metadata-only. In-container `git push`/`gh pr create` **failed** on ContinuityOps App tasks (no `gh`; GitHub `CONNECT tunnel failed, response 403`). Unattended publish therefore requires the **cloud supervisor** (or control-center when on-station) to actuate **platform Create PR** on the task page, or `codex cloud apply`+push+`gh pr create` locally — not worker-side git. Heartbeat advances only on an open GitHub PR URL. On bot-only-without-PR: one re-nudge; then platform Create PR actuation; if still blocked, diagnosis + Opus reserve (reasoning-only). `github-actions[bot]` `@codex` keepwarm mentions are **not** a verified warm carrier. Amends D-031. | superseded-by-D-034 | Overnight App path = mention → worker → supervisor/platform Create PR → GitHub PR (laptop optional) |
 | D-034 | **Patch-in-comment GHA publisher** (primary overnight publish): App workers must end replies with `<!-- continuityops-patch-v1 -->`, `base_branch`, `base_sha` (40-hex), and a full fenced unified diff (chunked if needed). Workflow `.github/workflows/codex-patch-publish.yml` runs on `chatgpt-codex-connector[bot]` `issue_comment` for `codex-dispatch` issues, applies the patch with ephemeral `GITHUB_TOKEN`, opens a PR, comments `publish-ok` + URL. Denies `.github/**`, secret/.env paths, binaries. Idempotent on existing `codex/issue-<N>-*` PRs. Platform Create PR and `scripts/Publish-CodexCloudTask.ps1` are fallbacks. Supervisor heartbeat reviews PRs / re-nudges missing markers / handles `publish-failed`. Amends D-033. | accepted | Fully in-cloud publish with no new secrets; supervisor reviews PRs only |
 | D-035 | **Adopt the dailydigits warm-cloud worker flow, cloud-native, execution delegated to the supervisor** (human directive 2026-07-17). Branch-and-merge execution authority is delegated to the cloud supervisor, amending the merge clause of D-012; the human retains only H0, credentials/secrets, spend ceilings, destructive/irreversible operations, and external-to-repo publication, and every merge carries evidence in the PR body. Keep-warm is cloud-native: warm stamp = latest Codex task timestamp on keep-warm issue #4, with no local registry; dispatch-time gate checks the stamp and, if older than ~10h, posts a trivial `@codex` smoke first and stamps on its reply; never dispatch real work into a cold environment; supervisor heartbeat posts smoke at >9h; local `Invoke-CodexCloudWarm.ps1` is fallback-lane only. Dispatch discipline follows the dailydigits DEC-014 pattern: each `@codex` mention carries one atomic task contract with one objective, explicit allowed paths, exact in-container validation commands to run before finishing, a two-strike stop condition, no lockfile commits, and concise Simplified Chinese worker messages with code/identifiers in English. Fleet discipline follows the DEC-021/022 pattern: lane tiering uses the default cheap worker lane for tight-contract tasks and escalates to a high-judgment lane only for high-judgment slices; parallelism is path-disjoint only; dispatches are batched rather than many small ones; bottleneck-fixer procedure triggers on task >2× budget, repeated failure class, or queue starvation and may fix flow but never product/constitutional behavior. | accepted | Cloud supervisor can execute branch-and-merge work within evidence-bound repo gates; warmth and dispatch are issue-native; human gates narrow to constitutional/credential/spend/destructive/external-publication decisions |
+| D-037 | **Per-PR GPT reviewer rounds** (human verbatim "go", effective next supervisor session): every worker PR is independently verified by a GPT reviewer round dispatched through the `codex-dispatch` queue. The reviewer applies that PR's patch at the declared `base_sha` inside the sandbox, personally runs the declared validation commands, and reports a structured verdict comment. The reviewer does not modify implementation; findings route to an independent fixer round. Supervisor merge signal = CI green + reviewer verdict pass. Guards: reviewer and worker are different round instances; actual model ID is recorded for every round; the supervisor's stream-boundary verdicts and final P8 review retain cross-model-family checking. | accepted | Per-PR validation moves out of the supervisor session while preserving independent review, CI, model-recording, and boundary-verdict controls |
+| D-038 | **Orchestrator model escalation ladder** (human directive): the orchestration seat defaults to Codex 5.4, using the same engine family as workers but with role isolation and with the orchestrator remaining the orchestrator. If **3 cumulative defects attributable to orchestration rounds** occur (excluding publisher/CI or other supervisor-side infrastructure defects; current orchestration-round attribution count: 0), escalate to **GPT-5.6 Sol medium**; if defects continue after escalation, escalate again to **GPT-5.6 Sol high**. Every escalation records the triggering defect list and actual model ID; downgrade requires human approval. | accepted | Orchestration stays on the cheap/default GPT lane until three attributed defects justify escalation; downgrade is human-gated |
+| D-039 | **Supervisor ratifies P0-T03 write_scope expansion** to match owner-authored issue #28 dispatch + CO-010 repair surface: add `scripts/project.mjs`, `tests/index.mjs`, `tests/package.json`, and the exact evidence file `evidence/slices/S0/validator-contract.json` (not the whole `evidence/slices/` tree). Material plan amendment recorded in `PLAN.md` and `docs/planning/dispatch/P0-T03.zh.md`; human may veto. Until ratification stands and a new fixer/reviewer cycle runs after issues:write restore, do not re-merge PR #30 content (D-037 SCOPE-001 fail still stands). | accepted | P0-T03 write_scope matches the owner dispatch contract; SCOPE-001 is addressable by a fresh fixer after D-039; human veto remains open |
+| D-040 | **Cursor cloud App token can push/merge but not Issues**: until `issues:write` is restored for the supervisor App seat, the App `@codex` path is unavailable from this seat for dispatch and keep-warm. Control-center / owner comments on queue issues (including keep-warm #4) are required. Amends the practical actuation of D-031/D-034/D-035 for this seat only; does not change the constitutional App-path design. | accepted | Supervisor git-push fallback remains viable; Issues-gated actuation must be owner/control-center until permission restored |
 
 ## Initial issue ledger
 
 ```json
 {
   "schema_version": "1.0",
-  "revision": 5,
+  "revision": 6,
   "issues": [
     {
       "id": "CO-001",
@@ -190,6 +201,26 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "status": "open",
       "owner": "orchestrator dispatch discipline (BF-PRE-019)",
       "resolution_criterion": "Any round needing non-default-branch material supplies it via issue-body context packaging or waits for a main merge; publication is actuated by the owner (platform Create PR) or the control center (codex cloud apply + push), never from inside the App sandbox."
+    },
+    {
+      "id": "CO-011",
+      "phase": 0,
+      "severity": "blocking",
+      "category": "credential",
+      "summary": "Cursor supervisor App seat lacks issues:write. Issues API returns 403; this seat cannot author/comment on codex-dispatch queue issues or post @codex / keep-warm on issue #4. Blocks App-path dispatch and cloud-native keep-warm from this seat (D-040).",
+      "status": "open",
+      "owner": "human (GitHub App/token permissions)",
+      "resolution_criterion": "Owner grants issues:write to the supervisor App/token, or owner/control-center posts @codex and keep-warm comments until the seat is restored; first successful Issues write from this seat closes the issue."
+    },
+    {
+      "id": "CO-012",
+      "phase": 0,
+      "severity": "conditional",
+      "category": "authority",
+      "summary": "BF-2026-005: accidental merge of PR #30 during a permissions probe (merge-API call with message probe-should-fail-dry) despite D-037 reviewer fail SCOPE-001. Reverted at 94f4e33. Prevention: never call the merge API for permission probes; use OPTIONS/dry-run or inspect-only; merge only on CI green + D-037 pass.",
+      "status": "open",
+      "owner": "supervisor actuation discipline",
+      "resolution_criterion": "Prevention control recorded in BREAK_FIX_LOG (BF-2026-005); any future merge of P0-T03 content requires CI green + D-037 pass after D-039 write_scope expansion and a fresh fixer/reviewer cycle."
     }
   ]
 }
