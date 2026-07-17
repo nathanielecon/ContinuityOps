@@ -9,19 +9,17 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 21,
+  "revision": 22,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
   "current_gate": "phase-0-baseline-audit",
-  "running_tasks": [],
+  "running_tasks": ["P0-T03"],
   "blocked_tasks": ["P0-T04", "P0-T05"],
   "waiting_human": [
-    "issues:write-restore-or-owner-@codex-keepwarm",
     "REPO_SETTINGS_ADMIN_TOKEN",
     "PR-20",
-    "H0-after-P0-T04",
-    "D-039-write-scope-human-veto-window"
+    "H0-after-P0-T04"
   ],
   "codex_cloud_environment": {
     "repo": "nathanielecon/ContinuityOps",
@@ -33,15 +31,13 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "Revision note: status revision 19 was attempted via issue #29 (ORCH-ROUND-06) but publish-failed (D-034); this revision 20 lands the same governance via supervisor git-push fallback plus post-#29 reality updates",
-    "Cursor supervisor App seat lacks issues:write (CO-011) — owner must grant Issues permission on the App/token OR personally post @codex / keep-warm on issue #4; App @codex dispatch/keep-warm is unavailable from this seat until restored (D-040)",
-    "#29 ORCH-ROUND-06 governance repaired via supervisor git-push fallback at 679f808: lands D-037/D-038/D-039/D-040, BF-2026-004/005, Watch-CodexRefs",
-    "P0-T03 fixer restaged as draft PR #32 (branch cursor/p0-t03-fixer-d039-2d6f @ fd8c8c3); local validate green under D-039; D-037 re-review + merge blocked on CO-011",
-    "Supervisor heartbeat armed via scripts/supervisor-heartbeat.sh (3.5h ls-remote); keep-warm @codex on #4 still requires owner/issues:write",
-    "#31 D-037 reviewer verdict fail SCOPE-001 on PR #30; PR #30 was accidentally merged during a permissions probe then reverted at 94f4e33 (BF-2026-005 / CO-012); do not re-merge #30 content until write_scope is expanded (D-039) and a new fixer/reviewer cycle runs after issues:write is restored",
-    "Owner pending: REPO_SETTINGS_ADMIN_TOKEN, PR #20, H0 after P0-T04; do not authorize Phase 1 until S0 and H0 pass",
-    "P0-T03 is ready (deps P0-T02 verified; write_scope expanded per D-039); next dispatch after issues:write restore: fixer for P0-T03 → D-037 re-review → P0-T04 → H0",
-    "Keep-warm: cloud-native issue #4 warm stamp; until issues:write returns, owner/control-center must post trivial @codex smokes; local Invoke-CodexCloudWarm.ps1 remains fallback-lane only",
+    "Status revision 22: portfolio supervisor resume seat with expanded owner GH_TOKEN (Issues + Pull Requests); CO-011 resolved for this seat; human directed P0-T03 redo (do not merge draft PR #32)",
+    "BF-2026-006: accidental Issues #33 during plan-mode capability probe — closed not_planned; never mutate to probe permissions",
+    "Supersede PR #32; dispatch fresh warm-Codex P0-T03 fixer under D-039 write_scope → D-037 independent reviewer → merge only on CI green + verdict pass",
+    "Keep-warm: issue #4 cloud-native stamp; smoke if >9h heartbeat / >10h before real dispatch; this seat can post @codex via GH_TOKEN",
+    "After P0-T03 verified: P0-T04 rubric freeze → package H0 → stop for human receipt; do not authorize Phase 1 until S0 + H0",
+    "Owner pending (parallel, non-blocking for P0-T03 redo): REPO_SETTINGS_ADMIN_TOKEN, PR #20",
+    "D-039 write_scope stands (human chose redo of implementation, not veto); PR #30/#32 are not merge vehicles",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -53,7 +49,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Rotated the orchestrator seat per D-024: predecessor retired at ~17% context_remaining; successor Opus 4.8 reconstructed state from durable artifacts only",
     "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed (PRs #8–#11)",
     "D-034: patch-in-comment GHA publisher smoked (issue #12 → PR #13; Actions create-PR permission required)",
-    "P0-T01 verified; P0-T02 verified with condition CO-010; ORCH-ROUND-06 governance landed via supervisor git-push fallback after #29 publish-failed"
+    "P0-T01 verified; P0-T02 verified with condition CO-010; ORCH-ROUND-06 governance landed via supervisor git-push fallback after #29 publish-failed",
+    "Owner GH_TOKEN restored Issues+PR actuation for supervisor seat; human directed P0-T03 fresh fixer/reviewer redo"
   ],
   "verified_baseline": [],
   "unverified": [
@@ -210,9 +207,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "severity": "blocking",
       "category": "credential",
       "summary": "Cursor supervisor App seat lacks issues:write. Issues API returns 403; this seat cannot author/comment on codex-dispatch queue issues or post @codex / keep-warm on issue #4. Blocks App-path dispatch and cloud-native keep-warm from this seat (D-040).",
-      "status": "open",
+      "status": "resolved",
       "owner": "human (GitHub App/token permissions)",
-      "resolution_criterion": "Owner grants issues:write to the supervisor App/token, or owner/control-center posts @codex and keep-warm comments until the seat is restored; first successful Issues write from this seat closes the issue."
+      "resolution_criterion": "Owner grants issues:write to the supervisor App/token, or owner/control-center posts @codex and keep-warm comments until the seat is restored; first successful Issues write from this seat closes the issue.",
+      "resolution_note": "2026-07-17: owner injected expanded GH_TOKEN (Issues + Pull Requests) into the supervisor cloud run. App ghs_ may still 403 on Issues; seat actuates queue/@codex/keep-warm via owner PAT. Closed after intentional codex-dispatch write (not after BF-2026-006 probe #33)."
     },
     {
       "id": "CO-012",

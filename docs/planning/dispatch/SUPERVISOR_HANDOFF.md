@@ -92,6 +92,16 @@
 5. Do **not** authorize Phase 1 before S0 + H0.
 
 
+## 2026-07-17T21:21Z supervisor resume — GH_TOKEN expanded; P0-T03 redo
+
+| Item | State |
+| --- | --- |
+| Seat | Portfolio supervisor resume; owner `GH_TOKEN` has Issues + Pull Requests |
+| CO-011 | **resolved** for this seat (PAT actuation); App `ghs_` may still 403 Issues |
+| Human binding | **Redo** P0-T03 — do not merge draft PR #32 |
+| Next | keep-warm check → supersede #32 → fresh `@codex` fixer → D-037 → merge on CI+verdict → P0-T04 → H0 stop |
+| BF | BF-2026-006 (accidental probe issue #33 closed) |
+
 ## 2026-07-17T20:42Z bottleneck — browser Issues attempt (waiting_human)
 
 Browser control **was attempted** (VNC `DISPLAY=:1` + Chrome CDP `:9222`). Result: **not authenticated**.

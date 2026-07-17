@@ -1,6 +1,6 @@
 # ContinuityOps phase gate status (supervisor packaging)
 
-Updated: 2026-07-17T20:36:42Z
+Updated: 2026-07-17T21:21:00Z
 
 ## Authority
 
@@ -13,8 +13,8 @@ Updated: 2026-07-17T20:36:42Z
 | --- | --- | --- |
 | P0-T01 | verified | CO-008/CO-009 conditional |
 | P0-T02 | verified | CO-010 addressed via D-039 / P0-T03 |
-| P0-T03 | ready; implementation on PR #32; CI green | **D-037 reviewer** (CO-011 issues:write) |
-| P0-T04 | planned/blocked on P0-T03 verified | cannot dispatch `@codex` from this seat |
+| P0-T03 | ready; **human-directed redo** (supersede PR #32) | fresh fixer + D-037 (CO-011 cleared via GH_TOKEN) |
+| P0-T04 | planned/blocked on P0-T03 verified | after redo merge |
 | H0 | waiting_human | after P0-T04 bundle hashes |
 | P0-T05 | blocked on P0-T04 + H0 | multi-stream / S0 council |
 

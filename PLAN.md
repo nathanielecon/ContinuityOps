@@ -64,7 +64,7 @@ Initial authorization stops at Phase 0.
       "slice": "S0",
       "title": "Implement validators, model routing, bottleneck dispatch, and evidence adapters",
       "state": "ready",
-      "note": "D-039 expands write_scope to match owner issue #28 + CO-010 surface. Prior PR #30 failed D-037 SCOPE-001 and must not be re-merged until a fresh fixer/reviewer cycle after issues:write restore. Do not mark verified.",
+      "note": "D-039 expands write_scope to match owner issue #28 + CO-010 surface. Human 2026-07-17 directed a full P0-T03 redo: supersede draft PR #32; do not re-merge PR #30/#32; fresh fixer + D-037 required. Do not mark verified.",
       "depends_on": ["P0-T02"],
       "owner": "validator-worker",
       "risk": "high",

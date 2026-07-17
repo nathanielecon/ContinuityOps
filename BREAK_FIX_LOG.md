@@ -300,6 +300,9 @@ ContinuityOps incidents yet.
 | Supervisor absorbed too much orchestration responsibility. | Restore role boundaries: episodic GPT rounds carry orchestration while the supervisor handles stream boundaries and actuation. | D-030 / D-035 compliance |
 | Validator lifecycle was coupled to unavailable future harness assets. | Fixture the validator lifecycle and keep the issue open through the P0-T03 repair lane. | CO-010 → P0-T03 |
 | Token consumption rose from per-round supervision and review work. | Apply D-032 supervisor economy, D-037 per-PR reviewer delegation, and session rotation. | D-032 / D-037 |
+| Plan-mode capability probe accidentally created GitHub issue #33. | Close immediately as not_planned; never create Issues to probe permissions; use inspect-only checks. | BF-2026-006 |
+| Cursor App seat lacked Issues write (CO-011). | Owner injected expanded `GH_TOKEN` (Issues + Pull Requests); App ghs_ remains Issues-403; seat actuates via owner PAT. | D-040 / CO-011 resolved |
+| Human directed P0-T03 redo rather than merge draft PR #32. | Supersede #32; fresh fixer + D-037 under D-039 write_scope. | supervisor resume 2026-07-17 |
 
 ## Log
 
@@ -402,3 +405,29 @@ ContinuityOps incidents yet.
 - **Judge round impact:** prior reviewer fail remains authoritative; repair cohort must be fresh after scope amendment.
 - **Remaining risk/follow-up:** restore `issues:write` (CO-011) before App-path re-dispatch; human may veto D-039.
 - **Verified by:** Cursor supervisor bottleneck fixer (git history).
+
+## 2026-07-17 — BF-2026-006 — Accidental Issues create during plan-mode capability probe
+
+- **Slice/task:** supervisor resume reconstruct / CO-011 capability check.
+- **Baseline SHA:** `832ce38baa2d8d776fd93169b32e317f3da17a30` (appendix on `main`).
+- **Candidate SHA at break:** N/A (no product merge); GitHub issue #33 created and closed.
+- **Environment/identity:** Cursor cloud portfolio supervisor with owner `GH_TOKEN` (PAT) present in the new run.
+- **Symptom:** while verifying whether Issues write was restored, a `gh api …/issues -f title=probe-should-not-create` call created issue [#33](https://github.com/nathanielecon/ContinuityOps/issues/33) (`probe-should-not-create`).
+- **Exact failed check and exit:** process/discipline failure — not a CI failure. Issue was closed within seconds as `not_planned` with explicit non-dispatch body.
+- **Raw failure evidence:** issue #33 timeline (create → close `not_planned` → clarifying comment).
+- **Attempts:** one accidental create; immediate close.
+- **Root cause:** using a mutating Issues create call as a permissions probe (same class as BF-2026-005 merge-API probe).
+- **Why earlier gates missed it:** plan-mode reconstruct treated live API capability mapping as read-only; create was not gated.
+- **Blast radius:** one closed noise issue; no branch/PR/product impact; no secrets exposed.
+- **Decision:** close #33; record prevention; treat expanded `GH_TOKEN` as restoring Issues+PR actuation for this seat; close CO-011 on first intentional `@codex` / queue write (not on the probe).
+- **Fix and files changed:** issue #33 closed; this break/fix entry; `OPERATING_STATE.md` revision for redo path.
+- **Regression control added:** never create Issues, comments, labels, or merges to probe permissions; use GET/inspect-only (and documented token scope headers) before any mutation. Capability probes must be read-only.
+- **New candidate SHA:** this supervisor-resume hygiene commit.
+- **Fresh verification commands/results:** `gh api repos/…/issues/33 --jq .state` → `closed`; `gh api repos/…/pulls/32` succeeds with owner PAT (expanded scopes).
+- **Hosted/cloud verification:** N/A (governance/discipline).
+- **Superseded evidence:** any claim that CO-011 remains blocking for this PAT-backed seat is void after intentional queue write.
+- **New evidence:** this entry; subsequent `codex-dispatch` issue for P0-T03 redo.
+- **Claim/status changes:** CO-011 → resolved for this seat via owner `GH_TOKEN`; human directed **redo** of P0-T03 (do not merge PR #32).
+- **Judge round impact:** none.
+- **Remaining risk/follow-up:** Cursor App `ghs_` token may still 403 on Issues; keep using owner PAT for `@codex` / keep-warm; do not reintroduce mutate-to-probe habits.
+- **Verified by:** portfolio supervisor (resume seat).
