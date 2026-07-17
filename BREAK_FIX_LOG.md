@@ -224,6 +224,37 @@ ContinuityOps incidents yet.
   `git`/`gh`. Any evidence produced against the wrong tree is candidate-bound
   and must be refreshed once the authoritative baseline is frozen.
 
+### BF-PRE-020 — Workers never commit lockfiles
+
+- Risk: bounded workers may commit regenerated lockfiles from transient or
+  container-local dependency state, creating noisy or misleading integration
+  changes outside the task contract.
+- Control: workers never commit lockfiles. If dependencies legitimately change,
+  the integrator regenerates lockfiles at integration time and binds that
+  regeneration to the integration evidence.
+
+### BF-PRE-021 — Fresh-install first test run may be flaky
+
+- Risk: the first test run after a fresh install can fail from cache warm-up or
+  one-time toolchain initialization rather than a product defect.
+- Control: integration runs the suite twice after install. A recurring failure
+  must capture full error output before repair; a one-time first-run failure is
+  recorded as warm-up evidence rather than silently ignored.
+
+### BF-PRE-022 — Detached local Codex exec must not block on stdin
+
+- Risk: a local detached `codex exec` can hang or consume unintended input when
+  stdin remains attached, wasting worker budget or blocking the lane.
+- Control: any local detached `codex exec` redirects stdin from `/dev/null`.
+  Prefer the warm cloud lane for long tasks.
+
+### BF-PRE-023 — Mock-green is not runtime-proven
+
+- Risk: unit-green results under mocked runtimes can be misrepresented as proof
+  of platform behavior.
+- Control: every platform behavior claim requires a real-runtime gate before it
+  counts as evidence; mocked-unit success is useful but not runtime proof.
+
 ## Entry template
 
 ```markdown

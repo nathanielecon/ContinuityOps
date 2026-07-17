@@ -32,7 +32,7 @@
 目标分支填 issue 正文指定的流/编排分支(例如 `stream/S0-baseline-audit` 或
 `claude/orchestrator-supervisor-setup-yyd3bu`),写入 `base_branch` 字段。
 
-## 监督者心跳 — D-034(评审 PR;发布由 GHA 完成)
+## 监督者心跳 — D-034/D-035(评审 PR;发布由 GHA 完成;保暖云原生)
 
 每次心跳(或 D-032 批量唤醒)对**每个**开放且带 `codex-dispatch` 的 issue:
 
@@ -43,8 +43,7 @@
    `Publish-CodexCloudTask.ps1`;仍失败则 Opus 后备(仅推理),禁止假装集成。
 4. **禁止**把 `make_pr` / 无 PR URL 的 bot 摘要当完成。
 
-保暖:仅**监督者/所有者**在 issue **#4** 发 `@codex` 冒烟(~9h)。勿依赖
-`github-actions[bot]` 提及。
+保暖(D-035):暖戳为保暖 issue **#4** 上最近一次 Codex 任务时间戳,不再依赖本地注册表。派遣时若暖戳旧于约 10h,先由**监督者/所有者**在 #4 发一个平凡 `@codex` 冒烟并等待回复落戳;禁止把真实工作派进冷环境。监督者心跳在暖戳超过 >9h 时主动冒烟。`Invoke-CodexCloudWarm.ps1` 只属于后备车道。勿依赖 `github-actions[bot]` 提及。
 
 ## 角色
 
@@ -108,7 +107,7 @@ gh label create dispatch-failed --color b60205 --description "温门或派遣失
 | `done`（关闭 issue） | diff 已 apply/push 回流分支,结果已评论 | 控制中心 / 编排器（集成后） |
 | 重排队 | 把 `dispatch-failed` 改回 `codex-dispatch` | **人工**（修正后） |
 
-## 执行流程（控制中心，幂等）
+## 执行流程（后备车道：控制中心，幂等）
 
 1. `scripts/Watch-CodexDispatchQueue.ps1 -Once` 拉取 `--label codex-dispatch --state open`；
 2. **作者白名单**：非 `-AllowedAuthors`（默认仓库所有者）的 issue 评论并跳过,不执行任何块；
@@ -124,9 +123,9 @@ gh label create dispatch-failed --color b60205 --description "温门或派遣失
 8. 轮询 `codex cloud status` → `codex cloud diff/apply` 到目标流分支 → `git push`；
 9. 评论结果并关闭 issue（`done`）。
 
-## 监督者巡查（sweep）模式
+## 后备车道：监督者巡查（sweep）模式
 
-控制中心**不注册自主计划任务**。派遣车道仅在**所有者的实时监督会话在站时**运行:
+控制中心巡查是**后备车道**,仅当 App/GHA 主路径不可用时使用。控制中心**不注册自主计划任务**。派遣车道仅在**所有者的实时监督会话在站时**运行:
 每次在站巡查一遍队列——可用 `Watch-CodexDispatchQueue.ps1 -Once`,或手工按 issue 的
 `warm` / `exec` 执行块逐个处理。队列项在两次巡查之间**等待**;这是"单一明确权威席位"
 的既定取舍(以在站时的确定性,换取项目在无人值守时不被自主执行)。
@@ -146,13 +145,12 @@ gh label create dispatch-failed --color b60205 --description "温门或派遣失
 - 云容器为 receive-only:无温门、无 `codex cloud exec`、无 `codex login`、无凭据；
 - 结果一律经仓库回流（apply 到流分支并推送）,云侧据此可见并继续验证。
 
-## 备选状态更新（D-031）
+## 后备状态说明（D-031→D-035）
 
 原"记录但未启用"的 Codex GitHub App 路径**已启用为主路径**(见文首 D-031 段):
-暖戳已移出 `%LOCALAPPDATA%`(改以保暖记录 issue **#4** 上最近一次 Codex 任务时间戳
-为证),触发门控为"仅监督者/所有者所建队列 issue 上的提及"。定时保暖工作流
+D-035 确认暖戳已移出 `%LOCALAPPDATA%`:以保暖记录 issue **#4** 上最近一次 Codex 任务时间戳为证;派遣时旧于约 10h 先冒烟,心跳旧于 >9h 冒烟。触发门控为"仅监督者/所有者所建队列 issue 上的提及"。定时保暖工作流
 `.github/workflows/codex-keepwarm.yml` 已编写(约每 8 小时在 #4 发 `@codex` 冒烟;
 仅用临时 GITHUB_TOKEN,零机密):**合并到默认分支后激活**,激活后须以一次
 `workflow_dispatch` 实测 App 是否响应 bot 作者的提及——若不响应,禁用该工作流,
 保暖回落到监督者心跳(约 3–4 小时一次的后备唤醒,兼作看门失效兜底)。
-控制中心巡查降为后备路径。
+控制中心巡查明确降为后备车道。
