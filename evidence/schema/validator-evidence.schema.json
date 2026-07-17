@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ContinuityOps validator evidence",
+  "type": "object",
+  "required": ["schema_version", "task_id", "candidate_sha", "baseline_sha", "validators", "adapter_evidence"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "task_id": { "const": "P0-T03" },
+    "candidate_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "baseline_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "validators": { "type": "array", "items": { "type": "object", "required": ["id", "ok"] } },
+    "adapter_evidence": { "type": "object", "required": ["adapter_signature", "candidate_sha", "command", "exit_code", "environment"] }
+  }
+}
