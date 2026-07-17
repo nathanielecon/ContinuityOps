@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "decision": "approve",
+  "candidate_sha": "ea2c27513305badfeafe98500e8fefe603bc97cb",
+  "reviewed_paths": [
+    "docs/scaffold-audit.md",
+    "integration/upstreams.lock.json",
+    "harness/partition-manifest.json",
+    "evidence/slices/S0/baseline-audit.json",
+    "evidence/slices/S0/STREAM_COMPLETE.json",
+    "evidence/slices/S0/preflight-pr6.json",
+    "evidence/slices/S0/validation/pinned-validators.txt",
+    "evidence/slices/S0/validation/clean-tree.txt",
+    "evidence/slices/S0/validation/equivalent-acceptance.txt"
+  ],
+  "issue_ids": ["CO-008", "CO-009"],
+  "reviewer": "claude-5-cloud-supervisor",
+  "at": "2026-07-17T03:55:25Z",
+  "notes_zh": "批准(附条件):产物实质满足 PLAN.md P0-T01 四条验收;被审计 diff 严格限于契约 write_scope;验证证据已仓内持久化;两处 pinned 验证器失败经查为非产物性(P0-T02/T03 工件未存在;分区清单 schema 未冻结),等效语义检查全过。条件性问题移交编排分支问题账本:CO-008——审计/分区清单基于 App 容器可见的 main 树计算,而 baseline_sha 记为 6ed2435,两树不一致;setup 分支合并 main 并冻结权威基线后,必须刷新分类与清单并全量复验(绑定变更使候选绑定证据失效)。CO-009——Codex App 容器仅克隆默认分支且无 origin remote,凡需读非默认分支的轮次必须上下文打包或待 main 合并;正式 BF 条目待编排分支补录。worker 交接格式缺陷(context_remaining 非数值、证据路径最初为终端输出)采纳编排轮裁定:格式性而非实质性,后者已就地修复。"
+}
