@@ -2,8 +2,9 @@
 
 **Status:** `waiting_human`  
 **Packaged at:** 2026-07-17T21:55:00Z  
-**Main tip at package:** `9a58cbd1b420452b3216de33602ee58868b5d87a`  
-**Agents cannot mint this receipt.**
+**Main tip at package:** see `git rev-parse origin/main` after hash refresh  
+**Agents cannot mint this receipt.**  
+**Hash refresh:** `plan_sha256` refreshed after PLAN.md P0-T04 `review` state bump so the validator matches the tree you sign.
 
 ## What to approve
 
