@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 11,
+  "revision": 12,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
@@ -29,11 +29,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "Supervisor: dispatch ORCH-SMOKE-01 (issue #3) via @codex mention — doubles as the App platform smoke (D-031)",
-    "Supervisor: on smoke pass, dispatch P0-T01 (issue #2) via @codex mention targeting stream/S0-baseline-audit",
-    "Supervisor: integrate Codex-returned PRs into stream branches only; record per-round model IDs",
-    "Episodic GPT orchestrator round: on worker completion run validators, produce STREAM_COMPLETE.json with preflight_ok as a diff",
-    "Keep-warm: supervisor posts @codex smoke on the keep-warm record roughly every 9 hours",
+    "Supervisor heartbeat (D-033): treat App path as complete only when gh shows an open PR URL for the queue issue — never on make_pr / bot summary alone",
+    "Supervisor: if #3/#5 still lack GitHub PRs after publish-contract re-nudge, write diagnosis + enable Opus reserve (reasoning-only); do not fake integrate",
+    "Supervisor: integrate only Codex-returned GitHub PRs into stream branches; record per-round model IDs",
+    "Episodic GPT orchestrator round: on worker PR merge/cherry-pick run validators, produce STREAM_COMPLETE.json with preflight_ok as a diff",
+    "Keep-warm: codex-keepwarm.yml on main (8h) plus supervisor @codex smoke ~9h; verify bot-authored mentions once via workflow_dispatch",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -88,6 +88,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-030 | The orchestrator seat moves from a resident Claude session to **episodic GPT rounds** to conserve Anthropic quota (human decision, verbatim "stick with GPT orchestrator"). Each orchestration round is carried by a Codex 5.4 Cloud task dispatched through the `codex-dispatch` queue; the ORCH-SMOKE-01 smoke (issue #3) and the P0-T01 validation round are its acceptance steps. Amends D-022: the resident Opus 4.8 orchestrator is retained as the **reserve seat** (cold-start is losslessly reconstructable from durable artifacts, enabled when a GPT round is unavailable or fails). The supervisor may publish the queue issue that carries an orchestration round's intent (this is bookkeeping, not an orchestration decision); episodic rounds hold zero credentials, return work as a diff applied to the branch, and have their bookkeeping/intent output executed by the on-station sweep lane. The actual model ID of every round is still recorded at dispatch | accepted | Default orchestration is episodic GPT via the queue; Opus 4.8 is reserve; credentials never move; per-round model IDs recorded |
 | D-031 | **Activate the Codex GitHub App dispatch path** (human decision, verbatim "go with A — app installed"): dispatch is now an `@codex` mention posted **by the cloud supervisor via its existing GitHub MCP authority** on a supervisor-authored `codex-dispatch` queue issue. Amends D-027/D-029: the Windows control-center ceases to be the sole dispatch point; the manual sweep becomes the fallback path. Gating: dispatch mentions are valid only on queue issues authored by the supervisor or the owner (this private repo has no other commenters); any other mention is not a dispatch. Results flow back as Codex-created PRs/branches; the supervisor integrates into **stream branches only** via MCP — merges to `main` and all D-012 gates remain human. Warm stamp leaves `%LOCALAPPDATA%`: warm freshness is now evidenced by the timestamp of the most recent Codex task on the keep-warm record (issue-based), maintained by the supervisor's scheduled self-checks posting an `@codex` smoke roughly every 9 hours; a scheduled GitHub Action is a documented backup pending verification that the App responds to bot-authored mentions. App platform behavior (branch targeting, PR flow) is unproven until the first dispatch — ORCH-SMOKE-01 doubles as that platform smoke | accepted | Fully autonomous dispatch loop with zero new credentials; human retains only D-012 constitutional gates; first App dispatch is itself the platform smoke |
 | D-032 | **Post-smoke supervisor economy** (human directive, effective when ORCH-SMOKE-01 passes): (1) supervisor verdicts (`SUPERVISOR_VERDICT.json`) certify at **stream boundaries only** — one BF-PRE-015 review per `STREAM_COMPLETE.json`, never per orchestration round; (2) actuation of orchestrator-emitted intents (mentions, merges, labels, issue closes) **batches** into evented wakes (ref-watcher) plus the 3–4h fallback heartbeat — no per-intent wakes; (3) **per-round checking stays with the deterministic validators** run inside the episodic rounds — the supervisor does not re-execute or shadow them | accepted | Supervisor token spend reduces to stream-boundary verdicts + batched actuation; deterministic gates remain the per-round quality floor |
+| D-033 | **App-path publish hard gate** (overnight unblock): `@codex` App execution is proven (bot replies + task diffs), but Codex UI `make_pr` creates **PR metadata only** and does not open a GitHub PR without a human Create PR click — forbidden for unattended overnight. Every App-path `@codex` dispatch/re-nudge must paste the publish contract in `docs/planning/dispatch/QUEUE.md` (require `git push` + `gh pr create` against the issue target branch; forbid stopping at `make_pr`). Supervisor heartbeat / D-032 actuation may advance or close a queue issue **only** when an open GitHub PR URL is observable; bot summaries alone are incomplete. On silence or bot-only-without-PR: re-nudge once with the publish contract; if still no PR, write diagnosis and enable Opus reserve for reasoning-only work. Amends D-031 success criteria. | accepted | Unattended overnight App path = mention → worker → GitHub-visible PR without laptop or Create PR UI |
 
 ## Initial issue ledger
 
