@@ -24,8 +24,11 @@ configuration, not inferred aliases.
   program under a minimal-intervention policy, maintains the integrated
   objective, approves stream creation/closure, and may appoint Claude Sonnet
   or Opus co-orchestrators for bounded streams. It reviews a stream branch
-  only upon the orchestrator's durable completion signal (BF-PRE-015). It does
-  not replace deterministic gates or human approvals.
+  only upon the orchestrator's durable completion signal (BF-PRE-015), and
+  certifies at **stream boundaries only** — per-round checking belongs to the
+  deterministic validators inside orchestration rounds, and actuation of
+  orchestrator intents batches into evented wakes plus a 3–4h heartbeat
+  (D-032). It does not replace deterministic gates or human approvals.
 - **Ralphy orchestration and council reasoning:** the default carrier is an
   **episodic GPT round** — a Codex 5.4 Cloud task dispatched through the
   `codex-dispatch` queue that plays the lead orchestrator (and council roles:
