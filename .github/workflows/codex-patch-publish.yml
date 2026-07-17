@@ -14,6 +14,14 @@ name: codex-patch-publish
 on:
   issue_comment:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      comment_id:
+        description: "Existing bot patch-comment ID to (re)process"
+        required: true
+      issue_number:
+        description: "Queue issue number the comment belongs to"
+        required: true
 
 permissions:
   contents: write
@@ -23,10 +31,11 @@ permissions:
 jobs:
   publish:
     if: |
-      github.event.issue.pull_request == null &&
-      github.event.comment.user.login == 'chatgpt-codex-connector[bot]' &&
-      contains(github.event.comment.body, '<!-- continuityops-patch-v1') &&
-      contains(join(github.event.issue.labels.*.name, ','), 'codex-dispatch')
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.pull_request == null &&
+       github.event.comment.user.login == 'chatgpt-codex-connector[bot]' &&
+       contains(github.event.comment.body, '<!-- continuityops-patch-v1') &&
+       contains(join(github.event.issue.labels.*.name, ','), 'codex-dispatch'))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout (default branch for scripts)
@@ -34,18 +43,47 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Resolve issue number
+        id: issue
+        env:
+          EVENT_ISSUE: ${{ github.event.issue.number }}
+          DISPATCH_ISSUE: ${{ inputs.issue_number }}
+        run: |
+          echo "number=${EVENT_ISSUE:-$DISPATCH_ISSUE}" >> "$GITHUB_OUTPUT"
+
       - name: Write comment body
         env:
+          GH_TOKEN: ${{ github.token }}
           COMMENT_BODY: ${{ github.event.comment.body }}
+          DISPATCH_COMMENT_ID: ${{ inputs.comment_id }}
+          ISSUE: ${{ steps.issue.outputs.number }}
         run: |
-          printf '%s' "$COMMENT_BODY" > /tmp/codex-comment.md
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Re-process an existing comment: verify author + marker + label
+            # (same guards the event path enforces in its `if:`).
+            author="$(gh api "repos/${{ github.repository }}/issues/comments/${DISPATCH_COMMENT_ID}" --jq '.user.login')"
+            if [ "$author" != "chatgpt-codex-connector[bot]" ]; then
+              echo "::error::comment $DISPATCH_COMMENT_ID author is $author, not the Codex connector bot"; exit 1
+            fi
+            labels="$(gh api "repos/${{ github.repository }}/issues/${ISSUE}" --jq '[.labels[].name] | join(",")')"
+            case "$labels" in *codex-dispatch*) ;; *) echo "::error::issue $ISSUE lacks codex-dispatch label"; exit 1;; esac
+            gh api "repos/${{ github.repository }}/issues/comments/${DISPATCH_COMMENT_ID}" --jq '.body' > /tmp/codex-comment.md
+            grep -qF '<!-- continuityops-patch-v1' /tmp/codex-comment.md || { echo "::error::comment lacks patch marker"; exit 1; }
+          else
+            printf '%s' "$COMMENT_BODY" > /tmp/codex-comment.md
+          fi
 
       - name: Extract patch metadata
         id: extract
         run: |
           set -euo pipefail
-          chmod +x scripts/extract-codex-patch.sh
-          scripts/extract-codex-patch.sh /tmp/codex-comment.md /tmp/codex-patch-out
+          # Copy the extractor OUT of the tree and invoke via bash: no chmod
+          # (chmod dirtied the checkout and blocked the later switch to a
+          # base_sha whose tree differs — BF-2026-002), and the copy keeps the
+          # extractor available after we hard-switch to base_sha.
+          cp scripts/extract-codex-patch.sh /tmp/extract-codex-patch.sh
+          bash /tmp/extract-codex-patch.sh /tmp/codex-comment.md /tmp/codex-patch-out
           echo "base_branch=$(cat /tmp/codex-patch-out/base_branch)" >> "$GITHUB_OUTPUT"
           echo "base_sha=$(cat /tmp/codex-patch-out/base_sha)" >> "$GITHUB_OUTPUT"
           echo "context_remaining=$(cat /tmp/codex-patch-out/context_remaining)" >> "$GITHUB_OUTPUT"
@@ -55,14 +93,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh issue comment "${{ github.event.issue.number }}" --repo "${{ github.repository }}" --body \
+          gh issue comment "${{ steps.issue.outputs.number }}" --repo "${{ github.repository }}" --body \
             "publish-failed (D-034): could not extract continuityops-patch-v1 metadata/diff from bot comment. Re-nudge worker to emit marker + base_branch + base_sha + fenced \`\`\`diff."
 
       - name: Idempotency — skip if open PR already exists
         id: idem
         env:
           GH_TOKEN: ${{ github.token }}
-          ISSUE: ${{ github.event.issue.number }}
+          ISSUE: ${{ steps.issue.outputs.number }}
         run: |
           set -euo pipefail
           existing="$(gh pr list --repo "${{ github.repository }}" --state open --json number,url,headRefName,body \
@@ -80,7 +118,7 @@ jobs:
         if: steps.idem.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-          ISSUE: ${{ github.event.issue.number }}
+          ISSUE: ${{ steps.issue.outputs.number }}
           BASE_BRANCH: ${{ steps.extract.outputs.base_branch }}
           BASE_SHA: ${{ steps.extract.outputs.base_sha }}
           CONTEXT_REMAINING: ${{ steps.extract.outputs.context_remaining }}
@@ -92,6 +130,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          # Discard any working-tree drift before switching to base_sha
+          # (BF-2026-002: a dirty tree aborts checkout when base differs).
+          git reset --hard
+          git clean -fd
           git fetch origin "$BASE_SHA" --depth=1 || git fetch origin
           git checkout -B "$HEAD_BRANCH" "$BASE_SHA"
 
@@ -146,3 +188,11 @@ jobs:
 
           gh issue comment "$ISSUE" --repo "${{ github.repository }}" --body \
             "publish-ok (D-034): ${URL}"
+
+      - name: Notify on unreported failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment "${{ steps.issue.outputs.number }}" --repo "${{ github.repository }}" --body \
+            "publish-failed (D-034): workflow run failed — see https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} (this notifier covers steps without their own failure comment)." || true
