@@ -22,12 +22,14 @@ Human gate **H0**: project scope, architecture, cost cap, upstream pins, and the
 ## Bundle hashes (from `evidence/slices/S0/rubric-freeze.json`)
 
 ```text
-plan_sha256:                f01f3144d507986e0a8cfbec297818e9327e7df77c875d87e3c2bb68f7ff1adc
+plan_sha256:                72e21d7e58e351d2bd4b22cfcd73d5a0fc5d6c1ce29f73843375674ad31e2026
 execution_contract_sha256:  5a3eff5d41baf5afac2a8c82d9b0312df1e65d86bce142ba07ed088f3cc184bf
 validator_bundle_sha256:    b8c1b48235315d183e34978f79544294d958cc0b95dd520f9005002be9d3c6bc
 rubric_sha256:              724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205
 partition_bundle_sha256:    52c4aefe62b7355e5abea13f4ee79967b5a28363b8f1866cde6b399c1fcbeab3
 ```
+
+Re-verify before signing: `node harness/rubrics/validate-rubric-freeze.mjs` (must exit 0).
 
 `partition_bundle_note`: main currently lacks `harness/partition-manifest.json`; P0-T04 used `integration/upstreams.lock.json` as the available partition/upstream pin input inside write_scope.
 

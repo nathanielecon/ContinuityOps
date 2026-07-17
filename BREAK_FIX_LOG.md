@@ -431,3 +431,12 @@ ContinuityOps incidents yet.
 - **Judge round impact:** none.
 - **Remaining risk/follow-up:** Cursor App `ghs_` token may still 403 on Issues; keep using owner PAT for `@codex` / keep-warm; do not reintroduce mutate-to-probe habits.
 - **Verified by:** portfolio supervisor (resume seat).
+
+## 2026-07-17 — BF-2026-007 — H0 plan_sha256 drifted after PLAN state bump
+
+- **Slice/task:** P0-T04 / H0 packaging.
+- **Symptom:** After marking P0-T04 `review` in `PLAN.md` and packaging H0, `node harness/rubrics/validate-rubric-freeze.mjs` failed with `plan_sha256 与当前文件不匹配`.
+- **Root cause:** Bundle hashes were pinned at P0-T04 integrate tip; subsequent PLAN.md authority edits changed `plan_sha256` without refreshing `evidence/slices/S0/rubric-freeze.json`.
+- **Fix:** Recompute and refresh pinned hashes in `rubric-freeze.json` + `H0_PACKAGE.md`; re-run validator to pass.
+- **Prevention:** Any PLAN/authority edit after rubric freeze must refresh H0-bound hashes before presenting the package for human signature; never ask humans to sign stale digests.
+- **Verified by:** portfolio supervisor (`validate-rubric-freeze.mjs` pass after refresh).
