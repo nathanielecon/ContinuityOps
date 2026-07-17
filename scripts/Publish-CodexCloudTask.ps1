@@ -5,6 +5,8 @@
 .DESCRIPTION
   Runs ONLY on the owner's machine (codex CLI + gh + git). Applies the cloud task
   diff locally, pushes a branch, and opens a GitHub PR. Never stores secrets.
+  The PR body is finalized with the GitHub-visible PR URL plus context_remaining
+  so D-033 publish completion can be verified from the PR itself.
   App sandboxes lack gh and often get CONNECT 403 to github.com — do not expect
   workers to self-publish.
 
@@ -19,6 +21,9 @@
 
 .PARAMETER Title
   PR title.
+
+.PARAMETER ContextRemaining
+  Context remaining reported by the Codex task, or 'n/a' when unavailable.
 
 .EXAMPLE
   pwsh -File scripts/Publish-CodexCloudTask.ps1 `
@@ -38,6 +43,8 @@ param(
 
     [Parameter(Mandatory)]
     [string]$Title,
+
+    [string]$ContextRemaining = 'n/a',
 
     [string]$Repo = 'nathanielecon/ContinuityOps'
 )
@@ -66,5 +73,13 @@ Published from Codex Cloud task via control-center apply (D-033).
 
 Task: $TaskId
 "@
-gh pr create --repo $Repo --base $BaseBranch --head $HeadBranch --title $Title --body $body
+$prUrl = gh pr create --repo $Repo --base $BaseBranch --head $HeadBranch --title $Title --body $body
+$finalBody = @"
+$body
+
+GitHub PR URL: $prUrl
+context_remaining: $ContextRemaining
+"@
+gh pr edit $prUrl --repo $Repo --body $finalBody
+Write-Host "[publish] PR URL: $prUrl"
 Write-Host '[publish] done'
