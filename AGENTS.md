@@ -26,10 +26,16 @@ configuration, not inferred aliases.
   or Opus co-orchestrators for bounded streams. It reviews a stream branch
   only upon the orchestrator's durable completion signal (BF-PRE-015). It does
   not replace deterministic gates or human approvals.
-- **Ralphy orchestration and council reasoning:** Claude Opus 4.8 is the
-  default model for the lead orchestrator, judges, nixers, fixers, and
-  bottleneck analysts unless the supervisor records a task-specific exception
-  (supersedes the earlier Grok 4.5 High Fast assignment; see D-022).
+- **Ralphy orchestration and council reasoning:** the default carrier is an
+  **episodic GPT round** — a Codex 5.4 Cloud task dispatched through the
+  `codex-dispatch` queue that plays the lead orchestrator (and council roles:
+  judges, nixers, fixers, bottleneck analysts) for one bounded round, returning
+  work as a diff and holding zero credentials. Claude Opus 4.8 is retained as
+  the **reserve seat**, enabled when a GPT round is unavailable or fails; a cold
+  orchestrator reconstructs state losslessly from durable artifacts. The actual
+  model ID of every round is recorded at dispatch, and the supervisor may record
+  a task-specific exception (amends D-022; supersedes the earlier Grok 4.5 High
+  Fast assignment; see D-030).
 - **Code execution:** warm Codex 5.4 CLI Cloud Agents in default mode (not
   `/high`, not `/fast`) implement the project code and tests through bounded
   Ralphy tasks. "Warm" is a per-Environment toolchain cache (~12h), never
