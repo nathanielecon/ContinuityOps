@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "continuityops/supervisor-verdict.schema.json",
+  "title": "ContinuityOps supervisor review verdict (BF-PRE-015)",
+  "description": "Committed as evidence/slices/<slice>/SUPERVISOR_VERDICT.json when the portfolio supervisor reviews a signaled stream branch. The verdict is a durable file, never chat-only feedback. Free-text values are Simplified Chinese.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "decision", "candidate_sha", "reviewed_paths", "issue_ids", "reviewer", "at"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "decision": {
+      "type": "string",
+      "enum": ["approve", "rework"],
+      "description": "approve certifies the signaled branch for the next step; rework returns it with issue IDs"
+    },
+    "candidate_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "The exact 40-hex candidate the verdict binds to; a new candidate SHA invalidates this verdict"
+    },
+    "reviewed_paths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "The write_scope paths and evidence files the supervisor actually inspected"
+    },
+    "issue_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Empty on approve; on rework, the durable issue IDs the orchestrator must resolve"
+    },
+    "reviewer": { "type": "string", "description": "Supervisor identity" },
+    "at": { "type": "string", "description": "ISO-8601 UTC of the verdict" },
+    "notes_zh": { "type": "string", "description": "Simplified Chinese rationale" }
+  }
+}
