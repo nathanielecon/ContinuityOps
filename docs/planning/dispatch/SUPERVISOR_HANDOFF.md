@@ -68,3 +68,23 @@
 - Local validation green under D-039; **merge blocked** until owner/control-center dispatches D-037 reviewer via `@codex` (CO-011)
 - Heartbeat armed: `scripts/supervisor-heartbeat.sh` (3.5h ls-remote loop); keep-warm still needs Issues write
 - Owner open items unchanged: `REPO_SETTINGS_ADMIN_TOKEN`, PR #20, H0 after P0-T04
+
+
+## 2026-07-17T20:36:42Z status — CI green on PR #32; D-037 still owner-gated
+
+| Item | State |
+| --- | --- |
+| main tip | see `git rev-parse origin/main` |
+| PR #32 | draft; `contracts` CI **success** on `7bbbe7c`; merge **blocked** on D-037 reviewer (CO-011) |
+| Heartbeat | `scripts/supervisor-heartbeat.sh` running in session `continuityops-heartbeat` (3.5h) |
+| Keep-warm #4 | **cannot** post from this seat — owner must `@codex` if stamp >9h |
+| P0-T04 / H0 | blocked until P0-T03 verified via CI+D-037 |
+| P0-T05 / Phases 1–8 | unauthorized until S0 + human H0 |
+
+### Owner actions required now
+
+1. Grant Cursor App **issues:write** (closes CO-011) **or** personally post D-037 reviewer `@codex` for PR #32 (use `docs/planning/dispatch/P0-T03.zh.md` + PR diff; read-only verdict comment).
+2. After D-037 **pass**, mark PR #32 ready and allow supervisor merge (CI already green).
+3. Then authorize dispatch of **P0-T04** (rubric freeze); sign **H0** receipt — agents cannot mint it.
+4. Still open: `REPO_SETTINGS_ADMIN_TOKEN`, PR #20.
+5. Do **not** authorize Phase 1 before S0 + H0.
