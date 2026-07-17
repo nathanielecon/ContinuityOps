@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.0",
+  "task_id": "P0-T01",
+  "claim_ceiling": "repo-only",
+  "baseline_sha": "6ed243564ddb46f4a46608496d6f05db53c93788",
+  "generated_at_utc": "2026-07-17T03:14:12.487033Z",
+  "unique_ownership_enforced": true,
+  "retained_paths": [
+    {
+      "path": ".codex/PROMPT-SPEED-ADDENDUM.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-control-lane-tooling",
+      "sha256": "de2610d9087a05c12024eb9c8f7f4d8f7e2f15b4191bbc5906a6155890d2beab"
+    },
+    {
+      "path": ".codex/README.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-control-lane-tooling",
+      "sha256": "7aba3de90347531b5ff4d60b045a105b008aeb9317fb15ad862bb71a3b96f7fd"
+    },
+    {
+      "path": ".codex/cloud-maintenance.sh",
+      "category": "operator-script",
+      "primary_slice": "S0-control-lane-tooling",
+      "sha256": "cf6ea0b903864abc617e873cd555ed76de0b69472574edd0083ef6eaebc03523"
+    },
+    {
+      "path": ".codex/cloud-setup.sh",
+      "category": "operator-script",
+      "primary_slice": "S0-control-lane-tooling",
+      "sha256": "cd199ff11805e2331c05d81a290420360e862497155dfdf31cc378cc4ba30c7a"
+    },
+    {
+      "path": ".gitignore",
+      "category": "repository-metadata",
+      "primary_slice": "S0-repository-foundation",
+      "sha256": "428370bc460ab31e7549a18b44f46c5c254acf935ee54c2bafa813e3b6fac75a"
+    },
+    {
+      "path": "AGENTS.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-repository-foundation",
+      "sha256": "7e53501e4600afd5c8305356af47f27935c1ab156bca8fd04f91b4765c3eb956"
+    },
+    {
+      "path": "BREAK_FIX_LOG.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "26486d996bca3ccd8907eaf97774294b6be5f082817be4d1beb43787a123fd4f"
+    },
+    {
+      "path": "EVIDENCE_AND_CLAIMS.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "862941082919dbfe2907e9aae5a7875867209905bcadc69f9750d3f269c63adf"
+    },
+    {
+      "path": "OPERATING_STATE.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "7e8f5a4f378d3a7833c521e8577fdb113f6c9103187db732dd17b6f5055c7de1"
+    },
+    {
+      "path": "PLAN.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "68081ca9f091984bfe2609db06714b779f9c8004ded4f99e9a1bdea121dfda2c"
+    },
+    {
+      "path": "README.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S1-portfolio-documentation",
+      "sha256": "c5e2252ab346a05263d9abb1ca98a887a0b8a130224d91e1dbe37a54dbefdc57"
+    },
+    {
+      "path": "docs/architecture/continuityops-architecture.png",
+      "category": "architecture-or-portfolio-asset",
+      "primary_slice": "S1-architecture-assets",
+      "sha256": "0008b3d26478826d9ae4351003f412baa6845d1769bc5041bbb749f5348a4799"
+    },
+    {
+      "path": "docs/architecture/continuityops-architecture.svg",
+      "category": "architecture-or-portfolio-asset",
+      "primary_slice": "S1-architecture-assets",
+      "sha256": "0da8f058b8ef18cf4d6cd35bd4ef7ae819f69dc06bc27fbb68dd4f55e8872917"
+    },
+    {
+      "path": "docs/architecture/continuityops.drawio",
+      "category": "architecture-or-portfolio-asset",
+      "primary_slice": "S1-architecture-assets",
+      "sha256": "a447db8d8f870ef944b1412019790949cd2ba21dea6ce578ac03e3f45879b4e0"
+    },
+    {
+      "path": "docs/decisions/README.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S1-portfolio-documentation",
+      "sha256": "b6c50f966d39b6c4ecfe18b4ab988e08483cad04479fdb1201777c1b167bb07c"
+    },
+    {
+      "path": "docs/evidence-index.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S1-portfolio-documentation",
+      "sha256": "8047533bd0b7b716f4908745ea0faa3073e24d9d2adaff78c0d4f3779ebdcf89"
+    },
+    {
+      "path": "docs/planning/AGENTS.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "efa7227eb0dce847c29ed90b6fe22c24379cb4a4960ac375a091f4fa941a7989"
+    },
+    {
+      "path": "docs/planning/BREAK_FIX_LOG.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "26486d996bca3ccd8907eaf97774294b6be5f082817be4d1beb43787a123fd4f"
+    },
+    {
+      "path": "docs/planning/EVIDENCE_AND_CLAIMS.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "862941082919dbfe2907e9aae5a7875867209905bcadc69f9750d3f269c63adf"
+    },
+    {
+      "path": "docs/planning/IMAGE2_INFOGRAPHIC_PROMPT.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "f40114d55481f89c519de0b2b7851f0758dd060dda7b884848fe57701f5febe6"
+    },
+    {
+      "path": "docs/planning/JUDGE_RUBRICS.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31"
+    },
+    {
+      "path": "docs/planning/MANDARIN_PROMPT_PACK.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "8a043b52b5d5135bb6c28ddb2e9c6ee837a547eaada32b627323f14adf029f40"
+    },
+    {
+      "path": "docs/planning/MASTER_PLAN.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "800a056b04b11e41548e6a0b02c292c9cb772de09a14ae448f1f68e3df496c7a"
+    },
+    {
+      "path": "docs/planning/MODEL_AND_STREAM_TOPOLOGY.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "725fbcba4159ec0ea7fb0e261d6637ac21fe6f36d8b89a615f21d724d32763b8"
+    },
+    {
+      "path": "docs/planning/OPERATING_STATE.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "7e8f5a4f378d3a7833c521e8577fdb113f6c9103187db732dd17b6f5055c7de1"
+    },
+    {
+      "path": "docs/planning/PLAN.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "68081ca9f091984bfe2609db06714b779f9c8004ded4f99e9a1bdea121dfda2c"
+    },
+    {
+      "path": "docs/planning/PROMPT_PACK.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "db938dc44fb3e483e8ebb4db0fc9a7f9cdc117af74183776bf65e38cfaf47168"
+    },
+    {
+      "path": "docs/planning/RALPHY_ORCHESTRATION.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "3b0d9bb8537fc4a2605613c049d63856f49b57b3249e7a540e2daf1a2d16d41c"
+    },
+    {
+      "path": "docs/planning/README.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "56e677b0a2afae205ca2acf9c3322f38c0180d6af0c22f889235ad5a81ca11b9"
+    },
+    {
+      "path": "docs/planning/RECRUITER_FRONT_PAGE_SPEC.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "34dd734fce7dca3cc77a2aef48776280021ff22e4ab52b7b298f35b6a034d1fa"
+    },
+    {
+      "path": "docs/planning/REPO_README_TEMPLATE.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "afcf517a87ae5d170e4f280befb0ebe55284273ab5c5f7b1c031f063f9e0f659"
+    },
+    {
+      "path": "docs/planning/SOURCE_ANALYSIS.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-governance-control-plane",
+      "sha256": "16fe0ca42862468da32f617bade4c9cc94f6f14eb159307658d733ab7c05cf21"
+    },
+    {
+      "path": "docs/portfolio/continuityops-infographic.png",
+      "category": "architecture-or-portfolio-asset",
+      "primary_slice": "S1-portfolio-documentation",
+      "sha256": "0008b3d26478826d9ae4351003f412baa6845d1769bc5041bbb749f5348a4799"
+    },
+    {
+      "path": "docs/scaffold-audit.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-repository-foundation",
+      "sha256": "105c344e0ed36de94ce33356817d3d91f78404950130c021545c0318e57c78e4"
+    },
+    {
+      "path": "evidence/README.md",
+      "category": "markdown-governance-or-documentation",
+      "primary_slice": "S0-evidence-ledger",
+      "sha256": "06783de1ea6199ab003c37f4d8d7e6bf2c858e4751496207b58736ae94eec969"
+    },
+    {
+      "path": "integration/upstreams.lock.json",
+      "category": "machine-readable-json-contract",
+      "primary_slice": "S0-integration-contracts",
+      "sha256": "827e9538b4e34310fe774a2b48a01f07a7c788143ea6625c009325393ad511c0"
+    },
+    {
+      "path": "scripts/Invoke-CodexCloudWarm.ps1",
+      "category": "operator-script",
+      "primary_slice": "S0-control-lane-tooling",
+      "sha256": "1ce9f61ccf1afd86b8020de503b7602789c7564e161f12c0f8b772bd5ba6d9fb"
+    },
+    {
+      "path": "scripts/Register-CodexCloudEnvironment.ps1",
+      "category": "operator-script",
+      "primary_slice": "S0-control-lane-tooling",
+      "sha256": "1913464f98e7b0ee839dfcd92bcf0580bb63360e12c4a3c8f7b6dcda2b10813d"
+    }
+  ],
+  "shared_interfaces": [
+    {
+      "path": "PLAN.md",
+      "interface": "machine-readable task authority and phase gate",
+      "consumers": [
+        "all-slices"
+      ]
+    },
+    {
+      "path": "OPERATING_STATE.md",
+      "interface": "current state and issue ledger",
+      "consumers": [
+        "all-slices"
+      ]
+    },
+    {
+      "path": "integration/upstreams.lock.json",
+      "interface": "Project A/C upstream pin contract",
+      "consumers": [
+        "S0-governance-control-plane",
+        "future-integration-slices"
+      ]
+    },
+    {
+      "path": "harness/partition-manifest.json",
+      "interface": "unique path ownership partition contract",
+      "consumers": [
+        "all-implementation-streams"
+      ]
+    },
+    {
+      "path": "EVIDENCE_AND_CLAIMS.md",
+      "interface": "claim-level evidence policy",
+      "consumers": [
+        "evidence-review",
+        "qa-review",
+        "security-review"
+      ]
+    },
+    {
+      "path": "docs/planning/JUDGE_RUBRICS.md",
+      "interface": "frozen review rubric source",
+      "consumers": [
+        "judge",
+        "nixer",
+        "fixer"
+      ]
+    }
+  ]
+}
