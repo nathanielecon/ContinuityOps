@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 14,
+  "revision": 17,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
@@ -29,13 +29,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "OVERNIGHT: App workers for #3/#5 finished diffs but cannot publish (sandbox 403 / no gh). Supervisor cloud heartbeat must open task links and use platform Create PR (or control-center apply) — never wait for in-container gh pr create",
-    "Supervisor heartbeat (D-033): advance only on open GitHub PR URL; bot make_pr text is incomplete",
-    "If platform Create PR unavailable overnight: Opus reserve for reasoning-only; leave clear diagnosis; do not fake integrate",
-    "Keep-warm: supervisor @codex smoke on issue #4 every ~9h (GHA bot mention smoke FAILED — App did not reply); leave codex-keepwarm schedule disabled until owner-authored mentions only",
-    "Integrate only GitHub-visible PRs into stream branches; record per-round model IDs",
-    "P0-T01 verified (candidate ea2c275, supervisor approve with CO-008/CO-009); P0-T02 is ready",
-    "P0-T02 dispatch waits until the morning merge completes (freeze the authoritative baseline first) so this high-risk task is not built on a stale main; refresh the P0-T01 audit/partition manifest and re-run full validation once the baseline is frozen (CO-008)",
+    "D-034 smoked: issue #12 → GHA apply/push → PR #13; rerun idempotent publish-skipped; keep Actions create-PR permission on",
+    "Supervisor heartbeat: review PRs / publish-ok; re-nudge if bot lacks continuityops-patch-v1; Create PR / Publish-CodexCloudTask.ps1 are fallbacks only",
+    "Integrate GitHub-visible PRs into stream/orchestrator branches; do not treat make_pr text as complete",
+    "Keep-warm: supervisor-authored @codex on issue #4 ~9h; GHA bot keepwarm stays disabled",
+    "P0-T01 verified (candidate ea2c275, supervisor approve with CO-008/CO-009); P0-T02 is ready — dispatch after this merge lands, then refresh the P0-T01 audit/partition manifest against the frozen baseline and re-run full validation (CO-008)",
     "Do not authorize Phase 1 until S0 and H0 pass"
   ],
   "completed_bootstrap": [
@@ -44,7 +42,9 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Installed root contracts and architecture assets",
     "Merged .codex Codex Cloud Environment scripts to the default branch",
     "Created, registered, and first-warmed the ContinuityOps Codex Cloud Environment (env 6a594ee667608191ab53cae15202815e, zero secrets)",
-    "Rotated the orchestrator seat per D-024: predecessor retired at ~17% context_remaining; successor Opus 4.8 reconstructed state from durable artifacts only"
+    "Rotated the orchestrator seat per D-024: predecessor retired at ~17% context_remaining; successor Opus 4.8 reconstructed state from durable artifacts only",
+    "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed (PRs #8–#11)",
+    "D-034: patch-in-comment GHA publisher smoked (issue #12 → PR #13; Actions create-PR permission required)"
   ],
   "verified_baseline": [],
   "unverified": [
@@ -90,7 +90,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-030 | The orchestrator seat moves from a resident Claude session to **episodic GPT rounds** to conserve Anthropic quota (human decision, verbatim "stick with GPT orchestrator"). Each orchestration round is carried by a Codex 5.4 Cloud task dispatched through the `codex-dispatch` queue; the ORCH-SMOKE-01 smoke (issue #3) and the P0-T01 validation round are its acceptance steps. Amends D-022: the resident Opus 4.8 orchestrator is retained as the **reserve seat** (cold-start is losslessly reconstructable from durable artifacts, enabled when a GPT round is unavailable or fails). The supervisor may publish the queue issue that carries an orchestration round's intent (this is bookkeeping, not an orchestration decision); episodic rounds hold zero credentials, return work as a diff applied to the branch, and have their bookkeeping/intent output executed by the on-station sweep lane. The actual model ID of every round is still recorded at dispatch | accepted | Default orchestration is episodic GPT via the queue; Opus 4.8 is reserve; credentials never move; per-round model IDs recorded |
 | D-031 | **Activate the Codex GitHub App dispatch path** (human decision, verbatim "go with A — app installed"): dispatch is now an `@codex` mention posted **by the cloud supervisor via its existing GitHub MCP authority** on a supervisor-authored `codex-dispatch` queue issue. Amends D-027/D-029: the Windows control-center ceases to be the sole dispatch point; the manual sweep becomes the fallback path. Gating: dispatch mentions are valid only on queue issues authored by the supervisor or the owner (this private repo has no other commenters); any other mention is not a dispatch. Results flow back as Codex-created PRs/branches; the supervisor integrates into **stream branches only** via MCP — merges to `main` and all D-012 gates remain human. Warm stamp leaves `%LOCALAPPDATA%`: warm freshness is now evidenced by the timestamp of the most recent Codex task on the keep-warm record (issue-based), maintained by the supervisor's scheduled self-checks posting an `@codex` smoke roughly every 9 hours; a scheduled GitHub Action is a documented backup pending verification that the App responds to bot-authored mentions. App platform behavior (branch targeting, PR flow) is unproven until the first dispatch — ORCH-SMOKE-01 doubles as that platform smoke | accepted | Fully autonomous dispatch loop with zero new credentials; human retains only D-012 constitutional gates; first App dispatch is itself the platform smoke |
 | D-032 | **Post-smoke supervisor economy** (human directive, effective when ORCH-SMOKE-01 passes): (1) supervisor verdicts (`SUPERVISOR_VERDICT.json`) certify at **stream boundaries only** — one BF-PRE-015 review per `STREAM_COMPLETE.json`, never per orchestration round; (2) actuation of orchestrator-emitted intents (mentions, merges, labels, issue closes) **batches** into evented wakes (ref-watcher) plus the 3–4h fallback heartbeat — no per-intent wakes; (3) **per-round checking stays with the deterministic validators** run inside the episodic rounds — the supervisor does not re-execute or shadow them | accepted | Supervisor token spend reduces to stream-boundary verdicts + batched actuation; deterministic gates remain the per-round quality floor |
-| D-033 | **App-path publish hard gate** (overnight unblock, empirically revised): `@codex` App execution is proven (bot replies + task diffs). Codex UI `make_pr` is metadata-only. In-container `git push`/`gh pr create` **failed** on ContinuityOps App tasks (no `gh`; GitHub `CONNECT tunnel failed, response 403`). Unattended publish therefore requires the **cloud supervisor** (or control-center when on-station) to actuate **platform Create PR** on the task page, or `codex cloud apply`+push+`gh pr create` locally — not worker-side git. Heartbeat advances only on an open GitHub PR URL. On bot-only-without-PR: one re-nudge; then platform Create PR actuation; if still blocked, diagnosis + Opus reserve (reasoning-only). `github-actions[bot]` `@codex` keepwarm mentions are **not** a verified warm carrier. Amends D-031. | accepted | Overnight App path = mention → worker → supervisor/platform Create PR → GitHub PR (laptop optional) |
+| D-033 | **App-path publish hard gate** (overnight unblock, empirically revised): `@codex` App execution is proven (bot replies + task diffs). Codex UI `make_pr` is metadata-only. In-container `git push`/`gh pr create` **failed** on ContinuityOps App tasks (no `gh`; GitHub `CONNECT tunnel failed, response 403`). Unattended publish therefore requires the **cloud supervisor** (or control-center when on-station) to actuate **platform Create PR** on the task page, or `codex cloud apply`+push+`gh pr create` locally — not worker-side git. Heartbeat advances only on an open GitHub PR URL. On bot-only-without-PR: one re-nudge; then platform Create PR actuation; if still blocked, diagnosis + Opus reserve (reasoning-only). `github-actions[bot]` `@codex` keepwarm mentions are **not** a verified warm carrier. Amends D-031. | superseded-by-D-034 | Overnight App path = mention → worker → supervisor/platform Create PR → GitHub PR (laptop optional) |
+| D-034 | **Patch-in-comment GHA publisher** (primary overnight publish): App workers must end replies with `<!-- continuityops-patch-v1 -->`, `base_branch`, `base_sha` (40-hex), and a full fenced unified diff (chunked if needed). Workflow `.github/workflows/codex-patch-publish.yml` runs on `chatgpt-codex-connector[bot]` `issue_comment` for `codex-dispatch` issues, applies the patch with ephemeral `GITHUB_TOKEN`, opens a PR, comments `publish-ok` + URL. Denies `.github/**`, secret/.env paths, binaries. Idempotent on existing `codex/issue-<N>-*` PRs. Platform Create PR and `scripts/Publish-CodexCloudTask.ps1` are fallbacks. Supervisor heartbeat reviews PRs / re-nudges missing markers / handles `publish-failed`. Amends D-033. | accepted | Fully in-cloud publish with no new secrets; supervisor reviews PRs only |
 
 ## Initial issue ledger
 
