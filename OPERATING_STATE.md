@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 13,
+  "revision": 14,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
@@ -29,12 +29,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "OVERNIGHT: App workers for #3/#5 finished diffs but cannot publish (sandbox 403 / no gh). Supervisor cloud heartbeat must open task links and use platform Create PR (or control-center apply) — never wait for in-container gh pr create",
-    "Supervisor heartbeat (D-033): advance only on open GitHub PR URL; bot make_pr text is incomplete",
-    "If platform Create PR unavailable overnight: Opus reserve for reasoning-only; leave clear diagnosis; do not fake integrate",
-    "Keep-warm: supervisor @codex smoke on issue #4 every ~9h (GHA bot mention smoke FAILED — App did not reply); leave codex-keepwarm schedule disabled until owner-authored mentions only",
-    "Integrate only GitHub-visible PRs into stream branches; record per-round model IDs",
+    "D-033 publish proven: platform Create PR cleared backlog — PR #8 smoke, #9 publish-script, #10 PREP-01, #11 ORCH-SMOKE evidence (bases defaulted to main; cherry-pick to stream/orch as needed)",
+    "Supervisor heartbeat: for each open codex-dispatch with bot reply and no PR → open View task → Create PR → gh pr list gate (see docs/planning/dispatch/QUEUE.md)",
+    "Integrate GitHub-visible PRs into stream/orchestrator branches; do not treat make_pr text as complete",
+    "Keep-warm: supervisor-authored @codex on issue #4 ~9h; GHA bot keepwarm stays disabled",
     "Do not authorize Phase 1 until S0 and H0 pass"
+  ],
+  "completed_bootstrap_extra": [
+    "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
