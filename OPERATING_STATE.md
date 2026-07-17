@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 15,
+  "revision": 16,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
@@ -29,7 +29,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "D-034: primary publish = codex-patch-publish GHA (patch-in-comment); smoke-prove then rely on publish-ok comments",
+    "D-034 smoked: issue #12 → GHA apply/push → PR #13; rerun idempotent publish-skipped; keep Actions create-PR permission on",
     "Supervisor heartbeat: review PRs / publish-ok; re-nudge if bot lacks continuityops-patch-v1; Create PR / Publish-CodexCloudTask.ps1 are fallbacks only",
     "Integrate GitHub-visible PRs into stream/orchestrator branches; do not treat make_pr text as complete",
     "Keep-warm: supervisor-authored @codex on issue #4 ~9h; GHA bot keepwarm stays disabled",
@@ -42,7 +42,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Merged .codex Codex Cloud Environment scripts to the default branch",
     "Created, registered, and first-warmed the ContinuityOps Codex Cloud Environment (env 6a594ee667608191ab53cae15202815e, zero secrets)",
     "Rotated the orchestrator seat per D-024: predecessor retired at ~17% context_remaining; successor Opus 4.8 reconstructed state from durable artifacts only",
-    "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed (PRs #8–#11)"
+    "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed (PRs #8–#11)",
+    "D-034: patch-in-comment GHA publisher smoked (issue #12 → PR #13; Actions create-PR permission required)"
   ],
   "verified_baseline": [],
   "unverified": [
