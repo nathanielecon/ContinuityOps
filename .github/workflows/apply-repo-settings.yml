@@ -1,0 +1,62 @@
+# ContinuityOps — settings-as-code applier (D-036, option C).
+#
+# Applies .github/repo-settings.json to the live repo using a fine-grained
+# admin PAT stored ONLY as the Actions secret REPO_SETTINGS_ADMIN_TOKEN
+# (Administration: write, this repo only, 90-day expiry — owner-created and
+# owner-rotated; credentials remain the owner's constitutional gate).
+#
+# Triggers: merge to main touching the settings file, manual reconcile, and a
+# weekly drift check. Never on pull_request (untrusted context). If the secret
+# is absent the job no-ops loudly instead of failing red.
+name: apply-repo-settings
+
+on:
+  push:
+    branches: [main]
+    paths: [".github/repo-settings.json"]
+  workflow_dispatch: {}
+  schedule:
+    - cron: "17 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply branch protection from desired-state file
+        env:
+          GH_TOKEN: ${{ secrets.REPO_SETTINGS_ADMIN_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::warning::REPO_SETTINGS_ADMIN_TOKEN not set — no-op. Owner must add the fine-grained admin PAT as an Actions secret to activate settings-as-code (D-036)."
+            exit 0
+          fi
+          for BRANCH in $(jq -r '.branch_protection | keys[]' .github/repo-settings.json); do
+            jq -c ".branch_protection[\"$BRANCH\"]" .github/repo-settings.json > /tmp/desired.json
+            echo "Applying protection to $BRANCH:"; cat /tmp/desired.json
+            gh api -X PUT "repos/${{ github.repository }}/branches/$BRANCH/protection" --input /tmp/desired.json > /tmp/applied.json
+            echo "Verifying:"
+            gh api "repos/${{ github.repository }}/branches/$BRANCH/protection" \
+              --jq '{contexts: .required_status_checks.contexts, strict: .required_status_checks.strict, force_pushes: .allow_force_pushes.enabled, deletions: .allow_deletions.enabled}'
+          done
+
+      - name: Drift check (scheduled runs fail loudly on divergence)
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ secrets.REPO_SETTINGS_ADMIN_TOKEN }}
+        run: |
+          set -euo pipefail
+          [ -z "${GH_TOKEN:-}" ] && { echo "secret absent — skip"; exit 0; }
+          for BRANCH in $(jq -r '.branch_protection | keys[]' .github/repo-settings.json); do
+            want=$(jq -c ".branch_protection[\"$BRANCH\"].required_status_checks.contexts" .github/repo-settings.json)
+            have=$(gh api "repos/${{ github.repository }}/branches/$BRANCH/protection" --jq '.required_status_checks.contexts' | jq -c .)
+            if [ "$want" != "$have" ]; then
+              echo "::error::Drift on $BRANCH: desired $want, live $have"; exit 1
+            fi
+          done
+          echo "no drift"
