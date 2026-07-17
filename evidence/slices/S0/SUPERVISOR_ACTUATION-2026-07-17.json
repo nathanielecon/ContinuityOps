@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "artifact": "SUPERVISOR_ACTUATION",
+  "at": "2026-07-17T20:35:00Z",
+  "reviewer": "cursor-grok-bottleneck-fixer",
+  "baseline_sha_before_this_commit": "94f4e331de6fbd23b5991e531e61beb83da79551",
+  "notes_zh": "本提交前 main tip 为 94f4e33（误合并 PR #30 的回滚）。#29 ORCH-ROUND-06 曾 publish-failed，本席以 git-push 后备重建落地。Issues API 403，App @codex/保暖不可用。",
+  "actions_taken": [
+    "reconstructed_failed_issue_29_ORCH_ROUND_06_governance",
+    "landed_D-037_D-038_from_issue_29_patch",
+    "bumped_status_revision_18_to_20_skipping_19_publish_failed",
+    "recorded_D-039_P0-T03_write_scope_expansion",
+    "recorded_D-040_and_CO-011_issues_write_gap",
+    "recorded_BF-2026-005_and_CO-012_accidental_PR30_merge_reverted",
+    "added_session_retrospective_and_BF-2026-004",
+    "expanded_P0-T03_write_scope_set_state_ready",
+    "added_Watch-CodexRefs_sh_and_SUPERVISOR_HANDOFF",
+    "did_not_remerge_PR_30_content"
+  ],
+  "decisions": ["D-037", "D-038", "D-039", "D-040"],
+  "break_fix": ["BF-2026-004", "BF-2026-005"],
+  "issue_ids": ["CO-011", "CO-012"],
+  "blocked_on": [
+    "issues:write for Cursor supervisor App seat (CO-011 / D-040)"
+  ],
+  "d037_status": {
+    "pr_30": "SCOPE-001 fail stands; content not on main after revert 94f4e33",
+    "merge_signal": "CI green + reviewer verdict pass required before any future land"
+  },
+  "owner_pending": [
+    "issues:write or owner @codex/keep-warm on #4",
+    "REPO_SETTINGS_ADMIN_TOKEN",
+    "PR #20",
+    "H0 after P0-T04",
+    "D-039 human veto window"
+  ],
+  "next_dispatches_after_issues_write": [
+    "fixer for P0-T03 under D-039 write_scope",
+    "D-037 re-review",
+    "P0-T04 then H0"
+  ]
+}
