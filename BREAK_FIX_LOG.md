@@ -206,6 +206,24 @@ ContinuityOps incidents yet.
   `@codex` smoke, not GHA bot mentions, until proven otherwise. Opus reserve for
   reasoning-only if publish actuation is unavailable overnight.
 
+### BF-PRE-019 — App container sees only the default branch (CO-009)
+
+- Observed risk: the Codex GitHub App container clones only the repository
+  default branch (`main`) and carries no `origin` remote. A worker dispatched
+  for a task whose contract or baseline lives on a non-default branch (e.g.
+  `stream/S0-baseline-audit`) cannot read it, silently falls back to the `main`
+  tree, and records a `contract_read=UNAVAILABLE` gap or a mismatched baseline
+  (see CO-008/CO-009 from the P0-T01 App round, PR #6). The same isolation
+  blocks outbound publication from inside the sandbox (BF-PRE-018).
+- Control: when dispatching an App-path round, never assume non-default-branch
+  readability. Either (1) context-package the needed contract/baseline/upstream
+  material directly into the issue body ("the worker gets data, not
+  permission", D-028), or (2) merge the required material to `main` first and
+  dispatch afterward. The publication surface is the owner's platform **Create
+  PR** or the control-center `codex cloud apply` + push — never in-container
+  `git`/`gh`. Any evidence produced against the wrong tree is candidate-bound
+  and must be refreshed once the authoritative baseline is frozen.
+
 ## Entry template
 
 ```markdown
