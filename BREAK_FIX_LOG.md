@@ -200,11 +200,11 @@ ContinuityOps incidents yet.
   Re-nudge with in-container `git push`/`gh pr create` still failed: no `gh`,
   GitHub git HTTPS `CONNECT tunnel failed, response 403`, often no `origin`.
   Separately, `github-actions[bot]` `@codex` keepwarm on issue #4 got no App reply.
-- Control (D-033 revised): treat worker bot text as incomplete until an open PR
-  URL exists. Cloud supervisor heartbeat actuates platform **Create PR** (or
-  control-center `codex cloud apply`+push). Keepwarm carrier = supervisor-authored
-  `@codex` smoke, not GHA bot mentions, until proven otherwise. Opus reserve for
-  reasoning-only if publish actuation is unavailable overnight.
+- Control (**D-034** supersedes D-033 overnight carrier): workers embed
+  `continuityops-patch-v1` + unified diff; GHA `codex-patch-publish` applies with
+  `GITHUB_TOKEN` and opens the PR. Platform Create PR /
+  `Publish-CodexCloudTask.ps1` remain fallbacks. Supervisor reviews PRs /
+  re-nudges missing markers. Keepwarm = supervisor-authored `@codex` on #4.
 
 ## Entry template
 
