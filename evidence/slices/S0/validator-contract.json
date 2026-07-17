@@ -1,0 +1,139 @@
+{
+  "task_id": "P0-T03",
+  "baseline_sha": "09e271643326b6e55a24e96e6b9c7841c0342813",
+  "candidate_sha": "09e271643326b6e55a24e96e6b9c7841c0342813",
+  "started_at": "2026-07-17T18:12:22.480Z",
+  "completed_at": "2026-07-17T18:12:22.631Z",
+  "validators": [
+    {
+      "id": "validator_contract",
+      "ok": true,
+      "result": {
+        "known_validators": [
+          "validator_contract",
+          "evidence_schema",
+          "secret_scan",
+          "forbidden_operations",
+          "mutation_isolation",
+          "model_routing",
+          "worker_language",
+          "bottleneck_dispatch",
+          "claude_proxy_profile",
+          "typescript_7"
+        ],
+        "fail_closed": true
+      }
+    },
+    {
+      "id": "evidence_schema",
+      "ok": true,
+      "result": {
+        "sample_fields": [
+          "schema_version",
+          "task_id",
+          "validator_id",
+          "candidate_sha",
+          "command",
+          "exit_code",
+          "started_at",
+          "completed_at",
+          "environment",
+          "adapter_signature"
+        ]
+      }
+    },
+    {
+      "id": "secret_scan",
+      "ok": true,
+      "result": {
+        "scanned_files": 76
+      }
+    },
+    {
+      "id": "forbidden_operations",
+      "ok": true,
+      "result": {
+        "forbidden_changed_paths_absent": true
+      }
+    },
+    {
+      "id": "mutation_isolation",
+      "ok": true,
+      "result": {
+        "status_before": " M scripts/project.mjs\n?? evidence/schema/\n?? evidence/slices/S0/validator-contract.json\n?? scripts/orchestration/\n?? scripts/validators/\n?? tests/index.mjs\n?? tests/orchestration/\n?? tests/package.json\n?? tests/validators/\n",
+        "readonly": true
+      }
+    },
+    {
+      "id": "model_routing",
+      "ok": true,
+      "result": {
+        "requires_actual_runtime_record": true,
+        "no_invented_availability": true
+      }
+    },
+    {
+      "id": "worker_language",
+      "ok": true,
+      "result": {
+        "free_text_language": "zh-CN"
+      }
+    },
+    {
+      "id": "bottleneck_dispatch",
+      "ok": true,
+      "result": {
+        "profiles": [
+          "auth",
+          "ci",
+          "toolchain"
+        ]
+      }
+    },
+    {
+      "id": "claude_proxy_profile",
+      "ok": true,
+      "result": {
+        "package": "pxpipe-proxy@0.9.0",
+        "gated": true
+      }
+    },
+    {
+      "id": "typescript_7",
+      "ok": true,
+      "result": {
+        "package_json_present": false,
+        "required_when_present": "typescript@7.0.2 strict"
+      }
+    }
+  ],
+  "adapter_evidence": {
+    "schema_version": "1.0",
+    "task_id": "P0-T03",
+    "validator_id": "validator_contract",
+    "candidate_sha": "09e271643326b6e55a24e96e6b9c7841c0342813",
+    "command": "node scripts/project.mjs validate P0-T03",
+    "exit_code": 0,
+    "started_at": "2026-07-17T18:12:22.480Z",
+    "completed_at": "2026-07-17T18:12:22.631Z",
+    "environment": {
+      "node": "v22.22.2",
+      "platform": "linux"
+    },
+    "adapter_signature": "b9946c4dd007e98b4d5b44249bc8a61896f1289563a8663ea3e68365291a7c74"
+  },
+  "passed": [
+    "validator_contract",
+    "evidence_schema",
+    "secret_scan",
+    "forbidden_operations",
+    "mutation_isolation",
+    "model_routing",
+    "worker_language",
+    "bottleneck_dispatch",
+    "claude_proxy_profile",
+    "typescript_7"
+  ],
+  "failed": [],
+  "evidence_path": "evidence/slices/S0/validator-contract.json"
+}
