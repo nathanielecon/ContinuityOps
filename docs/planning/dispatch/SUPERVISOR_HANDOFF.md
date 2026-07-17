@@ -88,3 +88,22 @@
 3. Then authorize dispatch of **P0-T04** (rubric freeze); sign **H0** receipt — agents cannot mint it.
 4. Still open: `REPO_SETTINGS_ADMIN_TOKEN`, PR #20.
 5. Do **not** authorize Phase 1 before S0 + H0.
+
+
+## 2026-07-17T20:42Z bottleneck — browser Issues attempt (waiting_human)
+
+Browser control **was attempted** (VNC `DISPLAY=:1` + Chrome CDP `:9222`). Result: **not authenticated**.
+
+| Probe | Result |
+| --- | --- |
+| `https://github.com/nathanielecon/ContinuityOps` | Title `Page not found · GitHub`; header **Sign in** / **Sign up**; Sign-in overlay |
+| `https://github.com/login` | Auth wall — Username/Password form, empty fields |
+| `https://github.com/.../issues/4` | Same private-repo 404 / Sign in |
+| Issues REST (`gh api .../issues/4`) | still **403**; header `X-Accepted-Github-Permissions: issues=read` |
+| Contents / PR #32 API | still OK (push/merge seat unchanged) |
+
+**Not done (blocked):** keep-warm `@codex` on #4; D-037 reviewer dispatch for PR #32; re-nudge #29.
+
+Evidence: `evidence/slices/S0/BOTTLENECK-BROWSER-ISSUES-2026-07-17.json` + `evidence/slices/S0/browser-issues-2026-07-17/`.
+
+**Owner action (exact):** (1) sign in as `nathanielecon` (or Issues writer) in this environment's Chrome/VNC and re-dispatch, **or** (2) grant App `issues:write` (closes CO-011 / D-040) **or** personally post keep-warm on #4 + D-037 `@codex` for PR #32. Do not invent credentials; do not `codex login`.
