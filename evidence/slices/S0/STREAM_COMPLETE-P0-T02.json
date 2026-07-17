@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "task_id": "P0-T02",
+  "slice": "S0",
+  "candidate_sha": "f9b698add11d63c10d7cc547b384b6ed78fa91ad",
+  "baseline_sha": "f9b698add11d63c10d7cc547b384b6ed78fa91ad",
+  "validation_results": [
+    {
+      "command": "node scripts/project.mjs validate P0-T02",
+      "exit": 0,
+      "time": "2026-07-17T17:56:40Z",
+      "evidence_path": "evidence/slices/S0/validation/p0-t02-postmerge.txt"
+    },
+    {
+      "command": "node --test tests/harness/",
+      "exit": 0,
+      "time": "2026-07-17T17:56:41Z",
+      "evidence_path": "evidence/slices/S0/validation/p0-t02-postmerge.txt"
+    },
+    {
+      "command": "python3 - <<'PY'\nimport json, pathlib, re\nfor path in pathlib.Path('.').rglob('*'):\n    if any(part == '.git' for part in path.parts):\n        continue\n    if path.is_file() and path.suffix == '.json':\n        json.loads(path.read_text())\n    if path.is_file() and path.suffix.lower() in {'.md', '.markdown'}:\n        for match in re.finditer(r'```json\\s*\\n([\\s\\S]*?)\\n```', path.read_text()):\n            json.loads(match.group(1))\nPY",
+      "exit": 0,
+      "time": "2026-07-17T17:56:41Z",
+      "evidence_path": "evidence/slices/S0/validation/p0-t02-postmerge.txt"
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "time": "2026-07-17T17:56:42Z",
+      "evidence_path": "evidence/slices/S0/validation/p0-t02-postmerge.txt"
+    }
+  ],
+  "evidence_manifest_path": "evidence/slices/S0/validation/p0-t02-postmerge.txt",
+  "context_remaining": "78%",
+  "preflight_ok": {
+    "warm_fresh": false,
+    "last_warm_utc": null,
+    "context_package_ready": "n/a"
+  },
+  "notes_zh": "P0-T02 合并后验证通过；当前编排轮只将任务推进到 review，verified 等待监督者流边界裁决。保暖记录时间戳在容器内不可读，因此按要求标注 warm_fresh=false。"
+}
