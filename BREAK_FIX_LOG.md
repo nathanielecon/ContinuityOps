@@ -312,3 +312,25 @@ ContinuityOps incidents yet.
 - **Judge round impact:** none (pre-slice-freeze)
 - **Remaining risk/follow-up:** a bare ``` as literal diff *content* at column 0 (e.g. a patch adding an unindented fence line to a md file appears as `+```` so it is safe; only a context line consisting of ``` could confuse — not producible in our added-file patches); CI fixture step to make the regression control permanent
 - **Verified by:** supervisor (fixture), publisher (pending live rerun)
+
+### BF-2026-002 — App 发布器 chmod 脏树与旧 base_sha 切换中止
+
+- Observed break: App-path patch 发布器在工作树内对提取器执行 `chmod`，导致发布前出现未预期脏树；随后旧 `base_sha` 切换中止，两轮发布静默失败，监督者无法获得可审查 PR。
+- Impact: D-034 机械发布链路未能按预期把 Codex diff 应用并开 PR，P0-T02 合并收尾被延迟。
+- Detection: 监督者检查发布结果时发现没有 `publish-ok`/PR URL，且失败轮次缺少足够可见通知。
+- Root cause: 发布器准备步骤在仓库工作树内变更文件权限，并在旧基线切换失败后没有以通用失败通知把错误返回到调度线程。
+- Fix: 提取器改为出树运行；发布失败前执行 `reset --hard` 清理工作树；通过 `workflow_dispatch` 重触发；增加通用失败通知。修复提交：`7640d80`。
+- Verification: 本轮保留 P0-T02 post-merge 验证输出于 `evidence/slices/S0/validation/p0-t02-postmerge.txt`，并在 `STREAM_COMPLETE-P0-T02.json` 绑定验证命令、退出码、时间与证据路径。
+- Prevention controls: 保持提取器出树运行、失败前硬重置、`workflow_dispatch` 重触发和通用失败通知；后续在 CI 增加发布器夹具测试，覆盖 chmod 脏树、旧 base_sha、缺 patch marker 与失败通知路径。
+- Status: repaired_pending_supervisor_review.
+
+### BF-2026-003 — GITHUB_TOKEN 创建的 PR 不触发 workflows
+
+- Observed break: 由 `GITHUB_TOKEN` 创建的发布 PR 未触发后续 workflow，符合 GitHub 防递归行为；监督者需要 owner 身份空提交才能触发 validate。
+- Impact: PR 可被机械创建，但缺少自动 validate 反馈，流边界裁决需要额外人工或 owner 操作。
+- Detection: 发布 PR 出现后未产生预期 validate 运行。
+- Root cause: GitHub 默认抑制由 `GITHUB_TOKEN` 触发的递归 workflow。
+- Fix: 暂无最终修复；当前操作要求监督者以 owner 身份空提交触发 validate。
+- Verification: 待决方案尚未实施，本条记录为已知控制平面缺口。
+- Prevention controls: 候选方案一是在 `validate.yml` 增加 `workflow_dispatch` 触发；候选方案二是发布器改由符合权限边界的 PAT 建 PR。两者均待监督者/owner 决策。
+- Status: open_pending_decision.

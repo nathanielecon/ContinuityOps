@@ -1,0 +1,93 @@
+\n$ node scripts/project.mjs validate P0-T02
+{
+  "task_id": "P0-T02",
+  "baseline_sha": "f9b698add11d63c10d7cc547b384b6ed78fa91ad",
+  "candidate_sha": "f9b698add11d63c10d7cc547b384b6ed78fa91ad",
+  "started_at": "2026-07-17T17:56:40.693Z",
+  "completed_at": "2026-07-17T17:56:40.731Z",
+  "validators": {
+    "harness_unit": true,
+    "authorization_boundary": true,
+    "state_reconciliation": true,
+    "stream_isolation": true,
+    "integration_queue": true,
+    "scope": true
+  },
+  "passed": [
+    "harness_unit",
+    "authorization_boundary",
+    "state_reconciliation",
+    "stream_isolation",
+    "integration_queue",
+    "scope"
+  ],
+  "failed": []
+}
+exit=0 time=2026-07-17T17:56:40Z
+\n$ node --test tests/harness/
+TAP version 13
+# Subtest: state transitions require a matching revision and legal lifecycle edge
+ok 1 - state transitions require a matching revision and legal lifecycle edge
+  ---
+  duration_ms: 9.090856
+  type: 'test'
+  ...
+# Subtest: authorization boundary accepts current phase and rejects next phase
+ok 2 - authorization boundary accepts current phase and rejects next phase
+  ---
+  duration_ms: 0.417942
+  type: 'test'
+  ...
+# Subtest: workers cannot mark verified or done
+ok 3 - workers cannot mark verified or done
+  ---
+  duration_ms: 0.468934
+  type: 'test'
+  ...
+# Subtest: up to three disjoint streams are isolated and sequential internally
+ok 4 - up to three disjoint streams are isolated and sequential internally
+  ---
+  duration_ms: 1.906677
+  type: 'test'
+  ...
+# Subtest: integration queue serializes candidate merges
+ok 5 - integration queue serializes candidate merges
+  ---
+  duration_ms: 0.451748
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 235.276264
+exit=0 time=2026-07-17T17:56:41Z
+\n$ python3 - <<'PY'
+json fence ok: PLAN.md#1
+json fence ok: EVIDENCE_AND_CLAIMS.md#1
+json fence ok: DECISIONS.md#1
+json fence ok: OPERATING_STATE.md#1
+json fence ok: OPERATING_STATE.md#2
+json fence ok: OPERATING_STATE.md#3
+json fence ok: STATUS.md#1
+json fence ok: ISSUES.md#1
+json file ok: integration/upstreams.lock.json
+json fence ok: docs/planning/PLAN.md#1
+json fence ok: docs/planning/EVIDENCE_AND_CLAIMS.md#1
+json fence ok: docs/planning/OPERATING_STATE.md#1
+json fence ok: docs/planning/OPERATING_STATE.md#2
+json fence ok: docs/planning/OPERATING_STATE.md#3
+json fence ok: docs/planning/MASTER_PLAN.md#1
+json file ok: harness/schemas/stream-complete.example.json
+json file ok: harness/schemas/supervisor-verdict.schema.json
+json file ok: harness/schemas/stream-complete.schema.json
+json file ok: evidence/slices/S0/harness.json
+json file ok: evidence/smoke/ORCH-SMOKE-01/stream-complete.dryrun.json
+parsed_json_files=6 parsed_json_fences=14
+exit=0 time=2026-07-17T17:56:41Z
+\n$ git diff --check
+exit=0 time=2026-07-17T17:56:42Z
