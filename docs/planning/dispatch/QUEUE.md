@@ -27,7 +27,16 @@ codex cloud exec --env <ENV_ID> --branch <target-branch> "<单行简体中文任
 
 并附：ENV_ID、目标分支、契约路径、baseline_sha,以及给控制中心的简体中文说明。
 
-## 所需标签（控制中心一次性创建）
+> **当前队列**：issue #2（`[codex-dispatch] P0-T01 — S0 baseline audit`）**已贴
+> `codex-dispatch` 标签**,等待下次监督者巡查处理。
+
+## 所需标签（自动创建，四个现已存在）
+
+GitHub 的 issues API 在给 issue 贴一个尚不存在的标签时会**自动创建**该标签
+（云侧经 MCP 已实证）。因此**任一拥有 `issues:write` 权限的席位**（云编排器或控制中心）
+均可经"贴标签"自动创建,无需专门的 `gh label create` 步骤。四个生命周期标签
+（`codex-dispatch`、`dispatching`、`dispatched`、`dispatch-failed`）**现已存在**。
+如需显式预建或统一配色/描述,可选执行：
 
 ```bash
 gh label create codex-dispatch  --color 1d76db --description "待派遣的 Codex 任务队列"
@@ -60,21 +69,21 @@ gh label create dispatch-failed --color b60205 --description "温门或派遣失
 7. 轮询 `codex cloud status` → `codex cloud diff/apply` 到目标流分支 → `git push`；
 8. 评论结果并关闭 issue（`done`）。
 
-## 持久运行（关键）
+## 监督者巡查（sweep）模式
 
-**会话内的后台循环随应用重启而静默停摆**（邻席项目因此丢过三个 worker,见 BF-PRE-017）。
-派遣轮询必须由**计划任务/服务**承载,以 `-Once` 单轮模式每 2–5 分钟触发一次：
+控制中心**不注册自主计划任务**。派遣车道仅在**所有者的实时监督会话在站时**运行:
+每次在站巡查一遍队列——可用 `Watch-CodexDispatchQueue.ps1 -Once`,或手工按 issue 的
+`warm` / `exec` 执行块逐个处理。队列项在两次巡查之间**等待**;这是"单一明确权威席位"
+的既定取舍(以在站时的确定性,换取项目在无人值守时不被自主执行)。
 
-```powershell
-$action  = New-ScheduledTaskAction -Execute 'pwsh' `
-  -Argument '-NoProfile -File "C:\path\to\ContinuityOps\scripts\Watch-CodexDispatchQueue.ps1" -Once'
-$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) `
-  -RepetitionInterval (New-TimeSpan -Minutes 5)
-Register-ScheduledTask -TaskName 'CodexDispatchQueue' -Action $action -Trigger $trigger `
-  -Description 'ContinuityOps Codex 派遣队列轮询（-Once，每5分钟）'
-```
+巡查也可能重叠(手工 + `-Once`、或多次触发),故脚本的**幂等/认领标签先行/本机锁互斥/
+作者白名单**要求**保持不变**:
 
-本机锁文件（`%LOCALAPPDATA%\codex-cloud-warm\queue.lock`,含过期兜底)确保重叠触发不并发运行。
+- 本机锁文件 `%LOCALAPPDATA%\codex-cloud-warm\queue.lock`(含过期兜底)确保重叠巡查不并发;
+- 认领标签 `codex-dispatch → dispatching` 先于执行,避免同一项被重复派遣。
+
+> **会话内的后台循环随应用重启而静默停摆**(邻席项目因此丢过三个 worker,见 BF-PRE-017);
+> 巡查模式以"在站才跑"规避了这一失效面,而非依赖长期后台进程。
 
 ## 边界
 
