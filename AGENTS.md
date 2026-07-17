@@ -88,16 +88,17 @@ Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
   supervisor or the owner. Results flow back as Codex-created PRs/branches;
   the supervisor integrates into **stream branches only** — `main` merges and
   all D-012 gates remain human.
-- **App publish hard gate (D-033):** every App-path `@codex` prompt must include
-  the publish contract from `docs/planning/dispatch/QUEUE.md`. Completion means
-  a **GitHub-visible** branch push plus `gh pr create` against the issue's
-  target branch. Stopping at Codex UI `make_pr` / "PR metadata" / issue-only
-  bot summaries is **incomplete**. Supervisor heartbeat advances only when an
-  open PR URL is observable (`gh pr list` / `gh pr view`); otherwise re-nudge
-  once with the publish contract, then diagnose + Opus reserve (reasoning-only).
-  App-path workers may `git push` / `gh pr create` for that publish step; the
-  fallback `codex cloud exec` path still keeps git ownership with the
-  control-center integrator.
+- **App publish hard gate (D-033, empirically revised):** every App-path
+  `@codex` prompt must include the completion contract from
+  `docs/planning/dispatch/QUEUE.md`. Completion means a **GitHub-visible open
+  PR URL**. Stopping at Codex UI `make_pr` / bot summaries is **incomplete**.
+  App **sandboxes cannot publish** (`gh` missing; `git` to GitHub often
+  `CONNECT 403`). The proven publish surfaces are: (1) Codex task-page
+  **Create PR** (platform, outside sandbox) actuated by the cloud supervisor
+  heartbeat, or (2) control-center `codex cloud apply` + push + `gh pr create`.
+  Supervisor advances only on an observable PR; otherwise one re-nudge, then
+  diagnose + Opus reserve (reasoning-only). Do not treat GHA `@codex` keepwarm
+  as verified — App ignored `github-actions[bot]` mentions in smoke.
 - **Warm freshness** is evidenced by the most recent Codex task timestamp on
   the keep-warm record (issue-based); the supervisor's scheduled self-checks
   post an `@codex` smoke roughly every 9 hours. The `%LOCALAPPDATA%` registry
