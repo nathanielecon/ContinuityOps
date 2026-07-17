@@ -23,9 +23,13 @@ configuration, not inferred aliases.
 - **Portfolio supervisor:** one Claude 5 cloud agent supervises the complete
   program under a minimal-intervention policy, maintains the integrated
   objective, approves stream creation/closure, and may appoint Claude Sonnet
-  or Opus co-orchestrators for bounded streams. It reviews a stream branch
-  only upon the orchestrator's durable completion signal (BF-PRE-015), and
-  certifies at **stream boundaries only** — per-round checking belongs to the
+  or Opus co-orchestrators for bounded streams. Branch-and-merge execution
+  authority is delegated to the cloud supervisor within the repository: every
+  merge carries evidence in the PR body, while the human retains H0,
+  credentials/secrets, spend ceilings, destructive/irreversible operations, and
+  external-to-repo publication. It reviews a stream branch only upon the
+  orchestrator's durable completion signal (BF-PRE-015), and certifies at
+  **stream boundaries only** — per-round checking belongs to the
   deterministic validators inside orchestration rounds, and actuation of
   orchestrator intents batches into evented wakes plus a 3–4h heartbeat
   (D-032). It does not replace deterministic gates or human approvals.
@@ -98,11 +102,15 @@ Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
   `scripts/Publish-CodexCloudTask.ps1` are **fallbacks**. **Heartbeat:** review
   PRs / `publish-ok`; re-nudge if bot reply lacks the patch marker; on
   `publish-failed` use fallback or Opus reserve (reasoning-only). Never treat
-  `make_pr` text alone as complete. Do not treat GHA `@codex` keepwarm as verified.
-- **Warm freshness** is evidenced by the most recent Codex task timestamp on
-  the keep-warm record (issue-based); the supervisor's scheduled self-checks
-  post an `@codex` smoke roughly every 9 hours. The `%LOCALAPPDATA%` registry
-  and `Invoke-CodexCloudWarm.ps1` warm gate apply only to the fallback path.
+  `make_pr` text alone as complete. The supervisor also owns the warm-cloud
+  heartbeat review: check the issue #4 warm stamp before dispatch, post a
+  trivial `@codex` smoke when the latest Codex task timestamp is older than
+  ~10h, and never dispatch real work into a cold environment.
+- **Warm freshness** is cloud-native and evidenced by the most recent Codex
+  task timestamp on the keep-warm record (issue #4); the supervisor heartbeat
+  posts an `@codex` smoke when the stamp is older than >9h. The
+  `%LOCALAPPDATA%` registry and `Invoke-CodexCloudWarm.ps1` warm gate apply only
+  to the fallback path.
 - **Fallback path — control-center sweep.** The owner's Windows session (codex
   CLI + keychain + registry) runs the classic run sheet (warm gate →
   `codex cloud exec` → diff/apply/push) when the App path is unavailable.
