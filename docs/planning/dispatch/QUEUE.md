@@ -12,6 +12,25 @@
 > 本文其余"控制中心巡查"流程(warm/exec 围栏块、`Watch-CodexDispatchQueue.ps1`、
 > 本机注册表与温门脚本)自 D-031 起为**后备路径**,仅在 App 路径不可用时启用。
 
+> **D-033 生效(App 发布硬门槛)**:App 路径已实证能执行并回帖,但 Codex UI 的
+> `make_pr` **只写 PR 元数据**,不会自动打开 GitHub PR(需人工点 Create PR ——
+> 过夜路径禁止)。因此每次 `@codex` 派遣/重催必须粘贴下方**发布契约**;监督者
+> 心跳**不得**把 bot 摘要/`make_pr` 字样当作完成——仅当 `gh pr list`/`gh pr view`
+> 可见到针对目标分支的开放 PR(含 URL)才算回流成功。无 PR → 重催一次发布契约;
+> 仍无 → 诊断 + Opus 后备(仅推理),不得假装集成。
+
+## App 路径发布契约(每次 `@codex` 派遣必贴)
+
+````text
+完成定义(硬门槛):必须把变更推到 GitHub 可见分支,并用 `gh pr create` 打开针对目标分支的 PR。
+禁止:停在 Codex UI 的 make_pr / "PR 元数据" / 仅 issue 评论。
+若 make_pr 不产生 GitHub PR URL,立即改用 `git push -u origin HEAD` + `gh pr create --base <目标分支> --head <工作分支>`。
+PR 描述结尾必须含 GitHub PR URL 与 context_remaining。没有 URL = 未完成。
+````
+
+目标分支填 issue 正文指定的流/编排分支(例如 `stream/S0-baseline-audit` 或
+`claude/orchestrator-supervisor-setup-yyd3bu`),**不要**默认 `main`。
+
 ## 角色
 
 - **云编排器（Opus 4.8，只读派遣权）**：发布派遣请求,永不亲自派遣、永不在容器内

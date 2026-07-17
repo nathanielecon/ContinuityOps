@@ -193,6 +193,16 @@ ContinuityOps incidents yet.
   resolves/decodes to usable material. Never echo any prefix, suffix, or
   substring of the value, in any tool call, log, or report.
 
+### BF-PRE-018 — App path `make_pr` is not a GitHub PR
+
+- Observed risk: `@codex` workers complete, call Codex UI `make_pr`, and post
+  bot summaries claiming commits/PRs while no GitHub PR or commit exists until
+  a human clicks **Create PR** in the Codex UI — fatal for laptop-off overnight.
+- Control (D-033): every App-path `@codex` prompt includes the publish contract
+  (`git push` + `gh pr create`, forbid `make_pr`-only). Supervisor heartbeat
+  advances only on an observable open PR URL; otherwise one re-nudge, then
+  diagnosis + Opus reserve (reasoning-only). Never integrate from bot text alone.
+
 ## Entry template
 
 ```markdown
