@@ -9,18 +9,26 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 25,
+  "revision": 26,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
   "current_gate": "H0-human-receipt",
-  "running_tasks": [],
+  "running_tasks": ["JR-SUPER-01"],
   "blocked_tasks": ["P0-T05"],
   "waiting_human": [
     "H0-after-P0-T04",
     "REPO_SETTINGS_ADMIN_TOKEN",
     "PR-20"
   ],
+  "seats": {
+    "owner": "human:nathanielecon",
+    "chief_supervisor": "cursor-cloud-chief",
+    "junior_supervisor": "gpt-5.6-sol-medium via codex-dispatch",
+    "orchestrator": "codex-5.4-cloud-episodic",
+    "reviewer": "gpt-d037-episodic",
+    "monitor": "grok-subagent-readonly-to-chief"
+  },
   "codex_cloud_environment": {
     "repo": "nathanielecon/ContinuityOps",
     "env_id": "6a594ee667608191ab53cae15202815e",
@@ -31,12 +39,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "H0 BLOCKED ON AMENDMENT: issue #42 comment 5007863678 is decision=approve from nathanielecon but still has template placeholders in candidate_sha and signature_or_signed_comment_url; conditions empty. See evidence/slices/S0/H0_WAITING_AMENDMENT.json. Supervisor will not mint/bind agent fill-ins.",
-    "Owner must edit that comment (or post JSON-only replacement) with real 40-hex candidate_sha (tip 1b66065 at last validator pass), real permalink, and conditions covering treatise 6ca0ec1 seat doctrine + engagement no Opus",
-    "After complete human receipt: bind into harness/approvals/H0.binding.json from that artifact only; then dispatch orch round for P0-T05 prep (supervisor actuates, does not author full orch content)",
-    "P0-T03 verified; P0-T04 in review; validate-rubric-freeze.mjs pass on 1b66065",
-    "Owner pending (parallel): REPO_SETTINGS_ADMIN_TOKEN, PR #20",
-    "Do not authorize Phase 1 until S0 and H0 pass"
+    "D-041 cutover: chief supervisor (stream-boundary/escalation only); junior supervisor GPT-5.6 Sol med owns steady-state actuation; Grok monitor reports significant bottlenecks to chief only",
+    "Appoint junior via JR-SUPER-01 @codex; junior gate-relays H0 if #42 receipt still has placeholders; after complete H0 bind, junior drives P0-T05 orch path",
+    "Chief waits on STREAM_COMPLETE / junior ESCALATION / significant monitor reports; does not author routine worker/orch bodies",
+    "Owner pending: amend H0 #42 placeholders OR sign fresh JSON-only receipt; REPO_SETTINGS_ADMIN_TOKEN; PR #20",
+    "Do not authorize Phase 1 until S0 and H0 pass; engagement: no Opus"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -50,7 +57,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "P0-T01 verified; P0-T02 verified with condition CO-010; ORCH-ROUND-06 governance landed via supervisor git-push fallback after #29 publish-failed",
     "Owner GH_TOKEN restored Issues+PR actuation for supervisor seat; human directed P0-T03 fresh fixer/reviewer redo",
     "P0-T03 verified after redo (issue #35 → PR #36 → D-037 #38 pass → main 1523466)",
-    "P0-T04 rubric freeze integrated (issue #39 → PR #40 → D-037 #41 pass → main 9a58cbd); H0 package waiting_human"
+    "P0-T04 rubric freeze integrated (issue #39 → PR #40 → D-037 #41 pass → main 9a58cbd); H0 package waiting_human",
+    "D-041 chief/junior/monitor topology accepted; junior appointment JR-SUPER-01"
   ],
   "verified_baseline": [],
   "unverified": [
@@ -103,6 +111,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-038 | **Orchestrator model escalation ladder** (human directive): the orchestration seat defaults to Codex 5.4, using the same engine family as workers but with role isolation and with the orchestrator remaining the orchestrator. If **3 cumulative defects attributable to orchestration rounds** occur (excluding publisher/CI or other supervisor-side infrastructure defects; current orchestration-round attribution count: 0), escalate to **GPT-5.6 Sol medium**; if defects continue after escalation, escalate again to **GPT-5.6 Sol high**. Every escalation records the triggering defect list and actual model ID; downgrade requires human approval. | accepted | Orchestration stays on the cheap/default GPT lane until three attributed defects justify escalation; downgrade is human-gated |
 | D-039 | **Supervisor ratifies P0-T03 write_scope expansion** to match owner-authored issue #28 dispatch + CO-010 repair surface: add `scripts/project.mjs`, `tests/index.mjs`, `tests/package.json`, and the exact evidence file `evidence/slices/S0/validator-contract.json` (not the whole `evidence/slices/` tree). Material plan amendment recorded in `PLAN.md` and `docs/planning/dispatch/P0-T03.zh.md`; human may veto. Until ratification stands and a new fixer/reviewer cycle runs after issues:write restore, do not re-merge PR #30 content (D-037 SCOPE-001 fail still stands). | accepted | P0-T03 write_scope matches the owner dispatch contract; SCOPE-001 is addressable by a fresh fixer after D-039; human veto remains open |
 | D-040 | **Cursor cloud App token can push/merge but not Issues**: until `issues:write` is restored for the supervisor App seat, the App `@codex` path is unavailable from this seat for dispatch and keep-warm. Control-center / owner comments on queue issues (including keep-warm #4) are required. Amends the practical actuation of D-031/D-034/D-035 for this seat only; does not change the constitutional App-path design. | accepted | Supervisor git-push fallback remains viable; Issues-gated actuation must be owner/control-center until permission restored |
+| D-041 | **Chief / junior supervisor split** (owner directive 2026-07-17): the former portfolio-supervisor five duties move to a **junior supervisor** on **GPT-5.6 Sol medium** (episodic via `codex-dispatch`). The cloud seat becomes **chief supervisor**: stream-boundary verdicts + escalations only. D-037 reviewer remains verdict-only; orch never approves/merges PRs; junior **actuates** merges on CI green + verdict. Escalation: … → junior → chief → owner (constitutional crisis). Each managerial seat replaces direct subordinates on low `context_remaining`. A read-only **Grok pipeline monitor** reports significant bottlenecks to the **chief** only. Amends practical reading of D-032/D-035 (steady-state actuation is junior-owned). Engagement: no Opus. | accepted | Chief stays quiet while junior oils the pipeline; monitor prevents silent bottlenecks |
 
 ## Initial issue ledger
 
