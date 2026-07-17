@@ -1,6 +1,6 @@
 # ContinuityOps phase gate status (supervisor packaging)
 
-Updated: 2026-07-17T21:43:00Z
+Updated: 2026-07-17T21:55:00Z
 
 ## Authority
 
@@ -13,10 +13,10 @@ Updated: 2026-07-17T21:43:00Z
 | --- | --- | --- |
 | P0-T01 | verified | CO-008/CO-009 conditional |
 | P0-T02 | verified | CO-010 addressed via D-039 / P0-T03 |
-| P0-T03 | **verified** on `1523466` | D-037 #38 pass; PR #36 landed; #32 superseded |
-| P0-T04 | ready / dispatching | rubric freeze → H0 package |
-| H0 | waiting_human | after P0-T04 bundle hashes |
-| P0-T05 | blocked on P0-T04 + H0 | multi-stream / S0 council |
+| P0-T03 | **verified** | D-037 #38 pass; redo PR #36 landed |
+| P0-T04 | **review** on `9a58cbd` | D-037 #41 pass; **H0 waiting_human** |
+| H0 | **STOP — human receipt** | [`H0_PACKAGE.md`](../../../evidence/slices/S0/H0_PACKAGE.md) |
+| P0-T05 | blocked on H0 | see [`POST_H0_RESUME.md`](./POST_H0_RESUME.md) |
 
 ## Phases 1–8
 
