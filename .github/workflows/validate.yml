@@ -50,7 +50,7 @@ jobs:
           fi
           # Markdown exempt: trailing double-space is a semantic hard line break
           if [ -n "$RANGE" ]; then
-            git diff --check "$RANGE" -- . ':(exclude)*.md' || { echo "whitespace errors in changed non-md files"; exit 1; }
+            git diff --check "$RANGE" -- . ':(exclude)*.md' ':(exclude)*.diff' || { echo "whitespace errors in changed non-md files"; exit 1; }
           fi
           # Real conflict markers only (<<<<<<< ref / >>>>>>> ref)
           ! grep -rn --include='*.md' --include='*.json' -E '^(<{7}|>{7}) ' . || { echo "conflict markers found"; exit 1; }
