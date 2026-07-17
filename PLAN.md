@@ -8,7 +8,7 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 7,
+  "revision": 8,
   "authorized_through_phase": 0,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
@@ -33,7 +33,8 @@ Initial authorization stops at Phase 0.
       "phase": 0,
       "slice": "S0",
       "title": "Audit and freeze the completed candidate baseline",
-      "state": "ready",
+      "state": "verified",
+      "note": "Verified by the reserve orchestrator (Opus 4.8) validation round; candidate ea2c27513305badfeafe98500e8fefe603bc97cb; supervisor verdict approve (evidence/slices/S0/SUPERVISOR_VERDICT.json on stream/S0-baseline-audit) with conditional issues CO-008 and CO-009 tracked in OPERATING_STATE.md.",
       "depends_on": [],
       "owner": "baseline-audit-worker",
       "risk": "medium",
@@ -47,7 +48,7 @@ Initial authorization stops at Phase 0.
       "phase": 0,
       "slice": "S0",
       "title": "Install authoritative multi-stream CLI and state contracts",
-      "state": "planned",
+      "state": "ready",
       "depends_on": ["P0-T01"],
       "owner": "harness-worker",
       "risk": "high",
