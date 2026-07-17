@@ -8,7 +8,7 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 9,
+  "revision": 10,
   "authorized_through_phase": 0,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
@@ -48,7 +48,8 @@ Initial authorization stops at Phase 0.
       "phase": 0,
       "slice": "S0",
       "title": "Install authoritative multi-stream CLI and state contracts",
-      "state": "review",
+      "state": "verified",
+      "note": "Supervisor stream-boundary verdict approve with condition CO-010 (evidence/slices/S0/SUPERVISOR_VERDICT-P0-T02.json); candidate f9b698add11d63c10d7cc547b384b6ed78fa91ad.",
       "depends_on": ["P0-T01"],
       "owner": "harness-worker",
       "risk": "high",
