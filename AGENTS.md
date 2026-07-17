@@ -18,58 +18,49 @@ from durable repository artifacts.
 ## Model and execution topology
 
 ContinuityOps uses a layered control plane. Model names are explicit runtime
-configuration, not inferred aliases.
+configuration, not inferred aliases. **D-041** splits supervision into chief
+and junior. **Actuation** means performing the GitHub/repo action (mention,
+merge, label, close); **judgment** means deciding whether that action should
+happen.
 
-- **Portfolio supervisor:** one Claude 5 cloud agent supervises the complete
-  program under a minimal-intervention policy, maintains the integrated
-  objective, approves stream creation/closure, and may appoint Claude Sonnet
-  or Opus co-orchestrators for bounded streams. Branch-and-merge execution
-  authority is delegated to the cloud supervisor within the repository: every
-  merge carries evidence in the PR body, while the human retains H0,
-  credentials/secrets, spend ceilings, destructive/irreversible operations, and
-  external-to-repo publication. It reviews a stream branch only upon the
-  orchestrator's durable completion signal (BF-PRE-015), and certifies at
-  **stream boundaries only** — per-round checking belongs to the
-  deterministic validators inside orchestration rounds, and actuation of
-  orchestrator intents batches into evented wakes plus a 3–4h heartbeat
-  (D-032). It does not replace deterministic gates or human approvals.
-- **Ralphy orchestration and council reasoning:** the default carrier is an
-  **episodic GPT round** — a Codex 5.4 Cloud task dispatched through the
-  `codex-dispatch` queue that plays the lead orchestrator (and council roles:
-  judges, nixers, fixers, bottleneck analysts) for one bounded round, returning
-  work as a diff and holding zero credentials. Claude Opus 4.8 is retained as
-  the **reserve seat**, enabled when a GPT round is unavailable or fails; a cold
-  orchestrator reconstructs state losslessly from durable artifacts. The actual
-  model ID of every round is recorded at dispatch, and the supervisor may record
-  a task-specific exception (amends D-022; supersedes the earlier Grok 4.5 High
-  Fast assignment; see D-030).
+- **Owner (human):** constitutional gates only — H0–H6, credentials/secrets,
+  spend ceilings, destructive/irreversible operations, external-to-repo
+  publication. Not an agent seat.
+- **Chief supervisor:** one cloud agent session (this seat) owns the integrated
+  objective at **stream boundaries and escalations only** (BF-PRE-015 / D-032
+  as amended by D-041). It does **not** perform steady-state actuation. It
+  replaces the junior supervisor when that seat is context-dead or stuck, and
+  may pipe true constitutional crises to the owner. See
+  `docs/planning/dispatch/CHIEF_SUPERVISOR.md`.
+- **Junior supervisor:** episodic **GPT-5.6 Sol medium** via `codex-dispatch`
+  owns the former day-to-day supervisor charter: actuation (`@codex`, merge on
+  CI green + D-037 verdict, labels, closes, CI nudges), gate relay packaging,
+  pipeline repair, and seat management of direct subordinates (orchestrator,
+  reviewers, monitor). See `docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md`.
+- **Pipeline monitor:** read-only Grok (or equivalent) subagent that
+  periodically checks for bottlenecks and reports **significant** findings
+  only to the **chief supervisor**. See `docs/planning/dispatch/MONITOR.zh.md`.
+- **Ralphy orchestration and council reasoning:** episodic GPT rounds — Codex
+  5.4 Cloud via `codex-dispatch` (D-030/D-038). Orchestrator validates rounds,
+  advances state up to `review`, owns break/fix, prepares contracts; it
+  **emits intents** and never merges/approves PRs. Engagement override: **no
+  Opus** under any circumstances; local absolute necessity uses a Grok
+  bottleneck (+ browser on auth fail).
+- **D-037 reviewer:** episodic GPT round per worker PR — apply patch, run
+  declared checks, structured `verdict` only. No code edits; no merge.
 - **Code execution:** warm Codex 5.4 CLI Cloud Agents in default mode (not
-  `/high`, not `/fast`) implement the project code and tests through bounded
-  Ralphy tasks. "Warm" is a per-Environment toolchain cache (~12h), never
-  credential material. The concrete specification (D-026):
-  - one Codex Cloud Environment per repository, created in the Codex UI with
-    caching On;
-  - the two in-repo scripts `.codex/cloud-setup.sh` (Setup) and
-    `.codex/cloud-maintenance.sh` (Maintenance) are the *only* content pasted
-    into the Environment; they live in the repo and are change-controlled;
-  - zero credentials in the container — adding any environment variable or
-    secret to the Environment invalidates the ~12h cache and is out of bounds;
-  - a warm gate (`scripts/Invoke-CodexCloudWarm.ps1`, control-center only) runs
-    before every dispatch and re-warms via a smoke task when `lastWarmUtc` is
-    missing or older than ~10h;
-  - dispatch is `codex cloud exec --env <ENV_ID> --branch <branch> "<task>"`;
-    the task never runs git itself, and the orchestrator owns integration.
-  Warmth is isolated per Environment/repo and does not carry across repos.
-  Workers report remaining context on every handoff; the orchestrator may
-  retire a low-context worker and dispatch a fresh replacement. They edit
-  repositories; they are not the live cloud apply control plane.
-- **Claude execution location:** Claude agents run in cloud environments only.
-  They do not rely on the user's laptop shell, browser session, cookies, or
-  local cloud login.
+  `/high`, not `/fast`) implement bounded tasks. Warmth is a per-Environment
+  toolchain cache (~12h), never credential material (D-026). Workers report
+  `context_remaining` every handoff; their **direct managerial seat**
+  (orchestrator for workers; junior for orch/reviewer/monitor; chief for
+  junior) replaces them when context is insufficient. Durable artifacts must
+  allow seamless replacement.
+- **Claude execution location:** Claude agents run in cloud environments only
+  when used; they do not rely on the owner's laptop shell or local cloud login.
 
-The supervisor records the actual model ID, provider, mode, and role for every
-dispatch. If a named model is unavailable, the task stops or uses a
-human-approved substitution; agents never invent model availability.
+Every dispatch records actual model ID, provider, mode, and role. If a named
+model is unavailable, the task stops or uses a human-approved substitution;
+agents never invent model availability.
 
 ### Dispatch topology
 
@@ -158,14 +149,17 @@ but every free-text value must be Simplified Chinese.
 
 ## Roles
 
-- **Portfolio supervisor:** owns integrated intent, stream topology, cross-stream
-  dependencies, and final convergence.
+- **Chief supervisor:** owns integrated intent at stream boundaries and
+  escalations only (D-041); replaces junior when needed; does not steady-state
+  actuate.
+- **Junior supervisor:** owns day-to-day supervision and actuation (D-041);
+  reports to chief; replaces orch/reviewer/monitor on low context.
 - **Lead orchestrator:** selects ready work, checks dependencies and scopes,
-  creates/joins Ralphy streams, dispatches roles, changes authoritative state
-  atomically, logs break/fix events, and assembles gates. It does not self-
-  approve high-risk work.
-- **Co-orchestrator:** a Sonnet/Opus cloud agent appointed to one named stream;
-  it has no authority over other streams or final certification.
+  creates/joins Ralphy streams, prepares dispatch intents, changes
+  authoritative state atomically up to `review`, logs break/fix events, and
+  assembles gates. It does not merge/approve PRs or self-approve high-risk work.
+- **Co-orchestrator:** optional bounded stream co-lead when appointed; no
+  authority over other streams or final certification. Engagement: no Opus.
 - **Codex implementation worker:** executes the bounded code/test task in `/fast`
   mode within a stream.
 - **Rubric setter:** read-only reviewer who freezes a checkable slice rubric

@@ -92,6 +92,21 @@
 5. Do **not** authorize Phase 1 before S0 + H0.
 
 
+## 2026-07-17T23:40Z D-041 — chief / junior cutover
+
+| Seat | Who |
+| --- | --- |
+| Owner | human `nathanielecon` |
+| Chief supervisor | this cloud seat — stream-boundary + escalation only |
+| Junior supervisor | GPT-5.6 Sol medium via `codex-dispatch` (`JR-SUPER-01`) |
+| Monitor | Grok subagent → chief (significant bottlenecks only) |
+
+Steady-state `@codex` / merges / keep-warm / D-037 dispatch = **junior**.  
+Chief does not author routine orch/worker bodies. Actuation = performing the
+GitHub action; junior owns it. H0 still waiting owner amendment on #42.
+
+Contracts: `CHIEF_SUPERVISOR.md`, `JUNIOR_SUPERVISOR.zh.md`, `MONITOR.zh.md`.
+
 ## 2026-07-17T21:55Z STOP — H0 human gate
 
 | Item | State |

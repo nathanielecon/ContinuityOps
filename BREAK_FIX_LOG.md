@@ -303,6 +303,7 @@ ContinuityOps incidents yet.
 | Plan-mode capability probe accidentally created GitHub issue #33. | Close immediately as not_planned; never create Issues to probe permissions; use inspect-only checks. | BF-2026-006 |
 | Cursor App seat lacked Issues write (CO-011). | Owner injected expanded `GH_TOKEN` (Issues + Pull Requests); App ghs_ remains Issues-403; seat actuates via owner PAT. | D-040 / CO-011 resolved |
 | Human directed P0-T03 redo rather than merge draft PR #32. | Supersede #32; fresh fixer + D-037 under D-039 write_scope. | supervisor resume 2026-07-17 |
+| Role creep: supervisor absorbing orch; promotion needed for economy. | D-041 chief (boundary/escalation) + junior 5.6 Sol med (actuation) + Grok monitor→chief. | D-041 |
 
 ## Log
 

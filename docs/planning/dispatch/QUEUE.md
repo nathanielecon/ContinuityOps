@@ -34,20 +34,24 @@
 目标分支填 issue 正文指定的流/编排分支(例如 `stream/S0-baseline-audit` 或
 `claude/orchestrator-supervisor-setup-yyd3bu`),写入 `base_branch` 字段。
 
-## 监督者心跳 — D-034/D-035(评审 PR;发布由 GHA 完成;保暖云原生)
+## 初级监督者心跳 — D-034/D-035/D-041(评审 PR;发布由 GHA 完成;保暖云原生)
+
+> **D-041:** 下列心跳由 **junior supervisor**（GPT-5.6 Sol med）执行。
+> **Chief supervisor** 只在 `STREAM_COMPLETE` / 升级 / monitor 显著瓶颈时介入。
+> Actuation = 真正执行 GitHub 动作；本心跳的动手方是 junior。
 
 每次心跳(或 D-032 批量唤醒)对**每个**开放且带 `codex-dispatch` 的 issue:
 
 1. `gh pr list` / issue 上 `publish-ok` — 已有开放 PR → 派遣 D-037 GPT reviewer 轮。
 2. reviewer 轮必须在沙箱内以该 PR 声明的 `base_sha` 应用 patch、亲自运行 PR 声明的验证命令、以结构化 verdict 评论回报;reviewer 只提 findings,不改实现。
-3. 监督者合并信号为 **CI green + reviewer verdict pass**;失败 findings 进入独立 fixer 轮,随后重新发布/评审。
+3. **Junior** 合并信号为 **CI green + reviewer verdict pass**;失败 findings 进入独立 fixer 轮,随后重新发布/评审。
 4. 若 bot 已回复但**无** `continuityops-patch-v1` 且无 PR → 重催一次,粘贴
    `CODEX_DISPATCH_SNIPPET.zh.md`(要求输出 patch 块)。
 5. 若见 `publish-failed` → 读失败评论;可后备平台 Create PR 或
-   `Publish-CodexCloudTask.ps1`;仍失败则 Opus 后备(仅推理),禁止假装集成。
+   `Publish-CodexCloudTask.ps1`;仍失败则升级首席/控制中心后备(**本 engagement 禁止 Opus**)。
 6. **禁止**把 `make_pr` / 无 PR URL 的 bot 摘要当完成。
 
-保暖(D-035):暖戳为保暖 issue **#4** 上最近一次 Codex 任务时间戳,不再依赖本地注册表。派遣时若暖戳旧于约 10h,先由**监督者/所有者**在 #4 发一个平凡 `@codex` 冒烟并等待回复落戳;禁止把真实工作派进冷环境。监督者心跳在暖戳超过 >9h 时主动冒烟。`Invoke-CodexCloudWarm.ps1` 只属于后备车道。勿依赖 `github-actions[bot]` 提及。
+保暖(D-035):暖戳为保暖 issue **#4** 上最近一次 Codex 任务时间戳。派遣时若暖戳旧于约 10h,先由 **junior**（或所有者）在 #4 发平凡 `@codex` 冒烟;禁止把真实工作派进冷环境。Junior 心跳在暖戳 >9h 时主动冒烟。Grok **monitor** 向首席汇报显著瓶颈（见 `MONITOR.zh.md`）。
 
 ## 角色
 
