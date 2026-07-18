@@ -33,10 +33,12 @@ happen.
   may pipe true constitutional crises to the owner. See
   `docs/planning/dispatch/CHIEF_SUPERVISOR.md`.
 - **Junior supervisor:** episodic **GPT-5.6 Sol medium** via `codex-dispatch`
-  owns the former day-to-day supervisor charter: actuation (`@codex`, merge on
-  CI green + D-037 verdict, labels, closes, CI nudges), gate relay packaging,
-  pipeline repair, and seat management of direct subordinates (orchestrator,
-  reviewers, monitor). See `docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md`.
+  owns day-to-day judgment for the former supervisor charter. **Actuation is
+  mechanical (D-042):** the App round emits `continuityops-merge-v1` /
+  `continuityops-dispatch-v1` intents; GitHub Actions `junior-actuate` performs
+  merge/`@codex` with `GITHUB_TOKEN`. The App sandbox never runs `gh` or holds
+  credentials. See `docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md` and
+  `JUNIOR_ACTUATE_SNIPPET.zh.md`.
 - **Pipeline monitor:** read-only Grok (or equivalent) subagent that
   periodically checks for bottlenecks and reports **significant** findings
   only to the **chief supervisor**. See `docs/planning/dispatch/MONITOR.zh.md`.
@@ -89,19 +91,16 @@ Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
   `base_sha`, and a full fenced unified diff. GitHub Actions
   `codex-patch-publish` mechanically applies the patch with `GITHUB_TOKEN` and
   opens the PR (primary overnight path). App sandboxes still cannot
-  `git push`/`gh`. Platform **Create PR** and
-  `scripts/Publish-CodexCloudTask.ps1` are **fallbacks**. **Heartbeat:** review
-  PRs / `publish-ok`; re-nudge if bot reply lacks the patch marker; on
-  `publish-failed` use fallback or Opus reserve (reasoning-only). For every
-  worker PR, D-037 adds an independent GPT reviewer round: dispatch the reviewer
-  through `codex-dispatch`, apply that PR patch at its declared `base_sha`, run
-  the declared validation commands, and require a structured verdict pass. The
-  supervisor merge signal is **CI green + reviewer verdict pass**; repair
+  `git push`/`gh` — **D-042** extends the same rule to junior merges/dispatches:
+  intent markers → `.github/workflows/junior-actuate.yml`. Platform **Create PR**
+  and `scripts/Publish-CodexCloudTask.ps1` are **fallbacks**. **Heartbeat:**
+  review PRs / `publish-ok`; re-nudge if bot reply lacks the patch marker; on
+  `publish-failed` use fallback (engagement: no Opus). For every worker PR,
+  D-037 adds an independent GPT reviewer round. Junior merge signal is **CI
+  green + reviewer verdict pass**, actuated via `continuityops-merge-v1`. Repair
   findings go to an independent fixer round, not the reviewer. Never treat
-  `make_pr` text alone as complete. The supervisor also owns the warm-cloud
-  heartbeat review: check the issue #4 warm stamp before dispatch, post a
-  trivial `@codex` smoke when the latest Codex task timestamp is older than
-  ~10h, and never dispatch real work into a cold environment.
+  `make_pr` text alone as complete. Warm-cloud heartbeat: issue #4 stamp; smoke
+  when older than ~10h; never dispatch real work into a cold environment.
 - **Warm freshness** is cloud-native and evidenced by the most recent Codex
   task timestamp on the keep-warm record (issue #4); the supervisor heartbeat
   posts an `@codex` smoke when the stamp is older than >9h. The
