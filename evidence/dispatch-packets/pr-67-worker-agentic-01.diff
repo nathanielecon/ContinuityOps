@@ -1,0 +1,178 @@
+diff --git a/OPERATING_STATE.md b/OPERATING_STATE.md
+index fa31ff1..a3536f6 100644
+--- a/OPERATING_STATE.md
++++ b/OPERATING_STATE.md
+@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
+ ```json
+ {
+   "schema_version": "1.0",
+-  "revision": 46,
++  "revision": 47,
+   "project": "ContinuityOps",
+   "current_phase": 8,
+   "authorized_through_phase": 8,
+@@ -57,7 +57,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
+   ],
+   "next_actions": [
+     "Issue #4 Codex App keep-warm replied 2026-07-18T13:49Z — App path warm",
+-    "D-037 review PRs #66 (security-sbom L2) and #67 (agentic-workflow L3); merge on CI green + verdict pass; rebase #67 after #66 for matrix.json",
++    "D-037 review PRs #66 (security-sbom L2) and #67 (agentic-workflow L3) with D-028 packaged diffs; merge on CI green + verdict pass",
++    "WORKER-AGENTIC-01: agentic-workflow elevated honestly to L3 hosted-control evidence pending D-037 pass",
+     "BF-2026-014: workers must set base_branch: main; publisher coerces missing refs",
+     "Leave CO-004/CO-006 blocked until owner supplies D-028 upstream digests; do not invent",
+     "azure-governance stays L1 (D-046); performance stays honest L1 without real load evidence"
+@@ -91,12 +92,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
+     "PR #51 merged to main at 21299f9: ensure-tfstate + staging live-marker + terraform-pr static path fix; OIDC plan was green (run 29642718513)",
+     "Live AWS apply GREEN run 29643569047 (after 29643490577 DynamoDB lock-create race); evidence/hosted/cloud-apply-staging-2026-07-18.json",
+     "BF-2026-013 hierarchy remediation recorded: AWS lab evidence remains valid, but portfolio hierarchy closure requires GPT worker -> D-037 process pass after WORKER-HIER-01 merges",
+-    "ORCH-CLOSE-02 dispatch #62–#65; chief fallback PRs #66/#67 after BF-2026-014 base_branch:work publish-failed; #65 rejected (reviewer must not edit terraform)"
++    "ORCH-CLOSE-02 dispatch #62–#65; chief fallback PRs #66/#67 after BF-2026-014 base_branch:work publish-failed; #65 rejected (reviewer must not edit terraform)",
++    "WORKER-AGENTIC-01 prepared: agentic-workflow claim raised from L1 to L3 using existing GitHub-hosted D-034/D-042/OIDC/keep-warm evidence; Cursor in-pod AWS remains an explicit non-claim"
+   ],
+   "verified_baseline": [
+     "GHA OIDC apply green run 29643569047 (staging live-marker + remote state)",
+     "Lab elevation apply 29644662492 (VPC/IAM/Lambda/EKS 1.32); drill 29645042815; teardown 29645052414",
+-    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json; portfolio-certified-L4-lab"
++    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json; portfolio-certified-L4-lab",
++    "Agentic hosted-control evidence: evidence/hosted/agentic-workflow-2026-07-18.json binds codex-patch-publish, junior-actuate, keep-warm issue #4, and continuityops-gha run 29643569047"
+   ],
+   "unverified": [
+     "Cross-repo Project A/C context packaging by the control center (CO-006)",
+diff --git a/docs/claims/matrix.json b/docs/claims/matrix.json
+index 78c03b8..a88bff8 100644
+--- a/docs/claims/matrix.json
++++ b/docs/claims/matrix.json
+@@ -80,10 +80,12 @@
+     },
+     {
+       "id": "agentic-workflow",
+-      "claim_level": "L1",
++      "claim_level": "L3",
+       "evidence": [
+-        "evidence/slices/S6/agentic.json"
+-      ]
++        "evidence/slices/S6/agentic.json",
++        "evidence/hosted/agentic-workflow-2026-07-18.json"
++      ],
++      "notes": "Hosted GitHub App dispatch/publisher + junior-actuate intent gates evidenced; no Cursor in-pod AWS credentials or worker-side push claimed"
+     },
+     {
+       "id": "recovery",
+@@ -124,6 +126,7 @@
+   "non_claims": [
+     "No CursorCloudAgent / in-pod AWS credentials on Cloud seat (OIDC control plane by design)",
+     "No production (customer) incident drills \u2014 lab drills only",
+-    "No live Azure apply \u2014 ContinuityOps AWS-lab ceiling (D-046)"
++    "No live Azure apply \u2014 ContinuityOps AWS-lab ceiling (D-046)",
++    "Agentic workflow is L3 hosted-control evidence only; no CursorCloudAgent / in-pod AWS credentials"
+   ]
+ }
+diff --git a/evidence/hosted/agentic-workflow-2026-07-18.json b/evidence/hosted/agentic-workflow-2026-07-18.json
+new file mode 100644
+index 0000000..e347607
+--- /dev/null
++++ b/evidence/hosted/agentic-workflow-2026-07-18.json
+@@ -0,0 +1,54 @@
++{
++  "schema_version": "1.0",
++  "recorded_utc": "2026-07-18T14:05:00Z",
++  "project": "ContinuityOps",
++  "component": "agentic-workflow",
++  "claim_level": "L3",
++  "claim_basis": "GitHub-hosted agentic workflow controls are evidenced by repository-native App dispatch, patch publisher, junior actuation intent gates, and keep-warm issue bookkeeping; no in-pod AWS credentials are claimed.",
++  "baseline_sha": "ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029",
++  "hosted_controls": [
++    {
++      "control": "codex-patch-publish",
++      "workflow": ".github/workflows/codex-patch-publish.yml",
++      "evidence_url": "https://github.com/nathanielecon/ContinuityOps/issues/12",
++      "result": "smoked via issue #12 to PR #13 per operating state",
++      "claim": "App worker output can be mechanically published only when it includes the D-034 patch marker and unified diff."
++    },
++    {
++      "control": "junior-actuate-intents",
++      "workflow": ".github/workflows/junior-actuate.yml",
++      "evidence_url": "https://github.com/nathanielecon/ContinuityOps/issues/42",
++      "result": "D-042 intent-gated actuation recorded and H0 binding retained",
++      "claim": "Junior supervisor judgment remains separated from GitHub actuation through marker-driven workflow gates."
++    },
++    {
++      "control": "codex-dispatch-queue",
++      "evidence_url": "https://github.com/nathanielecon/ContinuityOps/issues/4",
++      "result": "keep-warm issue is the durable cloud-native freshness record",
++      "claim": "Worker dispatch uses issue-native bookkeeping rather than container credentials."
++    },
++    {
++      "control": "continuityops-gha-oidc",
++      "workflow": ".github/workflows/continuityops-terraform.yml",
++      "evidence_url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29643569047",
++      "result": "success",
++      "claim": "Cloud mutation path is GitHub OIDC to continuityops-gha, not CursorCloudAgent or long-lived keys."
++    }
++  ],
++  "bound_evidence": [
++    "evidence/hosted/cloud-apply-staging-2026-07-18.json",
++    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
++    "evidence/hosted/cloud-apply-staging-reapply-2026-07-18.json"
++  ],
++  "non_claims": [
++    "No CursorCloudAgent / in-pod AWS credentials on Cloud seat",
++    "No worker-side git push or gh pr create from App sandbox",
++    "No production/customer mutation authority",
++    "No Azure live apply"
++  ],
++  "remaining_boundaries": [
++    "Agentic workflow elevated only to L3 hosted-control evidence",
++    "Protected environment placeholders retained",
++    "Cloud resource apply claims remain bound to continuityops-gha evidence, not to agent containers"
++  ]
++}
+diff --git a/evidence/slices/S6/agentic.json b/evidence/slices/S6/agentic.json
+index 177f33c..f775b5b 100644
+--- a/evidence/slices/S6/agentic.json
++++ b/evidence/slices/S6/agentic.json
+@@ -1,11 +1,11 @@
+ {
+   "schema_version": 1,
+   "task_id": "P6-T03",
+-  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+-  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
++  "baseline_sha": "ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029",
++  "candidate_sha": "ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029",
+   "command": "node scripts/project.mjs validate P6-T03",
+   "exit_code": 0,
+-  "recorded_at": "2026-07-18T06:25:10.182Z",
++  "recorded_at": "2026-07-18T14:21:25.322Z",
+   "environment": {
+     "id": "6a594ee667608191ab53cae15202815e",
+     "zero_secrets": true
+@@ -23,14 +23,15 @@
+     "mode": "default",
+     "role": "validator-worker"
+   },
+-  "claim_level": "L1",
++  "claim_level": "L3",
+   "remaining_boundaries": [
+-    "H4 waived under D-044",
++    "No CursorCloudAgent / in-pod AWS credentials on Cloud seat",
+     "Protected environment placeholders retained",
+-    "No live mutation"
++    "No worker-side git push or gh pr create from App sandbox",
++    "No production/customer mutation authority"
+   ],
+-  "started_at": "2026-07-18T06:25:10.173Z",
+-  "completed_at": "2026-07-18T06:25:10.182Z",
++  "started_at": "2026-07-18T14:21:25.271Z",
++  "completed_at": "2026-07-18T14:21:25.323Z",
+   "validator_details": [
+     {
+       "id": "agent_permission",
+@@ -74,5 +75,7 @@
+   "failed": [],
+   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+   "evidence_path": "evidence/slices/S6/agentic.json",
+-  "bind_model": "candidate_sha_equals_head"
++  "bind_model": "candidate_sha_equals_head",
++  "hosted_evidence": "evidence/hosted/agentic-workflow-2026-07-18.json",
++  "claim_basis": "GitHub-hosted App dispatch/publish and junior intent-gated actuation are evidenced; mutation still routes through GitHub workflows/OIDC, not in-pod credentials."
+ }

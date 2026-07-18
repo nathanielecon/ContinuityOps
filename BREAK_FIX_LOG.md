@@ -556,3 +556,11 @@ ContinuityOps incidents yet.
 - **Fix:** chief opened fallback PRs #66/#67 against `main`; rejected #65 (reviewer shipped terraform whitespace, not a D-037 verdict). Snippet now defaults/requires `base_branch: main`. Publisher coerces missing remote base refs to `main`.
 - **Regression control added:** `docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md` hard rule; `.github/workflows/codex-patch-publish.yml` remote-ref check before `gh pr create`.
 - **Remaining risk/follow-up:** re-nudge open workers with explicit `base_branch: main`; D-037 reviewers for #66/#67 must emit verdict-only (no implementation diffs).
+
+## 2026-07-18 — BF-2026-015 — App D-037 cannot fetch private PR `.patch`
+
+- **Slice/task:** REVIEW-SEC-01 (#68) / REVIEW-AGENTIC-01 (#70) against PRs #66/#67.
+- **Symptom:** Reviewers recorded `verdict: fail` / blocked because `curl` to `pull/N.patch` returned proxy/GitHub **403** inside the Codex App sandbox.
+- **Root cause:** D-028 — worker gets data, not permission; private-repo patch URLs are not readable from the zero-credential App environment.
+- **Fix:** Vendor review packets under `evidence/dispatch-packets/` and re-dispatch REVIEW-SEC-02 / REVIEW-AGENTIC-02 to apply in-repo diffs; do not rely on `pull/*.patch` for private ContinuityOps.
+- **Remaining risk/follow-up:** Keep packaging diffs (or read-only vendored snapshots) in every D-037 dispatch for private PRs until a trusted in-repo packet path is standard.
