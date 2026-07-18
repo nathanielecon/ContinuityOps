@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "task_id": "P1-T03",
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "OIDC plan/apply/drift/teardown are stubs",
+    "GitHub Environments / AWS roles not configured",
+    "L3 eligible only for existing validate.yml contracts when CI green on candidate SHA"
+  ],
+  "candidate_sha": "0000000000000000000000000000000000000000",
+  "baseline_sha": "0000000000000000000000000000000000000000",
+  "component_claims": {
+    "workflow_stubs_static": "L1",
+    "oidc_plan_apply": "not_claimed",
+    "validate_yml_contracts": "L3_when_ci_green"
+  }
+}

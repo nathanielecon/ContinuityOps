@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "stream_id": "S1",
+  "signal": "STREAM_COMPLETE",
+  "tasks": ["P1-T01", "P1-T02", "P1-T03", "P1-T04"],
+  "candidate_sha": "0000000000000000000000000000000000000000",
+  "baseline_sha": "b01e40dbba1198c8720f3992c7563f4c039f3f16",
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "No L4 cloud apply",
+    "Upstream digest/tree packaging open (CO-004/CO-006)",
+    "OIDC roles/environments not configured"
+  ],
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s1-gate-controller"
+  },
+  "notes": "S1 deterministic gates complete at L1. Supervisor stream-boundary review (BF-PRE-015) may certify."
+}

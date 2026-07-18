@@ -450,3 +450,12 @@ ContinuityOps incidents yet.
 - **Fix:** D-042 — `.github/workflows/junior-actuate.yml` + `continuityops-merge-v1` / `continuityops-dispatch-v1` intents; GHA/`GITHUB_TOKEN` performs merge and `@codex` posts. Docs updated (`JUNIOR_SUPERVISOR`, `QUEUE`, `AGENTS`, snippet).
 - **Prevention:** Never instruct App rounds to call `gh`; treat actuation as mechanism; keep Actions workflow permissions Read/write + create-PR (owner UI; PAT cannot set via API).
 - **Verified by:** chief supervisor (parser unit tests); end-to-end actuate-ok pending first merge intent after land.
+
+## 2026-07-18 — BF-2026-009 — Upstream A/C trees not readable from Grok worker token
+
+- **Slice/task:** S1 / P1-T01.
+- **Symptom:** `gh api .../contents` and `git clone` for `aws-landing-zone-lab` / `local-first-governed-cicd` return 403 (accepted permission: metadata=read only).
+- **Root cause:** D-028 — worker gets data not permission; PAT lacks contents scope on private upstreams.
+- **Fix:** ContinuityOps-side adapter contracts + `missing_capabilities` (MC-A-TREE, MC-C-TREE, MC-C-DIGEST); `image_digest=UNAVAILABLE`; claim ceiling L1.
+- **Prevention:** Control-center must supply D-028 context package or vendored snapshot before raising upstream-derived claims above L1; never invent digest/export values.
+- **Verified by:** Grok D-043 S1 worker (static tests + validators).

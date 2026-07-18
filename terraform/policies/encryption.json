@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "encryption-at-rest",
+  "require_sse": true,
+  "require_state_encryption": true,
+  "claim_level_ceiling": "L1"
+}

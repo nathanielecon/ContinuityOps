@@ -1,0 +1,173 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S1",
+  "round": "fresh",
+  "judge_id": "fresh-judge-2",
+  "candidate_sha": "0000000000000000000000000000000000000000",
+  "rubric_sha256": "9deb2c52131518241fc8666c44f8d54c5cc48ac5303567e0be2458203970eea5",
+  "evidence_manifest_sha256": "0bd2743cb69e1e54f1a2ca6310464ae60a02c20ec6cfea71818f93dcc50cb434",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "S1-M1",
+      "status": "pass",
+      "evidence": [
+        "integration/upstreams.lock.json"
+      ]
+    },
+    {
+      "id": "S1-M2",
+      "status": "pass",
+      "evidence": [
+        "integration/contracts/"
+      ]
+    },
+    {
+      "id": "S1-M3",
+      "status": "pass",
+      "evidence": [
+        "app-contract/release-contract.json"
+      ]
+    },
+    {
+      "id": "S1-M4",
+      "status": "pass",
+      "evidence": [
+        "terraform/envs/staging/",
+        "terraform/envs/recovery-lab/"
+      ]
+    },
+    {
+      "id": "S1-M5",
+      "status": "pass",
+      "evidence": [
+        "terraform/policies/"
+      ]
+    },
+    {
+      "id": "S1-M6",
+      "status": "pass",
+      "evidence": [
+        ".github/workflows/terraform-pr.yml"
+      ]
+    },
+    {
+      "id": "S1-M7",
+      "status": "pass",
+      "evidence": [
+        ".github/workflows/terraform-apply.yml"
+      ]
+    },
+    {
+      "id": "S1-M8",
+      "status": "pass",
+      "evidence": [
+        "scripts/ci/assert-pr-readonly.mjs"
+      ]
+    },
+    {
+      "id": "S1-M9",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S1/"
+      ]
+    },
+    {
+      "id": "S1-M10",
+      "status": "pass",
+      "evidence": [
+        "claim_level L1 remaining_boundaries"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 2,
+      "rationale": "契约与脚手架完整",
+      "evidence": [
+        "tests/integration/",
+        "tests/terraform/"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "OIDC 与只读 PR 边界清晰",
+      "evidence": [
+        "tests/workflows/"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "teardown/drift 桩具备",
+      "evidence": [
+        ".github/workflows/teardown.yml"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1,
+      "rationale": "node --test 覆盖 S1",
+      "evidence": [
+        "tests/"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 1,
+      "rationale": "证据绑定与声明诚实",
+      "evidence": [
+        "evidence/slices/S1/"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1,
+      "rationale": "运维文档齐全",
+      "evidence": [
+        "docs/operations/hosted-delivery.md"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 1,
+      "rationale": "未声明 L4",
+      "evidence": [
+        "EVIDENCE_AND_CLAIMS.md"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.5,
+      "rationale": "模块化 terraform",
+      "evidence": [
+        "terraform/modules/"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.3,
+      "rationale": "成本驱动显式",
+      "evidence": [
+        "terraform/modules/environments/main.tf"
+      ]
+    }
+  ],
+  "unsupported_claims": [],
+  "security_findings": [],
+  "improvements": [
+    "控制中心应提供 A/C 上下文包以关闭 CO-006"
+  ],
+  "overall_score": 9.6,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "judge"
+  },
+  "notes_zh": "独立核验 S1：上游适配、Terraform 脚手架与托管工作流桩在 L1 声明下通过。"
+}
