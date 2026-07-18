@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "task_id": "P3-T03",
-  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
-  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+  "baseline_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
   "command": "node scripts/project.mjs validate P3-T03",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:17:17.710Z",
+  "recorded_at": "2026-07-18T06:18:18.946Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -27,8 +27,8 @@
     "No live AWS Lambda",
     "DLQ path synthetic/unit only"
   ],
-  "started_at": "2026-07-18T06:17:17.694Z",
-  "completed_at": "2026-07-18T06:17:17.710Z",
+  "started_at": "2026-07-18T06:18:18.929Z",
+  "completed_at": "2026-07-18T06:18:18.946Z",
   "validator_details": [
     {
       "id": "serverless_runtime",
@@ -71,6 +71,5 @@
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
   "evidence_path": "evidence/slices/S3/integrated-gate.json",
-  "bind_model": "candidate_sha_parent_of_tip",
-  "implementation_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
+  "bind_model": "candidate_sha_equals_head"
 }
