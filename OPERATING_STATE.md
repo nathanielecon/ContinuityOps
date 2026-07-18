@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 46,
+  "revision": 47,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
@@ -57,7 +57,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   ],
   "next_actions": [
     "Issue #4 Codex App keep-warm replied 2026-07-18T13:49Z — App path warm",
-    "D-037 review PRs #66 (security-sbom L2) and #67 (agentic-workflow L3); merge on CI green + verdict pass; rebase #67 after #66 for matrix.json",
+    "D-037 review PRs #66 (security-sbom L2) and #67 (agentic-workflow L3) with D-028 packaged diffs; merge on CI green + verdict pass",
+    "WORKER-AGENTIC-01: agentic-workflow elevated honestly to L3 hosted-control evidence pending D-037 pass",
     "BF-2026-014: workers must set base_branch: main; publisher coerces missing refs",
     "Leave CO-004/CO-006 blocked until owner supplies D-028 upstream digests; do not invent",
     "azure-governance stays L1 (D-046); performance stays honest L1 without real load evidence"
@@ -91,12 +92,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "PR #51 merged to main at 21299f9: ensure-tfstate + staging live-marker + terraform-pr static path fix; OIDC plan was green (run 29642718513)",
     "Live AWS apply GREEN run 29643569047 (after 29643490577 DynamoDB lock-create race); evidence/hosted/cloud-apply-staging-2026-07-18.json",
     "BF-2026-013 hierarchy remediation recorded: AWS lab evidence remains valid, but portfolio hierarchy closure requires GPT worker -> D-037 process pass after WORKER-HIER-01 merges",
-    "ORCH-CLOSE-02 dispatch #62–#65; chief fallback PRs #66/#67 after BF-2026-014 base_branch:work publish-failed; #65 rejected (reviewer must not edit terraform)"
+    "ORCH-CLOSE-02 dispatch #62–#65; chief fallback PRs #66/#67 after BF-2026-014 base_branch:work publish-failed; #65 rejected (reviewer must not edit terraform)",
+    "WORKER-AGENTIC-01 prepared: agentic-workflow claim raised from L1 to L3 using existing GitHub-hosted D-034/D-042/OIDC/keep-warm evidence; Cursor in-pod AWS remains an explicit non-claim"
   ],
   "verified_baseline": [
     "GHA OIDC apply green run 29643569047 (staging live-marker + remote state)",
     "Lab elevation apply 29644662492 (VPC/IAM/Lambda/EKS 1.32); drill 29645042815; teardown 29645052414",
-    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json; portfolio-certified-L4-lab"
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json; portfolio-certified-L4-lab",
+    "Agentic hosted-control evidence: evidence/hosted/agentic-workflow-2026-07-18.json binds codex-patch-publish, junior-actuate, keep-warm issue #4, and continuityops-gha run 29643569047"
   ],
   "unverified": [
     "Cross-repo Project A/C context packaging by the control center (CO-006)",

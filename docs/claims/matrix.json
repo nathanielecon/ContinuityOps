@@ -80,10 +80,12 @@
     },
     {
       "id": "agentic-workflow",
-      "claim_level": "L1",
+      "claim_level": "L3",
       "evidence": [
-        "evidence/slices/S6/agentic.json"
-      ]
+        "evidence/slices/S6/agentic.json",
+        "evidence/hosted/agentic-workflow-2026-07-18.json"
+      ],
+      "notes": "Hosted GitHub App dispatch/publisher + junior-actuate intent gates evidenced; no Cursor in-pod AWS credentials or worker-side push claimed"
     },
     {
       "id": "recovery",
@@ -124,6 +126,7 @@
   "non_claims": [
     "No CursorCloudAgent / in-pod AWS credentials on Cloud seat (OIDC control plane by design)",
     "No production (customer) incident drills \u2014 lab drills only",
-    "No live Azure apply \u2014 ContinuityOps AWS-lab ceiling (D-046)"
+    "No live Azure apply \u2014 ContinuityOps AWS-lab ceiling (D-046)",
+    "Agentic workflow is L3 hosted-control evidence only; no CursorCloudAgent / in-pod AWS credentials"
   ]
 }
