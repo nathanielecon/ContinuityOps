@@ -1,18 +1,13 @@
 {
   "schema_version": "1.0",
-  "status": "waiting_human",
+  "status": "resolved",
   "gate_id": "H0",
   "recorded_at": "2026-07-17T22:22:26.969850Z",
-  "reason": "Owner posted approve on issue #42 comment 5007863678 but candidate_sha and signature_or_signed_comment_url still contain template placeholders; conditions empty. Supervisor will not mint or bind agent-authored fill-ins (owner PAT posts as nathanielecon).",
-  "owner_comment_url": "https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5007863678",
-  "required_amendment": [
-    "candidate_sha must be 40-hex (current main tip at sign: 1b66065164cf7b20b5580e2022218bdeba643bd1)",
-    "signature_or_signed_comment_url must be the real permalink",
-    "conditions should include treatise 6ca0ec1 seat doctrine + engagement no Opus"
-  ],
-  "validator_at_stop": "node harness/rubrics/validate-rubric-freeze.mjs -> pass on 1b66065",
-  "blocked_todos": [
-    "h0-bind",
-    "post-h0-orch"
-  ]
+  "resolved_at": "2026-07-17T23:58:30Z",
+  "reason": "Owner posted complete approve receipt on issue #42 comment 5008633820 (candidate_sha=28bfb64… matching origin/main tip at sign; signature permalink real; hashes match freeze; conditions include treatise/D-041/no Opus). Placeholder comment 5007863678 superseded and must not be bound.",
+  "owner_comment_url": "https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5008633820",
+  "superseded_incomplete_comment_url": "https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5007863678",
+  "binding_path": "harness/approvals/H0.binding.json",
+  "receipt_sha256": "2f44a0a9f5ee01ce55aaafb72a60c38d48c536d65a5f64b06ae10dab8d60015c",
+  "blocked_todos": []
 }
