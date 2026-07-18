@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "task_id": "P7-T04",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "command": "node scripts/project.mjs validate P7-T04",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:25:19.784Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "recovery_consistency": true,
+    "performance_consistency": true,
+    "cost_consistency": true,
+    "full_repository": true,
+    "judge_exit": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Synthetic resilience/perf/cost only"
+  ],
+  "started_at": "2026-07-18T06:25:19.765Z",
+  "completed_at": "2026-07-18T06:25:19.784Z",
+  "validator_details": [
+    {
+      "id": "recovery_consistency",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "performance_consistency",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "cost_consistency",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "full_repository",
+      "result": {
+        "pass": true,
+        "standalone_json": 191,
+        "fenced_json": 14,
+        "skipped_allowlisted": 0
+      }
+    },
+    {
+      "id": "judge_exit",
+      "result": {
+        "pass": true,
+        "provisional_pass": true,
+        "fresh_mean": 9.7
+      }
+    }
+  ],
+  "passed": [
+    "recovery_consistency",
+    "performance_consistency",
+    "cost_consistency",
+    "full_repository",
+    "judge_exit"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S7/integrated-gate.json",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "implementation_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
+}

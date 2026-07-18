@@ -9,11 +9,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 35,
+  "revision": 36,
   "project": "ContinuityOps",
-  "current_phase": 4,
+  "current_phase": 8,
   "authorized_through_phase": 8,
-  "current_gate": "S2-S4-boundary-approved",
+  "current_gate": "portfolio-certified-L1",
   "running_tasks": [],
   "blocked_tasks": [],
   "waiting_human": [],
@@ -43,11 +43,15 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S4-P4-T03",
     "S2-boundary",
     "S3-boundary",
-    "S4-boundary"
+    "S4-boundary",
+    "S5-P5-T03",
+    "S6-P6-T04",
+    "S7-P7-T04",
+    "S8-P8-T04"
   ],
   "next_actions": [
-    "Proceed Phase 5–8 (S5–S8) on cursor/phase5-8-complete-7c3d",
-    "Optional: kind+helm for L2 local kubernetes; AWS OIDC for L3/L4 elevation"
+    "Optional elevation: kind+helm L2 local kubernetes; AWS OIDC L3/L4 when accounts configured",
+    "Keep claim_level honest — no L4+ without cloud_apply_evidence"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -71,7 +75,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S2 P2-T01..T04 verified at claim L1 (Grok D-043); managed_cluster_apply retained",
     "S3 P3-T01..T03 verified at claim L1 (Grok D-043); no live Lambda",
     "S4 P4-T01..T03 verified at claim L1 (Grok D-043); synthetic signal-path only",
-    "S2/S3/S4 supervisor stream-boundary approve (BF-PRE-015); claim L1"
+    "S2/S3/S4 supervisor stream-boundary approve (BF-PRE-015); claim L1",
+    "S5–S8 P5-T01..P8-T04 verified at claim L1 (Grok D-043); portfolio-certified-L1"
   ],
   "verified_baseline": [],
   "unverified": [

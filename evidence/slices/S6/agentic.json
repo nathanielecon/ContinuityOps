@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "task_id": "P6-T03",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "command": "node scripts/project.mjs validate P6-T03",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:25:10.182Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "agent_permission": true,
+    "prompt_injection": true,
+    "unsafe_proposal": true,
+    "evidence_forgery": true,
+    "workflow_permissions": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "H4 waived under D-044",
+    "Protected environment placeholders retained",
+    "No live mutation"
+  ],
+  "started_at": "2026-07-18T06:25:10.173Z",
+  "completed_at": "2026-07-18T06:25:10.182Z",
+  "validator_details": [
+    {
+      "id": "agent_permission",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "prompt_injection",
+      "result": {
+        "pass": true,
+        "note": "prompt-injection \u7531 tests/agentic \u8986\u76d6"
+      }
+    },
+    {
+      "id": "unsafe_proposal",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "evidence_forgery",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "workflow_permissions",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "agent_permission",
+    "prompt_injection",
+    "unsafe_proposal",
+    "evidence_forgery",
+    "workflow_permissions"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S6/agentic.json",
+  "bind_model": "candidate_sha_equals_head"
+}

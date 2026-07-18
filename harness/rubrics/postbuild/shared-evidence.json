@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "must_haves": [
+    "candidate_sha 40-hex",
+    "remaining_boundaries present"
+  ]
+}

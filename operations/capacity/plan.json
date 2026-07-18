@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "headroom_percent": 30,
+  "scale_triggers": [
+    "cpu>70%",
+    "p95>300ms"
+  ],
+  "claim_ceiling": "L1"
+}

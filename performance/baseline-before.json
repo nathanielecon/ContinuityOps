@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "synth-steady-100rps",
+  "p50_ms": 120,
+  "p95_ms": 340,
+  "p99_ms": 780,
+  "error_rate": 0.02,
+  "saturation": {
+    "cpu": 0.72,
+    "memory": 0.61
+  },
+  "scaling": {
+    "replicas": 3
+  },
+  "synthetic": true
+}

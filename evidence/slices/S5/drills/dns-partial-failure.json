@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "drill_id": "dns-partial-failure",
+  "evidence_kind": "synthetic_drill",
+  "claim_level": "L1",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "path": "operations/drills/dns-partial-failure.json",
+  "remaining_boundaries": [
+    "No live production drill"
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "max_claim_level": "L1",
+  "components": [
+    {
+      "id": "upstream-integration",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S1/upstream-integration.json"
+      ]
+    },
+    {
+      "id": "terraform-scaffold",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S1/terraform.json"
+      ]
+    },
+    {
+      "id": "hosted-ci-stubs",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S1/hosted-ci.json"
+      ]
+    },
+    {
+      "id": "kubernetes-chart",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S2/chart-contract.json"
+      ]
+    },
+    {
+      "id": "serverless-worker",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S3/serverless.json"
+      ]
+    },
+    {
+      "id": "observability",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S4/telemetry.json"
+      ]
+    },
+    {
+      "id": "runbooks-drills",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S5/runbooks.json"
+      ]
+    },
+    {
+      "id": "security-sbom",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S6/security.json"
+      ]
+    },
+    {
+      "id": "azure-governance",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S6/azure-governance.json"
+      ]
+    },
+    {
+      "id": "agentic-workflow",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S6/agentic.json"
+      ]
+    },
+    {
+      "id": "recovery",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S7/recovery/"
+      ]
+    },
+    {
+      "id": "performance",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S7/performance/"
+      ]
+    },
+    {
+      "id": "finops-teardown",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S7/cost/"
+      ]
+    },
+    {
+      "id": "portfolio-delivery",
+      "claim_level": "L1",
+      "evidence": [
+        "evidence/slices/S8/delivery.json"
+      ]
+    }
+  ],
+  "non_claims": [
+    "No L4+ live cloud apply",
+    "No live EKS/Lambda/Azure apply",
+    "No live production incident drills",
+    "No live RTO/RPO measurement",
+    "No live teardown of cloud resources"
+  ]
+}

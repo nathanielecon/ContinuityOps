@@ -1,0 +1,35 @@
+{
+  "id": "network-isolation",
+  "title": "App-versus-network isolation",
+  "first_five_minutes": [
+    "Compare synthetic probe success from multiple AZs",
+    "Check TLS handshake and DNS resolution separately",
+    "Correlate with ingress 5xx vs upstream timeout"
+  ],
+  "safe_commands": [
+    {
+      "cmd": "dig +short <svc>",
+      "purpose": "DNS resolution",
+      "destructive": false
+    },
+    {
+      "cmd": "curl -sS -o /dev/null -w \"%{http_code}\" https://<endpoint>/healthz",
+      "purpose": "edge health",
+      "destructive": false
+    },
+    {
+      "cmd": "kubectl exec -n <ns> <pod> -- wget -qO- http://<peer>/healthz",
+      "purpose": "in-cluster path",
+      "destructive": false
+    }
+  ],
+  "stop_escalation": [
+    "Escalate to network if multi-AZ probes fail",
+    "Escalate if only one AZ fails (infra)"
+  ],
+  "do_not_do_yet": [
+    "Do not open wide NetworkPolicy temporarily",
+    "Do not disable TLS verification"
+  ],
+  "isolation_logic": "If in-cluster peer health works but edge fails, prefer ingress/TLS; if both fail, prefer network or cluster DNS."
+}

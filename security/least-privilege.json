@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "roles": [
+    {
+      "id": "ci-plan",
+      "permissions": [
+        "sts:AssumeRole",
+        "s3:GetObject"
+      ],
+      "resource_scope": "lab"
+    },
+    {
+      "id": "ci-apply",
+      "permissions": [
+        "eks:DescribeCluster",
+        "lambda:UpdateFunctionCode"
+      ],
+      "resource_scope": "lab",
+      "requires_environment": true
+    },
+    {
+      "id": "agent-evidence",
+      "permissions": [
+        "logs:FilterLogEvents",
+        "cloudwatch:GetMetricData"
+      ],
+      "resource_scope": "read",
+      "mutation": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "id": "deny-wildcard-admin",
+      "policy": "*:*",
+      "expect": "deny"
+    },
+    {
+      "id": "deny-agent-iam-create",
+      "policy": "iam:CreateUser",
+      "expect": "deny"
+    }
+  ]
+}
