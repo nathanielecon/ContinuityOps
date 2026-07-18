@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "queue-worker-v1",
+  "runtime": "nodejs22.x",
+  "trigger": "sqs",
+  "queue": {
+    "visibility_timeout_seconds": 60,
+    "max_receive_count": 3,
+    "batch_size": 5,
+    "concurrency": 10
+  },
+  "retry": {
+    "backoff": "exponential",
+    "base_ms": 1000,
+    "max_ms": 30000
+  },
+  "dlq": {
+    "enabled": true,
+    "alarm_on_message": true,
+    "replay_requires_approval": true
+  },
+  "idempotency": {
+    "key_field": "event_id",
+    "store": "dynamodb",
+    "ttl_seconds": 86400
+  },
+  "timeouts": {
+    "function_seconds": 30
+  },
+  "telemetry": {
+    "correlation_header": "x-correlation-id",
+    "cost_metric": "worker.invocations"
+  },
+  "iam": {
+    "least_privilege": true,
+    "long_lived_keys": false
+  },
+  "claim_ceiling": "L1",
+  "remaining_boundaries": [
+    "No live AWS Lambda deploy",
+    "No live SQS/DLQ runtime"
+  ]
+}

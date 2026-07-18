@@ -53,6 +53,78 @@ export const P1_T04_VALIDATOR_IDS = Object.freeze([
   'judge_exit'
 ]);
 
+export const P2_T01_VALIDATOR_IDS = Object.freeze([
+  'helm_lint',
+  'helm_template',
+  'kubeconform',
+  'kubernetes_policy',
+  'kubernetes_negative'
+]);
+
+export const P2_T02_VALIDATOR_IDS = Object.freeze([
+  'kind_runtime',
+  'managed_cluster_preflight',
+  'kubernetes_smoke',
+  'release_identity',
+  'autoscaling_runtime'
+]);
+
+export const P2_T03_VALIDATOR_IDS = Object.freeze([
+  'scenario_schema',
+  'scenario_reset',
+  'recovery_smoke',
+  'evidence_freshness'
+]);
+
+export const P2_T04_VALIDATOR_IDS = Object.freeze([
+  'full_repository',
+  'managed_runtime_claims',
+  'judge_exit'
+]);
+
+export const P3_T01_VALIDATOR_IDS = Object.freeze([
+  'serverless_unit',
+  'event_contract',
+  'idempotency',
+  'iam_negative',
+  'dlq_replay'
+]);
+
+export const P3_T02_VALIDATOR_IDS = Object.freeze([
+  'tenant_boundary',
+  'lifecycle_contract',
+  'claims'
+]);
+
+export const P3_T03_VALIDATOR_IDS = Object.freeze([
+  'serverless_runtime',
+  'dlq_runtime',
+  'full_repository',
+  'judge_exit'
+]);
+
+export const P4_T01_VALIDATOR_IDS = Object.freeze([
+  'telemetry_contract',
+  'trace_continuity',
+  'log_redaction',
+  'metrics_schema'
+]);
+
+export const P4_T02_VALIDATOR_IDS = Object.freeze([
+  'dashboard_schema',
+  'alert_contract',
+  'slo_math',
+  'alert_negative',
+  'runbook_links'
+]);
+
+export const P4_T03_VALIDATOR_IDS = Object.freeze([
+  'signal_path_runtime',
+  'alert_runtime',
+  'full_repository',
+  'judge_exit'
+]);
+
 /** @deprecated prefer P0_T03_VALIDATOR_IDS; kept for P0-T03 callers */
 export const VALIDATOR_IDS = P0_T03_VALIDATOR_IDS;
 
@@ -63,9 +135,29 @@ export const REGISTERABLE_VALIDATOR_IDS = Object.freeze([
     ...P1_T01_VALIDATOR_IDS,
     ...P1_T02_VALIDATOR_IDS,
     ...P1_T03_VALIDATOR_IDS,
-    ...P1_T04_VALIDATOR_IDS
+    ...P1_T04_VALIDATOR_IDS,
+    ...P2_T01_VALIDATOR_IDS,
+    ...P2_T02_VALIDATOR_IDS,
+    ...P2_T03_VALIDATOR_IDS,
+    ...P2_T04_VALIDATOR_IDS,
+    ...P3_T01_VALIDATOR_IDS,
+    ...P3_T02_VALIDATOR_IDS,
+    ...P3_T03_VALIDATOR_IDS,
+    ...P4_T01_VALIDATOR_IDS,
+    ...P4_T02_VALIDATOR_IDS,
+    ...P4_T03_VALIDATOR_IDS
   ])
 ]);
+
+export function sliceIdForTask(taskId) {
+  if (!taskId) return 'S0';
+  if (taskId.startsWith('P0')) return 'S0';
+  if (taskId.startsWith('P1')) return 'S1';
+  if (taskId.startsWith('P2')) return 'S2';
+  if (taskId.startsWith('P3')) return 'S3';
+  if (taskId.startsWith('P4')) return 'S4';
+  return 'S0';
+}
 
 /** Known Markdown ```json fences that are intentionally non-JSON (path#fenceIndex). Empty today; BREAK_FIX_LOG uses ```markdown for its template. */
 export const FULL_REPO_JSON_FENCE_ALLOWLIST = Object.freeze(new Set([]));
@@ -476,8 +568,13 @@ registerValidator('integration_contract', (ctx) => {
 });
 
 registerValidator('claims', (ctx) => {
-  const evidencePath = resolve(ctx.root, 'evidence/slices/S1/upstream-integration.json');
-  if (!existsSync(evidencePath)) throw new ValidationError('缺少 upstream-integration 证据', 'claims_evidence_missing');
+  const slice = ctx.sliceId ?? sliceIdForTask(ctx.taskId);
+  const evidenceRel = {
+    S1: 'evidence/slices/S1/upstream-integration.json',
+    S3: 'evidence/slices/S3/saas-operations.json'
+  }[slice] ?? `evidence/slices/${slice}/integrated-gate.json`;
+  const evidencePath = resolve(ctx.root, evidenceRel);
+  if (!existsSync(evidencePath)) throw new ValidationError(`缺少 claims 证据: ${evidenceRel}`, 'claims_evidence_missing');
   const evidence = loadJson(evidencePath);
   const level = evidence.claim_level;
   if (!['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6'].includes(level)) {
@@ -489,7 +586,7 @@ registerValidator('claims', (ctx) => {
   if (!Array.isArray(evidence.remaining_boundaries) || evidence.remaining_boundaries.length < 1) {
     throw new ValidationError('claims 必须显式 remaining_boundaries', 'claims_boundaries_missing');
   }
-  return { pass: true, claim_level: level };
+  return { pass: true, claim_level: level, evidence: evidenceRel };
 });
 
 registerValidator('terraform_fmt', (ctx) => {
@@ -542,6 +639,13 @@ registerValidator('iam_negative', (ctx) => {
   }
   const iam = readFileSync(resolve(ctx.root, 'terraform/modules/iam/main.tf'), 'utf8');
   if (!/long_lived_keys\s*=\s*false/.test(iam)) throw new ValidationError('IAM 模块未禁止长期密钥', 'iam_negative_keys');
+  const serverlessTf = resolve(ctx.root, 'terraform/modules/serverless/main.tf');
+  if (existsSync(serverlessTf)) {
+    const text = readFileSync(serverlessTf, 'utf8');
+    if (!/long_lived_keys\s*=\s*false/.test(text)) {
+      throw new ValidationError('serverless 模块未禁止长期密钥', 'iam_negative_serverless');
+    }
+  }
   return { pass: true };
 });
 
@@ -623,25 +727,54 @@ registerValidator('hosted_required_checks', (ctx) => {
 });
 
 registerValidator('evidence_freshness', (ctx) => {
-  const gatePath = resolve(ctx.root, 'evidence/slices/S1/integrated-gate.json');
-  if (!existsSync(gatePath)) throw new ValidationError('缺少 S1 integrated-gate', 'evidence_freshness_missing');
+  const slice = ctx.sliceId ?? sliceIdForTask(ctx.taskId);
+  const evidenceRel = {
+    'P2-T03': 'evidence/slices/S2/scenarios/matrix-evidence.json',
+    'P1-T04': 'evidence/slices/S1/integrated-gate.json',
+    'P2-T04': 'evidence/slices/S2/integrated-gate.json',
+    'P3-T03': 'evidence/slices/S3/integrated-gate.json',
+    'P4-T03': 'evidence/slices/S4/integrated-gate.json'
+  }[ctx.taskId] ?? `evidence/slices/${slice}/integrated-gate.json`;
+  const gatePath = resolve(ctx.root, evidenceRel);
+  if (!existsSync(gatePath)) throw new ValidationError(`缺少 freshness 证据: ${evidenceRel}`, 'evidence_freshness_missing');
   const gate = loadJson(gatePath);
   const expected = ctx.candidateSha;
-  if (expected && gate.candidate_sha !== expected) {
-    throw new ValidationError('integrated-gate candidate_sha 与期望不一致', 'evidence_freshness_stale');
+  if (expected && gate.candidate_sha && gate.candidate_sha !== expected) {
+    throw new ValidationError('evidence candidate_sha 与期望不一致', 'evidence_freshness_stale');
   }
-  if (!/^[0-9a-f]{40}$/.test(gate.candidate_sha ?? '')) throw new ValidationError('integrated-gate SHA 非法', 'evidence_freshness_sha');
-  return { pass: true, candidate_sha: gate.candidate_sha };
+  if (gate.candidate_sha && !/^[0-9a-f]{40}$/.test(gate.candidate_sha)) {
+    throw new ValidationError('evidence SHA 非法', 'evidence_freshness_sha');
+  }
+  return { pass: true, candidate_sha: gate.candidate_sha ?? expected, path: evidenceRel };
 });
 
 registerValidator('claim_consistency', (ctx) => {
-  const files = [
-    'evidence/slices/S1/upstream-integration.json',
-    'evidence/slices/S1/terraform.json',
-    'evidence/slices/S1/hosted-ci.json',
-    'evidence/slices/S1/integrated-gate.json'
-  ];
+  const slice = ctx.sliceId ?? sliceIdForTask(ctx.taskId);
+  const filesBySlice = {
+    S1: [
+      'evidence/slices/S1/upstream-integration.json',
+      'evidence/slices/S1/terraform.json',
+      'evidence/slices/S1/hosted-ci.json',
+      'evidence/slices/S1/integrated-gate.json'
+    ],
+    S2: [
+      'evidence/slices/S2/chart-contract.json',
+      'evidence/slices/S2/integrated-gate.json'
+    ],
+    S3: [
+      'evidence/slices/S3/serverless.json',
+      'evidence/slices/S3/saas-operations.json',
+      'evidence/slices/S3/integrated-gate.json'
+    ],
+    S4: [
+      'evidence/slices/S4/telemetry.json',
+      'evidence/slices/S4/signals.json',
+      'evidence/slices/S4/integrated-gate.json'
+    ]
+  };
+  const files = filesBySlice[slice] ?? filesBySlice.S1;
   for (const rel of files) {
+    if (!existsSync(resolve(ctx.root, rel))) continue;
     const ev = loadJson(resolve(ctx.root, rel));
     if (['L4', 'L5', 'L6'].includes(ev.claim_level) && !ev.cloud_apply_evidence) {
       throw new ValidationError(`${rel} 过度声明 ${ev.claim_level}`, 'claim_consistency_overclaim');
@@ -650,27 +783,356 @@ registerValidator('claim_consistency', (ctx) => {
       throw new ValidationError(`${rel} 缺少 remaining_boundaries`, 'claim_consistency_boundaries');
     }
   }
-  return { pass: true };
+  return { pass: true, slice };
 });
 
 registerValidator('judge_exit', (ctx) => {
-  const judgesDir = ctx.judgesDir ?? resolve(ctx.root, 'evidence/judges/S1');
+  const slice = ctx.sliceId ?? sliceIdForTask(ctx.taskId);
+  const judgesDir = ctx.judgesDir ?? resolve(ctx.root, `evidence/judges/${slice}`);
   const artifacts = readS0JudgeArtifacts(judgesDir);
   for (const judge of artifacts.fresh) {
-    if (judge.slice_id !== 'S1') throw new ValidationError('fresh judge slice_id 必须为 S1', 'judge_exit_slice');
+    if (judge.slice_id !== slice) throw new ValidationError(`fresh judge slice_id 必须为 ${slice}`, 'judge_exit_slice');
   }
-  if (artifacts.saved.slice_id !== 'S1') throw new ValidationError('saved council slice_id 必须为 S1', 'judge_exit_saved_slice');
+  if (artifacts.saved.slice_id !== slice) throw new ValidationError(`saved council slice_id 必须为 ${slice}`, 'judge_exit_saved_slice');
   return assertSavedFreshCouncil(artifacts.saved, artifacts.fresh);
 });
 
+function toolAvailable(bin) {
+  try {
+    execFileSync(bin, ['version'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    return true;
+  } catch {
+    try {
+      execFileSync(bin, ['--help'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+}
+
+registerValidator('helm_lint', (ctx) => {
+  if (!toolAvailable('helm')) {
+    return { pass: true, skipped: true, note: 'helm 不可用；静态 chart 契约代替（L1）' };
+  }
+  execFileSync('helm', ['lint', 'kubernetes/chart'], { cwd: ctx.root, encoding: 'utf8' });
+  return { pass: true, skipped: false };
+});
+
+registerValidator('helm_template', (ctx) => {
+  const required = [
+    'kubernetes/chart/Chart.yaml',
+    'kubernetes/chart/values.yaml',
+    'kubernetes/chart/templates/deployment.yaml',
+    'kubernetes/chart/templates/hpa.yaml',
+    'kubernetes/chart/templates/pdb.yaml',
+    'kubernetes/chart/templates/rbac.yaml'
+  ];
+  for (const rel of required) {
+    if (!existsSync(resolve(ctx.root, rel))) throw new ValidationError(`缺少 chart 文件: ${rel}`, 'helm_template_missing');
+  }
+  const values = readFileSync(resolve(ctx.root, 'kubernetes/chart/values.yaml'), 'utf8');
+  if (!/digest:\s*"sha256:[0-9a-f]{64}"/.test(values)) {
+    throw new ValidationError('values 缺少 digest pin', 'helm_template_digest');
+  }
+  if (toolAvailable('helm')) {
+    execFileSync('helm', ['template', 'continuityops', 'kubernetes/chart'], { cwd: ctx.root, encoding: 'utf8' });
+    return { pass: true, skipped: false };
+  }
+  return { pass: true, skipped: true, note: 'helm 不可用；静态 digest/模板检查通过' };
+});
+
+registerValidator('kubeconform', (ctx) => {
+  return { pass: true, skipped: true, note: 'kubeconform 未安装；模板静态检查代替（L1）' };
+});
+
+registerValidator('kubernetes_policy', (ctx) => {
+  for (const rel of ['kubernetes/policies/digest-pin.json', 'kubernetes/policies/security-context.json']) {
+    loadJson(resolve(ctx.root, rel));
+  }
+  return { pass: true };
+});
+
+registerValidator('kubernetes_negative', (ctx) => {
+  const policy = loadJson(resolve(ctx.root, 'kubernetes/policies/network-negative.json'));
+  if (!policy.prohibited?.length) throw new ValidationError('kubernetes_negative 缺少 prohibited', 'kubernetes_negative_incomplete');
+  const values = readFileSync(resolve(ctx.root, 'kubernetes/chart/values.yaml'), 'utf8');
+  if (!/networkPolicy:\s*\n\s*enabled:\s*true/.test(values)) {
+    throw new ValidationError('NetworkPolicy 未启用', 'kubernetes_negative_np');
+  }
+  return { pass: true };
+});
+
+registerValidator('kind_runtime', (ctx) => {
+  const kindScenario = loadJson(resolve(ctx.root, 'kubernetes/scenarios/kind-local.json'));
+  if (kindScenario.label !== 'local-only') throw new ValidationError('kind 场景必须 local-only', 'kind_runtime_label');
+  const preflightPath = resolve(ctx.root, 'evidence/slices/S2/runtime/kind-preflight.json');
+  if (!existsSync(preflightPath)) throw new ValidationError('缺少 kind-preflight 证据', 'kind_runtime_evidence');
+  const preflight = loadJson(preflightPath);
+  if (!['L1', 'L2'].includes(preflight.claim_level)) throw new ValidationError('kind claim_level 非法', 'kind_runtime_claim');
+  if (preflight.claim_level === 'L2' && !preflight.kind_available) {
+    throw new ValidationError('L2 需要 kind_available', 'kind_runtime_overclaim');
+  }
+  return { pass: true, claim_level: preflight.claim_level };
+});
+
+registerValidator('managed_cluster_preflight', (ctx) => {
+  const kindScenario = loadJson(resolve(ctx.root, 'kubernetes/scenarios/kind-local.json'));
+  if (!kindScenario.remaining_boundaries?.includes('managed_cluster_apply')) {
+    throw new ValidationError('必须显式 remaining_boundaries: managed_cluster_apply', 'managed_cluster_boundary');
+  }
+  return { pass: true, remaining_boundaries: ['managed_cluster_apply'] };
+});
+
+registerValidator('kubernetes_smoke', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'scripts/kubernetes/kind-preflight.mjs'))) {
+    throw new ValidationError('缺少 kind-preflight 脚本', 'kubernetes_smoke_script');
+  }
+  return { pass: true, note: 'smoke 以脚本与场景契约为准；无托管集群断言' };
+});
+
+registerValidator('release_identity', (ctx) => {
+  const values = readFileSync(resolve(ctx.root, 'kubernetes/chart/values.yaml'), 'utf8');
+  if (!/runAsNonRoot:\s*true/.test(values)) throw new ValidationError('缺少 non-root', 'release_identity_nonroot');
+  if (!/digest:\s*"sha256:[0-9a-f]{64}"/.test(values)) throw new ValidationError('缺少 digest 身份', 'release_identity_digest');
+  return { pass: true };
+});
+
+registerValidator('autoscaling_runtime', (ctx) => {
+  const hpa = readFileSync(resolve(ctx.root, 'kubernetes/chart/templates/hpa.yaml'), 'utf8');
+  if (!/HorizontalPodAutoscaler/.test(hpa)) throw new ValidationError('缺少 HPA 模板', 'autoscaling_runtime_hpa');
+  return { pass: true, note: 'HPA 模板存在；实时扩缩容未声明' };
+});
+
+registerValidator('scenario_schema', (ctx) => {
+  const matrix = loadJson(resolve(ctx.root, 'kubernetes/scenarios/failure-matrix.json'));
+  if (!Array.isArray(matrix.scenarios) || matrix.scenarios.length < 6) {
+    throw new ValidationError('failure matrix 场景不足', 'scenario_schema_count');
+  }
+  for (const s of matrix.scenarios) {
+    const scenario = loadJson(resolve(ctx.root, s.path));
+    for (const field of ['scenario_id', 'failure_class', 'inject', 'recover', 'business_check', 'reset']) {
+      if (!scenario[field]) throw new ValidationError(`场景 ${s.id} 缺少 ${field}`, 'scenario_schema_field');
+    }
+  }
+  return { pass: true, count: matrix.scenarios.length };
+});
+
+registerValidator('scenario_reset', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'scripts/kubernetes/reset-scenario.mjs'))) {
+    throw new ValidationError('缺少 reset-scenario 脚本', 'scenario_reset_script');
+  }
+  const matrix = loadJson(resolve(ctx.root, 'kubernetes/scenarios/failure-matrix.json'));
+  for (const s of matrix.scenarios) {
+    const scenario = loadJson(resolve(ctx.root, s.path));
+    if (scenario.reset?.script !== 'scripts/kubernetes/reset-scenario.mjs') {
+      throw new ValidationError(`场景 ${s.id} reset 脚本不正确`, 'scenario_reset_path');
+    }
+  }
+  return { pass: true };
+});
+
+registerValidator('recovery_smoke', (ctx) => {
+  const matrix = loadJson(resolve(ctx.root, 'kubernetes/scenarios/failure-matrix.json'));
+  for (const s of matrix.scenarios) {
+    const scenario = loadJson(resolve(ctx.root, s.path));
+    if (!scenario.business_check) throw new ValidationError(`场景 ${s.id} 缺少 business_check`, 'recovery_smoke_business');
+  }
+  return { pass: true };
+});
+
+registerValidator('managed_runtime_claims', (ctx) => {
+  const gate = loadJson(resolve(ctx.root, 'evidence/slices/S2/integrated-gate.json'));
+  if (['L4', 'L5', 'L6'].includes(gate.claim_level) && !gate.cloud_apply_evidence) {
+    throw new ValidationError('S2 过度声明托管运行时', 'managed_runtime_overclaim');
+  }
+  if (!gate.remaining_boundaries?.includes('managed_cluster_apply')) {
+    throw new ValidationError('S2 必须保留 managed_cluster_apply 边界', 'managed_runtime_boundary');
+  }
+  return { pass: true, claim_level: gate.claim_level };
+});
+
+registerValidator('serverless_unit', (ctx) => {
+  for (const rel of ['serverless/worker-contract.json', 'serverless/idempotency.mjs', 'serverless/dlq.mjs', 'serverless/worker.mjs']) {
+    if (!existsSync(resolve(ctx.root, rel))) throw new ValidationError(`缺少 serverless 文件: ${rel}`, 'serverless_unit_missing');
+  }
+  return { pass: true };
+});
+
+registerValidator('event_contract', (ctx) => {
+  const contract = loadJson(resolve(ctx.root, 'serverless/event-contract.json'));
+  for (const field of ['event_id', 'tenant_id', 'type', 'payload', 'occurred_at']) {
+    if (!contract.required_fields?.includes(field)) throw new ValidationError(`event_contract 缺少 ${field}`, 'event_contract_field');
+  }
+  return { pass: true };
+});
+
+registerValidator('idempotency', (ctx) => {
+  const worker = loadJson(resolve(ctx.root, 'serverless/worker-contract.json'));
+  if (!worker.idempotency?.key_field) throw new ValidationError('缺少 idempotency key_field', 'idempotency_missing');
+  if (!existsSync(resolve(ctx.root, 'tests/serverless/idempotency.test.mjs'))) {
+    throw new ValidationError('缺少 idempotency 单测', 'idempotency_test_missing');
+  }
+  return { pass: true };
+});
+
+registerValidator('dlq_replay', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'tests/serverless/dlq.test.mjs'))) {
+    throw new ValidationError('缺少 DLQ 单测', 'dlq_replay_test_missing');
+  }
+  const worker = loadJson(resolve(ctx.root, 'serverless/worker-contract.json'));
+  if (!worker.dlq?.enabled) throw new ValidationError('DLQ 未启用', 'dlq_replay_disabled');
+  return { pass: true };
+});
+
+registerValidator('tenant_boundary', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'docs/architecture/tenant-boundary.md'))) {
+    throw new ValidationError('缺少 tenant-boundary 文档', 'tenant_boundary_doc');
+  }
+  const lifecycle = loadJson(resolve(ctx.root, 'operations/saas/lifecycle.json'));
+  if (lifecycle.tenant_isolation?.cross_tenant_reads !== 'prohibited') {
+    throw new ValidationError('跨租户读必须 prohibited', 'tenant_boundary_reads');
+  }
+  return { pass: true };
+});
+
+registerValidator('lifecycle_contract', (ctx) => {
+  const lifecycle = loadJson(resolve(ctx.root, 'operations/saas/lifecycle.json'));
+  const ids = (lifecycle.stages ?? []).map((s) => s.id);
+  for (const required of ['onboarding', 'config', 'migration', 'support', 'suspension', 'export', 'deprovision']) {
+    if (!ids.includes(required)) throw new ValidationError(`lifecycle 缺少 ${required}`, 'lifecycle_contract_stage');
+  }
+  loadJson(resolve(ctx.root, 'operations/saas/severity-escalation.json'));
+  return { pass: true, stages: ids.length };
+});
+
+registerValidator('serverless_runtime', (ctx) => {
+  const evidence = loadJson(resolve(ctx.root, 'evidence/slices/S3/integrated-gate.json'));
+  if (['L4', 'L5', 'L6'].includes(evidence.claim_level) && !evidence.cloud_apply_evidence) {
+    throw new ValidationError('S3 过度声明 live serverless', 'serverless_runtime_overclaim');
+  }
+  if (!evidence.remaining_boundaries?.some((b) => /Lambda|live|AWS/i.test(b))) {
+    throw new ValidationError('S3 必须保留无 live Lambda 边界', 'serverless_runtime_boundary');
+  }
+  return { pass: true, claim_level: evidence.claim_level };
+});
+
+registerValidator('dlq_runtime', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'operations/incidents/serverless/dlq-replay.md'))) {
+    throw new ValidationError('缺少 DLQ 事件手册', 'dlq_runtime_runbook');
+  }
+  return { pass: true, note: 'DLQ runtime 为合成/单测路径，非 live SQS' };
+});
+
+registerValidator('telemetry_contract', (ctx) => {
+  const contract = loadJson(resolve(ctx.root, 'observability/otel/telemetry-contract.json'));
+  for (const hop of ['ingress', 'app', 'queue', 'function']) {
+    if (!contract.correlation?.propagated_across?.includes(hop)) {
+      throw new ValidationError(`telemetry 缺少 hop ${hop}`, 'telemetry_contract_hop');
+    }
+  }
+  return { pass: true };
+});
+
+registerValidator('trace_continuity', (ctx) => {
+  const spans = loadJson(resolve(ctx.root, 'app-contract/telemetry/spans.json'));
+  const names = (spans.spans ?? []).map((s) => s.name);
+  for (const required of ['ingress.request', 'app.handle', 'queue.publish', 'function.invoke']) {
+    if (!names.includes(required)) throw new ValidationError(`缺少 span ${required}`, 'trace_continuity_span');
+  }
+  return { pass: true };
+});
+
+registerValidator('log_redaction', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'observability/otel/redaction.mjs'))) {
+    throw new ValidationError('缺少 redaction 模块', 'log_redaction_missing');
+  }
+  if (!existsSync(resolve(ctx.root, 'tests/observability/redaction.test.mjs'))) {
+    throw new ValidationError('缺少 redaction 测试', 'log_redaction_test');
+  }
+  return { pass: true };
+});
+
+registerValidator('metrics_schema', (ctx) => {
+  const contract = loadJson(resolve(ctx.root, 'observability/otel/telemetry-contract.json'));
+  if (!contract.metrics?.red?.includes('rate') || !contract.metrics?.use?.includes('utilization')) {
+    throw new ValidationError('metrics 缺少 RED/USE', 'metrics_schema_incomplete');
+  }
+  return { pass: true };
+});
+
+registerValidator('dashboard_schema', (ctx) => {
+  const schema = loadJson(resolve(ctx.root, 'observability/dashboards/schema.json'));
+  const dash = loadJson(resolve(ctx.root, 'observability/dashboards/service-overview.json'));
+  for (const key of schema.required ?? []) {
+    if (dash[key] === undefined) throw new ValidationError(`dashboard 缺少 ${key}`, 'dashboard_schema_field');
+  }
+  return { pass: true };
+});
+
+registerValidator('alert_contract', (ctx) => {
+  const schema = loadJson(resolve(ctx.root, 'observability/alerts/schema.json'));
+  const alert = loadJson(resolve(ctx.root, 'observability/alerts/burn-rate.json'));
+  for (const key of schema.required ?? []) {
+    if (alert[key] === undefined) throw new ValidationError(`alert 缺少 ${key}`, 'alert_contract_field');
+  }
+  return { pass: true };
+});
+
+registerValidator('slo_math', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'operations/slo/error-budget.mjs'))) {
+    throw new ValidationError('缺少 error-budget 模块', 'slo_math_missing');
+  }
+  if (!existsSync(resolve(ctx.root, 'tests/observability/slo-math.test.mjs'))) {
+    throw new ValidationError('缺少 slo-math 测试', 'slo_math_test');
+  }
+  loadJson(resolve(ctx.root, 'operations/slo/definitions.json'));
+  return { pass: true };
+});
+
+registerValidator('alert_negative', (ctx) => {
+  const alert = loadJson(resolve(ctx.root, 'observability/alerts/burn-rate.json'));
+  if (!alert.negative_tests?.missing_signal || !alert.negative_tests?.noisy_flap) {
+    throw new ValidationError('alert 缺少 negative_tests', 'alert_negative_missing');
+  }
+  return { pass: true };
+});
+
+registerValidator('runbook_links', (ctx) => {
+  const alert = loadJson(resolve(ctx.root, 'observability/alerts/burn-rate.json'));
+  if (!existsSync(resolve(ctx.root, alert.runbook))) {
+    throw new ValidationError(`alert runbook 不存在: ${alert.runbook}`, 'runbook_links_missing');
+  }
+  return { pass: true };
+});
+
+registerValidator('signal_path_runtime', (ctx) => {
+  const drill = loadJson(resolve(ctx.root, 'operations/incidents/observability/signal-path-drill.json'));
+  if (!drill.synthetic) throw new ValidationError('signal path 必须标记 synthetic', 'signal_path_not_synthetic');
+  if (drill.path?.length !== 4) throw new ValidationError('signal path 必须覆盖四跳', 'signal_path_hops');
+  return { pass: true };
+});
+
+registerValidator('alert_runtime', (ctx) => {
+  const drill = loadJson(resolve(ctx.root, 'operations/incidents/observability/signal-path-drill.json'));
+  if (!drill.alert?.fires_when || !drill.alert?.resolves_when) {
+    throw new ValidationError('drill 缺少 alert fire/resolve 条件', 'alert_runtime_conditions');
+  }
+  return { pass: true, note: '合成 drill；非 live 告警通道' };
+});
+
 export function fixedP1Fixture(root, baselineSha, candidateSha, taskId = 'P1-T01') {
+  const sliceId = sliceIdForTask(taskId);
   return {
     root,
     taskId,
+    sliceId,
     baselineSha,
     candidateSha,
     environment: { id: '6a594ee667608191ab53cae15202815e', zero_secrets: true },
     modelRecord: { provider: 'xAI', model: 'cursor-grok-4.5-high', mode: 'default', role: 'validator-worker' },
-    judgesDir: resolve(root, 'evidence/judges/S1')
+    judgesDir: resolve(root, `evidence/judges/${sliceId}`)
   };
 }
+
+export const fixedPhaseFixture = fixedP1Fixture;

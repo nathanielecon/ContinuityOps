@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "task_id": "P3-T02",
+  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+  "command": "node scripts/project.mjs validate P3-T02",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:17:17.398Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "tenant_boundary": true,
+    "lifecycle_contract": true,
+    "claims": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Lifecycle tests are contractual/unit only",
+    "No live SaaS control plane"
+  ],
+  "started_at": "2026-07-18T06:17:17.389Z",
+  "completed_at": "2026-07-18T06:17:17.398Z",
+  "validator_details": [
+    {
+      "id": "tenant_boundary",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "lifecycle_contract",
+      "result": {
+        "pass": true,
+        "stages": 7
+      }
+    },
+    {
+      "id": "claims",
+      "result": {
+        "pass": true,
+        "claim_level": "L1",
+        "evidence": "evidence/slices/S3/saas-operations.json"
+      }
+    }
+  ],
+  "passed": [
+    "tenant_boundary",
+    "lifecycle_contract",
+    "claims"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S3/saas-operations.json"
+}

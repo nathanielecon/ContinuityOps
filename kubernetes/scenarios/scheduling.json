@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "scheduling",
+  "failure_class": "Unschedulable",
+  "inject": "Request nodes with impossible affinity",
+  "observe": ["Pending pods", "events show FailedScheduling"],
+  "recover": "Remove impossible affinity",
+  "business_check": "Pods schedule and become Ready",
+  "reset": {
+    "script": "scripts/kubernetes/reset-scenario.mjs",
+    "args": ["scheduling"]
+  },
+  "synthetic": true
+}

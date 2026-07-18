@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "task_id": "P2-T04",
+  "baseline_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "command": "node scripts/project.mjs validate P2-T04",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:18:18.898Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "full_repository": true,
+    "managed_runtime_claims": true,
+    "judge_exit": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "managed_cluster_apply",
+    "No EKS OIDC apply evidence"
+  ],
+  "started_at": "2026-07-18T06:18:18.882Z",
+  "completed_at": "2026-07-18T06:18:18.898Z",
+  "validator_details": [
+    {
+      "id": "full_repository",
+      "result": {
+        "pass": true,
+        "standalone_json": 102,
+        "fenced_json": 14,
+        "skipped_allowlisted": 0
+      }
+    },
+    {
+      "id": "managed_runtime_claims",
+      "result": {
+        "pass": true,
+        "claim_level": "L1"
+      }
+    },
+    {
+      "id": "judge_exit",
+      "result": {
+        "pass": true,
+        "provisional_pass": true,
+        "fresh_mean": 9.7
+      }
+    }
+  ],
+  "passed": [
+    "full_repository",
+    "managed_runtime_claims",
+    "judge_exit"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S2/integrated-gate.json",
+  "bind_model": "candidate_sha_equals_head"
+}

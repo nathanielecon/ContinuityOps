@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "drill_id": "signal-path-synthetic",
+  "synthetic": true,
+  "claim_ceiling": "L1",
+  "path": [
+    { "hop": "ingress", "signal": "http.server.requests", "trace_span": "ingress.request" },
+    { "hop": "app", "signal": "app.handle.duration", "trace_span": "app.handle" },
+    { "hop": "queue", "signal": "worker.queue_depth", "trace_span": "queue.publish" },
+    { "hop": "function", "signal": "worker.invocations", "trace_span": "function.invoke" }
+  ],
+  "alert": {
+    "alert_id": "error-budget-burn-fast",
+    "fires_when": "burn_rate >= 14.4 for 5m",
+    "resolves_when": "burn_rate < 1 for 10m"
+  },
+  "fixture_events": [
+    {
+      "correlation_id": "corr-drill-1",
+      "tenant_id": "tenant-lab",
+      "outcome": "error",
+      "expected_alert": true
+    },
+    {
+      "correlation_id": "corr-drill-2",
+      "tenant_id": "tenant-lab",
+      "outcome": "ok",
+      "expected_alert": false
+    }
+  ],
+  "remaining_boundaries": [
+    "No live Grafana/CloudWatch fire",
+    "Synthetic fixtures only"
+  ]
+}
