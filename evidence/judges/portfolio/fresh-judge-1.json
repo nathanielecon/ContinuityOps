@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "scope": "portfolio",
+  "round": "fresh",
+  "judge_id": "fresh-judge-1",
+  "tip_under_review": "b7b1815d57c1f5d01c56aa0cd9a7af586becc6c5",
+  "candidate_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "parent_bind_verified": true,
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "695d88db163b0acef4cc431412e1bacc259bdcb6f95fa0850623e5d2b273d83e",
+  "recorded_utc": "2026-07-18T19:51:38Z",
+  "claim_ceiling": "A3-scoped AWS lab L4; Azure L1, performance L1, security SBOM L2, agentic workflow L3, upstream integration L2",
+  "validation": [
+    {
+      "command": "git rev-parse b7b1815d57c1f5d01c56aa0cd9a7af586becc6c5^",
+      "exit_code": 0,
+      "result": "4674506bf963d9bf8915a73e6a28358acf089c71",
+      "recorded_utc": "2026-07-18T19:50:55Z"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "result": "94 passed; 0 failed",
+      "started_utc": "2026-07-18T19:51:19Z",
+      "completed_utc": "2026-07-18T19:51:24Z"
+    },
+    {
+      "command": "terraform fmt -check -recursive terraform",
+      "exit_code": 0,
+      "result": "pass",
+      "started_utc": "2026-07-18T19:51:27Z",
+      "completed_utc": "2026-07-18T19:51:28Z"
+    },
+    {
+      "command": "node scripts/project.mjs validate P8-T04",
+      "exit_code": 0,
+      "result": "all seven validators passed; generated side effects discarded",
+      "started_utc": "2026-07-18T19:51:38Z",
+      "completed_utc": "2026-07-18T19:51:38Z"
+    }
+  ],
+  "universal_must_haves": [
+    {"id": "U1", "status": "pass", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "docs/claims/matrix.json", "integration/upstreams.lock.json"]},
+    {"id": "U2", "status": "pass", "evidence": ["node --test tests/", "terraform fmt -check -recursive terraform", "node scripts/project.mjs validate P8-T04"]},
+    {"id": "U3", "status": "pass", "evidence": ["evidence/slices/S6/security.json", "tests/workflows/hosted-ci.test.mjs"]},
+    {"id": "U4", "status": "pass", "evidence": ["evidence/slices/S6/security.json", "docs/claims/matrix.json"]},
+    {"id": "U5", "status": "pass", "evidence": ["docs/claims/matrix.json", "README.md"]},
+    {"id": "U6", "status": "pass", "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json", "evidence/slices/S3/serverless.json", "evidence/slices/S7/recovery/"]},
+    {"id": "U7", "status": "pass", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]},
+    {"id": "U8", "status": "pass", "evidence": ["PLAN.md", "integration/upstreams.lock.json"]},
+    {"id": "U9", "status": "pass", "evidence": ["BREAK_FIX_LOG.md"]},
+    {"id": "U10", "status": "pass", "evidence": ["README.md", "OPERATING_STATE.md", "docs/claims/matrix.json"]},
+    {"id": "U11", "status": "pass", "evidence": ["AGENTS.md", "tests/harness/p0-t05.test.mjs"]},
+    {"id": "U12", "status": "pass", "evidence": ["PLAN.md", "tests/harness/p0-t05.test.mjs"]},
+    {"id": "U13", "status": "pass", "evidence": ["evidence/portfolio/nixer-council-fail-760827d.json", "evidence/portfolio/tip-bind-2026-07-18.json"]},
+    {"id": "U14", "status": "pass", "evidence": ["BREAK_FIX_LOG.md"]}
+  ],
+  "slice_must_haves": [
+    {"id": "S8-M1", "status": "pass", "evidence": ["evidence/slices/S1/STREAM_COMPLETE.json", "evidence/slices/S8/integrated-gate.json"]},
+    {"id": "S8-M2", "status": "pass", "evidence": ["evidence/slices/S8/evidence-index.json", "docs/claims/matrix.json"]},
+    {"id": "S8-M3", "status": "pass", "evidence": ["node --test tests/", "node scripts/project.mjs validate P8-T04", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]},
+    {"id": "S8-M4", "status": "pass", "evidence": ["README.md", "OPERATING_STATE.md", "docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]},
+    {"id": "S8-M5", "status": "pass", "evidence": ["docs/claims/matrix.json"]},
+    {"id": "S8-M6", "status": "pass", "evidence": ["docs/claims/matrix.json", "evidence/hosted/lab-drill-rto-29645042815.json"]},
+    {"id": "S8-M7", "status": "pass", "evidence": ["README.md", "operations/runbooks/"]},
+    {"id": "S8-M8", "status": "pass", "evidence": ["BREAK_FIX_LOG.md", "evidence/judges/REVIEW-COMPLETION-02.json"]},
+    {"id": "S8-M9", "status": "pass", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json"]},
+    {"id": "S8-M10", "status": "pass", "evidence": ["PLAN.md", "OPERATING_STATE.md"]},
+    {"id": "S8-M11", "status": "pass", "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/judges/S0/fresh-judge-1.json", "evidence/judges/S8/fresh-judge-3.json"]},
+    {"id": "S8-M12", "status": "pass", "evidence": ["docs/architecture/continuityops.drawio", "docs/architecture/continuityops-architecture.svg", "docs/architecture/continuityops-architecture.png"]},
+    {"id": "S8-M13", "status": "pass", "evidence": ["README.md", "docs/claims/matrix.json"]},
+    {"id": "S8-M14", "status": "pass", "evidence": ["README.md", "docs/architecture/continuityops-architecture.svg", "docs/claims/matrix.json"]}
+  ],
+  "scored_dimensions": [
+    {"id": "correctness_completeness", "score": 2.0, "maximum": 2.0, "rationale_zh": "父提交绑定、全仓验证和逐组件声明矩阵一致，A3 范围内交付完整。", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "docs/claims/matrix.json", "evidence/slices/S8/integrated-gate.json"]},
+    {"id": "security_authority_boundaries", "score": 1.5, "maximum": 1.5, "rationale_zh": "OIDC、环境门和无容器 AWS 凭据边界明确，未把实验室权限外扩为生产权限。", "evidence": ["evidence/slices/S6/security.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "OPERATING_STATE.md"]},
+    {"id": "failure_recovery_depth", "score": 1.4, "maximum": 1.5, "rationale_zh": "失败、修复、实验室恢复和拆除均有记录；因无已证明的 ContinuityOps 已知良好回滚摘要保留 0.1 分。", "evidence": ["BREAK_FIX_LOG.md", "evidence/hosted/lab-drill-rto-29645042815.json", "docs/claims/matrix.json"]},
+    {"id": "deterministic_test_quality", "score": 1.0, "maximum": 1.0, "rationale_zh": "94 项测试、Terraform 格式检查和 P8-T04 全部通过。", "evidence": ["tests/", "terraform/", "scripts/project.mjs"]},
+    {"id": "live_runtime_evidence_quality", "score": 1.0, "maximum": 1.0, "rationale_zh": "AWS 实验室 apply、RTO drill 与 teardown 的成功运行均被保存，且范围限定清楚。", "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "evidence/hosted/lab-drill-rto-29645042815.json"]},
+    {"id": "operability_troubleshooting", "score": 1.0, "maximum": 1.0, "rationale_zh": "运行手册、故障记录、状态页与招聘入口形成可脱离聊天历史使用的导航。", "evidence": ["operations/runbooks/", "BREAK_FIX_LOG.md", "README.md"]},
+    {"id": "evidence_claim_integrity", "score": 1.0, "maximum": 1.0, "rationale_zh": "矩阵逐组件标注 L1-L4，README 明示 A3 上限和非声明，父绑定修复可复核。", "evidence": ["docs/claims/matrix.json", "README.md", "evidence/portfolio/tip-bind-2026-07-18.json"]},
+    {"id": "maintainability_handoff", "score": 0.5, "maximum": 0.5, "rationale_zh": "切片证据、统一验证器和持久状态文件支持后续独立接手。", "evidence": ["PLAN.md", "OPERATING_STATE.md", "evidence/slices/S8/evidence-index.json"]},
+    {"id": "cost_performance_realism", "score": 0.3, "maximum": 0.5, "rationale_zh": "拆除与成本边界可信，但性能按 A3 保持 L1，缺少持续运行的统计性能证据。", "evidence": ["evidence/slices/S7/cost/", "evidence/slices/S7/performance/", "docs/claims/matrix.json"]}
+  ],
+  "overall_score": 9.7,
+  "blocking_findings": [],
+  "unsupported_claims": [],
+  "security_findings": [],
+  "remaining_risks": [
+    "ContinuityOps 已知良好回滚摘要仍未证明。",
+    "性能证据按 A3 上限保持 L1，不代表持续生产负载。",
+    "Azure 仍仅为 L1 设计/静态证据，明确不在本次 AWS 实验室声明内。"
+  ],
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-fresh-judge"
+  },
+  "notes_zh": "独立盲评结论：父绑定成立，必需检查通过，README 与 A3 范围的 L4 AWS 实验室声明一致；所有通用与 S8 必备项通过。"
+}
