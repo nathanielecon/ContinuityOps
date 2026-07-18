@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "artifact": "portfolio_fresh_judge",
+  "round": "fresh",
+  "judge_id": "fresh-judge-2",
+  "tip_under_review": "b7b1815d57c1f5d01c56aa0cd9a7af586becc6c5",
+  "candidate_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "recorded_utc": "2026-07-18T19:51:32Z",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "695d88db163b0acef4cc431412e1bacc259bdcb6f95fa0850623e5d2b273d83e",
+  "upstream_pins_sha256": "f01b2099f47ea87ef8418c75f4fc2efccde6972d8295d4b86af3c560236b764f",
+  "partition_manifest_sha256": "54fd67f4f1b06a87ee7fb0d010e38b59fef8613341daa29b1f8cac0d0b125d1a",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-judge"
+  },
+  "validation_results": [
+    {
+      "command": "git rev-parse b7b1815d57c1f5d01c56aa0cd9a7af586becc6c5^",
+      "exit_code": 0,
+      "recorded_utc": "2026-07-18T19:51:26Z",
+      "result": "4674506bf963d9bf8915a73e6a28358acf089c71",
+      "evidence_path": "evidence/portfolio/tip-bind-2026-07-18.json"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "recorded_utc": "2026-07-18T19:51:31Z",
+      "result": "94 passed, 0 failed",
+      "evidence_path": "tests/"
+    },
+    {
+      "command": "terraform fmt -check -recursive terraform",
+      "exit_code": 0,
+      "recorded_utc": "2026-07-18T19:51:31Z",
+      "result": "clean",
+      "evidence_path": "terraform/"
+    },
+    {
+      "command": "node scripts/project.mjs validate P8-T04",
+      "exit_code": 0,
+      "recorded_utc": "2026-07-18T19:51:32Z",
+      "result": "all seven validators passed; generated side effects discarded",
+      "evidence_path": "evidence/slices/S8/integrated-gate.json"
+    }
+  ],
+  "must_haves": [
+    {"id": "U1", "status": "pass", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "docs/claims/matrix.json", "integration/upstreams.lock.json", "harness/postbuild-partition-manifest.json"]},
+    {"id": "U2", "status": "pass", "evidence": ["tests/", "evidence/slices/S8/integrated-gate.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]},
+    {"id": "U3", "status": "pass", "evidence": ["evidence/slices/S6/security.json", "evidence/hosted/security-sbom-2026-07-18.json"]},
+    {"id": "U4", "status": "pass", "evidence": ["evidence/slices/S6/security.json", "ISSUES.md"]},
+    {"id": "U5", "status": "pass", "evidence": ["docs/claims/matrix.json", "README.md", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]},
+    {"id": "U6", "status": "pass", "evidence": ["tests/", "evidence/slices/S2/scenarios/matrix-evidence.json", "evidence/slices/S7/recovery/"]},
+    {"id": "U7", "status": "pass", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "evidence/hosted/lab-drill-rto-29645042815.json"]},
+    {"id": "U8", "status": "pass", "evidence": ["PLAN.md", "harness/postbuild-partition-manifest.json", "evidence/judges/REVIEW-COMPLETION-02.json"]},
+    {"id": "U9", "status": "pass", "evidence": ["BREAK_FIX_LOG.md"]},
+    {"id": "U10", "status": "pass", "evidence": ["README.md", "docs/claims/matrix.json", "docs/architecture/continuityops-architecture.svg", "evidence/slices/S8/integrated-gate.json"]},
+    {"id": "U11", "status": "pass", "evidence": ["AGENTS.md", "evidence/judges/WORKER-HIER-01-validation.json"]},
+    {"id": "U12", "status": "pass", "evidence": ["harness/postbuild-partition-manifest.json", "evidence/slices/S8/delivery.json"]},
+    {"id": "U13", "status": "pass", "evidence": ["evidence/portfolio/nixer-council-fail-760827d.json", "evidence/portfolio/tip-bind-2026-07-18.json"]},
+    {"id": "U14", "status": "pass", "evidence": ["BREAK_FIX_LOG.md"]},
+    {"id": "S8-M1", "status": "pass", "evidence": ["evidence/slices/S1/STREAM_COMPLETE.json", "evidence/slices/S8/integrated-gate.json"]},
+    {"id": "S8-M2", "status": "pass", "evidence": ["evidence/slices/S8/delivery.json", "docs/claims/matrix.json"]},
+    {"id": "S8-M3", "status": "pass", "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]},
+    {"id": "S8-M4", "status": "pass", "evidence": ["README.md", "docs/claims/matrix.json", "docs/architecture/continuityops-architecture.svg"]},
+    {"id": "S8-M5", "status": "pass", "evidence": ["docs/claims/matrix.json"]},
+    {"id": "S8-M6", "status": "pass", "evidence": ["docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]},
+    {"id": "S8-M7", "status": "pass", "evidence": ["README.md", "docs/portfolio/README.md", "docs/evidence-index.md"]},
+    {"id": "S8-M8", "status": "pass", "evidence": ["BREAK_FIX_LOG.md", "evidence/judges/REVIEW-COMPLETION-02.json"]},
+    {"id": "S8-M9", "status": "pass", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json"]},
+    {"id": "S8-M10", "status": "pass", "evidence": ["PLAN.md", "OPERATING_STATE.md"]},
+    {"id": "S8-M11", "status": "pass", "evidence": ["harness/postbuild-partition-manifest.json", "evidence/judges/S8/saved-council-provisional.json"]},
+    {"id": "S8-M12", "status": "pass", "evidence": ["docs/architecture/continuityops.drawio", "docs/architecture/continuityops-architecture.svg", "docs/architecture/continuityops-architecture.png"]},
+    {"id": "S8-M13", "status": "pass", "evidence": ["README.md", "docs/claims/matrix.json"]},
+    {"id": "S8-M14", "status": "pass", "evidence": ["README.md", "docs/portfolio/README.md", "docs/claims/matrix.json"]}
+  ],
+  "scored_dimensions": [
+    {"id": "correctness_completeness", "score": 2.0, "maximum": 2.0, "rationale_zh": "父提交绑定、全仓验证与 S1-S8 集成材料相互一致。", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "evidence/slices/S8/integrated-gate.json"]},
+    {"id": "security_authority_boundaries", "score": 1.5, "maximum": 1.5, "rationale_zh": "OIDC、只读 PR、H6 与无容器 AWS 凭据边界明确。", "evidence": ["evidence/slices/S6/security.json", "AGENTS.md"]},
+    {"id": "failure_recovery_depth", "score": 1.4, "maximum": 1.5, "rationale_zh": "失败、修复、实验室恢复和拆除均有证据；已诚实保留无已知良好回滚摘要的限制。", "evidence": ["BREAK_FIX_LOG.md", "evidence/hosted/lab-drill-rto-29645042815.json"]},
+    {"id": "deterministic_test_quality", "score": 1.0, "maximum": 1.0, "rationale_zh": "94 项测试、Terraform 格式及 P8 集成验证全部通过。", "evidence": ["tests/", "terraform/", "evidence/slices/S8/integrated-gate.json"]},
+    {"id": "live_runtime_evidence_quality", "score": 1.0, "maximum": 1.0, "rationale_zh": "AWS 实验室 apply、演练和 teardown 具有运行 URL 与范围限定。", "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "evidence/hosted/lab-drill-rto-29645042815.json"]},
+    {"id": "operability_troubleshooting", "score": 1.0, "maximum": 1.0, "rationale_zh": "运行手册、首五分钟诊断和演示路径可从仓库独立导航。", "evidence": ["operations/runbooks/", "docs/portfolio/README.md", "docs/evidence-index.md"]},
+    {"id": "evidence_claim_integrity", "score": 1.0, "maximum": 1.0, "rationale_zh": "README 已与 A3 的分项 L1/L2/L3/L4 上限和非声明同步。", "evidence": ["README.md", "docs/claims/matrix.json"]},
+    {"id": "maintainability_handoff", "score": 0.5, "maximum": 0.5, "rationale_zh": "分区、状态、证据索引与可复现命令支持无聊天历史交接。", "evidence": ["harness/postbuild-partition-manifest.json", "OPERATING_STATE.md"]},
+    {"id": "cost_performance_realism", "score": 0.3, "maximum": 0.5, "rationale_zh": "成本与拆除证据可信，但性能仍明确停留在 L1，未把合成结果包装为托管负载证明。", "evidence": ["docs/claims/matrix.json", "evidence/slices/S7/cost/", "evidence/slices/S7/performance/"]}
+  ],
+  "overall_score": 9.7,
+  "blocking_findings": [],
+  "unsupported_claims": [],
+  "security_findings": [],
+  "remaining_boundaries": [
+    "Azure live apply is out of scope and remains L1 design evidence.",
+    "Performance remains L1; no sustained customer-production load claim is made.",
+    "Security SBOM is L2, agentic workflow is L3, and upstream integration is L2.",
+    "AWS L4 evidence is scoped to the A3 lab; it is not customer production ownership.",
+    "No ContinuityOps known-good rollback digest is proven."
+  ],
+  "merge_ready": "yes",
+  "notes_zh": "独立盲评结论：README 修复已消除 BF-2026-017 的 U5/U10 不一致；父提交绑定与所有指定检查通过。A3 范围内可合并，且保留的非声明阻止将实验室 L4 外推为生产经历。"
+}
