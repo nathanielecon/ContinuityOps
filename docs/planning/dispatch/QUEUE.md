@@ -36,24 +36,47 @@
 
 ## 初级监督者心跳 — D-034/D-035/D-041(评审 PR;发布由 GHA 完成;保暖云原生)
 
-> **D-041 / D-042:** 下列心跳由 **junior supervisor**（GPT-5.6 Sol med）**判断**。
-> **Chief supervisor** 只在 `STREAM_COMPLETE` / 升级 / monitor 显著瓶颈时介入。
-> App 沙箱不能 `gh`；junior **动手**改为评论意图标记，由 GHA `junior-actuate` 执行（D-042）。
+> **D-047（amends D-041/D-042 例行 hop）:** 机械 phase hop 由
+> `.github/workflows/pipeline-zero-hop.yml` **零跳变**完成，**不经 junior 定时器**。
+> Junior 只处理**例外**（范围冲突、模糊 stop/escalate、两连同 class、跨车道锁、
+> 路由包）。寻呼见 [`PAGER_SNIPPET.zh.md`](./PAGER_SNIPPET.zh.md)。
+> 候选分支约定：`candidate/portfolio-<7sha>`；**仅** fresh council 通过后才合 `main`。
+>
+> **D-041 / D-042（仍有效，范围收窄）:** 例外判断仍由 **junior supervisor**
+> （GPT-5.6 Sol med）作出；动手经 D-042 意图标记 → `junior-actuate`。
+> **Chief** 处理 `STREAM_COMPLETE` / `chief-pager` / monitor 显著瓶颈。
 > 片段见 [`JUNIOR_ACTUATE_SNIPPET.zh.md`](./JUNIOR_ACTUATE_SNIPPET.zh.md)。
 
-每次心跳(或 D-032 批量唤醒)对**每个**开放且带 `codex-dispatch` 的 issue:
+### Zero-hop 机械表（D-047，GHA 拥有）
 
-1. 观察 `publish-ok` / 开放 PR → 用 `continuityops-dispatch-v1` 派遣 D-037 GPT reviewer 轮（勿在沙箱调 `gh`）。
-2. reviewer 轮必须在沙箱内以该 PR 声明的 `base_sha` 应用 patch、亲自运行 PR 声明的验证命令、以结构化 verdict 评论回报;reviewer 只提 findings,不改实现。
-3. **Junior** 合并信号为 **CI green + reviewer verdict pass** → 发 `continuityops-merge-v1`（`pr` + `d037_issue`）；GHA 核验后合并。失败 findings 进入独立 fixer 轮。
-4. 若 bot 已回复但**无** `continuityops-patch-v1` 且无 PR → 重催一次,粘贴
-   `CODEX_DISPATCH_SNIPPET.zh.md`(要求输出 patch 块)。
-5. 若见 `publish-failed` → 读失败评论;可后备平台 Create PR 或
-   `Publish-CodexCloudTask.ps1`;仍失败则升级首席/控制中心后备(**本 engagement 禁止 Opus**)。
-6. **禁止**把 `make_pr` / 无 PR URL 的 bot 摘要当完成。
-7. **禁止**在 App 容器内直接 `gh pr merge` / `gh issue create`（D-042）。
+| 触发 | 动作 |
+| --- | --- |
+| `publish-ok` | 创建/确保 D-037 `codex-dispatch` + `@codex` + D-034 片段 |
+| D-037 bot `verdict: pass` + CI green | 合并 PR → **candidate**（非 main） |
+| D-037 bot `verdict: fail` | 开 fixer issue + `@codex` |
+| Judge PR `evidence/judges/**` 且 `merge_ready: no` | **B:** 开 nixer + `@codex`（按 candidate SHA 去重） |
+| Nixer `publish-ok` | 开 fixer，绑定 nixer issue IDs |
+| Fixer 合入 candidate | 派遣 provisional 三 judge |
+| Provisional 全 `merge_ready: yes` | 派遣 **fresh** 三 judge |
+| Fresh 全通过 + CI | candidate → `main` |
+| Provisional/fresh 失败 | 新 nixer cohort（新 issue IDs），禁止盲重试同 tip |
+| `publish-failed` | 自动重催一次 `@codex` + D-034 |
+| #4 暖戳 >9h | `#4` 冒烟 `@codex` |
 
-保暖(D-035):暖戳为保暖 issue **#4** 上最近一次 Codex 任务时间戳。派遣时若暖戳旧于约 10h,先由 **junior**（或所有者）在 #4 发平凡 `@codex` 冒烟;禁止把真实工作派进冷环境。Junior 心跳在暖戳 >9h 时主动冒烟。Grok **monitor** 向首席汇报显著瓶颈（见 `MONITOR.zh.md`）。
+幂等标签：`zh-dispatching` / `zh-dispatched` / `fail-class:<hash>`。
+两连同 class（strike≥2）→ 停止自动重试，寻呼 junior/chief。
+
+### Junior 例外心跳（非机械 hop）
+
+每次被 `JR-EXCEPTION-*` 唤醒时：
+
+1. 校验 wake packet（缺字段 → `failed` + 寻呼首席，不得猜 hop）。
+2. 模糊 write_scope：只许 `reject` | `rebind_scope` | `escalate`。
+3. 跨车道须引用 lock/interface 路径，否则 escalate。
+4. 需 actuation 时必须带 D-042 意图标记；无标记不得标 `complete`。
+5. **禁止**在 App 容器内直接 `gh`；**禁止**把 `make_pr` 当完成。
+
+保暖(D-035/D-047):暖戳为 issue **#4** 最近 Codex 任务时间戳。Zero-hop 在 >9h 时冒烟；禁止把真实工作派进冷环境。Grok **monitor** 向首席汇报显著瓶颈（见 `MONITOR.zh.md`）。
 
 ## 角色
 
@@ -89,19 +112,23 @@ codex cloud exec --env <ENV_ID> --branch <target-branch> "<单行简体中文任
 > 权威*任务定义*仍是 `PLAN.md` 中的 `P0-T01`。验证器实现来源与运行方式见
 > `harness/README.md`（候选实现分支 `claude/cloud-gpt-ralphy-validation-6m0gkz`）。
 
-## 所需标签（自动创建，四个现已存在）
+## 所需标签（自动创建 + D-047 扩展）
 
 GitHub 的 issues API 在给 issue 贴一个尚不存在的标签时会**自动创建**该标签
-（云侧经 MCP 已实证）。因此**任一拥有 `issues:write` 权限的席位**（云编排器或控制中心）
-均可经"贴标签"自动创建,无需专门的 `gh label create` 步骤。四个生命周期标签
+（云侧经 MCP 已实证）。四个生命周期标签
 （`codex-dispatch`、`dispatching`、`dispatched`、`dispatch-failed`）**现已存在**。
-如需显式预建或统一配色/描述,可选执行：
+D-047 另需：`zh-dispatching`、`zh-dispatched`、`chief-pager`、`junior-exception`；
+`fail-class:<hash>` 由 zero-hop 按失败类动态贴。可选预建：
 
 ```bash
 gh label create codex-dispatch  --color 1d76db --description "待派遣的 Codex 任务队列"
 gh label create dispatching     --color fbca04 --description "已被车道认领,派遣进行中"
 gh label create dispatched      --color 0e8a16 --description "codex cloud exec 已提交,含任务 ID"
 gh label create dispatch-failed --color b60205 --description "温门或派遣失败,人工重排队"
+gh label create zh-dispatching  --color f9d0c4 --description "zero-hop 认领中(D-047)"
+gh label create zh-dispatched   --color c2e0c6 --description "zero-hop 已完成该 hop(D-047)"
+gh label create chief-pager     --color b60205 --description "首席 durable pager(D-047)"
+gh label create junior-exception --color d93f0b --description "初级例外唤醒(D-047)"
 ```
 
 ## 标签生命周期

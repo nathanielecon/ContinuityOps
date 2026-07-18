@@ -33,8 +33,20 @@ Settings → Actions → General → Workflow permissions:
 
 当前 owner PAT 对 Actions permissions API 返回 403（需 Administration 能力或 UI）。若发布/actuate 失败指向权限，由所有者在 UI 勾选。
 
+## 完成硬规则（D-047）
+
+当本轮合同需要合并或派遣时：
+
+- 仅 Mandarin handoff / 无意图标记 → **不完整**（不得标 `status: complete`）
+- 必须输出 `continuityops-merge-v1` 或 `continuityops-dispatch-v1`
+- 模糊 write_scope：只允许 `reject` | `rebind_scope` | `escalate`（见 `PAGER_SNIPPET.zh.md` wake packet）
+- 两连同 class 失败：停止盲目重试，寻呼首席（`chief-pager`）
+
+机械 hop（publish-ok→D-037、council fail→nixer、等）由 `pipeline-zero-hop` 自动完成；本席只处理例外。
+
 ## 明确非目标
 
 - 不向 Codex Cloud Environment 注入凭据（D-026）
 - 不宣称 App 沙箱获得 `gh`
 - 不绕过 D-037 / CI 绿灯
+- 不作为机械 hop 的定时器（D-047 zero-hop）
