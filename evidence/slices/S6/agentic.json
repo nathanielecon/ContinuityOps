@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "task_id": "P6-T03",
+  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "command": "node scripts/project.mjs validate P6-T03",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:24:01.139Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "agent_permission": true,
+    "prompt_injection": true,
+    "unsafe_proposal": true,
+    "evidence_forgery": true,
+    "workflow_permissions": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "H4 waived under D-044",
+    "Protected environment placeholders retained",
+    "No live mutation"
+  ],
+  "started_at": "2026-07-18T06:24:01.127Z",
+  "completed_at": "2026-07-18T06:24:01.139Z",
+  "validator_details": [
+    {
+      "id": "agent_permission",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "prompt_injection",
+      "result": {
+        "pass": true,
+        "note": "prompt-injection 由 tests/agentic 覆盖"
+      }
+    },
+    {
+      "id": "unsafe_proposal",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "evidence_forgery",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "workflow_permissions",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "agent_permission",
+    "prompt_injection",
+    "unsafe_proposal",
+    "evidence_forgery",
+    "workflow_permissions"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S6/agentic.json",
+  "bind_model": "candidate_sha_equals_head"
+}

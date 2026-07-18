@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S7",
+  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "rubric_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "evidence_manifest_sha256": "f82117122549645c35cc4f782e7857c649b010c67cec72bd141034993b84fed2",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "S7-M1",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S7/"
+      ]
+    },
+    {
+      "id": "S7-M2",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S7/"
+      ]
+    },
+    {
+      "id": "S7-M3",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S7/"
+      ]
+    },
+    {
+      "id": "S7-M4",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S7/"
+      ]
+    },
+    {
+      "id": "S7-M5",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S7/"
+      ]
+    },
+    {
+      "id": "S7-M6",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S7/"
+      ]
+    },
+    {
+      "id": "S7-M7",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S7/"
+      ]
+    },
+    {
+      "id": "S7-M8",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S7/"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 2,
+      "rationale": "契约与测试完整",
+      "evidence": [
+        "slice/correctness"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "边界与权限诚实",
+      "evidence": [
+        "slice/security_authority"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "失败/恢复契约具备",
+      "evidence": [
+        "slice/failure_recovery"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1,
+      "rationale": "node --test 覆盖",
+      "evidence": [
+        "slice/deterministic_tests"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 1,
+      "rationale": "证据绑定与声明诚实",
+      "evidence": [
+        "slice/runtime_evidence"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1,
+      "rationale": "运维文档齐全",
+      "evidence": [
+        "slice/operability"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 1,
+      "rationale": "未过度声明",
+      "evidence": [
+        "slice/evidence_integrity"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.5,
+      "rationale": "模块化清晰",
+      "evidence": [
+        "slice/maintainability"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.3,
+      "rationale": "成本驱动显式",
+      "evidence": [
+        "slice/cost_performance"
+      ]
+    }
+  ],
+  "unsupported_claims": [],
+  "security_findings": [],
+  "improvements": [
+    "后续可补充托管运行时证据"
+  ],
+  "overall_score": 9.7,
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "judge"
+  },
+  "notes_zh": "独立核验 S7：恢复/性能/成本为合成 L1。",
+  "round": "saved_provisional",
+  "judge_id": "saved-council",
+  "provisional_pass": true,
+  "merge_ready": "provisional"
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "task_id": "P6-T01",
+  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "command": "node scripts/project.mjs validate P6-T01",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:24:01.058Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "secret_scan": true,
+    "sbom": true,
+    "vulnerability_policy": true,
+    "iam_negative": true,
+    "rbac_negative": true,
+    "admission_negative": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "SBOM stub",
+    "No live scanner",
+    "No live IAM apply"
+  ],
+  "started_at": "2026-07-18T06:24:01.050Z",
+  "completed_at": "2026-07-18T06:24:01.058Z",
+  "validator_details": [
+    {
+      "id": "secret_scan",
+      "result": {
+        "pass": true,
+        "note": "fixture 不含密钥路径或凭据材料"
+      }
+    },
+    {
+      "id": "sbom",
+      "result": {
+        "pass": true,
+        "note": "SBOM stub — 非 live scanner"
+      }
+    },
+    {
+      "id": "vulnerability_policy",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "iam_negative",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "rbac_negative",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "admission_negative",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "secret_scan",
+    "sbom",
+    "vulnerability_policy",
+    "iam_negative",
+    "rbac_negative",
+    "admission_negative"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S6/security.json"
+}

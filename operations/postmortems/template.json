@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "required_sections": [
+    "summary",
+    "impact",
+    "timeline",
+    "root_cause",
+    "corrective_actions",
+    "detection_gaps"
+  ],
+  "claim_ceiling": "L1"
+}

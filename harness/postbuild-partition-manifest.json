@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "partitions": [
+    {
+      "id": "governance",
+      "paths": [
+        "PLAN.md",
+        "OPERATING_STATE.md",
+        "AGENTS.md"
+      ],
+      "owner": "portfolio"
+    },
+    {
+      "id": "harness",
+      "paths": [
+        "scripts/",
+        "harness/",
+        "tests/"
+      ],
+      "owner": "platform"
+    },
+    {
+      "id": "runtime-k8s",
+      "paths": [
+        "kubernetes/"
+      ],
+      "owner": "s2"
+    },
+    {
+      "id": "runtime-serverless",
+      "paths": [
+        "serverless/"
+      ],
+      "owner": "s3"
+    },
+    {
+      "id": "observability",
+      "paths": [
+        "observability/",
+        "operations/slo/"
+      ],
+      "owner": "s4"
+    },
+    {
+      "id": "operations",
+      "paths": [
+        "operations/runbooks/",
+        "operations/drills/",
+        "operations/incidents/"
+      ],
+      "owner": "s5"
+    },
+    {
+      "id": "security",
+      "paths": [
+        "security/",
+        "azure/",
+        "agentic/"
+      ],
+      "owner": "s6"
+    },
+    {
+      "id": "resilience",
+      "paths": [
+        "operations/recovery/",
+        "performance/",
+        "operations/finops/"
+      ],
+      "owner": "s7"
+    },
+    {
+      "id": "delivery",
+      "paths": [
+        "docs/",
+        "README.md",
+        "evidence/"
+      ],
+      "owner": "s8"
+    }
+  ],
+  "shared_interfaces": [
+    {
+      "id": "claim_level",
+      "consumers": [
+        "all"
+      ],
+      "rubric": "harness/rubrics/postbuild/shared-claims.json"
+    },
+    {
+      "id": "evidence_sha_binding",
+      "consumers": [
+        "all"
+      ],
+      "rubric": "harness/rubrics/postbuild/shared-evidence.json"
+    }
+  ]
+}

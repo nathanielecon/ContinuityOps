@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "must_haves": [
+    "Every component has claim_level",
+    "No L4+ without cloud_apply_evidence"
+  ]
+}

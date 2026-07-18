@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "drill_id": "queue-poison-message",
+  "evidence_kind": "synthetic_drill",
+  "claim_level": "L1",
+  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "path": "operations/drills/queue-poison-message.json",
+  "remaining_boundaries": [
+    "No live production drill"
+  ]
+}

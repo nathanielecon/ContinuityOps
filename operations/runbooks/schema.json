@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "first_five_minutes",
+    "safe_commands",
+    "stop_escalation",
+    "do_not_do_yet",
+    "isolation_logic"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "first_five_minutes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 3
+    },
+    "safe_commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "cmd",
+          "purpose",
+          "destructive"
+        ],
+        "properties": {
+          "cmd": {
+            "type": "string"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "destructive": {
+            "type": "boolean"
+          },
+          "requires_approval": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "stop_escalation": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "do_not_do_yet": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "isolation_logic": {
+      "type": "string"
+    }
+  }
+}
