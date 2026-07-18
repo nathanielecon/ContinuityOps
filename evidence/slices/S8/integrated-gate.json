@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "task_id": "P8-T04",
-  "baseline_sha": "196bed4775128efbe193e028c722f13816a7f91b",
-  "candidate_sha": "196bed4775128efbe193e028c722f13816a7f91b",
+  "baseline_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "candidate_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
   "command": "node scripts/project.mjs validate P8-T04",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:25:19.640Z",
+  "recorded_at": "2026-07-18T18:58:54.377Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -27,22 +27,27 @@
   },
   "claim_level": "L4",
   "remaining_boundaries": [
-    "Scoped 100% under A3 ceilings",
+    "Scoped 100% under A3 ceilings (AWS lab via continuityops-gha)",
     "Azure live apply out (D-046) \u2014 L1 design only",
     "Performance remains honest L1",
     "security-sbom L2; agentic-workflow L3; upstream-integration L2",
     "No ContinuityOps known-good rollback proven",
     "No Cursor in-pod AWS; no production customer drills"
   ],
-  "started_at": "2026-07-18T06:25:19.620Z",
-  "completed_at": "2026-07-18T06:25:19.640Z",
+  "cloud_apply_evidence": [
+    "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+    "evidence/hosted/lab-drill-rto-29645042815.json"
+  ],
+  "started_at": "2026-07-18T18:58:54.352Z",
+  "completed_at": "2026-07-18T18:58:54.377Z",
   "validator_details": [
     {
       "id": "full_repository",
       "result": {
         "pass": true,
-        "standalone_json": 191,
-        "fenced_json": 14,
+        "standalone_json": 233,
+        "fenced_json": 16,
         "skipped_allowlisted": 0
       }
     },
@@ -99,13 +104,7 @@
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
   "evidence_path": "evidence/slices/S8/integrated-gate.json",
-  "bind_model": "portfolio_tip_inheritance",
-  "implementation_sha": "196bed4775128efbe193e028c722f13816a7f91b",
-  "slice_landed_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "portfolio_tip_sha": "196bed4775128efbe193e028c722f13816a7f91b",
-  "rebinding": {
-    "recorded_utc": "2026-07-18T18:50:50Z",
-    "prior_candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-    "portfolio_tip_sha": "196bed4775128efbe193e028c722f13816a7f91b"
-  }
+  "bind_model": "candidate_sha_parent_of_tip",
+  "implementation_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "portfolio_tip_sha": "3666a94ed70bebcac4de9de864f557100b6288bb"
 }

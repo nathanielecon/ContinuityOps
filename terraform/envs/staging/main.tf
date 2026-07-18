@@ -19,11 +19,11 @@ module "network" {
 }
 
 module "serverless" {
-  source           = "../../modules/serverless"
-  environment      = "staging"
+  source            = "../../modules/serverless"
+  environment       = "staging"
   enable_serverless = true
-  lambda_role_arn  = module.iam.role_interface.lambda_role_arn
-  depends_on       = [module.iam]
+  lambda_role_arn   = module.iam.role_interface.lambda_role_arn
+  depends_on        = [module.iam]
 }
 
 module "eks" {
@@ -31,8 +31,8 @@ module "eks" {
   environment = "staging"
   enable_eks  = true
   # Public subnets for cost-capped lab (no NAT).
-  subnet_ids  = module.network.network_boundary.public_subnet_ids
-  depends_on  = [module.network]
+  subnet_ids = module.network.network_boundary.public_subnet_ids
+  depends_on = [module.network]
 }
 
 # Control-plane smoke (already live).
@@ -69,9 +69,9 @@ output "staging_network" {
 
 output "staging_serverless" {
   value = {
-    enabled      = module.serverless.serverless_enabled
-    queue_url    = module.serverless.queue_url
-    lambda_name  = module.serverless.lambda_function_name
+    enabled     = module.serverless.serverless_enabled
+    queue_url   = module.serverless.queue_url
+    lambda_name = module.serverless.lambda_function_name
   }
 }
 

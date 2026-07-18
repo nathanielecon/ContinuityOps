@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -27,15 +27,21 @@ test('failure matrix covers required classes', () => {
 });
 
 test('reset script records synthetic evidence', () => {
-  const out = execFileSync('node', ['scripts/kubernetes/reset-scenario.mjs', 'crashloop'], {
-    cwd: ROOT,
-    encoding: 'utf8'
-  });
-  const parsed = JSON.parse(out);
-  assert.equal(parsed.ok, true);
-  const evidence = JSON.parse(readFileSync(resolve(ROOT, parsed.path), 'utf8'));
-  assert.equal(evidence.synthetic, true);
-  assert.equal(evidence.action, 'reset');
+  const evidencePath = resolve(ROOT, 'evidence/slices/S2/scenarios/crashloop-reset.json');
+  const before = readFileSync(evidencePath, 'utf8');
+  try {
+    const out = execFileSync('node', ['scripts/kubernetes/reset-scenario.mjs', 'crashloop'], {
+      cwd: ROOT,
+      encoding: 'utf8'
+    });
+    const parsed = JSON.parse(out);
+    assert.equal(parsed.ok, true);
+    const evidence = JSON.parse(readFileSync(resolve(ROOT, parsed.path), 'utf8'));
+    assert.equal(evidence.synthetic, true);
+    assert.equal(evidence.action, 'reset');
+  } finally {
+    writeFileSync(evidencePath, before);
+  }
 });
 
 test('kind preflight emits claim level without managed apply', () => {
