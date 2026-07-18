@@ -1,0 +1,163 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "portfolio",
+  "scope": "S1-S8",
+  "round": "fresh",
+  "judge_id": "fresh-judge-3",
+  "candidate_sha": "c2e6610ed7257c52327cfb66fdcc07227547bb85",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "695d88db163b0acef4cc431412e1bacc259bdcb6f95fa0850623e5d2b273d83e",
+  "judge_model_id": "gpt-5.6-sol",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "rationale": "The manifest and rubric hashes match, and the explicit candidate-parent binding records 196bed4775128efbe193e028c722f13816a7f91b as the inherited portfolio evidence tip immediately beneath the judged candidate.",
+      "evidence": [
+        "evidence/portfolio/tip-bind-2026-07-18.json",
+        "docs/claims/matrix.json",
+        "docs/planning/JUDGE_RUBRICS.md",
+        "evidence/slices/S8/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "fail",
+      "rationale": "The focused pipeline/harness suite passes, but the required full repository suite fails because terraform fmt -check reports four unformatted Terraform files.",
+      "evidence": [
+        "tests/terraform/scaffold.test.mjs",
+        "terraform/envs/staging/main.tf",
+        "terraform/modules/iam/main.tf",
+        "terraform/modules/network/main.tf",
+        "terraform/modules/serverless/main.tf"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": ["evidence/slices/S6/security.json", "tests/security/"]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": ["evidence/slices/S6/security.json", "docs/claims/matrix.json"]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": ["docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": ["tests/", "evidence/slices/S2/", "evidence/slices/S3/", "operations/incidents/"]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": ["PLAN.md", "integration/upstreams.lock.json", "evidence/portfolio/tip-bind-2026-07-18.json"]
+    },
+    {
+      "id": "U9",
+      "status": "fail",
+      "rationale": "The freshly reproduced Terraform formatting failure is not recorded in BREAK_FIX_LOG.md, so closure cannot claim complete break/fix history.",
+      "evidence": ["BREAK_FIX_LOG.md", "tests/terraform/scaffold.test.mjs"]
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "rationale": "The current claims matrix elevates the AWS lab stack to L4 and upstream integration to L2, while the rebound S1 completion artifact still says L1, no L4 cloud apply, upstream packaging open, and OIDC not configured.",
+      "evidence": ["docs/claims/matrix.json", "evidence/slices/S1/STREAM_COMPLETE.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": ["AGENTS.md", "tests/harness/"]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": ["PLAN.md", "tests/harness/"]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": ["evidence/portfolio/nixer-council-fail-760827d.json", "evidence/portfolio/tip-bind-2026-07-18.json"]
+    },
+    {
+      "id": "U14",
+      "status": "fail",
+      "rationale": "The newly observed full-suite formatting failure has not yet been added to the durable break/fix log.",
+      "evidence": ["BREAK_FIX_LOG.md", "tests/terraform/scaffold.test.mjs"]
+    }
+  ],
+  "slice_review": [
+    {"id": "S1", "status": "fail", "rationale": "Live cloud evidence exists, but the authoritative completion narrative is stale and the Terraform formatting gate fails."},
+    {"id": "S2", "status": "pass", "rationale": "Chart contracts, failure scenarios, and bounded live EKS evidence are present."},
+    {"id": "S3", "status": "pass", "rationale": "Serverless contracts and bounded Lambda/SQS live evidence are present."},
+    {"id": "S4", "status": "pass", "rationale": "Telemetry contracts and bounded CloudWatch evidence remain claim-aligned."},
+    {"id": "S5", "status": "pass", "rationale": "Runbooks and the lab-only drill evidence preserve the production non-claim."},
+    {"id": "S6", "status": "pass", "rationale": "Security SBOM L2, agentic L3, and Azure L1 ceilings are explicit."},
+    {"id": "S7", "status": "pass", "rationale": "Recovery and teardown are bounded to the lab; performance remains L1."},
+    {"id": "S8", "status": "fail", "rationale": "Portfolio consistency cannot pass while U2, U9, U10, and U14 fail."}
+  ],
+  "blocking_findings": [
+    {
+      "id": "PORTFOLIO-TEST-001",
+      "severity": "high",
+      "summary": "Full repository validation is red.",
+      "reproduction": "node --test tests/",
+      "observed": "93 tests passed and 1 failed; terraform fmt -check -recursive terraform exited 3 and listed four files."
+    },
+    {
+      "id": "PORTFOLIO-CONSISTENCY-001",
+      "severity": "high",
+      "summary": "S1 completion claims contradict current portfolio evidence and claim levels.",
+      "reproduction": "Compare evidence/slices/S1/STREAM_COMPLETE.json with docs/claims/matrix.json and evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json."
+    },
+    {
+      "id": "PORTFOLIO-BREAKFIX-001",
+      "severity": "high",
+      "summary": "The newly observed deterministic failure is absent from BREAK_FIX_LOG.md.",
+      "reproduction": "Run the full suite, then inspect BREAK_FIX_LOG.md for the Terraform formatting failure."
+    }
+  ],
+  "scored_dimensions": [
+    {"id": "correctness_completeness", "score": 1.5, "maximum": 2.0, "rationale": "Broad S1-S8 implementation exists, but a required deterministic gate and portfolio consistency gate fail.", "evidence": ["tests/", "docs/claims/matrix.json", "evidence/slices/S1/STREAM_COMPLETE.json"]},
+    {"id": "security_authority_boundaries", "score": 1.5, "maximum": 1.5, "rationale": "OIDC, lab-only, Azure, agent-container, and production boundaries are explicit.", "evidence": ["docs/claims/matrix.json", "evidence/hosted/agentic-workflow-2026-07-18.json"]},
+    {"id": "failure_recovery_depth", "score": 1.3, "maximum": 1.5, "rationale": "Failure and lab recovery coverage is strong, but the fresh formatting failure is not yet in the durable break/fix chain.", "evidence": ["operations/incidents/", "evidence/hosted/lab-drill-rto-29645042815.json", "BREAK_FIX_LOG.md"]},
+    {"id": "deterministic_test_quality", "score": 0.4, "maximum": 1.0, "rationale": "Focused tests pass, but the full repository suite is red.", "evidence": ["tests/terraform/scaffold.test.mjs", "tests/pipeline/", "tests/harness/"]},
+    {"id": "live_runtime_evidence_quality", "score": 1.0, "maximum": 1.0, "rationale": "Apply, lab drill, and teardown run identities are recorded with honest ceilings.", "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]},
+    {"id": "operability_troubleshooting", "score": 0.9, "maximum": 1.0, "rationale": "Runbooks and drill artifacts are usable, with a small deduction for the unresolved formatting gate.", "evidence": ["operations/runbooks/", "operations/incidents/"]},
+    {"id": "evidence_claim_integrity", "score": 0.5, "maximum": 1.0, "rationale": "The tip binding and A3 ceilings are explicit, but S1 completion text contradicts the current matrix and live evidence.", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "evidence/slices/S1/STREAM_COMPLETE.json", "docs/claims/matrix.json"]},
+    {"id": "maintainability_handoff", "score": 0.4, "maximum": 0.5, "rationale": "Repository structure and durable handoffs are strong; stale completion text reduces confidence.", "evidence": ["PLAN.md", "OPERATING_STATE.md"]},
+    {"id": "cost_performance_realism", "score": 0.5, "maximum": 0.5, "rationale": "Performance remains L1 and cost/teardown claims are explicitly bounded.", "evidence": ["docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]}
+  ],
+  "validation_results": [
+    {"command": "node --test tests/pipeline/*.mjs tests/harness/*.mjs", "exit_code": 0, "result": "24 passed, 0 failed"},
+    {"command": "node --test tests/", "exit_code": 1, "result": "93 passed, 1 failed: terraform fmt -check -recursive terraform"},
+    {"command": "terraform fmt -check -recursive terraform", "exit_code": 3, "result": "Four Terraform files require formatting"},
+    {"command": "python3 standalone and fenced JSON parse", "exit_code": 0, "result": "233 standalone JSON files and 16 fenced JSON blocks parsed"}
+  ],
+  "unsupported_claims": [],
+  "security_findings": [],
+  "improvements": [
+    "Format the four reported Terraform files and rerun the complete repository suite.",
+    "Reconcile S1 STREAM_COMPLETE claim level and remaining boundaries with the current matrix and hosted evidence.",
+    "Record the observed failure and verified repair in BREAK_FIX_LOG.md before dispatching a new clean-room council."
+  ],
+  "overall_score": 8.0,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-read-only-judge"
+  },
+  "notes": "Independent fresh review of candidate c2e6610ed7257c52327cfb66fdcc07227547bb85. Any failed universal must-have forces merge_ready=no."
+}
