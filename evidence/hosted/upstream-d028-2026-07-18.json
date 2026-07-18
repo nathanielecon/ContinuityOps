@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "recorded_utc": "2026-07-18T17:16:00Z",
+  "component": "upstream-integration",
+  "claim_level": "L2",
+  "baseline_sha": "d499990df153ff786f211dd67914b4b50f893813",
+  "pr": 86,
+  "a3": {
+    "azure": "D-046 out",
+    "performance": "L1",
+    "security": "SBOM L2"
+  },
+  "closes": [
+    "CO-004",
+    "CO-006",
+    "MC-A-TREE",
+    "MC-C-TREE",
+    "MC-C-DIGEST"
+  ],
+  "packet": "integration/upstreams/packets/2026-07-18-a-c",
+  "project_c_pin": "376b7e18c5cc94e67ff180ca2f42b8eb05535be3",
+  "image_digest": "sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229",
+  "rollback": "none proven",
+  "validation": {
+    "command": "node --test tests/integration/upstream-contracts.test.mjs",
+    "pass": 6,
+    "fail": 0
+  },
+  "non_claims": [
+    "No ContinuityOps known-good rollback",
+    "No worker multi-repo grants",
+    "No Azure live apply"
+  ]
+}

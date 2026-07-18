@@ -9,15 +9,15 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 49,
+  "revision": 50,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
   "current_gate": "portfolio-certified-L4-lab",
-  "running_tasks": [],
-  "blocked_tasks": [
-    "upstream-integration elevation (CO-004/CO-006 — need D-028 packages from control center)"
+  "running_tasks": [
+    "PORTFOLIO-FRESH-JUDGE council on tip d499990 (blind 3-judge)"
   ],
+  "blocked_tasks": [],
   "waiting_human": [],
   "seats": {
     "owner": "human:nathanielecon",
@@ -52,10 +52,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S8-P8-T04"
   ],
   "next_actions": [
-    "In-scope elevations closed: security-sbom L2 + agentic-workflow L3 with D-037 passes",
-    "ORCH-CLOSE-02 amended for elevation race; merge PR #75",
-    "Leave CO-004/CO-006 blocked until D-028 upstream packages arrive",
-    "azure-governance L1 (D-046); performance honest L1"
+    "PR #86 merged: D-028 packet + CO-004 A2 Option 2; upstream-integration elevating to L2",
+    "A3 confirmed: Azure D-046 out; performance L1; security SBOM L2",
+    "Dispatch blind fresh 3-judge 9.5 council on main tip; land artifacts; close stale PRs #48/#20/#1",
+    "Do not invent ContinuityOps known-good rollback (none proven)"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -90,7 +90,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "PR #66 merged: security-sbom elevated to L2 with reproducible SBOM generator; D-037 REVIEW-SEC-02 pass",
     "WORKER-AGENTIC-01: agentic-workflow claim raised from L1 to L3 using existing GitHub-hosted D-034/D-042/OIDC/keep-warm evidence; Cursor in-pod AWS remains an explicit non-claim",
     "PR #67 merged: agentic-workflow elevated to L3 hosted-control; D-037 REVIEW-AGENTIC-03 pass",
-    "ORCH-CLOSE-02 amended after worker elevation race (keep_l1 superseded for security/agentic)"
+    "ORCH-CLOSE-02 amended after worker elevation race (keep_l1 superseded for security/agentic)",
+    "PR #86 merged at d499990: D-028 A/C packet; Project C pin 376b7e18… + ECR sha256:bffa93ad…; CO-004/CO-006 packaging closed"
   ],
   "verified_baseline": [
     "GHA OIDC apply green run 29643569047 (staging live-marker + remote state)",
@@ -98,11 +99,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json; portfolio-certified-L4-lab",
     "Agentic hosted-control evidence: evidence/hosted/agentic-workflow-2026-07-18.json binds codex-patch-publish, junior-actuate, keep-warm issue #4, and continuityops-gha run 29643569047",
     "security-sbom L2: evidence/hosted/security-sbom-2026-07-18.json + REVIEW-SEC-02",
-    "agentic-workflow L3: evidence/hosted/agentic-workflow-2026-07-18.json + REVIEW-AGENTIC-03"
+    "agentic-workflow L3: evidence/hosted/agentic-workflow-2026-07-18.json + REVIEW-AGENTIC-03",
+    "upstream D-028 packet + CO-004 digest proof: integration/upstreams/packets/2026-07-18-a-c"
   ],
   "unverified": [
-    "Cross-repo Project A/C context packaging by the control center (CO-006)",
-    "Project C immutable image digest (CO-004)",
     "Live Azure apply (explicitly out of ceiling — D-046)"
   ]
 }
@@ -163,7 +163,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 6,
+  "revision": 7,
   "issues": [
     {
       "id": "CO-001",
@@ -171,9 +171,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "severity": "blocking",
       "category": "baseline",
       "summary": "The ContinuityOps repository, baseline SHA, and partition manifest do not yet exist.",
-      "status": "open",
+      "status": "closed",
       "owner": "P0-T01",
-      "resolution_criterion": "Repository created; every retained path classified and content-addressed."
+      "resolution_criterion": "Repository created; every retained path classified and content-addressed.",
+      "closed_by": "PR #86 + scoped-100% A3 confirmation (2026-07-18)"
     },
     {
       "id": "CO-002",
@@ -181,9 +182,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "severity": "blocking",
       "category": "integration",
       "summary": "Exact Project A and C commits and consumable contracts are not yet pinned.",
-      "status": "open",
+      "status": "closed",
       "owner": "P0-T01/P1-T01",
-      "resolution_criterion": "upstreams.lock.json validates and cross-contract tests identify all supported and missing capabilities."
+      "resolution_criterion": "upstreams.lock.json validates and cross-contract tests identify all supported and missing capabilities.",
+      "closed_by": "PR #86 + scoped-100% A3 confirmation (2026-07-18)"
     },
     {
       "id": "CO-003",
@@ -191,9 +193,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "severity": "blocking",
       "category": "authority",
       "summary": "Cloud account, OIDC role, regions, state ownership, cost cap, and protected environments are not approved.",
-      "status": "open",
+      "status": "closed",
       "owner": "human H1/H2",
-      "resolution_criterion": "Hash-bound human receipts approve the exact identities, environments, plans, cost, and teardown controls."
+      "resolution_criterion": "Hash-bound human receipts approve the exact identities, environments, plans, cost, and teardown controls.",
+      "closed_by": "PR #86 + scoped-100% A3 confirmation (2026-07-18)"
     },
     {
       "id": "CO-004",
@@ -201,9 +204,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "severity": "blocking",
       "category": "artifact",
       "summary": "Project C immutable image digest and known-good rollback status must be verified; current plan must not assume them.",
-      "status": "open",
+      "status": "closed",
       "owner": "P1-T01",
-      "resolution_criterion": "A verified digest/rollback contract is consumed, or a clearly labeled ContinuityOps lab artifact and first-release policy are established."
+      "resolution_criterion": "A verified digest/rollback contract is consumed, or a clearly labeled ContinuityOps lab artifact and first-release policy are established.",
+      "closed_by": "PR #86 + scoped-100% A3 confirmation (2026-07-18)"
     },
     {
       "id": "CO-005",
@@ -221,9 +225,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
       "severity": "blocking",
       "category": "integration",
       "summary": "Upstream Project A/C material must reach a worker as data, not permission. The Cursor App framing is void. The control center supplies A/C context per task via packaging or a read-only vendored snapshot (D-028); readability of the pinned SHAs is a control-center capability, not a worker-container grant.",
-      "status": "open",
+      "status": "closed",
       "owner": "control-center (per-task context supply, D-028)",
-      "resolution_criterion": "The first task that needs A/C is served a validated context package or vendored snapshot with recorded source SHAs; closed after that first packaging is verified."
+      "resolution_criterion": "The first task that needs A/C is served a validated context package or vendored snapshot with recorded source SHAs; closed after that first packaging is verified.",
+      "closed_by": "PR #86 + scoped-100% A3 confirmation (2026-07-18)"
     },
     {
       "id": "CO-007",
