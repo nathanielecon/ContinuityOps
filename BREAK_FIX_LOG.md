@@ -497,5 +497,16 @@ ContinuityOps incidents yet.
 - **Fresh verification (this ContinuityOps Cloud seat, 2026-07-18):** `AWS_PROFILE=<unset>`; STS `NoCredentials`; role ARN secret set → stop; no keys. Portfolio remains `portfolio-certified-L1`.
 - **Hosted/cloud verification:** ContinuityOps GHA OIDC (`continuityops-gha`) primary; local bottleneck secondary. PR #50 merged to `main` (`20266d3`).
 - **Claim/status changes:** none elevated by chasing Cursor STS.
-- **Remaining risk/follow-up:** durable remote state (`ensure-tfstate.sh`) + first staging live marker; then capture `cloud_apply_evidence` before L3/L4 claim raise. This seat cannot read Actions (PAT 403) — owner/UI confirms apply green.
+- **Remaining risk/follow-up:** closed for smoke path — see BF-2026-011. Further elevation needs fresh plan+apply URLs. This seat Actions 403 until owner restarts Cloud Agent after GH_TOKEN refresh.
 - **Verified by:** chief supervisor + owner historical evidence paste (2026-07-18); PR #50 land.
+
+## 2026-07-18 — BF-2026-011 — DynamoDB tf-lock create race on first main apply
+
+- **Slice/task:** Live AWS loop / PR #51 land → auto apply on `main`.
+- **Symptom:** Apply run [29643490577](https://github.com/nathanielecon/ContinuityOps/actions/runs/29643490577) **failed** during `ensure-tfstate.sh` DynamoDB `create-table` (`ResourceInUseException`). OIDC assume of `continuityops-gha` succeeded.
+- **Root cause:** Concurrent ensure/create (or describe-then-create race) on `continuityops-tf-locks` without treating `ResourceInUseException` as success-and-wait.
+- **Fix:** Harden `terraform/ci-bootstrap/ensure-tfstate.sh` to tolerate `ResourceInUseException` / `BucketAlreadyOwnedByYou` and `wait table-exists`. Re-dispatch apply [29643569047](https://github.com/nathanielecon/ContinuityOps/actions/runs/29643569047) **green** (staging live-marker + remote state).
+- **Evidence:** `evidence/hosted/cloud-apply-staging-2026-07-18.json`; claims matrix terraform-scaffold + hosted-ci → **L4** (smoke scope only).
+- **Prevention:** Keep ensure script race-tolerant; prefer single concurrency group (already on workflow).
+- **Claim/status changes:** component L4 smoke; portfolio gate remains `portfolio-certified-L1` until broader recert.
+- **Verified by:** owner-confirmed Actions URLs (2026-07-18); chief records in-repo.

@@ -1,6 +1,7 @@
 {
   "schema_version": "1.0",
-  "max_claim_level": "L1",
+  "max_claim_level": "L4",
+  "max_claim_scope": "staging live-marker + remote state via continuityops-gha only",
   "components": [
     {
       "id": "upstream-integration",
@@ -11,17 +12,21 @@
     },
     {
       "id": "terraform-scaffold",
-      "claim_level": "L1",
+      "claim_level": "L4",
       "evidence": [
-        "evidence/slices/S1/terraform.json"
-      ]
+        "evidence/slices/S1/terraform.json",
+        "evidence/hosted/cloud-apply-staging-2026-07-18.json"
+      ],
+      "notes": "OIDC plan 29642718513 + apply 29643569047; staging CloudWatch live-marker + tfstate"
     },
     {
       "id": "hosted-ci-stubs",
-      "claim_level": "L1",
+      "claim_level": "L4",
       "evidence": [
-        "evidence/slices/S1/hosted-ci.json"
-      ]
+        "evidence/slices/S1/hosted-ci.json",
+        "evidence/hosted/cloud-apply-staging-2026-07-18.json"
+      ],
+      "notes": "continuityops-terraform.yml → continuityops-gha live; Environment continuityops"
     },
     {
       "id": "kubernetes-chart",
@@ -102,10 +107,12 @@
     }
   ],
   "non_claims": [
-    "No L4+ live cloud apply",
-    "No live EKS/Lambda/Azure apply",
+    "No live EKS cluster apply",
+    "No live Lambda worker apply",
+    "No live Azure apply",
     "No live production incident drills",
     "No live RTO/RPO measurement",
-    "No live teardown of cloud resources"
+    "No live teardown of cloud resources",
+    "No CursorCloudAgent / in-pod AWS credentials on Cloud seat"
   ]
 }

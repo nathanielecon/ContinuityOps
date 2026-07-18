@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 38,
+  "revision": 39,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
@@ -50,9 +50,9 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S8-P8-T04"
   ],
   "next_actions": [
-    "Live AWS loop (LIVE 2026-07-18): edit terraform/ → PR plan (continuityops-terraform.yml) → merge main → auto apply as continuityops-gha",
-    "Land remote state ensure-tfstate + staging live-marker; capture cloud_apply_evidence before raising claim above L1",
-    "Keep claim_level honest — no L4+ without cloud_apply_evidence",
+    "OWNER: restart Cloud Agent so refreshed GH_TOKEN injects — assert-cloud-seat-gh-token.mjs must PASS (this seat Actions 403)",
+    "Live AWS loop LIVE: PR plan → merge main → auto apply as continuityops-gha; confirm apply URLs",
+    "Elevate further Terraform (network/IAM/EKS) only with fresh green plan+apply run URLs",
     "Optional: kind+helm L2 local kubernetes"
   ],
   "completed_bootstrap": [
@@ -81,11 +81,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S5–S8 P5-T01..P8-T04 verified at claim L1 (Grok D-043); portfolio-certified-L1",
     "ContinuityOps live AWS control plane LIVE (2026-07-18): GHA OIDC → continuityops-gha (repo id 1301990908); workflow continuityops-terraform.yml; Environment continuityops; PR #50 merged to main at 20266d3",
     "Cloud seat NoCredentials expected (BF-2026-010 / Pro+); do not use CursorCloudAgent or project-a-lzlab-gha for ContinuityOps",
-    "PR #51 merged to main at 21299f9: ensure-tfstate + staging live-marker + terraform-pr static path fix; OIDC plan was green (run 29642718513); auto-apply on main expected"
+    "PR #51 merged to main at 21299f9: ensure-tfstate + staging live-marker + terraform-pr static path fix; OIDC plan was green (run 29642718513)",
+    "Live AWS apply GREEN run 29643569047 (after 29643490577 DynamoDB lock-create race); evidence/hosted/cloud-apply-staging-2026-07-18.json"
   ],
-  "verified_baseline": [],
+  "verified_baseline": [
+    "GHA OIDC apply green run 29643569047 (staging live-marker + remote state); evidence/hosted/cloud-apply-staging-2026-07-18.json; terraform-scaffold+hosted-ci claim L4 smoke scope"
+  ],
   "unverified": [
-    "All ContinuityOps cloud-applied and runtime capabilities (L4+)",
+    "Full ContinuityOps cloud-applied runtime (EKS/Lambda/Azure/RTO) beyond staging live-marker smoke",
     "Cross-repo Project A/C context packaging by the control center (CO-006)",
     "Project C immutable image digest (CO-004)"
   ]
