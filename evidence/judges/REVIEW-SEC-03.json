@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "task_id": "REVIEW-SEC-03",
+  "role": "D-037 independent reviewer",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "GPT-5.5 Codex API",
+    "mode": "default",
+    "role": "security-reviewer"
+  },
+  "reviewed_pr": 66,
+  "base_branch": "main",
+  "base_sha": "dc2b982ebcbbe87e6f826362c807427a02986b03",
+  "candidate_sha": "1a725bfc2adad9b0e1ba28f658a80b7189df646e",
+  "packet_applied": "evidence/dispatch-packets/pr-66-worker-sec-01.diff",
+  "verdict": "fail",
+  "summary": "security-sbom L2 claim is not yet honest because the generated artifact does not contain the repository file inventory that the claim notes assert; it only uses file hashes to derive serialNumber and emits package-manifest components.",
+  "validation_results": [
+    {
+      "command": "git apply evidence/dispatch-packets/pr-66-worker-sec-01.diff",
+      "exit_code": 0,
+      "time": "2026-07-18T00:00:00.000Z",
+      "evidence_path": "evidence/judges/REVIEW-SEC-03.json"
+    },
+    {
+      "command": "SOURCE_DATE_EPOCH=1784332800 node scripts/security/generate-sbom.mjs",
+      "exit_code": 0,
+      "time": "2026-07-18T00:00:00.000Z",
+      "evidence_path": "evidence/hosted/security-sbom-2026-07-18.json"
+    },
+    {
+      "command": "node --test tests/security/sbom-generator.test.mjs",
+      "exit_code": 0,
+      "time": "2026-07-18T00:00:00.000Z",
+      "evidence_path": "evidence/judges/REVIEW-SEC-03.json"
+    },
+    {
+      "command": "node -e \"const fs=require('node:fs'); for (const p of ['docs/claims/matrix.json','evidence/hosted/security-sbom-2026-07-18.json']) JSON.parse(fs.readFileSync(p,'utf8')); console.log('json ok')\"",
+      "exit_code": 0,
+      "time": "2026-07-18T00:00:00.000Z",
+      "evidence_path": "evidence/judges/REVIEW-SEC-03.json"
+    }
+  ],
+  "findings": [
+    {
+      "id": "SEC-SBOM-L2-001",
+      "severity": "blocking",
+      "claim": "docs/claims/matrix.json security-sbom notes claim a reproducible SBOM with sha256 file inventory.",
+      "observed": "evidence/hosted/security-sbom-2026-07-18.json contains metadata, npm manifest components, and dependency entries, but no emitted files/repository_inventory array for the 381 hashed files reported by the generator.",
+      "impact": "The L2 evidence overstates repository SBOM coverage. Deterministic generation is proven, but the artifact is not a checkable repository file inventory.",
+      "recommended_fix": "Either emit the sorted file inventory with sha256 values in the SBOM artifact and update tests to assert it, or lower/clarify the claim to package-manifest-only SBOM evidence."
+    }
+  ],
+  "remaining_risks": [
+    "No live vulnerability scanner evidence reviewed.",
+    "No live IAM apply evidence reviewed for this security-sbom claim."
+  ]
+}
