@@ -544,3 +544,15 @@ ContinuityOps incidents yet.
 - **Judge round impact:** REVIEW-COMPLETION-01 is fail; REVIEW-COMPLETION-02 is expected to supersede after this remediation patch merges and is independently reviewed.
 - **Remaining risk/follow-up:** ensure future live elevations do not proceed chief-only; close hierarchy remediation only after CI/contract validation plus independent GPT D-037 pass.
 - **Verified by:** WORKER-HIER-01 implementation worker records; independent reviewer to supersede with REVIEW-COMPLETION-02.
+
+## 2026-07-18 — BF-2026-014 — D-034 worker `base_branch: work` invents non-branch
+
+- **Slice/task:** ORCH-CLOSE-02 cohort — issues #63/#64/#65 (WORKER-SEC-01, WORKER-AGENTIC-01, REVIEW-CLOSE-01).
+- **Baseline SHA:** `ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029`.
+- **Environment/identity:** Codex App `@codex` + GHA `codex-patch-publish` (D-034); chief seat fallback.
+- **Symptom:** patch apply + branch push succeeded, but `gh pr create` failed with `Base ref must be a branch` / `No commits between work and codex/issue-N-*` because workers set `base_branch: work`.
+- **Exact failed check and exit:** Actions runs [29647973192](https://github.com/nathanielecon/ContinuityOps/actions/runs/29647973192), [29647966271](https://github.com/nathanielecon/ContinuityOps/actions/runs/29647966271), [29647912790](https://github.com/nathanielecon/ContinuityOps/actions/runs/29647912790) → `publish-failed`.
+- **Root cause:** dispatch snippet placeholder `<stream-or-orch-branch>` was interpreted as inventing `work`; publisher trusted that string without verifying the remote ref.
+- **Fix:** chief opened fallback PRs #66/#67 against `main`; rejected #65 (reviewer shipped terraform whitespace, not a D-037 verdict). Snippet now defaults/requires `base_branch: main`. Publisher coerces missing remote base refs to `main`.
+- **Regression control added:** `docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md` hard rule; `.github/workflows/codex-patch-publish.yml` remote-ref check before `gh pr create`.
+- **Remaining risk/follow-up:** re-nudge open workers with explicit `base_branch: main`; D-037 reviewers for #66/#67 must emit verdict-only (no implementation diffs).
