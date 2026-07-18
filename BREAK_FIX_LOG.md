@@ -510,3 +510,11 @@ ContinuityOps incidents yet.
 - **Prevention:** Keep ensure script race-tolerant; prefer single concurrency group (already on workflow).
 - **Claim/status changes:** component L4 smoke; portfolio gate remains `portfolio-certified-L1` until broader recert.
 - **Verified by:** owner-confirmed Actions URLs (2026-07-18); chief records in-repo.
+
+## 2026-07-18 — BF-2026-012 — EKS CreateCluster rejected Kubernetes 1.29
+
+- **Slice/task:** Chief elevation / PR #53 staging live apply.
+- **Symptom:** Apply [29644551841](https://github.com/nathanielecon/ContinuityOps/actions/runs/29644551841) failed: `InvalidParameterException: unsupported Kubernetes version 1.29`. VPC/IAM/SQS/Lambda created; EKS not.
+- **Root cause:** Default `cluster_version = "1.29"` no longer offered in account/region.
+- **Fix:** Bump default to `1.32`; re-apply.
+- **Verified by:** pending green apply after fix land.
