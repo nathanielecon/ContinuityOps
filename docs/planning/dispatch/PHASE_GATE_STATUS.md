@@ -1,11 +1,11 @@
 # ContinuityOps phase gate status (supervisor packaging)
 
-Updated: 2026-07-17T21:55:00Z
+Updated: 2026-07-17T23:58:30Z
 
 ## Authority
 
 - `authorized_through_phase`: **0**
-- Phase 1–8: **unauthorized** until human advances `authorized_through_phase` after S0 + **H0**
+- Phase 1–8: **unauthorized** until human advances `authorized_through_phase` after S0 + **H0** (H0 bound; S0 still open)
 
 ## Phase 0 checklist
 
@@ -14,9 +14,9 @@ Updated: 2026-07-17T21:55:00Z
 | P0-T01 | verified | CO-008/CO-009 conditional |
 | P0-T02 | verified | CO-010 addressed via D-039 / P0-T03 |
 | P0-T03 | **verified** | D-037 #38 pass; redo PR #36 landed |
-| P0-T04 | **review** on `9a58cbd` | D-037 #41 pass; **H0 waiting_human** |
-| H0 | **STOP — human receipt** | [`H0_PACKAGE.md`](../../../evidence/slices/S0/H0_PACKAGE.md) |
-| P0-T05 | blocked on H0 | see [`POST_H0_RESUME.md`](./POST_H0_RESUME.md) |
+| P0-T04 | **verified** | H0 bound from #42 comment 5008633820 |
+| H0 | **bound** | [`H0_PACKAGE.md`](../../../evidence/slices/S0/H0_PACKAGE.md) |
+| P0-T05 | **ready** | junior drives per [`POST_H0_RESUME.md`](./POST_H0_RESUME.md) |
 
 ## Phases 1–8
 
