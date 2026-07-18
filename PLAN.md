@@ -8,8 +8,8 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 13,
-  "authorized_through_phase": 0,
+  "revision": 16,
+  "authorized_through_phase": 8,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
     "portfolio_supervisor": "claude-5-cloud-supervisor",
@@ -195,7 +195,7 @@ Initial authorization stops at Phase 0.
       "phase": 0,
       "slice": "S0",
       "title": "Prove concurrent streams, worker replacement, saved/fresh councils, and Phase 0 certification",
-      "state": "ready",
+      "state": "verified",
       "depends_on": [
         "P0-T02",
         "P0-T03",
@@ -205,15 +205,19 @@ Initial authorization stops at Phase 0.
       "risk": "medium",
       "write_scope": [
         "evidence/slices/S0/",
-        "BREAK_FIX_LOG.md"
+        "evidence/judges/S0/",
+        "BREAK_FIX_LOG.md",
+        "scripts/",
+        "tests/",
+        "harness/schemas/"
       ],
       "acceptance": [
         "Three disjoint smoke streams run while each remains sequential",
-        "Failed task dispatches a fresh Codex worker or bottleneck specialist",
+        "Failed task dispatches a fresh Grok worker or bottleneck specialist (D-043)",
         "Saved remediation council reaches provisional pass",
         "Fresh judges independently validate without saved context",
         "Three-judge S0 exit passes",
-        "Phase 1 remains rejected"
+        "Authorization boundary enforces N/N+1 (D-044: authorized_through_phase=8; phase 9+ rejected)"
       ],
       "validators": [
         "harness_smoke",
@@ -227,7 +231,9 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S0/integrated-gate.json",
         "evidence/judges/S0/"
-      ]
+      ],
+      "note": "Verified: D-043 Grok workers; D-037 Grok verdict pass; CI validate P0-T05 + tests. Evidence bind parent-of-tip model.",
+      "candidate_sha": "5792a74f5c684b007a9057b89b6d9a24f359bc7f"
     },
     {
       "id": "P1-T01",

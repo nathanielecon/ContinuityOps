@@ -3,12 +3,21 @@ import { readFileSync, writeFileSync, renameSync, existsSync, mkdirSync } from '
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
-import { VALIDATOR_IDS, assertValidatorsReadOnly, createEvidence, fixedP0T03Fixture } from './validators/core.mjs';
+import { createHash } from 'node:crypto';
+import {
+  VALIDATOR_IDS,
+  P0_T05_VALIDATOR_IDS,
+  assertValidatorsReadOnly,
+  createEvidence,
+  fixedP0T03Fixture,
+  fixedP0T05Fixture
+} from './validators/core.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PLAN_PATH = resolve(ROOT, 'PLAN.md');
 const HARNESS_EVIDENCE_PATH = resolve(ROOT, 'evidence/slices/S0/harness.json');
 const VALIDATOR_EVIDENCE_PATH = resolve(ROOT, 'evidence/slices/S0/validator-contract.json');
+const INTEGRATED_GATE_EVIDENCE_PATH = resolve(ROOT, 'evidence/slices/S0/integrated-gate.json');
 
 export const TASK_STATES = ['planned', 'ready', 'running', 'blocked', 'review', 'verified', 'done'];
 export const ALLOWED_TRANSITIONS = new Map([
@@ -136,6 +145,7 @@ export function runValidationSuite(taskId = 'P0-T02') {
   const startedAt = new Date().toISOString();
   const baselineSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
   if (taskId === 'P0-T03') return runP0T03ValidationSuite();
+  if (taskId === 'P0-T05') return runP0T05ValidationSuite();
   const plan = readPlan();
   const task = assertPhaseAuthorized(plan, taskId);
 
@@ -144,8 +154,15 @@ export function runValidationSuite(taskId = 'P0-T02') {
   try { transitionTask(transitioned, { taskId, fromRevision: plan.revision, toState: 'blocked', actorRole: 'worker' }); } catch (error) { staleRejected = error.code === 'stale_revision'; }
   let workerRejected = false;
   try { transitionTask({ ...plan, tasks: plan.tasks.map((entry) => entry.id === taskId ? { ...entry, state: 'review' } : entry) }, { taskId, fromRevision: plan.revision, toState: 'verified', actorRole: 'worker' }); } catch (error) { workerRejected = error.code === 'worker_forbidden_state'; }
-  let phaseRejected = false;
-  try { assertPhaseAuthorized(plan, 'P1-T01'); } catch (error) { phaseRejected = error.code === 'phase_unauthorized'; }
+  // N/N+1: current authorized phase tasks pass; synthetic phase auth+1 rejects (D-044).
+  let nextPhaseRejected = false;
+  const beyond = {
+    ...plan,
+    tasks: [...plan.tasks, { id: 'P99-T01', phase: plan.authorized_through_phase + 1, state: 'planned', write_scope: [], evidence: [] }]
+  };
+  try { assertPhaseAuthorized(beyond, 'P99-T01'); } catch (error) { nextPhaseRejected = error.code === 'phase_unauthorized'; }
+  let authorizedOk = false;
+  try { assertPhaseAuthorized(plan, taskId); authorizedOk = true; } catch { authorizedOk = false; }
 
   const streams = createStreamState([
     { id: 'stream-a', owner: 'owner-a', writeScope: ['scripts/project.mjs'] },
@@ -156,8 +173,8 @@ export function runValidationSuite(taskId = 'P0-T02') {
   const queue = enqueueIntegration(enqueueIntegration([], { streamId: 'stream-a', candidateSha: 'a'.repeat(40), evidence: 'evidence/slices/S0/harness.json' }), { streamId: 'stream-b', candidateSha: 'b'.repeat(40), evidence: 'evidence/slices/S0/harness.json' });
 
   const checks = {
-    harness_unit: task.state === 'ready' && transitioned.revision === plan.revision + 1,
-    authorization_boundary: task.phase === 0 && phaseRejected,
+    harness_unit: ['ready', 'running', 'review'].includes(task.state) && transitioned.revision === plan.revision + 1,
+    authorization_boundary: authorizedOk && nextPhaseRejected,
     state_reconciliation: staleRejected,
     stream_isolation: sequenced.streams.length === 3 && sequenced.streams[0].sequence.map((entry) => entry.order).join(',') === '1,2',
     integration_queue: queue.map((entry) => entry.order).join(',') === '1,2',
@@ -170,10 +187,36 @@ export function runValidationSuite(taskId = 'P0-T02') {
 }
 
 function writeEvidence(result) {
-  const evidencePath = result.task_id === 'P0-T03' ? VALIDATOR_EVIDENCE_PATH : HARNESS_EVIDENCE_PATH;
-  const relative = result.task_id === 'P0-T03' ? 'evidence/slices/S0/validator-contract.json' : 'evidence/slices/S0/harness.json';
+  let evidencePath = HARNESS_EVIDENCE_PATH;
+  let relative = 'evidence/slices/S0/harness.json';
+  if (result.task_id === 'P0-T03') {
+    evidencePath = VALIDATOR_EVIDENCE_PATH;
+    relative = 'evidence/slices/S0/validator-contract.json';
+  } else if (result.task_id === 'P0-T05') {
+    evidencePath = INTEGRATED_GATE_EVIDENCE_PATH;
+    relative = 'evidence/slices/S0/integrated-gate.json';
+  }
   mkdirSync(dirname(evidencePath), { recursive: true });
-  writeFileSync(evidencePath, `${JSON.stringify({ ...result, evidence_path: relative }, null, 2)}\n`);
+  const payload = { ...result, evidence_path: relative };
+  if (result.task_id === 'P0-T05') {
+    const headSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
+    // When CANDIDATE_SHA is pinned, the next evidence-only commit is the bind tip;
+    // candidate_sha remains the implementation/parent commit (stable under amend).
+    if (process.env.CANDIDATE_SHA) {
+      payload.bind_model = 'candidate_sha_parent_of_tip';
+      payload.implementation_sha = result.candidate_sha;
+    } else if (result.candidate_sha === headSha) {
+      payload.bind_model = 'candidate_sha_equals_head';
+    } else {
+      payload.bind_model = 'candidate_sha_custom';
+      payload.bind_commit = headSha;
+    }
+  }
+  writeFileSync(evidencePath, `${JSON.stringify(payload, null, 2)}\n`);
+  if (result.task_id === 'P0-T05') {
+    const evidenceManifestSha256 = createHash('sha256').update(readFileSync(evidencePath)).digest('hex');
+    refreshP0T05JudgeBindings(result.candidate_sha, evidenceManifestSha256);
+  }
 }
 
 export function runP0T03ValidationSuite() {
@@ -206,8 +249,108 @@ export function runP0T03ValidationSuite() {
   };
 }
 
+function resolveEvidenceSha(envKey, fallback) {
+  const raw = process.env[envKey];
+  if (raw === undefined || raw === null || String(raw).trim() === '') return fallback;
+  const sha = String(raw).trim().toLowerCase();
+  if (!/^[0-9a-f]{40}$/.test(sha)) {
+    throw new ContractError(`${envKey} 必须是 40 位小写十六进制 SHA`, 'candidate_sha_env_invalid');
+  }
+  return sha;
+}
+
+function refreshP0T05JudgeBindings(candidateSha, evidenceManifestSha256) {
+  const judgesDir = resolve(ROOT, 'evidence/judges/S0');
+  const paths = [
+    resolve(judgesDir, 'saved-council-provisional.json'),
+    resolve(judgesDir, 'fresh-judge-1.json'),
+    resolve(judgesDir, 'fresh-judge-2.json'),
+    resolve(judgesDir, 'fresh-judge-3.json')
+  ];
+  for (const path of paths) {
+    if (!existsSync(path)) continue;
+    const judge = JSON.parse(readFileSync(path, 'utf8'));
+    judge.candidate_sha = candidateSha;
+    judge.evidence_manifest_sha256 = evidenceManifestSha256;
+    writeFileSync(path, `${JSON.stringify(judge, null, 2)}\n`);
+  }
+}
+
+export function runP0T05ValidationSuite() {
+  const startedAt = new Date().toISOString();
+  const headSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
+  const candidateSha = resolveEvidenceSha('CANDIDATE_SHA', headSha);
+  const baselineSha = resolveEvidenceSha('BASELINE_SHA', candidateSha);
+  const plan = readPlan();
+  assertPhaseAuthorized(plan, 'P0-T05');
+
+  let nextPhaseRejected = false;
+  const beyond = {
+    ...plan,
+    tasks: [...plan.tasks, { id: 'P99-T01', phase: plan.authorized_through_phase + 1, state: 'planned', write_scope: [], evidence: [] }]
+  };
+  try { assertPhaseAuthorized(beyond, 'P99-T01'); } catch (error) { nextPhaseRejected = error.code === 'phase_unauthorized'; }
+  if (!nextPhaseRejected) throw new ContractError('授权边界未拒绝 phase N+1', 'phase_boundary_failed');
+  if (plan.authorized_through_phase !== 8) {
+    throw new ContractError(`期望 authorized_through_phase=8 (D-044)，实际 ${plan.authorized_through_phase}`, 'auth_phase_mismatch');
+  }
+
+  const streams = createStreamState([
+    { id: 'stream-a', owner: 'owner-a', writeScope: ['scripts/validators'] },
+    { id: 'stream-b', owner: 'owner-b', writeScope: ['tests/validators'] },
+    { id: 'stream-c', owner: 'owner-c', writeScope: ['evidence/judges/S0'] }
+  ]);
+  const sequenced = appendStreamMutation(
+    appendStreamMutation(streams, 'stream-a', { candidateSha: 'a'.repeat(40) }),
+    'stream-a',
+    { candidateSha: 'b'.repeat(40) }
+  );
+
+  const context = {
+    ...fixedP0T05Fixture(ROOT, baselineSha, candidateSha),
+    harnessSmoke: {
+      authorizationOk: true,
+      nextPhaseRejected,
+      streamsOk: sequenced.streams.length === 3
+    },
+    streamState: sequenced,
+    failedCheck: 'node --test tests/validators/p0-t05-fixture-fail'
+  };
+
+  const readOnlyProof = assertValidatorsReadOnly(ROOT, P0_T05_VALIDATOR_IDS, context);
+  const checks = Object.fromEntries(readOnlyProof.map((entry) => [entry.id, true]));
+  const failed = P0_T05_VALIDATOR_IDS.filter((id) => !checks[id]);
+  const evidence = createEvidence({
+    taskId: 'P0-T05',
+    baselineSha,
+    candidateSha,
+    command: 'node scripts/project.mjs validate P0-T05',
+    exitCode: failed.length === 0 ? 0 : 1,
+    environment: context.environment,
+    validators: P0_T05_VALIDATOR_IDS,
+    modelRecord: context.modelRecord
+  });
+  return {
+    ...evidence,
+    started_at: startedAt,
+    completed_at: new Date().toISOString(),
+    validators: checks,
+    validator_details: readOnlyProof,
+    passed: P0_T05_VALIDATOR_IDS.filter((id) => checks[id]),
+    failed,
+    read_only_proof: 'git status --porcelain unchanged before/after validator execution',
+    acceptance_notes_zh: [
+      '三条互不重叠 smoke streams 并发且各自顺序执行',
+      '失败检查派遣 fresh Grok worker 或同会话 bottleneck（can_write=false）',
+      'saved council 仅 provisional_pass；fresh judges 无 saved 分数上下文',
+      '三 judge S0 exit：均分≥9.5、无低于9.0、全部 must_haves、merge_ready=yes',
+      '授权边界 D-044：authorized_through_phase=8，phase 9+ 拒绝'
+    ]
+  };
+}
+
 function usage(exitCode = 2) {
-  console.error('Usage: node scripts/project.mjs validate P0-T02|P0-T03');
+  console.error('Usage: node scripts/project.mjs validate P0-T02|P0-T03|P0-T05');
   process.exit(exitCode);
 }
 

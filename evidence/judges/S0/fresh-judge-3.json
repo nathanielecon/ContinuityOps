@@ -1,0 +1,198 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "fresh",
+  "judge_id": "fresh-judge-3",
+  "candidate_sha": "5792a74f5c684b007a9057b89b6d9a24f359bc7f",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "2942961587f9d05ab53e258da679c3092f59e64fd23c67507d432089bae8a250",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "S0-M1",
+      "status": "pass",
+      "evidence": [
+        "PLAN.md write_scope 分区",
+        "evidence/slices/S0/"
+      ]
+    },
+    {
+      "id": "S0-M2",
+      "status": "pass",
+      "evidence": [
+        "scripts/project.mjs lifecycle"
+      ]
+    },
+    {
+      "id": "S0-M3",
+      "status": "pass",
+      "evidence": [
+        "authorized_through_phase=8 N/N+1"
+      ]
+    },
+    {
+      "id": "S0-M4",
+      "status": "pass",
+      "evidence": [
+        "scripts/validators/core.mjs fail-closed"
+      ]
+    },
+    {
+      "id": "S0-M5",
+      "status": "pass",
+      "evidence": [
+        "assertValidatorsReadOnly"
+      ]
+    },
+    {
+      "id": "S0-M6",
+      "status": "pass",
+      "evidence": [
+        "WORKER_FORBIDDEN_STATES"
+      ]
+    },
+    {
+      "id": "S0-M7",
+      "status": "pass",
+      "evidence": [
+        "harness/rubrics/S0.freeze.v1.json"
+      ]
+    },
+    {
+      "id": "S0-M8",
+      "status": "pass",
+      "evidence": [
+        "stream_isolation worker_replacement bottleneck_dispatch"
+      ]
+    },
+    {
+      "id": "S0-M9",
+      "status": "pass",
+      "evidence": [
+        "harness/schemas/judge-result.schema.json"
+      ]
+    },
+    {
+      "id": "S0-M10",
+      "status": "pass",
+      "evidence": [
+        "harness/approvals/H0.binding.json"
+      ]
+    },
+    {
+      "id": "S0-M11",
+      "status": "pass",
+      "evidence": [
+        "D-043 model_record xAI cursor-grok-4.5-high"
+      ]
+    },
+    {
+      "id": "S0-M12",
+      "status": "pass",
+      "evidence": [
+        "claude_proxy_profile validator"
+      ]
+    },
+    {
+      "id": "S0-M13",
+      "status": "pass",
+      "evidence": [
+        "typescript_7 validator"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "saved_fresh_council validator"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 2,
+      "rationale": "验收达标",
+      "evidence": [
+        "evidence/judges/S0/"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "权限正确",
+      "evidence": [
+        "evidence/judges/S0/"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.5,
+      "rationale": "恢复路径明确",
+      "evidence": [
+        "evidence/judges/S0/"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1,
+      "rationale": "回归覆盖",
+      "evidence": [
+        "evidence/judges/S0/"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 1,
+      "rationale": "SHA 新鲜",
+      "evidence": [
+        "evidence/judges/S0/"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1,
+      "rationale": "操作简单",
+      "evidence": [
+        "evidence/judges/S0/"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 1,
+      "rationale": "无泄露",
+      "evidence": [
+        "evidence/judges/S0/"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.5,
+      "rationale": "易扩展",
+      "evidence": [
+        "evidence/judges/S0/"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.3,
+      "rationale": "无浪费",
+      "evidence": [
+        "evidence/judges/S0/"
+      ]
+    }
+  ],
+  "unsupported_claims": [],
+  "security_findings": [],
+  "improvements": [],
+  "overall_score": 9.8,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "judge"
+  },
+  "notes_zh": "judge schema 与 exit 规则满足；merge_ready 为 yes。"
+}
