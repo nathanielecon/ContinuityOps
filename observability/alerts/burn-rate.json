@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "alert_id": "error-budget-burn-fast",
+  "severity": "SEV2",
+  "owner": "sre-signals-worker",
+  "runbook": "operations/incidents/observability/signal-path-drill.json",
+  "expression": {
+    "slo_id": "availability-30d",
+    "burn_rate_window": "1h",
+    "threshold": 14.4
+  },
+  "for": "5m",
+  "labels": {
+    "team": "reliability"
+  },
+  "annotations": {
+    "summary": "Fast burn of availability error budget"
+  },
+  "negative_tests": {
+    "missing_signal": "suppress_and_page_missing_signal",
+    "noisy_flap": "require_for_duration"
+  }
+}

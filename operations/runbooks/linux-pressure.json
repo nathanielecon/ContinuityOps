@@ -1,0 +1,40 @@
+{
+  "id": "linux-pressure",
+  "title": "Linux host pressure (CPU/memory/disk)",
+  "first_five_minutes": [
+    "Confirm blast radius (single host vs fleet)",
+    "Capture load averages and top processes (read-only)",
+    "Check disk inode/space and recent OOM markers"
+  ],
+  "safe_commands": [
+    {
+      "cmd": "uptime",
+      "purpose": "load average",
+      "destructive": false
+    },
+    {
+      "cmd": "free -h",
+      "purpose": "memory pressure",
+      "destructive": false
+    },
+    {
+      "cmd": "df -h",
+      "purpose": "disk capacity",
+      "destructive": false
+    },
+    {
+      "cmd": "dmesg -T | tail -100",
+      "purpose": "kernel/OOM clues",
+      "destructive": false
+    }
+  ],
+  "stop_escalation": [
+    "Escalate if >1 host impacted",
+    "Escalate if customer-facing SLI breached"
+  ],
+  "do_not_do_yet": [
+    "Do not reboot without approval",
+    "Do not kill processes without owner sign-off"
+  ],
+  "isolation_logic": "If only one host shows pressure and network probes succeed, prefer app/host over network path."
+}

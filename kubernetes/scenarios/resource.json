@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "resource",
+  "failure_class": "OOMKilled",
+  "inject": "Lower memory limit below working set",
+  "observe": ["OOMKilled", "restarts"],
+  "recover": "Restore resource requests/limits from values.yaml",
+  "business_check": "Stable replicas without OOM",
+  "reset": {
+    "script": "scripts/kubernetes/reset-scenario.mjs",
+    "args": ["resource"]
+  },
+  "synthetic": true
+}

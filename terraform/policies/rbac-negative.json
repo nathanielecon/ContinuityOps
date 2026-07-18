@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "cases": [
+    {
+      "id": "cluster-admin-to-ci",
+      "expect": "deny"
+    },
+    {
+      "id": "agent-write-secrets",
+      "expect": "deny"
+    }
+  ]
+}

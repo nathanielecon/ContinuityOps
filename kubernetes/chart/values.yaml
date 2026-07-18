@@ -1,0 +1,104 @@
+# ContinuityOps workload values — digest-pin required; tag-only images rejected by policy.
+replicaCount: 2
+
+image:
+  repository: ghcr.io/continuityops/workload
+  # Digest pin is mandatory for managed apply; tag is display-only.
+  digest: "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::ACCOUNT_ID:role/continuityops-workload"
+  name: continuityops-workload
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  fsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:REGION:ACCOUNT_ID:certificate/PLACEHOLDER"
+  hosts:
+    - host: continuityops.example.invalid
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: continuityops-tls
+      hosts:
+        - continuityops.example.invalid
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+probes:
+  liveness:
+    path: /healthz
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  readiness:
+    path: /readyz
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: topology.kubernetes.io/zone
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: continuityops-workload
+
+networkPolicy:
+  enabled: true
+  allowIngressFromNamespaces:
+    - ingress-nginx
+  allowEgressToPorts:
+    - 443
+    - 5432
+
+rbac:
+  create: true
+  rules:
+    - apiGroups: [""]
+      resources: ["configmaps", "secrets"]
+      verbs: ["get", "list"]

@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "artifact": "BOTTLENECK_BROWSER_ISSUES",
+  "task_id": "BOTTLENECK-BROWSER-ISSUES",
+  "role": "bottleneck-specialist",
+  "profiles": ["auth", "browser-evidence", "github-actions"],
+  "at": "2026-07-17T20:41:53Z",
+  "status": "waiting_human",
+  "browser_attempted": true,
+  "browser_authenticated": false,
+  "mcp_browser": {
+    "cursor-ide-browser": "not_available",
+    "available_mcp_servers": ["Awsiac", "Awsknowledge", "Awspricing", "cursor-cloud"]
+  },
+  "browser_control_path": "VNC DISPLAY=:1 + google-chrome-stable CDP :9222 (custom --user-data-dir=/tmp/chrome-cdp-profile)",
+  "urls_probed": [
+    "https://github.com/nathanielecon/ContinuityOps",
+    "https://github.com/login",
+    "https://github.com/nathanielecon/ContinuityOps/issues/4"
+  ],
+  "browser_findings": {
+    "repo_url": "https://github.com/nathanielecon/ContinuityOps",
+    "repo_title": "Page not found · GitHub · GitHub",
+    "sign_in_visible": true,
+    "user_login_meta": "",
+    "has_comment_box": false,
+    "auth_wall": "GitHub Sign in overlay + header Sign in/Sign up; private-repo 404 without session",
+    "login_url": "https://github.com/login",
+    "login_title": "Sign in to GitHub · GitHub",
+    "issue4_title": "Page not found · GitHub · GitHub",
+    "chrome_profile_cookies_preexisting": false
+  },
+  "api_findings": {
+    "gh_account": "cursor (ghs_ integration token)",
+    "issues_rest": "403 Resource not accessible by integration",
+    "issues_accepted_permission_header": "issues=read",
+    "issues_graphql_issue4": "NOT_FOUND Could not resolve to an Issue with the number of 4",
+    "contents_readme": "200 ok",
+    "pulls_32": "200 open draft"
+  },
+  "actions_not_taken": [
+    "no_keepwarm_comment_on_issue_4",
+    "no_codex_dispatch_issue_for_D037_PR32",
+    "no_renudge_issue_29",
+    "did_not_merge_PR_32",
+    "did_not_codex_login",
+    "did_not_invent_credentials",
+    "did_not_use_Opus"
+  ],
+  "owner_action_required": [
+    "Log in as nathanielecon (or any Issues writer) in this cloud VNC Chrome session, then re-run bottleneck OR personally post keep-warm @codex on issue #4 and D-037 reviewer @codex for PR #32",
+    "OR grant issues:write (and preferably issues:read) to the Cursor supervisor App/token so REST/gh Issues actuation works (closes CO-011 / D-040)"
+  ],
+  "evidence_paths": [
+    "evidence/slices/S0/BOTTLENECK-BROWSER-ISSUES-2026-07-17.json",
+    "evidence/slices/S0/browser-issues-2026-07-17/github-auth-probe.json",
+    "evidence/slices/S0/browser-issues-2026-07-17/github-login-probe.json",
+    "evidence/slices/S0/browser-issues-2026-07-17/github-issue4-probe.json",
+    "evidence/slices/S0/browser-issues-2026-07-17/github-continuityops.png",
+    "evidence/slices/S0/browser-issues-2026-07-17/github-login.png",
+    "evidence/slices/S0/browser-issues-2026-07-17/github-issue4.png"
+  ],
+  "related": {
+    "CO-011": "open",
+    "D-040": "accepted",
+    "PR": "https://github.com/nathanielecon/ContinuityOps/pull/32"
+  },
+  "notes_zh": "已通过本机 VNC Chrome+CDP 打开 GitHub；浏览器无登录会话，私有仓与 #4 均显示 404/Sign in。Issues REST 仍 403。无法代发 keep-warm 或 D-037 @codex。未合并 PR #32。"
+}

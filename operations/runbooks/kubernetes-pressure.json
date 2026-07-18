@@ -1,0 +1,35 @@
+{
+  "id": "kubernetes-pressure",
+  "title": "Kubernetes workload pressure",
+  "first_five_minutes": [
+    "Identify Deployment/StatefulSet and namespace",
+    "Check Ready replicas vs desired",
+    "Inspect recent events and pod restarts (read-only)"
+  ],
+  "safe_commands": [
+    {
+      "cmd": "kubectl get deploy,po -n <ns>",
+      "purpose": "replica health",
+      "destructive": false
+    },
+    {
+      "cmd": "kubectl describe po -n <ns> <pod>",
+      "purpose": "events/probes",
+      "destructive": false
+    },
+    {
+      "cmd": "kubectl logs -n <ns> <pod> --tail=200",
+      "purpose": "app errors",
+      "destructive": false
+    }
+  ],
+  "stop_escalation": [
+    "Escalate if cluster-scoped (node NotReady)",
+    "Escalate if network policy denials across tenants"
+  ],
+  "do_not_do_yet": [
+    "Do not delete PVCs",
+    "Do not scale beyond capacity without FinOps check"
+  ],
+  "isolation_logic": "If DNS and networkpolicy allow but readiness fails, treat as app/config before network."
+}

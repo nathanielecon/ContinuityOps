@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "iam-negative",
+  "prohibited": [
+    "long_lived_access_keys_in_repo",
+    "AdministratorAccess_on_oidc_roles",
+    "wildcard_resource_on_apply_role_without_boundary"
+  ],
+  "required": [
+    "github_oidc_trust",
+    "environment_scoped_subjects",
+    "enable_guards_default_false"
+  ],
+  "claim_level_ceiling": "L1"
+}

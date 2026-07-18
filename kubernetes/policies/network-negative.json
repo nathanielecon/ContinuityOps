@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "kubernetes-network-negative",
+  "required": [
+    "NetworkPolicy enabled for workload",
+    "ingress limited to labeled namespaces",
+    "egress limited to explicit ports"
+  ],
+  "prohibited": [
+    "default allow-all egress",
+    "public LoadBalancer without TLS annotation"
+  ]
+}

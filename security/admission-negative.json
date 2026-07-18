@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "blocked_deployments": [
+    {
+      "reason": "latest tag",
+      "image": "app:latest",
+      "expect": "deny"
+    },
+    {
+      "reason": "runAsRoot",
+      "securityContext": {
+        "runAsNonRoot": false
+      },
+      "expect": "deny"
+    },
+    {
+      "reason": "missing digest",
+      "image": "app@sha256:missing",
+      "expect": "deny"
+    }
+  ]
+}

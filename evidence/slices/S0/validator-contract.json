@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "task_id": "P0-T03",
+  "baseline_sha": "832ce38baa2d8d776fd93169b32e317f3da17a30",
+  "candidate_sha": "832ce38baa2d8d776fd93169b32e317f3da17a30",
+  "command": "node scripts/project.mjs validate P0-T03",
+  "exit_code": 0,
+  "recorded_at": "2026-07-17T21:28:06.095Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "validator_contract": true,
+    "evidence_schema": true,
+    "secret_scan": true,
+    "forbidden_operations": true,
+    "mutation_isolation": true,
+    "model_routing": true,
+    "worker_language": true,
+    "bottleneck_dispatch": true,
+    "claude_proxy_profile": true,
+    "typescript_7": true
+  },
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.5",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "started_at": "2026-07-17T21:28:06.046Z",
+  "completed_at": "2026-07-17T21:28:06.095Z",
+  "validator_details": [
+    {
+      "id": "validator_contract",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "evidence_schema",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "secret_scan",
+      "result": {
+        "pass": true,
+        "note": "fixture 不含密钥路径或凭据材料"
+      }
+    },
+    {
+      "id": "forbidden_operations",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "mutation_isolation",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "model_routing",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "worker_language",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "bottleneck_dispatch",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "claude_proxy_profile",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "typescript_7",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "validator_contract",
+    "evidence_schema",
+    "secret_scan",
+    "forbidden_operations",
+    "mutation_isolation",
+    "model_routing",
+    "worker_language",
+    "bottleneck_dispatch",
+    "claude_proxy_profile",
+    "typescript_7"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "unknown_validator_fail_closed": true,
+  "negative_tests": [
+    "unknown validator ID rejected",
+    "stale SHA evidence rejected",
+    "non-Mandarin handoff rejected",
+    "late forbidden path detected by fixture"
+  ],
+  "evidence_path": "evidence/slices/S0/validator-contract.json"
+}

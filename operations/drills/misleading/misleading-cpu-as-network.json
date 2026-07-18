@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "id": "misleading-cpu-as-network",
+  "symptom": "High latency / timeouts",
+  "tempting_cause": "Network saturation",
+  "actual_root_cause": "CPU throttle from noisy neighbor on shared node",
+  "how_ruled_out": "AZ probes healthy; node CPU steal high; packet loss ~0",
+  "synthetic": true,
+  "claim_ceiling": "L1"
+}

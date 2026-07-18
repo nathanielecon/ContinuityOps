@@ -18,54 +18,44 @@ from durable repository artifacts.
 ## Model and execution topology
 
 ContinuityOps uses a layered control plane. Model names are explicit runtime
-configuration, not inferred aliases.
+configuration, not inferred aliases. **D-041** splits supervision into chief
+and junior. **Actuation** means performing the GitHub/repo action (mention,
+merge, label, close); **judgment** means deciding whether that action should
+happen.
 
-- **Portfolio supervisor:** one Claude 5 cloud agent supervises the complete
-  program under a minimal-intervention policy, maintains the integrated
-  objective, approves stream creation/closure, and may appoint Claude Sonnet
-  or Opus co-orchestrators for bounded streams. It reviews a stream branch
-  only upon the orchestrator's durable completion signal (BF-PRE-015), and
-  certifies at **stream boundaries only** — per-round checking belongs to the
-  deterministic validators inside orchestration rounds, and actuation of
-  orchestrator intents batches into evented wakes plus a 3–4h heartbeat
-  (D-032). It does not replace deterministic gates or human approvals.
-- **Ralphy orchestration and council reasoning:** the default carrier is an
-  **episodic GPT round** — a Codex 5.4 Cloud task dispatched through the
-  `codex-dispatch` queue that plays the lead orchestrator (and council roles:
-  judges, nixers, fixers, bottleneck analysts) for one bounded round, returning
-  work as a diff and holding zero credentials. Claude Opus 4.8 is retained as
-  the **reserve seat**, enabled when a GPT round is unavailable or fails; a cold
-  orchestrator reconstructs state losslessly from durable artifacts. The actual
-  model ID of every round is recorded at dispatch, and the supervisor may record
-  a task-specific exception (amends D-022; supersedes the earlier Grok 4.5 High
-  Fast assignment; see D-030).
-- **Code execution:** warm Codex 5.4 CLI Cloud Agents in default mode (not
-  `/high`, not `/fast`) implement the project code and tests through bounded
-  Ralphy tasks. "Warm" is a per-Environment toolchain cache (~12h), never
-  credential material. The concrete specification (D-026):
-  - one Codex Cloud Environment per repository, created in the Codex UI with
-    caching On;
-  - the two in-repo scripts `.codex/cloud-setup.sh` (Setup) and
-    `.codex/cloud-maintenance.sh` (Maintenance) are the *only* content pasted
-    into the Environment; they live in the repo and are change-controlled;
-  - zero credentials in the container — adding any environment variable or
-    secret to the Environment invalidates the ~12h cache and is out of bounds;
-  - a warm gate (`scripts/Invoke-CodexCloudWarm.ps1`, control-center only) runs
-    before every dispatch and re-warms via a smoke task when `lastWarmUtc` is
-    missing or older than ~10h;
-  - dispatch is `codex cloud exec --env <ENV_ID> --branch <branch> "<task>"`;
-    the task never runs git itself, and the orchestrator owns integration.
-  Warmth is isolated per Environment/repo and does not carry across repos.
-  Workers report remaining context on every handoff; the orchestrator may
-  retire a low-context worker and dispatch a fresh replacement. They edit
-  repositories; they are not the live cloud apply control plane.
-- **Claude execution location:** Claude agents run in cloud environments only.
-  They do not rely on the user's laptop shell, browser session, cookies, or
-  local cloud login.
+- **Owner (human):** constitutional gates only — H0–H6, credentials/secrets,
+  spend ceilings, destructive/irreversible operations, external-to-repo
+  publication. Not an agent seat.
+- **Chief supervisor:** one cloud agent session (this seat) owns the integrated
+  objective at **stream boundaries and escalations only** (BF-PRE-015 / D-032
+  as amended by D-041). It does **not** perform steady-state actuation. It
+  replaces the junior supervisor when that seat is context-dead or stuck, and
+  may pipe true constitutional crises to the owner. See
+  `docs/planning/dispatch/CHIEF_SUPERVISOR.md`.
+- **Junior / orch / reviewer / workers / monitor (D-043):** all episodic seats
+  use **`cursor-grok-4.5-high`** effective immediately (owner directive). Codex
+  App `@codex` / GPT implementation path is **suspended** for product work.
+  Chief dispatches Grok subordinates in-session and merges on CI green +
+  independent Grok reviewer `verdict: pass`. See
+  `docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md`.
+- **Pipeline monitor:** read-only Grok subagent reporting **significant**
+  findings only to the **chief supervisor**. See
+  `docs/planning/dispatch/MONITOR.zh.md`.
+- **Ralphy orchestration (D-043):** Grok episodic rounds. Orchestrator validates
+  rounds, advances state up to `review`, owns break/fix, prepares contracts; it
+  **emits intents** and never merges/approves PRs. Engagement: **no Opus**.
+- **D-037 reviewer (D-043):** independent Grok round per worker PR — apply
+  patch, run declared checks, structured `verdict` only. No code edits; no merge.
+- **Code execution (D-043):** Grok Cursor cloud/subagent workers implement
+  bounded tasks. Codex Cloud Environment (D-026) remains registered but is not
+  the default worker carrier while D-043 stands. Workers report
+  `context_remaining` every handoff; managerial seats replace low-context workers.
+- **Claude execution location:** Claude agents run in cloud environments only
+  when used; they do not rely on the owner's laptop shell or local cloud login.
 
-The supervisor records the actual model ID, provider, mode, and role for every
-dispatch. If a named model is unavailable, the task stops or uses a
-human-approved substitution; agents never invent model availability.
+Every dispatch records actual model ID, provider, mode, and role. If a named
+model is unavailable, the task stops or uses a human-approved substitution;
+agents never invent model availability.
 
 ### Dispatch topology
 
@@ -94,15 +84,21 @@ Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
   `base_sha`, and a full fenced unified diff. GitHub Actions
   `codex-patch-publish` mechanically applies the patch with `GITHUB_TOKEN` and
   opens the PR (primary overnight path). App sandboxes still cannot
-  `git push`/`gh`. Platform **Create PR** and
-  `scripts/Publish-CodexCloudTask.ps1` are **fallbacks**. **Heartbeat:** review
-  PRs / `publish-ok`; re-nudge if bot reply lacks the patch marker; on
-  `publish-failed` use fallback or Opus reserve (reasoning-only). Never treat
-  `make_pr` text alone as complete. Do not treat GHA `@codex` keepwarm as verified.
-- **Warm freshness** is evidenced by the most recent Codex task timestamp on
-  the keep-warm record (issue-based); the supervisor's scheduled self-checks
-  post an `@codex` smoke roughly every 9 hours. The `%LOCALAPPDATA%` registry
-  and `Invoke-CodexCloudWarm.ps1` warm gate apply only to the fallback path.
+  `git push`/`gh` — **D-042** extends the same rule to junior merges/dispatches:
+  intent markers → `.github/workflows/junior-actuate.yml`. Platform **Create PR**
+  and `scripts/Publish-CodexCloudTask.ps1` are **fallbacks**. **Heartbeat:**
+  review PRs / `publish-ok`; re-nudge if bot reply lacks the patch marker; on
+  `publish-failed` use fallback (engagement: no Opus). For every worker PR,
+  D-037 adds an independent GPT reviewer round. Junior merge signal is **CI
+  green + reviewer verdict pass**, actuated via `continuityops-merge-v1`. Repair
+  findings go to an independent fixer round, not the reviewer. Never treat
+  `make_pr` text alone as complete. Warm-cloud heartbeat: issue #4 stamp; smoke
+  when older than ~10h; never dispatch real work into a cold environment.
+- **Warm freshness** is cloud-native and evidenced by the most recent Codex
+  task timestamp on the keep-warm record (issue #4); the supervisor heartbeat
+  posts an `@codex` smoke when the stamp is older than >9h. The
+  `%LOCALAPPDATA%` registry and `Invoke-CodexCloudWarm.ps1` warm gate apply only
+  to the fallback path.
 - **Fallback path — control-center sweep.** The owner's Windows session (codex
   CLI + keychain + registry) runs the classic run sheet (warm gate →
   `codex cloud exec` → diff/apply/push) when the App path is unavailable.
@@ -145,14 +141,17 @@ but every free-text value must be Simplified Chinese.
 
 ## Roles
 
-- **Portfolio supervisor:** owns integrated intent, stream topology, cross-stream
-  dependencies, and final convergence.
+- **Chief supervisor:** owns integrated intent at stream boundaries and
+  escalations only (D-041); replaces junior when needed; does not steady-state
+  actuate.
+- **Junior supervisor:** owns day-to-day supervision and actuation (D-041);
+  reports to chief; replaces orch/reviewer/monitor on low context.
 - **Lead orchestrator:** selects ready work, checks dependencies and scopes,
-  creates/joins Ralphy streams, dispatches roles, changes authoritative state
-  atomically, logs break/fix events, and assembles gates. It does not self-
-  approve high-risk work.
-- **Co-orchestrator:** a Sonnet/Opus cloud agent appointed to one named stream;
-  it has no authority over other streams or final certification.
+  creates/joins Ralphy streams, prepares dispatch intents, changes
+  authoritative state atomically up to `review`, logs break/fix events, and
+  assembles gates. It does not merge/approve PRs or self-approve high-risk work.
+- **Co-orchestrator:** optional bounded stream co-lead when appointed; no
+  authority over other streams or final certification. Engagement: no Opus.
 - **Codex implementation worker:** executes the bounded code/test task in `/fast`
   mode within a stream.
 - **Rubric setter:** read-only reviewer who freezes a checkable slice rubric
@@ -342,33 +341,57 @@ then create GitHub Environment continuityops and dispatch ContinuityOps Terrafor
 
 Durable, non-obvious notes for future cloud agents working in this environment.
 
-- **Repository type:** This is a planning/governance repository at Phase 0
-  bootstrap. There is no application service, no dependency manifest
-  (`package.json`/`requirements.txt`/`go.mod`), and no committed build/test/lint
-  configuration. The "deliverables" are the Markdown governance docs, the
-  machine-readable JSON contracts (`PLAN.md` task authority, `OPERATING_STATE.md`
-  state/issues, `integration/upstreams.lock.json` upstream pins), and the
-  architecture assets in `docs/architecture/`. Do not fabricate a build system or
-  claim runtime capability; implementation begins only when a human advances
-  `authorized_through_phase` per `PLAN.md`.
-- **Pre-installed runtimes (no install needed):** Node 22, npm 10, Python 3.12,
-  Go 1.22, and `jq`. The update script is intentionally a near no-op because
-  there are no dependencies to install yet; it only installs deps if a manifest
-  later appears.
-- **Validate the contracts (the closest thing to a test suite):** parse every
-  standalone `*.json` and every fenced ```json block embedded in the Markdown
-  (all 12 currently parse). This is the core "does the repo still hold together"
-  check. `python3 -c "import json"` is sufficient; no framework is installed.
-- **Expected Phase-0 link gaps:** internal Markdown links to `evidence/*`
-  subdirectories (hosted/slices/postbuild/judges) and the root-relative links
-  inside `docs/planning/REPO_README_TEMPLATE.md` do NOT resolve yet by design —
-  those namespaces/assets are created in later phases. Only `evidence/README.md`
-  exists today. Treat these as known-not-yet-created, not as regressions.
-- **Render the architecture diagram (build/run demo):** the README Mermaid block
-  renders with `npx --yes @mermaid-js/mermaid-cli -i <file>.mmd -o out.png`; its
-  bundled Chromium works headless in this VM with no extra system libs. The
-  committed renders (`docs/architecture/continuityops-architecture.{png,svg}`,
-  `continuityops.drawio`) are valid and the drawio XML is well-formed.
-- **No secrets required** for planning/validation work in this environment.
-  Live AWS is **not** this seat: escalate via GHA OIDC → `continuityops-gha`
-  (see Live AWS control plane above). `NoCredentials` here is expected.
+- **Repository type:** ContinuityOps governance + in-repo L1 contracts through
+  Phases 0–8 on `main` (`portfolio-certified-L1`). Live L4+ cloud apply is not
+  performed inside this Cursor cloud VM by default (see Paste / BF-2026-010).
+- **Pre-installed runtimes:** Node 22, npm 10, Python 3.12, Go 1.22, and `jq`.
+  Install task-specific CLIs (`aws`, `terraform`, `helm`, etc.) only when a
+  path that can actually use them is available (GHA OIDC or local bottleneck).
+- **Validate:** `node --test tests/`; `node scripts/project.mjs validate <task>`;
+  parse standalone `*.json` and fenced ```json blocks in Markdown.
+- **Architecture renders:** Mermaid via
+  `npx --yes @mermaid-js/mermaid-cli`; committed
+  `docs/architecture/continuityops-architecture.{png,svg}` and
+  `continuityops.drawio` remain authoritative visuals.
+- **No secrets in the Codex/Cursor Environment** for warm cache (D-026). Repo
+  work does not require AWS keys in this VM. Live ContinuityOps AWS is
+  **GHA OIDC → `continuityops-gha`** (see Live AWS control plane above).
+
+### What actually fixed live AWS (2026-07-14/15) — not Cursor STS
+
+| Path | Evidence |
+| --- | --- |
+| **GitHub OIDC → `project-a-lzlab-gha`** (LZ lab / cloud) | Role last used **2026-07-15**; successful `landing-zone-lab.yml` runs |
+| **GitHub OIDC → `continuityops-gha`** (this repo) | Bootstrap via `terraform/ci-bootstrap/`; workflow `continuityops-terraform.yml` |
+| **`CursorCloudAgent` injection** | Role created Jul 14; **never assumed** (`RoleLastUsed` empty) |
+
+The prior “fix” was **change apply control plane** (GHA OIDC / local bottleneck), **not** finishing Cursor role injection. BF-2026-010 `NoCredentials` in this Cloud seat is real and expected on Pro+.
+
+### Paste for stuck agents
+
+```text
+NoCredentials is expected on Pro+ without team External ID. CursorCloudAgent has never been assumed.
+ContinuityOps live AWS: GHA OIDC → continuityops-gha (continuityops-terraform.yml) after CloudShell bootstrap with REPO_ID=1301990908.
+Do not block on CURSOR_AWS_ASSUME_IAM_ROLE_ARN. Do not use project-a-lzlab-gha for ContinuityOps roots. Continue repo-only here.
+```
+
+Account binding (not a secret): `000000000000` /
+`arn:aws:iam::000000000000:root`. ContinuityOps CI role:
+`arn:aws:iam::000000000000:role/continuityops-gha`. See BF-2026-010 + Live AWS.
+
+### AWS injection stop table (Cloud seat)
+
+```bash
+env | grep AWS_PROFILE
+aws sts get-caller-identity
+```
+
+| Observation | Action |
+| --- | --- |
+| Caller ARN contains `assumed-role/CursorCloudAgent` | Rare on Pro+; only if Teams External ID path was completed. Proceed; record identity (no secrets). |
+| `NoCredentials` / `AWS_PROFILE` unset / no `~/.aws/config` | **STOP.** Injection absent — stop; no keys. Do not invent keys or put long-lived keys in Cloud secrets. |
+| Live AWS still needed | **1)** ContinuityOps GHA OIDC (`gh workflow run continuityops-terraform.yml -f action=plan|apply` → `continuityops-gha`); **2)** local `aws login` bottleneck; **3)** Teams External ID only if insisting on in-pod AWS. Cloud seat stays **repo-only** until (1) or (2). |
+
+Verified 2026-07-18 this seat: `AWS_PROFILE=<unset>`, STS `NoCredentials`, `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` set → **injection absent — stop; no keys.**
+
+Workaround detail (order): (1) proven GHA OIDC; (2) proven local bottleneck; (3) Teams → Settings → **Bedrock IAM Role** → Validate & Save → External ID into `CursorCloudAgent` trust → **new** Cloud Agent pod. Role may trust `arn:aws:iam::289469326074:role/roleAssumer` without External ID condition — Cursor still will not inject without team External ID UI (Pro+ has neither panel).

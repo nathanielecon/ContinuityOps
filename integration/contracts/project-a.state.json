@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "project-a.state",
+  "upstream": "project_a",
+  "pinned_sha": "f688065c7705ab7d3febcd9ec2842bea4d8bed87",
+  "status": "adapter_stub",
+  "claim_level_ceiling": "L1",
+  "exports": {
+    "state_backend": {
+      "type": "s3",
+      "bucket": "PLACEHOLDER_STATE_BUCKET",
+      "key_prefix": "continuityops/",
+      "region": "us-east-1",
+      "encrypt": true,
+      "versioning": true,
+      "dynamodb_lock_table": "PLACEHOLDER_LOCK_TABLE"
+    },
+    "environment_keys": ["staging", "recovery-lab"]
+  },
+  "missing": [
+    "Real bucket/table names from approved lab account",
+    "Upstream state interface verification (MC-A-TREE)"
+  ],
+  "notes": "Remote state isolation, encryption, versioning, and locking are designed in terraform/modules/state. Not cloud-applied (no L4 claim)."
+}

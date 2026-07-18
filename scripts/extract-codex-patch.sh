@@ -44,30 +44,53 @@ from pathlib import Path
 body = Path(sys.argv[1]).read_text(encoding="utf-8", errors="replace")
 out = Path(sys.argv[2])
 
-part_re = re.compile(
-    r"<!--\s*continuityops-patch-v1\s+part=(\d+)/(\d+)\s*-->\s*"
-    r"```(?:diff)?\s*\n(.*?)```",
-    re.DOTALL | re.IGNORECASE,
-)
-fence_re = re.compile(r"```(?:diff)?\s*\n(.*?)```", re.DOTALL)
+# Line-based structural fence scan (BF-2026-001). A unified diff's content
+# lines always carry a prefix (+ - space @@ diff index --- +++ \), so a bare
+# ``` at column 0 inside a patch block can ONLY be the closing fence. The old
+# non-greedy regex terminated at the first ``` anywhere — including ```json
+# fences nested inside added file content — truncating the patch mid-hunk.
+part_open_re = re.compile(r"<!--\s*continuityops-patch-v1\s+part=(\d+)/(\d+)\s*-->\s*$", re.IGNORECASE)
+fence_open_re = re.compile(r"^```[A-Za-z0-9_-]*\s*$")
+fence_close_re = re.compile(r"^```\s*$")
 
-parts = part_re.findall(body)
+def scan_blocks(text):
+    """Yield (part_key, block_text). part_key is (k, n) or None."""
+    lines = text.splitlines()
+    i, pending_part = 0, None
+    while i < len(lines):
+        line = lines[i]
+        pm = part_open_re.search(line)
+        if pm:
+            pending_part = (int(pm.group(1)), int(pm.group(2)))
+            i += 1
+            continue
+        if fence_open_re.match(line):
+            block = []
+            i += 1
+            while i < len(lines) and not fence_close_re.match(lines[i]):
+                block.append(lines[i])
+                i += 1
+            i += 1  # skip closing fence (or EOF)
+            yield pending_part, "\n".join(block) + "\n"
+            pending_part = None
+            continue
+        i += 1
+
+blocks = list(scan_blocks(body))
+parts = [(k, n, text) for key, text in blocks if key for (k, n) in [key]]
 chunks = []
 if parts:
-    # Validate contiguous 1..N
-    parsed = [(int(k), int(n), text) for k, n, text in parts]
-    n = parsed[0][1]
-    if any(p[1] != n for p in parsed):
+    n = parts[0][1]
+    if any(p[1] != n for p in parts):
         print("ERROR: inconsistent part totals", file=sys.stderr)
         sys.exit(6)
-    by_k = {k: text for k, _, text in parsed}
+    by_k = {k: text for k, _, text in parts}
     if set(by_k) != set(range(1, n + 1)):
         print(f"ERROR: expected parts 1..{n}, got {sorted(by_k)}", file=sys.stderr)
         sys.exit(7)
     chunks = [by_k[i] for i in range(1, n + 1)]
 else:
-    for m in fence_re.finditer(body):
-        text = m.group(1)
+    for _, text in blocks:
         if "diff --git" in text:
             chunks.append(text)
 

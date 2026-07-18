@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "dashboard_id": "service-overview",
+  "title": "ContinuityOps service overview",
+  "panels": [
+    {
+      "id": "request-rate",
+      "type": "timeseries",
+      "metric": "http.server.requests",
+      "unit": "req/s"
+    },
+    {
+      "id": "error-rate",
+      "type": "timeseries",
+      "metric": "http.server.errors",
+      "unit": "err/s"
+    },
+    {
+      "id": "latency-p99",
+      "type": "timeseries",
+      "metric": "http.server.duration_p99",
+      "unit": "ms"
+    },
+    {
+      "id": "queue-depth",
+      "type": "gauge",
+      "metric": "worker.queue_depth",
+      "unit": "messages"
+    }
+  ],
+  "links": [
+    {
+      "from": "error-rate",
+      "to": "operations/incidents/observability/signal-path-drill.json",
+      "purpose": "symptom-to-root-cause"
+    }
+  ],
+  "owner": "sre-signals-worker"
+}

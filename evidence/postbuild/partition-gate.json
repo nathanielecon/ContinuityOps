@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "task_id": "P8-T03",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "command": "node scripts/project.mjs validate P8-T03",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:25:19.590Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "postbuild_partition_unique_ownership": true,
+    "shared_interface_map": true,
+    "saved_fresh_council": true,
+    "full_repository": true,
+    "judge_exit": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Logical partitions only"
+  ],
+  "started_at": "2026-07-18T06:25:19.570Z",
+  "completed_at": "2026-07-18T06:25:19.590Z",
+  "validator_details": [
+    {
+      "id": "postbuild_partition_unique_ownership",
+      "result": {
+        "pass": true,
+        "count": 9
+      }
+    },
+    {
+      "id": "shared_interface_map",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "saved_fresh_council",
+      "result": {
+        "pass": true,
+        "provisional_pass": true,
+        "fresh_mean": 9.7
+      }
+    },
+    {
+      "id": "full_repository",
+      "result": {
+        "pass": true,
+        "standalone_json": 191,
+        "fenced_json": 14,
+        "skipped_allowlisted": 0
+      }
+    },
+    {
+      "id": "judge_exit",
+      "result": {
+        "pass": true,
+        "provisional_pass": true,
+        "fresh_mean": 9.7
+      }
+    }
+  ],
+  "passed": [
+    "postbuild_partition_unique_ownership",
+    "shared_interface_map",
+    "saved_fresh_council",
+    "full_repository",
+    "judge_exit"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/postbuild/partition-gate.json",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "implementation_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
+}
