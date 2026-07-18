@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "task_id": "REVIEW-SEC-02",
+  "role": "independent-reviewer",
+  "target_pr": 66,
+  "target_branch": "codex/issue-63-ddfca8e",
+  "reviewed_patch_base_sha": "a40508fc86260db012f4dfe075eb02859d24bdd5",
+  "reviewed_patch_tip_sha": "1a725bfc2adad9b0e1ba28f658a80b7189df646e",
+  "verdict": "pass",
+  "recorded_at": "2026-07-18T14:36:00.000Z",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "GPT-5.5",
+    "mode": "codex-cloud",
+    "role": "d-037-reviewer"
+  },
+  "commands": [
+    {
+      "command": "SOURCE_DATE_EPOCH=1784332800 node scripts/security/generate-sbom.mjs",
+      "exit_code": 0,
+      "evidence_path": "/tmp/generate-sbom.out"
+    },
+    {
+      "command": "node --test tests/security/sbom-generator.test.mjs",
+      "exit_code": 0,
+      "evidence_path": "/tmp/sbom-test.out"
+    },
+    {
+      "command": "python3 - <<'PY' ... JSON parse docs/claims/matrix.json evidence/slices/S6/security.json evidence/hosted/security-sbom-2026-07-18.json",
+      "exit_code": 0,
+      "evidence_path": "terminal-output"
+    },
+    {
+      "command": "node scripts/project.mjs validate P6-T01",
+      "exit_code": 0,
+      "evidence_path": "terminal-output"
+    }
+  ],
+  "assessment": {
+    "security_sbom_l2_honest": true,
+    "live_scanner_claimed": false,
+    "live_iam_claimed": false,
+    "notes": [
+      "security-sbom 声明仅提升到仓库文件 SBOM 的 L2，并明确保留无 live vulnerability scanner 与无 live IAM apply 边界。",
+      "SBOM 生成器在 SOURCE_DATE_EPOCH 固定时输出可复现，组件包含 sha256 文件摘要。",
+      "证据矩阵引用了生成器产物与 S6 安全证据，未把仓库文件清单误称为 hosted/live 扫描。"
+    ]
+  },
+  "remaining_risks": [
+    "仍不是 live 漏洞扫描器证明。",
+    "仍不是 live IAM 或云端应用证明。"
+  ]
+}
