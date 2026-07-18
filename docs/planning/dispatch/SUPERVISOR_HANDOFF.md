@@ -1,5 +1,7 @@
 # 监督者交接 — ORCH-ROUND-06 治理修复后（2026-07-17）
 
+> **2026-07-18 LIVE AWS chief handoff (current):** [`CHIEF_HANDOFF_2026-07-18.md`](./CHIEF_HANDOFF_2026-07-18.md) — use that for new chief resume.
+
 > 面向所有者 / 控制中心的持久交接。机器字段英文；自由文本简体中文。
 
 > **Full successor appendix (Q&A + resume order):** [`SUPERVISOR_APPENDIX.md`](./SUPERVISOR_APPENDIX.md)

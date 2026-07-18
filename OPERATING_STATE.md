@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 39,
+  "revision": 40,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
@@ -50,10 +50,9 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S8-P8-T04"
   ],
   "next_actions": [
-    "OWNER: restart Cloud Agent so refreshed GH_TOKEN injects — assert-cloud-seat-gh-token.mjs must PASS (this seat Actions 403)",
-    "Live AWS loop LIVE: PR plan → merge main → auto apply as continuityops-gha; confirm apply URLs",
-    "Elevate further Terraform (network/IAM/EKS) only with fresh green plan+apply run URLs",
-    "Optional: kind+helm L2 local kubernetes"
+    "New chief: read docs/planning/dispatch/CHIEF_HANDOFF_2026-07-18.md; assert-cloud-seat-gh-token.mjs PASS; continue Terraform PR→plan→merge→apply",
+    "Elevate staging beyond live-marker only with fresh green apply run URLs + evidence/hosted/",
+    "Optional: kind+helm L2 local kubectl"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
