@@ -8,7 +8,7 @@
     "P6-T03",
     "P6-T04"
   ],
-  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "196bed4775128efbe193e028c722f13816a7f91b",
   "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
   "claim_level": "L1",
   "remaining_boundaries": [
@@ -20,5 +20,20 @@
     "mode": "default",
     "role": "s6-gate-controller"
   },
-  "notes": "S6 deterministic gates complete at L1."
+  "notes": "S6 deterministic gates complete at L1.",
+  "slice_landed_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "portfolio_tip_sha": "196bed4775128efbe193e028c722f13816a7f91b",
+  "bind_model": "portfolio_tip_inheritance",
+  "rebinding": {
+    "recorded_utc": "2026-07-18T18:50:50Z",
+    "reason": "Portfolio fresh council U1 fail on 760827d: STREAM_COMPLETE bound to stale slice SHAs; rebind to portfolio tip after D-047 + A3 claim matrix revalidation.",
+    "prior_candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+    "issue_ids": [
+      "NIX-PORTFOLIO-001"
+    ],
+    "validation": [
+      "node --test tests/pipeline/*.mjs tests/harness/*.mjs (pass)",
+      "python3 standalone JSON parse (0 errors)"
+    ]
+  }
 }
