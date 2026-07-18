@@ -262,7 +262,7 @@ jobs:
             PR="$(gh api "repos/${REPO}/issues/${D037}" --jq .body | grep -oE 'PR #[0-9]+|pull/[0-9]+' | head -1 | tr -dc '0-9' || true)"
           fi
           if [ -z "${PR}" ]; then
-            echo "no PR resolved — page junior"; 
+            echo "no PR resolved — page junior"
             gh label create junior-exception --color d93f0b --description "junior exception" --force --repo "$REPO" >/dev/null || true
             tip="$(gh api "repos/${REPO}/commits/main" --jq .sha)"
             packet="$(jq -n --arg tip "$tip" --argjson ids "[${D037}]" '{
