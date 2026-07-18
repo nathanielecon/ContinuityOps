@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "task_id": "ORCH-CLOSE-02",
+  "role": "orchestrator",
+  "model": "codex-5.4-default",
+  "provider": "OpenAI Codex App",
+  "mode": "default",
+  "baseline_sha": "560d542ec3f194d59b3fe23d54c2755e6745faf3",
+  "base_branch": "main",
+  "status": "amended_complete",
+  "at": "2026-07-18T14:55:08Z",
+  "claim_closure": {
+    "security-sbom": {
+      "target": "L2",
+      "decision": "elevated_l2",
+      "reason": "PR #66 + REVIEW-SEC-02 pass: reproducible repository SBOM generator; no live scanner/IAM claim."
+    },
+    "agentic-workflow": {
+      "target": "L3",
+      "decision": "elevated_l3_hosted_control",
+      "reason": "PR #67 + REVIEW-AGENTIC-03 pass: GitHub-hosted D-034/D-042/OIDC/keep-warm evidence; no in-pod AWS claim."
+    },
+    "performance": {
+      "target": "L1",
+      "decision": "keep_l1",
+      "reason": "No fresh reproducible live load/capacity comparison."
+    },
+    "azure-governance": {
+      "target": "L1",
+      "decision": "keep_l1_non_live",
+      "reason": "D-046 keeps Azure live apply out of AWS-lab ceiling."
+    },
+    "upstream-integration": {
+      "target": "L1",
+      "decision": "blocked",
+      "reason": "CO-004/CO-006 remain open pending D-028 control-center packages; do not invent digests."
+    }
+  },
+  "blocked_gaps": [
+    {
+      "issue_id": "CO-004",
+      "status": "open",
+      "reproducible_gap": "No verified Project C immutable sha256 image digest or rollback contract is present in the repository evidence."
+    },
+    {
+      "issue_id": "CO-006",
+      "status": "open",
+      "reproducible_gap": "No control-center supplied Project A/C context package or read-only vendored snapshot is present for the first upstream-dependent task."
+    }
+  ],
+  "worker_task_ids": [
+    "WORKER-SEC-01",
+    "WORKER-AGENTIC-01",
+    "REVIEW-SEC-02",
+    "REVIEW-AGENTIC-03"
+  ],
+  "d037_sequence": [
+    "REVIEW-SEC-02 pass -> merge PR #66",
+    "REVIEW-AGENTIC-03 pass -> merge PR #67",
+    "ORCH-CLOSE-02 amend after elevations"
+  ],
+  "context_remaining": "74%",
+  "supersedes_race": "Initial keep_l1 decisions raced ahead of WORKER-SEC-01/#66 and WORKER-AGENTIC-01/#67; amended after D-037 passes and merges."
+}
