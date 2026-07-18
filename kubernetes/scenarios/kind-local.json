@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "kind-local-preflight",
+  "environment": "local",
+  "label": "local-only",
+  "claim_ceiling": "L2",
+  "description": "kind cluster preflight template. Does not imply managed EKS.",
+  "steps": [
+    "kind create cluster --name continuityops-local",
+    "helm template continuityops kubernetes/chart -f kubernetes/chart/values.yaml",
+    "kubectl apply --dry-run=client -f rendered.yaml"
+  ],
+  "reset": [
+    "kind delete cluster --name continuityops-local"
+  ],
+  "evidence_paths": [
+    "evidence/slices/S2/runtime/kind-preflight.json"
+  ],
+  "remaining_boundaries": [
+    "managed_cluster_apply"
+  ]
+}

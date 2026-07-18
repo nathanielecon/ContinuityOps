@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "task_id": "P3-T01",
+  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "command": "node scripts/project.mjs validate P3-T01",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:16:40.334Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "serverless_unit": true,
+    "event_contract": true,
+    "idempotency": true,
+    "iam_negative": true,
+    "dlq_replay": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "No live AWS Lambda deploy",
+    "No live SQS/DLQ runtime"
+  ],
+  "started_at": "2026-07-18T06:16:40.325Z",
+  "completed_at": "2026-07-18T06:16:40.334Z",
+  "validator_details": [
+    {
+      "id": "serverless_unit",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "event_contract",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "idempotency",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "iam_negative",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "dlq_replay",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "serverless_unit",
+    "event_contract",
+    "idempotency",
+    "iam_negative",
+    "dlq_replay"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S3/serverless.json"
+}

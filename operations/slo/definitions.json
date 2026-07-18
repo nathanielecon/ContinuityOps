@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "slos": [
+    {
+      "id": "availability-30d",
+      "sli": "successful_requests / total_requests",
+      "objective": 0.999,
+      "window_days": 30,
+      "owner": "sre-signals-worker"
+    },
+    {
+      "id": "latency-p99-30d",
+      "sli": "requests_under_300ms / total_requests",
+      "objective": 0.99,
+      "window_days": 30,
+      "owner": "sre-signals-worker"
+    }
+  ]
+}

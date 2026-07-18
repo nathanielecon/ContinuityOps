@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "task_id": "P2-T03",
+  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "command": "node scripts/project.mjs validate P2-T03",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:16:40.206Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "scenario_schema": true,
+    "scenario_reset": true,
+    "recovery_smoke": true,
+    "evidence_freshness": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Synthetic failure matrix only",
+    "managed_cluster_apply",
+    "No live failure injection"
+  ],
+  "started_at": "2026-07-18T06:16:40.197Z",
+  "completed_at": "2026-07-18T06:16:40.206Z",
+  "validator_details": [
+    {
+      "id": "scenario_schema",
+      "result": {
+        "pass": true,
+        "count": 6
+      }
+    },
+    {
+      "id": "scenario_reset",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "recovery_smoke",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "evidence_freshness",
+      "result": {
+        "pass": true,
+        "candidate_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+        "path": "evidence/slices/S2/scenarios/matrix-evidence.json"
+      }
+    }
+  ],
+  "passed": [
+    "scenario_schema",
+    "scenario_reset",
+    "recovery_smoke",
+    "evidence_freshness"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S2/scenarios/matrix-evidence.json",
+  "bind_model": "candidate_sha_equals_head"
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "lifecycle_id": "saas-tenant-v1",
+  "stages": [
+    {
+      "id": "onboarding",
+      "owner": "saas-operations",
+      "automatable": true,
+      "checks": ["tenant_id minted", "isolation boundary recorded"]
+    },
+    {
+      "id": "config",
+      "owner": "saas-operations",
+      "automatable": true,
+      "checks": ["feature flags scoped to tenant"]
+    },
+    {
+      "id": "migration",
+      "owner": "saas-operations",
+      "automatable": false,
+      "checks": ["migration plan reviewed", "rollback digest named"]
+    },
+    {
+      "id": "support",
+      "owner": "support-oncall",
+      "automatable": false,
+      "checks": ["severity mapped", "escalation owner set"]
+    },
+    {
+      "id": "suspension",
+      "owner": "saas-operations",
+      "automatable": true,
+      "checks": ["ingress blocked", "data retained per policy"]
+    },
+    {
+      "id": "export",
+      "owner": "saas-operations",
+      "automatable": true,
+      "checks": ["export job idempotent", "artifact hashed"]
+    },
+    {
+      "id": "deprovision",
+      "owner": "saas-operations",
+      "automatable": true,
+      "checks": ["crypto shred or delete verified", "audit event written"]
+    }
+  ],
+  "tenant_isolation": {
+    "model": "logical_tenant_id",
+    "cross_tenant_reads": "prohibited",
+    "shared_infra": "allowed_with_row_filters"
+  }
+}

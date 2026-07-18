@@ -11,11 +11,22 @@ import {
   P1_T02_VALIDATOR_IDS,
   P1_T03_VALIDATOR_IDS,
   P1_T04_VALIDATOR_IDS,
+  P2_T01_VALIDATOR_IDS,
+  P2_T02_VALIDATOR_IDS,
+  P2_T03_VALIDATOR_IDS,
+  P2_T04_VALIDATOR_IDS,
+  P3_T01_VALIDATOR_IDS,
+  P3_T02_VALIDATOR_IDS,
+  P3_T03_VALIDATOR_IDS,
+  P4_T01_VALIDATOR_IDS,
+  P4_T02_VALIDATOR_IDS,
+  P4_T03_VALIDATOR_IDS,
   assertValidatorsReadOnly,
   createEvidence,
   fixedP0T03Fixture,
   fixedP0T05Fixture,
-  fixedP1Fixture
+  fixedP1Fixture,
+  sliceIdForTask
 } from './validators/core.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -28,6 +39,37 @@ const P1_EVIDENCE = {
   'P1-T02': resolve(ROOT, 'evidence/slices/S1/terraform.json'),
   'P1-T03': resolve(ROOT, 'evidence/slices/S1/hosted-ci.json'),
   'P1-T04': resolve(ROOT, 'evidence/slices/S1/integrated-gate.json')
+};
+
+const PHASE_EVIDENCE = {
+  ...P1_EVIDENCE,
+  'P2-T01': resolve(ROOT, 'evidence/slices/S2/chart-contract.json'),
+  'P2-T02': resolve(ROOT, 'evidence/slices/S2/runtime-evidence.json'),
+  'P2-T03': resolve(ROOT, 'evidence/slices/S2/scenarios/matrix-evidence.json'),
+  'P2-T04': resolve(ROOT, 'evidence/slices/S2/integrated-gate.json'),
+  'P3-T01': resolve(ROOT, 'evidence/slices/S3/serverless.json'),
+  'P3-T02': resolve(ROOT, 'evidence/slices/S3/saas-operations.json'),
+  'P3-T03': resolve(ROOT, 'evidence/slices/S3/integrated-gate.json'),
+  'P4-T01': resolve(ROOT, 'evidence/slices/S4/telemetry.json'),
+  'P4-T02': resolve(ROOT, 'evidence/slices/S4/signals.json'),
+  'P4-T03': resolve(ROOT, 'evidence/slices/S4/integrated-gate.json')
+};
+
+const PHASE_VALIDATORS = {
+  'P1-T01': P1_T01_VALIDATOR_IDS,
+  'P1-T02': P1_T02_VALIDATOR_IDS,
+  'P1-T03': P1_T03_VALIDATOR_IDS,
+  'P1-T04': P1_T04_VALIDATOR_IDS,
+  'P2-T01': P2_T01_VALIDATOR_IDS,
+  'P2-T02': P2_T02_VALIDATOR_IDS,
+  'P2-T03': P2_T03_VALIDATOR_IDS,
+  'P2-T04': P2_T04_VALIDATOR_IDS,
+  'P3-T01': P3_T01_VALIDATOR_IDS,
+  'P3-T02': P3_T02_VALIDATOR_IDS,
+  'P3-T03': P3_T03_VALIDATOR_IDS,
+  'P4-T01': P4_T01_VALIDATOR_IDS,
+  'P4-T02': P4_T02_VALIDATOR_IDS,
+  'P4-T03': P4_T03_VALIDATOR_IDS
 };
 
 export const TASK_STATES = ['planned', 'ready', 'running', 'blocked', 'review', 'verified', 'done'];
@@ -157,10 +199,7 @@ export function runValidationSuite(taskId = 'P0-T02') {
   const baselineSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
   if (taskId === 'P0-T03') return runP0T03ValidationSuite();
   if (taskId === 'P0-T05') return runP0T05ValidationSuite();
-  if (taskId === 'P1-T01') return runP1ValidationSuite('P1-T01', P1_T01_VALIDATOR_IDS);
-  if (taskId === 'P1-T02') return runP1ValidationSuite('P1-T02', P1_T02_VALIDATOR_IDS);
-  if (taskId === 'P1-T03') return runP1ValidationSuite('P1-T03', P1_T03_VALIDATOR_IDS);
-  if (taskId === 'P1-T04') return runP1ValidationSuite('P1-T04', P1_T04_VALIDATOR_IDS);
+  if (PHASE_VALIDATORS[taskId]) return runPhaseValidationSuite(taskId, PHASE_VALIDATORS[taskId]);
   const plan = readPlan();
   const task = assertPhaseAuthorized(plan, taskId);
 
@@ -210,13 +249,15 @@ function writeEvidence(result) {
   } else if (result.task_id === 'P0-T05') {
     evidencePath = INTEGRATED_GATE_EVIDENCE_PATH;
     relative = 'evidence/slices/S0/integrated-gate.json';
-  } else if (P1_EVIDENCE[result.task_id]) {
-    evidencePath = P1_EVIDENCE[result.task_id];
-    relative = `evidence/slices/S1/${evidencePath.split('/').pop()}`;
+  } else if (PHASE_EVIDENCE[result.task_id]) {
+    evidencePath = PHASE_EVIDENCE[result.task_id];
+    const slice = sliceIdForTask(result.task_id);
+    relative = evidencePath.slice(ROOT.length + 1).replaceAll('\\', '/');
+    void slice;
   }
   mkdirSync(dirname(evidencePath), { recursive: true });
   const payload = { ...result, evidence_path: relative };
-  if (result.task_id === 'P0-T05' || result.task_id === 'P1-T04') {
+  if (result.task_id === 'P0-T05' || /T0[34]$/.test(result.task_id ?? '') && (result.task_id?.startsWith('P1-') || result.task_id?.startsWith('P2-') || result.task_id?.startsWith('P3-') || result.task_id?.startsWith('P4-'))) {
     const headSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
     if (process.env.CANDIDATE_SHA) {
       payload.bind_model = 'candidate_sha_parent_of_tip';
@@ -228,7 +269,7 @@ function writeEvidence(result) {
       payload.bind_commit = headSha;
     }
   }
-  if (result.task_id?.startsWith('P1-') && existsSync(evidencePath)) {
+  if ((result.task_id?.startsWith('P1-') || result.task_id?.startsWith('P2-') || result.task_id?.startsWith('P3-') || result.task_id?.startsWith('P4-')) && existsSync(evidencePath)) {
     try {
       const prior = JSON.parse(readFileSync(evidencePath, 'utf8'));
       for (const key of ['claim_level', 'remaining_boundaries', 'cloud_apply_evidence', 'acceptance_notes', 'component_claims']) {
@@ -243,9 +284,10 @@ function writeEvidence(result) {
     const evidenceManifestSha256 = createHash('sha256').update(readFileSync(evidencePath)).digest('hex');
     refreshP0T05JudgeBindings(result.candidate_sha, evidenceManifestSha256);
   }
-  if (result.task_id === 'P1-T04') {
+  if (['P1-T04', 'P2-T04', 'P3-T03', 'P4-T03'].includes(result.task_id)) {
     const evidenceManifestSha256 = createHash('sha256').update(readFileSync(evidencePath)).digest('hex');
-    refreshJudgeBindings(resolve(ROOT, 'evidence/judges/S1'), result.candidate_sha, evidenceManifestSha256);
+    const slice = sliceIdForTask(result.task_id);
+    refreshJudgeBindings(resolve(ROOT, `evidence/judges/${slice}`), result.candidate_sha, evidenceManifestSha256);
   }
 }
 
@@ -310,6 +352,10 @@ function refreshP0T05JudgeBindings(candidateSha, evidenceManifestSha256) {
 }
 
 export function runP1ValidationSuite(taskId, validatorIds) {
+  return runPhaseValidationSuite(taskId, validatorIds);
+}
+
+export function runPhaseValidationSuite(taskId, validatorIds) {
   const startedAt = new Date().toISOString();
   const headSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
   const candidateSha = resolveEvidenceSha('CANDIDATE_SHA', headSha);
@@ -362,6 +408,46 @@ export function runP1ValidationSuite(taskId, validatorIds) {
         'H1 cloud identity receipts optional under D-044; accounts still unset',
         'Upstream digest packaging still open (CO-004/CO-006)'
       ]
+    },
+    'P2-T01': {
+      claim_level: 'L1',
+      remaining_boundaries: ['helm CLI may be absent — static chart contract', 'managed_cluster_apply']
+    },
+    'P2-T02': {
+      claim_level: 'L1',
+      remaining_boundaries: ['managed_cluster_apply', 'kind L2 only when kind+helm available']
+    },
+    'P2-T03': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Synthetic failure matrix only', 'managed_cluster_apply', 'No live failure injection']
+    },
+    'P2-T04': {
+      claim_level: 'L1',
+      remaining_boundaries: ['managed_cluster_apply', 'No EKS OIDC apply evidence']
+    },
+    'P3-T01': {
+      claim_level: 'L1',
+      remaining_boundaries: ['No live AWS Lambda deploy', 'No live SQS/DLQ runtime']
+    },
+    'P3-T02': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Lifecycle tests are contractual/unit only', 'No live SaaS control plane']
+    },
+    'P3-T03': {
+      claim_level: 'L1',
+      remaining_boundaries: ['No live AWS Lambda', 'DLQ path synthetic/unit only']
+    },
+    'P4-T01': {
+      claim_level: 'L1',
+      remaining_boundaries: ['No live OTLP exporter', 'Redaction proven in unit tests only']
+    },
+    'P4-T02': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Dashboard/alert JSON schemas only', 'No live Grafana/CloudWatch']
+    },
+    'P4-T03': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Signal-path drills are synthetic fixtures', 'No live alert fire/resolve channel']
     }
   };
   return {
@@ -452,7 +538,7 @@ export function runP0T05ValidationSuite() {
 }
 
 function usage(exitCode = 2) {
-  console.error('Usage: node scripts/project.mjs validate P0-T02|P0-T03|P0-T05|P1-T01|P1-T02|P1-T03|P1-T04');
+  console.error('Usage: node scripts/project.mjs validate P0-T02|P0-T03|P0-T05|P1-T0{1-4}|P2-T0{1-4}|P3-T0{1-3}|P4-T0{1-3}');
   process.exit(exitCode);
 }
 

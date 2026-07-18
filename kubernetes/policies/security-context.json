@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "kubernetes-security-context",
+  "required": [
+    "runAsNonRoot",
+    "readOnlyRootFilesystem",
+    "allowPrivilegeEscalation=false",
+    "capabilities.drop includes ALL",
+    "seccompProfile RuntimeDefault"
+  ],
+  "prohibited": [
+    "privileged containers",
+    "hostNetwork",
+    "hostPID"
+  ]
+}

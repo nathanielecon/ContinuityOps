@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task_id": "P4-T03",
+  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "command": "node scripts/project.mjs validate P4-T03",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:16:40.624Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "signal_path_runtime": true,
+    "alert_runtime": true,
+    "full_repository": true,
+    "judge_exit": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Signal-path drills are synthetic fixtures",
+    "No live alert fire/resolve channel"
+  ],
+  "started_at": "2026-07-18T06:16:40.607Z",
+  "completed_at": "2026-07-18T06:16:40.624Z",
+  "validator_details": [
+    {
+      "id": "signal_path_runtime",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "alert_runtime",
+      "result": {
+        "pass": true,
+        "note": "合成 drill；非 live 告警通道"
+      }
+    },
+    {
+      "id": "full_repository",
+      "result": {
+        "pass": true,
+        "standalone_json": 102,
+        "fenced_json": 14,
+        "skipped_allowlisted": 0
+      }
+    },
+    {
+      "id": "judge_exit",
+      "result": {
+        "pass": true,
+        "provisional_pass": true,
+        "fresh_mean": 9.7
+      }
+    }
+  ],
+  "passed": [
+    "signal_path_runtime",
+    "alert_runtime",
+    "full_repository",
+    "judge_exit"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S4/integrated-gate.json",
+  "bind_model": "candidate_sha_equals_head"
+}
