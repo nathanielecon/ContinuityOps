@@ -39,10 +39,10 @@ index fa31ff1..a3536f6 100644
    "unverified": [
      "Cross-repo Project A/C context packaging by the control center (CO-006)",
 diff --git a/docs/claims/matrix.json b/docs/claims/matrix.json
-index 78c03b8..a88bff8 100644
+index ee28e69..08adcc7 100644
 --- a/docs/claims/matrix.json
 +++ b/docs/claims/matrix.json
-@@ -80,10 +80,12 @@
+@@ -82,10 +82,12 @@
      },
      {
        "id": "agentic-workflow",
@@ -58,7 +58,7 @@ index 78c03b8..a88bff8 100644
      },
      {
        "id": "recovery",
-@@ -124,6 +126,7 @@
+@@ -126,6 +128,7 @@
    "non_claims": [
      "No CursorCloudAgent / in-pod AWS credentials on Cloud seat (OIDC control plane by design)",
      "No production (customer) incident drills \u2014 lab drills only",
