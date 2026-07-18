@@ -58,10 +58,10 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name                                        = "${local.name_prefix}-public-${count.index}"
-    Project                                     = "continuityops"
-    Environment                                 = var.environment
-    "kubernetes.io/role/elb"                    = "1"
+    Name                                         = "${local.name_prefix}-public-${count.index}"
+    Project                                      = "continuityops"
+    Environment                                  = var.environment
+    "kubernetes.io/role/elb"                     = "1"
     "kubernetes.io/cluster/${local.name_prefix}" = "shared"
   }
 }
@@ -73,10 +73,10 @@ resource "aws_subnet" "private" {
   availability_zone = var.azs[count.index % length(var.azs)]
 
   tags = {
-    Name                                        = "${local.name_prefix}-private-${count.index}"
-    Project                                     = "continuityops"
-    Environment                                 = var.environment
-    "kubernetes.io/role/internal-elb"           = "1"
+    Name                                         = "${local.name_prefix}-private-${count.index}"
+    Project                                      = "continuityops"
+    Environment                                  = var.environment
+    "kubernetes.io/role/internal-elb"            = "1"
     "kubernetes.io/cluster/${local.name_prefix}" = "shared"
   }
 }
