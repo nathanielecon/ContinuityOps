@@ -518,3 +518,29 @@ ContinuityOps incidents yet.
 - **Root cause:** Default `cluster_version = "1.29"` no longer offered in account/region.
 - **Fix:** Bump default to `1.32`; re-apply.
 - **Verified by:** apply green [29644662492](https://github.com/nathanielecon/ContinuityOps/actions/runs/29644662492); teardown [29645052414](https://github.com/nathanielecon/ContinuityOps/actions/runs/29645052414).
+
+## 2026-07-18 — BF-2026-013 — 层级流程绕过后补登记
+
+- **Slice/task:** portfolio completion / hierarchy remediation (issues #56/#57/#58).
+- **Baseline SHA:** `d2d90bc2a761031186451c19b391a12af198bd92`.
+- **Candidate SHA at break:** PR #53/#54 live elevation and `portfolio-certified-L4-lab` certification path before this remediation patch.
+- **Environment/identity:** chief supervisor seat; GHA OIDC `continuityops-gha` for lab AWS execution.
+- **Symptom:** chief directly implemented live elevation (PR #53/#54) and certified `portfolio-certified-L4-lab` without a GPT worker → D-037 reviewer chain.
+- **Exact failed check and exit:** independent GPT completion reviewer verdict = fail on hierarchy/process: no qualifying GPT worker handoff plus D-037 pass for the elevation/certification path.
+- **Raw failure evidence:** `evidence/judges/REVIEW-COMPLETION-01.json`; PR #53/#54 history; AWS lab runs 29644662492 / 29645042815 / 29645052414 remain evidence for the lab claim only.
+- **Attempts:** one chief-fast path through the OIDC loop; no prior D-045 hierarchy remediation recorded before this entry.
+- **Root cause:** chief occupation sped through the OIDC loop, bypassing D-041/D-045 hierarchy and the D-037 independent review contract.
+- **Why earlier gates missed it:** hosted AWS evidence validated infrastructure behavior, not management-chain compliance; the chief boundary record treated lab success as sufficient for the gate.
+- **Blast radius:** process debt on portfolio completion certification; AWS lab evidence remains valid for the scoped L4 lab claim (apply 29644662492, drill 29645042815, teardown 29645052414).
+- **Decision:** keep `current_gate` at `portfolio-certified-L4-lab`, record the hierarchy failure, and require a fresh D-037 process pass before closing the hierarchy remediation.
+- **Fix and files changed:** dispatch queue #56/#57/#58; in-session GPT worker + reviewer remediation; future elevations must use the GPT hierarchy restored by D-045 and actuated by D-042.
+- **Regression control added:** D-045 GPT hierarchy is now the required elevation path: GPT junior/orchestrator/worker plus independent D-037 reviewer; chief may record boundary evidence but must not replace the worker/reviewer chain.
+- **New candidate SHA:** this WORKER-HIER-01 remediation commit.
+- **Fresh verification commands/results:** repository JSON/fenced-JSON parse and `git diff --check` are required on this patch; D-037 process pass is still required after merge.
+- **Hosted/cloud verification:** no new AWS mutation; retained AWS lab evidence is apply [29644662492](https://github.com/nathanielecon/ContinuityOps/actions/runs/29644662492), drill [29645042815](https://github.com/nathanielecon/ContinuityOps/actions/runs/29645042815), teardown [29645052414](https://github.com/nathanielecon/ContinuityOps/actions/runs/29645052414).
+- **Superseded evidence:** none of the AWS lab evidence is superseded; only the earlier hierarchy/process completion claim is failed pending REVIEW-COMPLETION-02.
+- **New evidence:** `evidence/judges/REVIEW-COMPLETION-01.json`; this break/fix entry; `OPERATING_STATE.md` revision 43.
+- **Claim/status changes:** lab claim remains `portfolio-certified-L4-lab`; hierarchy closure is not claimed until D-037 process pass supersedes REVIEW-COMPLETION-01.
+- **Judge round impact:** REVIEW-COMPLETION-01 is fail; REVIEW-COMPLETION-02 is expected to supersede after this remediation patch merges and is independently reviewed.
+- **Remaining risk/follow-up:** ensure future live elevations do not proceed chief-only; close hierarchy remediation only after CI/contract validation plus independent GPT D-037 pass.
+- **Verified by:** WORKER-HIER-01 implementation worker records; independent reviewer to supersede with REVIEW-COMPLETION-02.
