@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "artifact": "portfolio_tip_bind",
   "recorded_utc": "2026-07-18T18:50:50Z",
-  "portfolio_tip_sha": "c18b57586284953a3d778cf7fef548ae0f29e6d7",
+  "portfolio_tip_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
   "bind_model": "candidate_sha_parent_of_tip",
   "trigger": {
     "failed_council_tip": "760827dbb46c803475fa095c19984db61c8a6995",
