@@ -5,10 +5,15 @@
   "components": [
     {
       "id": "upstream-integration",
-      "claim_level": "L1",
+      "claim_level": "L2",
       "evidence": [
-        "evidence/slices/S1/upstream-integration.json"
-      ]
+        "evidence/slices/S1/upstream-integration.json",
+        "integration/upstreams/packets/2026-07-18-a-c/manifest.json",
+        "integration/upstreams/packets/2026-07-18-a-c/co-004-digest-proof.json",
+        "integration/upstreams.lock.json",
+        "evidence/hosted/upstream-d028-2026-07-18.json"
+      ],
+      "notes": "D-028 packet + A2 Option 2 proven ECR digest for pin 376b7e18\u2026; rollback none proven (not a ContinuityOps known-good rollback claim)."
     },
     {
       "id": "terraform-scaffold",
