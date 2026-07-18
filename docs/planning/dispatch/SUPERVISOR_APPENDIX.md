@@ -120,12 +120,15 @@ probe.” Probe with inspect-only. Merge only on CI green + D-037 pass.
 
 ### Owner open items (do not invent)
 
-1. Cloud Agent secret **`GH_TOKEN`** = PAT with Issues R/W (name must be exact
-   `GH_TOKEN`, type Environment Variable, Apply to All repositories) — then
-   **new** agent run.  
-   Note: GitHub → Settings → Applications → Cursor App already shows Issues
-   R/W + All repositories; that is **necessary but not sufficient** for cloud
-   sandbox tokens (known Cursor down-scope).
+1. Cloud Agent secret **`GH_TOKEN`** = fine-grained PAT per
+   [`docs/operator/CLOUD_SEAT_GH_TOKEN.md`](../../operator/CLOUD_SEAT_GH_TOKEN.md)
+   (Contents, Pull requests, Actions, Commit statuses, Workflows, Issues R/W;
+   Environments read optional). Name must be exact `GH_TOKEN`, type Environment
+   Variable, Apply to **All repositories** — then **new** agent run. Assert:
+   `node scripts/assert-cloud-seat-gh-token.mjs`.  
+   Note: GitHub → Settings → Applications → Cursor App Issues R/W is
+   **necessary but not sufficient** for cloud sandbox tokens (known Cursor
+   down-scope); inject the PAT.
 2. Optional: log into VNC Chrome in the cloud VM as the owner if browser
    actuation is preferred over PAT.
 3. `REPO_SETTINGS_ADMIN_TOKEN` + PR **#20**

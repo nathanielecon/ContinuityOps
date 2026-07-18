@@ -276,6 +276,26 @@ Stop and request human action for:
 - acceptance of residual critical/high security risk;
 - any scope or architecture change that materially changes the approved plan.
 
+## Cloud seat GitHub power (`GH_TOKEN`) — not AWS keys
+
+Live AWS stays GHA OIDC. What Cloud Agents need for an unattended loop is
+**GitHub token power**, not Cursor STS. Portable contract (copy to new repos):
+
+[`docs/operator/CLOUD_SEAT_GH_TOKEN.md`](docs/operator/CLOUD_SEAT_GH_TOKEN.md)
+
+```bash
+node scripts/assert-cloud-seat-gh-token.mjs
+# other repo: node scripts/assert-cloud-seat-gh-token.mjs nathanielecon/<repo>
+```
+
+Owner one-time: fine-grained PAT with Contents/PRs/Actions/Commit statuses/
+Workflows/Issues (Environments read optional) → inject as exact name
+`GH_TOKEN` on **All repositories** → **new** Cloud Agent. Prefer PAT
+repository access **All repositories** so future projects inherit.
+
+If assert fails (Actions/PR merge 403): expand PAT / re-inject; do **not** add
+AWS keys. Until then humans confirm Actions green / merge.
+
 ## Live AWS control plane (not CursorCloudAgent)
 
 - Cloud seats often have `NoCredentials` (BF-PRE-002 / BF-2026-010). **Expected.**
