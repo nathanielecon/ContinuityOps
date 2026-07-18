@@ -7,7 +7,7 @@
     "P4-T02",
     "P4-T03"
   ],
-  "candidate_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
   "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
   "claim_level": "L1",
   "remaining_boundaries": [

@@ -8,7 +8,7 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 18,
+  "revision": 19,
   "authorized_through_phase": 8,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
@@ -414,7 +414,8 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S2/chart-contract.json"
       ],
-      "note": "Verified: Helm chart with digest pin, probes/resources/PDB/HPA/RBAC/NetworkPolicy/Ingress. Claim L1 (helm may be absent). remaining_boundaries include managed_cluster_apply. Model cursor-grok-4.5-high."
+      "note": "Verified: Helm chart with digest pin, probes/resources/PDB/HPA/RBAC/NetworkPolicy/Ingress. Claim L1 (helm may be absent). remaining_boundaries include managed_cluster_apply. Model cursor-grok-4.5-high.",
+      "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
     },
     {
       "id": "P2-T02",
@@ -449,7 +450,8 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S2/runtime/"
       ],
       "human_gate": "H2",
-      "note": "Verified: kind scenario labeled local-only; kind/helm absent so L1 templates (not L2). No managed EKS apply. remaining_boundaries: managed_cluster_apply. Model cursor-grok-4.5-high."
+      "note": "Verified: kind scenario labeled local-only; kind/helm absent so L1 templates (not L2). No managed EKS apply. remaining_boundaries: managed_cluster_apply. Model cursor-grok-4.5-high.",
+      "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
     },
     {
       "id": "P2-T03",
@@ -481,7 +483,8 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S2/scenarios/"
       ],
-      "note": "Verified: failure matrix scenario JSON + synthetic reset scripts for crashloop/readiness/scheduling/resource/DNS/network-policy. Claim L1 synthetic. Model cursor-grok-4.5-high."
+      "note": "Verified: failure matrix scenario JSON + synthetic reset scripts for crashloop/readiness/scheduling/resource/DNS/network-policy. Claim L1 synthetic. Model cursor-grok-4.5-high.",
+      "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
     },
     {
       "id": "P2-T04",
@@ -516,7 +519,8 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S2/integrated-gate.json",
         "evidence/judges/S2/"
       ],
-      "note": "Verified: S2 integrated gate + 3 fresh judges + saved provisional; honest L1; managed_cluster_apply retained. Model cursor-grok-4.5-high."
+      "note": "Verified: S2 integrated gate + 3 fresh judges + saved provisional; honest L1; managed_cluster_apply retained. Model cursor-grok-4.5-high.",
+      "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
     },
     {
       "id": "P3-T01",
@@ -550,7 +554,8 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S3/serverless.json"
       ],
-      "note": "Verified: queue worker contract + DLQ/idempotency unit tests; terraform serverless module placeholder. No live AWS Lambda. Claim L1. Model cursor-grok-4.5-high."
+      "note": "Verified: queue worker contract + DLQ/idempotency unit tests; terraform serverless module placeholder. No live AWS Lambda. Claim L1. Model cursor-grok-4.5-high.",
+      "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
     },
     {
       "id": "P3-T02",
@@ -581,7 +586,8 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S3/saas-operations.json"
       ],
-      "note": "Verified: SaaS lifecycle docs+tests, tenant boundary, severity escalation. Claim L1. Model cursor-grok-4.5-high."
+      "note": "Verified: SaaS lifecycle docs+tests, tenant boundary, severity escalation. Claim L1. Model cursor-grok-4.5-high.",
+      "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
     },
     {
       "id": "P3-T03",
@@ -619,7 +625,8 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S3/integrated-gate.json",
         "evidence/judges/S3/"
       ],
-      "note": "Verified: S3 integrated gate + 3 judges; synthetic DLQ path only; no live Lambda. Claim L1. Model cursor-grok-4.5-high."
+      "note": "Verified: S3 integrated gate + 3 judges; synthetic DLQ path only; no live Lambda. Claim L1. Model cursor-grok-4.5-high.",
+      "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
     },
     {
       "id": "P4-T01",
@@ -652,7 +659,8 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S4/telemetry.json"
       ],
-      "note": "Verified: telemetry contracts + redaction unit tests; correlation across ingress/app/queue/function. Claim L1. Model cursor-grok-4.5-high."
+      "note": "Verified: telemetry contracts + redaction unit tests; correlation across ingress/app/queue/function. Claim L1. Model cursor-grok-4.5-high.",
+      "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
     },
     {
       "id": "P4-T02",
@@ -687,7 +695,8 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S4/signals.json"
       ],
-      "note": "Verified: dashboard/alert JSON schemas + SLO math tests. Claim L1. Model cursor-grok-4.5-high."
+      "note": "Verified: dashboard/alert JSON schemas + SLO math tests. Claim L1. Model cursor-grok-4.5-high.",
+      "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
     },
     {
       "id": "P4-T03",
@@ -725,7 +734,8 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S4/integrated-gate.json",
         "evidence/judges/S4/"
       ],
-      "note": "Verified: synthetic signal-path drills + S4 gate + 3 judges. Claim L1. Model cursor-grok-4.5-high."
+      "note": "Verified: synthetic signal-path drills + S4 gate + 3 judges. Claim L1. Model cursor-grok-4.5-high.",
+      "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
     },
     {
       "id": "P5-T01",

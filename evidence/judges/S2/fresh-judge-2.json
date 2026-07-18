@@ -3,9 +3,9 @@
   "slice_id": "S2",
   "round": "fresh",
   "judge_id": "fresh-judge-2",
-  "candidate_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
   "rubric_sha256": "7d843e20dfb4aea0b1fb562a4865d3867cf2ddea0af51148b70740183641ffda",
-  "evidence_manifest_sha256": "c0a69e8b7cc32bce4adf2e624ab0badb28b13580b82dcab46dd407e8ae66c402",
+  "evidence_manifest_sha256": "50d88ca8080300c3ac08673a524b6795981aa806a50dd27ed3b7640ad9f1d25a",
   "judge_model_id": "cursor-grok-4.5-high",
   "must_haves": [
     {
