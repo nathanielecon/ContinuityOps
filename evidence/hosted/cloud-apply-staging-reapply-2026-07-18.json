@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "recorded_utc": "2026-07-18T13:28:07Z",
+  "run_id": "29645813983",
+  "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29645813983",
+  "conclusion": "success",
+  "note": "Staging rebuilt after teardown proof; hierarchy remediation closed",
+  "main_tip": "407328b4c84b5ad7299c297e540d3b888037d7f0"
+}

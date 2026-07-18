@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 44,
+  "revision": 45,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
