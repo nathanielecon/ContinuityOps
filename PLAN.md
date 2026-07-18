@@ -769,7 +769,7 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S5/runbooks.json"
       ],
       "note": "Verified: Linux/K8s/network runbooks + command_safety. Claim L1. Model cursor-grok-4.5-high.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P5-T02",
@@ -806,7 +806,7 @@ Initial authorization stops at Phase 0.
       ],
       "human_gate": "H3",
       "note": "Verified: 8 synthetic drills + 2 misleading symptoms. No live production drills. Claim L1. H3 waived D-044.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P5-T03",
@@ -843,7 +843,7 @@ Initial authorization stops at Phase 0.
         "evidence/judges/S5/"
       ],
       "note": "Verified: S5 integrated gate + 3 judges. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P6-T01",
@@ -881,7 +881,7 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S6/security.json"
       ],
       "note": "Verified: least-privilege fixtures, SBOM stub, admission negatives. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P6-T02",
@@ -914,7 +914,7 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S6/azure-governance.json"
       ],
       "note": "Verified: Azure governance designed/static; ExpressRoute non-claim. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P6-T03",
@@ -951,7 +951,7 @@ Initial authorization stops at Phase 0.
       ],
       "human_gate": "H4",
       "note": "Verified: agentic evidence+proposal with human gate; prompt-injection tests. H4 waived D-044; env placeholders retained. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P6-T04",
@@ -989,7 +989,7 @@ Initial authorization stops at Phase 0.
         "evidence/judges/S6/"
       ],
       "note": "Verified: S6 gate + 3 judges. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P7-T01",
@@ -1025,7 +1025,7 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S7/recovery/"
       ],
       "note": "Verified: backup/restore/rollback contracts + synthetic restore fixture. No live RTO. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P7-T02",
@@ -1059,7 +1059,7 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S7/performance/"
       ],
       "note": "Verified: synthetic load profile with before/after numbers. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P7-T03",
@@ -1095,7 +1095,7 @@ Initial authorization stops at Phase 0.
       ],
       "human_gate": "H5",
       "note": "Verified: FinOps budgets/tags + teardown inventory dry-run. No live teardown. H5 waived D-044. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P7-T04",
@@ -1133,7 +1133,7 @@ Initial authorization stops at Phase 0.
         "evidence/judges/S7/"
       ],
       "note": "Verified: S7 gate + 3 judges. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P8-T01",
@@ -1168,7 +1168,7 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S8/evidence-index.json"
       ],
       "note": "Verified: claims matrix + evidence index + append-only events. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P8-T02",
@@ -1213,7 +1213,7 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S8/delivery.json"
       ],
       "note": "Verified: recruiter README + architecture assets retained + operator/handoff. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P8-T03",
@@ -1254,7 +1254,7 @@ Initial authorization stops at Phase 0.
         "evidence/postbuild/"
       ],
       "note": "Verified: postbuild partition manifest + rubrics. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P8-T04",
@@ -1296,7 +1296,7 @@ Initial authorization stops at Phase 0.
       ],
       "human_gate": "H6",
       "note": "Verified: final integrated gate + 3 judges. Portfolio L1. H6 waived D-044. Claim L1.",
-      "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a"
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     }
   ]
 }

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "task_id": "P6-T01",
-  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
-  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
   "command": "node scripts/project.mjs validate P6-T01",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:24:01.058Z",
+  "recorded_at": "2026-07-18T06:25:10.107Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -30,21 +30,21 @@
     "No live scanner",
     "No live IAM apply"
   ],
-  "started_at": "2026-07-18T06:24:01.050Z",
-  "completed_at": "2026-07-18T06:24:01.058Z",
+  "started_at": "2026-07-18T06:25:10.097Z",
+  "completed_at": "2026-07-18T06:25:10.107Z",
   "validator_details": [
     {
       "id": "secret_scan",
       "result": {
         "pass": true,
-        "note": "fixture 不含密钥路径或凭据材料"
+        "note": "fixture \u4e0d\u542b\u5bc6\u94a5\u8def\u5f84\u6216\u51ed\u636e\u6750\u6599"
       }
     },
     {
       "id": "sbom",
       "result": {
         "pass": true,
-        "note": "SBOM stub — 非 live scanner"
+        "note": "SBOM stub \u2014 \u975e live scanner"
       }
     },
     {

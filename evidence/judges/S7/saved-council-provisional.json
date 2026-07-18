@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "slice_id": "S7",
-  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
   "rubric_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  "evidence_manifest_sha256": "f82117122549645c35cc4f782e7857c649b010c67cec72bd141034993b84fed2",
+  "evidence_manifest_sha256": "ac1f4763813b5cb34e390a4be06c44ba2985bbfc2fdd178e4ab8688de43dbba7",
   "judge_model_id": "cursor-grok-4.5-high",
   "must_haves": [
     {

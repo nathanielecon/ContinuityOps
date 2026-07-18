@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "task_id": "P5-T02",
-  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
-  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
   "command": "node scripts/project.mjs validate P5-T02",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:24:00.967Z",
+  "recorded_at": "2026-07-18T06:25:10.020Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -27,8 +27,8 @@
     "Synthetic fixtures only",
     "No live production drills"
   ],
-  "started_at": "2026-07-18T06:24:00.958Z",
-  "completed_at": "2026-07-18T06:24:00.967Z",
+  "started_at": "2026-07-18T06:25:10.010Z",
+  "completed_at": "2026-07-18T06:25:10.020Z",
   "validator_details": [
     {
       "id": "incident_schema",

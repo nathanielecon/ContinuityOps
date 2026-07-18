@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "task_id": "P7-T01",
-  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
-  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
   "command": "node scripts/project.mjs validate P7-T01",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:24:01.251Z",
+  "recorded_at": "2026-07-18T06:25:10.271Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -28,8 +28,8 @@
     "Synthetic restore only",
     "No live RTO"
   ],
-  "started_at": "2026-07-18T06:24:01.243Z",
-  "completed_at": "2026-07-18T06:24:01.251Z",
+  "started_at": "2026-07-18T06:25:10.262Z",
+  "completed_at": "2026-07-18T06:25:10.271Z",
   "validator_details": [
     {
       "id": "backup_contract",
@@ -41,7 +41,7 @@
       "id": "restore_runtime",
       "result": {
         "pass": true,
-        "note": "合成 restore；非 live RTO"
+        "note": "\u5408\u6210 restore\uff1b\u975e live RTO"
       }
     },
     {
@@ -60,7 +60,7 @@
       "id": "rto_rpo",
       "result": {
         "pass": true,
-        "note": "目标为契约值；未测量 live RTO"
+        "note": "\u76ee\u6807\u4e3a\u5951\u7ea6\u503c\uff1b\u672a\u6d4b\u91cf live RTO"
       }
     }
   ],

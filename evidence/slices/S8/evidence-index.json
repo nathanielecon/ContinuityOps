@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "task_id": "P8-T01",
-  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
-  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
   "command": "node scripts/project.mjs validate P8-T01",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:24:01.419Z",
+  "recorded_at": "2026-07-18T06:25:19.504Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -27,8 +27,8 @@
     "Manifest is L1 portfolio index",
     "No L4 elevation"
   ],
-  "started_at": "2026-07-18T06:24:01.411Z",
-  "completed_at": "2026-07-18T06:24:01.419Z",
+  "started_at": "2026-07-18T06:25:19.495Z",
+  "completed_at": "2026-07-18T06:25:19.504Z",
   "validator_details": [
     {
       "id": "evidence_chain",
@@ -40,7 +40,7 @@
       "id": "evidence_freshness",
       "result": {
         "pass": true,
-        "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+        "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
         "path": "evidence/slices/S8/integrated-gate.json"
       }
     },

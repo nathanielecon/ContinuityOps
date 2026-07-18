@@ -3,7 +3,7 @@
   "drill_id": "readiness-cascade",
   "evidence_kind": "synthetic_drill",
   "claim_level": "L1",
-  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
   "path": "operations/drills/readiness-cascade.json",
   "remaining_boundaries": [
     "No live production drill"
