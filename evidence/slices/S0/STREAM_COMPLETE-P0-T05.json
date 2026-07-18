@@ -2,34 +2,37 @@
   "schema_version": "1.0",
   "task_id": "P0-T05",
   "slice": "S0",
-  "candidate_sha": "fb18f5103a1392170e3c052eff72ba239496e610",
+  "candidate_sha": "5792a74f5c684b007a9057b89b6d9a24f359bc7f",
   "baseline_sha": "531aa6ffb37517efc6b3c705c040d6d838ab36d0",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "implementation_sha": "5792a74f5c684b007a9057b89b6d9a24f359bc7f",
   "validation_results": [
     {
-      "command": "node scripts/project.mjs validate P0-T05",
+      "command": "CANDIDATE_SHA=5792a74f5c684b007a9057b89b6d9a24f359bc7f BASELINE_SHA=531aa6ffb37517efc6b3c705c040d6d838ab36d0 node scripts/project.mjs validate P0-T05",
       "exit": 0,
-      "time": "2026-07-18T05:40:24Z",
+      "time": "2026-07-18T05:47:50Z",
       "evidence_path": "evidence/slices/S0/integrated-gate.json"
     },
     {
       "command": "node --test tests/",
       "exit": 0,
-      "time": "2026-07-18T05:40:24Z",
+      "time": "2026-07-18T05:47:50Z",
       "evidence_path": "evidence/slices/S0/integrated-gate.json"
     },
     {
       "command": "git diff --check",
       "exit": 0,
-      "time": "2026-07-18T05:40:24Z",
+      "time": "2026-07-18T05:47:50Z",
       "evidence_path": "evidence/slices/S0/integrated-gate.json"
     }
   ],
   "evidence_manifest_path": "evidence/slices/S0/integrated-gate.json",
-  "context_remaining": "72%",
+  "evidence_manifest_sha256": "2942961587f9d05ab53e258da679c3092f59e64fd23c67507d432089bae8a250",
+  "context_remaining": "68%",
   "preflight_ok": {
     "warm_fresh": false,
     "last_warm_utc": null,
     "context_package_ready": "n/a"
   },
-  "notes_zh": "P0-T05 S0 集成门验证器与三 judge 证据已通过；saved council 仅 provisional；fresh judges 独立退出均分≥9.5。保暖戳在容器不可读，warm_fresh=false。"
+  "notes_zh": "P0-T05 S0 \u96c6\u6210\u95e8\u5df2\u7ed1\u5b9a\uff1acandidate_sha=\u5b9e\u73b0\u63d0\u4ea4 5792a74\uff08\u7236\u63d0\u4ea4\uff09\uff1btip \u4e3a\u8bc1\u636e\u5bf9\u9f50\u63d0\u4ea4\u3002evidence_manifest_sha256 \u4e3a integrated-gate.json \u5b57\u8282 sha256\u3002saved council \u4ec5 provisional\uff1bfresh judges \u72ec\u7acb\u9000\u51fa\u5747\u5206\u22659.5\u3002validate \u652f\u6301 CANDIDATE_SHA/BASELINE_SHA\u3002"
 }

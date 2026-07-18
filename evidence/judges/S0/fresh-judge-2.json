@@ -3,9 +3,9 @@
   "slice_id": "S0",
   "round": "fresh",
   "judge_id": "fresh-judge-2",
-  "candidate_sha": "fb18f5103a1392170e3c052eff72ba239496e610",
+  "candidate_sha": "5792a74f5c684b007a9057b89b6d9a24f359bc7f",
   "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
-  "evidence_manifest_sha256": "16578536e9acc11098d2b61c13157ff10e66e9b68a68ef41186432f8c1a0c8ad",
+  "evidence_manifest_sha256": "2942961587f9d05ab53e258da679c3092f59e64fd23c67507d432089bae8a250",
   "judge_model_id": "cursor-grok-4.5-high",
   "must_haves": [
     {
@@ -112,7 +112,7 @@
   "scored_dimensions": [
     {
       "id": "correctness",
-      "score": 2.0,
+      "score": 2,
       "rationale": "门禁完整",
       "evidence": [
         "evidence/judges/S0/"
@@ -136,7 +136,7 @@
     },
     {
       "id": "deterministic_tests",
-      "score": 1.0,
+      "score": 1,
       "rationale": "确定性好",
       "evidence": [
         "evidence/judges/S0/"
@@ -144,7 +144,7 @@
     },
     {
       "id": "runtime_evidence",
-      "score": 1.0,
+      "score": 1,
       "rationale": "证据可读",
       "evidence": [
         "evidence/judges/S0/"
@@ -152,7 +152,7 @@
     },
     {
       "id": "operability",
-      "score": 1.0,
+      "score": 1,
       "rationale": "命令可复跑",
       "evidence": [
         "evidence/judges/S0/"
@@ -160,7 +160,7 @@
     },
     {
       "id": "evidence_integrity",
-      "score": 1.0,
+      "score": 1,
       "rationale": "哈希一致",
       "evidence": [
         "evidence/judges/S0/"
