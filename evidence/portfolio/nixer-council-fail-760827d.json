@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "role": "nixer",
+  "task_id": "NIXER-PORTFOLIO-COUNCIL-FAIL-760827d",
+  "candidate_sha": "196bed4775128efbe193e028c722f13816a7f91b",
+  "baseline_sha": "760827dbb46c803475fa095c19984db61c8a6995",
+  "source_judge_prs": [
+    91,
+    92,
+    93
+  ],
+  "issue_ids": [
+    {
+      "id": "NIX-PORTFOLIO-001",
+      "summary": "Rebind S1-S8 STREAM_COMPLETE + S8 integrated-gate to portfolio tip; preserve slice_landed_sha"
+    },
+    {
+      "id": "NIX-PORTFOLIO-002",
+      "summary": "Record tip-bind evidence + A3 ceiling boundaries on integrated-gate"
+    },
+    {
+      "id": "NIX-PORTFOLIO-003",
+      "summary": "Close failed fresh council issues/PRs after rebind; dispatch new fresh council on tip-bind tip"
+    }
+  ],
+  "deduped": true,
+  "path": "B",
+  "notes_zh": "\u96f6\u8df3\u53d8\u79cd\u5b50\u5931\u8d25\u540e\u7531\u9996\u5e2d\u4ee3\u884c nixer \u8bb0\u5f55\uff1bfixer \u540c PR \u843d\u5730 tip-bind\u3002"
+}

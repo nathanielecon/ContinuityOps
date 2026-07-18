@@ -164,11 +164,11 @@ jobs:
           sticky="$(gh issue list --repo "$REPO" --label chief-pager --state open --json number,title \
             --jq '.[] | select(.title|test("\\[pager\\] chief-supervisor";"i")) | .number' | head -1)"
           if [ -z "$sticky" ]; then
-            sticky="$(gh issue create --repo "$REPO" \
+            url="$(gh issue create --repo "$REPO" \
               --title '[pager] chief-supervisor' \
               --label chief-pager \
-              --body 'Sticky chief durable pager (D-047). Chief first command every wake: `gh issue list --label chief-pager --state open`.' \
-              --jq .number)"
+              --body 'Sticky chief durable pager (D-047). Chief first command every wake: `gh issue list --label chief-pager --state open`.')"
+            sticky="${url##*/}"
           fi
           if [ -n "${BODY:-}" ] && grep -qF '<!-- continuityops-chief-page-v1' <<<"$BODY"; then
             page_body="$BODY"
@@ -229,11 +229,12 @@ jobs:
           ${snippet}
           EOF
           )"
-          num="$(gh issue create --repo "$REPO" \
+          url="$(gh issue create --repo "$REPO" \
             --title "[codex-dispatch] D-037 REVIEW for worker #${SRC} PR #${PR}" \
             --label codex-dispatch \
             --label zh-dispatching \
-            --body "$body" --jq .number)"
+            --body "$body")"
+          num="${url##*/}"
           gh issue comment "$num" --repo "$REPO" --body "@codex 执行 D-037 独立评审：对 PR #${PR} 在声明 base_sha 应用 patch，亲自跑验证命令，结构化 verdict 回评。不得改实现。
 
           ${snippet}"
@@ -271,13 +272,14 @@ jobs:
               fail_class:"d037-missing-pr", strike_count:1, lock_or_interface_cite:null,
               notes_zh:"D-037 verdict 无法解析 worker PR，请路由或升级"
             }')"
-            num="$(gh issue create --repo "$REPO" --title "[codex-dispatch] JR-EXCEPTION-d037-missing-pr" \
+            url="$(gh issue create --repo "$REPO" --title "[codex-dispatch] JR-EXCEPTION-d037-missing-pr" \
               --label codex-dispatch --label junior-exception \
               --body "例外唤醒（D-047）
 
           \`\`\`json
           ${packet}
-          \`\`\`" --jq .number)"
+          \`\`\`")"
+            num="${url##*/}"
             gh issue comment "$num" --repo "$REPO" --body "@codex 处理 D-037 缺 PR 例外。见 wake packet。"
             exit 0
           fi
@@ -295,7 +297,10 @@ jobs:
               gh label create chief-pager --color b60205 --description "chief pager" --force --repo "$REPO" >/dev/null || true
               sticky="$(gh issue list --repo "$REPO" --label chief-pager --state open --json number,title \
                 --jq '.[] | select(.title|test("\\[pager\\] chief-supervisor";"i")) | .number' | head -1)"
-              [ -n "$sticky" ] || sticky="$(gh issue create --repo "$REPO" --title '[pager] chief-supervisor' --label chief-pager --body 'Sticky chief pager' --jq .number)"
+              if [ -z "$sticky" ]; then
+                url="$(gh issue create --repo "$REPO" --title '[pager] chief-supervisor' --label chief-pager --body 'Sticky chief pager')"
+                sticky="${url##*/}"
+              fi
               gh issue comment "$sticky" --repo "$REPO" --body "<!-- continuityops-chief-page-v1 -->
           reason: D-037 两连同 class 失败，停止自动 fixer
           issue_ids: [${D037}, ${PR}]
@@ -315,8 +320,9 @@ jobs:
           $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)
           EOF
           )"
-            num="$(gh issue create --repo "$REPO" --title "[codex-dispatch] FIXER after D-037 #${D037} PR #${PR}" \
-              --label codex-dispatch --label "$label" --body "$body" --jq .number)"
+            url="$(gh issue create --repo "$REPO" --title "[codex-dispatch] FIXER after D-037 #${D037} PR #${PR}" \
+              --label codex-dispatch --label "$label" --body "$body")"
+            num="${url##*/}"
             gh issue comment "$num" --repo "$REPO" --body "@codex 按 D-037 失败 findings 修复 PR #${PR}。输出 D-034 patch。
 
           $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)"
@@ -404,9 +410,10 @@ jobs:
           $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)
           EOF
           )"
-          num="$(gh issue create --repo "$REPO" \
+          url="$(gh issue create --repo "$REPO" \
             --title "[codex-dispatch] FIXER after nixer #${NIXER}" \
-            --label codex-dispatch --body "$body" --jq .number)"
+            --label codex-dispatch --body "$body")"
+          num="${url##*/}"
           gh issue comment "$num" --repo "$REPO" --body "@codex 根据 nixer #${NIXER} 的 issue IDs 修复；合入 candidate，勿直接 main。
 
           $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)"
@@ -469,10 +476,11 @@ jobs:
           $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)
           EOF
           )"
-          num="$(gh issue create --repo "$REPO" \
+          url="$(gh issue create --repo "$REPO" \
             --title "[codex-dispatch] NIXER path-B council-fail ${tip7}" \
             --label codex-dispatch --label "fail-class:${hash}" \
-            --body "$body" --jq .number)"
+            --body "$body")"
+          num="${url##*/}"
           gh issue comment "$num" --repo "$REPO" --body "@codex 路径 B：将 PR #${PR} 的 merge_ready:no 转为可复现 issue IDs（tip ${tip7}）。输出 D-034 patch。
 
           $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)"
@@ -545,10 +553,11 @@ jobs:
           $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)
           EOF
           )"
-          num="$(gh issue create --repo "$REPO" \
+          url="$(gh issue create --repo "$REPO" \
             --title "[codex-dispatch] NIXER path-B council-fail ${tip7}" \
             --label codex-dispatch --label "fail-class:${hash}" \
-            --body "$body" --jq .number)"
+            --body "$body")"
+          num="${url##*/}"
           gh issue comment "$num" --repo "$REPO" --body "@codex 路径 B 种子：tip ${tip7} 的 portfolio council fail → 可复现 issue IDs。输出 D-034 patch。
 
           $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)"

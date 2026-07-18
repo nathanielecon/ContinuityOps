@@ -126,14 +126,26 @@
         "evidence/slices/S8/delivery.json",
         "evidence/slices/S8/CHIEF_VERDICT_LAB_LIVE_2026-07-18.json",
         "evidence/slices/S8/CHIEF_VERDICT_HIERARCHY_CLOSE_2026-07-18.json",
-        "evidence/judges/REVIEW-COMPLETION-02.json"
-      ]
+        "evidence/judges/REVIEW-COMPLETION-02.json",
+        "evidence/portfolio/tip-bind-2026-07-18.json",
+        "evidence/portfolio/nixer-council-fail-760827d.json"
+      ],
+      "notes": "Scoped 100% under A3 ceilings after tip-bind; fresh council required on tip-bind tip for final gate label."
     }
   ],
   "non_claims": [
     "No CursorCloudAgent / in-pod AWS credentials on Cloud seat (OIDC control plane by design)",
     "No production (customer) incident drills \u2014 lab drills only",
     "No live Azure apply \u2014 ContinuityOps AWS-lab ceiling (D-046)",
-    "Agentic workflow is L3 hosted-control evidence only; no CursorCloudAgent / in-pod AWS credentials"
-  ]
+    "Agentic workflow is L3 hosted-control evidence only; no CursorCloudAgent / in-pod AWS credentials",
+    "No ContinuityOps known-good rollback digest proven"
+  ],
+  "engagement_ceilings_A3": {
+    "azure_live": "out",
+    "performance": "L1",
+    "security_sbom": "L2",
+    "agentic_workflow": "L3",
+    "upstream_integration": "L2",
+    "lab_stack": "L4"
+  }
 }
