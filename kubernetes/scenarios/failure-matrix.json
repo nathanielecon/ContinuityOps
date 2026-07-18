@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "matrix_id": "kubernetes-failure-recovery",
+  "claim_ceiling": "L1",
+  "note": "Synthetic scenario contracts + reset scripts. Live injection requires kind/EKS evidence.",
+  "scenarios": [
+    {
+      "id": "crashloop",
+      "path": "kubernetes/scenarios/crashloop.json",
+      "reset_script": "scripts/kubernetes/reset-scenario.mjs"
+    },
+    {
+      "id": "readiness",
+      "path": "kubernetes/scenarios/readiness.json",
+      "reset_script": "scripts/kubernetes/reset-scenario.mjs"
+    },
+    {
+      "id": "scheduling",
+      "path": "kubernetes/scenarios/scheduling.json",
+      "reset_script": "scripts/kubernetes/reset-scenario.mjs"
+    },
+    {
+      "id": "resource",
+      "path": "kubernetes/scenarios/resource.json",
+      "reset_script": "scripts/kubernetes/reset-scenario.mjs"
+    },
+    {
+      "id": "dns",
+      "path": "kubernetes/scenarios/dns.json",
+      "reset_script": "scripts/kubernetes/reset-scenario.mjs"
+    },
+    {
+      "id": "network-policy",
+      "path": "kubernetes/scenarios/network-policy.json",
+      "reset_script": "scripts/kubernetes/reset-scenario.mjs"
+    }
+  ]
+}

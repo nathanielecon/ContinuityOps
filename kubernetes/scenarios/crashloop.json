@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "crashloop",
+  "failure_class": "CrashLoopBackOff",
+  "inject": "Set command to exit 1",
+  "observe": ["pod restart count increases", "liveness fails"],
+  "recover": "Restore healthy image digest and rollout restart",
+  "business_check": "GET /readyz returns 200 after recovery",
+  "reset": {
+    "script": "scripts/kubernetes/reset-scenario.mjs",
+    "args": ["crashloop"]
+  },
+  "synthetic": true
+}

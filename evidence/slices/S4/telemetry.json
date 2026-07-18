@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "task_id": "P4-T01",
+  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "command": "node scripts/project.mjs validate P4-T01",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:16:40.506Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "telemetry_contract": true,
+    "trace_continuity": true,
+    "log_redaction": true,
+    "metrics_schema": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "No live OTLP exporter",
+    "Redaction proven in unit tests only"
+  ],
+  "started_at": "2026-07-18T06:16:40.498Z",
+  "completed_at": "2026-07-18T06:16:40.506Z",
+  "validator_details": [
+    {
+      "id": "telemetry_contract",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "trace_continuity",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "log_redaction",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "metrics_schema",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "telemetry_contract",
+    "trace_continuity",
+    "log_redaction",
+    "metrics_schema"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S4/telemetry.json"
+}

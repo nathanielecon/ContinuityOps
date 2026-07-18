@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "label": "local-only",
+  "environment": "local",
+  "kind_available": false,
+  "helm_available": false,
+  "scenario_present": true,
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "managed_cluster_apply",
+    "No OIDC EKS apply executed"
+  ],
+  "note": "kind/helm absent — L1 template contract only"
+}
