@@ -1,0 +1,47 @@
+# Lab incident drill + synthetic RTO measurement (not production).
+name: lab-drill-rto
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['ContinuityOps Terraform']
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  drill:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
+        continue-on-error: true
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN_CONTINUITYOPS || 'arn:aws:iam::000000000000:role/continuityops-gha' }}
+          aws-region: us-east-1
+          role-session-name: gha-cops-drill-${{ github.run_id }}
+
+      - name: Ensure drill log stream
+        continue-on-error: true
+        run: |
+          aws logs create-log-stream \
+            --log-group-name /continuityops/staging/lab-drill-rto \
+            --log-stream-name "drill-${{ github.run_id }}" || true
+
+      - name: Run lab drill + RTO recorder
+        run: node scripts/lab/record-lab-drill-rto.mjs "evidence/hosted/lab-drill-rto-${{ github.run_id }}.json"
+
+      - name: Upload evidence artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lab-drill-rto-${{ github.run_id }}
+          path: evidence/hosted/lab-drill-rto-*.json

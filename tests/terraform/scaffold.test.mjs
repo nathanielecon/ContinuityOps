@@ -14,6 +14,8 @@ const REQUIRED = [
   'terraform/modules/environments/main.tf',
   'terraform/modules/iam/main.tf',
   'terraform/modules/network/main.tf',
+  'terraform/modules/serverless/main.tf',
+  'terraform/modules/eks/main.tf',
   'terraform/envs/staging/main.tf',
   'terraform/envs/staging/versions.tf',
   'terraform/envs/recovery-lab/main.tf',
@@ -63,6 +65,14 @@ test('staging uses S3 backend and live marker log group', () => {
   assert.match(versions, /continuityops-tfstate-000000000000/);
   assert.match(staging, /aws_cloudwatch_log_group"\s+"live_marker"/);
   assert.match(staging, /\/continuityops\/staging\/live-marker/);
+  assert.match(staging, /enable_network_resources\s*=\s*true/);
+  assert.match(staging, /enable_iam_resources\s*=\s*true/);
+  assert.match(staging, /enable_serverless\s*=\s*true/);
+  assert.match(staging, /enable_eks\s*=\s*true/);
+});
+
+test('lab drill rto recorder exists', () => {
+  assert.ok(existsSync(resolve(ROOT, 'scripts/lab/record-lab-drill-rto.mjs')));
 });
 
 test('ensure-tfstate bootstrap is idempotent aws cli', () => {
