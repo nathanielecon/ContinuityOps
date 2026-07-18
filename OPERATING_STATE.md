@@ -9,11 +9,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 34,
+  "revision": 35,
   "project": "ContinuityOps",
   "current_phase": 4,
   "authorized_through_phase": 8,
-  "current_gate": "S2-S4-complete-pending-supervisor-boundary",
+  "current_gate": "S2-S4-boundary-approved",
   "running_tasks": [],
   "blocked_tasks": [],
   "waiting_human": [],
@@ -40,11 +40,13 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S1-P1-T04",
     "S2-P2-T04",
     "S3-P3-T03",
-    "S4-P4-T03"
+    "S4-P4-T03",
+    "S2-boundary",
+    "S3-boundary",
+    "S4-boundary"
   ],
   "next_actions": [
-    "Supervisor BF-PRE-015 stream-boundary review of S2/S3/S4 STREAM_COMPLETE",
-    "Proceed Phase 5 (S5) when S2-S4 boundaries certified",
+    "Proceed Phase 5–8 (S5–S8) on cursor/phase5-8-complete-7c3d",
     "Optional: kind+helm for L2 local kubernetes; AWS OIDC for L3/L4 elevation"
   ],
   "completed_bootstrap": [
@@ -68,7 +70,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S1 P1-T01..T04 verified at claim L1 (Grok D-043); STREAM_COMPLETE pending supervisor boundary",
     "S2 P2-T01..T04 verified at claim L1 (Grok D-043); managed_cluster_apply retained",
     "S3 P3-T01..T03 verified at claim L1 (Grok D-043); no live Lambda",
-    "S4 P4-T01..T03 verified at claim L1 (Grok D-043); synthetic signal-path only"
+    "S4 P4-T01..T03 verified at claim L1 (Grok D-043); synthetic signal-path only",
+    "S2/S3/S4 supervisor stream-boundary approve (BF-PRE-015); claim L1"
   ],
   "verified_baseline": [],
   "unverified": [
