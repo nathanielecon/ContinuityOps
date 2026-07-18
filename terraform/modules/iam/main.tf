@@ -65,13 +65,13 @@ resource "aws_iam_role_policy_attachment" "lambda_sqs" {
 
 output "role_interface" {
   value = {
-    role_name          = local.role_name
-    plan_subject       = local.oidc_sub_plan
-    apply_subject      = local.oidc_sub_apply
-    enable_guard       = var.enable_iam_resources
-    least_privilege    = true
-    long_lived_keys    = false
-    lambda_role_name   = try(aws_iam_role.lambda[0].name, null)
-    lambda_role_arn    = try(aws_iam_role.lambda[0].arn, null)
+    role_name        = local.role_name
+    plan_subject     = local.oidc_sub_plan
+    apply_subject    = local.oidc_sub_apply
+    enable_guard     = var.enable_iam_resources
+    least_privilege  = true
+    long_lived_keys  = false
+    lambda_role_name = try(aws_iam_role.lambda[0].name, null)
+    lambda_role_arn  = try(aws_iam_role.lambda[0].arn, null)
   }
 }

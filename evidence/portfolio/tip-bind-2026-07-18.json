@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "artifact": "portfolio_tip_bind",
   "recorded_utc": "2026-07-18T18:50:50Z",
-  "portfolio_tip_sha": "196bed4775128efbe193e028c722f13816a7f91b",
-  "bind_model": "candidate_sha_parent_of_tip",
+  "portfolio_tip_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
+  "bind_model": "exact_candidate_sha",
   "trigger": {
     "failed_council_tip": "760827dbb46c803475fa095c19984db61c8a6995",
     "judge_issues": [
@@ -57,5 +57,16 @@
     "upstream_integration": "L2",
     "lab_stack": "L4 via continuityops-gha"
   },
-  "notes_zh": "\u8def\u5f84 B \u4fee\u590d\uff1a\u5c06\u5207\u7247\u5b8c\u6210\u8bc1\u636e\u7ed1\u5b9a\u5230\u6295\u8d44\u7ec4\u5408 tip\uff0c\u4fdd\u7559\u5386\u53f2 slice_landed_sha\uff1b\u4e0d\u4f2a\u9020 live \u91cd\u8dd1\u3002"
+  "notes_zh": "\u8def\u5f84 B \u4fee\u590d\uff1a\u5c06\u5207\u7247\u5b8c\u6210\u8bc1\u636e\u7ed1\u5b9a\u5230\u6295\u8d44\u7ec4\u5408 tip\uff0c\u4fdd\u7559\u5386\u53f2 slice_landed_sha\uff1b\u4e0d\u4f2a\u9020 live \u91cd\u8dd1\u3002",
+  "fixer_round": {
+    "recorded_utc": "2026-07-18T18:58:15Z",
+    "repairs": [
+      "exact tip SHA bind",
+      "terraform fmt",
+      "k8s reset test restores evidence",
+      "integrated-gate L4 + cloud_apply_evidence",
+      "STREAM_COMPLETE boundaries reconcile with matrix",
+      "BREAK_FIX_LOG BF-2026-016"
+    ]
+  }
 }

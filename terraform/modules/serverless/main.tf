@@ -69,14 +69,14 @@ data "archive_file" "lambda_zip" {
 }
 
 resource "aws_lambda_function" "worker" {
-  count         = var.enable_serverless ? 1 : 0
-  function_name = local.fn_name
-  role          = var.lambda_role_arn
-  handler       = "index.handler"
-  runtime       = "nodejs20.x"
-  filename      = data.archive_file.lambda_zip[0].output_path
+  count            = var.enable_serverless ? 1 : 0
+  function_name    = local.fn_name
+  role             = var.lambda_role_arn
+  handler          = "index.handler"
+  runtime          = "nodejs20.x"
+  filename         = data.archive_file.lambda_zip[0].output_path
   source_code_hash = data.archive_file.lambda_zip[0].output_base64sha256
-  timeout       = 30
+  timeout          = 30
 
   environment {
     variables = {

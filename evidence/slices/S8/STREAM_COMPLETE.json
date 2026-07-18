@@ -8,11 +8,13 @@
     "P8-T03",
     "P8-T04"
   ],
-  "candidate_sha": "196bed4775128efbe193e028c722f13816a7f91b",
-  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "claim_level": "L1",
+  "candidate_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
+  "baseline_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
+  "claim_level": "L4",
   "remaining_boundaries": [
-    "See integrated-gate remaining_boundaries"
+    "Scoped 100% under A3 ceilings pending fresh council pass",
+    "Azure live out; performance L1; SBOM L2; agentic L3; upstream L2",
+    "No ContinuityOps known-good rollback; no production drills; no in-pod AWS"
   ],
   "model_record": {
     "provider": "xAI",
@@ -20,20 +22,25 @@
     "mode": "default",
     "role": "s8-gate-controller"
   },
-  "notes": "S8 deterministic gates complete at L1.",
+  "notes": "S8 portfolio delivery at scoped L4 lab after tip-bind repair.",
   "slice_landed_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "portfolio_tip_sha": "196bed4775128efbe193e028c722f13816a7f91b",
-  "bind_model": "portfolio_tip_inheritance",
+  "portfolio_tip_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
+  "bind_model": "exact_candidate_sha",
   "rebinding": {
-    "recorded_utc": "2026-07-18T18:50:50Z",
-    "reason": "Portfolio fresh council U1 fail on 760827d: STREAM_COMPLETE bound to stale slice SHAs; rebind to portfolio tip after D-047 + A3 claim matrix revalidation.",
-    "prior_candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+    "recorded_utc": "2026-07-18T18:58:15Z",
+    "reason": "Fixer after fresh council fail on c2e6610: exact tip bind + claim/boundary reconcile + deterministic green",
+    "prior_portfolio_tip_sha": "196bed4775128efbe193e028c722f13816a7f91b",
     "issue_ids": [
-      "NIX-PORTFOLIO-001"
-    ],
-    "validation": [
-      "node --test tests/pipeline/*.mjs tests/harness/*.mjs (pass)",
-      "python3 standalone JSON parse (0 errors)"
+      "NIX-PORTFOLIO-001",
+      "FJ2-001",
+      "FJ2-002",
+      "FJ2-003",
+      "FJ2-004"
     ]
-  }
+  },
+  "cloud_apply_evidence": [
+    "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+    "evidence/hosted/lab-drill-rto-29645042815.json"
+  ]
 }
