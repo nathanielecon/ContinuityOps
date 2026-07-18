@@ -21,7 +21,7 @@ FIRST COMMANDS:
 
 Doctrine: Live AWS = GHA OIDC → continuityops-gha. NoCredentials for aws sts EXPECTED.
 No AWS keys. No Cursor STS / CursorCloudAgent. No project-a-lzlab-gha.
-D-044: no more human gates. D-043: Grok subordinates. No Opus.
+D-044: no more human gates. D-045: GPT junior/orch/reviewer/workers; Grok monitor only. No Opus.
 Job: Terraform PR → plan green → merge main → confirm apply green → evidence → elevate claims only with run URLs.
 ```
 
