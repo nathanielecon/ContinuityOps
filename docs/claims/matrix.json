@@ -128,9 +128,13 @@
         "evidence/slices/S8/CHIEF_VERDICT_HIERARCHY_CLOSE_2026-07-18.json",
         "evidence/judges/REVIEW-COMPLETION-02.json",
         "evidence/portfolio/tip-bind-2026-07-18.json",
-        "evidence/portfolio/nixer-council-fail-760827d.json"
+        "evidence/portfolio/nixer-council-fail-760827d.json",
+        "evidence/judges/portfolio/fresh-judge-1.json",
+        "evidence/judges/portfolio/fresh-judge-2.json",
+        "evidence/judges/portfolio/fresh-judge-3.json",
+        "evidence/slices/S8/CHIEF_VERDICT_PORTFOLIO_SCOPED_100_A3.json"
       ],
-      "notes": "Scoped 100% under A3 ceilings after tip-bind; fresh council required on tip-bind tip for final gate label."
+      "notes": "Scoped 100% under A3 after fresh council pass (9.7/9.7/9.6); tip-bind + README claim align."
     }
   ],
   "non_claims": [
