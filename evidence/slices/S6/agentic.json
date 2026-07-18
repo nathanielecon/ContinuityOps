@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "task_id": "P6-T03",
-  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "baseline_sha": "ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029",
+  "candidate_sha": "ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029",
   "command": "node scripts/project.mjs validate P6-T03",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:25:10.182Z",
+  "recorded_at": "2026-07-18T14:21:25.322Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -23,14 +23,15 @@
     "mode": "default",
     "role": "validator-worker"
   },
-  "claim_level": "L1",
+  "claim_level": "L3",
   "remaining_boundaries": [
-    "H4 waived under D-044",
+    "No CursorCloudAgent / in-pod AWS credentials on Cloud seat",
     "Protected environment placeholders retained",
-    "No live mutation"
+    "No worker-side git push or gh pr create from App sandbox",
+    "No production/customer mutation authority"
   ],
-  "started_at": "2026-07-18T06:25:10.173Z",
-  "completed_at": "2026-07-18T06:25:10.182Z",
+  "started_at": "2026-07-18T14:21:25.271Z",
+  "completed_at": "2026-07-18T14:21:25.323Z",
   "validator_details": [
     {
       "id": "agent_permission",
@@ -74,5 +75,7 @@
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
   "evidence_path": "evidence/slices/S6/agentic.json",
-  "bind_model": "candidate_sha_equals_head"
+  "bind_model": "candidate_sha_equals_head",
+  "hosted_evidence": "evidence/hosted/agentic-workflow-2026-07-18.json",
+  "claim_basis": "GitHub-hosted App dispatch/publish and junior intent-gated actuation are evidenced; mutation still routes through GitHub workflows/OIDC, not in-pod credentials."
 }
