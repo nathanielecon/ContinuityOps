@@ -1,11 +1,11 @@
-# ContinuityOps — lab teardown stub (destructive; protected environment).
+# ContinuityOps lab teardown — terraform destroy via continuityops-gha (OIDC).
 name: teardown
 
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: Environment to tear down
+        description: Terraform env root to destroy
         required: true
         type: choice
         options: [staging, recovery-lab]
@@ -18,24 +18,55 @@ permissions:
   contents: read
   id-token: write
 
+concurrency:
+  group: continuityops-teardown-${{ github.event.inputs.environment }}
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: us-east-1
+  TF_IN_AUTOMATION: '1'
+  TF_INPUT: 'false'
+  TF_STATE_BUCKET: continuityops-tfstate-283077380808
+  TF_LOCK_TABLE: continuityops-tf-locks
+
 jobs:
   destroy:
     if: github.event.inputs.confirm == 'teardown'
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
+    environment: continuityops
+    env:
+      COPS_ENV: ${{ github.event.inputs.environment }}
+    defaults:
+      run:
+        working-directory: terraform/envs/${{ env.COPS_ENV }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Check out repository
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
-      - name: Configure AWS credentials (OIDC placeholder)
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
-        continue-on-error: true
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN_APPLY || 'arn:aws:iam::000000000000:role/continuityops-recovery-lab-apply' }}
-          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
-          role-session-name: continuityops-teardown
+          role-to-assume: ${{ vars.AWS_ROLE_ARN_CONTINUITYOPS || 'arn:aws:iam::283077380808:role/continuityops-gha' }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: gha-cops-teardown-${{ github.run_id }}
 
-      - name: Teardown stub
-        run: |
-          echo "Teardown stub — no resources destroyed. Retain post-teardown evidence when live."
-          node scripts/ci/record-hosted-stub.mjs teardown
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: 1.5.7
+
+      - name: Caller identity
+        run: aws sts get-caller-identity
+
+      - name: Ensure remote state
+        working-directory: ${{ github.workspace }}
+        run: bash terraform/ci-bootstrap/ensure-tfstate.sh
+
+      - name: Terraform init
+        run: terraform init -input=false -reconfigure
+
+      - name: Inventory before destroy
+        run: terraform state list || true
+
+      - name: Terraform destroy
+        run: terraform destroy -input=false -auto-approve -no-color
