@@ -9,11 +9,13 @@ ContinuityOps consumes pinned upstream SHAs without modifying those repositories
 
 ## Access boundary (CO-006 / D-028)
 
-Worker environments receive **data, not permission**. If the pinned trees are not
-readable in the worker container, adapters remain stubs with explicit
-`missing_capabilities` entries. The control center must supply a context package
-or read-only vendored snapshot before raising claim levels above L1 for
-upstream-derived runtime facts.
+Worker environments receive **data, not permission**. First validated packet:
+
+`integration/upstreams/packets/2026-07-18-a-c/` (see `manifest.json`).
+
+Refresh with `node scripts/package-upstream-context.mjs` on the control center.
+`MC-A-TREE` / `MC-C-TREE` / `MC-C-DIGEST` / `CO-006` / `CO-004` (A2 Option 2)
+are resolved by that packet; rollback remains **none proven**.
 
 ## Claim honesty
 

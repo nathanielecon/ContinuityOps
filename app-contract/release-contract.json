@@ -4,31 +4,34 @@
   "derived_from": {
     "upstream": "project_c",
     "repository": "nathanielecon/local-first-governed-cicd",
-    "commit_sha": "0f54def53fbfda9747c8ea27235eaac1da831aec"
+    "commit_sha": "376b7e18c5cc94e67ff180ca2f42b8eb05535be3",
+    "context_packet": "integration/upstreams/packets/2026-07-18-a-c"
   },
   "artifact": {
     "kind": "container_image",
-    "image_digest": "UNAVAILABLE",
-    "label": "ContinuityOps lab artifact policy — not a Project C production release until digest is verified"
+    "image_digest": "sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229",
+    "registry": "283077380808.dkr.ecr.us-east-1.amazonaws.com/project-c-delivery-api",
+    "rollback_target": "none proven",
+    "label": "Project C phase-9 staging digest consumed at ContinuityOps pin 376b7e18… — not a ContinuityOps-promoted production release; rollback none proven"
   },
   "identity": {
-    "git_commit": "0f54def53fbfda9747c8ea27235eaac1da831aec",
+    "git_commit": "376b7e18c5cc94e67ff180ca2f42b8eb05535be3",
     "version": "UNAVAILABLE"
   },
   "interfaces": {
     "config": ["APP_ENV", "LOG_LEVEL"],
     "secrets": ["DATABASE_URL_REF", "OIDC_CLIENT_SECRET_REF"],
     "smoke": {
-      "liveness": "/healthz",
-      "readiness": "/readyz",
+      "liveness": "/health/live",
+      "readiness": "/health/ready",
       "version": "/version",
-      "business": "/api/smoke"
+      "business": "/quotes"
     }
   },
   "claim_level_ceiling": "L1",
   "remaining_boundaries": [
-    "image_digest UNAVAILABLE (CO-004)",
-    "No L2 local runtime proof in S1",
-    "No L4 cloud apply of the application in S1"
+    "Rollback none proven for ContinuityOps (see packet phase-6 fixture note)",
+    "No ContinuityOps L2 local runtime re-proof in this packet PR",
+    "No ContinuityOps L4 cloud apply of the application in this packet PR"
   ]
 }

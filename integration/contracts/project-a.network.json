@@ -15,7 +15,7 @@
     }
   },
   "missing": [
-    "Live VPC identifiers from pinned upstream tree (MC-A-TREE)"
+    "Live VPC identifiers from ContinuityOps lab apply (L4); tree docs are in packet 2026-07-18-a-c"
   ],
-  "notes": "ContinuityOps-side adapter. Upstream Project A is unmodified. Values are filled when a D-028 context package arrives or ContinuityOps terraform/network module is applied (L4)."
+  "notes": "ContinuityOps-side adapter. Upstream Project A is unmodified. D-028 packet supplies architecture docs; live IDs require ContinuityOps terraform apply (L4)."
 }

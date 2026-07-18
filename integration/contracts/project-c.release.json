@@ -2,20 +2,24 @@
   "schema_version": "1.0",
   "contract_id": "project-c.release",
   "upstream": "project_c",
-  "pinned_sha": "0f54def53fbfda9747c8ea27235eaac1da831aec",
-  "status": "adapter_stub",
+  "pinned_sha": "376b7e18c5cc94e67ff180ca2f42b8eb05535be3",
+  "status": "digest_proven",
   "claim_level_ceiling": "L1",
   "exports": {
-    "image_digest": "UNAVAILABLE",
-    "registry": "UNAVAILABLE",
+    "image_digest": "sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229",
+    "registry": "283077380808.dkr.ecr.us-east-1.amazonaws.com/project-c-delivery-api",
     "app_version": "UNAVAILABLE",
-    "source_commit": "0f54def53fbfda9747c8ea27235eaac1da831aec",
-    "rollback_target": "UNAVAILABLE"
+    "source_commit": "376b7e18c5cc94e67ff180ca2f42b8eb05535be3",
+    "rollback_target": "none proven"
   },
-  "missing": [
-    "Immutable image digest (CO-004 / MC-C-DIGEST)",
-    "Registry location and known-good rollback digest",
-    "Upstream release evidence tree (MC-C-TREE)"
-  ],
-  "notes": "Until a verified digest is packaged (D-028), ContinuityOps must not claim a Project C production release. A future ContinuityOps lab artifact must be labeled as lab-only."
+  "proof": {
+    "a2_option": 2,
+    "co_004_one_line": "image_digest: sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229 | rollback: none proven | source: 283077380808.dkr.ecr.us-east-1.amazonaws.com/project-c-delivery-api@sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229 (packet evidence/phase-9/governing-manifest.json; evidence_commit c6ca45425244323ee90be5b7b02d511f54976b2b; pin 376b7e18c5cc94e67ff180ca2f42b8eb05535be3)",
+    "packet": "integration/upstreams/packets/2026-07-18-a-c/co-004-digest-proof.json",
+    "governing_manifest": "integration/upstreams/packets/2026-07-18-a-c/project_c/evidence/phase-9/governing-manifest.json",
+    "evidence_commit_sha": "c6ca45425244323ee90be5b7b02d511f54976b2b",
+    "rollback_evidence": "integration/upstreams/packets/2026-07-18-a-c/project_c/evidence/phase-6/manifest.json"
+  },
+  "missing": [],
+  "notes": "CO-004 closed via A2 Option 2. Phase-9 ECR digest is bound to pin 376b7e18…. ContinuityOps has not verified a known-good rollback digest for this pin (explicit none proven)."
 }

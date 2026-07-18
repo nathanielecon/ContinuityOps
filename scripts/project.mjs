@@ -425,8 +425,7 @@ export function runPhaseValidationSuite(taskId, validatorIds) {
     'P1-T01': {
       claim_level: 'L1',
       remaining_boundaries: [
-        'Upstream tree contents not readable (CO-006)',
-        'Project C image_digest=UNAVAILABLE (CO-004)',
+        'Project C digest proven at pin 376b7e18…; rollback none proven (CO-004 A2 Option 2)',
         'No L4 cloud-applied claim'
       ]
     },
@@ -451,7 +450,7 @@ export function runPhaseValidationSuite(taskId, validatorIds) {
       remaining_boundaries: [
         'Live AWS mutation not executed',
         'H1 cloud identity receipts optional under D-044; accounts still unset',
-        'Upstream digest packaging still open (CO-004/CO-006)'
+        'Upstream digest proven (CO-004 A2 Option 2); CO-006 packet present; rollback none proven'
       ]
     },
     'P2-T01': {
