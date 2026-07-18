@@ -266,7 +266,8 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S1/upstream-integration.json"
-      ]
+      ],
+      "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
     },
     {
       "id": "P1-T02",
@@ -302,7 +303,8 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S1/terraform.json"
-      ]
+      ],
+      "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
     },
     {
       "id": "P1-T03",
@@ -338,7 +340,8 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S1/hosted-ci.json"
-      ]
+      ],
+      "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
     },
     {
       "id": "P1-T04",
@@ -376,7 +379,8 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S1/integrated-gate.json",
         "evidence/judges/S1/"
       ],
-      "human_gate": "H1"
+      "human_gate": "H1",
+      "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
     },
     {
       "id": "P2-T01",
