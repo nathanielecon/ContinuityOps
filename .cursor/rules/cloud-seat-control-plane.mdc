@@ -1,0 +1,29 @@
+---
+description: Cloud seat control plane — GHA OIDC for AWS; GH_TOKEN for GitHub loop; never chase Cursor STS
+alwaysApply: true
+---
+
+# Cloud seat control plane
+
+## Split authority
+
+- **Live AWS** = GitHub Actions OIDC → repo CI role (ContinuityOps: `continuityops-gha`). Never put long-lived AWS keys in Cloud secrets. `aws sts` `NoCredentials` here is **expected** on Pro+.
+- **GitHub actuation** = Cloud seat env `GH_TOKEN` (fine-grained PAT). Needed to list Actions, merge PRs, optional `workflow_dispatch`.
+- Do **not** block on `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` / `CursorCloudAgent` / Teams External ID.
+- Do **not** reuse another project's CI role (e.g. `project-a-lzlab-gha`) for ContinuityOps.
+
+## Token contract
+
+Exact matrix and new-repo checklist: `docs/operator/CLOUD_SEAT_GH_TOKEN.md`.
+
+Assert in any seat:
+
+```bash
+node scripts/assert-cloud-seat-gh-token.mjs
+```
+
+If assert fails (403 on Actions / PR merge / statuses): stop asking for AWS keys; tell the owner to expand/re-inject `GH_TOKEN` and start a **new** Cloud Agent.
+
+## Loop after bootstrap
+
+PR → CI plan → merge `main` → CI apply (OIDC). No CloudShell per change. No AWS in this seat.
