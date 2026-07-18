@@ -1,0 +1,40 @@
+{
+  "bomFormat": "ContinuityOps-repository-sbom",
+  "specVersion": "1.0",
+  "serialNumber": "urn:uuid:b5689e6f0cd5a4d19261897106042bbc",
+  "metadata": {
+    "component": {
+      "name": "ContinuityOps",
+      "type": "repository"
+    },
+    "generated_at": "2026-07-18T00:00:00.000Z",
+    "generator": "scripts/security/generate-sbom.mjs",
+    "dependency_sources": [
+      "tests/package.json"
+    ],
+    "exclusions": [
+      ".git",
+      ".terraform",
+      "node_modules"
+    ]
+  },
+  "components": [
+    {
+      "path": "tests/package.json",
+      "type": "npm-manifest",
+      "size_bytes": 101,
+      "sha256": "31048d2dd399aea9c1f4031f7d65437c19dd99ef98d890fea18366d55911c95b",
+      "dependencies": [],
+      "devDependencies": []
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "tests/package.json",
+      "name": "tests/package.json",
+      "type": "npm-manifest",
+      "dependencies": [],
+      "devDependencies": []
+    }
+  ]
+}
