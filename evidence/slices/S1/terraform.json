@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "task_id": "P1-T02",
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "terraform CLI absent — fmt/validate skipped in this environment",
+    "No hosted OIDC plan evidence (not L3 plan)",
+    "No cloud apply (not L4)"
+  ],
+  "candidate_sha": "0000000000000000000000000000000000000000",
+  "baseline_sha": "0000000000000000000000000000000000000000",
+  "component_claims": {
+    "terraform_scaffold": "L1",
+    "terraform_cli_fmt_validate": "skipped_tool_absent",
+    "cloud_apply": "not_claimed"
+  }
+}

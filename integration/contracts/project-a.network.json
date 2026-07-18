@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "project-a.network",
+  "upstream": "project_a",
+  "pinned_sha": "f688065c7705ab7d3febcd9ec2842bea4d8bed87",
+  "status": "adapter_stub",
+  "claim_level_ceiling": "L1",
+  "exports": {
+    "vpc_id": { "type": "string", "required": false, "source": "terraform_output_or_adapter" },
+    "private_subnet_ids": { "type": "list(string)", "required": false },
+    "public_subnet_ids": { "type": "list(string)", "required": false },
+    "connectivity_boundary": {
+      "type": "object",
+      "description": "Intended single-account lab network boundary; multi-account design is not claimed."
+    }
+  },
+  "missing": [
+    "Live VPC identifiers from pinned upstream tree (MC-A-TREE)"
+  ],
+  "notes": "ContinuityOps-side adapter. Upstream Project A is unmodified. Values are filled when a D-028 context package arrives or ContinuityOps terraform/network module is applied (L4)."
+}

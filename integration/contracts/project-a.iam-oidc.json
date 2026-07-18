@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "project-a.iam-oidc",
+  "upstream": "project_a",
+  "pinned_sha": "f688065c7705ab7d3febcd9ec2842bea4d8bed87",
+  "status": "adapter_stub",
+  "claim_level_ceiling": "L1",
+  "exports": {
+    "oidc_provider_arn": { "type": "string", "required": false },
+    "github_oidc_audience": { "type": "string", "default": "sts.amazonaws.com" },
+    "role_interfaces": {
+      "staging_plan": "arn:aws:iam::ACCOUNT:role/continuityops-staging-plan",
+      "staging_apply": "arn:aws:iam::ACCOUNT:role/continuityops-staging-apply",
+      "recovery_lab_apply": "arn:aws:iam::ACCOUNT:role/continuityops-recovery-lab-apply"
+    }
+  },
+  "missing": [
+    "Concrete account ID and role ARNs from approved H1 cloud identity (CO-003; D-044 clears receipt wait but secrets/account still optional tooling)",
+    "Verified upstream OIDC export from pinned tree (MC-A-TREE)"
+  ],
+  "notes": "Least-privilege OIDC role names are ContinuityOps scaffold placeholders. No long-lived keys. Cloud apply remains L4-unproven."
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "task_id": "P1-T01",
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Upstream tree contents not readable with worker token (CO-006)",
+    "Project C image_digest=UNAVAILABLE (CO-004)",
+    "No L4 cloud-applied claim"
+  ],
+  "candidate_sha": "0000000000000000000000000000000000000000",
+  "baseline_sha": "0000000000000000000000000000000000000000",
+  "component_claims": {
+    "upstreams_lock": "L1",
+    "adapter_contracts": "L1",
+    "upstream_tree_verification": "not_claimed"
+  }
+}

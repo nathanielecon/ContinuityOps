@@ -1,0 +1,41 @@
+# ContinuityOps — lab teardown stub (destructive; protected environment).
+name: teardown
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to tear down
+        required: true
+        type: choice
+        options: [staging, recovery-lab]
+      confirm:
+        description: Type teardown to confirm
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  destroy:
+    if: github.event.inputs.confirm == 'teardown'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Configure AWS credentials (OIDC placeholder)
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        continue-on-error: true
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN_APPLY || 'arn:aws:iam::000000000000:role/continuityops-recovery-lab-apply' }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+          role-session-name: continuityops-teardown
+
+      - name: Teardown stub
+        run: |
+          echo "Teardown stub — no resources destroyed. Retain post-teardown evidence when live."
+          node scripts/ci/record-hosted-stub.mjs teardown

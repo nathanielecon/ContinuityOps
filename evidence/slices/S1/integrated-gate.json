@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "task_id": "P1-T04",
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Live AWS mutation not executed",
+    "H1 cloud identity receipts optional under D-044; accounts still unset",
+    "Upstream digest packaging still open (CO-004/CO-006)"
+  ],
+  "candidate_sha": "0000000000000000000000000000000000000000",
+  "baseline_sha": "0000000000000000000000000000000000000000",
+  "passed": [],
+  "failed": []
+}
