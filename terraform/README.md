@@ -1,21 +1,30 @@
-# ContinuityOps Terraform scaffold (S1)
+# ContinuityOps Terraform
 
-This directory is a **static scaffold**. Terraform CLI is not required to parse
-HCL in CI yet; Node static tests assert required files and invariants.
+Live AWS control plane (2026-07-18): **GitHub OIDC → `continuityops-gha`** via
+`.github/workflows/continuityops-terraform.yml`. Cloud Agents stay repo-only
+(`NoCredentials` expected). Do not use `CursorCloudAgent` or
+`project-a-lzlab-gha` for these roots.
+
+## Loop
+
+1. Edit `terraform/**` on a PR → CI **plan**
+2. Merge to `main` → CI **apply** (Environment `continuityops`)
+3. Workflow runs `terraform/ci-bootstrap/ensure-tfstate.sh` then S3 backend init
 
 ## Environments
 
 | Env | Purpose | Mutation |
 | --- | --- | --- |
-| `staging` | non-destructive integration | OIDC staging roles (placeholders) |
-| `recovery-lab` | destructive drills | protected environment + human/OIDC gate |
+| `staging` | non-destructive integration | auto-apply on push to `main` |
+| `recovery-lab` | destructive drills | `workflow_dispatch` apply |
 
 ## Backend
 
-See `modules/state`. State is designed to be isolated, versioned, encrypted,
-and locked. Placeholder names must be replaced before any apply.
+- Bucket: `continuityops-tfstate-000000000000`
+- Lock table: `continuityops-tf-locks`
+- Ensured idempotently by `ci-bootstrap/ensure-tfstate.sh` under OIDC
 
 ## Claim level
 
-**L1** static only unless `evidence/slices/S1/terraform.json` records a higher
-honest level with command evidence.
+Stay at **L1** until `cloud_apply_evidence` is recorded for a green apply
+(caller identity `assumed-role/continuityops-gha/...` + resource proof).

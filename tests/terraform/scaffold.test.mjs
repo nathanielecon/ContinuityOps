@@ -15,7 +15,10 @@ const REQUIRED = [
   'terraform/modules/iam/main.tf',
   'terraform/modules/network/main.tf',
   'terraform/envs/staging/main.tf',
+  'terraform/envs/staging/versions.tf',
   'terraform/envs/recovery-lab/main.tf',
+  'terraform/envs/recovery-lab/versions.tf',
+  'terraform/ci-bootstrap/ensure-tfstate.sh',
   'terraform/policies/tagging.json',
   'terraform/policies/encryption.json',
   'terraform/policies/iam-negative.json',
@@ -51,6 +54,22 @@ test('state module documents encryption versioning locking', () => {
   assert.match(state, /encrypt/i);
   assert.match(state, /lock/i);
   assert.match(state, /enable_state_resources[\s\S]*default\s*=\s*false/);
+});
+
+test('staging uses S3 backend and live marker log group', () => {
+  const versions = readFileSync(resolve(ROOT, 'terraform/envs/staging/versions.tf'), 'utf8');
+  const staging = readFileSync(resolve(ROOT, 'terraform/envs/staging/main.tf'), 'utf8');
+  assert.match(versions, /backend\s+"s3"/);
+  assert.match(versions, /continuityops-tfstate-000000000000/);
+  assert.match(staging, /aws_cloudwatch_log_group"\s+"live_marker"/);
+  assert.match(staging, /\/continuityops\/staging\/live-marker/);
+});
+
+test('ensure-tfstate bootstrap is idempotent aws cli', () => {
+  const script = readFileSync(resolve(ROOT, 'terraform/ci-bootstrap/ensure-tfstate.sh'), 'utf8');
+  assert.match(script, /head-bucket/);
+  assert.match(script, /create-table/);
+  assert.match(script, /continuityops-tf-locks/);
 });
 
 test('policy JSON stubs parse and encode negative controls', () => {

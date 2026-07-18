@@ -30,9 +30,10 @@ terraform apply -input=false -auto-approve
 terraform output gha_role_arn
 ```
 
-Then create GitHub Environment `continuityops` (no reviewers / wait timer).
+Then create GitHub Environment `continuityops` (no reviewers / wait timer) — **done 2026-07-18**.
 
 Ongoing loop (no dispatch): PR → plan → merge `main` → **apply on push**.
+Workflow runs `ensure-tfstate.sh` (S3 + DynamoDB lock) before remote-backend init.
 `workflow_dispatch` is fallback only.
 
 ## Do not
