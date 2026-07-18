@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "task_id": "P2-T04",
-  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
-  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+  "baseline_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
   "command": "node scripts/project.mjs validate P2-T04",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:17:17.664Z",
+  "recorded_at": "2026-07-18T06:18:18.898Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -26,8 +26,8 @@
     "managed_cluster_apply",
     "No EKS OIDC apply evidence"
   ],
-  "started_at": "2026-07-18T06:17:17.648Z",
-  "completed_at": "2026-07-18T06:17:17.664Z",
+  "started_at": "2026-07-18T06:18:18.882Z",
+  "completed_at": "2026-07-18T06:18:18.898Z",
   "validator_details": [
     {
       "id": "full_repository",
@@ -62,6 +62,5 @@
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
   "evidence_path": "evidence/slices/S2/integrated-gate.json",
-  "bind_model": "candidate_sha_parent_of_tip",
-  "implementation_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9"
+  "bind_model": "candidate_sha_equals_head"
 }
