@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "judge_id": "fresh-judge-2",
+  "role": "independent read-only judge",
+  "actual_model_id": "GPT-5.5 Codex API",
+  "candidate_sha": "760827dbb46c803475fa095c19984db61c8a6995",
+  "base_branch": "main",
+  "rubric_path": "docs/planning/JUDGE_RUBRICS.md",
+  "rubric_sha256_expected": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "rubric_sha256_observed": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "scope": "portfolio / S1-S8 fresh blind council judgment on the supplied candidate SHA",
+  "reviewed_evidence": [
+    "docs/claims/matrix.json",
+    "docs/planning/JUDGE_RUBRICS.md",
+    "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+    "evidence/hosted/cloud-apply-staging-reapply-2026-07-18.json",
+    "evidence/hosted/lab-drill-rto-29645042815.json",
+    "evidence/hosted/security-sbom-2026-07-18.json",
+    "evidence/hosted/agentic-workflow-2026-07-18.json",
+    "evidence/hosted/upstream-d028-2026-07-18.json",
+    "evidence/slices/S1/STREAM_COMPLETE.json",
+    "evidence/slices/S2/STREAM_COMPLETE.json",
+    "evidence/slices/S3/STREAM_COMPLETE.json",
+    "evidence/slices/S4/STREAM_COMPLETE.json",
+    "evidence/slices/S5/STREAM_COMPLETE.json",
+    "evidence/slices/S6/STREAM_COMPLETE.json",
+    "evidence/slices/S7/STREAM_COMPLETE.json",
+    "evidence/slices/S8/STREAM_COMPLETE.json",
+    "evidence/slices/S8/integrated-gate.json",
+    "integration/upstreams/packets/2026-07-18-a-c/manifest.json",
+    "integration/upstreams.lock.json"
+  ],
+  "universal_must_haves": [
+    {"id": "U1", "status": "not_proven", "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/slices/S1/STREAM_COMPLETE.json", "evidence/slices/S8/STREAM_COMPLETE.json"], "rationale": "集成门禁和多个 slice complete 记录绑定到早于候选的 SHA，而非派遣候选 760827dbb46c803475fa095c19984db61c8a6995；因此候选 SHA 绑定未完全证明。"},
+    {"id": "U2", "status": "not_proven", "evidence": ["evidence/slices/S8/integrated-gate.json"], "rationale": "存在通过的确定性门禁记录，但记录的 candidate_sha/implementation_sha 为 74f2ba35e48f96f2eabe41991d762d16900fbb93，不是本轮候选。"},
+    {"id": "U3", "status": "pass", "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/hosted/security-sbom-2026-07-18.json", "docs/claims/matrix.json"], "rationale": "安全验证、SBOM 与 non_claims 说明没有把 Cursor in-pod AWS 凭证或长期密钥作为证据；未发现秘密泄露证据。"},
+    {"id": "U4", "status": "pass", "evidence": ["evidence/slices/S6/security.json", "evidence/hosted/security-sbom-2026-07-18.json"], "rationale": "安全/SBOM 证据声明 triage 后没有未关闭 critical/high；本轮未发现相反证据。"},
+    {"id": "U5", "status": "pass", "evidence": ["docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-2026-07-18.json", "evidence/hosted/lab-drill-rto-29645042815.json"], "rationale": "claims matrix 区分 L1/L2/L3/L4，且 non_claims 明确非生产、非 Azure、非 CursorCloudAgent。"},
+    {"id": "U6", "status": "pass", "evidence": ["evidence/slices/S5/drills-summary.json", "evidence/slices/S7/recovery/", "evidence/hosted/lab-drill-rto-29645042815.json"], "rationale": "drill 与恢复证据覆盖负向/故障路径，但范围是实验室和合成路径。"},
+    {"id": "U7", "status": "not_proven", "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/hosted/cloud-apply-staging-2026-07-18.json"], "rationale": "证据记录包含时间、环境和 run URL，但不是全部绑定到最终候选 760827dbb46c803475fa095c19984db61c8a6995。"},
+    {"id": "U8", "status": "pass", "evidence": ["integration/upstreams/packets/2026-07-18-a-c/manifest.json", "integration/upstreams.lock.json", "evidence/hosted/upstream-d028-2026-07-18.json"], "rationale": "上游材料以 packet/lock 形式消费，符合 worker gets data, not permission 的边界。"},
+    {"id": "U9", "status": "not_proven", "evidence": ["BREAK_FIX_LOG.md", "evidence/slices/S8/integrated-gate.json"], "rationale": "集成门禁声称 break/fix 通过，但本轮未能从候选绑定证据证明每个 observed failure 都已在候选之后闭环。"},
+    {"id": "U10", "status": "pass", "evidence": ["docs/claims/matrix.json", "evidence/slices/S8/delivery.json", "evidence/slices/S8/integrated-gate.json"], "rationale": "portfolio 声明整体使用实验室/非生产边界，claims matrix 与 S8 交付证据基本一致。"},
+    {"id": "U11", "status": "pass", "evidence": ["AGENTS.md", "evidence/smoke/ORCH-SMOKE-01/reconstruction.zh.md"], "rationale": "仓库契约要求中文交接；抽查到中文重建证据，未发现反例。"},
+    {"id": "U12", "status": "pass", "evidence": ["evidence/slices/S8/CHIEF_VERDICT_HIERARCHY_CLOSE_2026-07-18.json", "evidence/slices/S8/integrated-gate.json"], "rationale": "层级关闭和集成门禁记录了 supervisor/junior/orch/reviewer 分离。"},
+    {"id": "U13", "status": "pass", "evidence": ["evidence/judges/S1/fresh-judge-1.json", "evidence/judges/S8/fresh-judge-3.json", "evidence/slices/S8/integrated-gate.json"], "rationale": "保存 remediation 与 fresh judge 文件分离，集成门禁也记录 judge_exit。"},
+    {"id": "U14", "status": "not_proven", "evidence": ["BREAK_FIX_LOG.md", "evidence/slices/S8/integrated-gate.json"], "rationale": "与 U9 相同，缺少对最终候选 SHA 的完整 break/fix 新鲜性绑定。"}
+  ],
+  "slice_must_haves_summary": [
+    {"slice": "S1", "status": "pass", "rationale": "Terraform/GHA OIDC 与 hosted apply 证据支持 AWS lab staging 范围；非 CursorCloudAgent 与非生产边界清楚。"},
+    {"slice": "S2", "status": "pass", "rationale": "chart contract 与 elevation evidence 支持实验室层级 Kubernetes claim；matrix 明示已 teardown。"},
+    {"slice": "S3", "status": "pass", "rationale": "serverless-worker claim 绑定 hosted elevation evidence；SaaS/生产边界未被夸大。"},
+    {"slice": "S4", "status": "pass", "rationale": "observability claim 绑定 CloudWatch/log-group 与 telemetry evidence；非 sustained production observability。"},
+    {"slice": "S5", "status": "pass", "rationale": "runbook/drill 证据覆盖实验室 incident restore，且明确不是生产事故。"},
+    {"slice": "S6", "status": "pass", "rationale": "security/SBOM、Azure governance、agentic workflow claim ceiling 清楚，没有扩权到 in-pod AWS。"},
+    {"slice": "S7", "status": "pass", "rationale": "恢复、FinOps teardown 和性能边界按 L4/L1 分开；实验室 RTO 被明确限定。"},
+    {"slice": "S8", "status": "not_proven", "rationale": "集成交付 narrative 与 claims 存在，但关键 gate 绑定到旧 SHA，无法证明最终候选 760827dbb46c803475fa095c19984db61c8a6995 上全部仍有效。"}
+  ],
+  "scored_dimensions": [
+    {"id": "correctness_and_completeness", "max": 2.0, "score": 1.55, "evidence": ["docs/claims/matrix.json", "evidence/slices/S8/integrated-gate.json"], "rationale": "portfolio 结构完整，S1-S8 evidence map 存在；候选 SHA 新鲜性缺口降低完整性。"},
+    {"id": "security_and_authority_boundaries", "max": 1.5, "score": 1.35, "evidence": ["AGENTS.md", "docs/claims/matrix.json", "evidence/hosted/security-sbom-2026-07-18.json"], "rationale": "OIDC、非生产、非 CursorCloudAgent、agentic 权限边界表达清楚。"},
+    {"id": "failure_recovery_depth", "max": 1.5, "score": 1.15, "evidence": ["evidence/hosted/lab-drill-rto-29645042815.json", "evidence/slices/S7/recovery/"], "rationale": "有实验室 restore/RTO 和 teardown 证据，但生产/客户恢复未声称且最终 SHA 绑定不足。"},
+    {"id": "deterministic_test_quality", "max": 1.0, "score": 0.75, "evidence": ["evidence/slices/S8/integrated-gate.json"], "rationale": "deterministic validators 记录为 pass，但记录绑定到 74f2ba35... 而非本候选。"},
+    {"id": "live_runtime_evidence_quality", "max": 1.0, "score": 0.85, "evidence": ["evidence/hosted/cloud-apply-staging-2026-07-18.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "evidence/hosted/lab-drill-rto-29645042815.json"], "rationale": "hosted run IDs、GHA OIDC 和 lab drill 证据较强；范围不是生产。"},
+    {"id": "operability_and_troubleshooting", "max": 1.0, "score": 0.85, "evidence": ["evidence/slices/S5/runbooks.json", "evidence/slices/S8/delivery.json"], "rationale": "runbook、drill 和 demo 路径可导航；最终候选绑定缺口保留风险。"},
+    {"id": "evidence_claim_integrity", "max": 1.0, "score": 0.55, "evidence": ["docs/claims/matrix.json", "evidence/slices/S8/integrated-gate.json"], "rationale": "claim ceiling 和 non_claims 清楚，但关键证据 manifest/gate SHA 与本轮候选不一致。"},
+    {"id": "maintainability_and_handoff", "max": 0.5, "score": 0.4, "evidence": ["AGENTS.md", "evidence/smoke/ORCH-SMOKE-01/reconstruction.zh.md"], "rationale": "durable artifacts 足以重建大部分状态。"},
+    {"id": "cost_performance_realism", "max": 0.5, "score": 0.38, "evidence": ["docs/claims/matrix.json", "evidence/slices/S7/cost/", "evidence/slices/S7/performance/"], "rationale": "成本/性能被限制为实验室或 L1 where appropriate，未过度声称。"}
+  ],
+  "overall_score": 7.83,
+  "merge_ready": "no",
+  "blocking_findings": [
+    {"id": "BF-FJ2-001", "severity": "blocking", "finding": "最终候选 SHA 760827dbb46c803475fa095c19984db61c8a6995 没有被关键集成门禁和 slice completion evidence 完整绑定；多个证据仍引用 74f2ba35...、4be8a30... 或 08433d...。", "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/slices/S1/STREAM_COMPLETE.json", "evidence/slices/S2/STREAM_COMPLETE.json"]},
+    {"id": "BF-FJ2-002", "severity": "blocking", "finding": "Universal must-haves U1/U2/U7/U9/U14 未证明；根据冻结 rubric，任何 universal must-have 失败或未证明都强制 merge_ready=no。", "evidence": ["docs/planning/JUDGE_RUBRICS.md", "evidence/slices/S8/integrated-gate.json", "BREAK_FIX_LOG.md"]}
+  ],
+  "unsupported_claims": [
+    {"claim": "候选 760827dbb46c803475fa095c19984db61c8a6995 已完成全部最终集成门禁", "reason": "现有 gate evidence 记录的 candidate_sha/implementation_sha 不是该候选。"}
+  ],
+  "critical_high_security": [],
+  "non_blocking_improvements": [
+    "重新运行并提交绑定到 760827dbb46c803475fa095c19984db61c8a6995 的 full repository/security/hosted/evidence-chain validation。",
+    "在 S1-S8 STREAM_COMPLETE 或 portfolio manifest 中统一最终候选 SHA 与 evidence hashes。",
+    "为 break/fix log 增加最终候选之后的新鲜性索引，便于 fresh judges 机械验证 U9/U14。"
+  ]
+}
