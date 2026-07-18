@@ -8,8 +8,8 @@
     "P7-T03",
     "P7-T04"
   ],
-  "candidate_sha": "c18b57586284953a3d778cf7fef548ae0f29e6d7",
-  "baseline_sha": "c18b57586284953a3d778cf7fef548ae0f29e6d7",
+  "candidate_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
+  "baseline_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
   "claim_level": "L4",
   "remaining_boundaries": [
     "Performance remains honest L1",
@@ -24,7 +24,7 @@
   },
   "notes": "S7 recovery/finops L4 lab; performance L1.",
   "slice_landed_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "portfolio_tip_sha": "c18b57586284953a3d778cf7fef548ae0f29e6d7",
+  "portfolio_tip_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
   "bind_model": "candidate_sha_parent_of_tip",
   "rebinding": {
     "recorded_utc": "2026-07-18T18:58:15Z",
