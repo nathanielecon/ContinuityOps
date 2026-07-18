@@ -9,14 +9,12 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 43,
+  "revision": 44,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
   "current_gate": "portfolio-certified-L4-lab",
-  "running_tasks": [
-    "WORKER-HIER-01 hierarchy remediation (BF-2026-013 / issues #56 #57 #58) pending D-037 process pass"
-  ],
+  "running_tasks": [],
   "blocked_tasks": [],
   "waiting_human": [],
   "seats": {
@@ -52,10 +50,9 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S8-P8-T04"
   ],
   "next_actions": [
-    "Lab live elevation complete (apply 29644662492, drill 29645042815, teardown 29645052414); re-apply staging when needed for demos",
-    "D-037 process pass is required for hierarchy closure; REVIEW-COMPLETION-02 must supersede REVIEW-COMPLETION-01 after this remediation patch merges",
-    "Optional: re-dispatch GPT junior for steady-state; keep Azure out of ceiling (D-046)",
-    "Permanent non-claims: CursorCloudAgent in-pod AWS; production customer drills"
+    "Hierarchy remediation closed (PR #59 + REVIEW-COMPLETION-02); AWS lab L4 evidence retained",
+    "Codex App keep-warm cold — prefer in-session GPT episodic carriers until issue #4 warm; queue #56/#57/#58 remain for App catch-up",
+    "Optional: workflow_dispatch continuityops-terraform apply staging to rebuild lab after teardown proof"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
