@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "task_id": "P6-T04",
-  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
-  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
   "command": "node scripts/project.mjs validate P6-T04",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:24:01.212Z",
+  "recorded_at": "2026-07-18T06:25:19.737Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -26,8 +26,8 @@
   "remaining_boundaries": [
     "No live cloud security proof"
   ],
-  "started_at": "2026-07-18T06:24:01.193Z",
-  "completed_at": "2026-07-18T06:24:01.212Z",
+  "started_at": "2026-07-18T06:25:19.718Z",
+  "completed_at": "2026-07-18T06:25:19.737Z",
   "validator_details": [
     {
       "id": "full_security",
@@ -39,7 +39,7 @@
       "id": "full_repository",
       "result": {
         "pass": true,
-        "standalone_json": 187,
+        "standalone_json": 191,
         "fenced_json": 14,
         "skipped_allowlisted": 0
       }
@@ -69,5 +69,6 @@
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
   "evidence_path": "evidence/slices/S6/integrated-gate.json",
-  "bind_model": "candidate_sha_equals_head"
+  "bind_model": "candidate_sha_parent_of_tip",
+  "implementation_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
 }
