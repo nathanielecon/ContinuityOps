@@ -29,6 +29,13 @@ test('state transitions require a matching revision and legal lifecycle edge', (
 test('authorization boundary accepts current phase and rejects next phase', () => {
   assert.equal(assertPhaseAuthorized(plan, 'P0-T02').phase, 0);
   assert.throws(() => assertPhaseAuthorized(plan, 'P1-T01'), (error) => error instanceof ContractError && error.code === 'phase_unauthorized');
+  const open = { ...plan, authorized_through_phase: 8 };
+  assert.equal(assertPhaseAuthorized(open, 'P1-T01').phase, 1);
+  const beyond = {
+    ...open,
+    tasks: [...open.tasks, { id: 'P99-T01', phase: 9, state: 'planned', write_scope: [], evidence: [] }]
+  };
+  assert.throws(() => assertPhaseAuthorized(beyond, 'P99-T01'), (error) => error instanceof ContractError && error.code === 'phase_unauthorized');
 });
 
 test('workers cannot mark verified or done', () => {
