@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "task_id": "P5-T01",
+  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "command": "node scripts/project.mjs validate P5-T01",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:24:00.928Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "runbook_schema": true,
+    "command_safety": true,
+    "runbook_links": true,
+    "diagnostic_tests": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Runbooks contractual; diagnostics not executed on live fleets"
+  ],
+  "started_at": "2026-07-18T06:24:00.918Z",
+  "completed_at": "2026-07-18T06:24:00.928Z",
+  "validator_details": [
+    {
+      "id": "runbook_schema",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "command_safety",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "runbook_links",
+      "result": {
+        "pass": true,
+        "slice": "S5"
+      }
+    },
+    {
+      "id": "diagnostic_tests",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "runbook_schema",
+    "command_safety",
+    "runbook_links",
+    "diagnostic_tests"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S5/runbooks.json"
+}

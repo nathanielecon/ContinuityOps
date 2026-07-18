@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "rules": [
+    {
+      "id": "idle-asg",
+      "criterion": "cpu_avg_7d < 5%",
+      "action": "flag_rightsize"
+    },
+    {
+      "id": "unattached-ebs",
+      "criterion": "volume_state=available",
+      "action": "flag_teardown_candidate"
+    }
+  ]
+}

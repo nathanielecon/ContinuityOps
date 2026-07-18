@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "task_id": "P8-T01",
+  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "command": "node scripts/project.mjs validate P8-T01",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:24:01.419Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "evidence_chain": true,
+    "evidence_freshness": true,
+    "claim_consistency": true,
+    "architecture_consistency": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Manifest is L1 portfolio index",
+    "No L4 elevation"
+  ],
+  "started_at": "2026-07-18T06:24:01.411Z",
+  "completed_at": "2026-07-18T06:24:01.419Z",
+  "validator_details": [
+    {
+      "id": "evidence_chain",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "evidence_freshness",
+      "result": {
+        "pass": true,
+        "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+        "path": "evidence/slices/S8/integrated-gate.json"
+      }
+    },
+    {
+      "id": "claim_consistency",
+      "result": {
+        "pass": true,
+        "slice": "S8"
+      }
+    },
+    {
+      "id": "architecture_consistency",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "evidence_chain",
+    "evidence_freshness",
+    "claim_consistency",
+    "architecture_consistency"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S8/evidence-index.json"
+}

@@ -21,6 +21,21 @@ import {
   P4_T01_VALIDATOR_IDS,
   P4_T02_VALIDATOR_IDS,
   P4_T03_VALIDATOR_IDS,
+  P5_T01_VALIDATOR_IDS,
+  P5_T02_VALIDATOR_IDS,
+  P5_T03_VALIDATOR_IDS,
+  P6_T01_VALIDATOR_IDS,
+  P6_T02_VALIDATOR_IDS,
+  P6_T03_VALIDATOR_IDS,
+  P6_T04_VALIDATOR_IDS,
+  P7_T01_VALIDATOR_IDS,
+  P7_T02_VALIDATOR_IDS,
+  P7_T03_VALIDATOR_IDS,
+  P7_T04_VALIDATOR_IDS,
+  P8_T01_VALIDATOR_IDS,
+  P8_T02_VALIDATOR_IDS,
+  P8_T03_VALIDATOR_IDS,
+  P8_T04_VALIDATOR_IDS,
   assertValidatorsReadOnly,
   createEvidence,
   fixedP0T03Fixture,
@@ -52,7 +67,22 @@ const PHASE_EVIDENCE = {
   'P3-T03': resolve(ROOT, 'evidence/slices/S3/integrated-gate.json'),
   'P4-T01': resolve(ROOT, 'evidence/slices/S4/telemetry.json'),
   'P4-T02': resolve(ROOT, 'evidence/slices/S4/signals.json'),
-  'P4-T03': resolve(ROOT, 'evidence/slices/S4/integrated-gate.json')
+  'P4-T03': resolve(ROOT, 'evidence/slices/S4/integrated-gate.json'),
+  'P5-T01': resolve(ROOT, 'evidence/slices/S5/runbooks.json'),
+  'P5-T02': resolve(ROOT, 'evidence/slices/S5/drills-summary.json'),
+  'P5-T03': resolve(ROOT, 'evidence/slices/S5/integrated-gate.json'),
+  'P6-T01': resolve(ROOT, 'evidence/slices/S6/security.json'),
+  'P6-T02': resolve(ROOT, 'evidence/slices/S6/azure-governance.json'),
+  'P6-T03': resolve(ROOT, 'evidence/slices/S6/agentic.json'),
+  'P6-T04': resolve(ROOT, 'evidence/slices/S6/integrated-gate.json'),
+  'P7-T01': resolve(ROOT, 'evidence/slices/S7/recovery/contract-evidence.json'),
+  'P7-T02': resolve(ROOT, 'evidence/slices/S7/performance/baseline-evidence.json'),
+  'P7-T03': resolve(ROOT, 'evidence/slices/S7/cost/finops-evidence.json'),
+  'P7-T04': resolve(ROOT, 'evidence/slices/S7/integrated-gate.json'),
+  'P8-T01': resolve(ROOT, 'evidence/slices/S8/evidence-index.json'),
+  'P8-T02': resolve(ROOT, 'evidence/slices/S8/delivery.json'),
+  'P8-T03': resolve(ROOT, 'evidence/postbuild/partition-gate.json'),
+  'P8-T04': resolve(ROOT, 'evidence/slices/S8/integrated-gate.json')
 };
 
 const PHASE_VALIDATORS = {
@@ -69,7 +99,22 @@ const PHASE_VALIDATORS = {
   'P3-T03': P3_T03_VALIDATOR_IDS,
   'P4-T01': P4_T01_VALIDATOR_IDS,
   'P4-T02': P4_T02_VALIDATOR_IDS,
-  'P4-T03': P4_T03_VALIDATOR_IDS
+  'P4-T03': P4_T03_VALIDATOR_IDS,
+  'P5-T01': P5_T01_VALIDATOR_IDS,
+  'P5-T02': P5_T02_VALIDATOR_IDS,
+  'P5-T03': P5_T03_VALIDATOR_IDS,
+  'P6-T01': P6_T01_VALIDATOR_IDS,
+  'P6-T02': P6_T02_VALIDATOR_IDS,
+  'P6-T03': P6_T03_VALIDATOR_IDS,
+  'P6-T04': P6_T04_VALIDATOR_IDS,
+  'P7-T01': P7_T01_VALIDATOR_IDS,
+  'P7-T02': P7_T02_VALIDATOR_IDS,
+  'P7-T03': P7_T03_VALIDATOR_IDS,
+  'P7-T04': P7_T04_VALIDATOR_IDS,
+  'P8-T01': P8_T01_VALIDATOR_IDS,
+  'P8-T02': P8_T02_VALIDATOR_IDS,
+  'P8-T03': P8_T03_VALIDATOR_IDS,
+  'P8-T04': P8_T04_VALIDATOR_IDS
 };
 
 export const TASK_STATES = ['planned', 'ready', 'running', 'blocked', 'review', 'verified', 'done'];
@@ -257,7 +302,7 @@ function writeEvidence(result) {
   }
   mkdirSync(dirname(evidencePath), { recursive: true });
   const payload = { ...result, evidence_path: relative };
-  if (result.task_id === 'P0-T05' || /T0[34]$/.test(result.task_id ?? '') && (result.task_id?.startsWith('P1-') || result.task_id?.startsWith('P2-') || result.task_id?.startsWith('P3-') || result.task_id?.startsWith('P4-'))) {
+  if (result.task_id === 'P0-T05' || /T0[34]$/.test(result.task_id ?? '') && (result.task_id?.startsWith('P1-') || result.task_id?.startsWith('P2-') || result.task_id?.startsWith('P3-') || result.task_id?.startsWith('P4-') || result.task_id?.startsWith('P5-') || result.task_id?.startsWith('P6-') || result.task_id?.startsWith('P7-') || result.task_id?.startsWith('P8-'))) {
     const headSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
     if (process.env.CANDIDATE_SHA) {
       payload.bind_model = 'candidate_sha_parent_of_tip';
@@ -269,7 +314,7 @@ function writeEvidence(result) {
       payload.bind_commit = headSha;
     }
   }
-  if ((result.task_id?.startsWith('P1-') || result.task_id?.startsWith('P2-') || result.task_id?.startsWith('P3-') || result.task_id?.startsWith('P4-')) && existsSync(evidencePath)) {
+  if ((result.task_id?.startsWith('P1-') || result.task_id?.startsWith('P2-') || result.task_id?.startsWith('P3-') || result.task_id?.startsWith('P4-') || result.task_id?.startsWith('P5-') || result.task_id?.startsWith('P6-') || result.task_id?.startsWith('P7-') || result.task_id?.startsWith('P8-')) && existsSync(evidencePath)) {
     try {
       const prior = JSON.parse(readFileSync(evidencePath, 'utf8'));
       for (const key of ['claim_level', 'remaining_boundaries', 'cloud_apply_evidence', 'acceptance_notes', 'component_claims']) {
@@ -284,7 +329,7 @@ function writeEvidence(result) {
     const evidenceManifestSha256 = createHash('sha256').update(readFileSync(evidencePath)).digest('hex');
     refreshP0T05JudgeBindings(result.candidate_sha, evidenceManifestSha256);
   }
-  if (['P1-T04', 'P2-T04', 'P3-T03', 'P4-T03'].includes(result.task_id)) {
+  if (['P1-T04', 'P2-T04', 'P3-T03', 'P4-T03', 'P5-T03', 'P6-T04', 'P7-T04', 'P8-T04'].includes(result.task_id)) {
     const evidenceManifestSha256 = createHash('sha256').update(readFileSync(evidencePath)).digest('hex');
     const slice = sliceIdForTask(result.task_id);
     refreshJudgeBindings(resolve(ROOT, `evidence/judges/${slice}`), result.candidate_sha, evidenceManifestSha256);
@@ -448,6 +493,66 @@ export function runPhaseValidationSuite(taskId, validatorIds) {
     'P4-T03': {
       claim_level: 'L1',
       remaining_boundaries: ['Signal-path drills are synthetic fixtures', 'No live alert fire/resolve channel']
+    },
+    'P5-T01': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Runbooks contractual; diagnostics not executed on live fleets']
+    },
+    'P5-T02': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Synthetic fixtures only', 'No live production drills']
+    },
+    'P5-T03': {
+      claim_level: 'L1',
+      remaining_boundaries: ['No live production drills', 'Synthetic fixtures only']
+    },
+    'P6-T01': {
+      claim_level: 'L1',
+      remaining_boundaries: ['SBOM stub', 'No live scanner', 'No live IAM apply']
+    },
+    'P6-T02': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Designed/static only', 'No ExpressRoute depth', 'No live Azure Policy']
+    },
+    'P6-T03': {
+      claim_level: 'L1',
+      remaining_boundaries: ['H4 waived under D-044', 'Protected environment placeholders retained', 'No live mutation']
+    },
+    'P6-T04': {
+      claim_level: 'L1',
+      remaining_boundaries: ['No live cloud security proof']
+    },
+    'P7-T01': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Synthetic restore only', 'No live RTO']
+    },
+    'P7-T02': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Synthetic load profile', 'Numbers are fixtures not live load']
+    },
+    'P7-T03': {
+      claim_level: 'L1',
+      remaining_boundaries: ['No live teardown of cloud resources executed']
+    },
+    'P7-T04': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Synthetic resilience/perf/cost only']
+    },
+    'P8-T01': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Manifest is L1 portfolio index', 'No L4 elevation']
+    },
+    'P8-T02': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Existing architecture assets retained']
+    },
+    'P8-T03': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Logical partitions only']
+    },
+    'P8-T04': {
+      claim_level: 'L1',
+      remaining_boundaries: ['Portfolio certified L1 only', 'No L4+ live cloud', 'D-044 waived H3-H6; placeholders retained']
     }
   };
   return {
@@ -538,7 +643,7 @@ export function runP0T05ValidationSuite() {
 }
 
 function usage(exitCode = 2) {
-  console.error('Usage: node scripts/project.mjs validate P0-T02|P0-T03|P0-T05|P1-T0{1-4}|P2-T0{1-4}|P3-T0{1-3}|P4-T0{1-3}');
+  console.error('Usage: node scripts/project.mjs validate P0-T02|P0-T03|P0-T05|P1-T0{1-4}|P2-T0{1-4}|P3-T0{1-3}|P4-T0{1-3}|P5-T0{1-3}|P6-T0{1-4}|P7-T0{1-4}|P8-T0{1-4}');
   process.exit(exitCode);
 }
 

@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "drill_id": "networkpolicy-deny",
+  "synthetic": true,
+  "claim_ceiling": "L1",
+  "timeline": [
+    {
+      "t": "T+0m",
+      "event": "Alert fires",
+      "actor": "sre-oncall"
+    },
+    {
+      "t": "T+5m",
+      "event": "First-five checks complete",
+      "actor": "sre-oncall"
+    },
+    {
+      "t": "T+15m",
+      "event": "Hypothesis narrowed",
+      "actor": "sre-oncall"
+    },
+    {
+      "t": "T+30m",
+      "event": "Recovery applied (synthetic)",
+      "actor": "sre-oncall"
+    },
+    {
+      "t": "T+40m",
+      "event": "Business verification pass",
+      "actor": "qa"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "statement": "Recent deploy introduced defect",
+      "status": "ruled_out"
+    },
+    {
+      "id": "H2",
+      "statement": "Infrastructure pressure",
+      "status": "confirmed"
+    }
+  ],
+  "ruled_out": [
+    "Customer data corruption",
+    "Region-wide outage"
+  ],
+  "root_cause": "Synthetic root cause for networkpolicy-deny",
+  "recovery": {
+    "steps": [
+      "Mitigate",
+      "Verify SLI",
+      "Reset fixture"
+    ],
+    "verified_business": true
+  },
+  "regression_controls": [
+    "Add alert link to runbook",
+    "Unit/fixture coverage for symptom"
+  ],
+  "remaining_boundaries": [
+    "Synthetic fixture only",
+    "No live production drill"
+  ]
+}

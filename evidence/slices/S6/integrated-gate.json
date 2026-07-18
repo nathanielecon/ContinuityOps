@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "task_id": "P6-T04",
+  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "command": "node scripts/project.mjs validate P6-T04",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:24:01.212Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "full_security": true,
+    "full_repository": true,
+    "claim_consistency": true,
+    "judge_exit": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "No live cloud security proof"
+  ],
+  "started_at": "2026-07-18T06:24:01.193Z",
+  "completed_at": "2026-07-18T06:24:01.212Z",
+  "validator_details": [
+    {
+      "id": "full_security",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "full_repository",
+      "result": {
+        "pass": true,
+        "standalone_json": 187,
+        "fenced_json": 14,
+        "skipped_allowlisted": 0
+      }
+    },
+    {
+      "id": "claim_consistency",
+      "result": {
+        "pass": true,
+        "slice": "S6"
+      }
+    },
+    {
+      "id": "judge_exit",
+      "result": {
+        "pass": true,
+        "provisional_pass": true,
+        "fresh_mean": 9.7
+      }
+    }
+  ],
+  "passed": [
+    "full_security",
+    "full_repository",
+    "claim_consistency",
+    "judge_exit"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S6/integrated-gate.json",
+  "bind_model": "candidate_sha_equals_head"
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "task_id": "P7-T02",
+  "baseline_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "candidate_sha": "7aed484df7c81fc7830f2372a1d91b37fa4d632a",
+  "command": "node scripts/project.mjs validate P7-T02",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:24:01.289Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "load_profile": true,
+    "performance_result_schema": true,
+    "before_after": true,
+    "capacity_claims": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Synthetic load profile",
+    "Numbers are fixtures not live load"
+  ],
+  "started_at": "2026-07-18T06:24:01.281Z",
+  "completed_at": "2026-07-18T06:24:01.289Z",
+  "validator_details": [
+    {
+      "id": "load_profile",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "performance_result_schema",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "before_after",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "capacity_claims",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "load_profile",
+    "performance_result_schema",
+    "before_after",
+    "capacity_claims"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S7/performance/baseline-evidence.json"
+}

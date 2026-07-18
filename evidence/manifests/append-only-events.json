@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "events": [
+    {
+      "id": "evt-s0",
+      "slice": "S0",
+      "kind": "gate",
+      "claim_level": "L1"
+    },
+    {
+      "id": "evt-s1",
+      "slice": "S1",
+      "kind": "gate",
+      "claim_level": "L1"
+    },
+    {
+      "id": "evt-s2",
+      "slice": "S2",
+      "kind": "gate",
+      "claim_level": "L1"
+    },
+    {
+      "id": "evt-s3",
+      "slice": "S3",
+      "kind": "gate",
+      "claim_level": "L1"
+    },
+    {
+      "id": "evt-s4",
+      "slice": "S4",
+      "kind": "gate",
+      "claim_level": "L1"
+    },
+    {
+      "id": "evt-s5",
+      "slice": "S5",
+      "kind": "gate",
+      "claim_level": "L1"
+    },
+    {
+      "id": "evt-s6",
+      "slice": "S6",
+      "kind": "gate",
+      "claim_level": "L1"
+    },
+    {
+      "id": "evt-s7",
+      "slice": "S7",
+      "kind": "gate",
+      "claim_level": "L1"
+    },
+    {
+      "id": "evt-s8",
+      "slice": "S8",
+      "kind": "gate",
+      "claim_level": "L1"
+    }
+  ],
+  "superseded": []
+}
