@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "task_id": "ORCH-CLOSE-02",
+  "role": "orchestrator",
+  "model": "codex-5.4-default",
+  "provider": "OpenAI Codex App",
+  "mode": "default",
+  "baseline_sha": "ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029",
+  "base_branch": "main",
+  "status": "complete",
+  "at": "2026-07-18T00:00:00Z",
+  "claim_closure": {
+    "security-sbom": {
+      "target": "L1",
+      "decision": "keep_l1",
+      "reason": "S6 static security and SBOM evidence supports L1 only; no live enforcement elevation in this round."
+    },
+    "agentic-workflow": {
+      "target": "L1",
+      "decision": "keep_l1",
+      "reason": "S6 agentic evidence supports orchestration and authority-boundary claims; no autonomous production actuation claim."
+    },
+    "performance": {
+      "target": "L1",
+      "decision": "keep_l1",
+      "reason": "Performance has planning/static evidence paths, not a fresh reproducible live load/capacity comparison."
+    },
+    "azure-governance": {
+      "target": "L1",
+      "decision": "keep_l1_non_live",
+      "reason": "D-046 keeps Azure live apply out of the ContinuityOps AWS-lab evidence ceiling."
+    }
+  },
+  "blocked_gaps": [
+    {
+      "issue_id": "CO-004",
+      "status": "open",
+      "reproducible_gap": "No verified Project C immutable sha256 image digest or rollback contract is present in the repository evidence."
+    },
+    {
+      "issue_id": "CO-006",
+      "status": "open",
+      "reproducible_gap": "No control-center supplied Project A/C context package or read-only vendored snapshot is present for the first upstream-dependent task."
+    }
+  ],
+  "worker_task_ids": [
+    "ORCH-CLOSE-02-CLAIMS",
+    "ORCH-CLOSE-02-UPSTREAM-GAPS",
+    "REVIEW-ORCH-CLOSE-02-CLAIMS",
+    "REVIEW-ORCH-CLOSE-02-UPSTREAM-GAPS"
+  ],
+  "d037_sequence": [
+    "REVIEW-ORCH-CLOSE-02-CLAIMS after ORCH-CLOSE-02-CLAIMS CI green",
+    "REVIEW-ORCH-CLOSE-02-UPSTREAM-GAPS after ORCH-CLOSE-02-UPSTREAM-GAPS CI green"
+  ],
+  "context_remaining": "74%"
+}
