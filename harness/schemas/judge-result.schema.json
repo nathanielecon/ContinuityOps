@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "continuityops/judge-result.schema.json",
+  "title": "ContinuityOps judge result (saved provisional or fresh)",
+  "description": "Independent judge output for slice certification. Fresh judges must not carry saved cohort scores. Free-text values are Simplified Chinese.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "slice_id",
+    "round",
+    "candidate_sha",
+    "rubric_sha256",
+    "evidence_manifest_sha256",
+    "judge_model_id",
+    "must_haves",
+    "blocking_findings",
+    "scored_dimensions",
+    "unsupported_claims",
+    "security_findings",
+    "improvements",
+    "overall_score",
+    "merge_ready",
+    "model_record"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "slice_id": { "type": "string" },
+    "round": { "type": "string", "enum": ["saved_provisional", "fresh"] },
+    "judge_id": { "type": "string" },
+    "candidate_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "rubric_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "evidence_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "judge_model_id": { "type": "string" },
+    "provisional_pass": { "type": "boolean" },
+    "must_haves": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "evidence"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string", "enum": ["pass", "fail", "not_proven"] },
+          "evidence": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "blocking_findings": { "type": "array", "items": { "type": "string" } },
+    "scored_dimensions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "score", "rationale", "evidence"],
+        "properties": {
+          "id": { "type": "string" },
+          "score": { "type": "number" },
+          "rationale": { "type": "string" },
+          "evidence": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "unsupported_claims": { "type": "array", "items": { "type": "string" } },
+    "security_findings": { "type": "array", "items": { "type": "string" } },
+    "improvements": { "type": "array", "items": { "type": "string" } },
+    "overall_score": { "type": "number", "minimum": 0, "maximum": 10 },
+    "merge_ready": { "type": "string", "enum": ["yes", "no", "provisional"] },
+    "model_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "mode", "role"],
+      "properties": {
+        "provider": { "type": "string" },
+        "model": { "type": "string" },
+        "mode": { "type": "string" },
+        "role": { "type": "string" }
+      }
+    },
+    "notes_zh": { "type": "string" }
+  }
+}

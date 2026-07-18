@@ -1,9 +1,9 @@
 # 初级监督者契约（D-041）
 
 > role: `junior-supervisor`  
-> model: **GPT-5.6 Sol medium**（派遣时记录实际 model ID）  
+> model: **cursor-grok-4.5-high**（D-043；派遣时记录实际 model ID）  
 > 向上汇报: `chief-supervisor`  
-> 向下管理: orchestrator、D-037 reviewer、watcher/monitor（只读健康）、worker 的派遣由 orch 准备、由本席 **actuate**
+> 向下管理: orchestrator、D-037 reviewer、watcher/monitor（只读健康）、worker 的派遣由 orch 准备；合并/派遣由首席或本席经 git/`gh` 执行（Codex App worker 路径已挂起）
 
 ## 职责（原 portfolio supervisor 五项）
 
