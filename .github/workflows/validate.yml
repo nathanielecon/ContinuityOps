@@ -63,6 +63,14 @@ jobs:
             echo "no harness tests yet (pre-P0-T02) — skipping"
           fi
 
+      - name: Pipeline zero-hop parser tests (D-047)
+        run: |
+          if [ -d tests/pipeline ] && ls tests/pipeline/*.mjs >/dev/null 2>&1; then
+            node --test tests/pipeline/*.mjs
+          else
+            echo "no pipeline tests — skipping"
+          fi
+
       - name: Schema samples conform (stream-complete example)
         run: |
           python3 - <<'PY'

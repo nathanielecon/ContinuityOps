@@ -27,14 +27,19 @@ happen.
   spend ceilings, destructive/irreversible operations, external-to-repo
   publication. Not an agent seat.
 - **Chief supervisor:** one cloud agent session (this seat) owns the integrated
-  objective at **stream boundaries and escalations only** (BF-PRE-015 / D-032
-  as amended by D-041). It does **not** perform steady-state actuation. It
-  replaces the junior supervisor when that seat is context-dead or stuck, and
-  may pipe true constitutional crises to the owner. See
+  objective at **stream boundaries, escalations, and the durable pager**
+  (BF-PRE-015 / D-032 as amended by D-041/D-047). First command on every wake:
+  `gh issue list --label chief-pager --state open`. It does **not** perform
+  routine mechanical hops (those are zero-hop GHA). It replaces the junior
+  supervisor when that seat is context-dead or stuck, and may pipe true
+  constitutional crises to the owner. See
   `docs/planning/dispatch/CHIEF_SUPERVISOR.md`.
-- **Junior supervisor (D-045 / D-041):** episodic **GPT-5.6 Sol medium** via
-  `codex-dispatch`; actuates through D-042 GHA intents. See
-  `docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md`.
+- **Junior supervisor (D-045 / D-041 / D-047):** episodic **GPT-5.6 Sol medium**
+  via `codex-dispatch`; **exception-only** (scope fights, fuzzy stop/escalate,
+  two-strike halt, cross-lane locks, routing). Actuates through D-042 GHA
+  intents. Routine hops are **not** junior-owned. See
+  `docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md` and
+  `docs/planning/dispatch/PAGER_SNIPPET.zh.md`.
 - **Ralphy orchestration (D-045 / D-030):** episodic **GPT** rounds (D-038
   ladder). Orchestrator validates rounds, advances state up to `review`, owns
   break/fix, prepares contracts; it **emits intents** and never merges/approves
@@ -84,16 +89,15 @@ Dispatch runs through the Codex GitHub App, triggered by the cloud supervisor
   `base_sha`, and a full fenced unified diff. GitHub Actions
   `codex-patch-publish` mechanically applies the patch with `GITHUB_TOKEN` and
   opens the PR (primary overnight path). App sandboxes still cannot
-  `git push`/`gh` — **D-042** extends the same rule to junior merges/dispatches:
-  intent markers → `.github/workflows/junior-actuate.yml`. Platform **Create PR**
-  and `scripts/Publish-CodexCloudTask.ps1` are **fallbacks**. **Heartbeat:**
-  review PRs / `publish-ok`; re-nudge if bot reply lacks the patch marker; on
-  `publish-failed` use fallback (engagement: no Opus). For every worker PR,
-  D-037 adds an independent GPT reviewer round. Junior merge signal is **CI
-  green + reviewer verdict pass**, actuated via `continuityops-merge-v1`. Repair
-  findings go to an independent fixer round, not the reviewer. Never treat
-  `make_pr` text alone as complete. Warm-cloud heartbeat: issue #4 stamp; smoke
-  when older than ~10h; never dispatch real work into a cold environment.
+  `git push`/`gh`. **D-042** covers junior exception intents →
+  `junior-actuate.yml`. **D-047 zero-hop** owns routine hops via
+  `pipeline-zero-hop.yml`: `publish-ok`→D-037; verdict pass+CI→merge
+  **candidate** (`candidate/portfolio-<7sha>`); verdict fail→fixer; judge
+  `merge_ready: no`→nixer (path B); nixer→fixer→provisional→fresh; fresh
+  pass+CI→`main`; `publish-failed` one re-nudge; keep-warm smoke. Platform
+  **Create PR** and `scripts/Publish-CodexCloudTask.ps1` remain **fallbacks**.
+  Never treat `make_pr` text alone as complete. Warm stamp: issue #4; smoke
+  when older than ~10h / >9h heartbeat.
 - **Warm freshness** is cloud-native and evidenced by the most recent Codex
   task timestamp on the keep-warm record (issue #4); the supervisor heartbeat
   posts an `@codex` smoke when the stamp is older than >9h. The
@@ -141,11 +145,12 @@ but every free-text value must be Simplified Chinese.
 
 ## Roles
 
-- **Chief supervisor:** owns integrated intent at stream boundaries and
-  escalations only (D-041); replaces junior when needed; does not steady-state
-  actuate.
-- **Junior supervisor:** owns day-to-day supervision and actuation (D-041);
-  reports to chief; replaces orch/reviewer/monitor on low context.
+- **Chief supervisor:** owns stream-boundary verdicts, durable `chief-pager`
+  intake, and escalations (D-041/D-047); replaces junior when needed; does not
+  own routine mechanical hops.
+- **Junior supervisor:** exception-only judgment + D-042 intents (D-041/D-047);
+  reports to chief via pager markers; replaces orch/reviewer/monitor on low
+  context.
 - **Lead orchestrator:** selects ready work, checks dependencies and scopes,
   creates/joins Ralphy streams, prepares dispatch intents, changes
   authoritative state atomically up to `review`, logs break/fix events, and
