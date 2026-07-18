@@ -9,13 +9,19 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 45,
+  "revision": 46,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
   "current_gate": "portfolio-certified-L4-lab",
-  "running_tasks": [],
-  "blocked_tasks": [],
+  "running_tasks": [
+    "PR #66 WORKER-SEC-01 (CI green; awaiting D-037)",
+    "PR #67 WORKER-AGENTIC-01 (CI green; awaiting D-037; matrix conflict with #66 — integrate serially)",
+    "issue #62 ORCH-CLOSE-02 (awaiting Codex reply; re-nudge base_branch=main)"
+  ],
+  "blocked_tasks": [
+    "upstream-integration elevation (CO-004/CO-006 — need D-028 packages from control center)"
+  ],
   "waiting_human": [],
   "seats": {
     "owner": "human:nathanielecon",
@@ -50,9 +56,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S8-P8-T04"
   ],
   "next_actions": [
-    "Hierarchy remediation closed (PR #59 + REVIEW-COMPLETION-02); AWS lab L4 evidence retained",
-    "Codex App keep-warm cold — prefer in-session GPT episodic carriers until issue #4 warm; queue #56/#57/#58 remain for App catch-up",
-    "Optional: workflow_dispatch continuityops-terraform apply staging to rebuild lab after teardown proof"
+    "Issue #4 Codex App keep-warm replied 2026-07-18T13:49Z — App path warm",
+    "D-037 review PRs #66 (security-sbom L2) and #67 (agentic-workflow L3); merge on CI green + verdict pass; rebase #67 after #66 for matrix.json",
+    "BF-2026-014: workers must set base_branch: main; publisher coerces missing refs",
+    "Leave CO-004/CO-006 blocked until owner supplies D-028 upstream digests; do not invent",
+    "azure-governance stays L1 (D-046); performance stays honest L1 without real load evidence"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -82,7 +90,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Cloud seat NoCredentials expected (BF-2026-010 / Pro+); do not use CursorCloudAgent or project-a-lzlab-gha for ContinuityOps",
     "PR #51 merged to main at 21299f9: ensure-tfstate + staging live-marker + terraform-pr static path fix; OIDC plan was green (run 29642718513)",
     "Live AWS apply GREEN run 29643569047 (after 29643490577 DynamoDB lock-create race); evidence/hosted/cloud-apply-staging-2026-07-18.json",
-    "BF-2026-013 hierarchy remediation recorded: AWS lab evidence remains valid, but portfolio hierarchy closure requires GPT worker -> D-037 process pass after WORKER-HIER-01 merges"
+    "BF-2026-013 hierarchy remediation recorded: AWS lab evidence remains valid, but portfolio hierarchy closure requires GPT worker -> D-037 process pass after WORKER-HIER-01 merges",
+    "ORCH-CLOSE-02 dispatch #62–#65; chief fallback PRs #66/#67 after BF-2026-014 base_branch:work publish-failed; #65 rejected (reviewer must not edit terraform)"
   ],
   "verified_baseline": [
     "GHA OIDC apply green run 29643569047 (staging live-marker + remote state)",
