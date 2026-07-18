@@ -9,14 +9,12 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 52,
+  "revision": 53,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
-  "current_gate": "portfolio-fixer-pending-fresh-council",
-  "running_tasks": [
-    "PORTFOLIO fixer after FJ2 findings then fresh 3-judge council (glow)"
-  ],
+  "current_gate": "portfolio-scoped-100-A3",
+  "running_tasks": [],
   "blocked_tasks": [],
   "waiting_human": [],
   "seats": {
@@ -49,13 +47,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S5-P5-T03",
     "S6-P6-T04",
     "S7-P7-T04",
-    "S8-P8-T04"
+    "S8-P8-T04",
+    "portfolio-scoped-100-A3"
   ],
   "next_actions": [
-    "PR #86 merged: D-028 packet + CO-004 A2 Option 2; upstream-integration elevating to L2",
-    "A3 confirmed: Azure D-046 out; performance L1; security SBOM L2",
-    "Dispatch blind fresh 3-judge 9.5 council on main tip; land artifacts; close stale PRs #48/#20/#1",
-    "Do not invent ContinuityOps known-good rollback (none proven)"
+    "Portfolio scoped-100% under A3 complete (fresh council 9.7/9.7/9.6)",
+    "D-047 zero-hop + pager operational; sticky chief-pager #94",
+    "Do not invent ContinuityOps known-good rollback (none proven)",
+    "Optional: owner may wire Cursor webhook to chief-pager later"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -92,7 +91,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "PR #67 merged: agentic-workflow elevated to L3 hosted-control; D-037 REVIEW-AGENTIC-03 pass",
     "ORCH-CLOSE-02 amended after worker elevation race (keep_l1 superseded for security/agentic)",
     "PR #86 merged at d499990: D-028 A/C packet; Project C pin 376b7e18… + ECR sha256:bffa93ad…; CO-004/CO-006 packaging closed",
-    "D-047: zero-hop mechanical pipeline + chief/junior pager; junior exception-only; candidate branch before main"
+    "D-047: zero-hop mechanical pipeline + chief/junior pager; junior exception-only; candidate branch before main",
+    "portfolio-scoped-100-A3: fresh council 9.7/9.7/9.6 merge_ready=yes; D-047 pager sticky #94"
   ],
   "verified_baseline": [
     "GHA OIDC apply green run 29643569047 (staging live-marker + remote state)",
