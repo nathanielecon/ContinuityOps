@@ -8,8 +8,8 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 14,
-  "authorized_through_phase": 0,
+  "revision": 15,
+  "authorized_through_phase": 8,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
     "portfolio_supervisor": "claude-5-cloud-supervisor",
@@ -217,7 +217,7 @@ Initial authorization stops at Phase 0.
         "Saved remediation council reaches provisional pass",
         "Fresh judges independently validate without saved context",
         "Three-judge S0 exit passes",
-        "Phase 1 remains rejected"
+        "Authorization boundary enforces N/N+1 (D-044: authorized_through_phase=8; phase 9+ rejected)"
       ],
       "validators": [
         "harness_smoke",

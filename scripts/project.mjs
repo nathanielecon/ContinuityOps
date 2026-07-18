@@ -144,8 +144,15 @@ export function runValidationSuite(taskId = 'P0-T02') {
   try { transitionTask(transitioned, { taskId, fromRevision: plan.revision, toState: 'blocked', actorRole: 'worker' }); } catch (error) { staleRejected = error.code === 'stale_revision'; }
   let workerRejected = false;
   try { transitionTask({ ...plan, tasks: plan.tasks.map((entry) => entry.id === taskId ? { ...entry, state: 'review' } : entry) }, { taskId, fromRevision: plan.revision, toState: 'verified', actorRole: 'worker' }); } catch (error) { workerRejected = error.code === 'worker_forbidden_state'; }
-  let phaseRejected = false;
-  try { assertPhaseAuthorized(plan, 'P1-T01'); } catch (error) { phaseRejected = error.code === 'phase_unauthorized'; }
+  // N/N+1: current authorized phase tasks pass; synthetic phase auth+1 rejects (D-044).
+  let nextPhaseRejected = false;
+  const beyond = {
+    ...plan,
+    tasks: [...plan.tasks, { id: 'P99-T01', phase: plan.authorized_through_phase + 1, state: 'planned', write_scope: [], evidence: [] }]
+  };
+  try { assertPhaseAuthorized(beyond, 'P99-T01'); } catch (error) { nextPhaseRejected = error.code === 'phase_unauthorized'; }
+  let authorizedOk = false;
+  try { assertPhaseAuthorized(plan, taskId); authorizedOk = true; } catch { authorizedOk = false; }
 
   const streams = createStreamState([
     { id: 'stream-a', owner: 'owner-a', writeScope: ['scripts/project.mjs'] },
@@ -156,8 +163,8 @@ export function runValidationSuite(taskId = 'P0-T02') {
   const queue = enqueueIntegration(enqueueIntegration([], { streamId: 'stream-a', candidateSha: 'a'.repeat(40), evidence: 'evidence/slices/S0/harness.json' }), { streamId: 'stream-b', candidateSha: 'b'.repeat(40), evidence: 'evidence/slices/S0/harness.json' });
 
   const checks = {
-    harness_unit: task.state === 'ready' && transitioned.revision === plan.revision + 1,
-    authorization_boundary: task.phase === 0 && phaseRejected,
+    harness_unit: ['ready', 'running', 'review'].includes(task.state) && transitioned.revision === plan.revision + 1,
+    authorization_boundary: authorizedOk && nextPhaseRejected,
     state_reconciliation: staleRejected,
     stream_isolation: sequenced.streams.length === 3 && sequenced.streams[0].sequence.map((entry) => entry.order).join(',') === '1,2',
     integration_queue: queue.map((entry) => entry.order).join(',') === '1,2',
