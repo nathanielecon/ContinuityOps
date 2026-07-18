@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "task_id": "P0-T05",
+  "baseline_sha": "fb18f5103a1392170e3c052eff72ba239496e610",
+  "candidate_sha": "fb18f5103a1392170e3c052eff72ba239496e610",
+  "command": "node scripts/project.mjs validate P0-T05",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T05:40:25.067Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "harness_smoke": true,
+    "stream_isolation": true,
+    "worker_replacement": true,
+    "bottleneck_dispatch": true,
+    "saved_fresh_council": true,
+    "full_repository": true,
+    "judge_result_schema": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "started_at": "2026-07-18T05:40:25.053Z",
+  "completed_at": "2026-07-18T05:40:25.067Z",
+  "validator_details": [
+    {
+      "id": "harness_smoke",
+      "result": {
+        "pass": true,
+        "note": "S0 harness smoke：授权 N/N+1 与三流夹具通过"
+      }
+    },
+    {
+      "id": "stream_isolation",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "worker_replacement",
+      "result": {
+        "pass": true,
+        "modes": [
+          "fresh_grok",
+          "bottleneck"
+        ]
+      }
+    },
+    {
+      "id": "bottleneck_dispatch",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "saved_fresh_council",
+      "result": {
+        "pass": true,
+        "provisional_pass": true,
+        "fresh_mean": 9.7
+      }
+    },
+    {
+      "id": "full_repository",
+      "result": {
+        "pass": true,
+        "standalone_json": 30,
+        "fenced_json": 14,
+        "skipped_allowlisted": 0
+      }
+    },
+    {
+      "id": "judge_result_schema",
+      "result": {
+        "pass": true,
+        "mean": 9.7,
+        "count": 3
+      }
+    }
+  ],
+  "passed": [
+    "harness_smoke",
+    "stream_isolation",
+    "worker_replacement",
+    "bottleneck_dispatch",
+    "saved_fresh_council",
+    "full_repository",
+    "judge_result_schema"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "acceptance_notes_zh": [
+    "三条互不重叠 smoke streams 并发且各自顺序执行",
+    "失败检查派遣 fresh Grok worker 或同会话 bottleneck（can_write=false）",
+    "saved council 仅 provisional_pass；fresh judges 无 saved 分数上下文",
+    "三 judge S0 exit：均分≥9.5、无低于9.0、全部 must_haves、merge_ready=yes",
+    "授权边界 D-044：authorized_through_phase=8，phase 9+ 拒绝"
+  ],
+  "evidence_path": "evidence/slices/S0/integrated-gate.json"
+}
