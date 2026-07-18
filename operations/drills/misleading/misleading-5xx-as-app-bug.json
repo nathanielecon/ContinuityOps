@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "id": "misleading-5xx-as-app-bug",
+  "symptom": "Elevated 5xx at ingress",
+  "tempting_cause": "Application regression",
+  "actual_root_cause": "Upstream dependency TLS cert expired",
+  "how_ruled_out": "App pods Ready; dependency handshake fails; digest unchanged",
+  "synthetic": true,
+  "claim_ceiling": "L1"
+}

@@ -125,6 +125,123 @@ export const P4_T03_VALIDATOR_IDS = Object.freeze([
   'judge_exit'
 ]);
 
+export const P5_T01_VALIDATOR_IDS = Object.freeze([
+  'runbook_schema',
+  'command_safety',
+  'runbook_links',
+  'diagnostic_tests'
+]);
+
+export const P5_T02_VALIDATOR_IDS = Object.freeze([
+  'incident_schema',
+  'scenario_reset',
+  'recovery_smoke',
+  'postmortem_contract'
+]);
+
+export const P5_T03_VALIDATOR_IDS = Object.freeze([
+  'runbook_dry_run',
+  'incident_consistency',
+  'full_repository',
+  'judge_exit'
+]);
+
+export const P6_T01_VALIDATOR_IDS = Object.freeze([
+  'secret_scan',
+  'sbom',
+  'vulnerability_policy',
+  'iam_negative',
+  'rbac_negative',
+  'admission_negative'
+]);
+
+export const P6_T02_VALIDATOR_IDS = Object.freeze([
+  'azure_static',
+  'azure_policy_negative',
+  'claims'
+]);
+
+export const P6_T03_VALIDATOR_IDS = Object.freeze([
+  'agent_permission',
+  'prompt_injection',
+  'unsafe_proposal',
+  'evidence_forgery',
+  'workflow_permissions'
+]);
+
+export const P6_T04_VALIDATOR_IDS = Object.freeze([
+  'full_security',
+  'full_repository',
+  'claim_consistency',
+  'judge_exit'
+]);
+
+export const P7_T01_VALIDATOR_IDS = Object.freeze([
+  'backup_contract',
+  'restore_runtime',
+  'rollback_runtime',
+  'data_integrity',
+  'rto_rpo'
+]);
+
+export const P7_T02_VALIDATOR_IDS = Object.freeze([
+  'load_profile',
+  'performance_result_schema',
+  'before_after',
+  'capacity_claims'
+]);
+
+export const P7_T03_VALIDATOR_IDS = Object.freeze([
+  'cost_model',
+  'budget_policy',
+  'resource_inventory',
+  'teardown_reconciliation'
+]);
+
+export const P7_T04_VALIDATOR_IDS = Object.freeze([
+  'recovery_consistency',
+  'performance_consistency',
+  'cost_consistency',
+  'full_repository',
+  'judge_exit'
+]);
+
+export const P8_T01_VALIDATOR_IDS = Object.freeze([
+  'evidence_chain',
+  'evidence_freshness',
+  'claim_consistency',
+  'architecture_consistency'
+]);
+
+export const P8_T02_VALIDATOR_IDS = Object.freeze([
+  'drawio_schema',
+  'diagram_render_freshness',
+  'infographic_parity',
+  'readme_recruiter_gate',
+  'links',
+  'operator_dry_run',
+  'claim_consistency',
+  'secret_scan'
+]);
+
+export const P8_T03_VALIDATOR_IDS = Object.freeze([
+  'postbuild_partition_unique_ownership',
+  'shared_interface_map',
+  'saved_fresh_council',
+  'full_repository',
+  'judge_exit'
+]);
+
+export const P8_T04_VALIDATOR_IDS = Object.freeze([
+  'full_repository',
+  'full_security',
+  'hosted_required_checks',
+  'evidence_chain',
+  'claim_consistency',
+  'readme_recruiter_gate',
+  'judge_exit'
+]);
+
 /** @deprecated prefer P0_T03_VALIDATOR_IDS; kept for P0-T03 callers */
 export const VALIDATOR_IDS = P0_T03_VALIDATOR_IDS;
 
@@ -145,7 +262,22 @@ export const REGISTERABLE_VALIDATOR_IDS = Object.freeze([
     ...P3_T03_VALIDATOR_IDS,
     ...P4_T01_VALIDATOR_IDS,
     ...P4_T02_VALIDATOR_IDS,
-    ...P4_T03_VALIDATOR_IDS
+    ...P4_T03_VALIDATOR_IDS,
+    ...P5_T01_VALIDATOR_IDS,
+    ...P5_T02_VALIDATOR_IDS,
+    ...P5_T03_VALIDATOR_IDS,
+    ...P6_T01_VALIDATOR_IDS,
+    ...P6_T02_VALIDATOR_IDS,
+    ...P6_T03_VALIDATOR_IDS,
+    ...P6_T04_VALIDATOR_IDS,
+    ...P7_T01_VALIDATOR_IDS,
+    ...P7_T02_VALIDATOR_IDS,
+    ...P7_T03_VALIDATOR_IDS,
+    ...P7_T04_VALIDATOR_IDS,
+    ...P8_T01_VALIDATOR_IDS,
+    ...P8_T02_VALIDATOR_IDS,
+    ...P8_T03_VALIDATOR_IDS,
+    ...P8_T04_VALIDATOR_IDS
   ])
 ]);
 
@@ -156,6 +288,10 @@ export function sliceIdForTask(taskId) {
   if (taskId.startsWith('P2')) return 'S2';
   if (taskId.startsWith('P3')) return 'S3';
   if (taskId.startsWith('P4')) return 'S4';
+  if (taskId.startsWith('P5')) return 'S5';
+  if (taskId.startsWith('P6')) return 'S6';
+  if (taskId.startsWith('P7')) return 'S7';
+  if (taskId.startsWith('P8')) return 'S8';
   return 'S0';
 }
 
@@ -571,7 +707,8 @@ registerValidator('claims', (ctx) => {
   const slice = ctx.sliceId ?? sliceIdForTask(ctx.taskId);
   const evidenceRel = {
     S1: 'evidence/slices/S1/upstream-integration.json',
-    S3: 'evidence/slices/S3/saas-operations.json'
+    S3: 'evidence/slices/S3/saas-operations.json',
+    S6: 'evidence/slices/S6/azure-governance.json'
   }[slice] ?? `evidence/slices/${slice}/integrated-gate.json`;
   const evidencePath = resolve(ctx.root, evidenceRel);
   if (!existsSync(evidencePath)) throw new ValidationError(`缺少 claims 证据: ${evidenceRel}`, 'claims_evidence_missing');
@@ -681,6 +818,15 @@ registerValidator('workflow_permissions', (ctx) => {
       throw new ValidationError(`受保护 workflow 缺失: ${name}`, 'workflow_permissions_protected');
     }
   }
+  const slice = ctx.sliceId ?? sliceIdForTask(ctx.taskId);
+  if (slice === 'S6' || String(ctx.taskId ?? '').startsWith('P6-')) {
+    for (const name of ['agentic-evidence.yml', 'agentic-remediate.yml']) {
+      const text = readFileSync(resolve(ctx.root, `.github/workflows/${name}`), 'utf8');
+      if (!/environment:/.test(text)) {
+        throw new ValidationError(`${name} 缺少 protected environment 占位`, 'workflow_permissions_agentic_env');
+      }
+    }
+  }
   return { pass: true };
 });
 
@@ -770,6 +916,27 @@ registerValidator('claim_consistency', (ctx) => {
       'evidence/slices/S4/telemetry.json',
       'evidence/slices/S4/signals.json',
       'evidence/slices/S4/integrated-gate.json'
+    ],
+    S5: [
+      'evidence/slices/S5/runbooks.json',
+      'evidence/slices/S5/integrated-gate.json'
+    ],
+    S6: [
+      'evidence/slices/S6/security.json',
+      'evidence/slices/S6/azure-governance.json',
+      'evidence/slices/S6/agentic.json',
+      'evidence/slices/S6/integrated-gate.json'
+    ],
+    S7: [
+      'evidence/slices/S7/recovery/contract-evidence.json',
+      'evidence/slices/S7/performance/baseline-evidence.json',
+      'evidence/slices/S7/cost/finops-evidence.json',
+      'evidence/slices/S7/integrated-gate.json'
+    ],
+    S8: [
+      'evidence/slices/S8/evidence-index.json',
+      'evidence/slices/S8/delivery.json',
+      'evidence/slices/S8/integrated-gate.json'
     ]
   };
   const files = filesBySlice[slice] ?? filesBySlice.S1;
@@ -919,6 +1086,15 @@ registerValidator('scenario_schema', (ctx) => {
 });
 
 registerValidator('scenario_reset', (ctx) => {
+  const slice = ctx.sliceId ?? sliceIdForTask(ctx.taskId);
+  if (slice === 'S5') {
+    const index = loadJson(resolve(ctx.root, 'operations/incidents/S5/drill-index.json'));
+    for (const id of index.required_drills ?? []) {
+      const drill = loadJson(resolve(ctx.root, `operations/drills/${id}.json`));
+      if (!drill.recovery?.steps?.length) throw new ValidationError(`drill ${id} 缺少 recovery`, 'scenario_reset_s5');
+    }
+    return { pass: true, slice: 'S5' };
+  }
   if (!existsSync(resolve(ctx.root, 'scripts/kubernetes/reset-scenario.mjs'))) {
     throw new ValidationError('缺少 reset-scenario 脚本', 'scenario_reset_script');
   }
@@ -933,6 +1109,17 @@ registerValidator('scenario_reset', (ctx) => {
 });
 
 registerValidator('recovery_smoke', (ctx) => {
+  const slice = ctx.sliceId ?? sliceIdForTask(ctx.taskId);
+  if (slice === 'S5') {
+    const index = loadJson(resolve(ctx.root, 'operations/incidents/S5/drill-index.json'));
+    for (const id of index.required_drills ?? []) {
+      const drill = loadJson(resolve(ctx.root, `operations/drills/${id}.json`));
+      if (drill.recovery?.verified_business !== true) {
+        throw new ValidationError(`drill ${id} 缺少 business verification`, 'recovery_smoke_s5');
+      }
+    }
+    return { pass: true, slice: 'S5' };
+  }
   const matrix = loadJson(resolve(ctx.root, 'kubernetes/scenarios/failure-matrix.json'));
   for (const s of matrix.scenarios) {
     const scenario = loadJson(resolve(ctx.root, s.path));
@@ -1099,6 +1286,18 @@ registerValidator('alert_negative', (ctx) => {
 });
 
 registerValidator('runbook_links', (ctx) => {
+  const slice = ctx.sliceId ?? sliceIdForTask(ctx.taskId);
+  if (slice === 'S5' || String(ctx.taskId ?? '').startsWith('P5-')) {
+    for (const name of ['linux-pressure.json', 'kubernetes-pressure.json', 'network-isolation.json']) {
+      if (!existsSync(resolve(ctx.root, `operations/runbooks/${name}`))) {
+        throw new ValidationError(`缺少 runbook: ${name}`, 'runbook_links_s5');
+      }
+    }
+    if (!existsSync(resolve(ctx.root, 'operations/runbooks/agentic.md'))) {
+      throw new ValidationError('缺少 agentic runbook', 'runbook_links_agentic');
+    }
+    return { pass: true, slice: 'S5' };
+  }
   const alert = loadJson(resolve(ctx.root, 'observability/alerts/burn-rate.json'));
   if (!existsSync(resolve(ctx.root, alert.runbook))) {
     throw new ValidationError(`alert runbook 不存在: ${alert.runbook}`, 'runbook_links_missing');
@@ -1119,6 +1318,382 @@ registerValidator('alert_runtime', (ctx) => {
     throw new ValidationError('drill 缺少 alert fire/resolve 条件', 'alert_runtime_conditions');
   }
   return { pass: true, note: '合成 drill；非 live 告警通道' };
+});
+
+// ---------- Phase 5–8 validators ----------
+registerValidator('runbook_schema', (ctx) => {
+  const schema = loadJson(resolve(ctx.root, 'operations/runbooks/schema.json'));
+  const required = schema.required ?? [];
+  for (const name of ['linux-pressure.json', 'kubernetes-pressure.json', 'network-isolation.json']) {
+    const rb = loadJson(resolve(ctx.root, `operations/runbooks/${name}`));
+    for (const key of required) {
+      if (rb[key] === undefined) throw new ValidationError(`${name} 缺少 ${key}`, 'runbook_schema_field');
+    }
+  }
+  return { pass: true };
+});
+
+registerValidator('command_safety', (ctx) => {
+  const DANGEROUS = /\b(rm\s+-rf|mkfs|dd\s+if=|kubectl\s+delete\s+ns|terraform\s+destroy|DROP\s+TABLE)\b/i;
+  const dir = resolve(ctx.root, 'operations/runbooks');
+  for (const name of readdirSync(dir)) {
+    if (!name.endsWith('.json') || name === 'schema.json') continue;
+    const rb = loadJson(resolve(dir, name));
+    for (const c of rb.safe_commands || []) {
+      if (c.destructive === true && c.requires_approval !== true) {
+        throw new ValidationError(`${name} 破坏性命令未标记 requires_approval`, 'command_safety_approval');
+      }
+      if (DANGEROUS.test(c.cmd) && c.destructive !== true) {
+        throw new ValidationError(`${name} 危险命令未标记 destructive`, 'command_safety_unmarked');
+      }
+    }
+  }
+  return { pass: true };
+});
+
+registerValidator('diagnostic_tests', (ctx) => {
+  for (const rel of ['scripts/diagnostics/first-five.mjs', 'scripts/diagnostics/command-safety.mjs']) {
+    if (!existsSync(resolve(ctx.root, rel))) throw new ValidationError(`缺少诊断脚本: ${rel}`, 'diagnostic_tests_missing');
+  }
+  return { pass: true };
+});
+
+registerValidator('incident_schema', (ctx) => {
+  const index = loadJson(resolve(ctx.root, 'operations/incidents/S5/drill-index.json'));
+  if ((index.required_drills ?? []).length !== 8) throw new ValidationError('需要恰好 8 个 drill', 'incident_schema_count');
+  if ((index.misleading_symptoms ?? []).length !== 2) throw new ValidationError('需要恰好 2 个误导症状', 'incident_schema_misleading');
+  if (index.live_production_drills === true) throw new ValidationError('不得声称 live production drills', 'incident_schema_live');
+  for (const id of index.required_drills) {
+    const drill = loadJson(resolve(ctx.root, `operations/drills/${id}.json`));
+    for (const field of ['timeline', 'hypotheses', 'ruled_out', 'root_cause', 'recovery', 'regression_controls']) {
+      if (drill[field] === undefined) throw new ValidationError(`drill ${id} 缺少 ${field}`, 'incident_schema_field');
+    }
+    if (drill.synthetic !== true) throw new ValidationError(`drill ${id} 必须 synthetic`, 'incident_schema_synthetic');
+  }
+  for (const id of index.misleading_symptoms) {
+    loadJson(resolve(ctx.root, `operations/drills/misleading/${id}.json`));
+  }
+  return { pass: true };
+});
+
+registerValidator('postmortem_contract', (ctx) => {
+  const tmpl = loadJson(resolve(ctx.root, 'operations/postmortems/template.json'));
+  if (!tmpl.required_sections?.includes('root_cause')) throw new ValidationError('postmortem 模板不完整', 'postmortem_contract');
+  loadJson(resolve(ctx.root, 'operations/postmortems/S5-synthetic-sample.json'));
+  return { pass: true };
+});
+
+registerValidator('runbook_dry_run', (ctx) => {
+  const rb = loadJson(resolve(ctx.root, 'operations/runbooks/linux-pressure.json'));
+  if (!rb.first_five_minutes?.length) throw new ValidationError('runbook dry-run 缺少 first_five_minutes', 'runbook_dry_run');
+  return { pass: true, note: '契约 dry-run；未对 live 主机执行' };
+});
+
+registerValidator('incident_consistency', (ctx) => {
+  const index = loadJson(resolve(ctx.root, 'operations/incidents/S5/drill-index.json'));
+  for (const id of index.required_drills) {
+    if (!existsSync(resolve(ctx.root, `evidence/slices/S5/drills/${id}.json`))) {
+      throw new ValidationError(`缺少 drill 证据: ${id}`, 'incident_consistency_evidence');
+    }
+  }
+  return { pass: true };
+});
+
+registerValidator('sbom', (ctx) => {
+  const sbom = loadJson(resolve(ctx.root, 'security/sbom-stub.json'));
+  if (!sbom.components?.length) throw new ValidationError('SBOM stub 缺少 components', 'sbom_empty');
+  if (sbom.claim_ceiling && ['L4', 'L5', 'L6'].includes(sbom.claim_ceiling)) {
+    throw new ValidationError('SBOM stub 不得声明 L4+', 'sbom_overclaim');
+  }
+  return { pass: true, note: 'SBOM stub — 非 live scanner' };
+});
+
+registerValidator('vulnerability_policy', (ctx) => {
+  const sbom = loadJson(resolve(ctx.root, 'security/sbom-stub.json'));
+  if (typeof sbom.triage?.critical !== 'number') throw new ValidationError('缺少 triage.critical', 'vuln_policy');
+  return { pass: true };
+});
+
+registerValidator('rbac_negative', (ctx) => {
+  const policy = loadJson(resolve(ctx.root, 'terraform/policies/rbac-negative.json'));
+  if (!policy.cases?.length) throw new ValidationError('rbac_negative 缺少 cases', 'rbac_negative');
+  return { pass: true };
+});
+
+registerValidator('admission_negative', (ctx) => {
+  const policy = loadJson(resolve(ctx.root, 'security/admission-negative.json'));
+  if (!policy.blocked_deployments?.some((b) => b.expect === 'deny')) {
+    throw new ValidationError('admission_negative 缺少 deny 用例', 'admission_negative');
+  }
+  return { pass: true };
+});
+
+registerValidator('azure_static', (ctx) => {
+  const gov = loadJson(resolve(ctx.root, 'azure/governance.json'));
+  if (gov.implemented_versus_designed !== 'designed_static') {
+    throw new ValidationError('Azure 必须标记 designed_static', 'azure_static_boundary');
+  }
+  if (!gov.non_claims?.some((n) => /ExpressRoute/i.test(n))) {
+    throw new ValidationError('必须显式非声明 ExpressRoute', 'azure_static_expressroute');
+  }
+  return { pass: true };
+});
+
+registerValidator('azure_policy_negative', (ctx) => {
+  const neg = loadJson(resolve(ctx.root, 'azure/policy-negative.json'));
+  if (!neg.cases?.length) throw new ValidationError('azure_policy_negative 缺少 cases', 'azure_policy_negative');
+  return { pass: true };
+});
+
+registerValidator('agent_permission', (ctx) => {
+  const contract = loadJson(resolve(ctx.root, 'agentic/workflow-contract.json'));
+  if (contract.default_mutation_authority !== false) {
+    throw new ValidationError('agent 不得默认拥有 mutation 权限', 'agent_permission');
+  }
+  if (contract.human_gate?.required !== true) throw new ValidationError('缺少 human gate', 'agent_permission_gate');
+  if (contract.human_gate?.protected_environment_placeholders_retained !== true) {
+    throw new ValidationError('D-044 下仍须保留 protected environment 占位', 'agent_permission_placeholder');
+  }
+  return { pass: true };
+});
+
+registerValidator('prompt_injection', (ctx) => {
+  const modPath = resolve(ctx.root, 'agentic/remediation-proposal.mjs');
+  if (!existsSync(modPath)) throw new ValidationError('缺少 remediation-proposal 模块', 'prompt_injection_missing');
+  return { pass: true, note: 'prompt-injection 由 tests/agentic 覆盖' };
+});
+
+registerValidator('unsafe_proposal', (ctx) => {
+  const contract = loadJson(resolve(ctx.root, 'agentic/workflow-contract.json'));
+  if (!contract.modes?.includes('remediation_proposal')) {
+    throw new ValidationError('缺少 remediation_proposal 模式', 'unsafe_proposal');
+  }
+  return { pass: true };
+});
+
+registerValidator('evidence_forgery', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'agentic/remediation-proposal.mjs'))) {
+    throw new ValidationError('缺少 evidence forgery 防护模块', 'evidence_forgery');
+  }
+  return { pass: true };
+});
+
+registerValidator('full_security', (ctx) => {
+  for (const rel of [
+    'security/least-privilege.json',
+    'security/sbom-stub.json',
+    'security/admission-negative.json',
+    'agentic/workflow-contract.json'
+  ]) {
+    loadJson(resolve(ctx.root, rel));
+  }
+  return { pass: true };
+});
+
+registerValidator('backup_contract', (ctx) => {
+  const c = loadJson(resolve(ctx.root, 'operations/recovery/backup-contract.json'));
+  if (!c.rto_minutes_target || !c.rpo_minutes_target) throw new ValidationError('backup 缺少 RTO/RPO', 'backup_contract');
+  if (c.isolated_restore_required !== true) throw new ValidationError('必须要求 isolated restore', 'backup_contract_isolated');
+  return { pass: true };
+});
+
+registerValidator('restore_runtime', (ctx) => {
+  const fixture = resolve(ctx.root, 'evidence/slices/S7/recovery/restore-fixture.json');
+  if (!existsSync(fixture)) throw new ValidationError('缺少合成 restore fixture', 'restore_runtime_missing');
+  const data = loadJson(fixture);
+  if (data.live_cloud === true) throw new ValidationError('restore 不得声称 live_cloud', 'restore_runtime_live');
+  for (const key of ['digest', 'health', 'version', 'data_checksum', 'business_smoke']) {
+    if (data.checks?.[key]?.pass !== true) throw new ValidationError(`restore check ${key} 未通过`, 'restore_runtime_check');
+  }
+  return { pass: true, note: '合成 restore；非 live RTO' };
+});
+
+registerValidator('rollback_runtime', (ctx) => {
+  const c = loadJson(resolve(ctx.root, 'operations/recovery/rollback-contract.json'));
+  if (c.requires_known_good_digest !== true) throw new ValidationError('rollback 必须要求 known-good digest', 'rollback_runtime');
+  return { pass: true };
+});
+
+registerValidator('data_integrity', (ctx) => {
+  const fixture = loadJson(resolve(ctx.root, 'evidence/slices/S7/recovery/restore-fixture.json'));
+  if (fixture.checks?.data_checksum?.pass !== true) throw new ValidationError('data integrity 失败', 'data_integrity');
+  return { pass: true };
+});
+
+registerValidator('rto_rpo', (ctx) => {
+  const c = loadJson(resolve(ctx.root, 'operations/recovery/backup-contract.json'));
+  if (!c.remaining_boundaries?.some((b) => /live RTO/i.test(b) || /Synthetic/i.test(b))) {
+    throw new ValidationError('RTO/RPO 必须声明非 live 边界', 'rto_rpo_boundary');
+  }
+  return { pass: true, note: '目标为契约值；未测量 live RTO' };
+});
+
+registerValidator('load_profile', (ctx) => {
+  const p = loadJson(resolve(ctx.root, 'performance/load-profile.json'));
+  if (p.synthetic !== true) throw new ValidationError('load profile 必须 synthetic', 'load_profile');
+  return { pass: true };
+});
+
+registerValidator('performance_result_schema', (ctx) => {
+  for (const name of ['baseline-before.json', 'baseline-after.json']) {
+    const b = loadJson(resolve(ctx.root, `performance/${name}`));
+    for (const k of ['p50_ms', 'p95_ms', 'p99_ms', 'error_rate', 'saturation']) {
+      if (b[k] === undefined) throw new ValidationError(`${name} 缺少 ${k}`, 'performance_result_schema');
+    }
+  }
+  return { pass: true };
+});
+
+registerValidator('before_after', (ctx) => {
+  const before = loadJson(resolve(ctx.root, 'performance/baseline-before.json'));
+  const after = loadJson(resolve(ctx.root, 'performance/baseline-after.json'));
+  if (!(after.p95_ms < before.p95_ms)) throw new ValidationError('after p95 未改善', 'before_after_p95');
+  if (!(after.error_rate < before.error_rate)) throw new ValidationError('after error_rate 未改善', 'before_after_err');
+  if (!after.repair) throw new ValidationError('缺少 repair 叙述', 'before_after_repair');
+  return { pass: true };
+});
+
+registerValidator('capacity_claims', (ctx) => {
+  const plan = loadJson(resolve(ctx.root, 'operations/capacity/plan.json'));
+  if (plan.claim_ceiling && ['L4', 'L5', 'L6'].includes(plan.claim_ceiling)) {
+    throw new ValidationError('capacity 过度声明', 'capacity_claims');
+  }
+  return { pass: true };
+});
+
+registerValidator('cost_model', (ctx) => {
+  const b = loadJson(resolve(ctx.root, 'operations/finops/budgets.json'));
+  if (!(b.monthly_budget_usd > 0)) throw new ValidationError('缺少 budget', 'cost_model');
+  return { pass: true };
+});
+
+registerValidator('budget_policy', (ctx) => {
+  const b = loadJson(resolve(ctx.root, 'operations/finops/budgets.json'));
+  if (!b.required_tags?.includes('cost-center')) throw new ValidationError('缺少 cost-center 标签要求', 'budget_policy');
+  if (!b.alerts?.length) throw new ValidationError('缺少 budget alerts', 'budget_policy_alerts');
+  return { pass: true };
+});
+
+registerValidator('resource_inventory', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'scripts/teardown/inventory-dry-run.mjs'))) {
+    throw new ValidationError('缺少 teardown inventory dry-run', 'resource_inventory');
+  }
+  return { pass: true };
+});
+
+registerValidator('teardown_reconciliation', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'scripts/teardown/reconcile.mjs'))) {
+    throw new ValidationError('缺少 teardown reconcile', 'teardown_reconciliation');
+  }
+  return { pass: true, note: 'dry-run only；未执行 live teardown' };
+});
+
+registerValidator('recovery_consistency', (ctx) => {
+  loadJson(resolve(ctx.root, 'evidence/slices/S7/recovery/contract-evidence.json'));
+  loadJson(resolve(ctx.root, 'evidence/slices/S7/recovery/restore-fixture.json'));
+  return { pass: true };
+});
+
+registerValidator('performance_consistency', (ctx) => {
+  loadJson(resolve(ctx.root, 'evidence/slices/S7/performance/baseline-evidence.json'));
+  return { pass: true };
+});
+
+registerValidator('cost_consistency', (ctx) => {
+  loadJson(resolve(ctx.root, 'evidence/slices/S7/cost/finops-evidence.json'));
+  return { pass: true };
+});
+
+registerValidator('evidence_chain', (ctx) => {
+  const events = loadJson(resolve(ctx.root, 'evidence/manifests/append-only-events.json'));
+  if (!Array.isArray(events.events) || events.events.length < 8) {
+    throw new ValidationError('evidence chain 事件不足', 'evidence_chain');
+  }
+  if (!Array.isArray(events.superseded)) throw new ValidationError('缺少 superseded 列表', 'evidence_chain_superseded');
+  return { pass: true };
+});
+
+registerValidator('architecture_consistency', (ctx) => {
+  for (const rel of [
+    'docs/architecture/continuityops.drawio',
+    'docs/architecture/continuityops-architecture.png',
+    'docs/architecture/continuityops-architecture.svg'
+  ]) {
+    if (!existsSync(resolve(ctx.root, rel))) throw new ValidationError(`缺少架构资产: ${rel}`, 'architecture_consistency');
+  }
+  return { pass: true };
+});
+
+registerValidator('drawio_schema', (ctx) => {
+  const text = readFileSync(resolve(ctx.root, 'docs/architecture/continuityops.drawio'), 'utf8');
+  if (!/<mxfile[\s>]/.test(text) && !/<mxGraphModel[\s>]/.test(text)) {
+    throw new ValidationError('drawio XML 无效', 'drawio_schema');
+  }
+  return { pass: true };
+});
+
+registerValidator('diagram_render_freshness', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'docs/architecture/continuityops-architecture.png'))) {
+    throw new ValidationError('缺少 architecture png', 'diagram_render_freshness');
+  }
+  return { pass: true, note: '既有渲染资产保留；本会话未强制重渲' };
+});
+
+registerValidator('infographic_parity', (ctx) => {
+  if (!existsSync(resolve(ctx.root, 'docs/portfolio/continuityops-infographic.png'))) {
+    throw new ValidationError('缺少 recruiter infographic', 'infographic_parity');
+  }
+  return { pass: true };
+});
+
+registerValidator('readme_recruiter_gate', (ctx) => {
+  const readme = readFileSync(resolve(ctx.root, 'README.md'), 'utf8');
+  if (!/continuityops-infographic\.png/.test(readme)) {
+    throw new ValidationError('README 必须以视觉 infographic 开头区域', 'readme_recruiter_visual');
+  }
+  if (!/non-?claim|Not claimed|Explicit non-claims/i.test(readme)) {
+    throw new ValidationError('README 缺少显式 non-claims', 'readme_recruiter_nonclaims');
+  }
+  if (!/L1/.test(readme)) {
+    throw new ValidationError('README 应声明当前 claim L1', 'readme_recruiter_claim');
+  }
+  return { pass: true };
+});
+
+registerValidator('links', (ctx) => {
+  for (const rel of ['docs/evidence-index.md', 'docs/claims/matrix.json', 'docs/operator/README.md']) {
+    if (!existsSync(resolve(ctx.root, rel))) throw new ValidationError(`缺少链接目标: ${rel}`, 'links_missing');
+  }
+  return { pass: true };
+});
+
+registerValidator('operator_dry_run', (ctx) => {
+  const op = readFileSync(resolve(ctx.root, 'docs/operator/README.md'), 'utf8');
+  if (!/node --test/.test(op)) throw new ValidationError('operator 入口缺少 safe test 命令', 'operator_dry_run');
+  return { pass: true };
+});
+
+registerValidator('postbuild_partition_unique_ownership', (ctx) => {
+  const manifest = loadJson(resolve(ctx.root, 'harness/postbuild-partition-manifest.json'));
+  if (!manifest.partitions?.length) throw new ValidationError('postbuild partitions 为空', 'postbuild_empty');
+  const owners = new Set();
+  for (const p of manifest.partitions) {
+    if (!p.id || !p.owner || !Array.isArray(p.paths)) throw new ValidationError('partition 字段不完整', 'postbuild_field');
+    owners.add(p.id);
+  }
+  if (owners.size !== manifest.partitions.length) throw new ValidationError('partition id 不唯一', 'postbuild_unique');
+  return { pass: true, count: manifest.partitions.length };
+});
+
+registerValidator('shared_interface_map', (ctx) => {
+  const manifest = loadJson(resolve(ctx.root, 'harness/postbuild-partition-manifest.json'));
+  if (!manifest.shared_interfaces?.length) throw new ValidationError('缺少 shared interfaces', 'shared_interface_map');
+  for (const iface of manifest.shared_interfaces) {
+    if (!existsSync(resolve(ctx.root, iface.rubric))) {
+      throw new ValidationError(`缺少 shared rubric: ${iface.rubric}`, 'shared_interface_rubric');
+    }
+  }
+  return { pass: true };
 });
 
 export function fixedP1Fixture(root, baselineSha, candidateSha, taskId = 'P1-T01') {

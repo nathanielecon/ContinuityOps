@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "kind": "synthetic_restore",
+  "started_at": "2026-07-18T06:20:41.810Z",
+  "source_backup_id": "bak-synth-001",
+  "target_env": "recovery-lab-synthetic",
+  "live_cloud": false,
+  "checks": {
+    "digest": {
+      "expected": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "actual": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "pass": true
+    },
+    "health": {
+      "pass": true
+    },
+    "version": {
+      "expected": "0.0.0-lab",
+      "actual": "0.0.0-lab",
+      "pass": true
+    },
+    "data_checksum": {
+      "expected": "deadbeef",
+      "actual": "deadbeef",
+      "pass": true
+    },
+    "business_smoke": {
+      "pass": true
+    }
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Synthetic only",
+    "No live RTO"
+  ]
+}

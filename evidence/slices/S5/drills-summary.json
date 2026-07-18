@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "task_id": "P5-T02",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "command": "node scripts/project.mjs validate P5-T02",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:25:10.020Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "incident_schema": true,
+    "scenario_reset": true,
+    "recovery_smoke": true,
+    "postmortem_contract": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Synthetic fixtures only",
+    "No live production drills"
+  ],
+  "started_at": "2026-07-18T06:25:10.010Z",
+  "completed_at": "2026-07-18T06:25:10.020Z",
+  "validator_details": [
+    {
+      "id": "incident_schema",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "scenario_reset",
+      "result": {
+        "pass": true,
+        "slice": "S5"
+      }
+    },
+    {
+      "id": "recovery_smoke",
+      "result": {
+        "pass": true,
+        "slice": "S5"
+      }
+    },
+    {
+      "id": "postmortem_contract",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "incident_schema",
+    "scenario_reset",
+    "recovery_smoke",
+    "postmortem_contract"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S5/drills-summary.json"
+}

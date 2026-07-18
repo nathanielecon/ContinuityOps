@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "required_drills": [
+    "crashloop-backlog",
+    "readiness-cascade",
+    "dns-partial-failure",
+    "networkpolicy-deny",
+    "disk-pressure-node",
+    "queue-poison-message",
+    "error-budget-burn",
+    "config-drift-digest"
+  ],
+  "misleading_symptoms": [
+    "misleading-cpu-as-network",
+    "misleading-5xx-as-app-bug"
+  ],
+  "claim_ceiling": "L1",
+  "live_production_drills": false
+}

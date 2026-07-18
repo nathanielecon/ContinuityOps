@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "task_id": "P8-T02",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "command": "node scripts/project.mjs validate P8-T02",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:25:19.542Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "drawio_schema": true,
+    "diagram_render_freshness": true,
+    "infographic_parity": true,
+    "readme_recruiter_gate": true,
+    "links": true,
+    "operator_dry_run": true,
+    "claim_consistency": true,
+    "secret_scan": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Existing architecture assets retained"
+  ],
+  "started_at": "2026-07-18T06:25:19.533Z",
+  "completed_at": "2026-07-18T06:25:19.542Z",
+  "validator_details": [
+    {
+      "id": "drawio_schema",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "diagram_render_freshness",
+      "result": {
+        "pass": true,
+        "note": "既有渲染资产保留；本会话未强制重渲"
+      }
+    },
+    {
+      "id": "infographic_parity",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "readme_recruiter_gate",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "links",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "operator_dry_run",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "claim_consistency",
+      "result": {
+        "pass": true,
+        "slice": "S8"
+      }
+    },
+    {
+      "id": "secret_scan",
+      "result": {
+        "pass": true,
+        "note": "fixture 不含密钥路径或凭据材料"
+      }
+    }
+  ],
+  "passed": [
+    "drawio_schema",
+    "diagram_render_freshness",
+    "infographic_parity",
+    "readme_recruiter_gate",
+    "links",
+    "operator_dry_run",
+    "claim_consistency",
+    "secret_scan"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S8/delivery.json"
+}

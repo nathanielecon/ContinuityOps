@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "id": "PM-S5-001",
+  "summary": "Synthetic sample postmortem for drill certification",
+  "impact": "Lab-only; no customer impact",
+  "timeline": [
+    "Alert",
+    "Triage",
+    "Recover",
+    "Verify"
+  ],
+  "root_cause": "Injected fixture failure",
+  "corrective_actions": [
+    "Improve runbook link",
+    "Add misleading-symptom case"
+  ],
+  "detection_gaps": [
+    "Need earlier burn-rate signal"
+  ],
+  "synthetic": true
+}

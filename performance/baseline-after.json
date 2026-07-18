@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "synth-steady-100rps",
+  "p50_ms": 95,
+  "p95_ms": 210,
+  "p99_ms": 420,
+  "error_rate": 0.005,
+  "saturation": {
+    "cpu": 0.55,
+    "memory": 0.58
+  },
+  "scaling": {
+    "replicas": 4
+  },
+  "repair": "Increased HPA max + fixed N+1 query in worker hot path (synthetic narrative)",
+  "synthetic": true
+}

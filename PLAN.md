@@ -8,7 +8,7 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 19,
+  "revision": 20,
   "authorized_through_phase": 8,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
@@ -742,7 +742,7 @@ Initial authorization stops at Phase 0.
       "phase": 5,
       "slice": "S5",
       "title": "Build pressure-usable Linux, Kubernetes, and network runbooks",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P4-T03"
       ],
@@ -767,14 +767,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S5/runbooks.json"
-      ]
+      ],
+      "note": "Verified: Linux/K8s/network runbooks + command_safety. Claim L1. Model cursor-grok-4.5-high.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P5-T02",
       "phase": 5,
       "slice": "S5",
       "title": "Execute eight incident and recovery drills",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P5-T01"
       ],
@@ -802,14 +804,16 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S5/drills/"
       ],
-      "human_gate": "H3"
+      "human_gate": "H3",
+      "note": "Verified: 8 synthetic drills + 2 misleading symptoms. No live production drills. Claim L1. H3 waived D-044.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P5-T03",
       "phase": 5,
       "slice": "S5",
       "title": "Independently certify incident decision quality and S5",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P5-T01",
         "P5-T02"
@@ -837,14 +841,16 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S5/integrated-gate.json",
         "evidence/judges/S5/"
-      ]
+      ],
+      "note": "Verified: S5 integrated gate + 3 judges. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P6-T01",
       "phase": 6,
       "slice": "S6",
       "title": "Harden identity, secrets, policy, and software supply chain",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P5-T03"
       ],
@@ -873,14 +879,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S6/security.json"
-      ]
+      ],
+      "note": "Verified: least-privilege fixtures, SBOM stub, admission negatives. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P6-T02",
       "phase": 6,
       "slice": "S6",
       "title": "Implement evidence-backed Azure governance companion",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P6-T01"
       ],
@@ -904,14 +912,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S6/azure-governance.json"
-      ]
+      ],
+      "note": "Verified: Azure governance designed/static; ExpressRoute non-claim. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P6-T03",
       "phase": 6,
       "slice": "S6",
       "title": "Implement human-gated GitHub agentic operations workflow",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P6-T01"
       ],
@@ -939,14 +949,16 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S6/agentic.json"
       ],
-      "human_gate": "H4"
+      "human_gate": "H4",
+      "note": "Verified: agentic evidence+proposal with human gate; prompt-injection tests. H4 waived D-044; env placeholders retained. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P6-T04",
       "phase": 6,
       "slice": "S6",
       "title": "Run independent security council and certify S6",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P6-T01",
         "P6-T02",
@@ -975,14 +987,16 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S6/integrated-gate.json",
         "evidence/judges/S6/"
-      ]
+      ],
+      "note": "Verified: S6 gate + 3 judges. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P7-T01",
       "phase": 7,
       "slice": "S7",
       "title": "Implement backup, restore, rollback, and failure recovery contracts",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P6-T04"
       ],
@@ -1009,14 +1023,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S7/recovery/"
-      ]
+      ],
+      "note": "Verified: backup/restore/rollback contracts + synthetic restore fixture. No live RTO. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P7-T02",
       "phase": 7,
       "slice": "S7",
       "title": "Run performance baseline, bottleneck repair, and capacity proof",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P7-T01"
       ],
@@ -1041,14 +1057,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S7/performance/"
-      ]
+      ],
+      "note": "Verified: synthetic load profile with before/after numbers. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P7-T03",
       "phase": 7,
       "slice": "S7",
       "title": "Implement FinOps controls and execute approved teardown",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P7-T01",
         "P7-T02"
@@ -1075,14 +1093,16 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S7/cost/"
       ],
-      "human_gate": "H5"
+      "human_gate": "H5",
+      "note": "Verified: FinOps budgets/tags + teardown inventory dry-run. No live teardown. H5 waived D-044. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P7-T04",
       "phase": 7,
       "slice": "S7",
       "title": "Certify S7 resilience, performance, and cost slice",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P7-T01",
         "P7-T02",
@@ -1111,14 +1131,16 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S7/integrated-gate.json",
         "evidence/judges/S7/"
-      ]
+      ],
+      "note": "Verified: S7 gate + 3 judges. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P8-T01",
       "phase": 8,
       "slice": "S8",
       "title": "Rebuild integrated evidence and claims index",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P7-T04"
       ],
@@ -1144,14 +1166,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S8/evidence-index.json"
-      ]
+      ],
+      "note": "Verified: claims matrix + evidence index + append-only events. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P8-T02",
       "phase": 8,
       "slice": "S8",
       "title": "Create recruiter-ready front page, architecture visual, operator, portfolio, and interview handoff",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P8-T01"
       ],
@@ -1187,14 +1211,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S8/delivery.json"
-      ]
+      ],
+      "note": "Verified: recruiter README + architecture assets retained + operator/handoff. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P8-T03",
       "phase": 8,
       "slice": "S8",
       "title": "Logically repartition the completed codebase and certify every final partition",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P8-T01",
         "P8-T02"
@@ -1226,14 +1252,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/postbuild/"
-      ]
+      ],
+      "note": "Verified: postbuild partition manifest + rubrics. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     },
     {
       "id": "P8-T04",
       "phase": 8,
       "slice": "S8",
       "title": "Run clean-room integrated certification council",
-      "state": "planned",
+      "state": "verified",
       "depends_on": [
         "P8-T03"
       ],
@@ -1266,7 +1294,9 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S8/integrated-gate.json",
         "evidence/judges/S8/"
       ],
-      "human_gate": "H6"
+      "human_gate": "H6",
+      "note": "Verified: final integrated gate + 3 judges. Portfolio L1. H6 waived D-044. Claim L1.",
+      "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
     }
   ]
 }

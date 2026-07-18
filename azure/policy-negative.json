@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "cases": [
+    {
+      "id": "public-ip-lab",
+      "expect": "deny"
+    },
+    {
+      "id": "missing-cost-center-tag",
+      "expect": "deny"
+    }
+  ]
+}

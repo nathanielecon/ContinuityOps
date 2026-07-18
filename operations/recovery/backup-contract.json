@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "rto_minutes_target": 60,
+  "rpo_minutes_target": 15,
+  "justification": "Lab SaaS — synthetic targets for contract tests only",
+  "isolated_restore_required": true,
+  "verification": [
+    "digest",
+    "health",
+    "version",
+    "data_checksum",
+    "business_smoke"
+  ],
+  "claim_ceiling": "L1",
+  "remaining_boundaries": [
+    "No live RTO measured",
+    "Synthetic restore fixtures only"
+  ]
+}
