@@ -11,7 +11,7 @@
     "status": "frozen_pending_H0"
   },
   "bundle_hashes": {
-    "plan_sha256": "72e21d7e58e351d2bd4b22cfcd73d5a0fc5d6c1ce29f73843375674ad31e2026",
+    "plan_sha256": "c44fbac28eb76347e1b15bbf561a8aabb17c118c01f3ac9d003635eacd34400e",
     "execution_contract_sha256": "5a3eff5d41baf5afac2a8c82d9b0312df1e65d86bce142ba07ed088f3cc184bf",
     "validator_bundle_sha256": "b8c1b48235315d183e34978f79544294d958cc0b95dd520f9005002be9d3c6bc",
     "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
@@ -20,9 +20,11 @@
   },
   "approval_binding": {
     "path": "harness/approvals/H0.binding.json",
-    "status": "waiting_human",
-    "receipt_sha256": null,
-    "agent_minted_receipt": false
+    "status": "bound",
+    "receipt_sha256": "2f44a0a9f5ee01ce55aaafb72a60c38d48c536d65a5f64b06ae10dab8d60015c",
+    "receipt_source": "https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5008633820",
+    "agent_minted_receipt": false,
+    "bound_at": "2026-07-17T23:58:30Z"
   },
   "mutation_policy_tests": {
     "positive": "rubric hash matches pinned SHA-256",
@@ -65,12 +67,12 @@
     }
   ],
   "remaining_risks": [
-    "H0 人工批准尚未签署；不得授权 Phase 1 或声明 S0 通过。",
-    "当前 main 缺少 harness/partition-manifest.json；后续编排应确认 P0-T01 分区清单是否需恢复到 main。"
+    "H0 已绑定人类收据；仍不得授权 Phase 1，直至 P0-T05 / S0 认证完成。",
+    "当前 main 缺少 harness/partition-manifest.json；后续编排应确认 P0-T01 分区清单是否需要恢复到 main。"
   ],
   "evidence_paths": [
     "evidence/slices/S0/rubric-freeze.json"
   ],
   "recorded_at": "2026-07-17T21:45:59.335Z",
-  "hash_refresh_note": "2026-07-17 supervisor refreshed plan_sha256 after PLAN.md state bump (P0-T04 review + H0 package) so H0 binds current files."
+  "hash_refresh_note": "2026-07-17 supervisor refreshed plan_sha256 after PLAN.md P0-T04 verified + H0 bind (prior sign-time plan digest retained on human receipt: 72e21d7e58e351d2bd4b22cfcd73d5a0fc5d6c1ce29f73843375674ad31e2026)."
 }

@@ -107,6 +107,17 @@ GitHub action; junior owns it. H0 still waiting owner amendment on #42.
 
 Contracts: `CHIEF_SUPERVISOR.md`, `JUNIOR_SUPERVISOR.zh.md`, `MONITOR.zh.md`.
 
+## 2026-07-17T23:58Z H0 bound — P0-T05 ready
+
+| Item | State |
+| --- | --- |
+| Main tip at sign | `28bfb64` |
+| P0-T03 | verified |
+| P0-T04 | **verified** (H0 bound) |
+| **H0** | **bound** — #42 comment 5008633820 → [`H0.binding.json`](../../../harness/approvals/H0.binding.json) |
+| Next | Junior drives [`POST_H0_RESUME.md`](./POST_H0_RESUME.md) → P0-T05 |
+| Hard stop | Agents **must not** mint H0–H6 or authorize Phase 1 until S0 certifies |
+
 ## 2026-07-17T21:55Z STOP — H0 human gate
 
 | Item | State |

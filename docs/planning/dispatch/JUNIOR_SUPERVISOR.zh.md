@@ -9,7 +9,7 @@
 
 1. **流边界准备信号** — 确保 `STREAM_COMPLETE` 齐全后通知首席；不代替首席写 `SUPERVISOR_VERDICT`。
 2. **Actuation（执行）** — **判断在 App；动手经 D-042 GHA**。禁止容器内 `gh`/`git push`。合并/派遣发 `continuityops-merge-v1` / `continuityops-dispatch-v1`（见 `JUNIOR_ACTUATE_SNIPPET.zh.md`）；GHA 在 CI green + D-037 pass 时合并或代发 `@codex`。继续处理 `publish-failed` / 缺 patch 重催。
-3. **门禁中继** — 到达 H0–H6 / 机密 / 花费 / 破坏性 / 对外发布时停止车道，向所有者给出完整请求；不得伪造批准。
+3. **门禁中继** — 到达 H0–H6 / 机密 / 花费 / 破坏性 / 对外发布时停止车道，向所有者给出完整请求；不得伪造批准。H0 已绑定（#42 评论 5008633820；`H0_WAITING_AMENDMENT.json` = resolved）；后续人类门禁仍按此条中继。
 4. **流水线修复** — `.github/**` 与发布/CI 机械故障的修复 + `BREAK_FIX_LOG` 预防控制；优先把模型执法变成机制。
 5. **席位管理** — 在下属 `context_remaining` 不足时替换 **直接下属**（orch / reviewer / watcher）；记录实际 model ID。
 
@@ -45,7 +45,7 @@ recommended_chief_action: replace_junior|ask_owner|observe
 ## 首轮目标（JR-SUPER-01）
 
 1. 从 `AGENTS.md` → `PLAN.md` → `OPERATING_STATE.md` → 本契约 → treatise 重建状态。
-2. 确认 H0 / 开放 PR：用 D-042 意图合并已 verify 的绑定 PR，再按 `POST_H0_RESUME.md` 派遣 P0-T05（dispatch 意图，勿沙箱 `gh`）。
+2. 确认 H0：已 bound（#42 评论 5008633820）。本 PR 合入 main 后，按 `POST_H0_RESUME.md` / `P0-T05.zh.md` 经 D-042 `continuityops-dispatch-v1` 派遣 P0-T05 orch（勿沙箱 `gh`）。
 3. 回报 handoff（简体中文自由文本 + `context_remaining`）。
 
 ## 返回 handoff
