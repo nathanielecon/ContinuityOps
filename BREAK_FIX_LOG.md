@@ -517,4 +517,4 @@ ContinuityOps incidents yet.
 - **Symptom:** Apply [29644551841](https://github.com/nathanielecon/ContinuityOps/actions/runs/29644551841) failed: `InvalidParameterException: unsupported Kubernetes version 1.29`. VPC/IAM/SQS/Lambda created; EKS not.
 - **Root cause:** Default `cluster_version = "1.29"` no longer offered in account/region.
 - **Fix:** Bump default to `1.32`; re-apply.
-- **Verified by:** pending green apply after fix land.
+- **Verified by:** apply green [29644662492](https://github.com/nathanielecon/ContinuityOps/actions/runs/29644662492); teardown [29645052414](https://github.com/nathanielecon/ContinuityOps/actions/runs/29645052414).

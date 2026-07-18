@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "max_claim_level": "L4",
-  "max_claim_scope": "staging live-marker + remote state via continuityops-gha only",
+  "max_claim_scope": "AWS lab staging via continuityops-gha (apply + lab drill/RTO + teardown); not production; not Azure",
   "components": [
     {
       "id": "upstream-integration",
@@ -15,46 +15,53 @@
       "claim_level": "L4",
       "evidence": [
         "evidence/slices/S1/terraform.json",
-        "evidence/hosted/cloud-apply-staging-2026-07-18.json"
-      ],
-      "notes": "OIDC plan 29642718513 + apply 29643569047; staging CloudWatch live-marker + tfstate"
+        "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
     },
     {
       "id": "hosted-ci-stubs",
       "claim_level": "L4",
       "evidence": [
         "evidence/slices/S1/hosted-ci.json",
-        "evidence/hosted/cloud-apply-staging-2026-07-18.json"
-      ],
-      "notes": "continuityops-terraform.yml → continuityops-gha live; Environment continuityops"
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
     },
     {
       "id": "kubernetes-chart",
-      "claim_level": "L1",
+      "claim_level": "L4",
       "evidence": [
-        "evidence/slices/S2/chart-contract.json"
-      ]
+        "evidence/slices/S2/chart-contract.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ],
+      "notes": "Live EKS cops-staging 1.32 apply run 29644662492; destroyed in teardown 29645052414"
     },
     {
       "id": "serverless-worker",
-      "claim_level": "L1",
+      "claim_level": "L4",
       "evidence": [
-        "evidence/slices/S3/serverless.json"
-      ]
+        "evidence/slices/S3/serverless.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ],
+      "notes": "Live Lambda+SQS apply 29644662492"
     },
     {
       "id": "observability",
-      "claim_level": "L1",
+      "claim_level": "L4",
       "evidence": [
-        "evidence/slices/S4/telemetry.json"
-      ]
+        "evidence/slices/S4/telemetry.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ],
+      "notes": "CloudWatch log groups live-marker + lab-drill-rto applied"
     },
     {
       "id": "runbooks-drills",
-      "claim_level": "L1",
+      "claim_level": "L4",
       "evidence": [
-        "evidence/slices/S5/runbooks.json"
-      ]
+        "evidence/slices/S5/runbooks.json",
+        "evidence/hosted/lab-drill-rto-29645042815.json"
+      ],
+      "notes": "Lab incident drill (not production) run 29645042815"
     },
     {
       "id": "security-sbom",
@@ -68,7 +75,8 @@
       "claim_level": "L1",
       "evidence": [
         "evidence/slices/S6/azure-governance.json"
-      ]
+      ],
+      "notes": "D-046: live Azure apply out of ContinuityOps AWS-lab ceiling"
     },
     {
       "id": "agentic-workflow",
@@ -79,10 +87,12 @@
     },
     {
       "id": "recovery",
-      "claim_level": "L1",
+      "claim_level": "L4",
       "evidence": [
-        "evidence/slices/S7/recovery/"
-      ]
+        "evidence/slices/S7/recovery/",
+        "evidence/hosted/lab-drill-rto-29645042815.json"
+      ],
+      "notes": "Lab RTO wall-clock measured in drill recorder"
     },
     {
       "id": "performance",
@@ -93,26 +103,25 @@
     },
     {
       "id": "finops-teardown",
-      "claim_level": "L1",
+      "claim_level": "L4",
       "evidence": [
-        "evidence/slices/S7/cost/"
-      ]
+        "evidence/slices/S7/cost/",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ],
+      "notes": "Live terraform destroy staging run 29645052414"
     },
     {
       "id": "portfolio-delivery",
-      "claim_level": "L1",
+      "claim_level": "L4",
       "evidence": [
-        "evidence/slices/S8/delivery.json"
+        "evidence/slices/S8/delivery.json",
+        "evidence/slices/S8/CHIEF_VERDICT_LAB_LIVE_2026-07-18.json"
       ]
     }
   ],
   "non_claims": [
-    "No live EKS cluster apply",
-    "No live Lambda worker apply",
-    "No live Azure apply",
-    "No live production incident drills",
-    "No live RTO/RPO measurement",
-    "No live teardown of cloud resources",
-    "No CursorCloudAgent / in-pod AWS credentials on Cloud seat"
+    "No CursorCloudAgent / in-pod AWS credentials on Cloud seat (OIDC control plane by design)",
+    "No production (customer) incident drills — lab drills only",
+    "No live Azure apply — ContinuityOps AWS-lab ceiling (D-046)"
   ]
 }
