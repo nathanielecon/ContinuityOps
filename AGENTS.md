@@ -315,24 +315,28 @@ Durable, non-obvious notes for future cloud agents working in this environment.
 - **No secrets in the Codex/Cursor Environment** for warm cache (D-026). Repo
   work does not require AWS keys in this VM.
 
+### What actually fixed live AWS (2026-07-14/15) — not Cursor STS
+
+| Path | Evidence |
+| --- | --- |
+| **GitHub OIDC → `project-a-lzlab-gha`** | Role last used **2026-07-15**; successful `landing-zone-lab.yml` runs; live lab evidence under `assumed-role/project-a-lzlab-gha` |
+| **`CursorCloudAgent` injection** | Role created Jul 14; **never assumed** (`RoleLastUsed` empty; CloudTrail only `CreateRole` / `AttachRolePolicy`) |
+
+The prior “fix” was **change apply control plane** (GHA OIDC / local bottleneck), **not** finishing Cursor role injection. BF-2026-010 `NoCredentials` in this Cloud seat is real and expected on Pro+.
+
 ### Paste for stuck agents
 
-When blocked on AWS identity inside Cursor cloud (Pro+), paste/follow this:
-
 ```text
-This Cloud seat cannot get AWS STS. CURSOR_AWS_ASSUME_IAM_ROLE_ARN → CursorCloudAgent may be set, but AWS_PROFILE / cursor-cloud-agent is never injected on Pro+ without a team External ID (Dashboard → Settings → Advanced / Bedrock IAM Role — Teams/Enterprise only). CursorCloudAgent is typically never assumed. NoCredentials is expected (BF-2026-010).
-
-Do not block on finishing Cursor role injection or putting long-lived keys in Cloud secrets.
-
-For live AWS: use this project's existing apply control plane (e.g. GitHub OIDC → CI role, or a local aws login bottleneck). Continue repo-only work in the Cloud seat until one of those paths runs.
+NoCredentials is expected on Pro+ without team External ID. CursorCloudAgent has never been assumed.
+Prior fix (2026-07-14/15): GitHub OIDC → project-a-lzlab-gha via landing-zone-lab.yml, or local aws login bottleneck.
+Do not block on CURSOR_AWS_ASSUME_IAM_ROLE_ARN. Escalate live AWS to GHA or local; continue repo-only here.
 ```
 
 Account binding (not a secret): `283077380808` /
-`arn:aws:iam::283077380808:root`. See `BREAK_FIX_LOG.md` BF-2026-010.
+`arn:aws:iam::283077380808:root`. Default CI role:
+`arn:aws:iam::283077380808:role/project-a-lzlab-gha`. See BF-2026-010.
 
 ### AWS injection stop table (Cloud seat)
-
-Run once at session start when live AWS might be needed:
 
 ```bash
 env | grep AWS_PROFILE
@@ -341,9 +345,10 @@ aws sts get-caller-identity
 
 | Observation | Action |
 | --- | --- |
-| Caller ARN contains `assumed-role/CursorCloudAgent` (account `283077380808`) | Proceed with in-seat AWS API work; record identity in evidence (no secrets). |
-| `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` set **and** `AWS_PROFILE` / usable config present **and** STS succeeds as `CursorCloudAgent` | Same as above. |
-| `NoCredentials` **or** `AWS_PROFILE` unset **or** no `~/.aws/config` | **STOP.** Injection absent — do not invent keys, do not put long-lived keys in Cloud secrets, do not spin on role ARN. Escalate live AWS to GHA OIDC or local `aws login`; continue **repo-only** here. |
-| Report when stopping | `AWS_PROFILE`, `AWS_CONFIG_FILE` (values or `<unset>`), STS error text, and that `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` was set/unset — then stop. |
+| Caller ARN contains `assumed-role/CursorCloudAgent` | Rare on Pro+; only if Teams External ID path was completed. Proceed; record identity (no secrets). |
+| `NoCredentials` / `AWS_PROFILE` unset / no `~/.aws/config` | **STOP.** Injection absent — stop; no keys. Do not invent keys or put long-lived keys in Cloud secrets. |
+| Live AWS still needed | **1)** GHA OIDC (`gh workflow run landing-zone-lab.yml --repo nathanielecon/cloud -f action=plan|apply` with `AWS_ROLE_ARN_LZ_LAB` / `project-a-lzlab-gha`); **2)** local `aws login` bottleneck (laptop); **3)** Teams External ID + trust update only if insisting on in-pod AWS. Cloud seat continues **repo-only** until (1) or (2) runs. |
 
-Verified 2026-07-18 this seat: `AWS_PROFILE=<unset>`, `AWS_CONFIG_FILE=<unset>`, STS `NoCredentials`, role ARN string present → **injection absent — stop; no keys.**
+Verified 2026-07-18 this seat: `AWS_PROFILE=<unset>`, STS `NoCredentials`, `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` set → **injection absent — stop; no keys.**
+
+Workaround detail (order): (1) proven GHA OIDC; (2) proven local bottleneck; (3) Teams → Settings → **Bedrock IAM Role** → Validate & Save → External ID into `CursorCloudAgent` trust → **new** Cloud Agent pod. Role may trust `arn:aws:iam::289469326074:role/roleAssumer` without External ID condition — Cursor still will not inject without team External ID UI (Pro+ has neither panel).

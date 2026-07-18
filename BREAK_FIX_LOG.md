@@ -463,26 +463,23 @@ ContinuityOps incidents yet.
 ## 2026-07-18 — BF-2026-010 — Lead agent dependencies vs Cursor Pro+ AWS identity
 
 - **Slice/task:** Portfolio / Phases 1–8 live claim elevation; chief supervisor seat.
-- **Symptom:** ContinuityOps reached `portfolio-certified-L1` (34/34 PLAN tasks at L1) while agents spun on `aws sts get-caller-identity` → `NoCredentials` and env `CURSOR_AWS_ASSUME_IAM_ROLE_ARN=arn:aws:iam::283077380808:role/CursorCloudAgent`. Browser Google→AWS reached Builder ID OAuth only; console cookies ≠ CLI credentials.
-- **Root cause (corrected 2026-07-18 owner pastes):** This Cloud seat **cannot get AWS STS** on **Pro+ without a team External ID**. `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` → `CursorCloudAgent` may be set, but **`AWS_PROFILE` / `cursor-cloud-agent` is never injected** (Dashboard → Settings → Advanced / Bedrock IAM Role is **Teams/Enterprise only**). `CursorCloudAgent` is typically **never assumed**. `NoCredentials` is **expected**. Owner Google/console sign-in does not inject API credentials into the VM. Do **not** finish by putting long-lived keys in Cloud secrets (D-026 / warm-cache red line).
-- **Target account (owner-supplied, for binding — not a secret):**
-  - Account: `283077380808`
-  - Root ARN: `arn:aws:iam::283077380808:root`
-  - Env role string (informational only): `arn:aws:iam::283077380808:role/CursorCloudAgent`
-- **Fix / control (prevention):**
-  1. **Do not block** on Cursor role injection, in-VM STS, or Cloud secret keys.
-  2. **Live AWS** uses this project's **existing apply control plane**: GitHub OIDC → CI role (Project A pattern: `landing-zone-lab.yml` / `project-a-lzlab-gha`, or ContinuityOps `terraform-*.yml` OIDC once trusted), or a **local `aws login` bottleneck** with evidence returned to the repo.
-  3. **Continue repo-only** in the Cloud seat until one of those paths runs; claim ceiling ≤ L1 (or L3 when hosted checks actually run) until GHA/local produces L4+ evidence.
-  4. **Google / console rule:** always *try* Google on browser AWS paths; console session ≠ CLI/API readiness.
-  5. **Preflight for L4+ dispatch:** confirm the **chosen carrier** (GHA OIDC or local bottleneck) — not that this VM can assume `CursorCloudAgent`.
-- **Regression control added:** Canonical stuck-agent paste in `AGENTS.md` § Paste for stuck agents (Pro+ / External ID / Bedrock IAM Role note). Never mark L4–L6 from a Pro+ STS failure loop; never store long-lived AWS keys in Cursor/Codex Environment secrets.
-- **Fresh verification commands/results (2026-07-18 re-check after owner “should now inject”):**
-  - `AWS_PROFILE=<unset>`; `AWS_CONFIG_FILE=<unset>`; no `~/.aws/config` / `credentials`
-  - `CURSOR_AWS_ASSUME_IAM_ROLE_ARN=arn:aws:iam::283077380808:role/CursorCloudAgent` (set)
-  - `aws sts get-caller-identity` → `NoCredentials` (exit 253)
-  - **Decision recorded:** injection absent — stop; no keys.
-- **Hosted/cloud verification:** via GHA OIDC or local bottleneck only for account `283077380808`.
-- **Claim/status changes:** none elevated; unblocks repo-only continuation.
-- **Remaining risk/follow-up:** run/wire ContinuityOps (or Project A) GHA OIDC apply against `283077380808` when elevating S1–S7 live claims.
-- **Verified by:** chief supervisor + owner pastes (2026-07-18).
-- **Durable control:** `AGENTS.md` § AWS injection stop table — STOP on `NoCredentials` / missing `AWS_PROFILE`; never invent keys.
+- **Symptom:** Agents treated `NoCredentials` + set `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` as an unfinished Cursor injection bug and blocked. ContinuityOps is `portfolio-certified-L1`; live L4+ needs a working apply control plane.
+- **What was actually fixed (2026-07-14/15) — owner-confirmed:**
+  | Path | Evidence |
+  | --- | --- |
+  | **GitHub OIDC → `project-a-lzlab-gha`** | Role last used **2026-07-15**; successful `landing-zone-lab.yml` runs; live lab under `assumed-role/project-a-lzlab-gha` |
+  | **`CursorCloudAgent` injection** | Role created Jul 14; **never assumed** (`RoleLastUsed` empty; CloudTrail only `CreateRole` / `AttachRolePolicy`) |
+- **Root cause:** Individual/Pro+ plan has **no team External ID**. Dashboard **Settings → Advanced / Bedrock IAM Role** (Teams/Enterprise only) is absent on Pro+. Secret/`CURSOR_AWS_ASSUME_IAM_ROLE_ARN` may be set and role may trust `arn:aws:iam::289469326074:role/roleAssumer` (no External ID condition), but Cursor **will not inject** `AWS_PROFILE` / `cursor-cloud-agent` without that External ID. Using Team ID as External ID is wrong. Prior “fix” was **change control plane**, not finish Cursor STS.
+- **Target account (not a secret):** `283077380808` / root `arn:aws:iam::283077380808:root`. CI role: `arn:aws:iam::283077380808:role/project-a-lzlab-gha`. Env string only: `.../role/CursorCloudAgent`.
+- **Fix / control (workarounds in order):**
+  1. **Proven — GitHub OIDC:** Cloud seat edits repo only; CI applies — e.g. `gh workflow run landing-zone-lab.yml --repo nathanielecon/cloud -f action=plan|apply` with `id-token: write` and `AWS_ROLE_ARN_LZ_LAB` / default `project-a-lzlab-gha`.
+  2. **Proven — local bottleneck:** laptop `aws login` as account `283077380808`; orchestrator runs apply/evidence locally; Cloud seat stays repo-only.
+  3. **Only if insisting on in-pod AWS:** upgrade to Teams → Bedrock IAM Role → Validate & Save → External ID in `CursorCloudAgent` trust → **new** Cloud Agent pod.
+  4. **Do not:** put long-lived access keys or root session tokens in Cloud secrets.
+  5. **Do not block** on `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` / in-VM STS on Pro+.
+- **Regression control added:** Stuck-agent paste + “What actually fixed live AWS” table + injection stop table in `AGENTS.md`. Phrase: **injection absent — stop; no keys.**
+- **Fresh verification (this ContinuityOps Cloud seat, 2026-07-18):** `AWS_PROFILE=<unset>`; STS `NoCredentials`; role ARN secret set → stop; no keys. Portfolio remains `portfolio-certified-L1`.
+- **Hosted/cloud verification:** GHA OIDC (`nathanielecon/cloud` / ContinuityOps workflows) or local bottleneck only.
+- **Claim/status changes:** none elevated by chasing Cursor STS.
+- **Remaining risk/follow-up:** when elevating ContinuityOps S1–S7 to L4+, dispatch apply via `landing-zone-lab.yml` / ContinuityOps OIDC workflows or local bottleneck; return evidence to this repo.
+- **Verified by:** chief supervisor + owner historical evidence paste (2026-07-18).
