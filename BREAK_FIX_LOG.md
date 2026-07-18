@@ -464,20 +464,20 @@ ContinuityOps incidents yet.
 
 - **Slice/task:** Portfolio / Phases 1–8 live claim elevation; chief supervisor seat.
 - **Symptom:** ContinuityOps reached `portfolio-certified-L1` (34/34 PLAN tasks at L1) while agents spun on `aws sts get-caller-identity` → `NoCredentials` and env `CURSOR_AWS_ASSUME_IAM_ROLE_ARN=arn:aws:iam::283077380808:role/CursorCloudAgent`. Browser Google→AWS reached Builder ID OAuth only; console cookies ≠ CLI credentials.
-- **Root cause (corrected 2026-07-18 owner paste):** On **Cursor Pro+ without team External ID**, `NoCredentials` in the cloud agent VM is **expected**. `CursorCloudAgent` has **never been assumed** from this seat. The env role ARN is informational, not a working injection. Owner Google sign-in to AWS on a laptop/console does not propagate API credentials into the Cursor cloud agent VM. Prior working path (2026-07-14/15): **GitHub OIDC → `project-a-lzlab-gha` via `landing-zone-lab.yml`**, or a **local `aws login` bottleneck** — not in-VM assume-role.
+- **Root cause (corrected 2026-07-18 owner pastes):** This Cloud seat **cannot get AWS STS** on **Pro+ without a team External ID**. `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` → `CursorCloudAgent` may be set, but **`AWS_PROFILE` / `cursor-cloud-agent` is never injected** (Dashboard → Settings → Advanced / Bedrock IAM Role is **Teams/Enterprise only**). `CursorCloudAgent` is typically **never assumed**. `NoCredentials` is **expected**. Owner Google/console sign-in does not inject API credentials into the VM. Do **not** finish by putting long-lived keys in Cloud secrets (D-026 / warm-cache red line).
 - **Target account (owner-supplied, for binding — not a secret):**
   - Account: `283077380808`
   - Root ARN: `arn:aws:iam::283077380808:root`
-  - Env role string (do not wait on): `arn:aws:iam::283077380808:role/CursorCloudAgent`
+  - Env role string (informational only): `arn:aws:iam::283077380808:role/CursorCloudAgent`
 - **Fix / control (prevention):**
-  1. **Do not block on `CURSOR_AWS_ASSUME_IAM_ROLE_ARN`** or in-VM STS success on Pro+.
-  2. **Escalate live AWS** (L4+ apply, EKS, live Lambda/SQS, measured RTO, live teardown) to **GitHub Actions OIDC** (Project A pattern: `landing-zone-lab.yml` / `project-a-lzlab-gha`) or a **local `aws login` bottleneck** with evidence returned to the repo.
-  3. **Continue repo-only here:** keep advancing L1 contracts, tests, docs, GHA workflow definitions, and claim-safe evidence; claim ceiling stays ≤ L1 (or L3 when hosted checks actually run) until GHA/local path produces L4+ evidence.
-  4. **Google / console rule:** always *try* Google sign-in on browser AWS paths; treat success as console session only unless SSO/`aws login`/GHA OIDC yields API credentials.
-  5. **Lead-agent dependency preflight (repo seat):** before *dispatching* an L4+ lane, confirm the **chosen carrier** (GHA OIDC workflow or local bottleneck) has identity + required CLIs — not that this Cursor VM can assume `CursorCloudAgent`.
-- **Regression control added:** Stuck-agent paste lives in `AGENTS.md` § Paste for stuck agents. Record hosted/local cloud evidence under `evidence/slices/*/` with account `283077380808` and no secret material. Never mark L4–L6 from a Pro+ VM STS failure loop.
+  1. **Do not block** on Cursor role injection, in-VM STS, or Cloud secret keys.
+  2. **Live AWS** uses this project's **existing apply control plane**: GitHub OIDC → CI role (Project A pattern: `landing-zone-lab.yml` / `project-a-lzlab-gha`, or ContinuityOps `terraform-*.yml` OIDC once trusted), or a **local `aws login` bottleneck** with evidence returned to the repo.
+  3. **Continue repo-only** in the Cloud seat until one of those paths runs; claim ceiling ≤ L1 (or L3 when hosted checks actually run) until GHA/local produces L4+ evidence.
+  4. **Google / console rule:** always *try* Google on browser AWS paths; console session ≠ CLI/API readiness.
+  5. **Preflight for L4+ dispatch:** confirm the **chosen carrier** (GHA OIDC or local bottleneck) — not that this VM can assume `CursorCloudAgent`.
+- **Regression control added:** Canonical stuck-agent paste in `AGENTS.md` § Paste for stuck agents (Pro+ / External ID / Bedrock IAM Role note). Never mark L4–L6 from a Pro+ STS failure loop; never store long-lived AWS keys in Cursor/Codex Environment secrets.
 - **Fresh verification commands/results:** `aws sts get-caller-identity` → `NoCredentials` (expected on Pro+); portfolio remains `portfolio-certified-L1`.
 - **Hosted/cloud verification:** via GHA OIDC or local bottleneck only for account `283077380808`.
-- **Claim/status changes:** none elevated by this clarification; unblocks repo-only continuation.
-- **Remaining risk/follow-up:** author/wire ContinuityOps (or reused Project A) GHA OIDC apply workflows against account `283077380808` when elevating S1–S7 live claims.
-- **Verified by:** chief supervisor + owner paste (2026-07-18).
+- **Claim/status changes:** none elevated; unblocks repo-only continuation.
+- **Remaining risk/follow-up:** run/wire ContinuityOps (or Project A) GHA OIDC apply against `283077380808` when elevating S1–S7 live claims.
+- **Verified by:** chief supervisor + owner pastes (2026-07-18).
