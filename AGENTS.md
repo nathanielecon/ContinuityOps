@@ -32,31 +32,24 @@ happen.
   replaces the junior supervisor when that seat is context-dead or stuck, and
   may pipe true constitutional crises to the owner. See
   `docs/planning/dispatch/CHIEF_SUPERVISOR.md`.
-- **Junior supervisor:** episodic **GPT-5.6 Sol medium** via `codex-dispatch`
-  owns day-to-day judgment for the former supervisor charter. **Actuation is
-  mechanical (D-042):** the App round emits `continuityops-merge-v1` /
-  `continuityops-dispatch-v1` intents; GitHub Actions `junior-actuate` performs
-  merge/`@codex` with `GITHUB_TOKEN`. The App sandbox never runs `gh` or holds
-  credentials. See `docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md` and
-  `JUNIOR_ACTUATE_SNIPPET.zh.md`.
-- **Pipeline monitor:** read-only Grok (or equivalent) subagent that
-  periodically checks for bottlenecks and reports **significant** findings
-  only to the **chief supervisor**. See `docs/planning/dispatch/MONITOR.zh.md`.
-- **Ralphy orchestration and council reasoning:** episodic GPT rounds — Codex
-  5.4 Cloud via `codex-dispatch` (D-030/D-038). Orchestrator validates rounds,
-  advances state up to `review`, owns break/fix, prepares contracts; it
-  **emits intents** and never merges/approves PRs. Engagement override: **no
-  Opus** under any circumstances; local absolute necessity uses a Grok
-  bottleneck (+ browser on auth fail).
-- **D-037 reviewer:** episodic GPT round per worker PR — apply patch, run
-  declared checks, structured `verdict` only. No code edits; no merge.
-- **Code execution:** warm Codex 5.4 CLI Cloud Agents in default mode (not
-  `/high`, not `/fast`) implement bounded tasks. Warmth is a per-Environment
-  toolchain cache (~12h), never credential material (D-026). Workers report
-  `context_remaining` every handoff; their **direct managerial seat**
-  (orchestrator for workers; junior for orch/reviewer/monitor; chief for
-  junior) replaces them when context is insufficient. Durable artifacts must
-  allow seamless replacement.
+- **Junior / orch / reviewer / workers / monitor (D-043):** all episodic seats
+  use **`cursor-grok-4.5-high`** effective immediately (owner directive). Codex
+  App `@codex` / GPT implementation path is **suspended** for product work.
+  Chief dispatches Grok subordinates in-session and merges on CI green +
+  independent Grok reviewer `verdict: pass`. See
+  `docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md`.
+- **Pipeline monitor:** read-only Grok subagent reporting **significant**
+  findings only to the **chief supervisor**. See
+  `docs/planning/dispatch/MONITOR.zh.md`.
+- **Ralphy orchestration (D-043):** Grok episodic rounds. Orchestrator validates
+  rounds, advances state up to `review`, owns break/fix, prepares contracts; it
+  **emits intents** and never merges/approves PRs. Engagement: **no Opus**.
+- **D-037 reviewer (D-043):** independent Grok round per worker PR — apply
+  patch, run declared checks, structured `verdict` only. No code edits; no merge.
+- **Code execution (D-043):** Grok Cursor cloud/subagent workers implement
+  bounded tasks. Codex Cloud Environment (D-026) remains registered but is not
+  the default worker carrier while D-043 stands. Workers report
+  `context_remaining` every handoff; managerial seats replace low-context workers.
 - **Claude execution location:** Claude agents run in cloud environments only
   when used; they do not rely on the owner's laptop shell or local cloud login.
 
