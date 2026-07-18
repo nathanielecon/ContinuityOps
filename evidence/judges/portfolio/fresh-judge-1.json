@@ -1,0 +1,357 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "portfolio",
+  "round": "fresh",
+  "judge_id": "fresh-judge-1",
+  "candidate_sha": "c2e6610ed7257c52327cfb66fdcc07227547bb85",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "695d88db163b0acef4cc431412e1bacc259bdcb6f95fa0850623e5d2b273d83e",
+  "judge_model_id": "gpt-5.6-sol",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "fail",
+      "evidence": [
+        "evidence/portfolio/tip-bind-2026-07-18.json",
+        "evidence/slices/S1/STREAM_COMPLETE.json",
+        "evidence/slices/S8/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "fail",
+      "evidence": [
+        "node --test tests/ (exit 1: terraform fmt -check -recursive terraform failed)",
+        "node scripts/project.mjs validate P8-T04 (exit 2: integrated-gate L4 overclaim)"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "tests/terraform/workflows.test.mjs",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S6/security.json",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "evidence/hosted/lab-drill-rto-29645042815.json"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "tests/",
+        "evidence/slices/S2/failure-matrix.json",
+        "evidence/slices/S5/runbooks.json"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "fail",
+      "evidence": [
+        "evidence/slices/S8/integrated-gate.json",
+        "node scripts/project.mjs validate P8-T04 (fresh exit 2 while committed evidence records exit_code 0)"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "harness/postbuild-partition-manifest.json",
+        "integration/upstreams.lock.json"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md",
+        "evidence/portfolio/nixer-council-fail-760827d.json"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "OPERATING_STATE.md",
+        "README.md",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md",
+        "tests/harness/validator.test.mjs"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "harness/postbuild-partition-manifest.json",
+        "tests/harness/state.test.mjs"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "evidence/portfolio/nixer-council-fail-760827d.json",
+        "evidence/portfolio/tip-bind-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "S8-M1",
+      "status": "fail",
+      "evidence": [
+        "evidence/slices/S1/STREAM_COMPLETE.json",
+        "evidence/slices/S8/STREAM_COMPLETE.json",
+        "evidence/portfolio/tip-bind-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "S8-M2",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S8/delivery.json"
+      ]
+    },
+    {
+      "id": "S8-M3",
+      "status": "fail",
+      "evidence": [
+        "node --test tests/ (exit 1)",
+        "node scripts/project.mjs validate P8-T04 (exit 2)"
+      ]
+    },
+    {
+      "id": "S8-M4",
+      "status": "pass",
+      "evidence": [
+        "README.md",
+        "OPERATING_STATE.md",
+        "docs/claims/matrix.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "S8-M5",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "S8-M6",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/hosted/lab-drill-rto-29645042815.json"
+      ]
+    },
+    {
+      "id": "S8-M7",
+      "status": "pass",
+      "evidence": [
+        "README.md",
+        "docs/runbooks/"
+      ]
+    },
+    {
+      "id": "S8-M8",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md",
+        "evidence/judges/REVIEW-COMPLETION-02.json"
+      ]
+    },
+    {
+      "id": "S8-M9",
+      "status": "pass",
+      "evidence": [
+        "本轮仅使用候选提交、冻结 rubric 与证据清单，未读取既有 portfolio judge 分数"
+      ]
+    },
+    {
+      "id": "S8-M10",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md",
+        "docs/planning/JUDGE_RUBRICS.md"
+      ]
+    },
+    {
+      "id": "S8-M11",
+      "status": "pass",
+      "evidence": [
+        "harness/postbuild-partition-manifest.json",
+        "evidence/slices/S1/STREAM_COMPLETE.json",
+        "evidence/slices/S8/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "S8-M12",
+      "status": "pass",
+      "evidence": [
+        "docs/architecture/continuityops.drawio",
+        "docs/architecture/continuityops-architecture.svg",
+        "docs/architecture/continuityops-architecture.png"
+      ]
+    },
+    {
+      "id": "S8-M13",
+      "status": "pass",
+      "evidence": [
+        "README.md",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "S8-M14",
+      "status": "pass",
+      "evidence": [
+        "README.md",
+        "docs/claims/matrix.json"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U1/S8-M1：候选为 c2e6610ed7257c52327cfb66fdcc07227547bb85，但 tip-bind、S1-S8 STREAM_COMPLETE 与 integrated-gate 绑定的是父提交 196bed4775128efbe193e028c722f13816a7f91b，未精确绑定本轮候选。",
+    "U2/S8-M3：node --test tests/ 新鲜执行为 exit 1，terraform fmt -check -recursive terraform 报四个未格式化文件。",
+    "U2/U7/S8-M3：node scripts/project.mjs validate P8-T04 新鲜执行为 exit 2，判定 evidence/slices/S8/integrated-gate.json 过度声明 L4；该文件却记录 exit_code 0，证据已与当前验证器结论不一致。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "Correctness and completeness",
+      "score": 1.2,
+      "rationale": "S1-S8 交付面完整且声明矩阵覆盖充分，但候选精确绑定和集成验证均失败，无法视为完成。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/portfolio/tip-bind-2026-07-18.json",
+        "evidence/slices/S8/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "Security and authority boundaries",
+      "score": 1.4,
+      "rationale": "OIDC、A3 上限、Azure 非声明和生产边界表达清楚，测试中的只读凭证负例符合预期。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S6/security.json",
+        "tests/terraform/workflows.test.mjs"
+      ]
+    },
+    {
+      "id": "Failure/recovery depth",
+      "score": 1.3,
+      "rationale": "实验室恢复、拆除与故障矩阵证据较深，并保留不具备已知良好回滚摘要的诚实边界。",
+      "evidence": [
+        "evidence/hosted/lab-drill-rto-29645042815.json",
+        "evidence/slices/S2/failure-matrix.json",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "Deterministic test quality",
+      "score": 0.4,
+      "rationale": "测试覆盖广，但候选上的全套测试与 P8-T04 验证均未通过，硬门槛失效。",
+      "evidence": [
+        "node --test tests/ (93 pass, 1 fail, exit 1)",
+        "node scripts/project.mjs validate P8-T04 (exit 2)"
+      ]
+    },
+    {
+      "id": "Live/runtime evidence quality",
+      "score": 0.8,
+      "rationale": "AWS 实验室 apply、drill 与 teardown 有托管运行证据，且没有提升 Azure、性能或生产声明。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "evidence/hosted/lab-drill-rto-29645042815.json",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "Operability and troubleshooting",
+      "score": 0.9,
+      "rationale": "运行手册、故障记录与操作入口充足，当前格式化和过度声明失败也可复现。",
+      "evidence": [
+        "docs/runbooks/",
+        "BREAK_FIX_LOG.md",
+        "README.md"
+      ]
+    },
+    {
+      "id": "Evidence/claim integrity",
+      "score": 0.3,
+      "rationale": "声明上限总体诚实，但候选 SHA 未精确绑定，且 integrated-gate 的成功记录被当前验证器直接否定。",
+      "evidence": [
+        "evidence/portfolio/tip-bind-2026-07-18.json",
+        "evidence/slices/S8/integrated-gate.json",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "Maintainability and handoff",
+      "score": 0.45,
+      "rationale": "分区、状态、证据索引和中英文边界便于接续，失败项具有明确修复入口。",
+      "evidence": [
+        "harness/postbuild-partition-manifest.json",
+        "OPERATING_STATE.md",
+        "AGENTS.md"
+      ]
+    },
+    {
+      "id": "Cost/performance realism",
+      "score": 0.45,
+      "rationale": "性能保持 L1，成本和拆除保留实验室边界，未把估算包装为持续生产测量。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S7/cost/",
+        "evidence/slices/S7/performance/"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "evidence/slices/S8/integrated-gate.json 的 claim_level L4 与当前 P8-T04 claim_consistency 验证结果不一致。",
+    "当前证据不能声称 c2e6610ed7257c52327cfb66fdcc07227547bb85 已完成精确 tip 绑定。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "将 S1-S8 STREAM_COMPLETE、S8 integrated-gate 和 tip-bind 以可验证的继承规则精确绑定 c2e6610ed7257c52327cfb66fdcc07227547bb85，并增加对应确定性测试。",
+    "执行 terraform fmt -recursive terraform，重新运行 node --test tests/ 并保存候选绑定结果。",
+    "修正 integrated-gate 的 L4 组合声明或 validator 的分层逻辑，然后在最终修复提交上重新生成 P8-T04 新鲜证据。"
+  ],
+  "overall_score": 7.2,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "medium",
+    "role": "independent-fresh-judge"
+  },
+  "notes_zh": "独立盲评结论：merge_ready=no。未参考既有 portfolio judge 分数；硬门槛因候选绑定、全套测试和 P8-T04 新鲜验证失败而不通过。"
+}
