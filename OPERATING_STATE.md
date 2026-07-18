@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 42,
+  "revision": 43,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
@@ -51,7 +51,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   ],
   "next_actions": [
     "Lab live elevation complete (apply 29644662492, drill 29645042815, teardown 29645052414); re-apply staging when needed for demos",
-    "Optional: re-dispatch GPT junior for steady-state; keep Azure out of ceiling (D-046)",
+    "D-045 hierarchy aligned after WORKER-HIER-01: re-dispatch GPT junior for steady-state; keep chief to stream boundaries/escalations",
     "Permanent non-claims: CursorCloudAgent in-pod AWS; production customer drills"
   ],
   "completed_bootstrap": [
@@ -70,14 +70,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "D-041 chief/junior/monitor topology accepted; junior appointment JR-SUPER-01",
     "D-042 junior App actuation via GHA intents (merge/dispatch); App sandbox remains receive-only",
     "H0 human receipt bound (issue #42 comment 5008633820 → harness/approvals/H0.binding.json); P0-T04 verified; P0-T05 ready",
-    "D-043: owner directed all workers fall back to Grok; chief merges per plan with Grok subordinates",
+    "D-043: owner directed all workers fall back to Grok; superseded by D-045 GPT/Codex restoration",
     "P0-T05 verified / S0 integrated gate (Grok D-043/D-044)",
     "S1 P1-T01..T04 verified at claim L1 (Grok D-043); STREAM_COMPLETE pending supervisor boundary",
     "S2 P2-T01..T04 verified at claim L1 (Grok D-043); managed_cluster_apply retained",
     "S3 P3-T01..T03 verified at claim L1 (Grok D-043); no live Lambda",
     "S4 P4-T01..T03 verified at claim L1 (Grok D-043); synthetic signal-path only",
     "S2/S3/S4 supervisor stream-boundary approve (BF-PRE-015); claim L1",
-    "S5–S8 P5-T01..P8-T04 verified at claim L1 (Grok D-043); portfolio-certified-L1",
+    "S5–S8 P5-T01..P8-T04 verified at claim L1 (Grok D-043 historical); portfolio-certified-L1",
     "ContinuityOps live AWS control plane LIVE (2026-07-18): GHA OIDC → continuityops-gha (repo id 1301990908); workflow continuityops-terraform.yml; Environment continuityops; PR #50 merged to main at 20266d3",
     "Cloud seat NoCredentials expected (BF-2026-010 / Pro+); do not use CursorCloudAgent or project-a-lzlab-gha for ContinuityOps",
     "PR #51 merged to main at 21299f9: ensure-tfstate + staging live-marker + terraform-pr static path fix; OIDC plan was green (run 29642718513)",
@@ -86,7 +86,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   "verified_baseline": [
     "GHA OIDC apply green run 29643569047 (staging live-marker + remote state)",
     "Lab elevation apply 29644662492 (VPC/IAM/Lambda/EKS 1.32); drill 29645042815; teardown 29645052414",
-    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json; portfolio-certified-L4-lab"
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json; evidence/hosted/INDEX.md; portfolio-certified-L4-lab"
   ],
   "unverified": [
     "Cross-repo Project A/C context packaging by the control center (CO-006)",

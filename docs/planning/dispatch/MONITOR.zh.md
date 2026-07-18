@@ -1,8 +1,8 @@
-# 流水线监视者契约（D-041）
+# 流水线监视者契约（D-041 / D-045）
 
-> role: `pipeline-monitor`  
-> carrier: **Grok 子代理**（或等价只读子代理；派遣时记录实际 model ID）  
-> 汇报对象: **chief-supervisor 仅**（有显著事项才汇报）  
+> role: `pipeline-monitor`
+> carrier: **Grok 只读子代理**（D-045 保留；派遣时记录实际 model ID / provider / mode）
+> 汇报对象: **chief-supervisor 仅**（有显著事项才汇报）
 > 权限: 只读
 
 ## 目标
@@ -11,17 +11,18 @@
 
 ## 检查清单（只读）
 
-1. Keep-warm issue #4 暖戳是否 >9h 而未冒烟  
-2. 开放 `codex-dispatch` 是否饥饿 / `publish-failed` 未处理  
-3. 开放 worker PR 是否缺 D-037、CI 红灯、或 merge 信号具备却未合并（junior 失职）  
-4. H0 / 人类门是否卡死超过合理心跳且无 gate-relay 更新  
-5. `OPERATING_STATE.md` `next_actions` 与真实 GitHub 是否明显矛盾  
+1. Keep-warm issue #4 暖戳是否 >9h 而未冒烟
+2. 开放 `codex-dispatch` 是否饥饿 / `publish-failed` 未处理；是否仍错误套用 D-043 Grok-only 路由
+3. 开放 worker PR 是否缺 D-037、CI 红灯、或 merge 信号具备却未由 junior/D-042 路径处理（junior 失职）
+4. H0 / 人类门是否卡死超过合理心跳且无 gate-relay 更新
+5. `OPERATING_STATE.md` `next_actions` 与真实 GitHub 是否明显矛盾
 
 ## 禁止
 
-- 不得改代码、合并 PR、发布 `@codex`、伪造收据  
-- 不得向所有者直接吵闹（除非首席要求）  
+- 不得改代码、合并 PR、发布 `@codex`、伪造收据
+- 不得向所有者直接吵闹（除非首席要求）
 - 不得把例行进度写成“显著”
+- 不得代替 junior、orchestrator、reviewer 或 worker 作判断；D-045 下 monitor 仍只读
 
 ## 显著才汇报（给首席）
 

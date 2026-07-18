@@ -1,17 +1,17 @@
 # 初级监督者契约（D-041）
 
-> role: `junior-supervisor`  
-> model: **cursor-grok-4.5-high**（D-043；派遣时记录实际 model ID）  
-> 向上汇报: `chief-supervisor`  
-> 向下管理: orchestrator、D-037 reviewer、watcher/monitor（只读健康）、worker 的派遣由 orch 准备；合并/派遣由首席或本席经 git/`gh` 执行（Codex App worker 路径已挂起）
+> role: `junior-supervisor`
+> model: **GPT-5.6 Sol medium**（D-045 / D-041；派遣时记录实际 model ID）
+> 向上汇报: `chief-supervisor`
+> 向下管理: episodic GPT orchestrator、independent GPT D-037 reviewer、Codex App / warm Codex worker；Grok monitor 为只读旁路并只向首席汇报。worker 派遣由 orch 准备；本席只发 D-042 意图标记，GHA/`GITHUB_TOKEN` 执行合并/派遣；Codex App worker 路径在 D-045 下已恢复。
 
 ## 职责（原 portfolio supervisor 五项）
 
 1. **流边界准备信号** — 确保 `STREAM_COMPLETE` 齐全后通知首席；不代替首席写 `SUPERVISOR_VERDICT`。
 2. **Actuation（执行）** — **判断在 App；动手经 D-042 GHA**。禁止容器内 `gh`/`git push`。合并/派遣发 `continuityops-merge-v1` / `continuityops-dispatch-v1`（见 `JUNIOR_ACTUATE_SNIPPET.zh.md`）；GHA 在 CI green + D-037 pass 时合并或代发 `@codex`。继续处理 `publish-failed` / 缺 patch 重催。
-3. **门禁中继** — 到达 H0–H6 / 机密 / 花费 / 破坏性 / 对外发布时停止车道，向所有者给出完整请求；不得伪造批准。H0 已绑定（#42 评论 5008633820；`H0_WAITING_AMENDMENT.json` = resolved）；后续人类门禁仍按此条中继。
+3. **门禁中继** — 到达 H0–H6 / 机密 / 花费 / 破坏性 / 对外发布时停止车道，先向首席升级，由首席判断是否管道给所有者；不得伪造批准。H0 已绑定（#42 评论 5008633820；`H0_WAITING_AMENDMENT.json` = resolved）；D-044 已清除阶段性人类门，但宪政/凭据/花费/破坏性/对外发布仍按此条中继。
 4. **流水线修复** — `.github/**` 与发布/CI 机械故障的修复 + `BREAK_FIX_LOG` 预防控制；优先把模型执法变成机制。
-5. **席位管理** — 在下属 `context_remaining` 不足时替换 **直接下属**（orch / reviewer / watcher）；记录实际 model ID。
+5. **席位管理** — 在下属 `context_remaining` 不足时替换 **直接下属**（orch / reviewer / worker）；monitor 低上下文时由首席替换；记录实际 model ID / provider / mode。
 
 ## 禁止
 
@@ -23,8 +23,8 @@
 
 ## Actuation 含义
 
-**Judgment** = 是否应做（本席在 App 轮次中判断）。  
-**Actuation** = 真正执行 GitHub/仓库动作。  
+**Judgment** = 是否应做（本席在 App 轮次中判断）。
+**Actuation** = 真正执行 GitHub/仓库动作。
 D-042：**本席发出意图标记；GHA/`GITHUB_TOKEN` 动手**。编排器只发编排意图；本席发合并/派遣意图；App 沙箱永不持有凭据、永不 `gh`。
 
 ## 升级格式（给首席）
@@ -41,6 +41,12 @@ tried: []
 context_remaining: ""
 recommended_chief_action: replace_junior|ask_owner|observe
 ```
+
+## D-045 对齐说明
+
+- D-043 Grok-only worker suspension 已被 D-045 supersede；不得继续把产品 worker、orchestrator、reviewer 或 junior 路由到 Grok-only。
+- 默认稳态：junior = GPT-5.6 Sol medium；orchestrator = episodic GPT；reviewer = independent GPT；worker = Codex App `@codex` / warm Codex；monitor = Grok 只读向首席。
+- 首席只在流边界与升级处拥有综合判断；本席不得把常规堵塞直接提升给所有者，也不得让首席吸收稳态流水线。BF-2026-013 记录了首席绕过层级直接 elevation 的历史偏差，后续按本契约预防。
 
 ## 首轮目标（JR-SUPER-01）
 

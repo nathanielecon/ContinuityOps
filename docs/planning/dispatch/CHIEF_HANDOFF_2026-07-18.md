@@ -1,7 +1,7 @@
 # Chief Supervisor Handoff — ContinuityOps LIVE AWS (2026-07-18)
 
-> **Audience:** next Cursor Cloud **chief supervisor** seat.  
-> Machine field names English; free-text Mandarin per D-015.  
+> **Audience:** next Cursor Cloud **chief supervisor** seat.
+> Machine field names English; free-text Mandarin per D-015.
 > Chat history is **not** authoritative — reconstruct from this file + paths below.
 
 ---
@@ -32,14 +32,14 @@ Job: Terraform PR → plan green → merge main → confirm apply green → evid
 | Seat | Who | Owns | Does **not** own |
 | --- | --- | --- | --- |
 | **Owner (human)** | `nathanielecon` | Constitutional crises, secrets minting agent cannot create, spend ceilings, external publication | Day-to-day merge/dispatch (D-044 cleared phase gates) |
-| **Chief supervisor (YOU)** | This Cursor Cloud session | Stream-boundary verdicts (BF-PRE-015); escalations; replace stuck junior; monitor intake; **currently also** drive live-AWS loop because junior App path is secondary under D-043 | In-pod AWS apply; inventing keys; minting H0–H6; Opus |
+| **Chief supervisor (YOU)** | This Cursor Cloud session | Stream-boundary verdicts (BF-PRE-015); escalations; replace stuck junior; monitor intake; may unblock bounded repo edits only when App/junior path stalls | In-pod AWS apply; inventing keys; minting H0–H6; Opus |
 | **Junior supervisor** | GPT-5.6 Sol medium (D-045/D-041) | Steady-state judgment; D-042 intent markers for App actuation | Direct `gh` in App sandbox; other streams’ authority |
 | **Orchestrator** | Episodic GPT (D-045/D-030) | Ready work, scopes, break/fix log, intents — **never merges** | Implementation code; self-approval of high risk |
 | **D-037 reviewer** | Independent GPT | Apply patch @ `base_sha`, run checks, `verdict` only | Code edits; merge |
 | **Workers** | Codex App `@codex` / D-034 | Bounded `write_scope` implementation + tests | Authoritative state; credentials |
 | **Monitor** | Grok read-only | Significant-only reports **to chief** | Actuation |
 
-**Actuation vs judgment:** judgment = decide; actuation = `gh`/merge/label/workflow. Chief may actuate when junior path is unavailable (this engagement: chief has `GH_TOKEN` and git push).
+**Actuation vs judgment:** judgment = decide; actuation = `gh`/merge/label/workflow. Under D-045/D-041, junior owns steady-state judgment and emits D-042 intents; chief actuates only at stream boundaries, escalations, or documented fallback when the junior/App path is unavailable. If chief bypasses junior for speed, record a BF entry and restore the hierarchy (see BF-2026-013).
 
 **Engagement overrides still in force:**
 - **D-045:** GPT junior/orch/reviewer/workers; Codex path restored (**D-043 superseded**)
@@ -54,7 +54,7 @@ Job: Terraform PR → plan green → merge main → confirm apply green → evid
 | Role | Carrier | How chief uses them |
 | --- | --- | --- |
 | Junior | GPT App / `codex-dispatch` (receive-only sandbox) | Appoint when needed; D-042 intents → `junior-actuate.yml` |
-| Orchestrator / workers / reviewer | Episodic GPT / `@codex` + D-034 | Prefer GPT workers; chief unblocks with in-repo edits when App stalls |
+| Orchestrator / workers / reviewer | Episodic GPT / `@codex` + D-034 | Prefer GPT/Codex workers; chief unblocks with in-repo edits only when App/junior path stalls and records the exception |
 | Monitor | Read-only Grok | Significant bottlenecks only → chief |
 
 **Default live-AWS execution (current objective):** chief (or worker) edits `terraform/**` → PR → confirm **ContinuityOps Terraform** plan green → merge `main` → confirm **apply** green → write evidence. Do **not** wait on Cursor STS.
@@ -135,7 +135,7 @@ Read in this order; do not invent from chat:
 | **GH_TOKEN** | Actions/merge 403 on fine-grained PAT lacking Actions | Owner refreshed Cursor Secret (repo+workflow). **New seat must assert PASS.** Old pods keep old token until restart. |
 | **Assert script** | Added `scripts/assert-cloud-seat-gh-token.mjs` | Gate for Actions/merge autonomy |
 
-**Doctrine phrase:** injection absent — stop; no keys.  
+**Doctrine phrase:** injection absent — stop; no keys.
 **Stuck paste:** see `AGENTS.md` § Paste for stuck ContinuityOps agents.
 
 ---
@@ -162,15 +162,15 @@ gh workflow run continuityops-terraform.yml --repo nathanielecon/ContinuityOps \
 ```
 
 ### Done when (near-term)
-1. `assert-cloud-seat-gh-token.mjs` **PASS** on this seat  
-2. Next Terraform mutations (beyond live-marker) have **plan + apply** green run URLs in `evidence/hosted/`  
-3. Claims elevated **only** for proven scope; non_claims stay honest (no fake EKS/Lambda/RTO)  
-4. `BREAK_FIX_LOG.md` updated for any new break  
-5. `OPERATING_STATE.md` revision bumped; `next_actions` accurate  
+1. `assert-cloud-seat-gh-token.mjs` **PASS** on this seat
+2. Next Terraform mutations (beyond live-marker) have **plan + apply** green run URLs in `evidence/hosted/`
+3. Claims elevated **only** for proven scope; non_claims stay honest (no fake EKS/Lambda/RTO)
+4. `BREAK_FIX_LOG.md` updated for any new break
+5. `OPERATING_STATE.md` revision bumped; `next_actions` accurate
 
 ### Portfolio honesty
-- Gate label may remain `portfolio-certified-L1` until broader recert  
-- Component L4 smoke ≠ full platform L4+  
+- Gate label may remain `portfolio-certified-L1` until broader recert
+- Component L4 smoke ≠ full platform L4+
 
 ---
 
@@ -211,7 +211,7 @@ aws sts get-caller-identity 2>&1 || true
 
 ---
 
-## 8. Worker handoff shape（若派遣 Grok worker）
+## 8. Worker handoff shape（若派遣 D-045 worker/reviewer/orchestrator）
 
 Reject if missing fields. Free-text values **简体中文**:
 
@@ -238,22 +238,23 @@ context_remaining: percent_or_token_estimate
 
 ## 9. Predecessor seat note
 
-- Predecessor chief main tip at handoff write: `c947de1`  
-- Predecessor recorded LIVE loop, BF-2026-010/011, claims L4 smoke, assert script  
-- Predecessor often used **git push fast-forward** when Merge/Actions API 403  
-- After owner token permission update, assert may PASS without new pod — **still re-run assert** on every new chief start  
+- Predecessor chief main tip at handoff write: `c947de1`
+- Predecessor recorded LIVE loop, BF-2026-010/011, claims L4 smoke, assert script
+- BF-2026-013 records that chief direct elevation bypassed the intended junior/orch layer; future seats should restore D-045 hierarchy after emergency unblocks
+- Predecessor often used **git push fast-forward** when Merge/Actions API 403
+- After owner token permission update, assert may PASS without new pod — **still re-run assert** on every new chief start
 
 ---
 
 ## 10. Absolute prohibitions
 
-1. Do not invent AWS access keys or root session tokens  
-2. Do not block on `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` / CursorCloudAgent  
-3. Do not use `project-a-lzlab-gha` / `landing-zone-lab.yml` for ContinuityOps  
-4. Do not claim L4+ for EKS/Lambda/Azure/RTO without matching apply evidence  
-5. Do not use Opus  
-6. Do not `codex login` in cloud containers  
-7. Do not delete failing tests / weaken validators to raise scores  
+1. Do not invent AWS access keys or root session tokens
+2. Do not block on `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` / CursorCloudAgent
+3. Do not use `project-a-lzlab-gha` / `landing-zone-lab.yml` for ContinuityOps
+4. Do not claim L4+ for EKS/Lambda/Azure/RTO without matching apply evidence
+5. Do not use Opus
+6. Do not `codex login` in cloud containers
+7. Do not delete failing tests / weaken validators to raise scores
 
 ---
 
