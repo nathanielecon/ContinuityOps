@@ -8,21 +8,21 @@ role: orchestrator
 model: codex-5.4-default
 provider: OpenAI Codex App
 mode: default
-baseline_sha: ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029
+baseline_sha: 560d542ec3f194d59b3fe23d54c2755e6745faf3
 base_branch: main
-status: complete
+status: amended_complete
 context_remaining: 74%
 ```
 
-## 收口判定
+## 收口判定（修订 — 竞态后）
 
-ORCH-CLOSE-02 只收口当前证据已允许的范围，不扩大产品实现、云权限或上游权限：
+初始编排包曾与 WORKER-SEC-01 / WORKER-AGENTIC-01 并行并写 keep L1。下列为合并 D-037 通过后的修订收口：
 
-- `security-sbom`：保持并明确为可证 L1；现有 S6 静态安全/SBOM 证据足以支撑治理与证据索引级声明，但不能提升到 live/cloud-enforced 级别。
-- `agentic-workflow`：保持并明确为可证 L1；现有 S6 agentic 证据证明编排、权限边界与人/机器人职责，但不证明自主生产变更。
-- `performance`：保持诚实 L1；当前只有计划/静态性能证据路径，未形成可重复的 live load/capacity 对比，因此不得提升。
-- `upstream`：`CO-004` 与 `CO-006` 继续 blocked；禁止发明 Project C digest、回滚证明或 Project A/C 上游可读性。
-- `azure-governance`：按 D-046 保持 L1 非 live 声明；不因 AWS lab L4 证据而外推 Azure live apply。
+- `security-sbom`：**提升至 L2**（PR #66 + REVIEW-SEC-02 pass）— 可复现仓库 SBOM；非 live scanner / live IAM。
+- `agentic-workflow`：**提升至 L3 hosted-control**（PR #67 + REVIEW-AGENTIC-03 pass）— D-034/D-042/OIDC/keep-warm；非 in-pod AWS。
+- `performance`：保持诚实 L1；无 live load 对比。
+- `upstream`：`CO-004` / `CO-006` 继续 blocked；禁止发明 digest（D-028）。
+- `azure-governance`：按 D-046 保持 L1 非 live。
 
 ## Worker 任务清单
 
@@ -34,7 +34,7 @@ ORCH-CLOSE-02 只收口当前证据已允许的范围，不扩大产品实现、
 task_id: ORCH-CLOSE-02-CLAIMS
 role: Codex implementation worker
 base_branch: main
-baseline_sha: ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029
+baseline_sha: 560d542ec3f194d59b3fe23d54c2755e6745faf3
 write_scope:
   - docs/claims/matrix.json
   - evidence/slices/S6/
@@ -57,7 +57,7 @@ validators:
 task_id: ORCH-CLOSE-02-UPSTREAM-GAPS
 role: Codex implementation worker
 base_branch: main
-baseline_sha: ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029
+baseline_sha: 560d542ec3f194d59b3fe23d54c2755e6745faf3
 write_scope:
   - OPERATING_STATE.md
   - BREAK_FIX_LOG.md
@@ -126,8 +126,8 @@ verdict_schema:
 task_id: ORCH-CLOSE-02
 role: orchestrator
 status: complete
-candidate_sha: ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029
-baseline_sha: ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029
+candidate_sha: 560d542ec3f194d59b3fe23d54c2755e6745faf3
+baseline_sha: 560d542ec3f194d59b3fe23d54c2755e6745faf3
 completed:
   - 已制定范围内声明收口判定。
   - 已列出 worker task_ids 与 D-037 评审顺序。

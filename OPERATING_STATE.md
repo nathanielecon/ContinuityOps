@@ -9,16 +9,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 48,
+  "revision": 49,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
   "current_gate": "portfolio-certified-L4-lab",
-  "running_tasks": [
-    "PR #75 ORCH-CLOSE-02 needs amend after L2/L3 elevations"
-  ],
+  "running_tasks": [],
   "blocked_tasks": [
-    "upstream-integration elevation (CO-004/CO-006 \u2014 need D-028 packages from control center)"
+    "upstream-integration elevation (CO-004/CO-006 — need D-028 packages from control center)"
   ],
   "waiting_human": [],
   "seats": {
@@ -54,9 +52,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S8-P8-T04"
   ],
   "next_actions": [
-    "security-sbom L2 merged via PR #66 + REVIEW-SEC-02 pass (issue #73)",
-    "agentic-workflow L3 via PR #67 + REVIEW-AGENTIC-03 pass (issue #79)",
-    "Amend ORCH-CLOSE-02 keep_l1 decisions to match merged elevations (#75)",
+    "In-scope elevations closed: security-sbom L2 + agentic-workflow L3 with D-037 passes",
+    "ORCH-CLOSE-02 amended for elevation race; merge PR #75",
     "Leave CO-004/CO-006 blocked until D-028 upstream packages arrive",
     "azure-governance L1 (D-046); performance honest L1"
   ],
@@ -67,15 +64,15 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Merged .codex Codex Cloud Environment scripts to the default branch",
     "Created, registered, and first-warmed the ContinuityOps Codex Cloud Environment (env 6a594ee667608191ab53cae15202815e, zero secrets)",
     "Rotated the orchestrator seat per D-024: predecessor retired at ~17% context_remaining; successor Opus 4.8 reconstructed state from durable artifacts only",
-    "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed (PRs #8\u2013#11)",
-    "D-034: patch-in-comment GHA publisher smoked (issue #12 \u2192 PR #13; Actions create-PR permission required)",
+    "D-033: platform Create PR publish path verified (2026-07-17) after App sandbox self-publish failed (PRs #8–#11)",
+    "D-034: patch-in-comment GHA publisher smoked (issue #12 → PR #13; Actions create-PR permission required)",
     "P0-T01 verified; P0-T02 verified with condition CO-010; ORCH-ROUND-06 governance landed via supervisor git-push fallback after #29 publish-failed",
     "Owner GH_TOKEN restored Issues+PR actuation for supervisor seat; human directed P0-T03 fresh fixer/reviewer redo",
-    "P0-T03 verified after redo (issue #35 \u2192 PR #36 \u2192 D-037 #38 pass \u2192 main 1523466)",
-    "P0-T04 rubric freeze integrated (issue #39 \u2192 PR #40 \u2192 D-037 #41 pass \u2192 main 9a58cbd); H0 package waiting_human",
+    "P0-T03 verified after redo (issue #35 → PR #36 → D-037 #38 pass → main 1523466)",
+    "P0-T04 rubric freeze integrated (issue #39 → PR #40 → D-037 #41 pass → main 9a58cbd); H0 package waiting_human",
     "D-041 chief/junior/monitor topology accepted; junior appointment JR-SUPER-01",
     "D-042 junior App actuation via GHA intents (merge/dispatch); App sandbox remains receive-only",
-    "H0 human receipt bound (issue #42 comment 5008633820 \u2192 harness/approvals/H0.binding.json); P0-T04 verified; P0-T05 ready",
+    "H0 human receipt bound (issue #42 comment 5008633820 → harness/approvals/H0.binding.json); P0-T04 verified; P0-T05 ready",
     "D-043: owner directed all workers fall back to Grok; chief merges per plan with Grok subordinates",
     "P0-T05 verified / S0 integrated gate (Grok D-043/D-044)",
     "S1 P1-T01..T04 verified at claim L1 (Grok D-043); STREAM_COMPLETE pending supervisor boundary",
@@ -83,26 +80,30 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S3 P3-T01..T03 verified at claim L1 (Grok D-043); no live Lambda",
     "S4 P4-T01..T03 verified at claim L1 (Grok D-043); synthetic signal-path only",
     "S2/S3/S4 supervisor stream-boundary approve (BF-PRE-015); claim L1",
-    "S5\u2013S8 P5-T01..P8-T04 verified at claim L1 (Grok D-043); portfolio-certified-L1",
-    "ContinuityOps live AWS control plane LIVE (2026-07-18): GHA OIDC \u2192 continuityops-gha (repo id 1301990908); workflow continuityops-terraform.yml; Environment continuityops; PR #50 merged to main at 20266d3",
+    "S5–S8 P5-T01..P8-T04 verified at claim L1 (Grok D-043); portfolio-certified-L1",
+    "ContinuityOps live AWS control plane LIVE (2026-07-18): GHA OIDC → continuityops-gha (repo id 1301990908); workflow continuityops-terraform.yml; Environment continuityops; PR #50 merged to main at 20266d3",
     "Cloud seat NoCredentials expected (BF-2026-010 / Pro+); do not use CursorCloudAgent or project-a-lzlab-gha for ContinuityOps",
     "PR #51 merged to main at 21299f9: ensure-tfstate + staging live-marker + terraform-pr static path fix; OIDC plan was green (run 29642718513)",
     "Live AWS apply GREEN run 29643569047 (after 29643490577 DynamoDB lock-create race); evidence/hosted/cloud-apply-staging-2026-07-18.json",
     "BF-2026-013 hierarchy remediation recorded: AWS lab evidence remains valid, but portfolio hierarchy closure requires GPT worker -> D-037 process pass after WORKER-HIER-01 merges",
     "ORCH-CLOSE-02 dispatch #62–#65; chief fallback PRs #66/#67 after BF-2026-014 base_branch:work publish-failed; #65 rejected (reviewer must not edit terraform)",
     "PR #66 merged: security-sbom elevated to L2 with reproducible SBOM generator; D-037 REVIEW-SEC-02 pass",
-    "WORKER-AGENTIC-01: agentic-workflow claim raised from L1 to L3 using existing GitHub-hosted D-034/D-042/OIDC/keep-warm evidence; Cursor in-pod AWS remains an explicit non-claim"
+    "WORKER-AGENTIC-01: agentic-workflow claim raised from L1 to L3 using existing GitHub-hosted D-034/D-042/OIDC/keep-warm evidence; Cursor in-pod AWS remains an explicit non-claim",
+    "PR #67 merged: agentic-workflow elevated to L3 hosted-control; D-037 REVIEW-AGENTIC-03 pass",
+    "ORCH-CLOSE-02 amended after worker elevation race (keep_l1 superseded for security/agentic)"
   ],
   "verified_baseline": [
     "GHA OIDC apply green run 29643569047 (staging live-marker + remote state)",
     "Lab elevation apply 29644662492 (VPC/IAM/Lambda/EKS 1.32); drill 29645042815; teardown 29645052414",
     "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json; portfolio-certified-L4-lab",
-    "Agentic hosted-control evidence: evidence/hosted/agentic-workflow-2026-07-18.json binds codex-patch-publish, junior-actuate, keep-warm issue #4, and continuityops-gha run 29643569047"
+    "Agentic hosted-control evidence: evidence/hosted/agentic-workflow-2026-07-18.json binds codex-patch-publish, junior-actuate, keep-warm issue #4, and continuityops-gha run 29643569047",
+    "security-sbom L2: evidence/hosted/security-sbom-2026-07-18.json + REVIEW-SEC-02",
+    "agentic-workflow L3: evidence/hosted/agentic-workflow-2026-07-18.json + REVIEW-AGENTIC-03"
   ],
   "unverified": [
     "Cross-repo Project A/C context packaging by the control center (CO-006)",
     "Project C immutable image digest (CO-004)",
-    "Live Azure apply (explicitly out of ceiling \u2014 D-046)"
+    "Live Azure apply (explicitly out of ceiling — D-046)"
   ]
 }
 ```
