@@ -23,7 +23,8 @@ jobs:
         run: node scripts/ci/assert-pr-readonly.mjs
 
       - name: Static terraform scaffold tests
-        run: node --test tests/terraform/
+        # Node 22: `node --test tests/terraform/` (trailing slash) fails MODULE_NOT_FOUND.
+        run: node --test tests/terraform/*.mjs
 
       - name: Terraform fmt/validate when CLI available
         run: |
