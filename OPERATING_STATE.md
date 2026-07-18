@@ -9,12 +9,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 42,
+  "revision": 43,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
   "current_gate": "portfolio-certified-L4-lab",
-  "running_tasks": [],
+  "running_tasks": [
+    "WORKER-HIER-01 hierarchy remediation (BF-2026-013 / issues #56 #57 #58) pending D-037 process pass"
+  ],
   "blocked_tasks": [],
   "waiting_human": [],
   "seats": {
@@ -51,6 +53,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   ],
   "next_actions": [
     "Lab live elevation complete (apply 29644662492, drill 29645042815, teardown 29645052414); re-apply staging when needed for demos",
+    "D-037 process pass is required for hierarchy closure; REVIEW-COMPLETION-02 must supersede REVIEW-COMPLETION-01 after this remediation patch merges",
     "Optional: re-dispatch GPT junior for steady-state; keep Azure out of ceiling (D-046)",
     "Permanent non-claims: CursorCloudAgent in-pod AWS; production customer drills"
   ],
@@ -81,7 +84,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "ContinuityOps live AWS control plane LIVE (2026-07-18): GHA OIDC → continuityops-gha (repo id 1301990908); workflow continuityops-terraform.yml; Environment continuityops; PR #50 merged to main at 20266d3",
     "Cloud seat NoCredentials expected (BF-2026-010 / Pro+); do not use CursorCloudAgent or project-a-lzlab-gha for ContinuityOps",
     "PR #51 merged to main at 21299f9: ensure-tfstate + staging live-marker + terraform-pr static path fix; OIDC plan was green (run 29642718513)",
-    "Live AWS apply GREEN run 29643569047 (after 29643490577 DynamoDB lock-create race); evidence/hosted/cloud-apply-staging-2026-07-18.json"
+    "Live AWS apply GREEN run 29643569047 (after 29643490577 DynamoDB lock-create race); evidence/hosted/cloud-apply-staging-2026-07-18.json",
+    "BF-2026-013 hierarchy remediation recorded: AWS lab evidence remains valid, but portfolio hierarchy closure requires GPT worker -> D-037 process pass after WORKER-HIER-01 merges"
   ],
   "verified_baseline": [
     "GHA OIDC apply green run 29643569047 (staging live-marker + remote state)",
