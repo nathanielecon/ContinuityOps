@@ -476,8 +476,13 @@ ContinuityOps incidents yet.
   4. **Google / console rule:** always *try* Google on browser AWS paths; console session ≠ CLI/API readiness.
   5. **Preflight for L4+ dispatch:** confirm the **chosen carrier** (GHA OIDC or local bottleneck) — not that this VM can assume `CursorCloudAgent`.
 - **Regression control added:** Canonical stuck-agent paste in `AGENTS.md` § Paste for stuck agents (Pro+ / External ID / Bedrock IAM Role note). Never mark L4–L6 from a Pro+ STS failure loop; never store long-lived AWS keys in Cursor/Codex Environment secrets.
-- **Fresh verification commands/results:** `aws sts get-caller-identity` → `NoCredentials` (expected on Pro+); portfolio remains `portfolio-certified-L1`.
+- **Fresh verification commands/results (2026-07-18 re-check after owner “should now inject”):**
+  - `AWS_PROFILE=<unset>`; `AWS_CONFIG_FILE=<unset>`; no `~/.aws/config` / `credentials`
+  - `CURSOR_AWS_ASSUME_IAM_ROLE_ARN=arn:aws:iam::283077380808:role/CursorCloudAgent` (set)
+  - `aws sts get-caller-identity` → `NoCredentials` (exit 253)
+  - **Decision recorded:** injection absent — stop; no keys.
 - **Hosted/cloud verification:** via GHA OIDC or local bottleneck only for account `283077380808`.
 - **Claim/status changes:** none elevated; unblocks repo-only continuation.
 - **Remaining risk/follow-up:** run/wire ContinuityOps (or Project A) GHA OIDC apply against `283077380808` when elevating S1–S7 live claims.
 - **Verified by:** chief supervisor + owner pastes (2026-07-18).
+- **Durable control:** `AGENTS.md` § AWS injection stop table — STOP on `NoCredentials` / missing `AWS_PROFILE`; never invent keys.
