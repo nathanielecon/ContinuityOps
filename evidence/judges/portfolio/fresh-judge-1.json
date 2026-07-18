@@ -1,0 +1,391 @@
+{
+  "schema_version": "1.0",
+  "portfolio_judge_id": "fresh-judge-1",
+  "round": "fresh",
+  "role": "independent read-only judge",
+  "candidate_sha": "760827dbb46c803475fa095c19984db61c8a6995",
+  "base_branch": "main",
+  "rubric": "docs/planning/JUDGE_RUBRICS.md",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest": "docs/claims/matrix.json",
+  "evidence_manifest_sha256": "1545074d3b4dd56ef79848b8deb1fddb4aef2e9812bc40f5c0ca2e6f5a72bd51",
+  "judge_model_record": {
+    "provider": "OpenAI",
+    "model": "GPT-5.5 Codex API",
+    "mode": "cloud follow-up",
+    "role": "fresh portfolio judge"
+  },
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "fail",
+      "rationale_zh": "证据包中多个 STREAM_COMPLETE 和 hosted 记录绑定的 candidate/main_tip 不一致；S1-S4 仍指向较早候选，部分 hosted 记录指向后续 main_tip，因此不能证明全部证据绑定到 760827db。",
+      "evidence": [
+        "evidence/slices/S1/STREAM_COMPLETE.json",
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "evidence/slices/S4/STREAM_COMPLETE.json",
+        "evidence/slices/S8/integrated-gate.json",
+        "evidence/hosted/cloud-apply-staging-reapply-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "rationale_zh": "S8 integrated gate 声明 full_repository、full_security、hosted_required_checks、evidence_chain、claim_consistency、readme_recruiter_gate 和 judge_exit 均通过，且命令退出码为 0。",
+      "evidence": [
+        "evidence/slices/S8/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "rationale_zh": "根契约和 hosted 记录均强调 GitHub OIDC 短凭证、云席位无 AWS 密钥、证据不应含秘密；未在抽查证据中发现明文长期凭证。",
+      "evidence": [
+        "AGENTS.md",
+        "evidence/slices/S6/security.json",
+        "evidence/hosted/security-sbom-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "rationale_zh": "S6 安全证据和 SBOM 记录没有声明未关闭 critical/high 安全问题。",
+      "evidence": [
+        "evidence/slices/S6/security.json",
+        "evidence/hosted/security-sbom-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "rationale_zh": "claims matrix 明确区分 L1/L2/L3/L4，并列出非声明项，例如无生产、无 Azure live apply、无 CursorCloudAgent/in-pod AWS credentials。",
+      "evidence": [
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "rationale_zh": "S2-S7 证据覆盖 CrashLoop、网络拒绝、DLQ、遥测缺失/告警、事故演练、恢复/成本等负向或失败路径。",
+      "evidence": [
+        "evidence/slices/S2/scenarios/matrix-evidence.json",
+        "evidence/slices/S5/drills-summary.json",
+        "evidence/slices/S7/recovery/contract-evidence.json"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "rationale_zh": "部分 integrated-gate 记录包含命令、退出码、时间和环境；但不是所有 slice/hosted 证据都绑定到最终 candidate 760827db，且 hosted reapply 是后续 main_tip 407328b 记录。",
+      "evidence": [
+        "evidence/slices/S8/integrated-gate.json",
+        "evidence/hosted/cloud-apply-staging-reapply-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "rationale_zh": "本评审仅写入允许的 portfolio judge JSON；仓库契约保留了上游只读/packet 规则。",
+      "evidence": [
+        "integration/upstreams.lock.json",
+        "evidence/hosted/upstream-d028-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "not_proven",
+      "rationale_zh": "BREAK_FIX_LOG 存在并记录预防/修复规则，但本轮没有逐项审计所有 observed failures 是否均已记录。",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "rationale_zh": "README 仍声明 Current claim level 为 L1 且 No L4+ live cloud apply，而 claims matrix 声明 max_claim_level L4 以及多个 AWS lab staging L4 组件，招聘入口文档与证据矩阵时态不一致。",
+      "evidence": [
+        "README.md",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "rationale_zh": "仓库契约要求内部通信简体中文、外部招聘文档英文；抽查 README 英文、证据中 judge notes/中文字段分离，未发现反向违规。",
+      "evidence": [
+        "AGENTS.md",
+        "README.md",
+        "evidence/judges/S8/fresh-judge-1.json"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "rationale_zh": "S0/S8 gate 证据声明并发流、集成队列和隔离验证通过。",
+      "evidence": [
+        "evidence/slices/S0/integrated-gate.json",
+        "evidence/slices/S8/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "rationale_zh": "保存 remediation council 与 fresh judges 分离在 evidence/judges/S*/ 下体现。",
+      "evidence": [
+        "evidence/judges/S0/saved-council-provisional.json",
+        "evidence/judges/S8/fresh-judge-1.json"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "not_proven",
+      "rationale_zh": "存在 BREAK_FIX_LOG，但本轮无法从现有摘要机械证明每个 observed failure 都在关闭前记录。",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "S8-M1",
+      "status": "fail",
+      "rationale_zh": "不是每个 slice 的 STREAM_COMPLETE 均绑定最终 integrated SHA；S1-S4 绑定旧 SHA，S5-S8 绑定 74f2ba35，而任务候选为 760827db。",
+      "evidence": [
+        "evidence/slices/S1/STREAM_COMPLETE.json",
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "evidence/slices/S4/STREAM_COMPLETE.json",
+        "evidence/slices/S5/STREAM_COMPLETE.json",
+        "evidence/slices/S8/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "S8-M2",
+      "status": "not_proven",
+      "rationale_zh": "存在 append-only events 与 S8 evidence-index，但本轮未见完整 reconcile 输出证明没有 unexplained drift。",
+      "evidence": [
+        "evidence/manifests/append-only-events.json",
+        "evidence/slices/S8/evidence-index.json"
+      ]
+    },
+    {
+      "id": "S8-M3",
+      "status": "pass",
+      "rationale_zh": "S8 integrated-gate 声明最终本地与 hosted required checks 通过。",
+      "evidence": [
+        "evidence/slices/S8/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "S8-M4",
+      "status": "fail",
+      "rationale_zh": "README 与 claims matrix 对 L4 live cloud apply 的状态不一致。",
+      "evidence": [
+        "README.md",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "S8-M5",
+      "status": "pass",
+      "rationale_zh": "claims matrix 为每个 portfolio component 映射 claim_level 与 evidence 路径。",
+      "evidence": [
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "S8-M6",
+      "status": "pass",
+      "rationale_zh": "claims matrix 的 max_claim_scope 与 non_claims 明确区分 AWS lab staging、非 production、非 Azure、agentic L3 等边界。",
+      "evidence": [
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "S8-M7",
+      "status": "pass",
+      "rationale_zh": "README 提供视觉入口、架构图、状态徽章和证据链接，基本可脱离聊天历史导航。",
+      "evidence": [
+        "README.md"
+      ]
+    },
+    {
+      "id": "S8-M8",
+      "status": "not_proven",
+      "rationale_zh": "BREAK_FIX_LOG 存在，但完整性未被本轮独立证明。",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "S8-M9",
+      "status": "pass",
+      "rationale_zh": "本输出按 fresh judge 合同独立生成，未使用或披露其他 portfolio judge 分数作为目标。",
+      "evidence": [
+        "evidence/judges/portfolio/fresh-judge-1.json"
+      ]
+    },
+    {
+      "id": "S8-M10",
+      "status": "pass",
+      "rationale_zh": "仓库契约保留 H6/人类门控用于 merge/publication；本轮未执行合并或发布。",
+      "evidence": [
+        "AGENTS.md"
+      ]
+    },
+    {
+      "id": "S8-M11",
+      "status": "not_proven",
+      "rationale_zh": "各 slice 有 saved-council 与 fresh judges 目录，但 portfolio 层对依赖图重分区和全部 fresh-judge certification 的汇总证明不足。",
+      "evidence": [
+        "evidence/judges/",
+        "evidence/slices/S8/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "S8-M12",
+      "status": "pass",
+      "rationale_zh": "仓库包含 draw.io、SVG/PNG/infographic 等权威视觉产物并由 README 引用。",
+      "evidence": [
+        "docs/architecture/continuityops.drawio",
+        "docs/architecture/continuityops-architecture.svg",
+        "docs/portfolio/continuityops-infographic.png",
+        "README.md"
+      ]
+    },
+    {
+      "id": "S8-M13",
+      "status": "not_proven",
+      "rationale_zh": "README 具备招聘入口结构，但因 claim level 与 live apply 矛盾，不能完全证明 resume-ready claims/metrics 与证据一致。",
+      "evidence": [
+        "README.md",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "S8-M14",
+      "status": "fail",
+      "rationale_zh": "README 当前把项目降为 L1/No L4+，而证据矩阵把 AWS lab staging 提升至 L4；合成实验室 proof 与 live lab proof 的外部呈现不一致。",
+      "evidence": [
+        "README.md",
+        "docs/claims/matrix.json"
+      ]
+    }
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness_and_completeness",
+      "max_score": 2.0,
+      "score": 1.35,
+      "rationale_zh": "大多数 slice artifacts 存在且 S8 gate 声明通过，但 candidate SHA 绑定和 README/claim matrix 不一致阻断完整性。",
+      "evidence": ["evidence/slices/S8/integrated-gate.json", "docs/claims/matrix.json", "README.md"]
+    },
+    {
+      "id": "security_and_authority_boundaries",
+      "max_score": 1.5,
+      "score": 1.35,
+      "rationale_zh": "OIDC、无 in-pod AWS keys、人类门控和非生产边界清晰；未见 open high/critical。",
+      "evidence": ["AGENTS.md", "docs/claims/matrix.json", "evidence/slices/S6/security.json"]
+    },
+    {
+      "id": "failure_recovery_depth",
+      "max_score": 1.5,
+      "score": 1.2,
+      "rationale_zh": "事故演练、恢复 fixture 和 lab RTO 证据存在；完整生产/真实备份恢复未声明。",
+      "evidence": ["evidence/slices/S5/drills-summary.json", "evidence/slices/S7/recovery/contract-evidence.json", "evidence/hosted/lab-drill-rto-29645042815.json"]
+    },
+    {
+      "id": "deterministic_test_quality",
+      "max_score": 1.0,
+      "score": 0.9,
+      "rationale_zh": "S8 gate 与 slice gates 记录 deterministic validation 命令 exit_code 0；部分证据 freshness/sha 汇总仍不足。",
+      "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/slices/S1/integrated-gate.json"]
+    },
+    {
+      "id": "live_runtime_evidence_quality",
+      "max_score": 1.0,
+      "score": 0.72,
+      "rationale_zh": "AWS lab apply/drill/teardown run IDs 存在，但 hosted evidence 与 candidate/main_tip 绑定不统一。",
+      "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "evidence/hosted/lab-drill-rto-29645042815.json", "evidence/hosted/cloud-apply-staging-reapply-2026-07-18.json"]
+    },
+    {
+      "id": "operability_and_troubleshooting",
+      "max_score": 1.0,
+      "score": 0.88,
+      "rationale_zh": "runbooks、drill summaries、operator navigation 证据较强；README claim mismatch 会影响操作者理解当前状态。",
+      "evidence": ["evidence/slices/S5/runbooks.json", "evidence/slices/S5/drills-summary.json", "README.md"]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "max_score": 1.0,
+      "score": 0.55,
+      "rationale_zh": "claims matrix 有良好 claim_level 映射和 non_claims，但与 README、部分 candidate-bound evidence 冲突。",
+      "evidence": ["docs/claims/matrix.json", "README.md", "evidence/slices/S8/STREAM_COMPLETE.json"]
+    },
+    {
+      "id": "maintainability_and_handoff",
+      "max_score": 0.5,
+      "score": 0.42,
+      "rationale_zh": "目录结构、schema_version、model_record、evidence namespaces 支持后续接手。",
+      "evidence": ["evidence/README.md", "evidence/slices/S8/evidence-index.json"]
+    },
+    {
+      "id": "cost_performance_realism",
+      "max_score": 0.5,
+      "score": 0.36,
+      "rationale_zh": "FinOps/teardown 和 performance baseline 分开呈现，但 performance 仍为 L1，成本真实性限于 lab。",
+      "evidence": ["docs/claims/matrix.json", "evidence/slices/S7/cost/finops-evidence.json", "evidence/slices/S7/performance/baseline-evidence.json"]
+    }
+  ],
+  "overall_score": 7.73,
+  "merge_ready": "no",
+  "blocking_findings": [
+    {
+      "id": "PFJ1-BLOCK-001",
+      "severity": "blocking",
+      "finding_zh": "Candidate/evidence binding is inconsistent: portfolio candidate is 760827db, but slice completion records and hosted evidence point to several older or later SHAs/main tips.",
+      "evidence": ["evidence/slices/S1/STREAM_COMPLETE.json", "evidence/slices/S8/STREAM_COMPLETE.json", "evidence/hosted/cloud-apply-staging-reapply-2026-07-18.json"]
+    },
+    {
+      "id": "PFJ1-BLOCK-002",
+      "severity": "blocking",
+      "finding_zh": "External README claim level conflicts with docs/claims/matrix.json L4 AWS lab staging claims, violating U10/S8-M4/S8-M14.",
+      "evidence": ["README.md", "docs/claims/matrix.json"]
+    }
+  ],
+  "unsupported_claims": [
+    {
+      "claim_zh": "整个 portfolio 在 760827db 上已经完全 final/integrated 且所有 slice 均有效。",
+      "reason_zh": "slice STREAM_COMPLETE candidate_sha 值未统一绑定 760827db。",
+      "evidence": ["evidence/slices/S*/STREAM_COMPLETE.json"]
+    },
+    {
+      "claim_zh": "对外 README 与证据矩阵均准确表达当前 L4 AWS lab staging 状态。",
+      "reason_zh": "README 仍声明 Current claim level L1 / No L4+ live cloud apply。",
+      "evidence": ["README.md", "docs/claims/matrix.json"]
+    }
+  ],
+  "critical_high_security": [],
+  "non_blocking_improvements": [
+    "把 portfolio closure manifest 机械生成并列出每个 slice 的 final candidate binding、hash 和 latest validation run，以减少人工审计歧义。",
+    "在 README claim badge 和 docs/claims/matrix.json 之间增加一致性测试，避免 live lab elevation 后外部页面滞后。",
+    "为 BREAK_FIX_LOG 添加机器可校验索引，证明每个 observed failure 均有记录和 superseding verification。"
+  ],
+  "validation_summary": [
+    {
+      "command": "sha256sum docs/planning/JUDGE_RUBRICS.md docs/claims/matrix.json",
+      "exit_code": 0,
+      "result_zh": "rubric hash 与派遣合同一致；claims matrix hash 已记录。"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 1,
+      "result_zh": "测试运行 80 项中 79 项通过；失败项为既有 terraform fmt -check -recursive terraform 格式检查，列出 terraform/envs/staging/main.tf、terraform/modules/iam/main.tf、terraform/modules/network/main.tf、terraform/modules/serverless/main.tf。"
+    },
+    {
+      "command": "python3 -m json.tool evidence/judges/portfolio/fresh-judge-1.json >/tmp/fresh-judge-1.json.validated",
+      "exit_code": 0,
+      "result_zh": "本评审 JSON 语法有效。"
+    }
+  ],
+  "notes_zh": "判定为不具备合并条件，不是因为发现 critical/high security，而是因为硬性 must-have 对候选 SHA 绑定、证据新鲜度和外部声明一致性要求未满足。"
+}
