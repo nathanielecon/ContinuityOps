@@ -283,38 +283,20 @@ Stop and request human action for:
 - Live ContinuityOps AWS = **GitHub OIDC → `continuityops-gha`** via
   `.github/workflows/continuityops-terraform.yml` (account `000000000000`).
 - Do **not** use `landing-zone-lab.yml` / `project-a-lzlab-gha` for ContinuityOps.
-- Do **not** invent AWS access keys. Repo wiring alone is not enough — the
-  operator must CloudShell-bootstrap the role once with **this** repo’s
-  `repository_id` (`1301990908`), never aws-landing-zone-lab `1296742987`.
-- One-time role bootstrap (operator CloudShell):
-
-  ```bash
-  gh api repos/nathanielecon/ContinuityOps -q .id   # expect 1301990908
-  REPO_ID=1301990908 curl -fsSL https://paste.rs/gHlj9 | bash
-  # or: REPO_ID=1301990908 bash terraform/ci-bootstrap/bootstrap-oidc-cloudshell.sh
-  ```
-
-- Escalate plan/apply (after GitHub Environment `continuityops` exists):
-
-  ```bash
-  gh workflow run continuityops-terraform.yml \
-    --repo nathanielecon/ContinuityOps \
-    -f action=plan -f environment=staging
-  # after plan OK:
-  gh workflow run continuityops-terraform.yml \
-    --repo nathanielecon/ContinuityOps \
-    -f action=apply -f environment=staging
-  ```
-
+- Do **not** invent AWS access keys. One-time bootstrap (done 2026-07-18): role
+  `continuityops-gha` trusted for ContinuityOps `repository_id` `1301990908`
+  (never aws-landing-zone-lab `1296742987`). Re-run only if trust drifts:
+  `REPO_ID=1301990908 bash terraform/ci-bootstrap/bootstrap-oidc-cloudshell.sh`
+- Loop (LZ-style, no human after bootstrap): open PR → CI **plan** → merge to
+  `main` → CI **apply** (push trigger). `workflow_dispatch` remains a fallback.
+  Environment `continuityops` has no required reviewers / wait timer.
 - Cloud Agent stays **repo-only**; prepare Terraform / open PRs; CI assumes the role.
 
 ### Paste for stuck ContinuityOps agents
 
 ```text
 ContinuityOps live AWS is GHA OIDC → continuityops-gha (continuityops-terraform.yml), not this Cloud VM and not CursorCloudAgent / project-a-lzlab-gha.
-NoCredentials here is expected. Operator CloudShell once:
-REPO_ID=1301990908 curl -fsSL https://paste.rs/gHlj9 | bash
-then create GitHub Environment continuityops and dispatch ContinuityOps Terraform plan. Continue repo-only in this seat.
+NoCredentials here is expected. Role + Environment are bootstrapped. Loop: PR plan → merge main → auto apply. Do not dispatch or CloudShell per change. Continue repo-only in this seat.
 ```
 
 ## Delivery invariants
@@ -371,7 +353,7 @@ The prior “fix” was **change apply control plane** (GHA OIDC / local bottlen
 
 ```text
 NoCredentials is expected on Pro+ without team External ID. CursorCloudAgent has never been assumed.
-ContinuityOps live AWS: GHA OIDC → continuityops-gha (continuityops-terraform.yml) after CloudShell bootstrap with REPO_ID=1301990908.
+ContinuityOps live AWS: GHA OIDC → continuityops-gha (continuityops-terraform.yml). Bootstrap done; PR plan → merge main → auto apply.
 Do not block on CURSOR_AWS_ASSUME_IAM_ROLE_ARN. Do not use project-a-lzlab-gha for ContinuityOps roots. Continue repo-only here.
 ```
 

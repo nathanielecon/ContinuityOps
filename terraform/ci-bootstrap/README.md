@@ -30,16 +30,10 @@ terraform apply -input=false -auto-approve
 terraform output gha_role_arn
 ```
 
-Then:
+Then create GitHub Environment `continuityops` (no reviewers / wait timer).
 
-1. Create GitHub Environment `continuityops` (required for apply).
-2. Dispatch **ContinuityOps Terraform** → `plan` on this repo.
-
-```bash
-gh workflow run continuityops-terraform.yml \
-  --repo nathanielecon/ContinuityOps \
-  -f action=plan -f environment=staging
-```
+Ongoing loop (no dispatch): PR → plan → merge `main` → **apply on push**.
+`workflow_dispatch` is fallback only.
 
 ## Do not
 
