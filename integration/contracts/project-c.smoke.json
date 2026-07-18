@@ -2,17 +2,17 @@
   "schema_version": "1.0",
   "contract_id": "project-c.smoke",
   "upstream": "project_c",
-  "pinned_sha": "0f54def53fbfda9747c8ea27235eaac1da831aec",
-  "status": "adapter_stub",
+  "pinned_sha": "376b7e18c5cc94e67ff180ca2f42b8eb05535be3",
+  "status": "adapter_from_packet",
   "claim_level_ceiling": "L1",
   "exports": {
-    "liveness_path": "/healthz",
-    "readiness_path": "/readyz",
+    "liveness_path": "/health/live",
+    "readiness_path": "/health/ready",
     "version_path": "/version",
-    "business_smoke_path": "/api/smoke"
+    "business_smoke_path": "/quotes",
+    "business_smoke_method": "POST"
   },
-  "missing": [
-    "Confirmed path names from pinned Project C source (MC-C-TREE)"
-  ],
-  "notes": "Endpoint paths are ContinuityOps placeholders matching common SaaS smoke contracts; confirm against packaged upstream before runtime claims."
+  "source": "integration/upstreams/packets/2026-07-18-a-c/project_c/scripts/smoke_test.py",
+  "missing": [],
+  "notes": "Paths confirmed from packaged Project C smoke_test.py at the pinned SHA (CO-006)."
 }

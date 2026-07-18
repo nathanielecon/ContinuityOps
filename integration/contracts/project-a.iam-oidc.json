@@ -15,8 +15,7 @@
     }
   },
   "missing": [
-    "Concrete account ID and role ARNs from approved H1 cloud identity (CO-003; D-044 clears receipt wait but secrets/account still optional tooling)",
-    "Verified upstream OIDC export from pinned tree (MC-A-TREE)"
+    "Concrete account ID and role ARNs from approved H1 cloud identity (CO-003; D-044 clears receipt wait but secrets/account still optional tooling)"
   ],
-  "notes": "Least-privilege OIDC role names are ContinuityOps scaffold placeholders. No long-lived keys. Cloud apply remains L4-unproven."
+  "notes": "Least-privilege OIDC role names are ContinuityOps scaffold placeholders. Upstream guardrail docs are in packet 2026-07-18-a-c. No long-lived keys. Cloud apply remains L4-unproven."
 }

@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "packet_id": "2026-07-18-a-c",
+  "packaged_at": "2026-07-18",
+  "packager": "control-center",
+  "decision": "D-028",
+  "a2_option": 2,
+  "method": "gh api repos/.../tarball/<sha> + Windows tar.exe selective extract (+ evidence overlay)",
+  "sources": [
+    {
+      "id": "project_a",
+      "repository": "nathanielecon/aws-landing-zone-lab",
+      "commit_sha": "f688065c7705ab7d3febcd9ec2842bea4d8bed87",
+      "extracted_paths": [
+        "README.md",
+        "platform/README.md",
+        "platform/SOURCES.md",
+        "platform/evidence-index.md",
+        "platform/docs/architecture",
+        "platform/docs/guardrails",
+        "platform/environments",
+        "platform/harness",
+        "evidence/platform"
+      ],
+      "evidence_overlays": [],
+      "file_count": 34
+    },
+    {
+      "id": "project_c",
+      "repository": "nathanielecon/local-first-governed-cicd",
+      "commit_sha": "376b7e18c5cc94e67ff180ca2f42b8eb05535be3",
+      "extracted_paths": [
+        "STATUS.md",
+        "docs/decisions/0002-promote-digests.md",
+        "evidence/phase-6/manifest.json",
+        "scripts/smoke_test.py",
+        "src/delivery_api"
+      ],
+      "evidence_overlays": [
+        {
+          "commit_sha": "c6ca45425244323ee90be5b7b02d511f54976b2b",
+          "extracted_paths": [
+            "evidence/phase-9"
+          ],
+          "reason": "phase-9 staging smoke + ECR digest recorded against pin 376b7e18…"
+        }
+      ],
+      "file_count": 24
+    }
+  ],
+  "co_004": {
+    "one_line": "image_digest: sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229 | rollback: none proven | source: 283077380808.dkr.ecr.us-east-1.amazonaws.com/project-c-delivery-api@sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229 (packet evidence/phase-9/governing-manifest.json; evidence_commit c6ca45425244323ee90be5b7b02d511f54976b2b; pin 376b7e18c5cc94e67ff180ca2f42b8eb05535be3)",
+    "proof": "co-004-digest-proof.json",
+    "image_digest": "sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229",
+    "registry": "283077380808.dkr.ecr.us-east-1.amazonaws.com/project-c-delivery-api",
+    "rollback_target": "none proven",
+    "rollback_evidence": "integration/upstreams/packets/2026-07-18-a-c/project_c/evidence/phase-6/manifest.json (fixture only; not ContinuityOps known-good)"
+  },
+  "notes": "Read-only vendored snapshot. Project C pin is the phase-9 deploy SHA; phase-9 evidence paths overlay from the later evidence commit. Upstream repos unmodified."
+}

@@ -18,8 +18,7 @@
     "environment_keys": ["staging", "recovery-lab"]
   },
   "missing": [
-    "Real bucket/table names from approved lab account",
-    "Upstream state interface verification (MC-A-TREE)"
+    "Real bucket/table names from approved lab account"
   ],
-  "notes": "Remote state isolation, encryption, versioning, and locking are designed in terraform/modules/state. Not cloud-applied (no L4 claim)."
+  "notes": "Remote state isolation, encryption, versioning, and locking are designed in terraform/modules/state. Upstream environment examples are in packet 2026-07-18-a-c. Not cloud-applied (no L4 claim)."
 }
