@@ -1,0 +1,32 @@
+# ContinuityOps — drift detection stub (scheduled + manual).
+name: drift
+
+on:
+  schedule:
+    - cron: '0 14 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    environment: staging-plan
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Configure AWS credentials (OIDC placeholder)
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        continue-on-error: true
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN_PLAN || 'arn:aws:iam::000000000000:role/continuityops-staging-plan' }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+          role-session-name: continuityops-drift
+
+      - name: Drift stub
+        run: |
+          echo "Drift detect stub — no live state comparison until backend exists."
+          node scripts/ci/record-hosted-stub.mjs drift

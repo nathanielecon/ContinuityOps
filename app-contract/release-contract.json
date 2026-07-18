@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "continuityops.app-contract.release",
+  "derived_from": {
+    "upstream": "project_c",
+    "repository": "nathanielecon/local-first-governed-cicd",
+    "commit_sha": "0f54def53fbfda9747c8ea27235eaac1da831aec"
+  },
+  "artifact": {
+    "kind": "container_image",
+    "image_digest": "UNAVAILABLE",
+    "label": "ContinuityOps lab artifact policy — not a Project C production release until digest is verified"
+  },
+  "identity": {
+    "git_commit": "0f54def53fbfda9747c8ea27235eaac1da831aec",
+    "version": "UNAVAILABLE"
+  },
+  "interfaces": {
+    "config": ["APP_ENV", "LOG_LEVEL"],
+    "secrets": ["DATABASE_URL_REF", "OIDC_CLIENT_SECRET_REF"],
+    "smoke": {
+      "liveness": "/healthz",
+      "readiness": "/readyz",
+      "version": "/version",
+      "business": "/api/smoke"
+    }
+  },
+  "claim_level_ceiling": "L1",
+  "remaining_boundaries": [
+    "image_digest UNAVAILABLE (CO-004)",
+    "No L2 local runtime proof in S1",
+    "No L4 cloud apply of the application in S1"
+  ]
+}

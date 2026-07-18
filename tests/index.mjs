@@ -3,4 +3,8 @@ import './harness/p0-t05.test.mjs';
 import './harness/junior-actuate.test.mjs';
 import './validators/core.test.mjs';
 import './validators/p0-t05.test.mjs';
+import './validators/p1.test.mjs';
 import './orchestration/dispatch.test.mjs';
+import './integration/upstream-contracts.test.mjs';
+import './terraform/scaffold.test.mjs';
+import './workflows/hosted-ci.test.mjs';

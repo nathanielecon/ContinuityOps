@@ -3,14 +3,51 @@
   "project_a": {
     "repository": "nathanielecon/aws-landing-zone-lab",
     "commit_sha": "f688065c7705ab7d3febcd9ec2842bea4d8bed87",
-    "consumed_contracts": [],
-    "evidence_refs": []
+    "consumed_contracts": [
+      "integration/contracts/project-a.network.json",
+      "integration/contracts/project-a.iam-oidc.json",
+      "integration/contracts/project-a.state.json",
+      "integration/contracts/project-a.governance.json"
+    ],
+    "evidence_refs": [
+      "evidence/slices/S1/upstream-integration.json",
+      "docs/architecture/integration.md"
+    ],
+    "access_note": "Worker token has metadata-only access; tree contents not readable in this environment (CO-006). Contracts are ContinuityOps-side adapters derived from MASTER_PLAN export surface; upstream trees remain unmodified."
   },
   "project_c": {
     "repository": "nathanielecon/local-first-governed-cicd",
     "commit_sha": "0f54def53fbfda9747c8ea27235eaac1da831aec",
-    "image_digest": "REQUIRED_OR_EXPLICITLY_UNAVAILABLE",
-    "consumed_contracts": [],
-    "evidence_refs": []
-  }
+    "image_digest": "UNAVAILABLE",
+    "consumed_contracts": [
+      "integration/contracts/project-c.release.json",
+      "integration/contracts/project-c.smoke.json",
+      "app-contract/release-contract.json"
+    ],
+    "evidence_refs": [
+      "evidence/slices/S1/upstream-integration.json",
+      "docs/architecture/integration.md"
+    ],
+    "access_note": "Worker token has metadata-only access; image digest not verifiable from pinned SHA in this environment (CO-004/CO-006). Digest marked UNAVAILABLE until control-center context package or vendored snapshot supplies a verified sha256 digest."
+  },
+  "missing_capabilities": [
+    {
+      "id": "MC-A-TREE",
+      "upstream": "project_a",
+      "summary": "Pinned Project A tree contents not readable with current worker GitHub token (contents:403).",
+      "resolution": "Control-center D-028 context package or read-only vendored snapshot at the pinned SHA."
+    },
+    {
+      "id": "MC-C-DIGEST",
+      "upstream": "project_c",
+      "summary": "Immutable image digest and known-good rollback target not verified; image_digest=UNAVAILABLE.",
+      "resolution": "Consume a verified sha256 digest via context package, or label a ContinuityOps lab artifact explicitly (CO-004)."
+    },
+    {
+      "id": "MC-C-TREE",
+      "upstream": "project_c",
+      "summary": "Pinned Project C tree contents not readable with current worker GitHub token (contents:403).",
+      "resolution": "Same as MC-A-TREE (D-028 packaging)."
+    }
+  ]
 }

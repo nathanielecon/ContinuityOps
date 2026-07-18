@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "network-negative",
+  "prohibited": [
+    "0.0.0.0/0_on_ssh",
+    "cross_account_peering_without_approval",
+    "calling_environment_production"
+  ],
+  "required": [
+    "staging_and_recovery_lab_separated",
+    "enable_network_resources_default_false"
+  ],
+  "claim_level_ceiling": "L1"
+}

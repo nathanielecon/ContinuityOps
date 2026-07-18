@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "task_id": "P1-T01",
+  "baseline_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "command": "node scripts/project.mjs validate P1-T01",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:09:03.084Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "upstream_pin": true,
+    "integration_contract": true,
+    "claims": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Upstream tree contents not readable (CO-006)",
+    "Project C image_digest=UNAVAILABLE (CO-004)",
+    "No L4 cloud-applied claim"
+  ],
+  "started_at": "2026-07-18T06:09:03.075Z",
+  "completed_at": "2026-07-18T06:09:03.084Z",
+  "validator_details": [
+    {
+      "id": "upstream_pin",
+      "result": {
+        "pass": true,
+        "digest": "UNAVAILABLE",
+        "missing": 3
+      }
+    },
+    {
+      "id": "integration_contract",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "claims",
+      "result": {
+        "pass": true,
+        "claim_level": "L1"
+      }
+    }
+  ],
+  "passed": [
+    "upstream_pin",
+    "integration_contract",
+    "claims"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S1/upstream-integration.json",
+  "component_claims": {
+    "upstreams_lock": "L1",
+    "adapter_contracts": "L1",
+    "upstream_tree_verification": "not_claimed"
+  }
+}
