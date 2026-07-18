@@ -10,8 +10,13 @@
 在摘要末尾**原样**输出下列结构(base_sha 为你开工时目标分支 tip 的 40 位 SHA;
 可用 `git rev-parse HEAD` 若工作区即该 tip,否则用派遣评论给出的 baseline):
 
+**base_branch 硬规则(BF-2026-014):** 必须是仓库里**已存在**的分支名。
+默认写 `main`。仅当派遣合同明确给出已存在的 stream/orch 分支时才写该分支。
+禁止发明不存在的名字(例如 `work`)——否则 `gh pr create` 会以
+`Base ref must be a branch` 失败。
+
 <!-- continuityops-patch-v1 -->
-base_branch: <stream-or-orch-branch>
+base_branch: main
 base_sha: <40_hex>
 context_remaining: <pct>
 

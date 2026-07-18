@@ -166,12 +166,20 @@ jobs:
           git commit -m "codex-dispatch: apply patch from issue #${ISSUE} (D-034)"
           git push -u origin "HEAD:refs/heads/${HEAD_BRANCH}"
 
+          # BF-2026-014: workers sometimes invent base_branch (e.g. "work").
+          # Coerce to an existing remote branch; default main.
+          PR_BASE="$BASE_BRANCH"
+          if ! git ls-remote --exit-code --heads origin "$PR_BASE" >/dev/null 2>&1; then
+            echo "warn: base_branch '$PR_BASE' missing on origin; coercing to main (BF-2026-014)"
+            PR_BASE=main
+          fi
+
           TITLE="codex-dispatch #${ISSUE}: mechanical publish (D-034)"
           BODY="$(cat <<EOF
           Mechanically published from chatgpt-codex-connector[bot] patch comment (D-034).
 
           - Issue: #${ISSUE}
-          - Base: \`${BASE_BRANCH}\` @ \`${BASE_SHA}\`
+          - Base: \`${PR_BASE}\` @ \`${BASE_SHA}\` (worker declared \`${BASE_BRANCH}\`)
           - context_remaining: ${CONTEXT_REMAINING}
 
           Closes #${ISSUE}
@@ -181,7 +189,7 @@ jobs:
           BODY="$(printf '%s\n' "$BODY" | sed 's/^          //')"
 
           URL="$(gh pr create --repo "${{ github.repository }}" \
-            --base "$BASE_BRANCH" \
+            --base "$PR_BASE" \
             --head "$HEAD_BRANCH" \
             --title "$TITLE" \
             --body "$BODY")"
