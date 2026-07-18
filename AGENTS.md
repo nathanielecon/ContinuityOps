@@ -32,24 +32,24 @@ happen.
   replaces the junior supervisor when that seat is context-dead or stuck, and
   may pipe true constitutional crises to the owner. See
   `docs/planning/dispatch/CHIEF_SUPERVISOR.md`.
-- **Junior / orch / reviewer / workers / monitor (D-043):** all episodic seats
-  use **`cursor-grok-4.5-high`** effective immediately (owner directive). Codex
-  App `@codex` / GPT implementation path is **suspended** for product work.
-  Chief dispatches Grok subordinates in-session and merges on CI green +
-  independent Grok reviewer `verdict: pass`. See
+- **Junior supervisor (D-045 / D-041):** episodic **GPT-5.6 Sol medium** via
+  `codex-dispatch`; actuates through D-042 GHA intents. See
   `docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md`.
-- **Pipeline monitor:** read-only Grok subagent reporting **significant**
+- **Ralphy orchestration (D-045 / D-030):** episodic **GPT** rounds (D-038
+  ladder). Orchestrator validates rounds, advances state up to `review`, owns
+  break/fix, prepares contracts; it **emits intents** and never merges/approves
+  PRs. Engagement: **no Opus**.
+- **D-037 reviewer (D-045):** independent **GPT** round per worker PR — apply
+  patch, run declared checks, structured `verdict` only. No code edits; no merge.
+  Chief merges on CI green + `verdict: pass`.
+- **Code execution (D-045):** Codex App `@codex` / warm Codex workers (D-034
+  patch publish) implement bounded tasks. Chief may unblock with in-repo edits
+  when the App path stalls. Workers report `context_remaining` every handoff.
+- **Pipeline monitor:** read-only **Grok** subagent reporting **significant**
   findings only to the **chief supervisor**. See
   `docs/planning/dispatch/MONITOR.zh.md`.
-- **Ralphy orchestration (D-043):** Grok episodic rounds. Orchestrator validates
-  rounds, advances state up to `review`, owns break/fix, prepares contracts; it
-  **emits intents** and never merges/approves PRs. Engagement: **no Opus**.
-- **D-037 reviewer (D-043):** independent Grok round per worker PR — apply
-  patch, run declared checks, structured `verdict` only. No code edits; no merge.
-- **Code execution (D-043):** Grok Cursor cloud/subagent workers implement
-  bounded tasks. Codex Cloud Environment (D-026) remains registered but is not
-  the default worker carrier while D-043 stands. Workers report
-  `context_remaining` every handoff; managerial seats replace low-context workers.
+- **D-043 superseded by D-045:** Grok-only worker suspension is lifted; GPT/Codex
+  product path is restored for junior/orch/reviewer/workers.
 - **Claude execution location:** Claude agents run in cloud environments only
   when used; they do not rely on the owner's laptop shell or local cloud login.
 

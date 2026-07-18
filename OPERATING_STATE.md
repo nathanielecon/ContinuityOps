@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 40,
+  "revision": 41,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
@@ -20,10 +20,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   "seats": {
     "owner": "human:nathanielecon",
     "chief_supervisor": "cursor-cloud-chief",
-    "junior_supervisor": "cursor-grok-4.5-high (D-043)",
-    "orchestrator": "cursor-grok-4.5-high (D-043)",
-    "reviewer": "cursor-grok-4.5-high (D-043)",
-    "worker": "cursor-grok-4.5-high (D-043)",
+    "junior_supervisor": "gpt-5.6-sol-medium (D-045/D-041)",
+    "orchestrator": "episodic-gpt (D-045/D-030)",
+    "reviewer": "episodic-gpt-d037 (D-045)",
+    "worker": "codex-app-gpt (D-045/D-034)",
     "monitor": "cursor-grok-4.5-high-readonly-to-chief"
   },
   "codex_cloud_environment": {
@@ -50,9 +50,9 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S8-P8-T04"
   ],
   "next_actions": [
-    "New chief: read docs/planning/dispatch/CHIEF_HANDOFF_2026-07-18.md; assert-cloud-seat-gh-token.mjs PASS; continue Terraform PR→plan→merge→apply",
-    "Elevate staging beyond live-marker only with fresh green apply run URLs + evidence/hosted/",
-    "Optional: kind+helm L2 local kubectl"
+    "Chief occupation: D-045 GPT subordinates LIVE; elevate lab non-claims via OIDC PR→plan→merge→apply",
+    "Order: network/IAM → EKS → Lambda → lab drills/RTO → teardown; Azure scope-drop if no Azure creds",
+    "Keep CursorCloudAgent/in-pod AWS as permanent non-claim"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -139,8 +139,9 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-040 | **Cursor cloud App token can push/merge but not Issues**: until `issues:write` is restored for the supervisor App seat, the App `@codex` path is unavailable from this seat for dispatch and keep-warm. Control-center / owner comments on queue issues (including keep-warm #4) are required. Amends the practical actuation of D-031/D-034/D-035 for this seat only; does not change the constitutional App-path design. | accepted | Supervisor git-push fallback remains viable; Issues-gated actuation must be owner/control-center until permission restored |
 | D-041 | **Chief / junior supervisor split** (owner directive 2026-07-17): the former portfolio-supervisor five duties move to a **junior supervisor** on **GPT-5.6 Sol medium** (episodic via `codex-dispatch`). The cloud seat becomes **chief supervisor**: stream-boundary verdicts + escalations only. D-037 reviewer remains verdict-only; orch never approves/merges PRs; junior **actuates** merges on CI green + verdict. Escalation: … → junior → chief → owner (constitutional crisis). Each managerial seat replaces direct subordinates on low `context_remaining`. A read-only **Grok pipeline monitor** reports significant bottlenecks to the **chief** only. Amends practical reading of D-032/D-035 (steady-state actuation is junior-owned). Engagement: no Opus. | accepted | Chief stays quiet while junior oils the pipeline; monitor prevents silent bottlenecks |
 | D-042 | **Junior App actuation via GHA intents** (owner directive 2026-07-18 "update the permissions"): Codex App sandboxes remain receive-only (no `git push`/`gh`). Junior judgment stays in the App round; **actuation** is `.github/workflows/junior-actuate.yml` consuming `<!-- continuityops-merge-v1 -->` / `<!-- continuityops-dispatch-v1 -->` from `chatgpt-codex-connector[bot]` on `codex-dispatch` issues, using ephemeral `GITHUB_TOKEN` (same Settings prerequisites as D-034). Merge requires CI contracts success + D-037 bot `verdict: pass`. Does **not** inject secrets into the Codex Environment (D-026). Amends practical reading of D-041 actuation. | accepted | Junior can oil the pipeline overnight without sandboxed `gh`; permissions = GHA write token + workflow gates |
-| D-043 | **All workers fall back to Grok** (owner directive 2026-07-18, effective immediately): every episodic worker seat — implementation worker, orchestrator, junior supervisor, D-037 reviewer, pipeline monitor — uses **`cursor-grok-4.5-high`** (or `cursor-grok-4.5-high-fast` when explicitly chosen). Codex App `@codex` / GPT implementation path is **suspended** for product work while D-043 stands; chief supervisor (this Cursor cloud seat) remains the merge/actuation authority and dispatches Grok subordinates in-session. Amends D-030/D-037/D-038/D-041 model carriers. Engagement: no Opus. | accepted | Overnight progress no longer depends on Codex App sandbox actuation for workers |
-| D-044 | **No more human gates** (owner directive 2026-07-18, verbatim): owner accepts authorization here; H1–H6 / further `waiting_human` phase gates are cleared for ContinuityOps execution. Set `authorized_through_phase` to **8**. Chief + Grok subordinates merge and advance per PLAN without stopping for human receipts. Residual secrets the agent cannot mint (e.g. absent `REPO_SETTINGS_ADMIN_TOKEN`) remain optional tooling, not constitutional stops. Amends D-012 merge/human-gate practical reading and D-035 human-retention list for this engagement. | accepted | Pipeline may run Phases 0–8 without owner clicks |
+| D-043 | ~~**All workers fall back to Grok**~~ **superseded by D-045** (was owner directive 2026-07-18): every episodic worker seat — implementation worker, orchestrator, junior supervisor, D-037 reviewer, pipeline monitor — uses **`cursor-grok-4.5-high`** (or `cursor-grok-4.5-high-fast` when explicitly chosen). Codex App `@codex` / GPT implementation path is **suspended** for product work while D-043 stands; chief supervisor (this Cursor cloud seat) remains the merge/actuation authority and dispatches Grok subordinates in-session. Amends D-030/D-037/D-038/D-041 model carriers. Engagement: no Opus. | superseded by D-045 | Overnight Grok-only path retired; GPT/Codex restored |
+| D-045 | **Restore GPT subordinates** (owner directive 2026-07-18): supersedes D-043. Junior = GPT-5.6 Sol medium (D-041); orchestrator = episodic GPT (D-030/D-038); workers = Codex App `@codex` / D-034; D-037 reviewer = independent GPT; **Grok monitor retained** (read-only → chief). Chief remains this Cursor cloud seat. Codex product path re-enabled for ContinuityOps work. Engagement: no Opus. | accepted | GPT pipeline restored; Grok-only suspension lifted |
+| D-044 | **No more human gates** (owner directive 2026-07-18, verbatim): owner accepts authorization here; H1–H6 / further `waiting_human` phase gates are cleared for ContinuityOps execution. Set `authorized_through_phase` to **8**. Chief + GPT subordinates (D-045) merge and advance per PLAN without stopping for human receipts. Residual secrets the agent cannot mint (e.g. absent `REPO_SETTINGS_ADMIN_TOKEN`) remain optional tooling, not constitutional stops. Amends D-012 merge/human-gate practical reading and D-035 human-retention list for this engagement. | accepted | Pipeline may run Phases 0–8 without owner clicks |
 
 ## Initial issue ledger
 
