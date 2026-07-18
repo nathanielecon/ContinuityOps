@@ -290,7 +290,10 @@ Stop and request human action for:
 - Loop (LZ-style, no human after bootstrap): open PR → CI **plan** → merge to
   `main` → CI **apply** (push trigger). `workflow_dispatch` remains a fallback.
   Environment `continuityops` has no required reviewers / wait timer.
+- Durable state: workflow runs `terraform/ci-bootstrap/ensure-tfstate.sh` then
+  S3 backend (`continuityops-tfstate-283077380808` / `continuityops-tf-locks`).
 - Cloud Agent stays **repo-only**; prepare Terraform / open PRs; CI assumes the role.
+  This seat’s PAT may 403 on Actions APIs — confirm apply green in the UI if needed.
 
 ### Paste for stuck ContinuityOps agents
 

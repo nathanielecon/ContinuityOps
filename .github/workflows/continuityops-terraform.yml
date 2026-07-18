@@ -44,6 +44,8 @@ env:
   TF_IN_AUTOMATION: '1'
   TF_INPUT: 'false'
   TF_VAR_aws_account_id: '283077380808'
+  TF_STATE_BUCKET: continuityops-tfstate-283077380808
+  TF_LOCK_TABLE: continuityops-tf-locks
 
 jobs:
   plan:
@@ -74,8 +76,12 @@ jobs:
       - name: Caller identity
         run: aws sts get-caller-identity
 
+      - name: Ensure remote state bucket and lock table
+        working-directory: ${{ github.workspace }}
+        run: bash terraform/ci-bootstrap/ensure-tfstate.sh
+
       - name: Terraform init
-        run: terraform init -backend=false -input=false
+        run: terraform init -input=false -reconfigure
 
       - name: Terraform validate
         run: terraform validate -no-color
@@ -115,8 +121,12 @@ jobs:
       - name: Caller identity
         run: aws sts get-caller-identity
 
+      - name: Ensure remote state bucket and lock table
+        working-directory: ${{ github.workspace }}
+        run: bash terraform/ci-bootstrap/ensure-tfstate.sh
+
       - name: Terraform init
-        run: terraform init -backend=false -input=false
+        run: terraform init -input=false -reconfigure
 
       - name: Terraform apply
         run: terraform apply -input=false -auto-approve -no-color

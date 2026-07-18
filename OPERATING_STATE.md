@@ -9,12 +9,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 36,
+  "revision": 37,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
   "current_gate": "portfolio-certified-L1",
-  "running_tasks": [],
+  "running_tasks": [
+    "live-aws-remote-state-and-staging-marker"
+  ],
   "blocked_tasks": [],
   "waiting_human": [],
   "seats": {
@@ -50,8 +52,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S8-P8-T04"
   ],
   "next_actions": [
-    "Optional elevation: kind+helm L2 local kubernetes; AWS OIDC L3/L4 when accounts configured",
-    "Keep claim_level honest — no L4+ without cloud_apply_evidence"
+    "Live AWS loop (LIVE 2026-07-18): edit terraform/ → PR plan (continuityops-terraform.yml) → merge main → auto apply as continuityops-gha",
+    "Land remote state ensure-tfstate + staging live-marker; capture cloud_apply_evidence before raising claim above L1",
+    "Keep claim_level honest — no L4+ without cloud_apply_evidence",
+    "Optional: kind+helm L2 local kubernetes"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -76,7 +80,9 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S3 P3-T01..T03 verified at claim L1 (Grok D-043); no live Lambda",
     "S4 P4-T01..T03 verified at claim L1 (Grok D-043); synthetic signal-path only",
     "S2/S3/S4 supervisor stream-boundary approve (BF-PRE-015); claim L1",
-    "S5–S8 P5-T01..P8-T04 verified at claim L1 (Grok D-043); portfolio-certified-L1"
+    "S5–S8 P5-T01..P8-T04 verified at claim L1 (Grok D-043); portfolio-certified-L1",
+    "ContinuityOps live AWS control plane LIVE (2026-07-18): GHA OIDC → continuityops-gha (repo id 1301990908); workflow continuityops-terraform.yml; Environment continuityops; PR #50 merged to main at 20266d3",
+    "Cloud seat NoCredentials expected (BF-2026-010 / Pro+); do not use CursorCloudAgent or project-a-lzlab-gha for ContinuityOps"
   ],
   "verified_baseline": [],
   "unverified": [
