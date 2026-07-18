@@ -9,15 +9,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 28,
+  "revision": 29,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
-  "current_gate": "H0-bind-pr-and-D042-actuate",
-  "running_tasks": ["JR-SUPER-01", "D-042-junior-actuate"],
-  "blocked_tasks": ["P0-T05"],
+  "current_gate": "P0-T05-integrated-gate",
+  "running_tasks": ["JR-SUPER-01"],
+  "blocked_tasks": [],
   "waiting_human": [
-    "ACTIONS_WORKFLOW_PERMISSIONS_UI_CONFIRM",
     "REPO_SETTINGS_ADMIN_TOKEN",
     "PR-20"
   ],
@@ -37,13 +36,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "first_warm": true,
     "secrets": "none"
   },
-  "completed_gates": [],
+  "completed_gates": ["H0"],
   "next_actions": [
-    "D-042: land junior-actuate GHA; junior emits merge/dispatch intents (no in-sandbox gh); owner confirm Actions workflow permissions UI if actuate/publish fails",
-    "Merge H0 bind PR #44 after D-037 pass via continuityops-merge-v1; then P0-T05 orch path",
+    "H0 bound from issue #42 comment 5008633820; P0-T04 verified; junior drives P0-T05 orch/worker path per POST_H0_RESUME.md via D-042 intents",
+    "Junior: D-037 every worker PR; merge only on CI green + reviewer verdict pass (continuityops-merge-v1)",
     "Chief waits on STREAM_COMPLETE / junior ESCALATION / significant monitor reports",
-    "Owner parallel: REPO_SETTINGS_ADMIN_TOKEN; PR #20; confirm Settings→Actions→Workflow permissions Read/write + create-PR",
-    "Do not authorize Phase 1 until S0 and H0 pass; engagement: no Opus"
+    "Owner parallel (non-blocking): REPO_SETTINGS_ADMIN_TOKEN; PR #20",
+    "D-034 publish-ok history already evidences Actions write + create-PR; ACTIONS_WORKFLOW_PERMISSIONS_UI_CONFIRM cleared without Settings UI click",
+    "Do not authorize Phase 1 until S0 (P0-T05) certifies; engagement: no Opus"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -59,7 +59,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "P0-T03 verified after redo (issue #35 → PR #36 → D-037 #38 pass → main 1523466)",
     "P0-T04 rubric freeze integrated (issue #39 → PR #40 → D-037 #41 pass → main 9a58cbd); H0 package waiting_human",
     "D-041 chief/junior/monitor topology accepted; junior appointment JR-SUPER-01",
-    "D-042 junior App actuation via GHA intents (merge/dispatch); App sandbox remains receive-only"
+    "D-042 junior App actuation via GHA intents (merge/dispatch); App sandbox remains receive-only",
+    "H0 human receipt bound (issue #42 comment 5008633820 → harness/approvals/H0.binding.json); P0-T04 verified; P0-T05 ready"
   ],
   "verified_baseline": [],
   "unverified": [
