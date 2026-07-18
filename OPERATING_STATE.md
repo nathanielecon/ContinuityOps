@@ -9,11 +9,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 33,
+  "revision": 35,
   "project": "ContinuityOps",
-  "current_phase": 1,
+  "current_phase": 4,
   "authorized_through_phase": 8,
-  "current_gate": "S1-complete-pending-supervisor-boundary",
+  "current_gate": "S2-S4-boundary-approved",
   "running_tasks": [],
   "blocked_tasks": [],
   "waiting_human": [],
@@ -37,13 +37,17 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   "completed_gates": [
     "H0",
     "S0-P0-T05",
-    "S1-P1-T04"
+    "S1-P1-T04",
+    "S2-P2-T04",
+    "S3-P3-T03",
+    "S4-P4-T03",
+    "S2-boundary",
+    "S3-boundary",
+    "S4-boundary"
   ],
   "next_actions": [
-    "Supervisor BF-PRE-015 stream-boundary review of S1 STREAM_COMPLETE",
-    "D-028 context package for A/C trees + digest (CO-004/CO-006)",
-    "Optional: configure GitHub Environments + AWS OIDC roles for L3/L4 elevation",
-    "Proceed Phase 2 (S2) when S1 boundary certified"
+    "Proceed Phase 5–8 (S5–S8) on cursor/phase5-8-complete-7c3d",
+    "Optional: kind+helm for L2 local kubernetes; AWS OIDC for L3/L4 elevation"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -63,7 +67,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "H0 human receipt bound (issue #42 comment 5008633820 → harness/approvals/H0.binding.json); P0-T04 verified; P0-T05 ready",
     "D-043: owner directed all workers fall back to Grok; chief merges per plan with Grok subordinates",
     "P0-T05 verified / S0 integrated gate (Grok D-043/D-044)",
-    "S1 P1-T01..T04 verified at claim L1 (Grok D-043); STREAM_COMPLETE pending supervisor boundary"
+    "S1 P1-T01..T04 verified at claim L1 (Grok D-043); STREAM_COMPLETE pending supervisor boundary",
+    "S2 P2-T01..T04 verified at claim L1 (Grok D-043); managed_cluster_apply retained",
+    "S3 P3-T01..T03 verified at claim L1 (Grok D-043); no live Lambda",
+    "S4 P4-T01..T03 verified at claim L1 (Grok D-043); synthetic signal-path only",
+    "S2/S3/S4 supervisor stream-boundary approve (BF-PRE-015); claim L1"
   ],
   "verified_baseline": [],
   "unverified": [

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "task_id": "P4-T02",
+  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+  "command": "node scripts/project.mjs validate P4-T02",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:17:17.516Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "dashboard_schema": true,
+    "alert_contract": true,
+    "slo_math": true,
+    "alert_negative": true,
+    "runbook_links": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Dashboard/alert JSON schemas only",
+    "No live Grafana/CloudWatch"
+  ],
+  "started_at": "2026-07-18T06:17:17.508Z",
+  "completed_at": "2026-07-18T06:17:17.516Z",
+  "validator_details": [
+    {
+      "id": "dashboard_schema",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "alert_contract",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "slo_math",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "alert_negative",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "runbook_links",
+      "result": {
+        "pass": true
+      }
+    }
+  ],
+  "passed": [
+    "dashboard_schema",
+    "alert_contract",
+    "slo_math",
+    "alert_negative",
+    "runbook_links"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S4/signals.json"
+}

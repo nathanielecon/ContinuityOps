@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "severities": [
+    {
+      "level": "SEV1",
+      "sla_minutes": 15,
+      "escalation_owner": "chief_supervisor",
+      "examples": ["cross-tenant data exposure", "total worker outage"]
+    },
+    {
+      "level": "SEV2",
+      "sla_minutes": 60,
+      "escalation_owner": "junior_supervisor",
+      "examples": ["DLQ depth alarm sustained", "elevated error budget burn"]
+    },
+    {
+      "level": "SEV3",
+      "sla_minutes": 240,
+      "escalation_owner": "saas-operations",
+      "examples": ["single-tenant export delay"]
+    }
+  ]
+}

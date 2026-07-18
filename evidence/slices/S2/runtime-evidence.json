@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "task_id": "P2-T02",
+  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+  "command": "node scripts/project.mjs validate P2-T02",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:17:17.241Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "kind_runtime": true,
+    "managed_cluster_preflight": true,
+    "kubernetes_smoke": true,
+    "release_identity": true,
+    "autoscaling_runtime": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "managed_cluster_apply",
+    "kind L2 only when kind+helm available"
+  ],
+  "started_at": "2026-07-18T06:17:17.232Z",
+  "completed_at": "2026-07-18T06:17:17.241Z",
+  "validator_details": [
+    {
+      "id": "kind_runtime",
+      "result": {
+        "pass": true,
+        "claim_level": "L1"
+      }
+    },
+    {
+      "id": "managed_cluster_preflight",
+      "result": {
+        "pass": true,
+        "remaining_boundaries": [
+          "managed_cluster_apply"
+        ]
+      }
+    },
+    {
+      "id": "kubernetes_smoke",
+      "result": {
+        "pass": true,
+        "note": "smoke 以脚本与场景契约为准；无托管集群断言"
+      }
+    },
+    {
+      "id": "release_identity",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "autoscaling_runtime",
+      "result": {
+        "pass": true,
+        "note": "HPA 模板存在；实时扩缩容未声明"
+      }
+    }
+  ],
+  "passed": [
+    "kind_runtime",
+    "managed_cluster_preflight",
+    "kubernetes_smoke",
+    "release_identity",
+    "autoscaling_runtime"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S2/runtime-evidence.json"
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "worker-event-v1",
+  "required_fields": ["event_id", "tenant_id", "type", "payload", "occurred_at"],
+  "types": ["order.created", "order.updated", "tenant.export"],
+  "malformed_examples": [
+    {},
+    { "event_id": "e1" },
+    { "event_id": "e2", "tenant_id": "t1", "type": "unknown.event", "payload": {}, "occurred_at": "2026-07-18T00:00:00Z" }
+  ],
+  "duplicate_policy": "ack_and_skip_when_idempotency_hit",
+  "poison_policy": "after_max_receive_count_send_to_dlq"
+}

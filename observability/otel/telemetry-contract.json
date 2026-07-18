@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "otel-telemetry-v1",
+  "correlation": {
+    "trace_context": "W3C Trace Context",
+    "baggage_keys": ["tenant_id", "correlation_id"],
+    "propagated_across": ["ingress", "app", "queue", "function"]
+  },
+  "logs": {
+    "format": "json",
+    "required_fields": ["timestamp", "level", "message", "trace_id", "span_id", "tenant_id"]
+  },
+  "metrics": {
+    "red": ["rate", "errors", "duration"],
+    "use": ["utilization", "saturation", "errors"]
+  },
+  "redaction": {
+    "secret_patterns": ["password", "secret", "api_key", "authorization", "token"],
+    "tenant_payload_fields": ["ssn", "card_number", "email_raw"]
+  },
+  "claim_ceiling": "L1"
+}
