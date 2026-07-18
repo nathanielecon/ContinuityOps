@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "verdict_type": "chief_stream_boundary",
+  "recorded_utc": "2026-07-18T13:03:00Z",
+  "chief_seat": "cursor-cloud-chief",
+  "decision": "approve",
+  "scope": "lab-live-elevation-and-teardown",
+  "baseline_sha": "3e743c8ca04e69401bf28e8e8e88e4436b96c7da",
+  "candidate_sha": "f059ffa3d2b73e26fb61c849f2a6bfeebdd0259a",
+  "evidence": [
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+    "evidence/hosted/lab-drill-rto-29645042815.json",
+    "https://github.com/nathanielecon/ContinuityOps/actions/runs/29644662492",
+    "https://github.com/nathanielecon/ContinuityOps/actions/runs/29645042815",
+    "https://github.com/nathanielecon/ContinuityOps/actions/runs/29645052414"
+  ],
+  "claims_elevated": [
+    "kubernetes-chart → L4 (live EKS apply)",
+    "serverless-worker → L4 (live Lambda/SQS)",
+    "runbooks-drills → L4 (lab drill)",
+    "recovery → L4 (lab RTO measurement)",
+    "finops-teardown → L4 (live terraform destroy)"
+  ],
+  "permanent_non_claims": [
+    "CursorCloudAgent in-pod AWS",
+    "Production customer incident drills",
+    "Azure live apply (D-046 AWS-lab ceiling)"
+  ],
+  "notes_zh": "首席边界裁决：实验室 live 提升与拆毁已由 OIDC 运行证据证明；保留 Cursor STS / 生产演练 / Azure 为非宣称。"
+}
