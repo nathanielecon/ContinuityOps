@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync, renameSync, existsSync, mkdirSync } from '
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import {
   VALIDATOR_IDS,
   P0_T05_VALIDATOR_IDS,
@@ -196,7 +197,26 @@ function writeEvidence(result) {
     relative = 'evidence/slices/S0/integrated-gate.json';
   }
   mkdirSync(dirname(evidencePath), { recursive: true });
-  writeFileSync(evidencePath, `${JSON.stringify({ ...result, evidence_path: relative }, null, 2)}\n`);
+  const payload = { ...result, evidence_path: relative };
+  if (result.task_id === 'P0-T05') {
+    const headSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
+    // When CANDIDATE_SHA is pinned, the next evidence-only commit is the bind tip;
+    // candidate_sha remains the implementation/parent commit (stable under amend).
+    if (process.env.CANDIDATE_SHA) {
+      payload.bind_model = 'candidate_sha_parent_of_tip';
+      payload.implementation_sha = result.candidate_sha;
+    } else if (result.candidate_sha === headSha) {
+      payload.bind_model = 'candidate_sha_equals_head';
+    } else {
+      payload.bind_model = 'candidate_sha_custom';
+      payload.bind_commit = headSha;
+    }
+  }
+  writeFileSync(evidencePath, `${JSON.stringify(payload, null, 2)}\n`);
+  if (result.task_id === 'P0-T05') {
+    const evidenceManifestSha256 = createHash('sha256').update(readFileSync(evidencePath)).digest('hex');
+    refreshP0T05JudgeBindings(result.candidate_sha, evidenceManifestSha256);
+  }
 }
 
 export function runP0T03ValidationSuite() {
@@ -229,10 +249,38 @@ export function runP0T03ValidationSuite() {
   };
 }
 
+function resolveEvidenceSha(envKey, fallback) {
+  const raw = process.env[envKey];
+  if (raw === undefined || raw === null || String(raw).trim() === '') return fallback;
+  const sha = String(raw).trim().toLowerCase();
+  if (!/^[0-9a-f]{40}$/.test(sha)) {
+    throw new ContractError(`${envKey} 必须是 40 位小写十六进制 SHA`, 'candidate_sha_env_invalid');
+  }
+  return sha;
+}
+
+function refreshP0T05JudgeBindings(candidateSha, evidenceManifestSha256) {
+  const judgesDir = resolve(ROOT, 'evidence/judges/S0');
+  const paths = [
+    resolve(judgesDir, 'saved-council-provisional.json'),
+    resolve(judgesDir, 'fresh-judge-1.json'),
+    resolve(judgesDir, 'fresh-judge-2.json'),
+    resolve(judgesDir, 'fresh-judge-3.json')
+  ];
+  for (const path of paths) {
+    if (!existsSync(path)) continue;
+    const judge = JSON.parse(readFileSync(path, 'utf8'));
+    judge.candidate_sha = candidateSha;
+    judge.evidence_manifest_sha256 = evidenceManifestSha256;
+    writeFileSync(path, `${JSON.stringify(judge, null, 2)}\n`);
+  }
+}
+
 export function runP0T05ValidationSuite() {
   const startedAt = new Date().toISOString();
-  const baselineSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
-  const candidateSha = baselineSha;
+  const headSha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
+  const candidateSha = resolveEvidenceSha('CANDIDATE_SHA', headSha);
+  const baselineSha = resolveEvidenceSha('BASELINE_SHA', candidateSha);
   const plan = readPlan();
   assertPhaseAuthorized(plan, 'P0-T05');
 
