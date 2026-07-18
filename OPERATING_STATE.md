@@ -9,15 +9,15 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 26,
+  "revision": 28,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 0,
-  "current_gate": "H0-human-receipt",
-  "running_tasks": ["JR-SUPER-01"],
+  "current_gate": "H0-bind-pr-and-D042-actuate",
+  "running_tasks": ["JR-SUPER-01", "D-042-junior-actuate"],
   "blocked_tasks": ["P0-T05"],
   "waiting_human": [
-    "H0-after-P0-T04",
+    "ACTIONS_WORKFLOW_PERMISSIONS_UI_CONFIRM",
     "REPO_SETTINGS_ADMIN_TOKEN",
     "PR-20"
   ],
@@ -39,10 +39,10 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
   },
   "completed_gates": [],
   "next_actions": [
-    "D-041 cutover: chief supervisor (stream-boundary/escalation only); junior supervisor GPT-5.6 Sol med owns steady-state actuation; Grok monitor reports significant bottlenecks to chief only",
-    "Appoint junior via JR-SUPER-01 @codex; junior gate-relays H0 if #42 receipt still has placeholders; after complete H0 bind, junior drives P0-T05 orch path",
-    "Chief waits on STREAM_COMPLETE / junior ESCALATION / significant monitor reports; does not author routine worker/orch bodies",
-    "Owner pending: amend H0 #42 placeholders OR sign fresh JSON-only receipt; REPO_SETTINGS_ADMIN_TOKEN; PR #20",
+    "D-042: land junior-actuate GHA; junior emits merge/dispatch intents (no in-sandbox gh); owner confirm Actions workflow permissions UI if actuate/publish fails",
+    "Merge H0 bind PR #44 after D-037 pass via continuityops-merge-v1; then P0-T05 orch path",
+    "Chief waits on STREAM_COMPLETE / junior ESCALATION / significant monitor reports",
+    "Owner parallel: REPO_SETTINGS_ADMIN_TOKEN; PR #20; confirm Settings→Actions→Workflow permissions Read/write + create-PR",
     "Do not authorize Phase 1 until S0 and H0 pass; engagement: no Opus"
   ],
   "completed_bootstrap": [
@@ -58,7 +58,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Owner GH_TOKEN restored Issues+PR actuation for supervisor seat; human directed P0-T03 fresh fixer/reviewer redo",
     "P0-T03 verified after redo (issue #35 → PR #36 → D-037 #38 pass → main 1523466)",
     "P0-T04 rubric freeze integrated (issue #39 → PR #40 → D-037 #41 pass → main 9a58cbd); H0 package waiting_human",
-    "D-041 chief/junior/monitor topology accepted; junior appointment JR-SUPER-01"
+    "D-041 chief/junior/monitor topology accepted; junior appointment JR-SUPER-01",
+    "D-042 junior App actuation via GHA intents (merge/dispatch); App sandbox remains receive-only"
   ],
   "verified_baseline": [],
   "unverified": [
@@ -112,6 +113,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-039 | **Supervisor ratifies P0-T03 write_scope expansion** to match owner-authored issue #28 dispatch + CO-010 repair surface: add `scripts/project.mjs`, `tests/index.mjs`, `tests/package.json`, and the exact evidence file `evidence/slices/S0/validator-contract.json` (not the whole `evidence/slices/` tree). Material plan amendment recorded in `PLAN.md` and `docs/planning/dispatch/P0-T03.zh.md`; human may veto. Until ratification stands and a new fixer/reviewer cycle runs after issues:write restore, do not re-merge PR #30 content (D-037 SCOPE-001 fail still stands). | accepted | P0-T03 write_scope matches the owner dispatch contract; SCOPE-001 is addressable by a fresh fixer after D-039; human veto remains open |
 | D-040 | **Cursor cloud App token can push/merge but not Issues**: until `issues:write` is restored for the supervisor App seat, the App `@codex` path is unavailable from this seat for dispatch and keep-warm. Control-center / owner comments on queue issues (including keep-warm #4) are required. Amends the practical actuation of D-031/D-034/D-035 for this seat only; does not change the constitutional App-path design. | accepted | Supervisor git-push fallback remains viable; Issues-gated actuation must be owner/control-center until permission restored |
 | D-041 | **Chief / junior supervisor split** (owner directive 2026-07-17): the former portfolio-supervisor five duties move to a **junior supervisor** on **GPT-5.6 Sol medium** (episodic via `codex-dispatch`). The cloud seat becomes **chief supervisor**: stream-boundary verdicts + escalations only. D-037 reviewer remains verdict-only; orch never approves/merges PRs; junior **actuates** merges on CI green + verdict. Escalation: … → junior → chief → owner (constitutional crisis). Each managerial seat replaces direct subordinates on low `context_remaining`. A read-only **Grok pipeline monitor** reports significant bottlenecks to the **chief** only. Amends practical reading of D-032/D-035 (steady-state actuation is junior-owned). Engagement: no Opus. | accepted | Chief stays quiet while junior oils the pipeline; monitor prevents silent bottlenecks |
+| D-042 | **Junior App actuation via GHA intents** (owner directive 2026-07-18 "update the permissions"): Codex App sandboxes remain receive-only (no `git push`/`gh`). Junior judgment stays in the App round; **actuation** is `.github/workflows/junior-actuate.yml` consuming `<!-- continuityops-merge-v1 -->` / `<!-- continuityops-dispatch-v1 -->` from `chatgpt-codex-connector[bot]` on `codex-dispatch` issues, using ephemeral `GITHUB_TOKEN` (same Settings prerequisites as D-034). Merge requires CI contracts success + D-037 bot `verdict: pass`. Does **not** inject secrets into the Codex Environment (D-026). Amends practical reading of D-041 actuation. | accepted | Junior can oil the pipeline overnight without sandboxed `gh`; permissions = GHA write token + workflow gates |
 
 ## Initial issue ledger
 
