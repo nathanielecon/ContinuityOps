@@ -9,12 +9,12 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 31,
+  "revision": 32,
   "project": "ContinuityOps",
   "current_phase": 0,
   "authorized_through_phase": 8,
-  "current_gate": "P0-T05-integrated-gate",
-  "running_tasks": ["P0-T05", "D-043-grok-workers"],
+  "current_gate": "P1-ready",
+  "running_tasks": [],
   "blocked_tasks": [],
   "waiting_human": [],
   "seats": {
@@ -34,13 +34,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "first_warm": true,
     "secrets": "none"
   },
-  "completed_gates": ["H0"],
+  "completed_gates": [
+    "H0",
+    "S0-P0-T05"
+  ],
   "next_actions": [
-    "D-044: no more human gates; authorized_through_phase=8; chief+Grok push to completion",
-    "D-043: all workers Grok; Codex App implementation path suspended",
-    "Execute P0-T05 → S0 certify → continue Phases 1–8 under plan; merge on CI + Grok reviewer pass",
-    "REPO_SETTINGS_ADMIN_TOKEN / PR #20 optional tooling only — not blocking",
-    "Engagement: no Opus"
+    "S0 certified (P0-T05); D-044 authorized_through_phase=8 — proceed Phase 1 tasks with Grok workers",
+    "Merge PR #49 evidence: CI + Grok D-037 pass",
+    "Engagement: no Opus; D-043 Grok workers"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -58,7 +59,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "D-041 chief/junior/monitor topology accepted; junior appointment JR-SUPER-01",
     "D-042 junior App actuation via GHA intents (merge/dispatch); App sandbox remains receive-only",
     "H0 human receipt bound (issue #42 comment 5008633820 → harness/approvals/H0.binding.json); P0-T04 verified; P0-T05 ready",
-    "D-043: owner directed all workers fall back to Grok; chief merges per plan with Grok subordinates"
+    "D-043: owner directed all workers fall back to Grok; chief merges per plan with Grok subordinates",
+    "P0-T05 verified / S0 integrated gate (Grok D-043/D-044)"
   ],
   "verified_baseline": [],
   "unverified": [
