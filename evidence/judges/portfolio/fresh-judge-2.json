@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0",
+  "task_id": "PORTFOLIO-FRESH-JUDGE-02",
+  "role": "independent_read_only_judge",
+  "round": "fresh-judge-2",
+  "candidate_sha": "c2e6610ed7257c52327cfb66fdcc07227547bb85",
+  "evaluated_at_utc": "2026-07-18T18:54:25Z",
+  "rubric": {
+    "path": "docs/planning/JUDGE_RUBRICS.md",
+    "sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31"
+  },
+  "evidence_manifest": {
+    "path": "docs/claims/matrix.json",
+    "sha256": "695d88db163b0acef4cc431412e1bacc259bdcb6f95fa0850623e5d2b273d83e"
+  },
+  "blind_review": {
+    "prior_scores_consulted": false,
+    "implementation_transcript_consulted": false
+  },
+  "engagement_ceilings": {
+    "azure_live": "out / L1 design only",
+    "performance": "L1",
+    "security_sbom": "L2",
+    "agentic_workflow": "L3",
+    "upstream_integration": "L2",
+    "lab_stack": "L4 via continuityops-gha"
+  },
+  "score": {
+    "total": 7.9,
+    "maximum": 10.0,
+    "dimensions": [
+      {
+        "name": "Correctness and completeness",
+        "score": 1.45,
+        "maximum": 2.0,
+        "evidence": [
+          "evidence/portfolio/tip-bind-2026-07-18.json",
+          "evidence/slices/S8/integrated-gate.json",
+          "evidence/slices/S1/STREAM_COMPLETE.json"
+        ],
+        "finding": "The repair is present, but the supplied final SHA is c2e6610 while the portfolio binding and S1-S8 completion records identify 196bed4 as the portfolio tip; the final-SHA invariant is therefore not demonstrated."
+      },
+      {
+        "name": "Security and authority boundaries",
+        "score": 1.4,
+        "maximum": 1.5,
+        "evidence": [
+          "docs/claims/matrix.json",
+          "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+        ],
+        "finding": "The manifest preserves the AWS-lab, Azure, agentic, SBOM, upstream, and production non-claim boundaries; no authority expansion was found in the reviewed repair."
+      },
+      {
+        "name": "Failure/recovery depth",
+        "score": 1.25,
+        "maximum": 1.5,
+        "evidence": [
+          "evidence/hosted/lab-drill-rto-29645042815.json",
+          "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+          "docs/claims/matrix.json"
+        ],
+        "finding": "Applied lab drill and teardown evidence is retained and scoped, while performance remains L1 and no known-good ContinuityOps rollback digest is claimed."
+      },
+      {
+        "name": "Deterministic test quality",
+        "score": 0.35,
+        "maximum": 1.0,
+        "evidence": [
+          "tests/terraform/scaffold.test.mjs",
+          "terraform/envs/staging/main.tf",
+          "terraform/modules/iam/main.tf",
+          "terraform/modules/network/main.tf",
+          "terraform/modules/serverless/main.tf"
+        ],
+        "finding": "node --test tests/ failed 1 of 94 because terraform fmt -check -recursive terraform reported four unformatted files; the suite also changed a tracked crashloop evidence file, which the judge restored."
+      },
+      {
+        "name": "Live/runtime evidence quality",
+        "score": 0.9,
+        "maximum": 1.0,
+        "evidence": [
+          "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+          "evidence/hosted/lab-drill-rto-29645042815.json"
+        ],
+        "finding": "Run-bound AWS lab apply, drill, and teardown artifacts support the scoped L4 lab claims without elevating Azure or production claims."
+      },
+      {
+        "name": "Operability and troubleshooting",
+        "score": 0.8,
+        "maximum": 1.0,
+        "evidence": [
+          "BREAK_FIX_LOG.md",
+          "OPERATING_STATE.md",
+          "evidence/portfolio/nixer-council-fail-760827d.json"
+        ],
+        "finding": "The prior tip-binding failure has a durable nixer record and state transition, but the current deterministic formatting failure is not yet reconciled for closure."
+      },
+      {
+        "name": "Evidence/claim integrity",
+        "score": 0.45,
+        "maximum": 1.0,
+        "evidence": [
+          "docs/claims/matrix.json",
+          "evidence/portfolio/tip-bind-2026-07-18.json",
+          "evidence/slices/S8/integrated-gate.json",
+          "evidence/slices/S1/STREAM_COMPLETE.json"
+        ],
+        "finding": "Manifest and rubric hashes match the tip-bind record, but exact-candidate binding fails and node scripts/project.mjs validate P8-T04 rejects the S8 integrated gate as an L4 overclaim; retained S1-S4 completion boundaries also still say no live/L4 proof while the current matrix claims scoped L4 components."
+      },
+      {
+        "name": "Maintainability and handoff",
+        "score": 0.4,
+        "maximum": 0.5,
+        "evidence": [
+          "README.md",
+          "docs/claims/matrix.json",
+          "evidence/slices/S8/STREAM_COMPLETE.json"
+        ],
+        "finding": "Navigation and machine-readable artifacts are strong, but contradictory historical completion summaries increase reviewer ambiguity."
+      },
+      {
+        "name": "Cost/performance realism",
+        "score": 0.45,
+        "maximum": 0.5,
+        "evidence": [
+          "docs/claims/matrix.json",
+          "evidence/slices/S7/performance/baseline-evidence.json",
+          "evidence/slices/S7/cost/finops-evidence.json"
+        ],
+        "finding": "Performance remains explicitly L1 and lab teardown/cost boundaries are disclosed."
+      }
+    ]
+  },
+  "universal_must_haves": {
+    "U1": {
+      "pass": false,
+      "reason": "Candidate c2e6610 is not the SHA named as portfolio_tip_sha/candidate_sha by the repaired binding records, which name its parent 196bed4."
+    },
+    "U2": {
+      "pass": false,
+      "reason": "node --test tests/ exits 1 and project validation exits 2."
+    },
+    "U3": {
+      "pass": true,
+      "reason": "No credential or sensitive-payload exposure found; negative credential tests behave as intended."
+    },
+    "U4": {
+      "pass": true,
+      "reason": "No open critical/high security finding is evidenced in the supplied manifest."
+    },
+    "U5": {
+      "pass": true,
+      "reason": "The claims matrix explicitly distinguishes L1/L2/L3/L4 and lists non-claims."
+    },
+    "U6": {
+      "pass": true,
+      "reason": "Slice evidence and tests retain negative/failure scenarios across authority, workload, queue, telemetry, and recovery paths."
+    },
+    "U7": {
+      "pass": false,
+      "reason": "The repaired integrated gate retains an earlier recorded_at and fails current validation; fresh passing final-SHA evidence is absent."
+    },
+    "U8": {
+      "pass": false,
+      "reason": "The full test command mutates tracked evidence/slices/S2/scenarios/crashloop-reset.json, contradicting check-only/read-only expectations; the judge restored it."
+    },
+    "U9": {
+      "pass": false,
+      "reason": "The current terraform formatting and validator overclaim failures are not recorded as verified repairs and remain open."
+    },
+    "U10": {
+      "pass": false,
+      "reason": "S1-S4 STREAM_COMPLETE remaining_boundaries describe no live/L4 proof while the current claims matrix contains scoped L4 AWS lab components."
+    },
+    "U11": {
+      "pass": true,
+      "reason": "No noncompliant worker handoff was identified in the supplied review scope."
+    },
+    "U12": {
+      "pass": true,
+      "reason": "No overlapping concurrent mutation was identified in the supplied review scope."
+    },
+    "U13": {
+      "pass": true,
+      "reason": "The artifact path and dispatch identify this as a fresh judge and the blind-review declaration confirms isolation."
+    },
+    "U14": {
+      "pass": false,
+      "reason": "New failures observed during this review are not present in BREAK_FIX_LOG.md before closure."
+    }
+  },
+  "s8_must_haves": {
+    "S8-M1": false,
+    "S8-M2": false,
+    "S8-M3": false,
+    "S8-M4": false,
+    "S8-M5": true,
+    "S8-M6": true,
+    "S8-M7": true,
+    "S8-M8": false,
+    "S8-M9": true,
+    "S8-M10": true,
+    "S8-M11": false,
+    "S8-M12": true,
+    "S8-M13": true,
+    "S8-M14": true
+  },
+  "validation": [
+    {
+      "command": "git rev-parse HEAD",
+      "exit_code": 0,
+      "result": "c2e6610ed7257c52327cfb66fdcc07227547bb85"
+    },
+    {
+      "command": "sha256sum docs/planning/JUDGE_RUBRICS.md docs/claims/matrix.json",
+      "exit_code": 0,
+      "result": "Hashes match the dispatched tip-bind record."
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 1,
+      "result": "93 passed, 1 failed: terraform fmt -check -recursive terraform."
+    },
+    {
+      "command": "node scripts/project.mjs validate P8-T04",
+      "exit_code": 2,
+      "result": "ValidationError: evidence/slices/S8/integrated-gate.json overclaims L4."
+    },
+    {
+      "command": "python3 standalone JSON parse",
+      "exit_code": 0,
+      "result": "233 standalone JSON files parsed with 0 errors."
+    },
+    {
+      "command": "terraform fmt -check -recursive terraform",
+      "exit_code": 3,
+      "result": "Four Terraform files require formatting."
+    }
+  ],
+  "blocking_findings": [
+    {
+      "id": "FJ2-001",
+      "must_haves": [
+        "U1",
+        "S8-M1",
+        "S8-M2"
+      ],
+      "summary": "Rebind all portfolio completion and integrated-gate artifacts to exact final candidate c2e6610, or provide a coherent documented parent-of-evidence-commit binding that validates against that final SHA."
+    },
+    {
+      "id": "FJ2-002",
+      "must_haves": [
+        "U2",
+        "U7",
+        "S8-M3"
+      ],
+      "summary": "Restore a green full deterministic suite and regenerate fresh final-SHA integrated validation evidence."
+    },
+    {
+      "id": "FJ2-003",
+      "must_haves": [
+        "U10",
+        "S8-M4"
+      ],
+      "summary": "Reconcile stale S1-S4 completion boundaries with the scoped live AWS lab claims in the current manifest."
+    },
+    {
+      "id": "FJ2-004",
+      "must_haves": [
+        "U8",
+        "U9",
+        "U14",
+        "S8-M8"
+      ],
+      "summary": "Make validation check-only and record the observed formatting, mutation, and overclaim failures plus verified repairs in BREAK_FIX_LOG.md."
+    }
+  ],
+  "merge_ready": "no",
+  "recommended_next_step": "Dispatch a fresh nixer/fixer cohort for FJ2-001 through FJ2-004, then rerun all checks and obtain a new clean-room fresh council on the repaired exact candidate."
+}
