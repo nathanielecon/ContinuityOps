@@ -1,0 +1,291 @@
+{
+  "schema_version": "1.0",
+  "task_id": "PORTFOLIO-FRESH-JUDGE-03",
+  "role": "independent-read-only-judge",
+  "judge_id": "fresh-judge-3",
+  "round": "fresh",
+  "status": "complete",
+  "recorded_utc": "2026-07-18T00:00:00Z",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "GPT-5.5",
+    "mode": "Codex API agent",
+    "role": "portfolio fresh judge"
+  },
+  "candidate_sha": "760827dbb46c803475fa095c19984db61c8a6995",
+  "baseline_sha": "760827dbb46c803475fa095c19984db61c8a6995",
+  "base_branch": "main",
+  "rubric_path": "docs/planning/JUDGE_RUBRICS.md",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_path": "docs/claims/matrix.json",
+  "evidence_manifest_sha256": "1545074d3b4dd56ef79848b8deb1fddb4aef2e9812bc40f5c0ca2e6f5a72bd51",
+  "upstream_lock_sha256": "f01b2099f47ea87ef8418c75f4fc2efccde6972d8295d4b86af3c560236b764f",
+  "scope": "portfolio / S1-S8 evidence review only; no implementation edits",
+  "must_haves": {
+    "universal": {
+      "U1": {
+        "verdict": "fail",
+        "evidence": [
+          "docs/claims/matrix.json records portfolio evidence but several slice STREAM_COMPLETE/integrated-gate artifacts remain bound to older candidate SHAs such as 4be8a30, 1fd88ff, and 74f2ba3 rather than 760827d.",
+          "sha256sum confirmed rubric hash f122c1d0... and matrix hash 1545074d..., but candidate binding is not coherent across retained slice evidence."
+        ]
+      },
+      "U2": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Hosted evidence includes successful apply/drill/teardown runs 29644662492, 29645042815, and 29645052414 in evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json.",
+          "No single evidence manifest proves all required deterministic and hosted checks re-ran on exact candidate 760827dbb46c803475fa095c19984db61c8a6995 after the final upstream-integration edits."
+        ]
+      },
+      "U3": {
+        "verdict": "pass",
+        "evidence": [
+          "docs/claims/matrix.json retains non-claims against CursorCloudAgent/in-pod AWS credentials and worker-side mutation; evidence/hosted entries use GitHub OIDC role arn:aws:iam::000000000000:role/continuityops-gha, not long-lived AWS keys."
+        ]
+      },
+      "U4": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Security artifacts exist in evidence/slices/S6/security.json and evidence/hosted/security-sbom-2026-07-18.json, but the claim matrix explicitly keeps security-sbom at L2 and does not prove no open critical/high issue affects the whole portfolio at candidate 760827d."
+        ]
+      },
+      "U5": {
+        "verdict": "pass",
+        "evidence": [
+          "docs/claims/matrix.json distinguishes max_claim_level L4, AWS lab staging scope, L2 security/upstream claims, L1 Azure/performance claims, and explicit non-claims for production, Azure live apply, and CursorCloudAgent."
+        ]
+      },
+      "U6": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Evidence includes some negative/failure material such as unsupported EKS 1.29 failure in cloud-apply-staging-elevation and lab drill records, but portfolio-wide negative behavior for every slice must-have is not established at the candidate SHA."
+        ]
+      },
+      "U7": {
+        "verdict": "fail",
+        "evidence": [
+          "Hosted evidence records command outcomes and run URLs, but multiple slice completion/integrated-gate files are stale relative to candidate 760827d; evidence freshness after the last fix is therefore not proven."
+        ]
+      },
+      "U8": {
+        "verdict": "pass",
+        "evidence": [
+          "This judge write scope is limited to evidence/judges/portfolio/fresh-judge-3.json; docs/claims/matrix.json states D-028 upstream data packet consumption without upstream repository modification."
+        ]
+      },
+      "U9": {
+        "verdict": "not_proven",
+        "evidence": [
+          "BREAK_FIX_LOG.md was not modified in this round; existing hosted evidence mentions BF-2026-012 and matrix notes BF-2026-013 closure, but exhaustive observed-failure coverage for all portfolio repairs is not proven by the focused evidence set."
+        ]
+      },
+      "U10": {
+        "verdict": "not_proven",
+        "evidence": [
+          "docs/claims/matrix.json uses careful non-claims, but stale slice STREAM_COMPLETE claim_level L1 files coexist with matrix L4 elevations for S2/S3/S4/S5/S7/S8, so status/evidence tense agreement is incomplete."
+        ]
+      },
+      "U11": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Repository artifacts mix English external artifacts and some Chinese operational notes; no portfolio-wide transcript/evidence check proves every retained inter-agent free-text handoff uses Simplified Chinese."
+        ]
+      },
+      "U12": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Evidence tree contains per-slice completion records, but focused review did not find a current candidate-bound integration queue proving all concurrent Ralphy streams were disjoint and sequential internally through 760827d."
+        ]
+      },
+      "U13": {
+        "verdict": "pass",
+        "evidence": [
+          "Fresh judge artifacts are separated under evidence/judges/S*/fresh-judge-*.json and saved-council-provisional files are distinct from fresh judge outputs."
+        ]
+      },
+      "U14": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Observed failure references exist, including the EKS version failure in hosted apply evidence, but complete break/fix log coverage before closure is not proven in the supplied focus set."
+        ]
+      }
+    },
+    "slices": {
+      "S1": {
+        "verdict": "not_proven",
+        "evidence": [
+          "S1 has L4 terraform/hosted CI and L2 upstream-integration claims with hosted OIDC evidence, but S1 STREAM_COMPLETE remains candidate_sha 4be8a30 and claim_level L1, not candidate 760827d."
+        ]
+      },
+      "S2": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Matrix elevates kubernetes-chart to L4 via apply run 29644662492 and teardown run 29645052414, but managed-runtime detail and slice completion artifacts are not bound to candidate 760827d."
+        ]
+      },
+      "S3": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Matrix cites live Lambda+SQS apply run 29644662492, but S3 end-to-end request/queue/function/result, duplicate/DLQ/replay, and least-privilege negative tests are not portfolio-proven at candidate 760827d."
+        ]
+      },
+      "S4": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Matrix cites CloudWatch log groups and telemetry evidence, but S4 alert fire/resolution, trace continuity, redaction, and dashboard/runbook quality are not fully candidate-bound."
+        ]
+      },
+      "S5": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Eight drill artifacts and lab RTO evidence exist; however, independent operator dry-run and all scenario reset/business-smoke proof are not conclusively bound to candidate 760827d."
+        ]
+      },
+      "S6": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Security SBOM is L2 and agentic workflow L3; Azure governance is L1 by explicit D-046 ceiling. This is appropriately scoped but below full S6 live/security must-have proof."
+        ]
+      },
+      "S7": {
+        "verdict": "not_proven",
+        "evidence": [
+          "Recovery and finops-teardown are L4 lab claims with drill/teardown evidence, while performance remains L1; portfolio recovery/performance/cost must-haves are only partially proven."
+        ]
+      },
+      "S8": {
+        "verdict": "not_proven",
+        "evidence": [
+          "S8 delivery and chief verdict artifacts summarize closure/elevation, but they depend on the stale or partial slice evidence noted above."
+        ]
+      }
+    }
+  },
+  "dimension_scores": {
+    "Correctness and completeness": {
+      "score": 1.2,
+      "max": 2.0,
+      "evidence": [
+        "Substantial AWS lab artifacts and claim matrix are present, but stale slice candidate bindings and partial S1-S8 proof prevent full correctness."
+      ]
+    },
+    "Security and authority boundaries": {
+      "score": 1.1,
+      "max": 1.5,
+      "evidence": [
+        "OIDC/non-claim boundaries are explicit; portfolio-wide no critical/high security issue remains unproven."
+      ]
+    },
+    "Failure/recovery depth": {
+      "score": 1.0,
+      "max": 1.5,
+      "evidence": [
+        "Lab drill RTO, teardown, and EKS failure repair are evidenced; full negative/failure coverage across slices is incomplete."
+      ]
+    },
+    "Deterministic test quality": {
+      "score": 0.7,
+      "max": 1.0,
+      "evidence": [
+        "Repository has deterministic validation guidance and slice evidence, but no unified fresh candidate-bound deterministic check manifest for 760827d was found."
+      ]
+    },
+    "Live/runtime evidence quality": {
+      "score": 0.8,
+      "max": 1.0,
+      "evidence": [
+        "Hosted run URLs and live resources are documented for AWS lab staging; production, Azure, and some slice-specific runtime behaviors are explicit non-claims or unproven."
+      ]
+    },
+    "Operability and troubleshooting": {
+      "score": 0.8,
+      "max": 1.0,
+      "evidence": [
+        "Runbooks/drills evidence exists, but independent operator dry-run and complete first-five-minute verification remain not proven in this fresh portfolio review."
+      ]
+    },
+    "Evidence/claim integrity": {
+      "score": 0.5,
+      "max": 1.0,
+      "evidence": [
+        "Claims are carefully scoped, but candidate/evidence freshness mismatches are blocking integrity defects."
+      ]
+    },
+    "Maintainability and handoff": {
+      "score": 0.4,
+      "max": 0.5,
+      "evidence": [
+        "Structured evidence and explicit non-claims support handoff; stale artifacts increase future reviewer burden."
+      ]
+    },
+    "Cost/performance realism": {
+      "score": 0.3,
+      "max": 0.5,
+      "evidence": [
+        "Teardown evidence exists and cost drivers are referenced, but performance remains L1 and cost/performance validation is partial."
+      ]
+    }
+  },
+  "overall_score": 6.8,
+  "merge_ready": "no",
+  "blocking_findings": [
+    {
+      "id": "PFJ3-BLOCK-001",
+      "severity": "blocking",
+      "summary": "Candidate/evidence binding is incoherent: retained slice STREAM_COMPLETE and integrated-gate artifacts cite older candidate SHAs while the judged candidate is 760827d.",
+      "evidence": [
+        "evidence/slices/S1/STREAM_COMPLETE.json",
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "evidence/slices/S8/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "PFJ3-BLOCK-002",
+      "severity": "blocking",
+      "summary": "No single fresh manifest proves all deterministic and hosted checks passed after the final upstream-integration repair on candidate 760827d.",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "PFJ3-BLOCK-003",
+      "severity": "blocking",
+      "summary": "Portfolio-wide break/fix completeness and all-slice negative behavior remain not proven.",
+      "evidence": [
+        "docs/planning/JUDGE_RUBRICS.md",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "Full portfolio merge readiness at candidate 760827d is unsupported because universal must-haves U1, U2, U7, and U10 are not satisfied.",
+    "Production, Azure live apply, CursorCloudAgent in-pod AWS, and full performance proof remain unsupported; the matrix appropriately lists several as non-claims or L1 claims."
+  ],
+  "critical_high_security": [
+    "No confirmed critical/high security issue was identified in this focused review, but absence of such issues is not proven portfolio-wide at candidate 760827d."
+  ],
+  "non_blocking_improvements": [
+    "Add a candidate-bound portfolio evidence manifest that records command, exit code, time, environment, identity, tool versions, and hashes for every required deterministic and hosted check.",
+    "Refresh or supersede stale per-slice STREAM_COMPLETE/integrated-gate artifacts so their candidate SHA and claim levels align with the current matrix.",
+    "Add an explicit break/fix coverage index mapping every observed hosted and deterministic failure to BREAK_FIX_LOG.md entries and repair evidence."
+  ],
+  "validation_commands": [
+    {
+      "command": "git rev-parse HEAD",
+      "exit_code": 0,
+      "result": "760827dbb46c803475fa095c19984db61c8a6995"
+    },
+    {
+      "command": "sha256sum docs/planning/JUDGE_RUBRICS.md docs/claims/matrix.json integration/upstreams.lock.json",
+      "exit_code": 0,
+      "result": "rubric f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31; matrix 1545074d3b4dd56ef79848b8deb1fddb4aef2e9812bc40f5c0ca2e6f5a72bd51; upstream lock f01b2099f47ea87ef8418c75f4fc2efccde6972d8295d4b86af3c560236b764f"
+    },
+    {
+      "command": "jq . evidence/judges/portfolio/fresh-judge-3.json",
+      "exit_code": 0,
+      "result": "valid JSON"
+    }
+  ],
+  "context_remaining": "70%"
+}
