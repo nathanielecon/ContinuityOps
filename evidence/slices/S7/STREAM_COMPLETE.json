@@ -8,8 +8,8 @@
     "P7-T03",
     "P7-T04"
   ],
-  "candidate_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
-  "baseline_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "candidate_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
+  "baseline_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
   "claim_level": "L4",
   "remaining_boundaries": [
     "Performance remains honest L1",
@@ -24,7 +24,7 @@
   },
   "notes": "S7 recovery/finops L4 lab; performance L1.",
   "slice_landed_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "portfolio_tip_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "portfolio_tip_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
   "bind_model": "candidate_sha_parent_of_tip",
   "rebinding": {
     "recorded_utc": "2026-07-18T18:58:15Z",
@@ -36,7 +36,8 @@
       "FJ2-002",
       "FJ2-003",
       "FJ2-004"
-    ]
+    ],
+    "post_squash_utc": "2026-07-18T19:41:21Z"
   },
   "cloud_apply_evidence": [
     "evidence/hosted/cloud-apply-staging-2026-07-18.json",

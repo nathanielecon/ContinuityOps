@@ -8,8 +8,8 @@
     "P1-T03",
     "P1-T04"
   ],
-  "candidate_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
-  "baseline_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "candidate_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
+  "baseline_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
   "claim_level": "L4",
   "remaining_boundaries": [
     "Scoped AWS lab L4 via continuityops-gha (not production)",
@@ -24,7 +24,7 @@
   },
   "notes": "S1 stream closed; portfolio tip-bind elevates component claims per matrix under A3.",
   "slice_landed_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
-  "portfolio_tip_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "portfolio_tip_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
   "bind_model": "candidate_sha_parent_of_tip",
   "rebinding": {
     "recorded_utc": "2026-07-18T18:58:15Z",
@@ -36,7 +36,8 @@
       "FJ2-002",
       "FJ2-003",
       "FJ2-004"
-    ]
+    ],
+    "post_squash_utc": "2026-07-18T19:41:21Z"
   },
   "cloud_apply_evidence": [
     "evidence/hosted/cloud-apply-staging-2026-07-18.json",

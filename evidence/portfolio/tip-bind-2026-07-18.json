@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "artifact": "portfolio_tip_bind",
   "recorded_utc": "2026-07-18T18:50:50Z",
-  "portfolio_tip_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "portfolio_tip_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
   "bind_model": "candidate_sha_parent_of_tip",
   "trigger": {
     "failed_council_tip": "760827dbb46c803475fa095c19984db61c8a6995",
@@ -68,5 +68,9 @@
       "STREAM_COMPLETE boundaries reconcile with matrix",
       "BREAK_FIX_LOG BF-2026-016"
     ]
+  },
+  "post_squash_rebind": {
+    "recorded_utc": "2026-07-18T19:41:21Z",
+    "reason": "squash merge of #104 collapsed parent bind; rebind to squash tip as parent of this commit"
   }
 }
