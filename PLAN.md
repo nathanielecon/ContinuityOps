@@ -8,7 +8,7 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 13,
+  "revision": 14,
   "authorized_through_phase": 0,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
@@ -195,7 +195,7 @@ Initial authorization stops at Phase 0.
       "phase": 0,
       "slice": "S0",
       "title": "Prove concurrent streams, worker replacement, saved/fresh councils, and Phase 0 certification",
-      "state": "ready",
+      "state": "running",
       "depends_on": [
         "P0-T02",
         "P0-T03",
@@ -205,11 +205,15 @@ Initial authorization stops at Phase 0.
       "risk": "medium",
       "write_scope": [
         "evidence/slices/S0/",
-        "BREAK_FIX_LOG.md"
+        "evidence/judges/S0/",
+        "BREAK_FIX_LOG.md",
+        "scripts/",
+        "tests/",
+        "harness/schemas/"
       ],
       "acceptance": [
         "Three disjoint smoke streams run while each remains sequential",
-        "Failed task dispatches a fresh Codex worker or bottleneck specialist",
+        "Failed task dispatches a fresh Grok worker or bottleneck specialist (D-043)",
         "Saved remediation council reaches provisional pass",
         "Fresh judges independently validate without saved context",
         "Three-judge S0 exit passes",
@@ -227,7 +231,8 @@ Initial authorization stops at Phase 0.
       "evidence": [
         "evidence/slices/S0/integrated-gate.json",
         "evidence/judges/S0/"
-      ]
+      ],
+      "note": "D-043: Grok workers. write_scope expanded for validator suite + judges namespace required by acceptance."
     },
     {
       "id": "P1-T01",
