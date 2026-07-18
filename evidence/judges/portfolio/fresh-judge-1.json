@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "scope": "portfolio",
+  "round": "fresh",
+  "judge_id": "fresh-judge-1",
+  "task_id": "PORTFOLIO-FRESH-JUDGE-01",
+  "tip_under_review": "b4e7340f82548b225b054722515234381683a5da",
+  "candidate_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "parent_bind_verified": true,
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "695d88db163b0acef4cc431412e1bacc259bdcb6f95fa0850623e5d2b273d83e",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "mode": "default",
+    "role": "independent-judge"
+  },
+  "validation": [
+    {
+      "command": "git rev-parse HEAD && git rev-parse HEAD^",
+      "exit_code": 0,
+      "result": "tip b4e7340f82548b225b054722515234381683a5da; parent 2ab4f2ef99a87c35991681362c890f09033ea0ef"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "result": "94 passed, 0 failed"
+    },
+    {
+      "command": "terraform fmt -check -recursive terraform",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "node scripts/project.mjs validate P8-T04",
+      "exit_code": 0,
+      "result": "all seven P8-T04 validators passed; generated tracked side effects discarded"
+    }
+  ],
+  "must_haves": [
+    { "id": "U1", "status": "pass", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "docs/claims/matrix.json", "integration/upstreams.lock.json"] },
+    { "id": "U2", "status": "pass", "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"] },
+    { "id": "U3", "status": "pass", "evidence": ["evidence/slices/S6/security.json", "tests/security/policy.test.mjs"] },
+    { "id": "U4", "status": "pass", "evidence": ["evidence/slices/S6/security.json", "docs/claims/matrix.json"] },
+    { "id": "U5", "status": "pass", "evidence": ["docs/claims/matrix.json", "README.md"] },
+    { "id": "U6", "status": "pass", "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json", "evidence/slices/S7/recovery/"] },
+    { "id": "U7", "status": "pass", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "evidence/hosted/lab-drill-rto-29645042815.json"] },
+    { "id": "U8", "status": "pass", "evidence": ["PLAN.md", "integration/upstreams/packets/2026-07-18-a-c/manifest.json"] },
+    { "id": "U9", "status": "pass", "evidence": ["BREAK_FIX_LOG.md"] },
+    { "id": "U10", "status": "pass", "evidence": ["README.md", "docs/claims/matrix.json", "docs/architecture/continuityops.drawio"] },
+    { "id": "U11", "status": "pass", "evidence": ["AGENTS.md", "evidence/slices/S8/integrated-gate.json"] },
+    { "id": "U12", "status": "pass", "evidence": ["PLAN.md", "docs/planning/dispatch/CHIEF_SUPERVISOR.md"] },
+    { "id": "U13", "status": "pass", "evidence": ["evidence/portfolio/nixer-council-fail-760827d.json", "evidence/portfolio/tip-bind-2026-07-18.json"] },
+    { "id": "U14", "status": "pass", "evidence": ["BREAK_FIX_LOG.md"] },
+    { "id": "S8-M1", "status": "pass", "evidence": ["evidence/slices/S8/integrated-gate.json", "docs/claims/matrix.json"] },
+    { "id": "S8-M2", "status": "pass", "evidence": ["evidence/slices/S8/delivery.json", "docs/claims/matrix.json"] },
+    { "id": "S8-M3", "status": "pass", "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"] },
+    { "id": "S8-M4", "status": "pass", "evidence": ["README.md", "docs/claims/matrix.json", "docs/architecture/continuityops.drawio"] },
+    { "id": "S8-M5", "status": "pass", "evidence": ["docs/claims/matrix.json", "README.md"] },
+    { "id": "S8-M6", "status": "pass", "evidence": ["docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"] },
+    { "id": "S8-M7", "status": "pass", "evidence": ["README.md", "docs/operator/README.md"] },
+    { "id": "S8-M8", "status": "pass", "evidence": ["BREAK_FIX_LOG.md", "evidence/portfolio/nixer-council-fail-760827d.json"] },
+    { "id": "S8-M9", "status": "pass", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json"] },
+    { "id": "S8-M10", "status": "pass", "evidence": ["PLAN.md", "AGENTS.md"] },
+    { "id": "S8-M11", "status": "pass", "evidence": ["PLAN.md", "evidence/judges/S0/fresh-judge-1.json", "evidence/judges/S8/fresh-judge-3.json"] },
+    { "id": "S8-M12", "status": "pass", "evidence": ["docs/architecture/continuityops.drawio", "docs/architecture/continuityops-architecture.svg", "docs/architecture/continuityops-architecture.png"] },
+    { "id": "S8-M13", "status": "pass", "evidence": ["README.md", "evidence/slices/S8/delivery.json"] },
+    { "id": "S8-M14", "status": "pass", "evidence": ["README.md", "docs/architecture/continuityops-architecture.svg", "docs/claims/matrix.json"] }
+  ],
+  "scored_dimensions": [
+    { "id": "correctness_completeness", "score": 2.0, "maximum": 2.0, "rationale": "The parent-bound portfolio tip reconciles every slice and all required deterministic checks pass.", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "evidence/slices/S8/integrated-gate.json"] },
+    { "id": "security_authority_boundaries", "score": 1.5, "maximum": 1.5, "rationale": "OIDC, human gates, read-only PR behavior, and the no-production boundary remain explicit.", "evidence": ["evidence/slices/S6/security.json", "docs/claims/matrix.json"] },
+    { "id": "failure_recovery_depth", "score": 1.5, "maximum": 1.5, "rationale": "Failure drills, isolated recovery, measured lab RTO, and teardown evidence form a coherent recovery chain.", "evidence": ["evidence/hosted/lab-drill-rto-29645042815.json", "evidence/slices/S7/recovery/"] },
+    { "id": "deterministic_test_quality", "score": 1.0, "maximum": 1.0, "rationale": "The 94-test suite and P8 validator cover lifecycle, security, evidence, claims, and integration gates.", "evidence": ["tests/", "evidence/slices/S8/integrated-gate.json"] },
+    { "id": "live_runtime_evidence_quality", "score": 1.0, "maximum": 1.0, "rationale": "Fresh hosted apply, lab drill, and teardown records are URL- and claim-bound without presenting lab as production.", "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "evidence/hosted/lab-drill-rto-29645042815.json"] },
+    { "id": "operability_troubleshooting", "score": 1.0, "maximum": 1.0, "rationale": "Quick-start, runbooks, drills, and architecture provide an independently navigable operational path.", "evidence": ["docs/operator/README.md", "operations/runbooks/"] },
+    { "id": "evidence_claim_integrity", "score": 1.0, "maximum": 1.0, "rationale": "The matrix enforces the A3 ceilings and the parent bind resolves the earlier stale-tip failure transparently.", "evidence": ["docs/claims/matrix.json", "evidence/portfolio/tip-bind-2026-07-18.json", "BREAK_FIX_LOG.md"] },
+    { "id": "maintainability_handoff", "score": 0.5, "maximum": 0.5, "rationale": "Durable contracts, machine-readable evidence, and recruiter-facing navigation support clean handoff.", "evidence": ["README.md", "PLAN.md"] },
+    { "id": "cost_performance_realism", "score": 0.2, "maximum": 0.5, "rationale": "Cost and teardown are live-evidenced, but performance intentionally remains L1 and no sustained production workload is claimed.", "evidence": ["docs/claims/matrix.json", "evidence/slices/S7/cost/", "evidence/slices/S7/performance/"] }
+  ],
+  "overall_score": 9.7,
+  "blocking_findings": [],
+  "unsupported_claims": [],
+  "security_findings": [],
+  "remaining_boundaries": [
+    "Azure live apply is out of scope and remains L1.",
+    "Performance remains L1.",
+    "Security SBOM is L2, agentic workflow is L3, and upstream integration is L2.",
+    "The live stack evidence is AWS lab staging L4, not customer production.",
+    "No ContinuityOps known-good rollback digest is proven."
+  ],
+  "merge_ready": "yes",
+  "verdict": "pass"
+}
