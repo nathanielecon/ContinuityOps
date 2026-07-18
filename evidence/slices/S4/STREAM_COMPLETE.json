@@ -7,8 +7,8 @@
     "P4-T02",
     "P4-T03"
   ],
-  "candidate_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
-  "baseline_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "candidate_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
+  "baseline_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
   "claim_level": "L4",
   "remaining_boundaries": [
     "CloudWatch lab signals evidenced",
@@ -23,7 +23,7 @@
   },
   "notes": "S4 observability complete; scoped L4 lab apply evidenced.",
   "slice_landed_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
-  "portfolio_tip_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "portfolio_tip_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
   "bind_model": "candidate_sha_parent_of_tip",
   "rebinding": {
     "recorded_utc": "2026-07-18T18:58:15Z",
@@ -35,7 +35,8 @@
       "FJ2-002",
       "FJ2-003",
       "FJ2-004"
-    ]
+    ],
+    "post_squash_utc": "2026-07-18T19:41:21Z"
   },
   "cloud_apply_evidence": [
     "evidence/hosted/cloud-apply-staging-2026-07-18.json",
