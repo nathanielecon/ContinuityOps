@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "verdict_type": "chief_stream_boundary",
+  "recorded_utc": "2026-07-18T13:15:00Z",
+  "chief_seat": "cursor-cloud-chief",
+  "decision": "approve",
+  "scope": "hierarchy-remediation-and-lab-completion",
+  "candidate_sha": "96b538a98f76c3316aaf8379723e5191c118d6f7",
+  "evidence": [
+    "evidence/judges/REVIEW-COMPLETION-01.json",
+    "evidence/judges/REVIEW-COMPLETION-02.json",
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+    "https://github.com/nathanielecon/ContinuityOps/pull/59"
+  ],
+  "hierarchy": {
+    "required": "chief → GPT junior → GPT orch → Codex/GPT worker → GPT D-037 → merge",
+    "breach": "BF-2026-013 chief-direct elevation",
+    "remediation": "WORKER-HIER-01 + REVIEW-COMPLETION-02 pass; queue #56/#57/#58 @codex dispatched (App cold; in-session GPT used as episodic carrier)"
+  },
+  "completion": {
+    "aws_lab_l4": true,
+    "process_debt_closed": true,
+    "permanent_non_claims": [
+      "CursorCloudAgent in-pod AWS",
+      "production customer drills",
+      "Azure live apply (D-046)"
+    ]
+  },
+  "notes_zh": "首席确认：实验室 L4 证据有效；层级违规已由 GPT worker+D-037 修复并关闭。"
+}
