@@ -8,7 +8,7 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 12,
+  "revision": 13,
   "authorized_through_phase": 0,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
@@ -160,7 +160,7 @@ Initial authorization stops at Phase 0.
       "phase": 0,
       "slice": "S0",
       "title": "Freeze rubrics and pin execution bundles",
-      "state": "review",
+      "state": "verified",
       "depends_on": [
         "P0-T01",
         "P0-T03"
@@ -183,18 +183,19 @@ Initial authorization stops at Phase 0.
         "approval_binding"
       ],
       "evidence": [
-        "evidence/slices/S0/rubric-freeze.json"
+        "evidence/slices/S0/rubric-freeze.json",
+        "harness/approvals/H0.binding.json"
       ],
       "human_gate": "H0",
-      "note": "Implementation integrated on main 9a58cbd after CI + D-037 #41 pass. H0 binding waiting_human — agents cannot mint receipt. See evidence/slices/S0/H0_PACKAGE.md.",
-      "candidate_sha": "9a58cbd1b420452b3216de33602ee58868b5d87a"
+      "note": "Verified: H0 human receipt bound from issue #42 comment 5008633820 (candidate_sha 28bfb64). Receipt not agent-minted. See evidence/slices/S0/H0_PACKAGE.md.",
+      "candidate_sha": "28bfb64ca5c12659d2e109091e8b6a7ec2143745"
     },
     {
       "id": "P0-T05",
       "phase": 0,
       "slice": "S0",
       "title": "Prove concurrent streams, worker replacement, saved/fresh councils, and Phase 0 certification",
-      "state": "planned",
+      "state": "ready",
       "depends_on": [
         "P0-T02",
         "P0-T03",

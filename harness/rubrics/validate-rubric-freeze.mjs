@@ -9,6 +9,17 @@ const sha256Text = (text) => createHash('sha256').update(text).digest('hex');
 const sha256File = (path) => sha256Text(readFileSync(new URL(path, root), 'utf8'));
 const fail = (code, message) => { const error = new Error(message); error.code = code; throw error; };
 
+const REQUIRED_RECEIPT_FIELDS = [
+  'gate_id',
+  'approver',
+  'approved_at',
+  'approved_bundle_sha256',
+  'approved_rubric_sha256',
+  'baseline_sha',
+  'candidate_sha',
+  'signature_or_signed_comment_url'
+];
+
 export function validateRubricSchema(rubric) {
   if (rubric.schema_version !== '1.0') fail('rubric_schema', 'rubric schema_version 必须是 1.0');
   if (rubric.rubric_id !== 'S0-freeze-v1' || rubric.slice !== 'S0') fail('rubric_schema', 'rubric id 或 slice 不匹配');
@@ -25,10 +36,45 @@ export function validateRubricSchema(rubric) {
   return true;
 }
 
-export function validateApprovalBinding(binding) {
-  if (binding.status !== 'waiting_human') fail('approval_binding', '没有真实 H0 receipt 时状态必须是 waiting_human');
-  if (binding.receipt !== null || binding.receipt_sha256 !== null) fail('approval_binding', '代理不得填入 H0 receipt 或 receipt hash');
+export function validateApprovalBinding(binding, evidence) {
   if (!binding.binding_rule?.includes('真实人类')) fail('approval_binding', 'binding_rule 必须要求真实人类 receipt');
+
+  if (binding.status === 'waiting_human') {
+    if (binding.receipt !== null || binding.receipt_sha256 !== null) fail('approval_binding', 'waiting_human 时不得填入 H0 receipt 或 receipt hash');
+    return true;
+  }
+
+  if (binding.status !== 'bound') fail('approval_binding', 'status 必须是 waiting_human 或 bound');
+  const receipt = binding.receipt;
+  if (!receipt || typeof receipt !== 'object') fail('approval_binding', 'bound 状态必须包含人类 receipt 对象');
+  if (!/^[0-9a-f]{64}$/.test(binding.receipt_sha256 ?? '')) fail('approval_binding', 'bound 状态必须包含 receipt_sha256');
+
+  for (const field of REQUIRED_RECEIPT_FIELDS) {
+    if (receipt[field] == null || receipt[field] === '') fail('approval_binding', `receipt 缺少字段 ${field}`);
+  }
+  if (receipt.gate_id !== 'H0') fail('approval_binding', 'receipt.gate_id 必须是 H0');
+  if (receipt.decision !== 'approve') fail('approval_binding', 'bound 状态要求 decision=approve');
+  if (receipt.approver !== 'nathanielecon') fail('approval_binding', 'receipt.approver 必须是所有者身份');
+  if (!/^[0-9a-f]{40}$/.test(receipt.candidate_sha ?? '')) fail('approval_binding', 'candidate_sha 必须是 40-hex');
+  if (!/^[0-9a-f]{40}$/.test(receipt.baseline_sha ?? '')) fail('approval_binding', 'baseline_sha 必须是 40-hex');
+  if (!String(receipt.signature_or_signed_comment_url).includes('issuecomment-')) {
+    fail('approval_binding', 'signature_or_signed_comment_url 必须指向真实 issue comment permalink');
+  }
+  if (String(receipt.signature_or_signed_comment_url).includes('<') || String(receipt.candidate_sha).includes('<')) {
+    fail('approval_binding', 'receipt 仍含模板占位符');
+  }
+
+  const pinnedRubric = evidence?.bundle_hashes?.rubric_sha256;
+  if (pinnedRubric && receipt.approved_rubric_sha256 !== pinnedRubric) {
+    fail('approval_binding', 'approved_rubric_sha256 与冻结 rubric hash 不匹配');
+  }
+  if (receipt.approved_rubric_sha256 !== sha256File('harness/rubrics/S0.freeze.v1.json')) {
+    fail('approval_binding', 'approved_rubric_sha256 与当前冻结 rubric 文件不匹配');
+  }
+  // approved_bundle_sha256 is the plan hash at human sign time; PLAN.md may advance after bind (BF-2026-007).
+  if (receipt.approved_bundle_sha256 !== receipt.plan_bundle_sha256) {
+    fail('approval_binding', 'approved_bundle_sha256 必须与 plan_bundle_sha256 一致');
+  }
   return true;
 }
 
@@ -71,7 +117,7 @@ export function runAll() {
   const binding = readJson('harness/approvals/H0.binding.json');
   const evidence = readJson('evidence/slices/S0/rubric-freeze.json');
   validateRubricSchema(rubric);
-  validateApprovalBinding(binding);
+  validateApprovalBinding(binding, evidence);
   validateBundleHashes(evidence);
   validateMutationPolicy(evidence);
   return { pass: true, validators: ['rubric_schema', 'bundle_hashes', 'approval_binding', 'rubric_mutation_policy'] };
