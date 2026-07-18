@@ -320,13 +320,12 @@ Durable, non-obvious notes for future cloud agents working in this environment.
 When blocked on AWS identity inside Cursor cloud (Pro+), paste/follow this:
 
 ```text
-NoCredentials is expected on Pro+ without team External ID. CursorCloudAgent has never been assumed.
-Prior fix (2026-07-14/15): GitHub OIDC → project-a-lzlab-gha via landing-zone-lab.yml, or local aws login bottleneck.
-Do not block on CURSOR_AWS_ASSUME_IAM_ROLE_ARN. Escalate live AWS to GHA or local; continue repo-only here.
+This Cloud seat cannot get AWS STS. CURSOR_AWS_ASSUME_IAM_ROLE_ARN → CursorCloudAgent may be set, but AWS_PROFILE / cursor-cloud-agent is never injected on Pro+ without a team External ID (Dashboard → Settings → Advanced / Bedrock IAM Role — Teams/Enterprise only). CursorCloudAgent is typically never assumed. NoCredentials is expected (BF-2026-010).
+
+Do not block on finishing Cursor role injection or putting long-lived keys in Cloud secrets.
+
+For live AWS: use this project's existing apply control plane (e.g. GitHub OIDC → CI role, or a local aws login bottleneck). Continue repo-only work in the Cloud seat until one of those paths runs.
 ```
 
 Account binding (not a secret): `000000000000` /
-`arn:aws:iam::000000000000:root`. Env may show
-`CURSOR_AWS_ASSUME_IAM_ROLE_ARN=.../CursorCloudAgent` — treat as **informational
-only** on Pro+; do not spin or wait for STS success in this seat. See
-`BREAK_FIX_LOG.md` BF-2026-010.
+`arn:aws:iam::000000000000:root`. See `BREAK_FIX_LOG.md` BF-2026-010.
