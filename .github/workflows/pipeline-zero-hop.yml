@@ -1,0 +1,555 @@
+# ContinuityOps — evented zero-hop mechanical pipeline (D-047)
+#
+# Routine phase hops without junior timer. Junior is exception-only.
+# Candidate branch: candidate/portfolio-<7sha>; main only after fresh pass.
+#
+# Safety: never widens write_scope; denies guessing on exceptions (pages junior/chief).
+# Idempotency: zh-dispatching / zh-dispatched + zh-claim/zh-done markers.
+name: pipeline-zero-hop
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+    paths:
+      - 'evidence/judges/**'
+  schedule:
+    # Keep-warm stamp check (~every 6h; smoke when >9h)
+    - cron: '15 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      hop:
+        description: 'Manual hop (seed/debug)'
+        required: true
+        type: choice
+        options:
+          - ensure-labels
+          - seed-nixer
+          - keepwarm-check
+          - page-chief
+      tip_sha:
+        description: 'Tip SHA for seed-nixer'
+        required: false
+        default: ''
+      reason:
+        description: 'Reason for page-chief'
+        required: false
+        default: 'manual page'
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+  statuses: read
+
+env:
+  KEEPWARM_ISSUE: '4'
+  NODE_VERSION_HINT: '22'
+
+jobs:
+  ensure-labels:
+    if: github.event_name == 'workflow_dispatch' && inputs.hop == 'ensure-labels'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure D-047 labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ensure() {
+            local name="$1" color="$2" desc="$3"
+            gh label create "$name" --color "$color" --description "$desc" --force \
+              --repo "${{ github.repository }}" >/dev/null
+          }
+          ensure zh-dispatching f9d0c4 "zero-hop claim in flight (D-047)"
+          ensure zh-dispatched c2e0c6 "zero-hop hop completed (D-047)"
+          ensure chief-pager b60205 "chief durable pager (D-047)"
+          ensure junior-exception d93f0b "junior exception wake (D-047)"
+          echo "labels ok"
+
+  classify-comment:
+    if: github.event_name == 'issue_comment' && github.event.issue.pull_request == null
+    runs-on: ubuntu-latest
+    outputs:
+      action: ${{ steps.cls.outputs.action }}
+      issue: ${{ steps.cls.outputs.issue }}
+      pr: ${{ steps.cls.outputs.pr }}
+      verdict: ${{ steps.cls.outputs.verdict }}
+      page: ${{ steps.cls.outputs.page }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Classify comment
+        id: cls
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BODY: ${{ github.event.comment.body }}
+          ISSUE: ${{ github.event.issue.number }}
+          LOGIN: ${{ github.event.comment.user.login }}
+          LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$BODY" > /tmp/body.md
+          echo "issue=$ISSUE" >> "$GITHUB_OUTPUT"
+          echo "action=none" >> "$GITHUB_OUTPUT"
+          echo "pr=" >> "$GITHUB_OUTPUT"
+          echo "verdict=" >> "$GITHUB_OUTPUT"
+          echo "page=false" >> "$GITHUB_OUTPUT"
+
+          if grep -qF '<!-- continuityops-chief-page-v1' /tmp/body.md; then
+            echo "action=page-chief" >> "$GITHUB_OUTPUT"
+            echo "page=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          case "$LABELS" in *codex-dispatch*) ;; *) exit 0;; esac
+
+          pub="$(node scripts/pipeline/cli.mjs detect-publish /tmp/body.md)"
+          kind="$(echo "$pub" | jq -r .kind)"
+          if [ "$kind" = "publish-ok" ]; then
+            pr="$(echo "$pub" | jq -r '.prNumber // empty')"
+            # Heuristic: nixer issues mention NIXER in title → fixer next
+            title="$(gh api "repos/${{ github.repository }}/issues/${ISSUE}" --jq .title)"
+            if echo "$title" | grep -qiE 'NIXER|nixer'; then
+              echo "action=nixer-to-fixer" >> "$GITHUB_OUTPUT"
+            else
+              echo "action=publish-ok-d037" >> "$GITHUB_OUTPUT"
+            fi
+            echo "pr=$pr" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$kind" = "publish-failed" ]; then
+            echo "action=publish-failed-renudge" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$LOGIN" = "chatgpt-codex-connector[bot]" ]; then
+            verd="$(node scripts/pipeline/cli.mjs parse-verdict /tmp/body.md | jq -r .verdict)"
+            if [ "$verd" = "pass" ] || [ "$verd" = "fail" ]; then
+              echo "action=d037-verdict" >> "$GITHUB_OUTPUT"
+              echo "verdict=$verd" >> "$GITHUB_OUTPUT"
+              # Resolve worker PR from issue body
+              pr="$(gh api "repos/${{ github.repository }}/issues/${ISSUE}" --jq .body \
+                | grep -oE 'pull/[0-9]+|#[0-9]+' | head -1 | tr -dc '0-9' || true)"
+              echo "pr=$pr" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+  page-chief:
+    needs: [classify-comment]
+    if: |
+      always() && (
+        (needs.classify-comment.result == 'success' && needs.classify-comment.outputs.action == 'page-chief') ||
+        (github.event_name == 'workflow_dispatch' && inputs.hop == 'page-chief')
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Ensure labels + sticky pager issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BODY: ${{ github.event.comment.body || '' }}
+          REASON: ${{ inputs.reason || 'zero-hop escalation' }}
+          SRC_ISSUE: ${{ github.event.issue.number || 0 }}
+        run: |
+          set -euo pipefail
+          gh label create chief-pager --color b60205 --description "chief durable pager (D-047)" --force --repo "$REPO" >/dev/null || true
+          sticky="$(gh issue list --repo "$REPO" --label chief-pager --state open --json number,title \
+            --jq '.[] | select(.title|test("\\[pager\\] chief-supervisor";"i")) | .number' | head -1)"
+          if [ -z "$sticky" ]; then
+            sticky="$(gh issue create --repo "$REPO" \
+              --title '[pager] chief-supervisor' \
+              --label chief-pager \
+              --body 'Sticky chief durable pager (D-047). Chief first command every wake: `gh issue list --label chief-pager --state open`.' \
+              --jq .number)"
+          fi
+          if [ -n "${BODY:-}" ] && grep -qF '<!-- continuityops-chief-page-v1' <<<"$BODY"; then
+            page_body="$BODY"
+          else
+            page_body="$(cat <<EOF
+          <!-- continuityops-chief-page-v1 -->
+          reason: ${REASON}
+          issue_ids: [${SRC_ISSUE}]
+          recommended_action: intervene_pipeline
+          context_remaining: unknown
+          EOF
+          )"
+          fi
+          gh issue comment "$sticky" --repo "$REPO" --body "$page_body"
+          # Child issue when source is not the sticky itself
+          if [ "${SRC_ISSUE}" != "0" ] && [ "${SRC_ISSUE}" != "$sticky" ]; then
+            gh issue edit "$SRC_ISSUE" --repo "$REPO" --add-label chief-pager || true
+          fi
+          echo "paged sticky #$sticky"
+
+  publish-ok-d037:
+    needs: [classify-comment]
+    if: needs.classify-comment.result == 'success' && needs.classify-comment.outputs.action == 'publish-ok-d037'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure D-037 reviewer issue + @codex
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SRC: ${{ needs.classify-comment.outputs.issue }}
+          PR: ${{ needs.classify-comment.outputs.pr }}
+        run: |
+          set -euo pipefail
+          key="$(node scripts/pipeline/cli.mjs hop-key - <<EOF
+          {"hop":"d037","subject":"${SRC}","tip_sha":""}
+          EOF
+          )"
+          key="$(echo "$key" | jq -r .key)"
+          # Idempotency: skip if open D-037 already references this issue
+          existing="$(gh issue list --repo "$REPO" --label codex-dispatch --state open --json number,title,body \
+            --jq "[.[] | select(.title|test(\"D-037|REVIEW\";\"i\")) | select(.body|test(\"#${SRC}|issue ${SRC}|Issue: #${SRC}\";\"i\")) | .number] | first // empty")"
+          if [ -n "$existing" ]; then
+            gh issue comment "$SRC" --repo "$REPO" --body "$(node -e "console.log(JSON.parse(process.argv[1]).body)" "$(node scripts/pipeline/cli.mjs done-marker "$key")")"
+            echo "d037 already open #$existing"
+            exit 0
+          fi
+          snippet="$(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)"
+          body="$(cat <<EOF
+          ## D-037 independent reviewer (zero-hop D-047)
+
+          Worker queue issue: #${SRC}
+          Worker PR: #${PR}
+
+          Apply the PR patch at its declared \`base_sha\`, run declared validation commands,
+          post structured verdict JSON (\`verdict: pass|fail\`). Do not edit implementation.
+
+          ${snippet}
+          EOF
+          )"
+          num="$(gh issue create --repo "$REPO" \
+            --title "[codex-dispatch] D-037 REVIEW for worker #${SRC} PR #${PR}" \
+            --label codex-dispatch \
+            --label zh-dispatching \
+            --body "$body" --jq .number)"
+          gh issue comment "$num" --repo "$REPO" --body "@codex 执行 D-037 独立评审：对 PR #${PR} 在声明 base_sha 应用 patch，亲自跑验证命令，结构化 verdict 回评。不得改实现。
+
+          ${snippet}"
+          gh issue comment "$SRC" --repo "$REPO" --body "zero-hop: opened D-037 #${num}
+          $(node scripts/pipeline/cli.mjs done-marker "$key" | jq -r .body)"
+          gh issue edit "$num" --repo "$REPO" --add-label zh-dispatched --remove-label zh-dispatching || true
+
+  d037-verdict:
+    needs: [classify-comment]
+    if: needs.classify-comment.result == 'success' && needs.classify-comment.outputs.action == 'd037-verdict'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Merge to candidate or open fixer
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          D037: ${{ needs.classify-comment.outputs.issue }}
+          VERDICT: ${{ needs.classify-comment.outputs.verdict }}
+          PR: ${{ needs.classify-comment.outputs.pr }}
+        run: |
+          set -euo pipefail
+          if [ -z "${PR}" ]; then
+            PR="$(gh api "repos/${REPO}/issues/${D037}" --jq .body | grep -oE 'PR #[0-9]+|pull/[0-9]+' | head -1 | tr -dc '0-9' || true)"
+          fi
+          if [ -z "${PR}" ]; then
+            echo "no PR resolved — page junior"
+            gh label create junior-exception --color d93f0b --description "junior exception" --force --repo "$REPO" >/dev/null || true
+            tip="$(gh api "repos/${REPO}/commits/main" --jq .sha)"
+            packet="$(jq -n --arg tip "$tip" --argjson ids "[${D037}]" '{
+              schema_version:"1.0", kind:"junior_exception_wake", tip_sha:$tip,
+              fail_evidence_paths:[], write_scope:[], allowed_decisions:["reject","rebind_scope","escalate"],
+              fail_class:"d037-missing-pr", strike_count:1, lock_or_interface_cite:null,
+              notes_zh:"D-037 verdict 无法解析 worker PR，请路由或升级"
+            }')"
+            num="$(gh issue create --repo "$REPO" --title "[codex-dispatch] JR-EXCEPTION-d037-missing-pr" \
+              --label codex-dispatch --label junior-exception \
+              --body "例外唤醒（D-047）
+
+          \`\`\`json
+          ${packet}
+          \`\`\`" --jq .number)"
+            gh issue comment "$num" --repo "$REPO" --body "@codex 处理 D-037 缺 PR 例外。见 wake packet。"
+            exit 0
+          fi
+
+          if [ "$VERDICT" = "fail" ]; then
+            hash="$(node scripts/pipeline/cli.mjs fail-class-hash "d037-fail-pr-${PR}" | jq -r .hash)"
+            label="fail-class:${hash}"
+            gh label create "$label" --color e99695 --description "fail class $hash" --force --repo "$REPO" >/dev/null || true
+            # strike count via comments on D037
+            strikes="$(gh api "repos/${REPO}/issues/${D037}/comments" --paginate --jq \
+              "[.[].body | select(test(\"fail-class:${hash}\"))] | length")"
+            strikes=$((strikes + 1))
+            gh issue comment "$D037" --repo "$REPO" --body "zero-hop fail-class:${hash} strike=${strikes}"
+            if [ "$strikes" -ge 2 ]; then
+              gh label create chief-pager --color b60205 --description "chief pager" --force --repo "$REPO" >/dev/null || true
+              sticky="$(gh issue list --repo "$REPO" --label chief-pager --state open --json number,title \
+                --jq '.[] | select(.title|test("\\[pager\\] chief-supervisor";"i")) | .number' | head -1)"
+              [ -n "$sticky" ] || sticky="$(gh issue create --repo "$REPO" --title '[pager] chief-supervisor' --label chief-pager --body 'Sticky chief pager' --jq .number)"
+              gh issue comment "$sticky" --repo "$REPO" --body "<!-- continuityops-chief-page-v1 -->
+          reason: D-037 两连同 class 失败，停止自动 fixer
+          issue_ids: [${D037}, ${PR}]
+          recommended_action: intervene_pipeline
+          context_remaining: unknown"
+              exit 0
+            fi
+            body="$(cat <<EOF
+          ## Fixer after D-037 fail (zero-hop B)
+
+          D-037: #${D037}
+          Worker PR: #${PR}
+          fail_class: ${hash}
+
+          Repair findings only. End with D-034 patch marker. write_scope must match original worker contract.
+
+          $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)
+          EOF
+          )"
+            num="$(gh issue create --repo "$REPO" --title "[codex-dispatch] FIXER after D-037 #${D037} PR #${PR}" \
+              --label codex-dispatch --label "$label" --body "$body" --jq .number)"
+            gh issue comment "$num" --repo "$REPO" --body "@codex 按 D-037 失败 findings 修复 PR #${PR}。输出 D-034 patch。
+
+          $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)"
+            exit 0
+          fi
+
+          # verdict pass → CI check → merge to candidate
+          sha="$(gh api "repos/${REPO}/pulls/${PR}" --jq .head.sha)"
+          checks="$(gh api "repos/${REPO}/commits/${sha}/check-runs" --jq \
+            '[.check_runs[] | select(.name|test("contracts|validate";"i")) | {name,status,conclusion}]')"
+          bad="$(echo "$checks" | jq '[.[] | select(.conclusion != "success")] | length')"
+          if [ "$bad" != "0" ] || [ "$(echo "$checks" | jq 'length')" = "0" ]; then
+            gh issue comment "$D037" --repo "$REPO" --body "zero-hop: verdict pass but CI contracts/validate not green yet; will not merge candidate"
+            exit 0
+          fi
+          base_sha="$(gh api "repos/${REPO}/pulls/${PR}" --jq .base.sha)"
+          cand="$(node scripts/pipeline/cli.mjs candidate-branch "$base_sha" | jq -r .branch)"
+          git fetch origin main
+          git checkout -B "$cand" "origin/main"
+          # Merge PR head into candidate via gh
+          gh pr checkout "$PR" || true
+          git fetch origin "pull/${PR}/head:pr-${PR}"
+          git checkout "$cand"
+          git merge --no-ff "pr-${PR}" -m "zero-hop: land PR #${PR} on ${cand} after D-037 pass"
+          git push -u origin "$cand"
+          gh issue comment "$D037" --repo "$REPO" --body "zero-hop: merged PR #${PR} → \`${cand}\` (not main)"
+          gh pr comment "$PR" --repo "$REPO" --body "zero-hop (D-047): landed on \`${cand}\`. Main only after fresh council pass."
+
+  publish-failed-renudge:
+    needs: [classify-comment]
+    if: needs.classify-comment.result == 'success' && needs.classify-comment.outputs.action == 'publish-failed-renudge'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: One automatic re-nudge
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ISSUE: ${{ needs.classify-comment.outputs.issue }}
+        run: |
+          set -euo pipefail
+          key="zh:renudge:${ISSUE}"
+          prior="$(gh api "repos/${REPO}/issues/${ISSUE}/comments" --paginate --jq \
+            "[.[].body | select(contains(\"zh-done:${key}\") or contains(\"zero-hop renudge\"))] | length")"
+          if [ "$prior" -ge 1 ]; then
+            echo "already re-nudged once"
+            exit 0
+          fi
+          snippet="$(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)"
+          gh issue comment "$ISSUE" --repo "$REPO" --body "zero-hop renudge (D-047): publish-failed — 请按 D-034 重新输出完整 patch。
+
+          @codex 重新发布：必须含 continuityops-patch-v1 + base_branch + base_sha + fenced diff。
+
+          ${snippet}
+
+          <!-- continuityops-zero-hop-v1 -->
+          zh-done:${key}"
+
+  nixer-to-fixer:
+    needs: [classify-comment]
+    if: needs.classify-comment.result == 'success' && needs.classify-comment.outputs.action == 'nixer-to-fixer'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Open fixer bound to nixer
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          NIXER: ${{ needs.classify-comment.outputs.issue }}
+          PR: ${{ needs.classify-comment.outputs.pr }}
+        run: |
+          set -euo pipefail
+          existing="$(gh issue list --repo "$REPO" --label codex-dispatch --state open --json number,title \
+            --jq "[.[] | select(.title|test(\"FIXER.*NIXER #${NIXER}|after nixer #${NIXER}\";\"i\")) | .number] | first // empty")"
+          if [ -n "$existing" ]; then echo "fixer exists #$existing"; exit 0; fi
+          body="$(cat <<EOF
+          ## Fixer after nixer (zero-hop)
+
+          Nixer issue: #${NIXER}
+          Nixer PR: #${PR}
+
+          Implement disjoint issue IDs from nixer report. Land on candidate branch, not main.
+          End with D-034 patch. base_branch must exist (prefer candidate/* or main).
+
+          $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)
+          EOF
+          )"
+          num="$(gh issue create --repo "$REPO" \
+            --title "[codex-dispatch] FIXER after nixer #${NIXER}" \
+            --label codex-dispatch --body "$body" --jq .number)"
+          gh issue comment "$num" --repo "$REPO" --body "@codex 根据 nixer #${NIXER} 的 issue IDs 修复；合入 candidate，勿直接 main。
+
+          $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)"
+
+  judge-merge-ready-no:
+    if: |
+      github.event_name == 'pull_request' &&
+      (github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.action == 'ready_for_review')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+      - name: Path B — open nixer on merge_ready no
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          mapfile -t files < <(git diff --name-only "${BASE_SHA}...${HEAD_SHA}" | grep '^evidence/judges/' || true)
+          if [ "${#files[@]}" -eq 0 ]; then echo "no judge evidence paths"; exit 0; fi
+          any_no=0
+          paths=()
+          for f in "${files[@]}"; do
+            [ -f "$f" ] || continue
+            mr="$(node scripts/pipeline/cli.mjs merge-ready "$f" | jq -r .merge_ready)"
+            echo "$f => $mr"
+            if [ "$mr" = "no" ]; then any_no=1; paths+=("$f"); fi
+          done
+          if [ "$any_no" -ne 1 ]; then echo "no merge_ready:no"; exit 0; fi
+
+          tip7="$(echo "$BASE_SHA" | cut -c1-7)"
+          # Dedupe by candidate/base SHA
+          existing="$(gh issue list --repo "$REPO" --label codex-dispatch --state open --json number,title,body \
+            --jq "[.[] | select(.title|test(\"NIXER\";\"i\")) | select(.body|test(\"${tip7}|${BASE_SHA}\";\"i\")) | .number] | first // empty")"
+          if [ -n "$existing" ]; then
+            echo "nixer already open #$existing for tip $tip7"
+            exit 0
+          fi
+          hash="$(node scripts/pipeline/cli.mjs fail-class-hash "council-fail-${tip7}" | jq -r .hash)"
+          gh label create "fail-class:${hash}" --color e99695 --description "council fail $tip7" --force --repo "$REPO" >/dev/null || true
+          path_json="$(printf '%s\n' "${paths[@]}" | jq -R . | jq -s .)"
+          body="$(cat <<EOF
+          ## Nixer path B (zero-hop D-047)
+
+          Trigger: PR #${PR} judge evidence with \`merge_ready: no\`
+          Candidate/base tip: \`${BASE_SHA}\`
+          fail_class: ${hash}
+
+          Evidence paths:
+          $(printf -- '- %s\n' "${paths[@]}")
+
+          Convert failed rubric findings into deduplicated reproducible issue IDs.
+          Do not edit product code beyond nixer report paths. End with D-034 patch.
+
+          $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)
+          EOF
+          )"
+          num="$(gh issue create --repo "$REPO" \
+            --title "[codex-dispatch] NIXER path-B council-fail ${tip7}" \
+            --label codex-dispatch --label "fail-class:${hash}" \
+            --body "$body" --jq .number)"
+          gh issue comment "$num" --repo "$REPO" --body "@codex 路径 B：将 PR #${PR} 的 merge_ready:no 转为可复现 issue IDs（tip ${tip7}）。输出 D-034 patch。
+
+          $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)"
+          echo "opened nixer #$num"
+
+  keepwarm-check:
+    if: |
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && inputs.hop == 'keepwarm-check')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Smoke #4 when stamp older than 9h
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ISSUE: ${{ env.KEEPWARM_ISSUE }}
+        run: |
+          set -euo pipefail
+          # Latest comment timestamp on keep-warm issue as warm stamp proxy
+          ts="$(gh api "repos/${REPO}/issues/${ISSUE}/comments" --paginate --jq \
+            '[.[] | select(.user.login=="chatgpt-codex-connector[bot]" or (.body|test("@codex"))) | .created_at] | max // empty')"
+          if [ -z "$ts" ]; then
+            ts="$(gh api "repos/${REPO}/issues/${ISSUE}" --jq .updated_at)"
+          fi
+          age_h="$(python3 - <<PY
+          from datetime import datetime, timezone
+          ts = "${ts}".replace("Z", "+00:00")
+          dt = datetime.fromisoformat(ts)
+          print(int((datetime.now(timezone.utc) - dt).total_seconds() // 3600))
+          PY
+          )"
+          echo "warm age hours=$age_h"
+          if [ "$age_h" -lt 9 ]; then echo "warm enough"; exit 0; fi
+          gh issue comment "$ISSUE" --repo "$REPO" --body "zero-hop keepwarm (D-047): stamp age ${age_h}h >9h
+
+          @codex 保暖冒烟：回复 pong 即可，勿改仓库。"
+
+  seed-nixer:
+    if: github.event_name == 'workflow_dispatch' && inputs.hop == 'seed-nixer'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Seed nixer for tip (chicken/egg bootstrap)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TIP: ${{ inputs.tip_sha }}
+        run: |
+          set -euo pipefail
+          tip="${TIP:-$(git rev-parse HEAD)}"
+          tip40="$(echo "$tip" | cut -c1-40)"
+          tip7="$(echo "$tip40" | cut -c1-7)"
+          existing="$(gh issue list --repo "$REPO" --label codex-dispatch --state open --json number,title,body \
+            --jq "[.[] | select(.title|test(\"NIXER\";\"i\")) | select(.body|test(\"${tip7}|${tip40}\";\"i\")) | .number] | first // empty")"
+          if [ -n "$existing" ]; then echo "exists #$existing"; exit 0; fi
+          hash="$(node scripts/pipeline/cli.mjs fail-class-hash "council-fail-${tip7}" | jq -r .hash)"
+          gh label create "fail-class:${hash}" --color e99695 --description "council fail" --force --repo "$REPO" >/dev/null || true
+          body="$(cat <<EOF
+          ## Nixer path B (manual seed / zero-hop D-047)
+
+          Tip: \`${tip40}\`
+          Source: portfolio fresh council fail (PRs #91–#93 / issues #88–#90)
+          fail_class: ${hash}
+
+          Convert failed rubric findings into deduplicated reproducible issue IDs.
+          Evidence under evidence/judges/portfolio/ on judge PR heads.
+          End with D-034 patch.
+
+          $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)
+          EOF
+          )"
+          num="$(gh issue create --repo "$REPO" \
+            --title "[codex-dispatch] NIXER path-B council-fail ${tip7}" \
+            --label codex-dispatch --label "fail-class:${hash}" \
+            --body "$body" --jq .number)"
+          gh issue comment "$num" --repo "$REPO" --body "@codex 路径 B 种子：tip ${tip7} 的 portfolio council fail → 可复现 issue IDs。输出 D-034 patch。
+
+          $(cat docs/planning/dispatch/CODEX_DISPATCH_SNIPPET.zh.md)"
+          echo "seeded nixer #$num"
