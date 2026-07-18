@@ -2,8 +2,13 @@
   "schema_version": "1.0",
   "stream_id": "S1",
   "signal": "STREAM_COMPLETE",
-  "tasks": ["P1-T01", "P1-T02", "P1-T03", "P1-T04"],
-  "candidate_sha": "0000000000000000000000000000000000000000",
+  "tasks": [
+    "P1-T01",
+    "P1-T02",
+    "P1-T03",
+    "P1-T04"
+  ],
+  "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
   "baseline_sha": "b01e40dbba1198c8720f3992c7563f4c039f3f16",
   "claim_level": "L1",
   "remaining_boundaries": [

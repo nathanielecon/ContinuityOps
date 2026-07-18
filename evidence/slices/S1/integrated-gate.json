@@ -1,14 +1,76 @@
 {
   "schema_version": 1,
   "task_id": "P1-T04",
+  "baseline_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "command": "node scripts/project.mjs validate P1-T04",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:09:03.200Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "full_repository": true,
+    "evidence_freshness": true,
+    "claim_consistency": true,
+    "judge_exit": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
   "claim_level": "L1",
   "remaining_boundaries": [
     "Live AWS mutation not executed",
     "H1 cloud identity receipts optional under D-044; accounts still unset",
     "Upstream digest packaging still open (CO-004/CO-006)"
   ],
-  "candidate_sha": "0000000000000000000000000000000000000000",
-  "baseline_sha": "0000000000000000000000000000000000000000",
-  "passed": [],
-  "failed": []
+  "started_at": "2026-07-18T06:09:03.184Z",
+  "completed_at": "2026-07-18T06:09:03.200Z",
+  "validator_details": [
+    {
+      "id": "full_repository",
+      "result": {
+        "pass": true,
+        "standalone_json": 51,
+        "fenced_json": 14,
+        "skipped_allowlisted": 0
+      }
+    },
+    {
+      "id": "evidence_freshness",
+      "result": {
+        "pass": true,
+        "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
+      }
+    },
+    {
+      "id": "claim_consistency",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "judge_exit",
+      "result": {
+        "pass": true,
+        "provisional_pass": true,
+        "fresh_mean": 9.7
+      }
+    }
+  ],
+  "passed": [
+    "full_repository",
+    "evidence_freshness",
+    "claim_consistency",
+    "judge_exit"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S1/integrated-gate.json",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "implementation_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
 }
