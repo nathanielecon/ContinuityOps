@@ -33,16 +33,16 @@ Job: Terraform PR → plan green → merge main → confirm apply green → evid
 | --- | --- | --- | --- |
 | **Owner (human)** | `nathanielecon` | Constitutional crises, secrets minting agent cannot create, spend ceilings, external publication | Day-to-day merge/dispatch (D-044 cleared phase gates) |
 | **Chief supervisor (YOU)** | This Cursor Cloud session | Stream-boundary verdicts (BF-PRE-015); escalations; replace stuck junior; monitor intake; **currently also** drive live-AWS loop because junior App path is secondary under D-043 | In-pod AWS apply; inventing keys; minting H0–H6; Opus |
-| **Junior supervisor** | `cursor-grok-4.5-high` episodic | Steady-state judgment; D-042 intent markers for App actuation | Direct `gh` in App sandbox; other streams’ authority |
-| **Orchestrator** | Grok episodic | Ready work, scopes, break/fix log, intents — **never merges** | Implementation code; self-approval of high risk |
-| **D-037 reviewer** | Independent Grok | Apply patch @ `base_sha`, run checks, `verdict` only | Code edits; merge |
-| **Workers** | Grok cloud/subagent | Bounded `write_scope` implementation + tests | Authoritative state; credentials |
+| **Junior supervisor** | GPT-5.6 Sol medium (D-045/D-041) | Steady-state judgment; D-042 intent markers for App actuation | Direct `gh` in App sandbox; other streams’ authority |
+| **Orchestrator** | Episodic GPT (D-045/D-030) | Ready work, scopes, break/fix log, intents — **never merges** | Implementation code; self-approval of high risk |
+| **D-037 reviewer** | Independent GPT | Apply patch @ `base_sha`, run checks, `verdict` only | Code edits; merge |
+| **Workers** | Codex App `@codex` / D-034 | Bounded `write_scope` implementation + tests | Authoritative state; credentials |
 | **Monitor** | Grok read-only | Significant-only reports **to chief** | Actuation |
 
 **Actuation vs judgment:** judgment = decide; actuation = `gh`/merge/label/workflow. Chief may actuate when junior path is unavailable (this engagement: chief has `GH_TOKEN` and git push).
 
 **Engagement overrides still in force:**
-- **D-043:** all episodic seats = `cursor-grok-4.5-high`; Codex `@codex` product path **suspended**
+- **D-045:** GPT junior/orch/reviewer/workers; Codex path restored (**D-043 superseded**)
 - **D-044:** no more human phase gates; `authorized_through_phase: 8`
 - **No Opus** under any circumstances
 - Inter-agent free text: **Simplified Chinese**; recruiter artifacts English
@@ -53,8 +53,8 @@ Job: Terraform PR → plan green → merge main → confirm apply green → evid
 
 | Role | Carrier | How chief uses them |
 | --- | --- | --- |
-| Junior | Grok subagent / App (receive-only) | Appoint when needed; D-042 intents → `junior-actuate.yml` if App cannot `gh` |
-| Orchestrator / workers / reviewer | In-session Grok Task/subagent **or** repo PR workflow | Prefer: chief opens Terraform/docs PRs directly when faster; use Grok for bounded implementation |
+| Junior | GPT App / `codex-dispatch` (receive-only sandbox) | Appoint when needed; D-042 intents → `junior-actuate.yml` |
+| Orchestrator / workers / reviewer | Episodic GPT / `@codex` + D-034 | Prefer GPT workers; chief unblocks with in-repo edits when App stalls |
 | Monitor | Read-only Grok | Significant bottlenecks only → chief |
 
 **Default live-AWS execution (current objective):** chief (or worker) edits `terraform/**` → PR → confirm **ContinuityOps Terraform** plan green → merge `main` → confirm **apply** green → write evidence. Do **not** wait on Cursor STS.
@@ -96,7 +96,7 @@ Job: Terraform PR → plan green → merge main → confirm apply green → evid
 ### 3.4 Optional / non-blocking
 
 - `REPO_SETTINGS_ADMIN_TOKEN`, PR #20 (settings-as-code) — tooling, not constitutional stop (D-044)
-- Codex warm env `6a594ee667608191ab53cae15202815e` — registered; not default worker under D-043
+- Codex warm env `6a594ee667608191ab53cae15202815e` — registered; default worker carrier under D-045
 
 ---
 
