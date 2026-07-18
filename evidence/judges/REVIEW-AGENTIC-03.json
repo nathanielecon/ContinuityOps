@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "task_id": "REVIEW-AGENTIC-03",
+  "role": "d037-reviewer",
+  "status": "complete",
+  "verdict": "pass",
+  "recorded_utc": "2026-07-18T14:45:00Z",
+  "baseline_sha": "dc2b982ebcbbe87e6f826362c807427a02986b03",
+  "reviewed_pr": 67,
+  "reviewed_tip": "5348fcb",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.5",
+    "role": "d037-reviewer"
+  },
+  "commands": [
+    {
+      "command": "git apply evidence/dispatch-packets/pr-67-worker-agentic-01.diff",
+      "exit_code": 0,
+      "evidence": "working tree accepted the in-repo dispatch packet without using private PR patches"
+    },
+    {
+      "command": "python -m json.tool docs/claims/matrix.json",
+      "exit_code": 0,
+      "evidence": "matrix JSON parsed successfully"
+    },
+    {
+      "command": "python -m json.tool evidence/hosted/agentic-workflow-2026-07-18.json",
+      "exit_code": 0,
+      "evidence": "hosted agentic workflow evidence JSON parsed successfully"
+    },
+    {
+      "command": "node scripts/project.mjs validate P6-T03",
+      "exit_code": 0,
+      "evidence": "validator passed; reviewer notes this standalone validator rewrites the slice to L1, so matrix plus hosted evidence remain primary per dispatch contract"
+    }
+  ],
+  "findings": [],
+  "notes_zh": "verdict: pass。agentic-workflow 的 L3 说法限定为 GitHub 托管控制面证据：D-034 patch publisher、D-042 junior-actuate intent gate、issue #4 keep-warm 记录和 continuityops-gha OIDC run 29643569047；未声称 Cursor in-pod AWS 凭据、worker 直接 push/gh pr create、生产/客户变更或 Azure live apply。P6-T03 standalone validator 会把 slice 回写为 L1；按派遣合同，本次判定以 docs/claims/matrix.json 与 evidence/hosted/agentic-workflow-2026-07-18.json 为主。"
+}
