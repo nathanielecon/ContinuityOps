@@ -9,13 +9,13 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 51,
+  "revision": 52,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
-  "current_gate": "portfolio-tip-bind-pending-fresh-council",
+  "current_gate": "portfolio-fixer-pending-fresh-council",
   "running_tasks": [
-    "PORTFOLIO tip-bind (NIX-PORTFOLIO-001..003) then fresh 3-judge council (glow)"
+    "PORTFOLIO fixer after FJ2 findings then fresh 3-judge council (glow)"
   ],
   "blocked_tasks": [],
   "waiting_human": [],

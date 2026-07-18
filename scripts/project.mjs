@@ -550,8 +550,20 @@ export function runPhaseValidationSuite(taskId, validatorIds) {
       remaining_boundaries: ['Logical partitions only']
     },
     'P8-T04': {
-      claim_level: 'L1',
-      remaining_boundaries: ['Portfolio certified L1 only', 'No L4+ live cloud', 'D-044 waived H3-H6; placeholders retained']
+      claim_level: 'L4',
+      remaining_boundaries: [
+        'Scoped 100% under A3 ceilings (AWS lab via continuityops-gha)',
+        'Azure live apply out (D-046) — L1 design only',
+        'Performance remains honest L1',
+        'security-sbom L2; agentic-workflow L3; upstream-integration L2',
+        'No ContinuityOps known-good rollback proven',
+        'No Cursor in-pod AWS; no production customer drills'
+      ],
+      cloud_apply_evidence: [
+        'evidence/hosted/cloud-apply-staging-2026-07-18.json',
+        'evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json',
+        'evidence/hosted/lab-drill-rto-29645042815.json'
+      ]
     }
   };
   return {

@@ -564,3 +564,10 @@ ContinuityOps incidents yet.
 - **Root cause:** D-028 — worker gets data, not permission; private-repo patch URLs are not readable from the zero-credential App environment.
 - **Fix:** Vendor review packets under `evidence/dispatch-packets/` and re-dispatch REVIEW-SEC-02 / REVIEW-AGENTIC-02 to apply in-repo diffs; do not rely on `pull/*.patch` for private ContinuityOps.
 - **Remaining risk/follow-up:** Keep packaging diffs (or read-only vendored snapshots) in every D-037 dispatch for private PRs until a trusted in-repo packet path is standard.
+
+## BF-2026-016 — Fresh council fail on tip-bind tip `c2e6610`
+
+- **Detected:** 2026-07-18T18:57Z via PORTFOLIO-FRESH-JUDGE-02/03 (PRs #101/#102), `merge_ready: no`, scores ~7.9–8.0.
+- **Symptom:** (1) portfolio_tip_sha named parent `196bed4` while judges scored tip `c2e6610`; (2) `terraform fmt -check` failed on four files; (3) k8s reset test mutated tracked `crashloop-reset.json`; (4) S8 `integrated-gate.json` claim_level L4 without `cloud_apply_evidence` → P8-T04 overclaim; (5) S1–S4 STREAM_COMPLETE boundaries still denied L4 while matrix claimed scoped lab L4.
+- **Repair:** exact-SHA rebind; `terraform fmt`; restore evidence in scenarios test; add `cloud_apply_evidence` to integrated-gate + STREAM_COMPLETE; reconcile boundaries; regenerate P8-T04 validation on final tip.
+- **Prevention:** tip-bind commits must set `candidate_sha` to the evidence commit itself (or an explicitly validated parent-of-tip model accepted by judges); never elevate integrated-gate to L4+ without `cloud_apply_evidence`; keep validation check-only for tracked evidence.
