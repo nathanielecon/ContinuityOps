@@ -9,14 +9,12 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 37,
+  "revision": 38,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
   "current_gate": "portfolio-certified-L1",
-  "running_tasks": [
-    "live-aws-remote-state-and-staging-marker"
-  ],
+  "running_tasks": [],
   "blocked_tasks": [],
   "waiting_human": [],
   "seats": {
@@ -82,7 +80,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S2/S3/S4 supervisor stream-boundary approve (BF-PRE-015); claim L1",
     "S5–S8 P5-T01..P8-T04 verified at claim L1 (Grok D-043); portfolio-certified-L1",
     "ContinuityOps live AWS control plane LIVE (2026-07-18): GHA OIDC → continuityops-gha (repo id 1301990908); workflow continuityops-terraform.yml; Environment continuityops; PR #50 merged to main at 20266d3",
-    "Cloud seat NoCredentials expected (BF-2026-010 / Pro+); do not use CursorCloudAgent or project-a-lzlab-gha for ContinuityOps"
+    "Cloud seat NoCredentials expected (BF-2026-010 / Pro+); do not use CursorCloudAgent or project-a-lzlab-gha for ContinuityOps",
+    "PR #51 merged to main at 21299f9: ensure-tfstate + staging live-marker + terraform-pr static path fix; OIDC plan was green (run 29642718513); auto-apply on main expected"
   ],
   "verified_baseline": [],
   "unverified": [
