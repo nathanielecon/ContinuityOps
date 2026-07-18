@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0",
+  "artifact": "portfolio_fresh_judge",
+  "round": "fresh",
+  "judge_id": "portfolio-fresh-judge-3",
+  "tip_under_review": "b4e7340f82548b225b054722515234381683a5da",
+  "candidate_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "parent_bind_verified": true,
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "695d88db163b0acef4cc431412e1bacc259bdcb6f95fa0850623e5d2b273d83e",
+  "upstream_pins_sha256": "f01b2099f47ea87ef8418c75f4fc2efccde6972d8295d4b86af3c560236b764f",
+  "partition_sha256": "54fd67f4f1b06a87ee7fb0d010e38b59fef8613341daa29b1f8cac0d0b125d1a",
+  "recorded_utc": "2026-07-18T19:43:05Z",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "mode": "default",
+    "role": "independent-judge"
+  },
+  "validation": [
+    {
+      "command": "git rev-parse HEAD && git rev-parse HEAD^",
+      "exit_code": 0,
+      "started_utc": "2026-07-18T19:42:59Z",
+      "completed_utc": "2026-07-18T19:42:59Z",
+      "environment": "Codex cloud repository worktree",
+      "result": "tip b4e7340f82548b225b054722515234381683a5da; parent 2ab4f2ef99a87c35991681362c890f09033ea0ef"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "started_utc": "2026-07-18T19:42:59Z",
+      "completed_utc": "2026-07-18T19:43:04Z",
+      "environment": "Node.js v22.22.2",
+      "result": "94 passed; 0 failed"
+    },
+    {
+      "command": "terraform fmt -check -recursive terraform",
+      "exit_code": 0,
+      "started_utc": "2026-07-18T19:43:04Z",
+      "completed_utc": "2026-07-18T19:43:05Z",
+      "environment": "Terraform v1.15.5",
+      "result": "pass"
+    },
+    {
+      "command": "node scripts/project.mjs validate P8-T04",
+      "exit_code": 0,
+      "started_utc": "2026-07-18T19:43:05Z",
+      "completed_utc": "2026-07-18T19:43:05Z",
+      "environment": "Node.js v22.22.2; validator environment 6a594ee667608191ab53cae15202815e",
+      "result": "all seven declared validators passed; tracked validator side effects were discarded and the reviewed tree was restored clean"
+    }
+  ],
+  "universal_must_haves": [
+    {"id": "U1", "status": "pass", "evidence": ["git parent bind", "evidence/portfolio/tip-bind-2026-07-18.json", "docs/claims/matrix.json", "integration/upstreams.lock.json", "harness/postbuild-partition-manifest.json"]},
+    {"id": "U2", "status": "unproven", "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"], "finding": "Local checks pass, but the integrated gate is bound to the candidate parent and its hosted-required-check detail reports only L1; the supplied live apply is bound to f059ffa3, not the reviewed tip."},
+    {"id": "U3", "status": "pass", "evidence": ["node scripts/project.mjs validate P8-T04", "tests/pipeline/"]},
+    {"id": "U4", "status": "pass", "evidence": ["evidence/slices/S8/integrated-gate.json", "docs/claims/matrix.json"]},
+    {"id": "U5", "status": "fail", "evidence": ["README.md", "docs/claims/matrix.json"], "finding": "The matrix claims scoped AWS lab L4 while README.md still says current L1, no L4+ apply, no live EKS/Lambda, no measured live RTO, and no live teardown."},
+    {"id": "U6", "status": "pass", "evidence": ["BREAK_FIX_LOG.md", "tests/"]},
+    {"id": "U7", "status": "pass", "evidence": ["validation", "evidence/portfolio/tip-bind-2026-07-18.json"]},
+    {"id": "U8", "status": "pass", "evidence": ["PLAN.md", "evidence/portfolio/tip-bind-2026-07-18.json"]},
+    {"id": "U9", "status": "pass", "evidence": ["BREAK_FIX_LOG.md"]},
+    {"id": "U10", "status": "fail", "evidence": ["README.md", "docs/claims/matrix.json", "evidence/slices/S1/STREAM_COMPLETE.json", "evidence/slices/S8/integrated-gate.json"], "finding": "Recruiter-facing README tense and claim ceilings contradict the matrix, stream summaries, and hosted lab evidence."},
+    {"id": "U11", "status": "pass", "evidence": ["AGENTS.md", "tests/harness/"]},
+    {"id": "U12", "status": "pass", "evidence": ["harness/postbuild-partition-manifest.json", "PLAN.md"]},
+    {"id": "U13", "status": "pass", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "BREAK_FIX_LOG.md"]},
+    {"id": "U14", "status": "pass", "evidence": ["BREAK_FIX_LOG.md"]}
+  ],
+  "slice_must_haves": [
+    {"id": "S8-M1", "status": "pass", "evidence": ["evidence/slices/S1/STREAM_COMPLETE.json", "evidence/slices/S8/STREAM_COMPLETE.json"]},
+    {"id": "S8-M2", "status": "pass", "evidence": ["evidence/slices/S8/evidence-index.json", "docs/claims/matrix.json"]},
+    {"id": "S8-M3", "status": "unproven", "evidence": ["evidence/slices/S8/integrated-gate.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"], "finding": "Deterministic checks pass, but hosted evidence is not bound to the reviewed final tip."},
+    {"id": "S8-M4", "status": "fail", "evidence": ["README.md", "docs/claims/matrix.json"], "finding": "README and claims matrix disagree on live AWS lab apply, EKS/Lambda, RTO, and teardown."},
+    {"id": "S8-M5", "status": "pass", "evidence": ["docs/claims/matrix.json", "docs/evidence-index.md"]},
+    {"id": "S8-M6", "status": "fail", "evidence": ["README.md", "docs/claims/matrix.json"], "finding": "The repository has scoped live-lab distinctions in the matrix, but the primary recruiter surface denies those evidenced states rather than distinguishing them."},
+    {"id": "S8-M7", "status": "pass", "evidence": ["docs/operator/README.md", "docs/handoff/interview-walkthrough.md"]},
+    {"id": "S8-M8", "status": "pass", "evidence": ["BREAK_FIX_LOG.md", "evidence/judges/REVIEW-COMPLETION-02.json"]},
+    {"id": "S8-M9", "status": "pass", "evidence": ["fresh judge execution"]},
+    {"id": "S8-M10", "status": "pass", "evidence": ["PLAN.md", "AGENTS.md"]},
+    {"id": "S8-M11", "status": "pass", "evidence": ["harness/postbuild-partition-manifest.json", "evidence/postbuild/"]},
+    {"id": "S8-M12", "status": "pass", "evidence": ["docs/architecture/continuityops.drawio", "docs/architecture/continuityops-architecture.svg", "docs/portfolio/continuityops-infographic.png"]},
+    {"id": "S8-M13", "status": "fail", "evidence": ["README.md", "docs/claims/matrix.json"], "finding": "README is visual-first but is not final-evidence accurate, so it is not a valid final recruiter handoff."},
+    {"id": "S8-M14", "status": "pass", "evidence": ["README.md", "docs/portfolio/continuityops-infographic.png"]}
+  ],
+  "scored_dimensions": [
+    {"id": "correctness_completeness", "score": 1.5, "maximum": 2.0, "evidence": ["node --test tests/", "README.md", "docs/claims/matrix.json"], "rationale": "Core checks and tip bind pass, but final portfolio surfaces are internally inconsistent."},
+    {"id": "security_authority_boundaries", "score": 1.4, "maximum": 1.5, "evidence": ["AGENTS.md", "docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"], "rationale": "OIDC and non-production boundaries are explicit and no credential expansion was observed."},
+    {"id": "failure_recovery_depth", "score": 1.4, "maximum": 1.5, "evidence": ["BREAK_FIX_LOG.md", "evidence/hosted/lab-drill-rto-29645042815.json"], "rationale": "Failures, lab recovery, and teardown are recorded; known-good workload rollback remains an explicit non-claim."},
+    {"id": "deterministic_test_quality", "score": 1.0, "maximum": 1.0, "evidence": ["node --test tests/", "terraform fmt -check -recursive terraform"], "rationale": "All 94 tests and formatting checks pass."},
+    {"id": "live_runtime_evidence_quality", "score": 0.7, "maximum": 1.0, "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "evidence/slices/S8/integrated-gate.json"], "rationale": "Strong scoped AWS lab records exist, but they are not final-tip hosted checks."},
+    {"id": "operability_troubleshooting", "score": 0.9, "maximum": 1.0, "evidence": ["docs/operator/README.md", "BREAK_FIX_LOG.md"], "rationale": "Operator paths and detailed break/fix diagnostics are durable."},
+    {"id": "evidence_claim_integrity", "score": 0.4, "maximum": 1.0, "evidence": ["README.md", "docs/claims/matrix.json"], "rationale": "The primary README directly contradicts the authoritative claim matrix and hosted evidence."},
+    {"id": "maintainability_handoff", "score": 0.45, "maximum": 0.5, "evidence": ["docs/evidence-index.md", "docs/handoff/interview-walkthrough.md"], "rationale": "Evidence navigation and handoff material are structured and durable."},
+    {"id": "cost_performance_realism", "score": 0.4, "maximum": 0.5, "evidence": ["docs/claims/matrix.json", "evidence/slices/S7/"], "rationale": "Performance remains honestly L1 and lab cost/teardown boundaries are explicit."}
+  ],
+  "overall_score": 8.15,
+  "blocking_findings": [
+    {
+      "id": "PORTFOLIO-CLAIM-DRIFT-001",
+      "severity": "high",
+      "summary": "README.md claims only L1 and denies live AWS lab outcomes that docs/claims/matrix.json and hosted evidence claim at scoped L4.",
+      "reproduction": "Compare README.md current claim level, Results at a glance, Explicit non-claims, and claim-safe bullets with docs/claims/matrix.json and evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json."
+    },
+    {
+      "id": "PORTFOLIO-HOSTED-BIND-002",
+      "severity": "medium",
+      "summary": "The supplied hosted apply record is bound to f059ffa3 rather than the final reviewed tip; integrated hosted_required_checks reports L1.",
+      "reproduction": "Compare candidate_sha_apply in evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json with tip_under_review and inspect hosted_required_checks in evidence/slices/S8/integrated-gate.json."
+    }
+  ],
+  "unsupported_claims": [
+    "Final recruiter surfaces agree with the scoped L4 AWS lab evidence.",
+    "All hosted required checks are bound to the final reviewed tip."
+  ],
+  "security_findings": [],
+  "improvements": [
+    "Reconcile README.md and its badges, outcome table, explicit non-claims, architecture wording, and recruiter bullets with the A3 ceilings and scoped AWS lab evidence.",
+    "Run or record hosted required checks against the final reviewed tip, then regenerate candidate-bound integrated evidence and obtain a new clean-room council."
+  ],
+  "merge_ready": "no"
+}
