@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "task_id": "P0-T05",
+  "slice": "S0",
+  "candidate_sha": "fb18f5103a1392170e3c052eff72ba239496e610",
+  "baseline_sha": "531aa6ffb37517efc6b3c705c040d6d838ab36d0",
+  "validation_results": [
+    {
+      "command": "node scripts/project.mjs validate P0-T05",
+      "exit": 0,
+      "time": "2026-07-18T05:40:24Z",
+      "evidence_path": "evidence/slices/S0/integrated-gate.json"
+    },
+    {
+      "command": "node --test tests/",
+      "exit": 0,
+      "time": "2026-07-18T05:40:24Z",
+      "evidence_path": "evidence/slices/S0/integrated-gate.json"
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "time": "2026-07-18T05:40:24Z",
+      "evidence_path": "evidence/slices/S0/integrated-gate.json"
+    }
+  ],
+  "evidence_manifest_path": "evidence/slices/S0/integrated-gate.json",
+  "context_remaining": "72%",
+  "preflight_ok": {
+    "warm_fresh": false,
+    "last_warm_utc": null,
+    "context_package_ready": "n/a"
+  },
+  "notes_zh": "P0-T05 S0 集成门验证器与三 judge 证据已通过；saved council 仅 provisional；fresh judges 独立退出均分≥9.5。保暖戳在容器不可读，warm_fresh=false。"
+}
