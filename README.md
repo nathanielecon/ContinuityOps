@@ -7,34 +7,37 @@
 > correlated observability, reproducible incident drills, and verified recovery
 > **fixtures** — with agentic remediation proposals behind a protected gate.
 
-**Current claim level: L1** (contracts, fixtures, and synthetic drills). Synthetic L2
-where local tools exist. **No L4+ live cloud apply.**
+**Current claim ceiling: scoped AWS lab L4** via GitHub OIDC → `continuityops-gha`
+(apply + lab drill/RTO + teardown). Component ceilings under engagement A3:
+security-sbom **L2**, agentic-workflow **L3**, upstream-integration **L2**,
+performance **L1**, Azure live **out** (D-046). See [`docs/claims/matrix.json`](docs/claims/matrix.json).
 
-[![Status](https://img.shields.io/badge/status-Phases%200–8%20L1%20certified-teal)](OPERATING_STATE.md)
+[![Status](https://img.shields.io/badge/status-portfolio%20L4%20lab%20(A3)-teal)](OPERATING_STATE.md)
 [![Plan](https://img.shields.io/badge/plan-continuityops--cloud--reliability--v1-0B3D5C)](docs/planning/MASTER_PLAN.md)
-[![Claims](https://img.shields.io/badge/claims-L1%20evidence%20gated-teal)](docs/claims/matrix.json)
+[![Claims](https://img.shields.io/badge/claims-A3%20ceilings%20evidence%20gated-teal)](docs/claims/matrix.json)
 
 ## Results at a glance
 
 | Result | Verified outcome | Evidence |
 | --- | --- | --- |
-| Delivery / hosted CI stubs | L1 contracts + workflow pins | [S1](evidence/slices/S1/) |
-| Kubernetes | Helm chart + synthetic failure matrix | [S2](evidence/slices/S2/) |
-| Serverless | Queue/DLQ/idempotency unit contracts | [S3](evidence/slices/S3/) |
-| Observability | Telemetry/SLO + synthetic signal path | [S4](evidence/slices/S4/) |
-| Operations / drills | Runbooks + 8 synthetic drills | [S5](evidence/slices/S5/) |
-| Security / Azure / agentic | Least-privilege fixtures + human gate | [S6](evidence/slices/S6/) |
-| Recovery / perf / FinOps | Synthetic restore + before/after + dry-run teardown | [S7](evidence/slices/S7/) |
-| Portfolio gate | Claims matrix + recruiter front | [S8](evidence/slices/S8/) |
+| Delivery / hosted CI + Terraform | Scoped L4 lab apply via OIDC (`continuityops-gha`) | [S1](evidence/slices/S1/) · [hosted](evidence/hosted/) |
+| Kubernetes | Chart contracts + lab EKS apply/teardown | [S2](evidence/slices/S2/) · [elevation](evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json) |
+| Serverless | Queue/DLQ contracts + lab Lambda/SQS apply | [S3](evidence/slices/S3/) · [elevation](evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json) |
+| Observability | Telemetry/SLO + lab CloudWatch signals | [S4](evidence/slices/S4/) |
+| Operations / drills | Runbooks + lab incident drill (not production) | [S5](evidence/slices/S5/) · [drill](evidence/hosted/lab-drill-rto-29645042815.json) |
+| Security / Azure / agentic | SBOM L2 · Azure L1 (no live) · agentic L3 hosted-control | [S6](evidence/slices/S6/) |
+| Recovery / perf / FinOps | Lab RTO + teardown L4; performance honest L1 | [S7](evidence/slices/S7/) |
+| Portfolio gate | A3-scoped matrix + tip-bind + recruiter front | [S8](evidence/slices/S8/) · [tip-bind](evidence/portfolio/tip-bind-2026-07-18.json) |
 
 ## Explicit non-claims
 
-- No live EKS / Lambda / Azure apply (not L4+)
-- No live production incident drills
-- No measured live RTO/RPO
-- No live teardown of cloud resources executed
-- No ExpressRoute depth; Azure governance is designed/static
-- SBOM is a stub (not a live scanner result)
+- No **production** (customer) incident drills — lab drills only
+- No CursorCloudAgent / in-pod AWS credentials (OIDC control plane by design)
+- No live **Azure** apply — ContinuityOps AWS-lab ceiling (D-046)
+- No ContinuityOps known-good rollback digest proven
+- Performance remains **L1** (no live load proof)
+- Azure governance is designed/static (no ExpressRoute depth)
+- Hosted lab apply/drill/teardown evidence is tip-inherited from recorded runs (not re-applied on every tip)
 
 ## Architecture
 
@@ -82,7 +85,7 @@ rewrite upstream work:
 
 ## Claim-safe bullets (recruiter)
 
-- End-to-end **contracts** for k8s, serverless, observability, incidents, recovery
-- Honest **L1** evidence with explicit remaining boundaries on every gate
-- Agentic remediation = evidence gather + proposal; mutation gated
-- FinOps budgets/tags + teardown **inventory dry-run** (no live destroy)
+- End-to-end **contracts** plus scoped **AWS lab L4** proof via GitHub OIDC
+- Honest **A3 ceilings** in the claims matrix (Azure out; performance L1; SBOM L2; agentic L3)
+- Agentic remediation = hosted-control evidence + proposal; no in-pod AWS credentials
+- Lab drill/RTO + teardown evidenced; no production drills; no known-good rollback claim

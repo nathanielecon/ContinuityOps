@@ -571,3 +571,10 @@ ContinuityOps incidents yet.
 - **Symptom:** (1) portfolio_tip_sha named parent `196bed4` while judges scored tip `c2e6610`; (2) `terraform fmt -check` failed on four files; (3) k8s reset test mutated tracked `crashloop-reset.json`; (4) S8 `integrated-gate.json` claim_level L4 without `cloud_apply_evidence` → P8-T04 overclaim; (5) S1–S4 STREAM_COMPLETE boundaries still denied L4 while matrix claimed scoped lab L4.
 - **Repair:** exact-SHA rebind; `terraform fmt`; restore evidence in scenarios test; add `cloud_apply_evidence` to integrated-gate + STREAM_COMPLETE; reconcile boundaries; regenerate P8-T04 validation on final tip.
 - **Prevention:** tip-bind commits must set `candidate_sha` to the evidence commit itself (or an explicitly validated parent-of-tip model accepted by judges); never elevate integrated-gate to L4+ without `cloud_apply_evidence`; keep validation check-only for tracked evidence.
+
+## BF-2026-017 — README claim tense lagged matrix L4 lab
+
+- **Detected:** 2026-07-18T19:48Z via PORTFOLIO-FRESH-JUDGE-03 (PR #109), `merge_ready: no` (U5/U10); judges 01/02 passed at 9.7.
+- **Symptom:** README still advertised L1 / no live apply while `docs/claims/matrix.json` and hosted evidence claimed scoped AWS lab L4 under A3.
+- **Repair:** Update README status, results table, non-claims, and recruiter bullets to match A3 ceilings; re-dispatch fresh council on rebind tip.
+- **Prevention:** Recruiter-facing claim prose updates atomically with matrix/hosted elevations (BF-PRE-001).
