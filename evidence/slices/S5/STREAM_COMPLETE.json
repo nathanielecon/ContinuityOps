@@ -7,8 +7,8 @@
     "P5-T02",
     "P5-T03"
   ],
-  "candidate_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
-  "baseline_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
+  "candidate_sha": "c18b57586284953a3d778cf7fef548ae0f29e6d7",
+  "baseline_sha": "c18b57586284953a3d778cf7fef548ae0f29e6d7",
   "claim_level": "L4",
   "remaining_boundaries": [
     "Lab incident drill only (not production customer drills)",
@@ -22,7 +22,7 @@
   },
   "notes": "S5 runbooks/drills complete at scoped L4 lab.",
   "slice_landed_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "portfolio_tip_sha": "2ab4f2ef99a87c35991681362c890f09033ea0ef",
+  "portfolio_tip_sha": "c18b57586284953a3d778cf7fef548ae0f29e6d7",
   "bind_model": "candidate_sha_parent_of_tip",
   "rebinding": {
     "recorded_utc": "2026-07-18T18:58:15Z",
