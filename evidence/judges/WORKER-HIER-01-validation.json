@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "task_id": "WORKER-HIER-01",
+  "recorded_utc": "2026-07-18T13:10:38Z",
+  "baseline_sha": "d2d90bc2a761031186451c19b391a12af198bd92",
+  "branch": "cursor/worker-hier-01-7c3d",
+  "validation_results": [
+    {
+      "command": "python3 - <<'PY' ... parse every standalone *.json and every fenced ```json block in *.md ... PY",
+      "exit_code": 0,
+      "time_utc": "2026-07-18T13:10:38Z",
+      "output_summary": "standalone_json_files=197; fenced_json_blocks=14",
+      "evidence_path": "evidence/judges/WORKER-HIER-01-validation.json"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "time_utc": "2026-07-18T13:10:38Z",
+      "output_summary": "no output",
+      "evidence_path": "evidence/judges/WORKER-HIER-01-validation.json"
+    }
+  ],
+  "notes_zh": "本文件记录 WORKER-HIER-01 补丁的仓库合同验证摘要；完整命令输出同时保留在本轮 worker 终端记录中。"
+}
