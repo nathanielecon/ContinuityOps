@@ -300,31 +300,33 @@ Stop and request human action for:
 
 Durable, non-obvious notes for future cloud agents working in this environment.
 
-- **Repository type:** This is a planning/governance repository at Phase 0
-  bootstrap. There is no application service, no dependency manifest
-  (`package.json`/`requirements.txt`/`go.mod`), and no committed build/test/lint
-  configuration. The "deliverables" are the Markdown governance docs, the
-  machine-readable JSON contracts (`PLAN.md` task authority, `OPERATING_STATE.md`
-  state/issues, `integration/upstreams.lock.json` upstream pins), and the
-  architecture assets in `docs/architecture/`. Do not fabricate a build system or
-  claim runtime capability; implementation begins only when a human advances
-  `authorized_through_phase` per `PLAN.md`.
-- **Pre-installed runtimes (no install needed):** Node 22, npm 10, Python 3.12,
-  Go 1.22, and `jq`. The update script is intentionally a near no-op because
-  there are no dependencies to install yet; it only installs deps if a manifest
-  later appears.
-- **Validate the contracts (the closest thing to a test suite):** parse every
-  standalone `*.json` and every fenced ```json block embedded in the Markdown
-  (all 12 currently parse). This is the core "does the repo still hold together"
-  check. `python3 -c "import json"` is sufficient; no framework is installed.
-- **Expected Phase-0 link gaps:** internal Markdown links to `evidence/*`
-  subdirectories (hosted/slices/postbuild/judges) and the root-relative links
-  inside `docs/planning/REPO_README_TEMPLATE.md` do NOT resolve yet by design —
-  those namespaces/assets are created in later phases. Only `evidence/README.md`
-  exists today. Treat these as known-not-yet-created, not as regressions.
-- **Render the architecture diagram (build/run demo):** the README Mermaid block
-  renders with `npx --yes @mermaid-js/mermaid-cli -i <file>.mmd -o out.png`; its
-  bundled Chromium works headless in this VM with no extra system libs. The
-  committed renders (`docs/architecture/continuityops-architecture.{png,svg}`,
-  `continuityops.drawio`) are valid and the drawio XML is well-formed.
-- **No secrets required** for planning/validation work in this environment.
+- **Repository type:** ContinuityOps governance + in-repo L1 contracts through
+  Phases 0–8 on `main` (`portfolio-certified-L1`). Live L4+ cloud apply is not
+  performed inside this Cursor cloud VM by default (see Paste / BF-2026-010).
+- **Pre-installed runtimes:** Node 22, npm 10, Python 3.12, Go 1.22, and `jq`.
+  Install task-specific CLIs (`aws`, `terraform`, `helm`, etc.) only when a
+  path that can actually use them is available (GHA OIDC or local bottleneck).
+- **Validate:** `node --test tests/`; `node scripts/project.mjs validate <task>`;
+  parse standalone `*.json` and fenced ```json blocks in Markdown.
+- **Architecture renders:** Mermaid via
+  `npx --yes @mermaid-js/mermaid-cli`; committed
+  `docs/architecture/continuityops-architecture.{png,svg}` and
+  `continuityops.drawio` remain authoritative visuals.
+- **No secrets in the Codex/Cursor Environment** for warm cache (D-026). Repo
+  work does not require AWS keys in this VM.
+
+### Paste for stuck agents
+
+When blocked on AWS identity inside Cursor cloud (Pro+), paste/follow this:
+
+```text
+NoCredentials is expected on Pro+ without team External ID. CursorCloudAgent has never been assumed.
+Prior fix (2026-07-14/15): GitHub OIDC → project-a-lzlab-gha via landing-zone-lab.yml, or local aws login bottleneck.
+Do not block on CURSOR_AWS_ASSUME_IAM_ROLE_ARN. Escalate live AWS to GHA or local; continue repo-only here.
+```
+
+Account binding (not a secret): `283077380808` /
+`arn:aws:iam::283077380808:root`. Env may show
+`CURSOR_AWS_ASSUME_IAM_ROLE_ARN=.../CursorCloudAgent` — treat as **informational
+only** on Pro+; do not spin or wait for STS success in this seat. See
+`BREAK_FIX_LOG.md` BF-2026-010.

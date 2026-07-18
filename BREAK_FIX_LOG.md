@@ -460,24 +460,24 @@ ContinuityOps incidents yet.
 - **Prevention:** Control-center must supply D-028 context package or vendored snapshot before raising upstream-derived claims above L1; never invent digest/export values.
 - **Verified by:** Grok D-043 S1 worker (static tests + validators).
 
-## 2026-07-18 — BF-2026-010 — Lead agent must have job dependencies and credentials before L4+ work
+## 2026-07-18 — BF-2026-010 — Lead agent dependencies vs Cursor Pro+ AWS identity
 
 - **Slice/task:** Portfolio / Phases 1–8 live claim elevation; chief supervisor seat.
-- **Symptom:** ContinuityOps reached `portfolio-certified-L1` (34/34 PLAN tasks verified at static/synthetic claim ceiling) but could not raise to L4+ (EKS apply, live Lambda/SQS, measured RTO/RPO, live teardown). `aws sts get-caller-identity` → `NoCredentials`. Env exposes `CURSOR_AWS_ASSUME_IAM_ROLE_ARN=arn:aws:iam::283077380808:role/CursorCloudAgent` with **no base identity** (no IMDS, no web-identity/OIDC token file, no SSO cache), so the role cannot be assumed. Browser Google→AWS attempt reached Builder ID OAuth only; console cookies ≠ CLI credentials. Spec-complete progress stalled at ~35–40% despite full L1 task checklist.
-- **Root cause:** Lead/chief agent was dispatched into cloud work without a preflight that the **runtime identity, CLIs, and upstream data packages** required by the claim level were actually injectable and usable. Owner Google sign-in to AWS on a laptop/console does not automatically propagate API credentials into the Cursor cloud agent VM.
+- **Symptom:** ContinuityOps reached `portfolio-certified-L1` (34/34 PLAN tasks at L1) while agents spun on `aws sts get-caller-identity` → `NoCredentials` and env `CURSOR_AWS_ASSUME_IAM_ROLE_ARN=arn:aws:iam::283077380808:role/CursorCloudAgent`. Browser Google→AWS reached Builder ID OAuth only; console cookies ≠ CLI credentials.
+- **Root cause (corrected 2026-07-18 owner paste):** On **Cursor Pro+ without team External ID**, `NoCredentials` in the cloud agent VM is **expected**. `CursorCloudAgent` has **never been assumed** from this seat. The env role ARN is informational, not a working injection. Owner Google sign-in to AWS on a laptop/console does not propagate API credentials into the Cursor cloud agent VM. Prior working path (2026-07-14/15): **GitHub OIDC → `project-a-lzlab-gha` via `landing-zone-lab.yml`**, or a **local `aws login` bottleneck** — not in-VM assume-role.
 - **Target account (owner-supplied, for binding — not a secret):**
   - Account: `283077380808`
   - Root ARN: `arn:aws:iam::283077380808:root`
-  - Expected agent role (env): `arn:aws:iam::283077380808:role/CursorCloudAgent`
-- **Fix / control (prevention — apply before any L4+ dispatch):**
-  1. **Lead-agent credential preflight (mandatory):** before claiming or attempting hosted/cloud apply, the lead agent must prove `aws sts get-caller-identity` (or equivalent) succeeds for account `283077380808`, record the assumed role ARN, and confirm required tools (`aws`, and task-specific `terraform`/`kubectl`/`helm` as needed) are on PATH.
-  2. **Dependency preflight:** verify GitHub actuation token scopes for the seat, D-028 upstream context packages when A/C trees are required, and that Actions OIDC trust (if used) targets this account — not merely that a role ARN string exists in env.
-  3. **Google / console session rule:** always *try* Google sign-in when a browser AWS path is used; treat success as **console session only** until SSO/`aws login`/web-identity yields working CLI/API credentials. Never equate “owner signed into AWS with Google” with agent API readiness.
-  4. **Fail closed on claim level:** if preflight fails, keep claim ceiling ≤ L1/L3 as evidenced; do not mark L4–L6 or “100% as specified” for live slices.
-- **Regression control added:** BF-2026-010 preflight is a hard gate for any task whose acceptance requires L4+ or `environment: staging|recovery-lab` cloud apply. Record preflight evidence under `evidence/slices/*/credential-preflight.json` (account id, caller ARN, tool versions) with no secret material.
-- **New candidate SHA:** this break/fix hygiene commit.
-- **Fresh verification commands/results:** `aws sts get-caller-identity` → still `NoCredentials` in this seat at time of writing (preflight fails; L4 blocked). Account/root ARN recorded from owner message only.
-- **Hosted/cloud verification:** blocked pending Cursor→AWS identity injection or Identity Center SSO usable inside the agent VM for account `283077380808`.
-- **Claim/status changes:** none elevated; portfolio remains `portfolio-certified-L1` until preflight passes and live evidence is captured.
-- **Remaining risk/follow-up:** wire assumable credentials for `CursorCloudAgent` in account `283077380808` (or SSO start URL + `aws sso login`) so the lead agent can clear BF-2026-010 and resume L4+ slices.
-- **Verified by:** chief supervisor (browser Google attempt + STS probe; owner account binding).
+  - Env role string (do not wait on): `arn:aws:iam::283077380808:role/CursorCloudAgent`
+- **Fix / control (prevention):**
+  1. **Do not block on `CURSOR_AWS_ASSUME_IAM_ROLE_ARN`** or in-VM STS success on Pro+.
+  2. **Escalate live AWS** (L4+ apply, EKS, live Lambda/SQS, measured RTO, live teardown) to **GitHub Actions OIDC** (Project A pattern: `landing-zone-lab.yml` / `project-a-lzlab-gha`) or a **local `aws login` bottleneck** with evidence returned to the repo.
+  3. **Continue repo-only here:** keep advancing L1 contracts, tests, docs, GHA workflow definitions, and claim-safe evidence; claim ceiling stays ≤ L1 (or L3 when hosted checks actually run) until GHA/local path produces L4+ evidence.
+  4. **Google / console rule:** always *try* Google sign-in on browser AWS paths; treat success as console session only unless SSO/`aws login`/GHA OIDC yields API credentials.
+  5. **Lead-agent dependency preflight (repo seat):** before *dispatching* an L4+ lane, confirm the **chosen carrier** (GHA OIDC workflow or local bottleneck) has identity + required CLIs — not that this Cursor VM can assume `CursorCloudAgent`.
+- **Regression control added:** Stuck-agent paste lives in `AGENTS.md` § Paste for stuck agents. Record hosted/local cloud evidence under `evidence/slices/*/` with account `283077380808` and no secret material. Never mark L4–L6 from a Pro+ VM STS failure loop.
+- **Fresh verification commands/results:** `aws sts get-caller-identity` → `NoCredentials` (expected on Pro+); portfolio remains `portfolio-certified-L1`.
+- **Hosted/cloud verification:** via GHA OIDC or local bottleneck only for account `283077380808`.
+- **Claim/status changes:** none elevated by this clarification; unblocks repo-only continuation.
+- **Remaining risk/follow-up:** author/wire ContinuityOps (or reused Project A) GHA OIDC apply workflows against account `283077380808` when elevating S1–S7 live claims.
+- **Verified by:** chief supervisor + owner paste (2026-07-18).
