@@ -687,8 +687,12 @@ registerValidator('upstream_pin', (ctx) => {
   if (digest !== 'UNAVAILABLE' && !/^sha256:[0-9a-f]{64}$/.test(digest ?? '')) {
     throw new ValidationError('project_c.image_digest 必须为 UNAVAILABLE 或 sha256:…', 'upstream_pin_digest');
   }
-  if (!Array.isArray(lock.missing_capabilities) || lock.missing_capabilities.length < 1) {
-    throw new ValidationError('缺少 missing_capabilities', 'upstream_pin_missing');
+  if (!Array.isArray(lock.missing_capabilities)) {
+    throw new ValidationError('缺少 missing_capabilities 数组', 'upstream_pin_missing');
+  }
+  // Empty missing_capabilities is allowed only when a real digest is pinned.
+  if (lock.missing_capabilities.length < 1 && digest === 'UNAVAILABLE') {
+    throw new ValidationError('image_digest=UNAVAILABLE 时必须声明 missing_capabilities', 'upstream_pin_missing');
   }
   return { pass: true, digest, missing: lock.missing_capabilities.length };
 });

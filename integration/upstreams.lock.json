@@ -10,44 +10,67 @@
       "integration/contracts/project-a.governance.json"
     ],
     "evidence_refs": [
+      "integration/upstreams/packets/2026-07-18-a-c/manifest.json",
       "evidence/slices/S1/upstream-integration.json",
       "docs/architecture/integration.md"
     ],
-    "access_note": "Worker token has metadata-only access; tree contents not readable in this environment (CO-006). Contracts are ContinuityOps-side adapters derived from MASTER_PLAN export surface; upstream trees remain unmodified."
+    "access_note": "D-028 packet integration/upstreams/packets/2026-07-18-a-c/project_a supplies pinned tree excerpts (CO-006). Upstream repo unmodified."
   },
   "project_c": {
     "repository": "nathanielecon/local-first-governed-cicd",
-    "commit_sha": "0f54def53fbfda9747c8ea27235eaac1da831aec",
-    "image_digest": "UNAVAILABLE",
+    "commit_sha": "376b7e18c5cc94e67ff180ca2f42b8eb05535be3",
+    "image_digest": "sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229",
+    "registry": "000000000000.dkr.ecr.us-east-1.amazonaws.com/project-c-delivery-api",
+    "rollback_target": "none proven",
+    "rollback_evidence": "integration/upstreams/packets/2026-07-18-a-c/project_c/evidence/phase-6/manifest.json",
     "consumed_contracts": [
       "integration/contracts/project-c.release.json",
       "integration/contracts/project-c.smoke.json",
       "app-contract/release-contract.json"
     ],
     "evidence_refs": [
+      "integration/upstreams/packets/2026-07-18-a-c/manifest.json",
+      "integration/upstreams/packets/2026-07-18-a-c/co-004-digest-proof.json",
+      "integration/upstreams/packets/2026-07-18-a-c/project_c/evidence/phase-9/governing-manifest.json",
       "evidence/slices/S1/upstream-integration.json",
       "docs/architecture/integration.md"
     ],
-    "access_note": "Worker token has metadata-only access; image digest not verifiable from pinned SHA in this environment (CO-004/CO-006). Digest marked UNAVAILABLE until control-center context package or vendored snapshot supplies a verified sha256 digest."
+    "access_note": "D-028 packet supplies source @ 376b7e18… plus phase-9 evidence overlay @ c6ca4542… (CO-004 A2 Option 2; CO-006). Upstream repos unmodified."
   },
-  "missing_capabilities": [
+  "context_packet": {
+    "path": "integration/upstreams/packets/2026-07-18-a-c",
+    "manifest": "integration/upstreams/packets/2026-07-18-a-c/manifest.json",
+    "packaged_at": "2026-07-18",
+    "decision": "D-028",
+    "a2_option": 2,
+    "closes": ["CO-006", "CO-004", "MC-A-TREE", "MC-C-TREE", "MC-C-DIGEST"]
+  },
+  "missing_capabilities": [],
+  "resolved_capabilities": [
     {
       "id": "MC-A-TREE",
-      "upstream": "project_a",
-      "summary": "Pinned Project A tree contents not readable with current worker GitHub token (contents:403).",
-      "resolution": "Control-center D-028 context package or read-only vendored snapshot at the pinned SHA."
-    },
-    {
-      "id": "MC-C-DIGEST",
-      "upstream": "project_c",
-      "summary": "Immutable image digest and known-good rollback target not verified; image_digest=UNAVAILABLE.",
-      "resolution": "Consume a verified sha256 digest via context package, or label a ContinuityOps lab artifact explicitly (CO-004)."
+      "resolved_by": "integration/upstreams/packets/2026-07-18-a-c",
+      "summary": "Project A pinned tree excerpts vendored read-only via control-center packager."
     },
     {
       "id": "MC-C-TREE",
-      "upstream": "project_c",
-      "summary": "Pinned Project C tree contents not readable with current worker GitHub token (contents:403).",
-      "resolution": "Same as MC-A-TREE (D-028 packaging)."
+      "resolved_by": "integration/upstreams/packets/2026-07-18-a-c",
+      "summary": "Project C source + phase-9 evidence vendored read-only via control-center packager."
+    },
+    {
+      "id": "MC-C-DIGEST",
+      "resolved_by": "integration/upstreams/packets/2026-07-18-a-c/co-004-digest-proof.json",
+      "summary": "A2 Option 2: pin 376b7e18… with ECR digest sha256:bffa93ad…; rollback none proven with evidence path."
+    },
+    {
+      "id": "CO-006",
+      "resolved_by": "integration/upstreams/packets/2026-07-18-a-c/manifest.json",
+      "summary": "First validated A/C context package with recorded source SHAs."
+    },
+    {
+      "id": "CO-004",
+      "resolved_by": "integration/upstreams/packets/2026-07-18-a-c/CO-004.txt",
+      "summary": "Proven image_digest for active pin; rollback none proven."
     }
   ]
 }

@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "issue": "CO-004",
+  "a2_option": 2,
+  "repository": "nathanielecon/local-first-governed-cicd",
+  "commit_sha": "376b7e18c5cc94e67ff180ca2f42b8eb05535be3",
+  "one_line": "image_digest: sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229 | rollback: none proven | source: 000000000000.dkr.ecr.us-east-1.amazonaws.com/project-c-delivery-api@sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229 (packet evidence/phase-9/governing-manifest.json; evidence_commit c6ca45425244323ee90be5b7b02d511f54976b2b; pin 376b7e18c5cc94e67ff180ca2f42b8eb05535be3)",
+  "image_digest": "sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229",
+  "registry": "000000000000.dkr.ecr.us-east-1.amazonaws.com/project-c-delivery-api",
+  "rollback_target": "none proven",
+  "rollback_evidence": "integration/upstreams/packets/2026-07-18-a-c/project_c/evidence/phase-6/manifest.json (fixture only; not ContinuityOps known-good)",
+  "provenance": {
+    "phase9_governing_manifest": {
+      "image_digest": "sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229",
+      "image_ref": "000000000000.dkr.ecr.us-east-1.amazonaws.com/project-c-delivery-api@sha256:bffa93adcbe247be118de0726842f673e14310052b3fdcd6ddaa853fbc05c229",
+      "bound_git_sha": "376b7e18c5cc94e67ff180ca2f42b8eb05535be3",
+      "evidence": "evidence/phase-9/governing-manifest.json",
+      "evidence_commit_sha": "c6ca45425244323ee90be5b7b02d511f54976b2b",
+      "smoke": "PASS"
+    },
+    "phase6_manifest_note": "Phase 6 manifest uses localhost fixture digests; ContinuityOps records rollback as none proven with this evidence path.",
+    "pin_matches_proven_digest": true,
+    "evidence_overlays": [
+      {
+        "commit_sha": "c6ca45425244323ee90be5b7b02d511f54976b2b",
+        "extracted_paths": [
+          "evidence/phase-9"
+        ],
+        "reason": "phase-9 staging smoke + ECR digest recorded against pin 376b7e18…"
+      }
+    ]
+  },
+  "packaged_at": "2026-07-18"
+}

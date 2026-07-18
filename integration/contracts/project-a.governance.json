@@ -12,7 +12,7 @@
     "policy_surface": ["tagging", "encryption_at_rest", "public_access_block"]
   },
   "missing": [
-    "Verified upstream governance policy export (MC-A-TREE)"
+    "Live audit destination from ContinuityOps lab apply (L4)"
   ],
-  "notes": "Governance expectations adapted into ContinuityOps terraform/policies stubs. Single-account lab only."
+  "notes": "Governance expectations adapted into ContinuityOps terraform/policies stubs. Upstream guardrail docs are in packet 2026-07-18-a-c. Single-account lab only."
 }
