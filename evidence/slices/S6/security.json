@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "WORKER-SEC-01",
   "baseline_sha": "ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029",
-  "candidate_sha": "pending-local-worker",
+  "candidate_sha": "95f847fcdeef84319bd9b60aed910ac7831938e9",
   "command": "SOURCE_DATE_EPOCH=1784332800 node scripts/security/generate-sbom.mjs && node --test tests/security/sbom-generator.test.mjs && node scripts/project.mjs validate P6-T01",
   "exit_code": 0,
   "recorded_at": "2026-07-18T16:00:00.000Z",
