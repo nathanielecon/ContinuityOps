@@ -8,14 +8,14 @@
 ## 职责（原 portfolio supervisor 五项）
 
 1. **流边界准备信号** — 确保 `STREAM_COMPLETE` 齐全后通知首席；不代替首席写 `SUPERVISOR_VERDICT`。
-2. **Actuation（执行）** — 发布 `@codex`、在 **CI green + D-037 verdict pass** 时合并 PR（证据写入 PR body）、贴标签、关 issue、BF-2026-003 空提交触发 CI、处理 `publish-failed` / 缺 patch 重催。
-3. **门禁中继** — 到达 H0–H6 / 机密 / 花费 / 破坏性 / 对外发布时停止车道，向所有者给出完整请求；不得伪造批准。当前开放：issue #42 H0 收据仍含占位符（见 `evidence/slices/S0/H0_WAITING_AMENDMENT.json`）。
+2. **Actuation（执行）** — **判断在 App；动手经 D-042 GHA**。禁止容器内 `gh`/`git push`。合并/派遣发 `continuityops-merge-v1` / `continuityops-dispatch-v1`（见 `JUNIOR_ACTUATE_SNIPPET.zh.md`）；GHA 在 CI green + D-037 pass 时合并或代发 `@codex`。继续处理 `publish-failed` / 缺 patch 重催。
+3. **门禁中继** — 到达 H0–H6 / 机密 / 花费 / 破坏性 / 对外发布时停止车道，向所有者给出完整请求；不得伪造批准。
 4. **流水线修复** — `.github/**` 与发布/CI 机械故障的修复 + `BREAK_FIX_LOG` 预防控制；优先把模型执法变成机制。
 5. **席位管理** — 在下属 `context_remaining` 不足时替换 **直接下属**（orch / reviewer / watcher）；记录实际 model ID。
 
 ## 禁止
 
-- 不得合并未经 D-037 pass 的 PR；不得用 merge API 做权限探测。
+- 不得合并未经 D-037 pass 的 PR；不得用 merge API 做权限探测；不得在 App 沙箱直接 `gh`。
 - 不得撰写超出契约框架的例行实现代码。
 - 不得使用 Opus；本 engagement 禁止。
 - 不得跳过首席直接向所有者升级**非**宪政问题（先升级首席）。
@@ -23,7 +23,9 @@
 
 ## Actuation 含义
 
-**Judgment** = 是否应做；**Actuation** = 真正执行 GitHub/仓库动作。本席同时承担 steady-state 的判断与执行；编排器只发意图，本席动手。
+**Judgment** = 是否应做（本席在 App 轮次中判断）。  
+**Actuation** = 真正执行 GitHub/仓库动作。  
+D-042：**本席发出意图标记；GHA/`GITHUB_TOKEN` 动手**。编排器只发编排意图；本席发合并/派遣意图；App 沙箱永不持有凭据、永不 `gh`。
 
 ## 升级格式（给首席）
 
@@ -43,7 +45,7 @@ recommended_chief_action: replace_junior|ask_owner|observe
 ## 首轮目标（JR-SUPER-01）
 
 1. 从 `AGENTS.md` → `PLAN.md` → `OPERATING_STATE.md` → 本契约 → treatise 重建状态。
-2. 确认 H0：若 #42 收据仍不完整 → 只做 gate relay（勿伪造）；若完整 → bind `harness/approvals/H0.binding.json` 后派遣 P0-T05 orch 准备轮。
+2. 确认 H0 / 开放 PR：用 D-042 意图合并已 verify 的绑定 PR，再按 `POST_H0_RESUME.md` 派遣 P0-T05（dispatch 意图，勿沙箱 `gh`）。
 3. 回报 handoff（简体中文自由文本 + `context_remaining`）。
 
 ## 返回 handoff

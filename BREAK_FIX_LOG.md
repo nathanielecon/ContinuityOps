@@ -441,3 +441,12 @@ ContinuityOps incidents yet.
 - **Fix:** Recompute and refresh pinned hashes in `rubric-freeze.json` + `H0_PACKAGE.md`; re-run validator to pass.
 - **Prevention:** Any PLAN/authority edit after rubric freeze must refresh H0-bound hashes before presenting the package for human signature; never ask humans to sign stale digests.
 - **Verified by:** portfolio supervisor (`validate-rubric-freeze.mjs` pass after refresh).
+
+## 2026-07-18 — BF-2026-008 — Junior App sandbox cannot actuate with gh
+
+- **Slice/task:** D-041 junior supervisor / JR-SUPER-01.
+- **Symptom:** Junior correctly left `waiting_human` after H0 verify, but reported no GitHub actuation channel (no remote, `gh` forbidden, API CONNECT 403). Heartbeat that assumed in-sandbox `gh pr merge` / issue create stalled; D-034 `publish-failed` fired on a legitimate `no_repo_mutation` reply.
+- **Root cause:** Charter said junior "actuates" while the carrier is the Codex App sandbox, which is receive-only by D-034/D-026 (credentials never move).
+- **Fix:** D-042 — `.github/workflows/junior-actuate.yml` + `continuityops-merge-v1` / `continuityops-dispatch-v1` intents; GHA/`GITHUB_TOKEN` performs merge and `@codex` posts. Docs updated (`JUNIOR_SUPERVISOR`, `QUEUE`, `AGENTS`, snippet).
+- **Prevention:** Never instruct App rounds to call `gh`; treat actuation as mechanism; keep Actions workflow permissions Read/write + create-PR (owner UI; PAT cannot set via API).
+- **Verified by:** chief supervisor (parser unit tests); end-to-end actuate-ok pending first merge intent after land.

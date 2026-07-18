@@ -24,7 +24,7 @@
 
 **Actuation** = performing the GitHub/repo action (post mention, merge, label, close, CI nudge).  
 **Judgment** = deciding whether that action should happen.  
-Chief almost never actuates in steady state; junior does.
+Chief almost never actuates in steady state. Junior **judges** in the App; **D-042** GHA performs the mutation from junior intent markers (App sandbox still has no `gh`).
 
 ## Signals this seat acts on
 
