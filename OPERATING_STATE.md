@@ -9,11 +9,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 41,
+  "revision": 42,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
-  "current_gate": "portfolio-certified-L1",
+  "current_gate": "portfolio-certified-L4-lab",
   "running_tasks": [],
   "blocked_tasks": [],
   "waiting_human": [],
@@ -50,9 +50,9 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "S8-P8-T04"
   ],
   "next_actions": [
-    "Chief occupation: D-045 GPT subordinates LIVE; elevate lab non-claims via OIDC PR→plan→merge→apply",
-    "Order: network/IAM → EKS → Lambda → lab drills/RTO → teardown; Azure scope-drop if no Azure creds",
-    "Keep CursorCloudAgent/in-pod AWS as permanent non-claim"
+    "Lab live elevation complete (apply 29644662492, drill 29645042815, teardown 29645052414); re-apply staging when needed for demos",
+    "Optional: re-dispatch GPT junior for steady-state; keep Azure out of ceiling (D-046)",
+    "Permanent non-claims: CursorCloudAgent in-pod AWS; production customer drills"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -84,12 +84,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "Live AWS apply GREEN run 29643569047 (after 29643490577 DynamoDB lock-create race); evidence/hosted/cloud-apply-staging-2026-07-18.json"
   ],
   "verified_baseline": [
-    "GHA OIDC apply green run 29643569047 (staging live-marker + remote state); evidence/hosted/cloud-apply-staging-2026-07-18.json; terraform-scaffold+hosted-ci claim L4 smoke scope"
+    "GHA OIDC apply green run 29643569047 (staging live-marker + remote state)",
+    "Lab elevation apply 29644662492 (VPC/IAM/Lambda/EKS 1.32); drill 29645042815; teardown 29645052414",
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json; portfolio-certified-L4-lab"
   ],
   "unverified": [
-    "Full ContinuityOps cloud-applied runtime (EKS/Lambda/Azure/RTO) beyond staging live-marker smoke",
     "Cross-repo Project A/C context packaging by the control center (CO-006)",
-    "Project C immutable image digest (CO-004)"
+    "Project C immutable image digest (CO-004)",
+    "Live Azure apply (explicitly out of ceiling — D-046)"
   ]
 }
 ```
@@ -141,6 +143,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 | D-042 | **Junior App actuation via GHA intents** (owner directive 2026-07-18 "update the permissions"): Codex App sandboxes remain receive-only (no `git push`/`gh`). Junior judgment stays in the App round; **actuation** is `.github/workflows/junior-actuate.yml` consuming `<!-- continuityops-merge-v1 -->` / `<!-- continuityops-dispatch-v1 -->` from `chatgpt-codex-connector[bot]` on `codex-dispatch` issues, using ephemeral `GITHUB_TOKEN` (same Settings prerequisites as D-034). Merge requires CI contracts success + D-037 bot `verdict: pass`. Does **not** inject secrets into the Codex Environment (D-026). Amends practical reading of D-041 actuation. | accepted | Junior can oil the pipeline overnight without sandboxed `gh`; permissions = GHA write token + workflow gates |
 | D-043 | ~~**All workers fall back to Grok**~~ **superseded by D-045** (was owner directive 2026-07-18): every episodic worker seat — implementation worker, orchestrator, junior supervisor, D-037 reviewer, pipeline monitor — uses **`cursor-grok-4.5-high`** (or `cursor-grok-4.5-high-fast` when explicitly chosen). Codex App `@codex` / GPT implementation path is **suspended** for product work while D-043 stands; chief supervisor (this Cursor cloud seat) remains the merge/actuation authority and dispatches Grok subordinates in-session. Amends D-030/D-037/D-038/D-041 model carriers. Engagement: no Opus. | superseded by D-045 | Overnight Grok-only path retired; GPT/Codex restored |
 | D-045 | **Restore GPT subordinates** (owner directive 2026-07-18): supersedes D-043. Junior = GPT-5.6 Sol medium (D-041); orchestrator = episodic GPT (D-030/D-038); workers = Codex App `@codex` / D-034; D-037 reviewer = independent GPT; **Grok monitor retained** (read-only → chief). Chief remains this Cursor cloud seat. Codex product path re-enabled for ContinuityOps work. Engagement: no Opus. | accepted | GPT pipeline restored; Grok-only suspension lifted |
+| D-046 | **Azure live apply out of ContinuityOps AWS-lab ceiling** (chief occupation 2026-07-18): ContinuityOps live elevation proves AWS lab via `continuityops-gha` only. Azure governance remains L1 design/static; live Azure apply is an explicit non-claim unless a future owner decision adds an Azure OIDC control plane. | accepted | Azure stays non-claim; does not block portfolio-certified-L4-lab |
 | D-044 | **No more human gates** (owner directive 2026-07-18, verbatim): owner accepts authorization here; H1–H6 / further `waiting_human` phase gates are cleared for ContinuityOps execution. Set `authorized_through_phase` to **8**. Chief + GPT subordinates (D-045) merge and advance per PLAN without stopping for human receipts. Residual secrets the agent cannot mint (e.g. absent `REPO_SETTINGS_ADMIN_TOKEN`) remain optional tooling, not constitutional stops. Amends D-012 merge/human-gate practical reading and D-035 human-retention list for this engagement. | accepted | Pipeline may run Phases 0–8 without owner clicks |
 
 ## Initial issue ledger

@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "recorded_utc": "2026-07-18T12:50:16.771Z",
+  "environment": "lab-staging",
+  "production": false,
+  "drill_type": "lab-incident-restore",
+  "rto_ms": 7,
+  "rto_seconds": 0.007,
+  "steps": [
+    {
+      "name": "load_restore_fixture",
+      "duration_ms": 0
+    },
+    {
+      "name": "apply_restore_plan",
+      "duration_ms": 7
+    },
+    {
+      "name": "health_check",
+      "duration_ms": 0
+    }
+  ],
+  "log_group": "/continuityops/staging/lab-drill-rto",
+  "control_plane": "GHA OIDC → continuityops-gha",
+  "notes": [
+    "Lab drill only — not a production incident",
+    "RTO is wall-clock of synthetic restore fixture steps in CI/agent"
+  ]
+}

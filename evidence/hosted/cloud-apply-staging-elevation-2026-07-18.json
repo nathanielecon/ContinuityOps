@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "recorded_utc": "2026-07-18T13:03:00Z",
+  "project": "ContinuityOps",
+  "control_plane": "GHA OIDC → continuityops-gha",
+  "role_arn": "arn:aws:iam::000000000000:role/continuityops-gha",
+  "account_id": "000000000000",
+  "environment": "staging",
+  "candidate_sha_apply": "f059ffa3d2b73e26fb61c849f2a6bfeebdd0259a",
+  "runs": {
+    "plan_elevation": {
+      "run_id": "29644515314",
+      "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29644515314",
+      "conclusion": "success"
+    },
+    "apply_partial_fail_eks_version": {
+      "run_id": "29644551841",
+      "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29644551841",
+      "conclusion": "failure",
+      "note": "BF-2026-012 unsupported EKS 1.29; VPC/IAM/SQS/Lambda created"
+    },
+    "plan_eks_fix": {
+      "run_id": "29644639098",
+      "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29644639098",
+      "conclusion": "success"
+    },
+    "apply_green_full": {
+      "run_id": "29644662492",
+      "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29644662492",
+      "conclusion": "success",
+      "note": "VPC + IAM + Lambda/SQS + EKS 1.32 + node group + drill log groups"
+    },
+    "lab_drill_rto": {
+      "run_id": "29645042815",
+      "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29645042815",
+      "conclusion": "success",
+      "evidence": "evidence/hosted/lab-drill-rto-29645042815.json"
+    },
+    "teardown_staging": {
+      "run_id": "29645052414",
+      "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29645052414",
+      "conclusion": "success",
+      "note": "terraform destroy staging via continuityops-gha"
+    }
+  },
+  "resources_proven_live": [
+    "aws_vpc lab",
+    "aws_iam_role lambda + EKS roles",
+    "aws_sqs_queue worker + dlq",
+    "aws_lambda_function continuityops-worker-staging",
+    "aws_eks_cluster cops-staging (1.32) + node group",
+    "cloudwatch log groups live-marker + lab-drill-rto"
+  ],
+  "non_claims_retained": [
+    "CursorCloudAgent / in-pod AWS credentials on Cloud seat",
+    "Production (customer) incident drills — lab only",
+    "Azure live apply — out of ContinuityOps AWS-lab ceiling (D-046)"
+  ]
+}
