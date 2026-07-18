@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "task_id": "P6-T01",
-  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "command": "node scripts/project.mjs validate P6-T01",
+  "task_id": "WORKER-SEC-01",
+  "baseline_sha": "ddfca8e81d9efd8ef4eeed1253bc2a8ee6ccb029",
+  "candidate_sha": "95f847fcdeef84319bd9b60aed910ac7831938e9",
+  "command": "SOURCE_DATE_EPOCH=1784332800 node scripts/security/generate-sbom.mjs && node --test tests/security/sbom-generator.test.mjs && node scripts/project.mjs validate P6-T01",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:25:10.107Z",
+  "recorded_at": "2026-07-18T16:00:00.000Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -16,35 +16,36 @@
     "vulnerability_policy": true,
     "iam_negative": true,
     "rbac_negative": true,
-    "admission_negative": true
+    "admission_negative": true,
+    "reproducible_repository_sbom": true
   },
   "model_record": {
-    "provider": "xAI",
-    "model": "cursor-grok-4.5-high",
+    "provider": "OpenAI",
+    "model": "codex-5.4-default",
     "mode": "default",
-    "role": "validator-worker"
+    "role": "worker"
   },
-  "claim_level": "L1",
+  "claim_level": "L2",
   "remaining_boundaries": [
-    "SBOM stub",
-    "No live scanner",
+    "Repository-file SBOM only",
+    "No live vulnerability scanner",
     "No live IAM apply"
   ],
-  "started_at": "2026-07-18T06:25:10.097Z",
-  "completed_at": "2026-07-18T06:25:10.107Z",
+  "started_at": "2026-07-18T14:21:19.501Z",
+  "completed_at": "2026-07-18T14:21:19.566Z",
   "validator_details": [
     {
       "id": "secret_scan",
       "result": {
         "pass": true,
-        "note": "fixture \u4e0d\u542b\u5bc6\u94a5\u8def\u5f84\u6216\u51ed\u636e\u6750\u6599"
+        "note": "fixture 不含密钥路径或凭据材料"
       }
     },
     {
       "id": "sbom",
       "result": {
         "pass": true,
-        "note": "SBOM stub \u2014 \u975e live scanner"
+        "note": "SBOM stub — 非 live scanner"
       }
     },
     {
@@ -70,6 +71,13 @@
       "result": {
         "pass": true
       }
+    },
+    {
+      "id": "reproducible_repository_sbom",
+      "result": {
+        "pass": true,
+        "note": "SOURCE_DATE_EPOCH 固定时，仓库 SBOM 组件按路径排序并包含 sha256 摘要，可复现生成。"
+      }
     }
   ],
   "passed": [
@@ -78,9 +86,16 @@
     "vulnerability_policy",
     "iam_negative",
     "rbac_negative",
-    "admission_negative"
+    "admission_negative",
+    "reproducible_repository_sbom"
   ],
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
-  "evidence_path": "evidence/slices/S6/security.json"
+  "evidence_path": "evidence/slices/S6/security.json",
+  "sbom_artifact": "evidence/hosted/security-sbom-2026-07-18.json",
+  "sbom_generator": "scripts/security/generate-sbom.mjs",
+  "evidence_paths": [
+    "evidence/slices/S6/security.json",
+    "evidence/hosted/security-sbom-2026-07-18.json"
+  ]
 }
