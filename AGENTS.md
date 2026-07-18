@@ -276,30 +276,37 @@ Stop and request human action for:
 - acceptance of residual critical/high security risk;
 - any scope or architecture change that materially changes the approved plan.
 
-## Live AWS control plane (not CursorCloudAgent)
+## Live AWS control plane (not CursorCloudAgent) — LIVE 2026-07-18
 
 - Cloud seats often have `NoCredentials` (BF-PRE-002 / BF-2026-010). **Expected.**
 - Do **not** block on `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` / CursorCloudAgent.
-- Live ContinuityOps AWS = **GitHub OIDC → `continuityops-gha`** via
-  `.github/workflows/continuityops-terraform.yml` (account `000000000000`).
+- Do **not** invent AWS access keys.
+- Live ContinuityOps AWS = **GitHub OIDC → `arn:aws:iam::000000000000:role/continuityops-gha`**
+  via `.github/workflows/continuityops-terraform.yml` (repo id `1301990908`).
 - Do **not** use `landing-zone-lab.yml` / `project-a-lzlab-gha` for ContinuityOps.
-- Do **not** invent AWS access keys. One-time bootstrap (done 2026-07-18): role
-  `continuityops-gha` trusted for ContinuityOps `repository_id` `1301990908`
-  (never aws-landing-zone-lab `1296742987`). Re-run only if trust drifts:
-  `REPO_ID=1301990908 bash terraform/ci-bootstrap/bootstrap-oidc-cloudshell.sh`
-- Loop (LZ-style, no human after bootstrap): open PR → CI **plan** → merge to
-  `main` → CI **apply** (push trigger). `workflow_dispatch` remains a fallback.
-  Environment `continuityops` has no required reviewers / wait timer.
-- Durable state: workflow runs `terraform/ci-bootstrap/ensure-tfstate.sh` then
-  S3 backend (`continuityops-tfstate-000000000000` / `continuityops-tf-locks`).
-- Cloud Agent stays **repo-only**; prepare Terraform / open PRs; CI assumes the role.
-  This seat’s PAT may 403 on Actions APIs — confirm apply green in the UI if needed.
+- **GitHub actuation** = env `GH_TOKEN` (Cursor Secret, All repositories). Gate:
+  `node scripts/assert-cloud-seat-gh-token.mjs` → expect **PASS** on a **new**
+  agent after secret refresh. If Actions / PR merge **403** → **stop**; tell
+  owner to restart the seat (do not chase AWS).
+- Loop (no human after bootstrap): PR → ContinuityOps Terraform **plan** →
+  merge `main` → auto **apply** (push). `workflow_dispatch` apply = fallback only.
+  Environment `continuityops`: no required reviewers / wait timer.
+- Durable state: `terraform/ci-bootstrap/ensure-tfstate.sh` then S3 backend
+  (`continuityops-tfstate-000000000000` / `continuityops-tf-locks`).
+- Proven apply (owner-confirmed): run
+  [29643569047](https://github.com/nathanielecon/ContinuityOps/actions/runs/29643569047)
+  green (staging live-marker + remote state). First push apply
+  [29643490577](https://github.com/nathanielecon/ContinuityOps/actions/runs/29643490577)
+  failed on DynamoDB create race (OIDC OK). Evidence:
+  `evidence/hosted/cloud-apply-staging-2026-07-18.json`.
+- Elevate claims only with fresh run URLs bound into evidence/matrix.
 
 ### Paste for stuck ContinuityOps agents
 
 ```text
-ContinuityOps live AWS is GHA OIDC → continuityops-gha (continuityops-terraform.yml), not this Cloud VM and not CursorCloudAgent / project-a-lzlab-gha.
-NoCredentials here is expected. Role + Environment are bootstrapped. Loop: PR plan → merge main → auto apply. Do not dispatch or CloudShell per change. Continue repo-only in this seat.
+ContinuityOps live AWS loop is LIVE. GHA OIDC → continuityops-gha (continuityops-terraform.yml), not CursorCloudAgent / AWS keys / project-a-lzlab-gha.
+NoCredentials for aws sts here is expected. Run: node scripts/assert-cloud-seat-gh-token.mjs — PASS required for Actions/merge; on 403 tell owner to restart seat.
+Loop: PR plan → merge main → auto apply. Evidence: Actions run 29643569047 green. Continue repo-only AWS edits via Terraform PRs.
 ```
 
 ## Delivery invariants
@@ -356,8 +363,8 @@ The prior “fix” was **change apply control plane** (GHA OIDC / local bottlen
 
 ```text
 NoCredentials is expected on Pro+ without team External ID. CursorCloudAgent has never been assumed.
-ContinuityOps live AWS: GHA OIDC → continuityops-gha (continuityops-terraform.yml). Bootstrap done; PR plan → merge main → auto apply.
-Do not block on CURSOR_AWS_ASSUME_IAM_ROLE_ARN. Do not use project-a-lzlab-gha for ContinuityOps roots. Continue repo-only here.
+ContinuityOps live AWS loop LIVE: GHA OIDC → continuityops-gha. Assert: node scripts/assert-cloud-seat-gh-token.mjs (PASS or owner restarts seat).
+Do not block on CURSOR_AWS_ASSUME_IAM_ROLE_ARN. Do not use project-a-lzlab-gha. Apply evidence: Actions run 29643569047.
 ```
 
 Account binding (not a secret): `000000000000` /

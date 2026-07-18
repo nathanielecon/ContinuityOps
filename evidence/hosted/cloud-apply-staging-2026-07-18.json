@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "recorded_utc": "2026-07-18T12:05:00Z",
+  "project": "ContinuityOps",
+  "control_plane": "GHA OIDC → continuityops-gha",
+  "role_arn": "arn:aws:iam::000000000000:role/continuityops-gha",
+  "repository_id": "1301990908",
+  "account_id": "000000000000",
+  "environment": "staging",
+  "workflow": "continuityops-terraform.yml",
+  "github_environment": "continuityops",
+  "main_tip_at_record": "23c7d2303ba92aa0a941c3be8c11245cfcb3b631",
+  "resources": [
+    {
+      "type": "aws_cloudwatch_log_group",
+      "name": "/continuityops/staging/live-marker",
+      "purpose": "control-plane-smoke"
+    },
+    {
+      "type": "s3_bucket",
+      "name": "continuityops-tfstate-000000000000",
+      "purpose": "remote-state"
+    },
+    {
+      "type": "dynamodb_table",
+      "name": "continuityops-tf-locks",
+      "purpose": "state-lock"
+    }
+  ],
+  "runs": {
+    "first_push_apply_failed": {
+      "run_id": "29643490577",
+      "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29643490577",
+      "conclusion": "failure",
+      "note": "DynamoDB state lock table create race (ResourceInUseException); OIDC assume OK"
+    },
+    "apply_green": {
+      "run_id": "29643569047",
+      "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29643569047",
+      "conclusion": "success",
+      "note": "Re-dispatch apply green; staging live-marker + remote state"
+    },
+    "pr51_plan_green": {
+      "run_id": "29642718513",
+      "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/29642718513",
+      "conclusion": "success",
+      "note": "PR #51 ContinuityOps Terraform plan green; apply skipped on PR"
+    }
+  },
+  "non_claims": [
+    "CursorCloudAgent STS injection",
+    "In-pod aws sts credentials on Cloud seat",
+    "project-a-lzlab-gha / landing-zone-lab.yml for ContinuityOps"
+  ],
+  "claim_ceiling_note": "Evidence supports hosted OIDC apply path; raise component claim_level only with this run URL bound and matrix update"
+}

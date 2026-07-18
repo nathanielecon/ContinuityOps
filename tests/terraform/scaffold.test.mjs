@@ -70,6 +70,8 @@ test('ensure-tfstate bootstrap is idempotent aws cli', () => {
   assert.match(script, /head-bucket/);
   assert.match(script, /create-table/);
   assert.match(script, /continuityops-tf-locks/);
+  assert.match(script, /ResourceInUseException/);
+  assert.match(script, /BucketAlreadyOwnedByYou/);
 });
 
 test('policy JSON stubs parse and encode negative controls', () => {
