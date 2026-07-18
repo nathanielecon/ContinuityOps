@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "artifact": "portfolio_tip_bind",
+  "recorded_utc": "2026-07-18T18:50:50Z",
+  "portfolio_tip_sha": "196bed4775128efbe193e028c722f13816a7f91b",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "trigger": {
+    "failed_council_tip": "760827dbb46c803475fa095c19984db61c8a6995",
+    "judge_issues": [
+      88,
+      89,
+      90
+    ],
+    "judge_prs": [
+      93,
+      92,
+      91
+    ],
+    "primary_finding": "U1 STREAM_COMPLETE / integrated-gate not bound to portfolio tip"
+  },
+  "nixer_issue_ids": [
+    {
+      "id": "NIX-PORTFOLIO-001",
+      "summary": "Rebind S1-S8 STREAM_COMPLETE + S8 integrated-gate to portfolio tip; preserve slice_landed_sha"
+    },
+    {
+      "id": "NIX-PORTFOLIO-002",
+      "summary": "Record tip-bind evidence + A3 ceiling boundaries on integrated-gate"
+    },
+    {
+      "id": "NIX-PORTFOLIO-003",
+      "summary": "Close failed fresh council issues/PRs after rebind; dispatch new fresh council on tip-bind tip"
+    }
+  ],
+  "validation_commands": [
+    "node --test tests/pipeline/*.mjs tests/harness/*.mjs",
+    "python3 standalone JSON parse"
+  ],
+  "validation_results": [
+    {
+      "command": "node --test tests/pipeline/*.mjs tests/harness/*.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 standalone JSON parse",
+      "exit_code": 0,
+      "standalone_json_errors": 0
+    }
+  ],
+  "claims_matrix_sha256": "695d88db163b0acef4cc431412e1bacc259bdcb6f95fa0850623e5d2b273d83e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "a3_ceilings": {
+    "azure_live": "out (D-046) L1",
+    "performance": "L1",
+    "security_sbom": "L2",
+    "agentic_workflow": "L3",
+    "upstream_integration": "L2",
+    "lab_stack": "L4 via continuityops-gha"
+  },
+  "notes_zh": "\u8def\u5f84 B \u4fee\u590d\uff1a\u5c06\u5207\u7247\u5b8c\u6210\u8bc1\u636e\u7ed1\u5b9a\u5230\u6295\u8d44\u7ec4\u5408 tip\uff0c\u4fdd\u7559\u5386\u53f2 slice_landed_sha\uff1b\u4e0d\u4f2a\u9020 live \u91cd\u8dd1\u3002"
+}
