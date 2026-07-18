@@ -2,10 +2,10 @@
   "schema_version": 1,
   "task_id": "P3-T02",
   "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
-  "candidate_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
   "command": "node scripts/project.mjs validate P3-T02",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:16:40.387Z",
+  "recorded_at": "2026-07-18T06:17:17.398Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -26,8 +26,8 @@
     "Lifecycle tests are contractual/unit only",
     "No live SaaS control plane"
   ],
-  "started_at": "2026-07-18T06:16:40.379Z",
-  "completed_at": "2026-07-18T06:16:40.387Z",
+  "started_at": "2026-07-18T06:17:17.389Z",
+  "completed_at": "2026-07-18T06:17:17.398Z",
   "validator_details": [
     {
       "id": "tenant_boundary",

@@ -3,9 +3,9 @@
   "slice_id": "S3",
   "round": "saved_provisional",
   "judge_id": "saved-council",
-  "candidate_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
   "rubric_sha256": "7d843e20dfb4aea0b1fb562a4865d3867cf2ddea0af51148b70740183641ffda",
-  "evidence_manifest_sha256": "6e9402a1c490f9f356043096d34b6c01fb5b9ac5acdc60bd59d95e3f23488bee",
+  "evidence_manifest_sha256": "4ad3443d0a4b63deecc7ba13eb86c15a6eaa233387dde10efc5bed6982a344da",
   "judge_model_id": "cursor-grok-4.5-high",
   "provisional_pass": true,
   "must_haves": [

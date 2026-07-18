@@ -2,10 +2,10 @@
   "schema_version": 1,
   "task_id": "P2-T02",
   "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
-  "candidate_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
   "command": "node scripts/project.mjs validate P2-T02",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:16:40.151Z",
+  "recorded_at": "2026-07-18T06:17:17.241Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -28,8 +28,8 @@
     "managed_cluster_apply",
     "kind L2 only when kind+helm available"
   ],
-  "started_at": "2026-07-18T06:16:40.143Z",
-  "completed_at": "2026-07-18T06:16:40.151Z",
+  "started_at": "2026-07-18T06:17:17.232Z",
+  "completed_at": "2026-07-18T06:17:17.241Z",
   "validator_details": [
     {
       "id": "kind_runtime",
