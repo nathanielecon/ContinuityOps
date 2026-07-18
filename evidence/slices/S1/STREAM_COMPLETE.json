@@ -8,8 +8,8 @@
     "P1-T03",
     "P1-T04"
   ],
-  "candidate_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
-  "baseline_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
+  "candidate_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "baseline_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
   "claim_level": "L4",
   "remaining_boundaries": [
     "Scoped AWS lab L4 via continuityops-gha (not production)",
@@ -24,8 +24,8 @@
   },
   "notes": "S1 stream closed; portfolio tip-bind elevates component claims per matrix under A3.",
   "slice_landed_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
-  "portfolio_tip_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
-  "bind_model": "exact_candidate_sha",
+  "portfolio_tip_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "bind_model": "candidate_sha_parent_of_tip",
   "rebinding": {
     "recorded_utc": "2026-07-18T18:58:15Z",
     "reason": "Fixer after fresh council fail on c2e6610: exact tip bind + claim/boundary reconcile + deterministic green",

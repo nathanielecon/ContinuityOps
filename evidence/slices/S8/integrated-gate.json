@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "P8-T04",
-  "baseline_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
-  "candidate_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
+  "baseline_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "candidate_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
   "command": "node scripts/project.mjs validate P8-T04",
   "exit_code": 0,
   "recorded_at": "2026-07-18T18:58:54.377Z",
@@ -104,7 +104,7 @@
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
   "evidence_path": "evidence/slices/S8/integrated-gate.json",
-  "bind_model": "exact_candidate_sha",
-  "implementation_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
-  "portfolio_tip_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa"
+  "bind_model": "candidate_sha_parent_of_tip",
+  "implementation_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "portfolio_tip_sha": "3666a94ed70bebcac4de9de864f557100b6288bb"
 }

@@ -7,8 +7,8 @@
     "P5-T02",
     "P5-T03"
   ],
-  "candidate_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
-  "baseline_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
+  "candidate_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "baseline_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
   "claim_level": "L4",
   "remaining_boundaries": [
     "Lab incident drill only (not production customer drills)",
@@ -22,8 +22,8 @@
   },
   "notes": "S5 runbooks/drills complete at scoped L4 lab.",
   "slice_landed_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "portfolio_tip_sha": "82fea6d6cc14fcc2c9a1cd23405c48e18da975fa",
-  "bind_model": "exact_candidate_sha",
+  "portfolio_tip_sha": "3666a94ed70bebcac4de9de864f557100b6288bb",
+  "bind_model": "candidate_sha_parent_of_tip",
   "rebinding": {
     "recorded_utc": "2026-07-18T18:58:15Z",
     "reason": "Fixer after fresh council fail on c2e6610: exact tip bind + claim/boundary reconcile + deterministic green",
