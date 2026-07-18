@@ -96,6 +96,7 @@ jobs:
       (github.event_name == 'workflow_dispatch' && inputs.action == 'apply')
     runs-on: ubuntu-latest
     environment: continuityops
+    timeout-minutes: 120
     env:
       # Push to main applies staging; dispatch may choose staging or recovery-lab.
       COPS_ENV: ${{ github.event.inputs.environment || 'staging' }}
