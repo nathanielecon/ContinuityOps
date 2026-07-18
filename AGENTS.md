@@ -329,3 +329,21 @@ For live AWS: use this project's existing apply control plane (e.g. GitHub OIDC 
 
 Account binding (not a secret): `000000000000` /
 `arn:aws:iam::000000000000:root`. See `BREAK_FIX_LOG.md` BF-2026-010.
+
+### AWS injection stop table (Cloud seat)
+
+Run once at session start when live AWS might be needed:
+
+```bash
+env | grep AWS_PROFILE
+aws sts get-caller-identity
+```
+
+| Observation | Action |
+| --- | --- |
+| Caller ARN contains `assumed-role/CursorCloudAgent` (account `000000000000`) | Proceed with in-seat AWS API work; record identity in evidence (no secrets). |
+| `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` set **and** `AWS_PROFILE` / usable config present **and** STS succeeds as `CursorCloudAgent` | Same as above. |
+| `NoCredentials` **or** `AWS_PROFILE` unset **or** no `~/.aws/config` | **STOP.** Injection absent — do not invent keys, do not put long-lived keys in Cloud secrets, do not spin on role ARN. Escalate live AWS to GHA OIDC or local `aws login`; continue **repo-only** here. |
+| Report when stopping | `AWS_PROFILE`, `AWS_CONFIG_FILE` (values or `<unset>`), STS error text, and that `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` was set/unset — then stop. |
+
+Verified 2026-07-18 this seat: `AWS_PROFILE=<unset>`, `AWS_CONFIG_FILE=<unset>`, STS `NoCredentials`, role ARN string present → **injection absent — stop; no keys.**
