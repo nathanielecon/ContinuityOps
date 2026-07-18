@@ -1,0 +1,165 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "fresh",
+  "judge_id": "fresh-judge-1",
+  "candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "rubric_sha256": "7d843e20dfb4aea0b1fb562a4865d3867cf2ddea0af51148b70740183641ffda",
+  "evidence_manifest_sha256": "bd29359433b59aa4e437f9c13d59f35aabf63fe28b47788b946312ebc7836a2a",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "S2-M1",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/"
+      ]
+    },
+    {
+      "id": "S2-M2",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/policies/digest-pin.json"
+      ]
+    },
+    {
+      "id": "S2-M3",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/templates/hpa.yaml",
+        "kubernetes/chart/templates/pdb.yaml"
+      ]
+    },
+    {
+      "id": "S2-M4",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/templates/rbac.yaml"
+      ]
+    },
+    {
+      "id": "S2-M5",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/scenarios/kind-local.json"
+      ]
+    },
+    {
+      "id": "S2-M6",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json"
+      ]
+    },
+    {
+      "id": "S2-M7",
+      "status": "pass",
+      "evidence": [
+        "scripts/kubernetes/reset-scenario.mjs"
+      ]
+    },
+    {
+      "id": "S2-M8",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/"
+      ]
+    },
+    {
+      "id": "S2-M9",
+      "status": "pass",
+      "evidence": [
+        "remaining_boundaries managed_cluster_apply"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 2,
+      "rationale": "契约与测试完整",
+      "evidence": [
+        "slice/correctness"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "边界与权限诚实",
+      "evidence": [
+        "slice/security_authority"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "失败矩阵/恢复契约具备",
+      "evidence": [
+        "slice/failure_recovery"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1,
+      "rationale": "node --test 覆盖",
+      "evidence": [
+        "slice/deterministic_tests"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 1,
+      "rationale": "证据绑定与声明诚实",
+      "evidence": [
+        "slice/runtime_evidence"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1,
+      "rationale": "运维文档齐全",
+      "evidence": [
+        "slice/operability"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 1,
+      "rationale": "未过度声明",
+      "evidence": [
+        "slice/evidence_integrity"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.5,
+      "rationale": "模块化清晰",
+      "evidence": [
+        "slice/maintainability"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.3,
+      "rationale": "成本驱动显式",
+      "evidence": [
+        "slice/cost_performance"
+      ]
+    }
+  ],
+  "unsupported_claims": [],
+  "security_findings": [],
+  "improvements": [
+    "后续可补充托管运行时证据"
+  ],
+  "overall_score": 9.7,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "judge"
+  },
+  "notes_zh": "独立核验 S2：契约与单测在诚实 claim_level 下通过。"
+}

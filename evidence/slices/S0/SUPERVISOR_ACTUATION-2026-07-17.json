@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "artifact": "SUPERVISOR_ACTUATION",
+  "at": "2026-07-17T20:35:00Z",
+  "reviewer": "cursor-grok-bottleneck-fixer",
+  "baseline_sha_before_this_commit": "94f4e331de6fbd23b5991e531e61beb83da79551",
+  "notes_zh": "\u672c\u63d0\u4ea4\u524d main tip \u4e3a 94f4e33\uff08\u8bef\u5408\u5e76 PR #30 \u7684\u56de\u6eda\uff09\u3002#29 ORCH-ROUND-06 \u66fe publish-failed\uff0c\u672c\u5e2d\u4ee5 git-push \u540e\u5907\u91cd\u5efa\u843d\u5730\u3002Issues API 403\uff0cApp @codex/\u4fdd\u6696\u4e0d\u53ef\u7528\u3002",
+  "actions_taken": [
+    "reconstructed_failed_issue_29_ORCH_ROUND_06_governance",
+    "landed_D-037_D-038_from_issue_29_patch",
+    "bumped_status_revision_18_to_20_skipping_19_publish_failed",
+    "recorded_D-039_P0-T03_write_scope_expansion",
+    "recorded_D-040_and_CO-011_issues_write_gap",
+    "recorded_BF-2026-005_and_CO-012_accidental_PR30_merge_reverted",
+    "added_session_retrospective_and_BF-2026-004",
+    "expanded_P0-T03_write_scope_set_state_ready",
+    "added_Watch-CodexRefs_sh_and_SUPERVISOR_HANDOFF",
+    "did_not_remerge_PR_30_content"
+  ],
+  "decisions": [
+    "D-037",
+    "D-038",
+    "D-039",
+    "D-040"
+  ],
+  "break_fix": [
+    "BF-2026-004",
+    "BF-2026-005"
+  ],
+  "issue_ids": [
+    "CO-011",
+    "CO-012"
+  ],
+  "blocked_on": [
+    "issues:write for Cursor supervisor App seat (CO-011 / D-040)"
+  ],
+  "d037_status": {
+    "pr_30": "SCOPE-001 fail stands; content not on main after revert 94f4e33",
+    "merge_signal": "CI green + reviewer verdict pass required before any future land"
+  },
+  "owner_pending": [
+    "issues:write or owner @codex/keep-warm on #4",
+    "REPO_SETTINGS_ADMIN_TOKEN",
+    "PR #20",
+    "H0 after P0-T04",
+    "D-039 human veto window"
+  ],
+  "next_dispatches_after_issues_write": [
+    "fixer for P0-T03 under D-039 write_scope",
+    "D-037 re-review",
+    "P0-T04 then H0"
+  ],
+  "updated_at": "2026-07-17T20:36:42.485680+00:00",
+  "pr32": {
+    "url": "https://github.com/nathanielecon/ContinuityOps/pull/32",
+    "head": "7bbbe7c",
+    "contracts_ci": "success",
+    "merge_gate": "D-037 reviewer required; blocked on CO-011"
+  },
+  "heartbeat": "scripts/supervisor-heartbeat.sh armed",
+  "phase_gate_status": "docs/planning/dispatch/PHASE_GATE_STATUS.md"
+}

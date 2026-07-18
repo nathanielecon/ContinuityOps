@@ -1,0 +1,160 @@
+# ContinuityOps — junior App-path actuation via GITHUB_TOKEN (D-042)
+#
+# Codex App sandboxes remain receive-only (no git push / gh). Junior judgment
+# still runs in the App; actuation is performed here when the bot posts an
+# intent marker on a codex-dispatch issue.
+#
+# Repo prerequisite (same as D-034):
+#   Settings → Actions → General → Workflow permissions:
+#     - Read and write permissions
+#     - Allow GitHub Actions to create and approve pull requests
+name: junior-actuate
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      comment_id:
+        description: "Existing bot intent-comment ID to (re)process"
+        required: true
+      issue_number:
+        description: "Queue issue number the comment belongs to"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+  statuses: read
+
+jobs:
+  actuate:
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.pull_request == null &&
+       github.event.comment.user.login == 'chatgpt-codex-connector[bot]' &&
+       (contains(github.event.comment.body, '<!-- continuityops-merge-v1') ||
+        contains(github.event.comment.body, '<!-- continuityops-dispatch-v1')) &&
+       contains(join(github.event.issue.labels.*.name, ','), 'codex-dispatch'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout scripts
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Resolve issue + load comment
+        id: src
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_ISSUE: ${{ github.event.issue.number }}
+          DISPATCH_ISSUE: ${{ inputs.issue_number }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          DISPATCH_COMMENT_ID: ${{ inputs.comment_id }}
+        run: |
+          set -euo pipefail
+          ISSUE="${EVENT_ISSUE:-$DISPATCH_ISSUE}"
+          echo "issue=$ISSUE" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            author="$(gh api "repos/${{ github.repository }}/issues/comments/${DISPATCH_COMMENT_ID}" --jq '.user.login')"
+            if [ "$author" != "chatgpt-codex-connector[bot]" ]; then
+              echo "::error::comment author is $author, not Codex connector bot"; exit 1
+            fi
+            labels="$(gh api "repos/${{ github.repository }}/issues/${ISSUE}" --jq '[.labels[].name] | join(",")')"
+            case "$labels" in *codex-dispatch*) ;; *) echo "::error::issue $ISSUE lacks codex-dispatch"; exit 1;; esac
+            gh api "repos/${{ github.repository }}/issues/comments/${DISPATCH_COMMENT_ID}" --jq '.body' > /tmp/intent.md
+          else
+            printf '%s' "$COMMENT_BODY" > /tmp/intent.md
+          fi
+          cp scripts/parse-junior-actuate.py /tmp/parse-junior-actuate.py
+          python3 /tmp/parse-junior-actuate.py intent /tmp/intent.md > /tmp/intent.json
+          kind="$(jq -r .kind /tmp/intent.json)"
+          echo "kind=$kind" >> "$GITHUB_OUTPUT"
+          echo "intent<<EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/intent.json >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Actuate merge
+        if: steps.src.outputs.kind == 'merge'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ steps.src.outputs.issue }}
+          REPO: ${{ github.repository }}
+          INTENT: ${{ steps.src.outputs.intent }}
+        run: |
+          set -euo pipefail
+          pr="$(echo "$INTENT" | jq -r .pr)"
+          d037="$(echo "$INTENT" | jq -r .d037_issue)"
+
+          state="$(gh api "repos/${REPO}/pulls/${pr}" --jq '{merged:.merged,state:.state,sha:.head.sha}')"
+          merged="$(echo "$state" | jq -r .merged)"
+          pstate="$(echo "$state" | jq -r .state)"
+          sha="$(echo "$state" | jq -r .sha)"
+          if [ "$merged" = "true" ]; then
+            gh issue comment "$ISSUE" --repo "$REPO" --body "actuate-skipped (D-042): PR #${pr} already merged"
+            exit 0
+          fi
+          if [ "$pstate" != "open" ]; then
+            gh issue comment "$ISSUE" --repo "$REPO" --body "actuate-failed (D-042): PR #${pr} state=${pstate}"
+            exit 1
+          fi
+
+          gh api "repos/${REPO}/issues/${d037}/comments" --paginate > /tmp/d037-comments.json
+          if ! verdict="$(python3 /tmp/parse-junior-actuate.py verdict /tmp/d037-comments.json)"; then
+            gh issue comment "$ISSUE" --repo "$REPO" --body \
+              "actuate-failed (D-042): no bot verdict found on D-037 issue #${d037}"
+            exit 1
+          fi
+          if [ "$verdict" != "pass" ]; then
+            gh issue comment "$ISSUE" --repo "$REPO" --body \
+              "actuate-failed (D-042): latest bot verdict on #${d037} is \`${verdict}\` (need pass)"
+            exit 1
+          fi
+
+          checks_json="$(gh api "repos/${REPO}/commits/${sha}/check-runs" --jq \
+            '[.check_runs[] | {name,status,conclusion}]')"
+          contracts="$(echo "$checks_json" | jq -c '[.[] | select(.name|test("contracts|validate";"i"))] | last // empty')"
+          if [ -z "$contracts" ] || [ "$contracts" = "null" ]; then
+            gh issue comment "$ISSUE" --repo "$REPO" --body \
+              "actuate-failed (D-042): no contracts/validate check-run on ${sha}; refuse merge"
+            exit 1
+          fi
+          cstatus="$(echo "$contracts" | jq -r .status)"
+          cconc="$(echo "$contracts" | jq -r .conclusion)"
+          if [ "$cstatus" != "completed" ] || [ "$cconc" != "success" ]; then
+            gh issue comment "$ISSUE" --repo "$REPO" --body \
+              "actuate-failed (D-042): CI not green on ${sha} (contracts status=${cstatus} conclusion=${cconc})"
+            exit 1
+          fi
+
+          gh pr merge "$pr" --repo "$REPO" --merge --delete-branch=false \
+            --body "Merged by junior-actuate (D-042). Evidence: CI contracts success on ${sha}; D-037 #${d037} verdict=pass. Source intent on #${ISSUE}."
+          gh issue comment "$ISSUE" --repo "$REPO" --body \
+            "actuate-ok (D-042 merge): PR #${pr} merged (head ${sha}); D-037 #${d037} verdict=pass"
+          gh issue comment "$d037" --repo "$REPO" --body \
+            "actuate-ok (D-042): PR #${pr} merged after this issue's verdict=pass"
+
+      - name: Actuate dispatch (@codex post)
+        if: steps.src.outputs.kind == 'dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ steps.src.outputs.issue }}
+          REPO: ${{ github.repository }}
+          INTENT: ${{ steps.src.outputs.intent }}
+        run: |
+          set -euo pipefail
+          target="$(echo "$INTENT" | jq -r .target_issue)"
+          echo "$INTENT" | jq -r .body > /tmp/dispatch-body.md
+
+          labels="$(gh api "repos/${REPO}/issues/${target}" --jq '[.labels[].name] | join(",")')"
+          case "$labels" in *codex-dispatch*) ;; *)
+            gh issue comment "$ISSUE" --repo "$REPO" --body \
+              "actuate-failed (D-042 dispatch): target #${target} lacks codex-dispatch label"
+            exit 1
+          ;; esac
+
+          gh issue comment "$target" --repo "$REPO" --body "$(cat /tmp/dispatch-body.md)"
+          gh issue comment "$ISSUE" --repo "$REPO" --body \
+            "actuate-ok (D-042 dispatch): posted @codex body to #${target}"

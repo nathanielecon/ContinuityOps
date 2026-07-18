@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "tagging-required",
+  "required_tags": ["Project", "Environment", "ManagedBy", "CostCenter"],
+  "deny_untagged": true,
+  "claim_level_ceiling": "L1"
+}

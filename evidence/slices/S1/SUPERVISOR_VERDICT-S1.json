@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "verdict_type": "stream_boundary",
+  "task_id": "S1",
+  "slice": "S1",
+  "tasks": [
+    "P1-T01",
+    "P1-T02",
+    "P1-T03",
+    "P1-T04"
+  ],
+  "decision": "approve",
+  "d037_verdict": "pass",
+  "reviewer": "cursor-cloud-chief-actuation",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "d037-independent-reviewer"
+  },
+  "at": "2026-07-18T06:10:45Z",
+  "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "implementation_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "branch_tip_sha": "9ee601c2b9c043b50fa2d3e33bb0fa80484ecb5f",
+  "baseline_sha": "b01e40dbba1198c8720f3992c7563f4c039f3f16",
+  "checks": {
+    "tests": {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "pass": 41,
+      "fail": 0
+    },
+    "validators": {
+      "P1-T01": true,
+      "P1-T02": true,
+      "P1-T03": true,
+      "P1-T04": true
+    },
+    "write_scope_sane": true,
+    "claim_level_max": "L1",
+    "remaining_boundaries_present": true,
+    "false_l4_claim": false
+  },
+  "write_scope_notes": [
+    "Task deliverables confined to declared P1-T01..T04 write_scopes",
+    "Co-touched governance/tooling only: PLAN.md, OPERATING_STATE.md, scripts/project.mjs, scripts/validators/core.mjs, tests/index.mjs, tests/validators/p1.test.mjs, .gitignore (evidence/_bundle/)",
+    "No AWS credentials invented; AKIATEST appears only in negative untrusted-PR test"
+  ],
+  "remaining_boundaries": [
+    "No L4 cloud apply",
+    "Upstream digest/tree packaging open (CO-004/CO-006)",
+    "OIDC roles/environments not configured",
+    "terraform CLI absent in validator environment \u2014 fmt/validate skipped with static coverage"
+  ],
+  "claim_level": "L1",
+  "issue_ids": [],
+  "open_prs_closed": [],
+  "reviewed_paths": [
+    "evidence/slices/S1/",
+    "evidence/judges/S1/",
+    "integration/",
+    "terraform/",
+    ".github/workflows/",
+    "scripts/ci/",
+    "scripts/project.mjs",
+    "scripts/validators/core.mjs",
+    "tests/"
+  ],
+  "notes": "BF-PRE-015 S1 stream boundary. Independent D-037-style review: tests+validators green; write_scope sane; claim_level L1 with remaining_boundaries; no false L4. Verdict artifact landed via follow-up cherry-pick after content merge 1d76a98.",
+  "merge_of_s1_content_sha": "1d76a987c021fe4101a65f3d84045ecf75a669f2"
+}

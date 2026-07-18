@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "task_id": "P6-T02",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "command": "node scripts/project.mjs validate P6-T02",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:25:10.145Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "azure_static": true,
+    "azure_policy_negative": true,
+    "claims": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Designed/static only",
+    "No ExpressRoute depth",
+    "No live Azure Policy"
+  ],
+  "started_at": "2026-07-18T06:25:10.134Z",
+  "completed_at": "2026-07-18T06:25:10.145Z",
+  "validator_details": [
+    {
+      "id": "azure_static",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "azure_policy_negative",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "claims",
+      "result": {
+        "pass": true,
+        "claim_level": "L1",
+        "evidence": "evidence/slices/S6/azure-governance.json"
+      }
+    }
+  ],
+  "passed": [
+    "azure_static",
+    "azure_policy_negative",
+    "claims"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S6/azure-governance.json"
+}

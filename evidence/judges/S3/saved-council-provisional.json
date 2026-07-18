@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "judge_id": "saved-council",
+  "candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "rubric_sha256": "7d843e20dfb4aea0b1fb562a4865d3867cf2ddea0af51148b70740183641ffda",
+  "evidence_manifest_sha256": "a4c213ff4fb5ad9f307cd6660ddec26bd704bc9c39373810f6157f1541efd899",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "S3-M1",
+      "status": "pass",
+      "evidence": [
+        "serverless/worker-contract.json"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "pass",
+      "evidence": [
+        "serverless/idempotency.mjs",
+        "tests/serverless/idempotency.test.mjs"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "serverless/dlq.mjs",
+        "tests/serverless/dlq.test.mjs"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "pass",
+      "evidence": [
+        "terraform/modules/serverless/main.tf"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/lifecycle.json"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "docs/architecture/tenant-boundary.md"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "pass",
+      "evidence": [
+        "No live AWS Lambda claim"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 2,
+      "rationale": "契约与测试完整",
+      "evidence": [
+        "slice/correctness"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "边界与权限诚实",
+      "evidence": [
+        "slice/security_authority"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "失败矩阵/恢复契约具备",
+      "evidence": [
+        "slice/failure_recovery"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1,
+      "rationale": "node --test 覆盖",
+      "evidence": [
+        "slice/deterministic_tests"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 1,
+      "rationale": "证据绑定与声明诚实",
+      "evidence": [
+        "slice/runtime_evidence"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1,
+      "rationale": "运维文档齐全",
+      "evidence": [
+        "slice/operability"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 1,
+      "rationale": "未过度声明",
+      "evidence": [
+        "slice/evidence_integrity"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.5,
+      "rationale": "模块化清晰",
+      "evidence": [
+        "slice/maintainability"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.3,
+      "rationale": "成本驱动显式",
+      "evidence": [
+        "slice/cost_performance"
+      ]
+    }
+  ],
+  "unsupported_claims": [],
+  "security_findings": [],
+  "improvements": [
+    "可在具备凭据后提升至 L2/L4"
+  ],
+  "overall_score": 9.7,
+  "merge_ready": "provisional",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "judge"
+  },
+  "notes_zh": "S3 保存委员会仅 provisional_pass，不作最终认证。"
+}

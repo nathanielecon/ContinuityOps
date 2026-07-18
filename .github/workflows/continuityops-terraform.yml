@@ -48,7 +48,7 @@ jobs:
       COPS_ENV: ${{ github.event.inputs.environment || 'staging' }}
     defaults:
       run:
-        working-directory: terraform/environments/${{ env.COPS_ENV }}
+        working-directory: terraform/envs/${{ env.COPS_ENV }}
     steps:
       - name: Check out repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.0
@@ -86,7 +86,7 @@ jobs:
       COPS_ENV: ${{ github.event.inputs.environment || 'staging' }}
     defaults:
       run:
-        working-directory: terraform/environments/${{ env.COPS_ENV }}
+        working-directory: terraform/envs/${{ env.COPS_ENV }}
     steps:
       - name: Check out repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.0

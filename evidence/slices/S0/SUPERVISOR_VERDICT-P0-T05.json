@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "verdict_type": "stream_boundary",
+  "task_id": "P0-T05",
+  "slice": "S0",
+  "decision": "approve",
+  "reviewed_paths": [
+    "evidence/slices/S0/integrated-gate.json",
+    "evidence/slices/S0/STREAM_COMPLETE-P0-T05.json",
+    "evidence/judges/S0/",
+    "scripts/project.mjs",
+    "scripts/validators/core.mjs"
+  ],
+  "issue_ids": [],
+  "reviewer": "cursor-cloud-chief",
+  "at": "2026-07-18T06:00:43Z",
+  "candidate_sha": "5792a74f5c684b007a9057b89b6d9a24f359bc7f",
+  "baseline_sha": "531aa6ffb37517efc6b3c705c040d6d838ab36d0",
+  "d037_verdict": "pass",
+  "notes": "BF-PRE-015 stream boundary. D-043 Grok workers; D-044 no human gates. Independent Grok reviewer pass on PR #49."
+}

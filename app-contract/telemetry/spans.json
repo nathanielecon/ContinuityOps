@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "spans": [
+    { "name": "ingress.request", "kind": "SERVER" },
+    { "name": "app.handle", "kind": "INTERNAL" },
+    { "name": "queue.publish", "kind": "PRODUCER" },
+    { "name": "function.invoke", "kind": "CONSUMER" }
+  ],
+  "required_attributes": ["tenant_id", "correlation_id", "service.name"]
+}

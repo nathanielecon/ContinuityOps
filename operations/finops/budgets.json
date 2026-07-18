@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "monthly_budget_usd": 500,
+  "alerts": [
+    {
+      "threshold_percent": 50,
+      "action": "notify"
+    },
+    {
+      "threshold_percent": 80,
+      "action": "notify+ticket"
+    },
+    {
+      "threshold_percent": 100,
+      "action": "block-nonessential-apply"
+    }
+  ],
+  "required_tags": [
+    "cost-center",
+    "env",
+    "owner"
+  ],
+  "claim_ceiling": "L1"
+}

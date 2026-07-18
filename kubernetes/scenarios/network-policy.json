@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "network-policy",
+  "failure_class": "NetworkPolicyDenied",
+  "inject": "Deny ingress from client namespace",
+  "observe": ["timeouts from denied clients"],
+  "recover": "Restore NetworkPolicy allow list",
+  "business_check": "Allowed clients succeed; denied remain blocked",
+  "reset": {
+    "script": "scripts/kubernetes/reset-scenario.mjs",
+    "args": ["network-policy"]
+  },
+  "synthetic": true
+}

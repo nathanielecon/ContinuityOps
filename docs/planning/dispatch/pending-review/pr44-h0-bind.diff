@@ -1,0 +1,473 @@
+diff --git a/OPERATING_STATE.md b/OPERATING_STATE.md
+index deee917..cce0ddb 100644
+--- a/OPERATING_STATE.md
++++ b/OPERATING_STATE.md
+@@ -9,15 +9,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
+ ```json
+ {
+   "schema_version": "1.0",
+-  "revision": 28,
++  "revision": 29,
+   "project": "ContinuityOps",
+   "current_phase": 0,
+   "authorized_through_phase": 0,
+-  "current_gate": "H0-bind-pr-and-D042-actuate",
+-  "running_tasks": ["JR-SUPER-01", "D-042-junior-actuate"],
+-  "blocked_tasks": ["P0-T05"],
++  "current_gate": "P0-T05-integrated-gate",
++  "running_tasks": ["JR-SUPER-01"],
++  "blocked_tasks": [],
+   "waiting_human": [
+-    "ACTIONS_WORKFLOW_PERMISSIONS_UI_CONFIRM",
+     "REPO_SETTINGS_ADMIN_TOKEN",
+     "PR-20"
+   ],
+@@ -37,13 +36,14 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
+     "first_warm": true,
+     "secrets": "none"
+   },
+-  "completed_gates": [],
++  "completed_gates": ["H0"],
+   "next_actions": [
+-    "D-042: land junior-actuate GHA; junior emits merge/dispatch intents (no in-sandbox gh); owner confirm Actions workflow permissions UI if actuate/publish fails",
+-    "Merge H0 bind PR #44 after D-037 pass via continuityops-merge-v1; then P0-T05 orch path",
++    "H0 bound from issue #42 comment 5008633820; P0-T04 verified; junior drives P0-T05 orch/worker path per POST_H0_RESUME.md via D-042 intents",
++    "Junior: D-037 every worker PR; merge only on CI green + reviewer verdict pass (continuityops-merge-v1)",
+     "Chief waits on STREAM_COMPLETE / junior ESCALATION / significant monitor reports",
+-    "Owner parallel: REPO_SETTINGS_ADMIN_TOKEN; PR #20; confirm Settings→Actions→Workflow permissions Read/write + create-PR",
+-    "Do not authorize Phase 1 until S0 and H0 pass; engagement: no Opus"
++    "Owner parallel (non-blocking): REPO_SETTINGS_ADMIN_TOKEN; PR #20",
++    "D-034 publish-ok history already evidences Actions write + create-PR; ACTIONS_WORKFLOW_PERMISSIONS_UI_CONFIRM cleared without Settings UI click",
++    "Do not authorize Phase 1 until S0 (P0-T05) certifies; engagement: no Opus"
+   ],
+   "completed_bootstrap": [
+     "Created ContinuityOps GitHub repository home",
+@@ -59,7 +59,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
+     "P0-T03 verified after redo (issue #35 → PR #36 → D-037 #38 pass → main 1523466)",
+     "P0-T04 rubric freeze integrated (issue #39 → PR #40 → D-037 #41 pass → main 9a58cbd); H0 package waiting_human",
+     "D-041 chief/junior/monitor topology accepted; junior appointment JR-SUPER-01",
+-    "D-042 junior App actuation via GHA intents (merge/dispatch); App sandbox remains receive-only"
++    "D-042 junior App actuation via GHA intents (merge/dispatch); App sandbox remains receive-only",
++    "H0 human receipt bound (issue #42 comment 5008633820 → harness/approvals/H0.binding.json); P0-T04 verified; P0-T05 ready"
+   ],
+   "verified_baseline": [],
+   "unverified": [
+diff --git a/PLAN.md b/PLAN.md
+index 87021e4..833b2b3 100644
+--- a/PLAN.md
++++ b/PLAN.md
+@@ -8,7 +8,7 @@ Initial authorization stops at Phase 0.
+ {
+   "schema_version": "1.0",
+   "plan_id": "continuityops-cloud-reliability-v1",
+-  "revision": 12,
++  "revision": 13,
+   "authorized_through_phase": 0,
+   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
+   "execution_profile": {
+@@ -160,7 +160,7 @@ Initial authorization stops at Phase 0.
+       "phase": 0,
+       "slice": "S0",
+       "title": "Freeze rubrics and pin execution bundles",
+-      "state": "review",
++      "state": "verified",
+       "depends_on": [
+         "P0-T01",
+         "P0-T03"
+@@ -183,18 +183,19 @@ Initial authorization stops at Phase 0.
+         "approval_binding"
+       ],
+       "evidence": [
+-        "evidence/slices/S0/rubric-freeze.json"
++        "evidence/slices/S0/rubric-freeze.json",
++        "harness/approvals/H0.binding.json"
+       ],
+       "human_gate": "H0",
+-      "note": "Implementation integrated on main 9a58cbd after CI + D-037 #41 pass. H0 binding waiting_human — agents cannot mint receipt. See evidence/slices/S0/H0_PACKAGE.md.",
+-      "candidate_sha": "9a58cbd1b420452b3216de33602ee58868b5d87a"
++      "note": "Verified: H0 human receipt bound from issue #42 comment 5008633820 (candidate_sha 28bfb64). Receipt not agent-minted. See evidence/slices/S0/H0_PACKAGE.md.",
++      "candidate_sha": "28bfb64ca5c12659d2e109091e8b6a7ec2143745"
+     },
+     {
+       "id": "P0-T05",
+       "phase": 0,
+       "slice": "S0",
+       "title": "Prove concurrent streams, worker replacement, saved/fresh councils, and Phase 0 certification",
+-      "state": "planned",
++      "state": "ready",
+       "depends_on": [
+         "P0-T02",
+         "P0-T03",
+diff --git a/docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md b/docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md
+index 2632f59..a63678d 100644
+--- a/docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md
++++ b/docs/planning/dispatch/JUNIOR_SUPERVISOR.zh.md
+@@ -9,7 +9,7 @@
+ 
+ 1. **流边界准备信号** — 确保 `STREAM_COMPLETE` 齐全后通知首席；不代替首席写 `SUPERVISOR_VERDICT`。
+ 2. **Actuation（执行）** — **判断在 App；动手经 D-042 GHA**。禁止容器内 `gh`/`git push`。合并/派遣发 `continuityops-merge-v1` / `continuityops-dispatch-v1`（见 `JUNIOR_ACTUATE_SNIPPET.zh.md`）；GHA 在 CI green + D-037 pass 时合并或代发 `@codex`。继续处理 `publish-failed` / 缺 patch 重催。
+-3. **门禁中继** — 到达 H0–H6 / 机密 / 花费 / 破坏性 / 对外发布时停止车道，向所有者给出完整请求；不得伪造批准。
++3. **门禁中继** — 到达 H0–H6 / 机密 / 花费 / 破坏性 / 对外发布时停止车道，向所有者给出完整请求；不得伪造批准。H0 已绑定（#42 评论 5008633820；`H0_WAITING_AMENDMENT.json` = resolved）；后续人类门禁仍按此条中继。
+ 4. **流水线修复** — `.github/**` 与发布/CI 机械故障的修复 + `BREAK_FIX_LOG` 预防控制；优先把模型执法变成机制。
+ 5. **席位管理** — 在下属 `context_remaining` 不足时替换 **直接下属**（orch / reviewer / watcher）；记录实际 model ID。
+ 
+@@ -45,7 +45,7 @@ recommended_chief_action: replace_junior|ask_owner|observe
+ ## 首轮目标（JR-SUPER-01）
+ 
+ 1. 从 `AGENTS.md` → `PLAN.md` → `OPERATING_STATE.md` → 本契约 → treatise 重建状态。
+-2. 确认 H0 / 开放 PR：用 D-042 意图合并已 verify 的绑定 PR，再按 `POST_H0_RESUME.md` 派遣 P0-T05（dispatch 意图，勿沙箱 `gh`）。
++2. 确认 H0：已 bound（#42 评论 5008633820）。本 PR 合入 main 后，按 `POST_H0_RESUME.md` / `P0-T05.zh.md` 经 D-042 `continuityops-dispatch-v1` 派遣 P0-T05 orch（勿沙箱 `gh`）。
+ 3. 回报 handoff（简体中文自由文本 + `context_remaining`）。
+ 
+ ## 返回 handoff
+diff --git a/docs/planning/dispatch/PHASE_GATE_STATUS.md b/docs/planning/dispatch/PHASE_GATE_STATUS.md
+index 96f7156..40a08c1 100644
+--- a/docs/planning/dispatch/PHASE_GATE_STATUS.md
++++ b/docs/planning/dispatch/PHASE_GATE_STATUS.md
+@@ -1,11 +1,11 @@
+ # ContinuityOps phase gate status (supervisor packaging)
+ 
+-Updated: 2026-07-17T21:55:00Z
++Updated: 2026-07-17T23:58:30Z
+ 
+ ## Authority
+ 
+ - `authorized_through_phase`: **0**
+-- Phase 1–8: **unauthorized** until human advances `authorized_through_phase` after S0 + **H0**
++- Phase 1–8: **unauthorized** until human advances `authorized_through_phase` after S0 + **H0** (H0 bound; S0 still open)
+ 
+ ## Phase 0 checklist
+ 
+@@ -14,9 +14,9 @@ Updated: 2026-07-17T21:55:00Z
+ | P0-T01 | verified | CO-008/CO-009 conditional |
+ | P0-T02 | verified | CO-010 addressed via D-039 / P0-T03 |
+ | P0-T03 | **verified** | D-037 #38 pass; redo PR #36 landed |
+-| P0-T04 | **review** on `9a58cbd` | D-037 #41 pass; **H0 waiting_human** |
+-| H0 | **STOP — human receipt** | [`H0_PACKAGE.md`](../../../evidence/slices/S0/H0_PACKAGE.md) |
+-| P0-T05 | blocked on H0 | see [`POST_H0_RESUME.md`](./POST_H0_RESUME.md) |
++| P0-T04 | **verified** | H0 bound from #42 comment 5008633820 |
++| H0 | **bound** | [`H0_PACKAGE.md`](../../../evidence/slices/S0/H0_PACKAGE.md) |
++| P0-T05 | **ready** | junior drives per [`POST_H0_RESUME.md`](./POST_H0_RESUME.md) |
+ 
+ ## Phases 1–8
+ 
+diff --git a/docs/planning/dispatch/SUPERVISOR_HANDOFF.md b/docs/planning/dispatch/SUPERVISOR_HANDOFF.md
+index 48dbe2f..415e7c8 100644
+--- a/docs/planning/dispatch/SUPERVISOR_HANDOFF.md
++++ b/docs/planning/dispatch/SUPERVISOR_HANDOFF.md
+@@ -107,6 +107,17 @@ GitHub action; junior owns it. H0 still waiting owner amendment on #42.
+ 
+ Contracts: `CHIEF_SUPERVISOR.md`, `JUNIOR_SUPERVISOR.zh.md`, `MONITOR.zh.md`.
+ 
++## 2026-07-17T23:58Z H0 bound — P0-T05 ready
++
++| Item | State |
++| --- | --- |
++| Main tip at sign | `28bfb64` |
++| P0-T03 | verified |
++| P0-T04 | **verified** (H0 bound) |
++| **H0** | **bound** — #42 comment 5008633820 → [`H0.binding.json`](../../../harness/approvals/H0.binding.json) |
++| Next | Junior drives [`POST_H0_RESUME.md`](./POST_H0_RESUME.md) → P0-T05 |
++| Hard stop | Agents **must not** mint H0–H6 or authorize Phase 1 until S0 certifies |
++
+ ## 2026-07-17T21:55Z STOP — H0 human gate
+ 
+ | Item | State |
+diff --git a/evidence/slices/S0/H0_PACKAGE.md b/evidence/slices/S0/H0_PACKAGE.md
+index 22b0052..a6ffcde 100644
+--- a/evidence/slices/S0/H0_PACKAGE.md
++++ b/evidence/slices/S0/H0_PACKAGE.md
+@@ -1,26 +1,37 @@
+ # H0 Human Approval Package — S0 Rubric Freeze
+ 
+-**Status:** `waiting_human`  
+-**Packaged at:** 2026-07-17T21:55:00Z  
+-**Main tip at package:** see `git rev-parse origin/main` after hash refresh  
+-**Agents cannot mint this receipt.**  
+-**Hash refresh:** `plan_sha256` refreshed after PLAN.md P0-T04 `review` state bump so the validator matches the tree you sign.
++**Status:** `bound`
+ 
+-## What to approve
++**Packaged at:** 2026-07-17T21:55:00Z
+ 
+-Human gate **H0**: project scope, architecture, cost cap, upstream pins, and the frozen S0 rubric / execution bundles produced by P0-T04.
++**Bound at:** 2026-07-17T23:58:30Z
++
++**Human receipt:** https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5008633820
++
++**Agents cannot mint this receipt.**
++
++## Bound state
++
++| Field | Value |
++| --- | --- |
++| Binding | `harness/approvals/H0.binding.json` (`status: bound`) |
++| Approver | `nathanielecon` |
++| Decision | `approve` |
++| `candidate_sha` | `28bfb64ca5c12659d2e109091e8b6a7ec2143745` |
++| `receipt_sha256` | `2f44a0a9f5ee01ce55aaafb72a60c38d48c536d65a5f64b06ae10dab8d60015c` (UTF-8 SHA-256 of comment body) |
++| Ignore | placeholder comment `5007863678` |
+ 
+ ## Bound artifacts
+ 
+ | Artifact | Path | Notes |
+ | --- | --- | --- |
+-| Frozen rubric | `harness/rubrics/S0.freeze.v1.json` | status `frozen_pending_H0` |
+-| H0 binding shell | `harness/approvals/H0.binding.json` | `receipt: null` until you sign |
++| Frozen rubric | `harness/rubrics/S0.freeze.v1.json` | identity unchanged (`frozen_pending_H0` file status; H0 satisfied via binding) |
++| H0 binding | `harness/approvals/H0.binding.json` | human receipt filled |
+ | Rubric freeze evidence | `evidence/slices/S0/rubric-freeze.json` | includes bundle hashes |
+ | Rubric review notes | `docs/reviews/rubric-review.md` | English reviewer notes |
+-| Validator | `harness/rubrics/validate-rubric-freeze.mjs` | exit 0 on main tip |
++| Validator | `harness/rubrics/validate-rubric-freeze.mjs` | accepts `waiting_human` or verified `bound` |
+ 
+-## Bundle hashes (from `evidence/slices/S0/rubric-freeze.json`)
++## Bundle hashes at human sign (receipt)
+ 
+ ```text
+ plan_sha256:                72e21d7e58e351d2bd4b22cfcd73d5a0fc5d6c1ce29f73843375674ad31e2026
+@@ -30,29 +41,21 @@ rubric_sha256:              724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a
+ partition_bundle_sha256:    52c4aefe62b7355e5abea13f4ee79967b5a28363b8f1866cde6b399c1fcbeab3
+ ```
+ 
+-Re-verify before signing: `node harness/rubrics/validate-rubric-freeze.mjs` (must exit 0).
+-
+-`partition_bundle_note`: main currently lacks `harness/partition-manifest.json`; P0-T04 used `integration/upstreams.lock.json` as the available partition/upstream pin input inside write_scope.
+-
+-## Suggested receipt fields
++Post-bind PLAN authority edits refresh `plan_sha256` in `rubric-freeze.json` (BF-2026-007); the receipt keeps the sign-time plan digest.
+ 
+-Use the schema in root `OPERATING_STATE.md` (Human receipt schema) / `H0.binding.json` `required_receipt_fields`:
++Re-verify: `node harness/rubrics/validate-rubric-freeze.mjs` (must exit 0).
+ 
+-- `gate_id`: `H0`
+-- `decision`: `approve` | `reject` | `defer`
+-- `approver`: your identity
+-- `approved_at`: ISO-8601
+-- `baseline_sha` / `candidate_sha`: bind to the exact SHAs you reviewed
+-- `approved_bundle_sha256` / `approved_rubric_sha256`: must match the hashes above (or re-run validator and use fresh digests)
+-- `signature_or_signed_comment_url`: durable proof (signed comment / external receipt store outside worker write scope)
++## Conditions accepted with receipt
+ 
+-After you sign, a supervisor/orchestrator round may fill `harness/approvals/H0.binding.json` `receipt` + `receipt_sha256` from that **human** artifact only.
++- treatise `6ca0ec1` accepted as seat doctrine; register wins on conflict
++- engagement: no Opus; Grok bottleneck only for true local necessity (browser on auth fail)
++- D-041 chief/junior/monitor topology accepted
+ 
+-## Merge / verification evidence for this package
++## Next
+ 
+-- P0-T03 verified: main includes validators; D-037 issue #38 `verdict: pass`
+-- P0-T04 integrated: PR #40 content on main `9a58cbd`; CI `contracts` success; D-037 issue #41 `verdict: pass`
+-- Explicit non-claim: **no Phase 1 authorization** until S0 certification (P0-T05) **and** this H0 receipt
++- P0-T04 **verified**; P0-T05 **ready**
++- Junior drives orch/worker path per [`POST_H0_RESUME.md`](../../docs/planning/dispatch/POST_H0_RESUME.md)
++- **No Phase 1 authorization** until S0 certification (P0-T05) completes
+ 
+ ## Owner parallel items (unchanged)
+ 
+diff --git a/evidence/slices/S0/H0_WAITING_AMENDMENT.json b/evidence/slices/S0/H0_WAITING_AMENDMENT.json
+index 7d2da1c..07aa0ba 100644
+--- a/evidence/slices/S0/H0_WAITING_AMENDMENT.json
++++ b/evidence/slices/S0/H0_WAITING_AMENDMENT.json
+@@ -1,18 +1,13 @@
+ {
+   "schema_version": "1.0",
+-  "status": "waiting_human",
++  "status": "resolved",
+   "gate_id": "H0",
+   "recorded_at": "2026-07-17T22:22:26.969850Z",
+-  "reason": "Owner posted approve on issue #42 comment 5007863678 but candidate_sha and signature_or_signed_comment_url still contain template placeholders; conditions empty. Supervisor will not mint or bind agent-authored fill-ins (owner PAT posts as nathanielecon).",
+-  "owner_comment_url": "https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5007863678",
+-  "required_amendment": [
+-    "candidate_sha must be 40-hex (current main tip at sign: 1b66065164cf7b20b5580e2022218bdeba643bd1)",
+-    "signature_or_signed_comment_url must be the real permalink",
+-    "conditions should include treatise 6ca0ec1 seat doctrine + engagement no Opus"
+-  ],
+-  "validator_at_stop": "node harness/rubrics/validate-rubric-freeze.mjs -> pass on 1b66065",
+-  "blocked_todos": [
+-    "h0-bind",
+-    "post-h0-orch"
+-  ]
++  "resolved_at": "2026-07-17T23:58:30Z",
++  "reason": "Owner posted complete approve receipt on issue #42 comment 5008633820 (candidate_sha=28bfb64… matching origin/main tip at sign; signature permalink real; hashes match freeze; conditions include treatise/D-041/no Opus). Placeholder comment 5007863678 superseded and must not be bound.",
++  "owner_comment_url": "https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5008633820",
++  "superseded_incomplete_comment_url": "https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5007863678",
++  "binding_path": "harness/approvals/H0.binding.json",
++  "receipt_sha256": "2f44a0a9f5ee01ce55aaafb72a60c38d48c536d65a5f64b06ae10dab8d60015c",
++  "blocked_todos": []
+ }
+diff --git a/evidence/slices/S0/rubric-freeze.json b/evidence/slices/S0/rubric-freeze.json
+index 27115e7..c8e8a69 100644
+--- a/evidence/slices/S0/rubric-freeze.json
++++ b/evidence/slices/S0/rubric-freeze.json
+@@ -11,7 +11,7 @@
+     "status": "frozen_pending_H0"
+   },
+   "bundle_hashes": {
+-    "plan_sha256": "72e21d7e58e351d2bd4b22cfcd73d5a0fc5d6c1ce29f73843375674ad31e2026",
++    "plan_sha256": "c44fbac28eb76347e1b15bbf561a8aabb17c118c01f3ac9d003635eacd34400e",
+     "execution_contract_sha256": "5a3eff5d41baf5afac2a8c82d9b0312df1e65d86bce142ba07ed088f3cc184bf",
+     "validator_bundle_sha256": "b8c1b48235315d183e34978f79544294d958cc0b95dd520f9005002be9d3c6bc",
+     "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+@@ -20,9 +20,11 @@
+   },
+   "approval_binding": {
+     "path": "harness/approvals/H0.binding.json",
+-    "status": "waiting_human",
+-    "receipt_sha256": null,
+-    "agent_minted_receipt": false
++    "status": "bound",
++    "receipt_sha256": "2f44a0a9f5ee01ce55aaafb72a60c38d48c536d65a5f64b06ae10dab8d60015c",
++    "receipt_source": "https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5008633820",
++    "agent_minted_receipt": false,
++    "bound_at": "2026-07-17T23:58:30Z"
+   },
+   "mutation_policy_tests": {
+     "positive": "rubric hash matches pinned SHA-256",
+@@ -65,12 +67,12 @@
+     }
+   ],
+   "remaining_risks": [
+-    "H0 人工批准尚未签署；不得授权 Phase 1 或声明 S0 通过。",
+-    "当前 main 缺少 harness/partition-manifest.json；后续编排应确认 P0-T01 分区清单是否需恢复到 main。"
++    "H0 已绑定人类收据；仍不得授权 Phase 1，直至 P0-T05 / S0 认证完成。",
++    "当前 main 缺少 harness/partition-manifest.json；后续编排应确认 P0-T01 分区清单是否需要恢复到 main。"
+   ],
+   "evidence_paths": [
+     "evidence/slices/S0/rubric-freeze.json"
+   ],
+   "recorded_at": "2026-07-17T21:45:59.335Z",
+-  "hash_refresh_note": "2026-07-17 supervisor refreshed plan_sha256 after PLAN.md state bump (P0-T04 review + H0 package) so H0 binds current files."
++  "hash_refresh_note": "2026-07-17 supervisor refreshed plan_sha256 after PLAN.md P0-T04 verified + H0 bind (prior sign-time plan digest retained on human receipt: 72e21d7e58e351d2bd4b22cfcd73d5a0fc5d6c1ce29f73843375674ad31e2026)."
+ }
+diff --git a/harness/approvals/H0.binding.json b/harness/approvals/H0.binding.json
+index 6dd367a..f2e3212 100644
+--- a/harness/approvals/H0.binding.json
++++ b/harness/approvals/H0.binding.json
+@@ -5,9 +5,35 @@
+   "slice": "S0",
+   "task_id": "P0-T04",
+   "baseline_sha": "a195e74c51e758d1e655915c8a063760153e3b53",
+-  "status": "waiting_human",
+-  "receipt": null,
+-  "receipt_sha256": null,
++  "status": "bound",
++  "receipt": {
++    "schema_version": "1.0",
++    "gate_id": "H0",
++    "decision": "approve",
++    "approver": "nathanielecon",
++    "approved_at": "2026-07-17T23:55:00Z",
++    "baseline_sha": "a195e74c51e758d1e655915c8a063760153e3b53",
++    "candidate_sha": "28bfb64ca5c12659d2e109091e8b6a7ec2143745",
++    "approved_bundle_sha256": "72e21d7e58e351d2bd4b22cfcd73d5a0fc5d6c1ce29f73843375674ad31e2026",
++    "approved_rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
++    "plan_bundle_sha256": "72e21d7e58e351d2bd4b22cfcd73d5a0fc5d6c1ce29f73843375674ad31e2026",
++    "execution_bundle_sha256": "5a3eff5d41baf5afac2a8c82d9b0312df1e65d86bce142ba07ed088f3cc184bf",
++    "validator_sha256": "b8c1b48235315d183e34978f79544294d958cc0b95dd520f9005002be9d3c6bc",
++    "rubric_bundle_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
++    "partition_manifest_sha256": "52c4aefe62b7355e5abea13f4ee79967b5a28363b8f1866cde6b399c1fcbeab3",
++    "environment": "repo-only",
++    "cost_cap_usd": null,
++    "conditions": [
++      "treatise 6ca0ec1 accepted as seat doctrine; register wins on conflict",
++      "engagement: no Opus under any circumstances; Grok bottleneck only for true local necessity (browser on auth fail)",
++      "D-041 chief/junior/monitor topology accepted"
++    ],
++    "signature_or_signed_comment_url": "https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5008633820"
++  },
++  "receipt_sha256": "2f44a0a9f5ee01ce55aaafb72a60c38d48c536d65a5f64b06ae10dab8d60015c",
++  "receipt_source": "https://github.com/nathanielecon/ContinuityOps/issues/42#issuecomment-5008633820",
++  "bound_at": "2026-07-17T23:58:30Z",
++  "bound_by_role": "chief-supervisor",
+   "binding_rule": "只有真实人类签署的 H0 receipt 可以填入 receipt 并计算 receipt_sha256；代理、worker、脚本或模型输出不得创建、模拟或替代该 receipt。",
+   "required_receipt_fields": [
+     "gate_id",
+@@ -19,5 +45,5 @@
+     "candidate_sha",
+     "signature_or_signed_comment_url"
+   ],
+-  "agent_attestation": "本文件仅准备绑定结构；未声明、未模拟、未获得 H0 人工批准。"
++  "agent_attestation": "本文件已绑定 issue #42 评论 5008633820 的人类 approve 收据（approver=nathanielecon）；receipt_sha256 为该评论正文 UTF-8 的 SHA-256。代理未铸造收据字段。"
+ }
+diff --git a/harness/rubrics/validate-rubric-freeze.mjs b/harness/rubrics/validate-rubric-freeze.mjs
+index 91ad705..ea1c1b7 100644
+--- a/harness/rubrics/validate-rubric-freeze.mjs
++++ b/harness/rubrics/validate-rubric-freeze.mjs
+@@ -9,6 +9,17 @@ const sha256Text = (text) => createHash('sha256').update(text).digest('hex');
+ const sha256File = (path) => sha256Text(readFileSync(new URL(path, root), 'utf8'));
+ const fail = (code, message) => { const error = new Error(message); error.code = code; throw error; };
+ 
++const REQUIRED_RECEIPT_FIELDS = [
++  'gate_id',
++  'approver',
++  'approved_at',
++  'approved_bundle_sha256',
++  'approved_rubric_sha256',
++  'baseline_sha',
++  'candidate_sha',
++  'signature_or_signed_comment_url'
++];
++
+ export function validateRubricSchema(rubric) {
+   if (rubric.schema_version !== '1.0') fail('rubric_schema', 'rubric schema_version 必须是 1.0');
+   if (rubric.rubric_id !== 'S0-freeze-v1' || rubric.slice !== 'S0') fail('rubric_schema', 'rubric id 或 slice 不匹配');
+@@ -25,10 +36,45 @@ export function validateRubricSchema(rubric) {
+   return true;
+ }
+ 
+-export function validateApprovalBinding(binding) {
+-  if (binding.status !== 'waiting_human') fail('approval_binding', '没有真实 H0 receipt 时状态必须是 waiting_human');
+-  if (binding.receipt !== null || binding.receipt_sha256 !== null) fail('approval_binding', '代理不得填入 H0 receipt 或 receipt hash');
++export function validateApprovalBinding(binding, evidence) {
+   if (!binding.binding_rule?.includes('真实人类')) fail('approval_binding', 'binding_rule 必须要求真实人类 receipt');
++
++  if (binding.status === 'waiting_human') {
++    if (binding.receipt !== null || binding.receipt_sha256 !== null) fail('approval_binding', 'waiting_human 时不得填入 H0 receipt 或 receipt hash');
++    return true;
++  }
++
++  if (binding.status !== 'bound') fail('approval_binding', 'status 必须是 waiting_human 或 bound');
++  const receipt = binding.receipt;
++  if (!receipt || typeof receipt !== 'object') fail('approval_binding', 'bound 状态必须包含人类 receipt 对象');
++  if (!/^[0-9a-f]{64}$/.test(binding.receipt_sha256 ?? '')) fail('approval_binding', 'bound 状态必须包含 receipt_sha256');
++
++  for (const field of REQUIRED_RECEIPT_FIELDS) {
++    if (receipt[field] == null || receipt[field] === '') fail('approval_binding', `receipt 缺少字段 ${field}`);
++  }
++  if (receipt.gate_id !== 'H0') fail('approval_binding', 'receipt.gate_id 必须是 H0');
++  if (receipt.decision !== 'approve') fail('approval_binding', 'bound 状态要求 decision=approve');
++  if (receipt.approver !== 'nathanielecon') fail('approval_binding', 'receipt.approver 必须是所有者身份');
++  if (!/^[0-9a-f]{40}$/.test(receipt.candidate_sha ?? '')) fail('approval_binding', 'candidate_sha 必须是 40-hex');
++  if (!/^[0-9a-f]{40}$/.test(receipt.baseline_sha ?? '')) fail('approval_binding', 'baseline_sha 必须是 40-hex');
++  if (!String(receipt.signature_or_signed_comment_url).includes('issuecomment-')) {
++    fail('approval_binding', 'signature_or_signed_comment_url 必须指向真实 issue comment permalink');
++  }
++  if (String(receipt.signature_or_signed_comment_url).includes('<') || String(receipt.candidate_sha).includes('<')) {
++    fail('approval_binding', 'receipt 仍含模板占位符');
++  }
++
++  const pinnedRubric = evidence?.bundle_hashes?.rubric_sha256;
++  if (pinnedRubric && receipt.approved_rubric_sha256 !== pinnedRubric) {
++    fail('approval_binding', 'approved_rubric_sha256 与冻结 rubric hash 不匹配');
++  }
++  if (receipt.approved_rubric_sha256 !== sha256File('harness/rubrics/S0.freeze.v1.json')) {
++    fail('approval_binding', 'approved_rubric_sha256 与当前冻结 rubric 文件不匹配');
++  }
++  // approved_bundle_sha256 is the plan hash at human sign time; PLAN.md may advance after bind (BF-2026-007).
++  if (receipt.approved_bundle_sha256 !== receipt.plan_bundle_sha256) {
++    fail('approval_binding', 'approved_bundle_sha256 必须与 plan_bundle_sha256 一致');
++  }
+   return true;
+ }
+ 
+@@ -71,7 +117,7 @@ export function runAll() {
+   const binding = readJson('harness/approvals/H0.binding.json');
+   const evidence = readJson('evidence/slices/S0/rubric-freeze.json');
+   validateRubricSchema(rubric);
+-  validateApprovalBinding(binding);
++  validateApprovalBinding(binding, evidence);
+   validateBundleHashes(evidence);
+   validateMutationPolicy(evidence);
+   return { pass: true, validators: ['rubric_schema', 'bundle_hashes', 'approval_binding', 'rubric_mutation_policy'] };

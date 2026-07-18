@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "task_id": "P8-T04",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "command": "node scripts/project.mjs validate P8-T04",
+  "exit_code": 0,
+  "recorded_at": "2026-07-18T06:25:19.640Z",
+  "environment": {
+    "id": "6a594ee667608191ab53cae15202815e",
+    "zero_secrets": true
+  },
+  "validators": {
+    "full_repository": true,
+    "full_security": true,
+    "hosted_required_checks": true,
+    "evidence_chain": true,
+    "claim_consistency": true,
+    "readme_recruiter_gate": true,
+    "judge_exit": true
+  },
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "validator-worker"
+  },
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "Portfolio certified L1 only",
+    "No L4+ live cloud",
+    "D-044 waived H3-H6; placeholders retained"
+  ],
+  "started_at": "2026-07-18T06:25:19.620Z",
+  "completed_at": "2026-07-18T06:25:19.640Z",
+  "validator_details": [
+    {
+      "id": "full_repository",
+      "result": {
+        "pass": true,
+        "standalone_json": 191,
+        "fenced_json": 14,
+        "skipped_allowlisted": 0
+      }
+    },
+    {
+      "id": "full_security",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "hosted_required_checks",
+      "result": {
+        "pass": true,
+        "claim_level": "L1"
+      }
+    },
+    {
+      "id": "evidence_chain",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "claim_consistency",
+      "result": {
+        "pass": true,
+        "slice": "S8"
+      }
+    },
+    {
+      "id": "readme_recruiter_gate",
+      "result": {
+        "pass": true
+      }
+    },
+    {
+      "id": "judge_exit",
+      "result": {
+        "pass": true,
+        "provisional_pass": true,
+        "fresh_mean": 9.7
+      }
+    }
+  ],
+  "passed": [
+    "full_repository",
+    "full_security",
+    "hosted_required_checks",
+    "evidence_chain",
+    "claim_consistency",
+    "readme_recruiter_gate",
+    "judge_exit"
+  ],
+  "failed": [],
+  "read_only_proof": "git status --porcelain unchanged before/after validator execution",
+  "evidence_path": "evidence/slices/S8/integrated-gate.json",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "implementation_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
+}

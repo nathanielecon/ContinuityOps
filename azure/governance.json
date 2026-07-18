@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "claim_ceiling": "L1",
+  "implemented_versus_designed": "designed_static",
+  "controls": {
+    "policy": [
+      "require-tags",
+      "deny-public-ip-lab"
+    ],
+    "naming": "co-{env}-{workload}-{region}",
+    "rbac": [
+      "Reader",
+      "Contributor-lab-scoped"
+    ],
+    "logging": [
+      "activity-logs",
+      "diagnostic-settings-designed"
+    ],
+    "cost": [
+      "budget-alerts-designed"
+    ],
+    "network": [
+      "nsg-baseline-designed"
+    ]
+  },
+  "blocked_change_examples": [
+    {
+      "change": "Open NSG 0.0.0.0/0:22",
+      "expect": "deny"
+    },
+    {
+      "change": "Untagged resource group",
+      "expect": "deny"
+    }
+  ],
+  "non_claims": [
+    "No ExpressRoute depth",
+    "No live Azure Policy assignment evidence",
+    "No Hub-Spoke live peering proof"
+  ]
+}

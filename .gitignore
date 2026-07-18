@@ -33,6 +33,7 @@ target/
 *.tfstate.*
 .terraform.lock.hcl
 crash.log
+evidence/_bundle/
 
 # Agent / local runtime
 .cursor/
@@ -42,6 +43,8 @@ crash.log
 .codex/*.local
 .codex/cache/
 .codex-last-message-*
+# Local stamp for scripts/Watch-CodexRefs.sh (never credentials)
+.codex-warm/
 *.log
 tmp/
 .cache/

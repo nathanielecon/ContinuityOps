@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "dns",
+  "failure_class": "DNSResolutionFailure",
+  "inject": "Point Service selector to nonexistent labels",
+  "observe": ["NXDOMAIN or connection refused from callers"],
+  "recover": "Restore selector labels",
+  "business_check": "In-cluster DNS resolves Service",
+  "reset": {
+    "script": "scripts/kubernetes/reset-scenario.mjs",
+    "args": ["dns"]
+  },
+  "synthetic": true
+}

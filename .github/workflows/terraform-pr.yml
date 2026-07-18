@@ -1,0 +1,36 @@
+# ContinuityOps — PR-only Terraform static checks (read-only, no cloud credentials).
+name: terraform-pr
+
+on:
+  pull_request:
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform-pr.yml'
+      - 'tests/terraform/**'
+      - 'scripts/ci/**'
+
+permissions:
+  contents: read
+
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Assert PR job is credential-free
+        run: node scripts/ci/assert-pr-readonly.mjs
+
+      - name: Static terraform scaffold tests
+        run: node --test tests/terraform/
+
+      - name: Terraform fmt/validate when CLI available
+        run: |
+          if command -v terraform >/dev/null 2>&1; then
+            terraform fmt -check -recursive terraform
+            terraform -chdir=terraform/envs/staging init -backend=false
+            terraform -chdir=terraform/envs/staging validate
+          else
+            echo "terraform CLI absent on runner path — static tests already cover scaffold (L1)"
+          fi

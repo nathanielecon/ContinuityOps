@@ -1,0 +1,343 @@
+diff --git a/docs/reviews/rubric-review.md b/docs/reviews/rubric-review.md
+new file mode 100644
+index 0000000..4ce46b7
+--- /dev/null
++++ b/docs/reviews/rubric-review.md
+@@ -0,0 +1,29 @@
++# S0 Frozen Rubric Review
++
++## Review status
++
++- Task: `P0-T04`
++- Role: `rubric-setter`
++- Baseline SHA: `a195e74c51e758d1e655915c8a063760153e3b53`
++- Frozen rubric: `harness/rubrics/S0.freeze.v1.json`
++- Approval binding scaffold: `harness/approvals/H0.binding.json`
++- Evidence: `evidence/slices/S0/rubric-freeze.json`
++- Status: frozen package prepared; H0 remains `waiting_human`.
++
++## Findings
++
++1. S0 now has exactly one frozen rubric file under `harness/rubrics/` for this slice and version.
++2. The rubric preserves the draft's proposed S0 evaluation dimensions but makes the draft non-authoritative and checkable.
++3. The mutation policy requires any semantic rubric change to create a new frozen version, recompute bundle hashes, and obtain a real H0 receipt.
++4. No H0 receipt was created or simulated. The binding file is an empty scaffold that must remain `waiting_human` until a human signs the exact bundle.
++
++## H0 handoff requirement
++
++The next human approval receipt must bind at least:
++
++- `gate_id`: `H0`
++- `approved_bundle_sha256`
++- `approved_rubric_sha256`
++- `baseline_sha`
++- `candidate_sha`
++- a signed comment URL or equivalent durable human signature.
+diff --git a/evidence/slices/S0/rubric-freeze.json b/evidence/slices/S0/rubric-freeze.json
+new file mode 100644
+index 0000000..cdf465e
+--- /dev/null
++++ b/evidence/slices/S0/rubric-freeze.json
+@@ -0,0 +1,75 @@
++{
++  "schema_version": "1.0",
++  "task_id": "P0-T04",
++  "role": "rubric-setter",
++  "slice": "S0",
++  "baseline_sha": "a195e74c51e758d1e655915c8a063760153e3b53",
++  "candidate_context": "working_tree_before_commit",
++  "rubric": {
++    "path": "harness/rubrics/S0.freeze.v1.json",
++    "version": "S0-freeze-v1",
++    "status": "frozen_pending_H0"
++  },
++  "bundle_hashes": {
++    "plan_sha256": "f01f3144d507986e0a8cfbec297818e9327e7df77c875d87e3c2bb68f7ff1adc",
++    "execution_contract_sha256": "5a3eff5d41baf5afac2a8c82d9b0312df1e65d86bce142ba07ed088f3cc184bf",
++    "validator_bundle_sha256": "b8c1b48235315d183e34978f79544294d958cc0b95dd520f9005002be9d3c6bc",
++    "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
++    "partition_bundle_sha256": "52c4aefe62b7355e5abea13f4ee79967b5a28363b8f1866cde6b399c1fcbeab3",
++    "partition_bundle_note": "当前 main 未包含 harness/partition-manifest.json；P0-T04 在允许写入范围内以 integration/upstreams.lock.json 作为现有分区/上游 pin bundle 输入并明确记录该限制。"
++  },
++  "approval_binding": {
++    "path": "harness/approvals/H0.binding.json",
++    "status": "waiting_human",
++    "receipt_sha256": null,
++    "agent_minted_receipt": false
++  },
++  "mutation_policy_tests": {
++    "positive": "rubric hash matches pinned SHA-256",
++    "negative": "temporary threshold mutation changes SHA-256 and is rejected as rubric_mutated"
++  },
++  "validation_commands": [
++    "node harness/rubrics/validate-rubric-freeze.mjs",
++    "node --test tests/",
++    "python3 - <<'PY'\nimport json, pathlib, re, sys\n...\nPY",
++    "git diff --check"
++  ],
++  "validation_results": [
++    {
++      "command": "node harness/rubrics/validate-rubric-freeze.mjs",
++      "exit_code": 0,
++      "time": "2026-07-17T00:00:00Z",
++      "evidence_path": "/tmp/rubric-validator.txt",
++      "result": "通过：rubric_schema、bundle_hashes、approval_binding、rubric_mutation_policy 均通过。"
++    },
++    {
++      "command": "node --test tests/",
++      "exit_code": 0,
++      "time": "2026-07-17T00:00:00Z",
++      "evidence_path": "/tmp/node-tests.txt",
++      "result": "通过：13 个 node:test 子测试全部通过。"
++    },
++    {
++      "command": "python3 - <<'PY'\nimport json, pathlib, re, sys\n...\nPY",
++      "exit_code": 1,
++      "time": "2026-07-17T00:00:00Z",
++      "evidence_path": "/tmp/json-parse.txt",
++      "result": "失败：既有 BREAK_FIX_LOG.md 中一个 ```json fence 内容不是 JSON；本任务未修改该文件，按 AGENTS.md 记录为 Phase-0 已知合约解析阻塞。"
++    },
++    {
++      "command": "git diff --check",
++      "exit_code": 0,
++      "time": "2026-07-17T00:00:00Z",
++      "evidence_path": "/tmp/diff-check.txt",
++      "result": "通过：无 whitespace error。"
++    }
++  ],
++  "remaining_risks": [
++    "H0 人工批准尚未签署；不得授权 Phase 1 或声明 S0 通过。",
++    "当前 main 缺少 harness/partition-manifest.json；后续编排应确认 P0-T01 分区清单是否需恢复到 main。"
++  ],
++  "evidence_paths": [
++    "evidence/slices/S0/rubric-freeze.json"
++  ],
++  "recorded_at": "2026-07-17T21:45:59.335Z"
++}
+diff --git a/harness/approvals/H0.binding.json b/harness/approvals/H0.binding.json
+new file mode 100644
+index 0000000..6dd367a
+--- /dev/null
++++ b/harness/approvals/H0.binding.json
+@@ -0,0 +1,23 @@
++{
++  "schema_version": "1.0",
++  "approval_id": "H0-S0-rubric-freeze",
++  "human_gate": "H0",
++  "slice": "S0",
++  "task_id": "P0-T04",
++  "baseline_sha": "a195e74c51e758d1e655915c8a063760153e3b53",
++  "status": "waiting_human",
++  "receipt": null,
++  "receipt_sha256": null,
++  "binding_rule": "只有真实人类签署的 H0 receipt 可以填入 receipt 并计算 receipt_sha256；代理、worker、脚本或模型输出不得创建、模拟或替代该 receipt。",
++  "required_receipt_fields": [
++    "gate_id",
++    "approver",
++    "approved_at",
++    "approved_bundle_sha256",
++    "approved_rubric_sha256",
++    "baseline_sha",
++    "candidate_sha",
++    "signature_or_signed_comment_url"
++  ],
++  "agent_attestation": "本文件仅准备绑定结构；未声明、未模拟、未获得 H0 人工批准。"
++}
+diff --git a/harness/rubrics/S0.freeze.v1.json b/harness/rubrics/S0.freeze.v1.json
+new file mode 100644
+index 0000000..74c9652
+--- /dev/null
++++ b/harness/rubrics/S0.freeze.v1.json
+@@ -0,0 +1,104 @@
++{
++  "schema_version": "1.0",
++  "rubric_id": "S0-freeze-v1",
++  "slice": "S0",
++  "status": "frozen_pending_H0",
++  "language": "zh-CN",
++  "authority": {
++    "task_id": "P0-T04",
++    "baseline_sha": "a195e74c51e758d1e655915c8a063760153e3b53",
++    "plan_task_id": "P0-T04",
++    "human_gate": "H0",
++    "draft_source": "docs/planning/dispatch/drafts/S0-rubric-draft.zh.md",
++    "draft_is_authoritative": false
++  },
++  "scope": {
++    "phase": 0,
++    "slice_goal": "证明 ContinuityOps Phase 0 治理与编排底座成立：分区清晰、状态推进可审计、验证器 fail-closed、证据 SHA 绑定、rubric 冻结受 H0 约束、并发与 fresh judge 退出路径可验证。",
++    "required_evidence": [
++      "evidence/slices/S0/baseline-audit.json",
++      "evidence/slices/S0/harness.json",
++      "evidence/slices/S0/validator-contract.json",
++      "evidence/slices/S0/rubric-freeze.json",
++      "evidence/slices/S0/integrated-gate.json",
++      "evidence/judges/S0/"
++    ]
++  },
++  "scoring": {
++    "pass_threshold": 90,
++    "max_score": 100,
++    "dimensions": [
++      {
++        "id": "state_authority",
++        "weight": 25,
++        "title": "状态机与授权边界",
++        "required_checks": [
++          "PLAN.md 与 OPERATING_STATE.md 的 Phase 0 状态不矛盾。",
++          "P0 任务只能按合法生命周期推进，worker 不得自标 verified/done。",
++          "Phase 1 必须保持拒绝，直到真实人类更新授权。"
++        ]
++      },
++      {
++        "id": "validators_evidence",
++        "weight": 25,
++        "title": "验证器与证据 schema",
++        "required_checks": [
++          "未知 validator ID fail closed。",
++          "验证器运行不得修改仓库工作区。",
++          "证据必须包含 baseline SHA、candidate SHA、命令、退出码、时间戳、环境与模型记录。"
++        ]
++      },
++      {
++        "id": "partition_concurrency",
++        "weight": 20,
++        "title": "分区、并发与集成队列",
++        "required_checks": [
++          "每个 changed path 必须属于当前任务 write_scope。",
++          "最多三个 disjoint streams 可并行，每个 stream 内必须顺序执行。",
++          "共享接口与集成队列顺序必须在合并前记录。"
++        ]
++      },
++      {
++        "id": "rubric_bundle_h0",
++        "weight": 15,
++        "title": "Rubric freeze、bundle hash 与 H0 绑定",
++        "required_checks": [
++          "S0 只有一个冻结 rubric，路径、版本与 SHA-256 明确。",
++          "plan、execution、validator、rubric、partition bundle hashes 绑定到同一基线上下文。",
++          "H0 只能由真实人工 receipt 满足；没有 receipt 时状态必须是 waiting_human 或 remaining risk。"
++        ]
++      },
++      {
++        "id": "handoff_breakfix_language",
++        "weight": 15,
++        "title": "Break/fix、handoff 与简体中文通信",
++        "required_checks": [
++          "所有观察到的 break 均记录到 BREAK_FIX_LOG.md 或任务证据中。",
++          "handoff 字段完整，包含 context_remaining。",
++          "自由文本通信使用简体中文；机器字段名可保持英文。"
++        ]
++      }
++    ]
++  },
++  "automatic_failures": [
++    "任何 worker、工具或证据伪造、暗示或替代 H0 人工批准。",
++    "Phase 1 在未授权情况下被接受。",
++    "验证器删除、覆盖或静默修改仓库内容。",
++    "证据缺少 candidate SHA、baseline SHA、命令或退出码。",
++    "changed path 超出任务 write_scope。",
++    "judge 能看到实现 transcript、目标阈值或其他 judge 报告。",
++    "出现 secrets、凭据、用户数据或外部账户材料。",
++    "冻结 rubric 被未授权修改却未重新冻结、重新 hash 并重新请求 H0。"
++  ],
++  "mutation_policy": {
++    "frozen": true,
++    "allowed_without_refreeze": [
++      "无；冻结内容的任何语义变更都必须生成新版本。"
++    ],
++    "requires_refreeze_and_h0": [
++      "评分权重、阈值、必检项、自动失败条件、证据要求、human_gate 或 authority 字段的任何变更。"
++    ],
++    "positive_test": "原始 rubric 文件的 SHA-256 与 evidence 中 pinned hash 一致时通过。",
++    "negative_test": "临时篡改 rubric 后 SHA-256 不一致，验证器必须拒绝并报告 rubric_mutated。"
++  }
++}
+diff --git a/harness/rubrics/validate-rubric-freeze.mjs b/harness/rubrics/validate-rubric-freeze.mjs
+new file mode 100644
+index 0000000..91ad705
+--- /dev/null
++++ b/harness/rubrics/validate-rubric-freeze.mjs
+@@ -0,0 +1,82 @@
++import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
++import { createHash } from 'node:crypto';
++import { join } from 'node:path';
++import { tmpdir } from 'node:os';
++
++const root = new URL('../..', import.meta.url);
++const readJson = (path) => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
++const sha256Text = (text) => createHash('sha256').update(text).digest('hex');
++const sha256File = (path) => sha256Text(readFileSync(new URL(path, root), 'utf8'));
++const fail = (code, message) => { const error = new Error(message); error.code = code; throw error; };
++
++export function validateRubricSchema(rubric) {
++  if (rubric.schema_version !== '1.0') fail('rubric_schema', 'rubric schema_version 必须是 1.0');
++  if (rubric.rubric_id !== 'S0-freeze-v1' || rubric.slice !== 'S0') fail('rubric_schema', 'rubric id 或 slice 不匹配');
++  if (rubric.status !== 'frozen_pending_H0') fail('rubric_schema', 'rubric 必须冻结且等待 H0');
++  if (rubric.authority?.human_gate !== 'H0' || rubric.authority?.draft_is_authoritative !== false) fail('rubric_schema', 'H0 或草案权威声明错误');
++  const dimensions = rubric.scoring?.dimensions ?? [];
++  const total = dimensions.reduce((sum, item) => sum + item.weight, 0);
++  if (total !== 100) fail('rubric_schema', `rubric 权重总和必须为 100，实际为 ${total}`);
++  for (const item of dimensions) {
++    if (!item.id || !item.title || !Array.isArray(item.required_checks) || item.required_checks.length === 0) fail('rubric_schema', `维度 ${item.id ?? '<missing>'} 缺少必检项`);
++  }
++  if (!Array.isArray(rubric.automatic_failures) || !rubric.automatic_failures.some((item) => item.includes('H0'))) fail('rubric_schema', '自动失败条件必须包含 H0 防伪造规则');
++  if (rubric.mutation_policy?.frozen !== true) fail('rubric_schema', 'mutation policy 必须声明 frozen=true');
++  return true;
++}
++
++export function validateApprovalBinding(binding) {
++  if (binding.status !== 'waiting_human') fail('approval_binding', '没有真实 H0 receipt 时状态必须是 waiting_human');
++  if (binding.receipt !== null || binding.receipt_sha256 !== null) fail('approval_binding', '代理不得填入 H0 receipt 或 receipt hash');
++  if (!binding.binding_rule?.includes('真实人类')) fail('approval_binding', 'binding_rule 必须要求真实人类 receipt');
++  return true;
++}
++
++export function validateBundleHashes(evidence) {
++  const pinned = evidence.bundle_hashes;
++  for (const key of ['plan_sha256', 'execution_contract_sha256', 'validator_bundle_sha256', 'rubric_sha256', 'partition_bundle_sha256']) {
++    if (!/^[0-9a-f]{64}$/.test(pinned?.[key] ?? '')) fail('bundle_hashes', `${key} 缺少 SHA-256`);
++  }
++  const actual = {
++    plan_sha256: sha256File('PLAN.md'),
++    execution_contract_sha256: sha256File('docs/planning/dispatch/P0-T04.zh.md'),
++    validator_bundle_sha256: sha256Text([sha256File('scripts/validators/core.mjs'), sha256File('evidence/schema/validator-contract.schema.json')].join('\n')),
++    rubric_sha256: sha256File('harness/rubrics/S0.freeze.v1.json'),
++    partition_bundle_sha256: sha256File('integration/upstreams.lock.json')
++  };
++  for (const [key, value] of Object.entries(actual)) {
++    if (pinned[key] !== value) fail('bundle_hashes', `${key} 与当前文件不匹配`);
++  }
++  return true;
++}
++
++export function validateMutationPolicy(evidence) {
++  const rubricText = readFileSync(new URL('harness/rubrics/S0.freeze.v1.json', root), 'utf8');
++  const originalHash = sha256Text(rubricText);
++  if (originalHash !== evidence.bundle_hashes.rubric_sha256) fail('rubric_mutated', '原始 rubric hash 未匹配 pinned hash');
++  const tempDir = mkdtempSync(join(tmpdir(), 'co-rubric-mut-'));
++  try {
++    const mutatedPath = join(tempDir, 'S0.freeze.v1.json');
++    writeFileSync(mutatedPath, rubricText.replace('"pass_threshold": 90', '"pass_threshold": 89'));
++    const mutatedHash = sha256Text(readFileSync(mutatedPath, 'utf8'));
++    if (mutatedHash === evidence.bundle_hashes.rubric_sha256) fail('rubric_mutation_negative', '负向篡改测试未改变 hash');
++  } finally {
++    rmSync(tempDir, { recursive: true, force: true });
++  }
++  return true;
++}
++
++export function runAll() {
++  const rubric = readJson('harness/rubrics/S0.freeze.v1.json');
++  const binding = readJson('harness/approvals/H0.binding.json');
++  const evidence = readJson('evidence/slices/S0/rubric-freeze.json');
++  validateRubricSchema(rubric);
++  validateApprovalBinding(binding);
++  validateBundleHashes(evidence);
++  validateMutationPolicy(evidence);
++  return { pass: true, validators: ['rubric_schema', 'bundle_hashes', 'approval_binding', 'rubric_mutation_policy'] };
++}
++
++if (import.meta.url === `file://${process.argv[1]}`) {
++  console.log(JSON.stringify(runAll(), null, 2));
++}

@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "requires_known_good_digest": true,
+  "first_release_exception": "document explicit go/no-go",
+  "verification_after_rollback": [
+    "digest",
+    "health",
+    "version",
+    "business_smoke"
+  ],
+  "claim_ceiling": "L1"
+}

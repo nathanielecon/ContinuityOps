@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "stream_id": "S5",
+  "signal": "STREAM_COMPLETE",
+  "tasks": [
+    "P5-T01",
+    "P5-T02",
+    "P5-T03"
+  ],
+  "candidate_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "baseline_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "claim_level": "L1",
+  "remaining_boundaries": [
+    "See integrated-gate remaining_boundaries"
+  ],
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s5-gate-controller"
+  },
+  "notes": "S5 deterministic gates complete at L1."
+}
