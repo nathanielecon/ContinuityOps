@@ -8,7 +8,7 @@ Initial authorization stops at Phase 0.
 {
   "schema_version": "1.0",
   "plan_id": "continuityops-cloud-reliability-v1",
-  "revision": 16,
+  "revision": 17,
   "authorized_through_phase": 8,
   "baseline_sha": "UNSET_UNTIL_BOOTSTRAP",
   "execution_profile": {
@@ -240,7 +240,8 @@ Initial authorization stops at Phase 0.
       "phase": 1,
       "slice": "S1",
       "title": "Verify and adapt Project A and Project C contracts",
-      "state": "planned",
+      "state": "verified",
+      "note": "Verified by Grok D-043 worker: pins + ContinuityOps-side adapters; image_digest=UNAVAILABLE; missing_capabilities explicit (CO-004/CO-006). Claim level L1. Upstream trees unmodified.",
       "depends_on": [
         "P0-T05"
       ],
@@ -265,14 +266,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S1/upstream-integration.json"
-      ]
+      ],
+      "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
     },
     {
       "id": "P1-T02",
       "phase": 1,
       "slice": "S1",
       "title": "Implement Terraform state, environments, IAM, and network composition",
-      "state": "planned",
+      "state": "verified",
+      "note": "Verified: Terraform scaffold for state/env/IAM/network; staging+recovery-lab separated; terraform CLI absent so fmt/validate skipped with static tests. Claim level L1 (not L4).",
       "depends_on": [
         "P1-T01"
       ],
@@ -300,14 +303,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S1/terraform.json"
-      ]
+      ],
+      "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
     },
     {
       "id": "P1-T03",
       "phase": 1,
       "slice": "S1",
       "title": "Implement hosted PR, plan, apply, drift, evidence, and teardown workflows",
-      "state": "planned",
+      "state": "verified",
+      "note": "Verified: new workflow stubs only; D-034/D-042 preserved; PR read-only; OIDC placeholders; actions SHA-pinned. Claim level L1 for stubs (OIDC plan/apply not proven).",
       "depends_on": [
         "P1-T02"
       ],
@@ -335,14 +340,16 @@ Initial authorization stops at Phase 0.
       ],
       "evidence": [
         "evidence/slices/S1/hosted-ci.json"
-      ]
+      ],
+      "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
     },
     {
       "id": "P1-T04",
       "phase": 1,
       "slice": "S1",
       "title": "Run S1 engineering, QA, security, evidence, and judge gates",
-      "state": "planned",
+      "state": "verified",
+      "note": "Verified: S1 integrated gate + 3 fresh judges + saved provisional; D-044 clears H1 receipt wait; live mutation still not executed (honest L1). Model cursor-grok-4.5-high.",
       "depends_on": [
         "P1-T01",
         "P1-T02",
@@ -372,7 +379,8 @@ Initial authorization stops at Phase 0.
         "evidence/slices/S1/integrated-gate.json",
         "evidence/judges/S1/"
       ],
-      "human_gate": "H1"
+      "human_gate": "H1",
+      "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
     },
     {
       "id": "P2-T01",

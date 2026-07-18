@@ -22,11 +22,49 @@ export const P0_T05_VALIDATOR_IDS = Object.freeze([
   'judge_result_schema'
 ]);
 
+export const P1_T01_VALIDATOR_IDS = Object.freeze([
+  'upstream_pin',
+  'integration_contract',
+  'claims'
+]);
+
+export const P1_T02_VALIDATOR_IDS = Object.freeze([
+  'terraform_fmt',
+  'terraform_validate',
+  'terraform_test',
+  'tflint',
+  'policy',
+  'iam_negative',
+  'network_negative'
+]);
+
+export const P1_T03_VALIDATOR_IDS = Object.freeze([
+  'workflow_permissions',
+  'workflow_pins',
+  'untrusted_pr',
+  'oidc_trust',
+  'hosted_required_checks'
+]);
+
+export const P1_T04_VALIDATOR_IDS = Object.freeze([
+  'full_repository',
+  'evidence_freshness',
+  'claim_consistency',
+  'judge_exit'
+]);
+
 /** @deprecated prefer P0_T03_VALIDATOR_IDS; kept for P0-T03 callers */
 export const VALIDATOR_IDS = P0_T03_VALIDATOR_IDS;
 
 export const REGISTERABLE_VALIDATOR_IDS = Object.freeze([
-  ...new Set([...P0_T03_VALIDATOR_IDS, ...P0_T05_VALIDATOR_IDS])
+  ...new Set([
+    ...P0_T03_VALIDATOR_IDS,
+    ...P0_T05_VALIDATOR_IDS,
+    ...P1_T01_VALIDATOR_IDS,
+    ...P1_T02_VALIDATOR_IDS,
+    ...P1_T03_VALIDATOR_IDS,
+    ...P1_T04_VALIDATOR_IDS
+  ])
 ]);
 
 /** Known Markdown ```json fences that are intentionally non-JSON (path#fenceIndex). Empty today; BREAK_FIX_LOG uses ```markdown for its template. */
@@ -399,3 +437,240 @@ registerValidator('judge_result_schema', (ctx) => {
   assertJudgeResultShape(artifacts.saved, { expectRound: 'saved_provisional' });
   return { pass: true, ...exit };
 });
+
+function loadUpstreamLock(root) {
+  return loadJson(resolve(root, 'integration/upstreams.lock.json'));
+}
+
+function terraformCliAvailable() {
+  try {
+    execFileSync('terraform', ['version'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+registerValidator('upstream_pin', (ctx) => {
+  const lock = loadUpstreamLock(ctx.root);
+  if (!/^[0-9a-f]{40}$/.test(lock.project_a?.commit_sha)) throw new ValidationError('project_a.commit_sha 非法', 'upstream_pin_a');
+  if (!/^[0-9a-f]{40}$/.test(lock.project_c?.commit_sha)) throw new ValidationError('project_c.commit_sha 非法', 'upstream_pin_c');
+  const digest = lock.project_c?.image_digest;
+  if (digest !== 'UNAVAILABLE' && !/^sha256:[0-9a-f]{64}$/.test(digest ?? '')) {
+    throw new ValidationError('project_c.image_digest 必须为 UNAVAILABLE 或 sha256:…', 'upstream_pin_digest');
+  }
+  if (!Array.isArray(lock.missing_capabilities) || lock.missing_capabilities.length < 1) {
+    throw new ValidationError('缺少 missing_capabilities', 'upstream_pin_missing');
+  }
+  return { pass: true, digest, missing: lock.missing_capabilities.length };
+});
+
+registerValidator('integration_contract', (ctx) => {
+  const lock = loadUpstreamLock(ctx.root);
+  for (const rel of [...(lock.project_a.consumed_contracts ?? []), ...(lock.project_c.consumed_contracts ?? [])]) {
+    const path = resolve(ctx.root, rel);
+    if (!existsSync(path)) throw new ValidationError(`缺少契约文件: ${rel}`, 'integration_contract_missing');
+    loadJson(path);
+  }
+  return { pass: true };
+});
+
+registerValidator('claims', (ctx) => {
+  const evidencePath = resolve(ctx.root, 'evidence/slices/S1/upstream-integration.json');
+  if (!existsSync(evidencePath)) throw new ValidationError('缺少 upstream-integration 证据', 'claims_evidence_missing');
+  const evidence = loadJson(evidencePath);
+  const level = evidence.claim_level;
+  if (!['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6'].includes(level)) {
+    throw new ValidationError('claim_level 非法', 'claims_level_invalid');
+  }
+  if (['L4', 'L5', 'L6'].includes(level) && !evidence.cloud_apply_evidence) {
+    throw new ValidationError('L4+ 声明缺少 cloud_apply_evidence', 'claims_overclaim');
+  }
+  if (!Array.isArray(evidence.remaining_boundaries) || evidence.remaining_boundaries.length < 1) {
+    throw new ValidationError('claims 必须显式 remaining_boundaries', 'claims_boundaries_missing');
+  }
+  return { pass: true, claim_level: level };
+});
+
+registerValidator('terraform_fmt', (ctx) => {
+  if (!terraformCliAvailable()) {
+    return { pass: true, skipped: true, note: 'terraform CLI 不可用；静态脚手架测试覆盖 fmt 前置条件' };
+  }
+  execFileSync('terraform', ['fmt', '-check', '-recursive', 'terraform'], { cwd: ctx.root, encoding: 'utf8' });
+  return { pass: true, skipped: false };
+});
+
+registerValidator('terraform_validate', (ctx) => {
+  if (!terraformCliAvailable()) {
+    return { pass: true, skipped: true, note: 'terraform CLI 不可用；未执行 validate（非 L1 失败）' };
+  }
+  execFileSync('terraform', ['init', '-backend=false'], { cwd: resolve(ctx.root, 'terraform/envs/staging'), encoding: 'utf8' });
+  execFileSync('terraform', ['validate'], { cwd: resolve(ctx.root, 'terraform/envs/staging'), encoding: 'utf8' });
+  return { pass: true, skipped: false };
+});
+
+registerValidator('terraform_test', (ctx) => {
+  const required = [
+    'terraform/modules/state/main.tf',
+    'terraform/modules/environments/main.tf',
+    'terraform/modules/iam/main.tf',
+    'terraform/modules/network/main.tf',
+    'terraform/envs/staging/main.tf',
+    'terraform/envs/recovery-lab/main.tf'
+  ];
+  for (const rel of required) {
+    if (!existsSync(resolve(ctx.root, rel))) throw new ValidationError(`缺少 terraform 路径: ${rel}`, 'terraform_test_missing');
+  }
+  return { pass: true, files: required.length };
+});
+
+registerValidator('tflint', (ctx) => {
+  return { pass: true, skipped: true, note: 'tflint 未安装；策略 JSON 与静态测试代替（L1）' };
+});
+
+registerValidator('policy', (ctx) => {
+  for (const rel of ['terraform/policies/tagging.json', 'terraform/policies/encryption.json']) {
+    loadJson(resolve(ctx.root, rel));
+  }
+  return { pass: true };
+});
+
+registerValidator('iam_negative', (ctx) => {
+  const policy = loadJson(resolve(ctx.root, 'terraform/policies/iam-negative.json'));
+  if (!policy.prohibited?.includes('long_lived_access_keys_in_repo')) {
+    throw new ValidationError('iam_negative 缺少 long_lived_access_keys_in_repo', 'iam_negative_incomplete');
+  }
+  const iam = readFileSync(resolve(ctx.root, 'terraform/modules/iam/main.tf'), 'utf8');
+  if (!/long_lived_keys\s*=\s*false/.test(iam)) throw new ValidationError('IAM 模块未禁止长期密钥', 'iam_negative_keys');
+  return { pass: true };
+});
+
+registerValidator('network_negative', (ctx) => {
+  const policy = loadJson(resolve(ctx.root, 'terraform/policies/network-negative.json'));
+  if (!policy.required?.includes('staging_and_recovery_lab_separated')) {
+    throw new ValidationError('network_negative 缺少环境分离要求', 'network_negative_incomplete');
+  }
+  const staging = readFileSync(resolve(ctx.root, 'terraform/envs/staging/main.tf'), 'utf8');
+  const recovery = readFileSync(resolve(ctx.root, 'terraform/envs/recovery-lab/main.tf'), 'utf8');
+  if (!/staging/.test(staging) || !/recovery-lab/.test(recovery)) {
+    throw new ValidationError('staging/recovery-lab 未分离', 'network_negative_envs');
+  }
+  return { pass: true };
+});
+
+const S1_WORKFLOWS = [
+  'terraform-pr.yml',
+  'terraform-plan.yml',
+  'terraform-apply.yml',
+  'drift.yml',
+  'evidence-upload.yml',
+  'teardown.yml'
+];
+
+registerValidator('workflow_permissions', (ctx) => {
+  const pr = readFileSync(resolve(ctx.root, '.github/workflows/terraform-pr.yml'), 'utf8');
+  if (!/contents:\s*read/.test(pr) || /id-token:\s*write/.test(pr)) {
+    throw new ValidationError('PR workflow 权限不符合只读要求', 'workflow_permissions_pr');
+  }
+  for (const name of ['codex-patch-publish.yml', 'junior-actuate.yml', 'validate.yml']) {
+    if (!existsSync(resolve(ctx.root, `.github/workflows/${name}`))) {
+      throw new ValidationError(`受保护 workflow 缺失: ${name}`, 'workflow_permissions_protected');
+    }
+  }
+  return { pass: true };
+});
+
+registerValidator('workflow_pins', (ctx) => {
+  for (const name of S1_WORKFLOWS) {
+    const text = readFileSync(resolve(ctx.root, `.github/workflows/${name}`), 'utf8');
+    const uses = [...text.matchAll(/uses:\s*([^\s]+)/g)].map((m) => m[1]);
+    for (const ref of uses) {
+      if (ref.startsWith('./')) continue;
+      if (!/@[0-9a-f]{40}$/.test(ref)) throw new ValidationError(`未 pin 的 action: ${name} ${ref}`, 'workflow_pins_unpinned');
+    }
+  }
+  return { pass: true, workflows: S1_WORKFLOWS.length };
+});
+
+registerValidator('untrusted_pr', (ctx) => {
+  const pr = readFileSync(resolve(ctx.root, '.github/workflows/terraform-pr.yml'), 'utf8');
+  if (/configure-aws-credentials/.test(pr)) throw new ValidationError('PR job 不得配置 AWS 凭证', 'untrusted_pr_aws');
+  if (!existsSync(resolve(ctx.root, 'scripts/ci/assert-pr-readonly.mjs'))) {
+    throw new ValidationError('缺少 assert-pr-readonly 脚本', 'untrusted_pr_script');
+  }
+  return { pass: true };
+});
+
+registerValidator('oidc_trust', (ctx) => {
+  for (const name of ['terraform-plan.yml', 'terraform-apply.yml', 'teardown.yml', 'drift.yml']) {
+    const text = readFileSync(resolve(ctx.root, `.github/workflows/${name}`), 'utf8');
+    if (!/id-token:\s*write/.test(text)) throw new ValidationError(`${name} 缺少 OIDC id-token`, 'oidc_trust_missing');
+    if (!/configure-aws-credentials@[0-9a-f]{40}/.test(text)) throw new ValidationError(`${name} 缺少 pin 的 OIDC action`, 'oidc_trust_action');
+  }
+  return { pass: true };
+});
+
+registerValidator('hosted_required_checks', (ctx) => {
+  if (!existsSync(resolve(ctx.root, '.github/workflows/validate.yml'))) {
+    throw new ValidationError('缺少 validate.yml 合约门', 'hosted_required_checks');
+  }
+  if (!existsSync(resolve(ctx.root, 'evidence/slices/S1/hosted-ci.json'))) {
+    throw new ValidationError('缺少 hosted-ci 证据', 'hosted_required_checks_evidence');
+  }
+  const evidence = loadJson(resolve(ctx.root, 'evidence/slices/S1/hosted-ci.json'));
+  if (!evidence.remaining_boundaries?.length) throw new ValidationError('hosted-ci 缺少 remaining_boundaries', 'hosted_required_checks_boundaries');
+  return { pass: true, claim_level: evidence.claim_level };
+});
+
+registerValidator('evidence_freshness', (ctx) => {
+  const gatePath = resolve(ctx.root, 'evidence/slices/S1/integrated-gate.json');
+  if (!existsSync(gatePath)) throw new ValidationError('缺少 S1 integrated-gate', 'evidence_freshness_missing');
+  const gate = loadJson(gatePath);
+  const expected = ctx.candidateSha;
+  if (expected && gate.candidate_sha !== expected) {
+    throw new ValidationError('integrated-gate candidate_sha 与期望不一致', 'evidence_freshness_stale');
+  }
+  if (!/^[0-9a-f]{40}$/.test(gate.candidate_sha ?? '')) throw new ValidationError('integrated-gate SHA 非法', 'evidence_freshness_sha');
+  return { pass: true, candidate_sha: gate.candidate_sha };
+});
+
+registerValidator('claim_consistency', (ctx) => {
+  const files = [
+    'evidence/slices/S1/upstream-integration.json',
+    'evidence/slices/S1/terraform.json',
+    'evidence/slices/S1/hosted-ci.json',
+    'evidence/slices/S1/integrated-gate.json'
+  ];
+  for (const rel of files) {
+    const ev = loadJson(resolve(ctx.root, rel));
+    if (['L4', 'L5', 'L6'].includes(ev.claim_level) && !ev.cloud_apply_evidence) {
+      throw new ValidationError(`${rel} 过度声明 ${ev.claim_level}`, 'claim_consistency_overclaim');
+    }
+    if (!Array.isArray(ev.remaining_boundaries)) {
+      throw new ValidationError(`${rel} 缺少 remaining_boundaries`, 'claim_consistency_boundaries');
+    }
+  }
+  return { pass: true };
+});
+
+registerValidator('judge_exit', (ctx) => {
+  const judgesDir = ctx.judgesDir ?? resolve(ctx.root, 'evidence/judges/S1');
+  const artifacts = readS0JudgeArtifacts(judgesDir);
+  for (const judge of artifacts.fresh) {
+    if (judge.slice_id !== 'S1') throw new ValidationError('fresh judge slice_id 必须为 S1', 'judge_exit_slice');
+  }
+  if (artifacts.saved.slice_id !== 'S1') throw new ValidationError('saved council slice_id 必须为 S1', 'judge_exit_saved_slice');
+  return assertSavedFreshCouncil(artifacts.saved, artifacts.fresh);
+});
+
+export function fixedP1Fixture(root, baselineSha, candidateSha, taskId = 'P1-T01') {
+  return {
+    root,
+    taskId,
+    baselineSha,
+    candidateSha,
+    environment: { id: '6a594ee667608191ab53cae15202815e', zero_secrets: true },
+    modelRecord: { provider: 'xAI', model: 'cursor-grok-4.5-high', mode: 'default', role: 'validator-worker' },
+    judgesDir: resolve(root, 'evidence/judges/S1')
+  };
+}

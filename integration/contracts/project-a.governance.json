@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "project-a.governance",
+  "upstream": "project_a",
+  "pinned_sha": "f688065c7705ab7d3febcd9ec2842bea4d8bed87",
+  "status": "adapter_stub",
+  "claim_level_ceiling": "L1",
+  "exports": {
+    "naming_prefix": "continuityops",
+    "required_tags": ["Project", "Environment", "ManagedBy", "CostCenter"],
+    "audit_log_destination": "PLACEHOLDER_CLOUDTRAIL_OR_S3",
+    "policy_surface": ["tagging", "encryption_at_rest", "public_access_block"]
+  },
+  "missing": [
+    "Verified upstream governance policy export (MC-A-TREE)"
+  ],
+  "notes": "Governance expectations adapted into ContinuityOps terraform/policies stubs. Single-account lab only."
+}
