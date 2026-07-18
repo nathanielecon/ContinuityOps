@@ -65,10 +65,12 @@
     },
     {
       "id": "security-sbom",
-      "claim_level": "L1",
+      "claim_level": "L2",
       "evidence": [
-        "evidence/slices/S6/security.json"
-      ]
+        "evidence/slices/S6/security.json",
+        "evidence/hosted/security-sbom-2026-07-18.json"
+      ],
+      "notes": "Repository SBOM is generated reproducibly by scripts/security/generate-sbom.mjs with sha256 file inventory; vulnerability and live IAM claims remain below hosted/live level."
     },
     {
       "id": "azure-governance",
