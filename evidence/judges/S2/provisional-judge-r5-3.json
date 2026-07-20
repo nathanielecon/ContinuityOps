@@ -1,0 +1,290 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "saved_provisional",
+  "judge_id": "S2-PROVISIONAL-R5-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "candidate_sha=aa01454f8808c173deb43cc4b9b803287eec851e",
+        "rubric_sha256=f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "evidence_manifest_sha256=89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "parent-bind: 0606812354dae2e23356278f10f9b76b7ebd010b^ == candidate"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → exit 0",
+        "terraform fmt -check → exit 0",
+        "CANDIDATE_SHA=aa01454… validate P2-T04 → exit 0（L4+managed_cluster_apply）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "zero_secrets 环境记录",
+        "hosted 证据 non_claims 排除 CursorCloudAgent 凭据"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无 slice 级 critical/high 安全开放项记录"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "STREAM_COMPLETE/SUPERVISOR 将 designed/static L1、lab cloud-applied L4、managed_cluster_apply 缺口分开",
+        "历史组件 L1 notes 不构成 U5 失败（边界已诚实）"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "合成失败矩阵 + kubernetes_negative"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "elevation/staging/lab-drill 证据含 runs/时间/控制面；tip-bound 关联模型接受 apply SHA 偏移",
+        "BF-2026-024 后权威边界已刷新"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "评判未越权改 PLAN/门禁；仅新增本 R5 文件"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 连续记录 BF-2026-022…024"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "evidence": [
+        "docs/reviews/S2/engineering-qa-security.md Evidence 表与 Residual 仍否认 Managed EKS apply",
+        "integrated-gate remaining_boundaries 含 No EKS OIDC apply evidence，与同文件 cloud_apply_evidence 及 matrix L4 冲突"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "notes_zh 与 findings 使用简体中文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S2 单流证据命名空间 evidence/slices/S2/"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本 round=saved_provisional R5；不把历史 fresh-judge 当 tipbound 权威"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BF-2026-024 已入 BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "S2-M1",
+      "status": "pass",
+      "evidence": [
+        "immutable digest 静态契约（chart-contract）"
+      ]
+    },
+    {
+      "id": "S2-M2",
+      "status": "pass",
+      "evidence": [
+        "probes/resources/PDB/HPA 模板与测试路径"
+      ]
+    },
+    {
+      "id": "S2-M3",
+      "status": "pass",
+      "evidence": [
+        "RBAC/NetworkPolicy/非 root + 负向策略"
+      ]
+    },
+    {
+      "id": "S2-M4",
+      "status": "pass",
+      "evidence": [
+        "P2-T01 静态门全绿"
+      ]
+    },
+    {
+      "id": "S2-M5",
+      "status": "pass",
+      "evidence": [
+        "kind local-only 与 managed EKS lab 证据分离"
+      ]
+    },
+    {
+      "id": "S2-M6",
+      "status": "not_proven",
+      "evidence": [
+        "仅集群/控制面 lab apply；无候选 workload 运行时六元组",
+        "诚实保留 managed_cluster_apply → 判 not_proven 而非用集群 apply 冒充 pass"
+      ]
+    },
+    {
+      "id": "S2-M7",
+      "status": "pass",
+      "evidence": [
+        "CrashLoop/readiness/scheduling/DNS/network-denial 合成场景"
+      ]
+    },
+    {
+      "id": "S2-M8",
+      "status": "pass",
+      "evidence": [
+        "reset + recovery_smoke 契约"
+      ]
+    },
+    {
+      "id": "S2-M9",
+      "status": "pass",
+      "evidence": [
+        "Ingress/TLS 占位边界准确"
+      ]
+    },
+    {
+      "id": "S2-M10",
+      "status": "pass",
+      "evidence": [
+        "lab teardown 与成本/非生产含义已披露"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U10：文档与 integrated-gate 残留句与 tip-bound L4 lab apply 举证不一致。",
+    "S2-M6：托管 workload 运行时未证明（not_proven）。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 1.45,
+      "rationale": "契约正确但 S2-M6 缺口使托管完备性不足。",
+      "evidence": [
+        "evidence/slices/S2/runtime-evidence.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.3,
+      "rationale": "权限与非生产边界充分；无秘密暴露。",
+      "evidence": [
+        "docs/reviews/S2/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.15,
+      "rationale": "故障深度依赖合成矩阵，未上托管实注入。",
+      "evidence": [
+        "evidence/slices/S2/scenarios/matrix-evidence.json"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "要求的确定性命令均 exit 0。",
+      "evidence": [
+        "parent-bind+tests+tf+validate P2-T04"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 0.5,
+      "rationale": "运行时证据止于集群存在性，缺 workload 观测。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json#resources_proven_live"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.7,
+      "rationale": "STREAM 边界可用；评审 Residual 易误导。",
+      "evidence": [
+        "docs/reviews/S2/engineering-qa-security.md",
+        "evidence/slices/S2/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 0.65,
+      "rationale": "SUPERVISOR 已统一 L4/L4，但 U10 冲突仍在。",
+      "evidence": [
+        "evidence/slices/S2/integrated-gate.json",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.35,
+      "rationale": "多处残留文案增加后续误判风险。",
+      "evidence": [
+        "evidence/slices/S2/runtime/kind-preflight.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.4,
+      "rationale": "teardown/非生产表述现实。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "不得将集群级 L4 lab apply 写成完整 S2-M6 工作负载运行时证明",
+    "不得用旧 fresh-judge SHA 否决本 tipbound R5"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "和解 engineering-qa / kind-preflight / integrated-gate 对 EKS OIDC apply 的措辞",
+    "补齐或明确放弃 S2-M6 workload 运行时证据"
+  ],
+  "overall_score": 7.5,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "independent-provisional-judge"
+  },
+  "notes_zh": "独立 clean-room provisional R5 #3（S2-PROVISIONAL-R5-03）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=95e9c10 / rubric=f122c1d0d37f… / manifest=89642f65a7bc…。现场验证 parent-bind、node --test、terraform fmt、validate P2-T04 通过；L4+managed_cluster_apply 保留；副作用已丢弃（禁止 git clean）。未读既有分数。U5 pass；U10 fail；S2-M6 not_proven → provisional_pass=false、merge_ready=no。A3 未抬升 Azure。"
+}
