@@ -1,0 +1,200 @@
+{
+  "schema_version": "1.0",
+  "task_id": "NIX-TIPBOUND-AA01454-02",
+  "role": "nixer",
+  "status": "complete",
+  "path": "B",
+  "cohort": "new",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "baseline_sha": "6f3d362b21847d5931cc5c0f95769f607f515fa0",
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "deduped": true,
+  "claim_ceiling": {
+    "engagement": "A3",
+    "max_claim_level": "L4",
+    "scope_zh": "仅 AWS 隔离实验室 staging 的已托管 apply、演练与 teardown；不是生产，不含 Azure live apply。任务级 L1 合约证据不因组合后的实验室 L4 证据而被改写或冒充为任务级 live 验证。",
+    "azure_live": "out",
+    "raise_a3": false
+  },
+  "source_evidence": {
+    "requested_r3_paths": [
+      "evidence/judges/S0/provisional-judge-r3-1.json",
+      "evidence/judges/S0/provisional-judge-r3-2.json",
+      "evidence/judges/S0/provisional-judge-r3-3.json",
+      "evidence/judges/S2/provisional-judge-r3-1.json",
+      "evidence/judges/S2/provisional-judge-r3-2.json",
+      "evidence/judges/S2/provisional-judge-r3-3.json",
+      "evidence/judges/S3/provisional-judge-r3-1.json",
+      "evidence/judges/S3/provisional-judge-r3-2.json",
+      "evidence/judges/S3/provisional-judge-r3-3.json"
+    ],
+    "requested_r3_observation_zh": "候选树中未找到上述九个 r3 命名文件；现存同切片三人组为 fresh-judge-1/2/3，分别仍绑定 S0 的 5792a74… 与 S2/S3 的 1fd88ff…。该缺口作为 SHA 重绑问题的复现输入，不把缺失文件推断为通过。",
+    "reviewed_paths": [
+      "evidence/judges/S0/fresh-judge-1.json",
+      "evidence/judges/S0/fresh-judge-2.json",
+      "evidence/judges/S0/fresh-judge-3.json",
+      "evidence/judges/S2/fresh-judge-1.json",
+      "evidence/judges/S2/fresh-judge-2.json",
+      "evidence/judges/S2/fresh-judge-3.json",
+      "evidence/judges/S3/fresh-judge-1.json",
+      "evidence/judges/S3/fresh-judge-2.json",
+      "evidence/judges/S3/fresh-judge-3.json",
+      "evidence/slices/S0/rubric-freeze.json",
+      "evidence/slices/S0/integrated-gate.json",
+      "evidence/slices/S0/STREAM_COMPLETE-P0-T02.json",
+      "evidence/slices/S0/STREAM_COMPLETE-P0-T05.json",
+      "evidence/slices/S2/STREAM_COMPLETE.json",
+      "evidence/slices/S2/integrated-gate.json",
+      "evidence/slices/S2/SUPERVISOR_VERDICT.json",
+      "evidence/slices/S3/STREAM_COMPLETE.json",
+      "evidence/slices/S3/integrated-gate.json",
+      "evidence/slices/S3/SUPERVISOR_VERDICT.json",
+      "evidence/slices/S3/serverless.json",
+      "evidence/slices/S3/saas-operations.json",
+      "docs/claims/matrix.json",
+      "BREAK_FIX_LOG.md"
+    ]
+  },
+  "issue_ids": [
+    {
+      "id": "NIX-TIPBOUND-010",
+      "fail_class": "claim_level_L1_L4_conflict",
+      "summary_zh": "调和 S2/S3 任务门的 L1 与组合后 AWS 实验室 L4 声明，不提高 A3 或 Azure 声明。",
+      "finding_zh": "S2/S3 的 STREAM_COMPLETE 与 claims matrix 把有托管 apply 证据的限定实验室范围记为 L4，但 integrated-gate、SUPERVISOR_VERDICT 及任务级 serverless/SaaS 证据仍诚实记录 L1 静态、合约或单测边界。两层证据可以并存，但必须显式区分任务验证层与组合后的实验室运行层，并保留非生产、Azure 不在范围内及 teardown 边界。",
+      "reproduction_check": "node - <<'NODE'\nconst fs=require('fs'); for (const s of ['S2','S3']) { const sc=JSON.parse(fs.readFileSync(`evidence/slices/${s}/STREAM_COMPLETE.json`)); const gate=JSON.parse(fs.readFileSync(`evidence/slices/${s}/integrated-gate.json`)); const verdict=JSON.parse(fs.readFileSync(`evidence/slices/${s}/SUPERVISOR_VERDICT.json`)); if (!(sc.claim_level==='L4' && gate.claim_level==='L1' && verdict.claim_level==='L1')) throw new Error(`${s}: 未复现 L4/L1 分层冲突`); }\nNODE",
+      "failed_evidence_paths": [
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "evidence/slices/S2/integrated-gate.json",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "evidence/slices/S3/integrated-gate.json",
+        "evidence/slices/S3/SUPERVISOR_VERDICT.json",
+        "evidence/slices/S3/serverless.json",
+        "evidence/slices/S3/saas-operations.json",
+        "docs/claims/matrix.json"
+      ],
+      "recommended_write_scope": [
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "docs/claims/matrix.json",
+        "evidence/portfolio/tip-bind-*.json"
+      ],
+      "acceptance_zh": "所有 L4 文案仅指向可核验的 AWS lab apply/drill/teardown；任务门的 L1 含义保持不变；matrix 的 A3 ceilings 不增项、不升级，azure_live 继续为 out。"
+    },
+    {
+      "id": "NIX-TIPBOUND-011",
+      "fail_class": "stale_task_gate_sha",
+      "summary_zh": "把 S2/S3 的组合 tip 绑定刷新到 aa01454…，同时保留历史 slice_landed_sha。",
+      "finding_zh": "S2/S3 STREAM_COMPLETE 的 portfolio_tip_sha 与 candidate_sha 仍为 4674506…；任务 gate 与 SUPERVISOR_VERDICT 仍为 1fd88ff…，任务证据仍为 08433d7…。修复不得抹除这些切片落地事实，而应采用 slice_landed_sha（历史实现/任务证据）与 portfolio_tip_sha（当前组合候选）的双字段模型，并将候选绑定更新到 aa01454…。",
+      "reproduction_check": "node - <<'NODE'\nconst fs=require('fs'), tip='aa01454f8808c173deb43cc4b9b803287eec851e'; for (const s of ['S2','S3']) { const x=JSON.parse(fs.readFileSync(`evidence/slices/${s}/STREAM_COMPLETE.json`)); if (x.portfolio_tip_sha===tip && x.candidate_sha===tip) throw new Error(`${s}: 未复现 stale tip`); if (!x.slice_landed_sha) throw new Error(`${s}: 缺少 slice_landed_sha`); }\nNODE",
+      "failed_evidence_paths": [
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "evidence/slices/S2/integrated-gate.json",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "evidence/slices/S3/integrated-gate.json",
+        "evidence/slices/S3/SUPERVISOR_VERDICT.json",
+        "evidence/judges/S2/fresh-judge-1.json",
+        "evidence/judges/S2/fresh-judge-2.json",
+        "evidence/judges/S2/fresh-judge-3.json",
+        "evidence/judges/S3/fresh-judge-1.json",
+        "evidence/judges/S3/fresh-judge-2.json",
+        "evidence/judges/S3/fresh-judge-3.json"
+      ],
+      "recommended_write_scope": [
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "evidence/slices/S2/integrated-gate.json",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "evidence/slices/S3/integrated-gate.json",
+        "evidence/slices/S3/SUPERVISOR_VERDICT.json",
+        "evidence/portfolio/tip-bind-*.json"
+      ],
+      "acceptance_zh": "组合证据明确 portfolio_tip_sha=aa01454…；历史任务 SHA 仅作为 slice_landed_sha、implementation_sha 或 prior binding 保存；不得把未在 aa01454… 上重跑的任务门伪报成 candidate_sha_equals_head。"
+    },
+    {
+      "id": "NIX-TIPBOUND-012",
+      "fail_class": "s0_m7_freeze_bundle_stale",
+      "summary_zh": "刷新或重钉 S0-M7 freeze bundle，并同步 S0 候选绑定证据。",
+      "finding_zh": "当前执行 validate-rubric-freeze.mjs 以 bundle_hashes 失败，首先报告 plan_sha256 与当前 PLAN.md 不匹配；rubric-freeze 仍绑定 a195e74…，S0 integrated-gate 与三份 fresh judge 仍绑定 5792a74…。修复必须只刷新输入 bundle 的真实摘要与绑定元数据，不得更改冻结 rubric 的阈值、must-have 或通过标准。",
+      "reproduction_check": "node harness/rubrics/validate-rubric-freeze.mjs",
+      "expected_current_result_zh": "退出码非零，错误代码 bundle_hashes；至少 plan_sha256 与当前文件不匹配。",
+      "failed_evidence_paths": [
+        "evidence/slices/S0/rubric-freeze.json",
+        "evidence/slices/S0/integrated-gate.json",
+        "evidence/judges/S0/fresh-judge-1.json",
+        "evidence/judges/S0/fresh-judge-2.json",
+        "evidence/judges/S0/fresh-judge-3.json",
+        "harness/rubrics/S0.freeze.v1.json",
+        "PLAN.md"
+      ],
+      "recommended_write_scope": [
+        "evidence/slices/S0/rubric-freeze.json",
+        "evidence/slices/S0/integrated-gate.json",
+        "evidence/slices/S0/STREAM_COMPLETE-*.json",
+        "evidence/portfolio/tip-bind-*.json"
+      ],
+      "acceptance_zh": "freeze validator 在目标候选上退出 0；bundle 哈希逐项对应当前被钉文件；rubric_sha256 与冻结 rubric 内容一致且阈值不变；S0 证据区分历史 slice_landed_sha 与 aa01454… portfolio_tip_sha。"
+    }
+  ],
+  "completed": [
+    "读取并交叉核对 S0/S2/S3 现存三人 judge 证据、切片完成信号、门禁、监督裁决、S0 freeze 与 claims matrix。",
+    "将声明层级冲突、过期 SHA 与 S0-M7 bundle 漂移去重为三个可复现问题。",
+    "为每个问题限定推荐写范围与不提高 A3 的验收边界。"
+  ],
+  "modified_files": [
+    "evidence/portfolio/nixer-tipbound-aa01454-02.json"
+  ],
+  "validation_commands": [
+    "node -e \"JSON.parse(require('fs').readFileSync('evidence/portfolio/nixer-tipbound-aa01454-02.json','utf8'))\"",
+    "node harness/rubrics/validate-rubric-freeze.mjs",
+    "git diff --check"
+  ],
+  "validation_results": [
+    {
+      "command": "node -e \"JSON.parse(require('fs').readFileSync('evidence/portfolio/nixer-tipbound-aa01454-02.json','utf8'))\"",
+      "exit_code": 0,
+      "time": "2026-07-20T11:53:21Z",
+      "evidence_path": "/tmp/nixer-json-parse.txt",
+      "result_zh": "通过：JSON 可解析且三个去重 issue 均存在。"
+    },
+    {
+      "command": "node harness/rubrics/validate-rubric-freeze.mjs",
+      "exit_code": 1,
+      "time": "2026-07-20T11:53:21Z",
+      "evidence_path": "/tmp/nixer-rubric-freeze.txt",
+      "result_zh": "预期复现失败：bundle_hashes，plan_sha256 与当前文件不匹配；对应 NIX-TIPBOUND-012。"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "time": "2026-07-20T11:53:21Z",
+      "evidence_path": "/tmp/nixer-diff-check.txt",
+      "result_zh": "通过：无空白错误。"
+    }
+  ],
+  "failed_checks": [
+    {
+      "issue_id": "NIX-TIPBOUND-012",
+      "command": "node harness/rubrics/validate-rubric-freeze.mjs",
+      "exit_code": 1,
+      "time": "2026-07-20T11:53:21Z",
+      "evidence_path": "/tmp/nixer-rubric-freeze.txt",
+      "failure_zh": "bundle_hashes：plan_sha256 与当前文件不匹配。"
+    }
+  ],
+  "remaining_risks": [
+    "请求的九份 provisional-judge-r3 文件不在当前候选树中；不得把现存 fresh judge 别名当作新一轮 tip-bound judge 通过证明。",
+    "本 nixer 只定义修复问题，不授权 fixer 修改 rubric 阈值、提高 A3、扩大 Azure 范围或合并 main。",
+    "任何修复都会使旧候选绑定的验证与 judge 结果失效，必须在最终候选上重新完整验证并由 fresh independent judges 复核。"
+  ],
+  "evidence_paths": [
+    "evidence/portfolio/nixer-tipbound-aa01454-02.json"
+  ],
+  "recommended_next_step": [
+    "派遣范围互斥的 fixer 处理 NIX-TIPBOUND-010/011/012，并在 aa01454… 后继候选上重跑完整验证。",
+    "修复后派遣新的独立 judge cohort；不得复用本 nixer 或旧 judge 的通过结论。"
+  ],
+  "requires_escalation": false,
+  "context_remaining": "72%"
+}
