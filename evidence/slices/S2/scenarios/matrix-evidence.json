@@ -26,7 +26,9 @@
   "remaining_boundaries": [
     "Synthetic failure matrix only",
     "managed_cluster_apply",
-    "No live failure injection"
+    "No live failure injection",
+    "Component/task evidence remains L1 synthetic or local; portfolio STREAM_COMPLETE/integrated-gate carry A3-scoped L4 lab",
+    "slice_landed_sha may differ from portfolio_tip_sha / candidate_sha under candidate_sha_parent_of_tip"
   ],
   "started_at": "2026-07-18T06:17:17.268Z",
   "completed_at": "2026-07-18T06:17:17.277Z",
@@ -71,11 +73,14 @@
   "bind_model": "candidate_sha_parent_of_tip",
   "implementation_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "rebinding": {
-    "recorded_utc": "2026-07-20T11:16:00Z",
-    "reason": "NIX-TIPBOUND-002 / FIX-TIPBOUND-AA01454-01: rebind S2 evidence to tip-bound parent aa01454",
-    "prior_candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+    "recorded_utc": "2026-07-20T11:54:43Z",
+    "reason": "NIX-TIPBOUND-010/011 FIX-TIPBOUND-AA01454-02: tip-bound claim/SHA reconcile under A3",
+    "prior_candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+    "prior_claim_level": "L1",
     "issue_ids": [
-      "NIX-TIPBOUND-002"
+      "NIX-TIPBOUND-010",
+      "NIX-TIPBOUND-011"
     ]
-  }
+  },
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e"
 }
