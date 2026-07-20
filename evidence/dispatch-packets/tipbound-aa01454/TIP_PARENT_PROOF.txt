@@ -1,0 +1,7 @@
+tip_under_review: 0606812354dae2e23356278f10f9b76b7ebd010b
+candidate_sha: aa01454f8808c173deb43cc4b9b803287eec851e
+branch: candidate/portfolio-aa01454
+verified_utc: 2026-07-20T11:15:47Z
+fetch: git fetch origin candidate/portfolio-aa01454
+cat-file: commit
+rev-parse parent: aa01454f8808c173deb43cc4b9b803287eec851e
