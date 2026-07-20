@@ -1,0 +1,307 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S8",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r1-1",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "tree_sha": "9a834065ee08a358bae9549839e7af5abb0f929f",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ == aa01454f8808c173deb43cc4b9b803287eec851e（parent-of-tip）",
+        "HEAD/tree 9a834065ee08a358bae9549839e7af5abb0f929f（candidate/portfolio-aa01454 tipbound elevate）",
+        "sha256sum docs/planning/JUDGE_RUBRICS.md → f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "sha256sum docs/claims/matrix.json → 89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "integration/upstreams.lock.json 存在；S8 bind_model=candidate_sha_parent_of_tip；tip-proof-aa01454 交叉核验"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → 94/94 pass exit 0（~2026-07-20T13:49Z）",
+        "terraform fmt -check -recursive terraform → exit 0",
+        "CANDIDATE_SHA=aa01454… node scripts/project.mjs validate P8-T04 → exit 0（full_repository/full_security/hosted_required_checks/evidence_chain/claim_consistency/readme_recruiter_gate/judge_exit）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "integrated-gate environment.zero_secrets=true",
+        "P8-T04 full_security pass；S8 证据未见长寿凭证或密钥材料"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "docs/reviews/S8/engineering-qa-security.md：Portfolio L1/A3 边界；无 open critical/high",
+        "matrix non_claims + engagement_ceilings_A3 显式；未抬高 A3"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json 按组件分层（lab L4 / SBOM L2 / agentic L3 / upstream L2 / performance L1 / Azure L1 out）",
+        "STREAM_COMPLETE remaining_boundaries + tipbound_note_zh：A3 ceilings；Azure out；do not raise A3",
+        "hosted apply/drill 标注 tip-inherited，非每 tip 重放"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "P8-T04 full_security + claim_consistency fail-closed 路径经校验器证明",
+        "BREAK_FIX_LOG 记录 tip-bind/overclaim/fmt 等负向事件与修复；非生产破坏性路径未在本座执行"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "现场 validate 记录 command/exit/time；integrated-gate recorded_at≈2026-07-20T13:48Z 且 candidate_sha=aa01454…",
+        "cloud_apply_evidence 指向 staging apply + elevation + lab-drill-rto；副作用已 checkout 丢弃（未 git clean）"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "本 judge 仅写入 provisional-judge-r1-1.json；写范围未逸出 evidence/judges/S8/",
+        "禁止 git clean；validate 副作用已丢弃；未改实现或权威任务状态；未提高 A3"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 含 BF-2026-019 tip-proof、tip-bind、S8 gate elevate 等相关条目",
+        "切片边界内未见未记录阻断失败"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "README A3 天花板/非宣称与 matrix/evidence-index 一致",
+        "draw.io + png/svg + infographic 与 portfolio-delivery 叙事对齐"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本报告 notes_zh 与 must_have 自由文本为简体中文；对外 README/证据 JSON 键保持英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S8 为集成门禁分区 evidence/slices/S8/ + evidence/judges/S8/；tipbound 绑定 candidate=aa01454 parent-of tip；无跨流写冲突"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本文件 round=saved_provisional；与 tipbound-fresh / historical fresh 分轨；未打开旧分数文件"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 持续维护；本轮现场校验未见未入账阻断失败"
+      ]
+    },
+    {
+      "id": "S8-M1",
+      "status": "pass",
+      "evidence": [
+        "S0–S8 integrated-gate candidate_sha 均绑定 aa01454…；bind_model=candidate_sha_parent_of_tip",
+        "P8-T04 full_repository + evidence_chain + claim_consistency exit 0（最终集成 SHA 校验）"
+      ]
+    },
+    {
+      "id": "S8-M2",
+      "status": "pass",
+      "evidence": [
+        "evidence/manifests/append-only-events.json 保留历史 L1 gate 事件；docs/claims/matrix.json + docs/evidence-index.md 为 A3 摘要权威",
+        "elevation 路径由 tip-bind / CHIEF_VERDICT_PORTFOLIO_SCOPED_100_A3 / STREAM remaining_boundaries 解释；P8-T04 claim_consistency 绿——非无解释漂移"
+      ]
+    },
+    {
+      "id": "S8-M3",
+      "status": "pass",
+      "evidence": [
+        "现场 94 测 + tf fmt + P8-T04（含 hosted_required_checks）全绿",
+        "hosted apply/drill/teardown 证据路径在 integrated-gate.cloud_apply_evidence"
+      ]
+    },
+    {
+      "id": "S8-M4",
+      "status": "pass",
+      "evidence": [
+        "architecture/drawio/render、operator README、claims matrix、teardown dry-run 入口与 S8 gate 边界一致",
+        "成本/性能诚实 L1；Azure live out（D-046）——未抬 A3"
+      ]
+    },
+    {
+      "id": "S8-M5",
+      "status": "pass",
+      "evidence": [
+        "matrix 每行含 id/claim_level/evidence[]；portfolio-delivery 映射 S8 delivery + tip-bind + A3 chief verdict",
+        "engagement_ceilings_A3 与 non_claims 完整"
+      ]
+    },
+    {
+      "id": "S8-M6",
+      "status": "pass",
+      "evidence": [
+        "README/evidence-index 区分 synthetic、contract、hosted tip-inherited apply/drill、teardown dry-run vs live destroy 证据",
+        "STREAM remaining_boundaries 明确无 production drills / 无 known-good rollback / 无 in-pod AWS"
+      ]
+    },
+    {
+      "id": "S8-M7",
+      "status": "pass",
+      "evidence": [
+        "docs/operator/README.md 一命令本地检查；README Start here + docs/handoff/interview-walkthrough.md 可无聊天史随访",
+        "claims/evidence-index 可导航"
+      ]
+    },
+    {
+      "id": "S8-M8",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 含 tip-bind、parent-proof、fmt、overclaim、S8 elevate 等过程偏差与修复",
+        "tipbound_note_zh 披露 Emergency package C / A3 天花板"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.9,
+      "rationale": "集成门禁、claims、架构资产与 P8-T04 校验闭环完整；A3 边界清晰，未因缺 Azure/live perf 扣 must-have。",
+      "evidence": [
+        "evidence/slices/S8/integrated-gate.json",
+        "docs/claims/matrix.json",
+        "validate P8-T04 exit 0"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.42,
+      "rationale": "zero_secrets、full_security 绿；OIDC 控制面与非宣称一致；本座未扩大权限。",
+      "evidence": [
+        "integrated-gate full_security",
+        "matrix non_claims",
+        "engagement_ceilings_A3"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.38,
+      "rationale": "BF 日志与 tip-bind 修复充分；恢复宣称停在 lab/fixture，深度诚实略扣。",
+      "evidence": [
+        "BREAK_FIX_LOG.md BF-2026-019",
+        "lab-drill-rto hosted evidence",
+        "STREAM remaining_boundaries"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 0.97,
+      "rationale": "94 测与 P8-T04 确定性校验器稳定绿。",
+      "evidence": [
+        "node --test tests/ 94 pass",
+        "P8-T04 validators pass"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.88,
+      "rationale": "staging apply/drill 存在但 tip-inherited；非 aa01454 当日重放——live 维度保守。",
+      "evidence": [
+        "cloud-apply-staging-2026-07-18.json",
+        "README tip-inherited note",
+        "STREAM cloud_apply_evidence"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.94,
+      "rationale": "operator 入口与 recruiter/README 可操作；S8 评审文档偏薄略扣。",
+      "evidence": [
+        "docs/operator/README.md",
+        "README.md",
+        "docs/reviews/S8/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.94,
+      "rationale": "matrix/A3/README 一致；append-only 历史 L1 与摘要 L4 需读 elevation 路径，略扣。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/manifests/append-only-events.json",
+        "docs/evidence-index.md"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.48,
+      "rationale": "evidence-index + tipbound 包便于交接。",
+      "evidence": [
+        "docs/evidence-index.md",
+        "evidence/dispatch-packets/tipbound-aa01454/",
+        "STREAM_COMPLETE tipbound_note_zh"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.49,
+      "rationale": "性能诚实 L1；FinOps/teardown 在 lab 天花板内——现实主义高。",
+      "evidence": [
+        "matrix performance L1",
+        "engagement_ceilings_A3",
+        "finops-teardown L4 tip-inherited"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "不得将 tip-inherited hosted apply/drill 解释为 aa01454 当日重放的 live 证明",
+    "不得将 lab RTO/teardown 解释为生产客户演练或 ContinuityOps known-good rollback",
+    "不得抬高 A3：Azure live / performance>L1 / SBOM>L2 / agentic>L3 / upstream>L2",
+    "L4 仅限 AWS lab staging via continuityops-gha；非客户生产所有权"
+  ],
+  "security_findings": [
+    "无阻断项：zero_secrets、full_security 绿；未见密钥进入 S8 证据；未提高 A3"
+  ],
+  "improvements": [
+    "append-only-events 可追加 A3 elevation 事件以减少读者对历史 L1 的误读",
+    "docs/reviews/S8/engineering-qa-security.md 可扩写与 matrix 对齐的安全/QA 摘要",
+    "P8-T01/T02 任务级 evidence 仍标 slice_landed SHA——可显式加 tipbound 再绑定注释"
+  ],
+  "overall_score": 9.4,
+  "merge_ready": "provisional",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-tipbound-provisional-judge",
+    "role": "s8-tipbound-provisional-judge-01"
+  },
+  "notes_zh": "独立 clean-room tipbound provisional #1（S8 / Emergency package C）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=9a83406 / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf fmt、CANDIDATE_SHA validate P8-T04 均 exit 0；副作用 checkout 丢弃（未 git clean）。未读旧分数；未提高 A3。must_haves U1–U14+S8-M1–M8 全 pass；overall_score=9.40；merge_ready=provisional；provisional_pass=true。"
+}
