@@ -1,0 +1,299 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r4-2",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ == aa01454f8808c173deb43cc4b9b803287eec851e",
+        "rubric_sha256 与 JUDGE_RUBRICS.md 一致；evidence_manifest_sha256 与 docs/claims/matrix.json 一致"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "/tmp/s3-prov-r4/tests.txt：# pass 94 # fail 0",
+        "/tmp/s3-prov-r4/tf-fmt.txt：tf_fmt_exit=0",
+        "/tmp/s3-prov-r4/validate-p3t03.txt：validate_exit=0（serverless_runtime/dlq_runtime/full_repository/judge_exit）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "P3-T03 environment.zero_secrets=true",
+        "仓库 serverless/IAM 路径禁止 long_lived_keys"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "切片范围内无未关闭 critical/high；残留为 least-privilege 深度不足（非高危敞口）"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "gate/STREAM tip-bound L4 + cloud_apply_evidence（continuityops-gha 实验室 apply/teardown）",
+        "matrix.max_claim_scope 明确 AWS lab staging，非生产；Azure 组件保持 L1",
+        "worker-contract claim_ceiling=L1「No live AWS Lambda deploy」视为实现/组件边界，不否决已举证的 scoped lab L4"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "重复与 poison 负向路径有确定性测试；iam_negative 至少覆盖长期密钥禁止"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "evidence": [
+        "candidate_sha 已 tip-bound 到 aa01454…，但 SUPERVISOR_VERDICT.checks.claim_level_max 仍为 L1，与 claim_level=L4 并存，显示最后一次修复后证据内部字段未完全刷新",
+        "hosted apply 绑定 candidate_sha_apply=f059ffa…（历史实验室运行），依赖 tip-bound 引用而非本候选重跑"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "评判写范围限于 evidence/judges/S3/provisional-judge-r4-2.json"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 记录 tip-bound 修复与验证轨迹"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "evidence": [
+        "SUPERVISOR notes「honest L1; no live Lambda」与 claim_level=L4 / STREAM「scoped L4 lab apply evidenced」时态冲突",
+        "docs/reviews/S3/engineering-qa-security.md 表格写 Live AWS Lambda/SQS not claimed，与 matrix serverless-worker L4 冲突"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本报告中文；外部架构/README 路径保持英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S3 顺序门禁 P3-T01→P3-T02→P3-T03；无并行写冲突迹象"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "provisional 与 fresh 分离；本轮不替代 fresh council"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "声明漂移类失败已进入 break/fix 日志"
+      ]
+    },
+    {
+      "id": "S3-M1",
+      "status": "fail",
+      "evidence": [
+        "未见可复现的 Kubernetes 请求→队列→函数→结果相关链路执行；仅有 header/span 名称级合约",
+        "terraform Lambda handler 为 console.log stub，不传播 correlation_id/result"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "not_proven",
+      "evidence": [
+        "idempotency 已测；retry.backoff、queue.visibility_timeout_seconds、concurrency、timeouts.function_seconds 无行为断言"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "合成 DLQ：poison、alarm、approval replay 单测执行；回放手册存在",
+        "校验器注明非 live SQS——与组件 L1 一致"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "not_proven",
+      "evidence": [
+        "scripts/validators/core.mjs iam_negative 不检查函数策略动作集合；security/least-privilege.json 负向未绑定到 serverless 模块角色"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "租户隔离假设与 lifecycle/tenant-boundary 文档一致并通过单元校验"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "七阶段 SaaS 运营合约齐全（含 migration/suspension/export/deprovision）"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "severity-escalation.json 提供严重级别、所有权与升级路径"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "fail",
+      "evidence": [
+        "serverless 事件路径无 redact 调用；S3 切片未证明 payload/log 脱敏执行"
+      ]
+    },
+    {
+      "id": "S3-M9",
+      "status": "fail",
+      "evidence": [
+        "缺少 per-event/idle 成本与扩展限制的准确文字/证据；仅有 metric 名"
+      ]
+    },
+    {
+      "id": "S3-M10",
+      "status": "pass",
+      "evidence": [
+        "remaining_boundaries 明确非生产客户负载；SaaS 运营未越过实验室证据"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U10/U7：tip-bound L4 与 SUPERVISOR/手册「L1 / no live」叙述未闭合。",
+    "S3-M1 fail：端到端相关传播未执行。",
+    "S3-M8/S3-M9 fail：脱敏与成本上限未证明。",
+    "S3-M2/S3-M4 not_proven：运行时行为与 IAM 负向深度不足。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.1,
+      "rationale": "合约与单元路径完整度中等；端到端相关与多项 must-have 失败拉低。",
+      "evidence": [
+        "P3-T01..T03 校验通过",
+        "S3-M1 fail"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 0.9,
+      "rationale": "密钥与租户边界合格；函数权限负向偏浅，事件脱敏缺失。",
+      "evidence": [
+        "iam_negative",
+        "S3-M8 fail"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.1,
+      "rationale": "DLQ 合成路径较完整；live 回放复验与相关失败链路不足。",
+      "evidence": [
+        "dlq.test.mjs"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 0.6,
+      "rationale": "核心幂等/DLQ 测试在；合约数值行为覆盖面窄。",
+      "evidence": [
+        "tests/serverless/"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.8,
+      "rationale": "hosted elevation 证明实验室 Lambda/SQS 曾 apply 并 teardown；切片行为证据仍合成。",
+      "evidence": [
+        "cloud-apply-staging-elevation-2026-07-18.json resources_proven_live"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.7,
+      "rationale": "生命周期与升级可用；审查文档过时削弱可操作性。",
+      "evidence": [
+        "lifecycle.json",
+        "engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.4,
+      "rationale": "U5 分层可辨，但 SUPERVISOR 内部字段与审查文档破坏跨工件一致性。",
+      "evidence": [
+        "SUPERVISOR_VERDICT.json",
+        "matrix.json"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.3,
+      "rationale": "交接笔记与 tip-bound 声明不同步。",
+      "evidence": [
+        "SUPERVISOR notes"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.1,
+      "rationale": "成本/扩展描述缺失，S3-M9 失败。",
+      "evidence": [
+        "worker-contract.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "以「无 live Lambda」组件措辞否定 tip-bound 实验室 L4",
+    "把 SQS/Lambda 基础设施 apply 当作 SaaS 运营与相关传播已完整证明"
+  ],
+  "security_findings": [
+    {
+      "severity": "medium",
+      "finding": "事件/日志脱敏在 serverless 路径未证明，存在合成负载字段泄漏到日志的残余风险（实验室场景）。"
+    }
+  ],
+  "improvements": [
+    "修复 SUPERVISOR claim_level_max/notes 与 S3 review/playbook，使其与 A3 L4 lab 分层一致。",
+    "实现并测试跨 hop correlation_id；把 redact 接入 worker 日志路径。",
+    "补充成本与扩展上限说明；扩展 IAM 负向到函数角色动作。"
+  ],
+  "overall_score": 6.0,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-provisional-judge",
+    "role": "provisional-judge"
+  },
+  "notes_zh": "独立 clean-room provisional R4 #2（S3-PROVISIONAL-R4-02）。绑定 tip/candidate/rubric/manifest 与任务书一致；现场验证 parent-bind、94 测、tf fmt、P3-T03 validate 全绿并丢弃副作用。未读既有 judge 分数。U5 通过：区分未抬升 Azure/生产 vs 实验室 L4 已举证。U7 标 not_proven（SUPERVISOR 内部字段未刷净）；U10 与多项 S3 must-have 失败 → provisional_pass=false、merge_ready=no。"
+}
