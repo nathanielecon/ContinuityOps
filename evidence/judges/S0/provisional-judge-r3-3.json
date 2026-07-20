@@ -1,0 +1,348 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "saved_provisional",
+  "judge_id": "S0-PROVISIONAL-R3-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high-fast",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ → aa01454f8808c173deb43cc4b9b803287eec851e",
+        "harness/rubrics/S0.freeze.v1.json SHA-256=724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+        "docs/claims/matrix.json SHA-256=89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "integration/upstreams.lock.json 含 project_a/project_c 固定 commit_sha",
+        "harness/postbuild-partition-manifest.json SHA-256=54fd67f4f1b06a87ee7fb0d010e38b59fef8613341daa29b1f8cac0d0b125d1a"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → exit 0（94 pass / 0 fail，2026-07-20T11:26:09Z）",
+        "terraform fmt -check -recursive terraform → exit 0",
+        "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P0-T05 → exit 0；validators 全部通过后 git checkout -- 丢弃副作用"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S0/integrated-gate.json environment.zero_secrets=true",
+        "AGENTS.md / OPERATING_STATE.md 声明 Codex 环境 secrets=none；本座未引入长期凭据"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "S0 范围内未见未关闭的 critical/high 安全缺陷；secret_scan 与 forbidden_operations 校验器通过",
+        "H0 收据为人签署 GitHub 评论绑定，非代理铸造"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json 区分 claim 层级与 non_claims",
+        "S0 证据与 harness 验收保持设计/静态/夹具层级，未宣称 cloud-applied 或 recovery-tested"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "未知 validator ID fail-closed（scripts/validators/core.mjs validator_contract）",
+        "tests/harness/project.test.mjs 与 tests/harness/p0-t05.test.mjs：phase>authorized_through_phase 拒绝",
+        "harness/rubrics/validate-rubric-freeze.mjs：rubric_mutated 负向路径"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "本轮在 candidate aa01454 上重跑 node --test、terraform fmt、P0-T05 validate，命令/退出码/时间可复现",
+        "evidence/portfolio/tip-bind-2026-07-20.json 绑定 portfolio tip=aa01454 与 parent-of-tip 模型",
+        "历史 evidence/slices/S0/integrated-gate.json 仍记录实现提交 5792a74；本轮以 CANDIDATE_SHA 重验并通过后丢弃工作区改写"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "PLAN.md P0-T05 write_scope 限于 evidence/slices/S0/、evidence/judges/S0/、scripts/、tests/、harness/schemas/ 等",
+        "harness/approvals/H0.binding.json 绑定人类收据 issue #42 comment 5008633820",
+        "integration/upstreams.lock.json access_note：上游仓库未修改（D-028）"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 持续记录 BF-PRE-* 与 BF-2026-* 观察与修复",
+        "S0 相关授权/H0/编排断裂在 break/fix 日志中可追溯"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "OPERATING_STATE.md completed_gates 含 H0 与 S0-P0-T05；PLAN.md P0-T05 state=verified",
+        "docs/claims/matrix.json 与 S0 harness 证据时态一致，未把夹具证明写成托管云证明"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "scripts/validators/core.mjs worker_language / assertWorkerHandoffLanguage 强制简体中文自由文本",
+        "对外招聘向文档与代码注释保持英文；本裁决 notes_zh 与 rationale 为简体中文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "P0-T05 stream_isolation / harness_smoke：三条互不重叠 smoke streams 且各自顺序执行",
+        "tests/harness/project.test.mjs：integration queue 串行化候选合并"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "harness/schemas/judge-result.schema.json：round 区分 saved_provisional 与 fresh",
+        "scripts/validators/core.mjs saved_fresh_council：saved 必须 provisional_pass；fresh 禁止携带 saved 分数上下文",
+        "本文件 round=saved_provisional 且 merge_ready=provisional"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 在切片关闭前保留已观察失败条目",
+        "P0-T05 / S0 集成门证据链引用可复现校验命令与退出码"
+      ]
+    },
+    {
+      "id": "S0-M1",
+      "status": "pass",
+      "evidence": [
+        "harness/postbuild-partition-manifest.json 声明 partitions 与 shared_interfaces",
+        "stream_isolation 夹具要求互不重叠 writeScope"
+      ]
+    },
+    {
+      "id": "S0-M2",
+      "status": "pass",
+      "evidence": [
+        "scripts/project.mjs assertPhaseAuthorized / 生命周期推进受 PLAN 约束",
+        "tests/harness/project.test.mjs 覆盖授权与未授权相位"
+      ]
+    },
+    {
+      "id": "S0-M3",
+      "status": "pass",
+      "evidence": [
+        "OPERATING_STATE.md / PLAN.md authorized_through_phase=8；当前授权相位可验证",
+        "tests/harness/p0-t05.test.mjs：phase 9+ 任务被拒绝（D-044 N/N+1）"
+      ]
+    },
+    {
+      "id": "S0-M4",
+      "status": "pass",
+      "evidence": [
+        "registerValidator / getValidator：未知 ID 以 validator_unknown fail-closed",
+        "P0-T03/P0-T05 校验套件包含 validator_contract"
+      ]
+    },
+    {
+      "id": "S0-M5",
+      "status": "pass",
+      "evidence": [
+        "assertValidatorsReadOnly：校验器执行前后工作区 porcelain 不变",
+        "project.mjs validate 在校验后写入 evidence（设计行为）；本轮已 git checkout -- 丢弃副作用"
+      ]
+    },
+    {
+      "id": "S0-M6",
+      "status": "pass",
+      "evidence": [
+        "harness/approvals/H0.binding.json binding_rule：禁止代理/worker 铸造收据",
+        "agent_attestation 声明未铸造收据字段；receipt_source 指向人类签署评论"
+      ]
+    },
+    {
+      "id": "S0-M7",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S0/rubric-freeze.json bundle_hashes 绑定 plan/execution/validator/rubric/partition",
+        "H0.binding.json receipt 含 approved_rubric_sha256=724232f4… 与当时 partition 替代 pin；现行 rubric 文件哈希仍一致"
+      ]
+    },
+    {
+      "id": "S0-M8",
+      "status": "pass",
+      "evidence": [
+        "P0-T05 validate：stream_isolation、worker_replacement（fresh_grok/bottleneck）、bottleneck_dispatch 均 pass",
+        "acceptance_notes_zh：三流并发顺序、失败派遣与 bottleneck can_write=false"
+      ]
+    },
+    {
+      "id": "S0-M9",
+      "status": "pass",
+      "evidence": [
+        "harness/schemas/judge-result.schema.json 与 judge_result_schema 校验器",
+        "saved_fresh_council 隔离 saved/fresh；本 clean-room 评委未读取既有分数文件"
+      ]
+    },
+    {
+      "id": "S0-M10",
+      "status": "pass",
+      "evidence": [
+        "harness/approvals/H0.binding.json status=bound；receipt_sha256=2f44a0a9…",
+        "H0 环境 repo-only；S0 集成门未执行云调用"
+      ]
+    },
+    {
+      "id": "S0-M11",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md / OPERATING_STATE.md seats 记录 chief/junior/orch/reviewer/worker/monitor 模型角色",
+        "model_routing 与 worker_language、bottleneck_dispatch 校验器通过"
+      ]
+    },
+    {
+      "id": "S0-M12",
+      "status": "pass",
+      "evidence": [
+        "claude_proxy_profile 校验器要求 pxpipe-proxy@0.9.0、策略批准、凭据安全、可度量、直连回退",
+        "AGENTS.md 声明可选代理非保证倍率"
+      ]
+    },
+    {
+      "id": "S0-M13",
+      "status": "pass",
+      "evidence": [
+        "scripts/validators/core.mjs assertTypescriptPolicy：要求 typescript@7.0.2 与 strict",
+        "typescript_7 校验器在 P0-T03 契约套件中注册并通过"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.95,
+      "rationale": "S0 权威与 harness 必检项在 candidate aa01454 上可复现通过；tip 父提交绑定与 rubric/manifest 哈希一致。扣少量分因已提交 integrated-gate 仍记录历史实现 SHA 5792a74。",
+      "evidence": [
+        "git rev-parse tip^ = aa01454",
+        "P0-T05 validate exit 0",
+        "evidence/slices/S0/integrated-gate.json 历史 candidate_sha=5792a74"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "H0 人类收据绑定、相位授权边界、未知校验器 fail-closed、零密钥环境声明齐全，未见权威越权。",
+      "evidence": [
+        "harness/approvals/H0.binding.json",
+        "tests/harness/p0-t05.test.mjs",
+        "validator_contract / secret_scan"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "负向路径与 worker 替换/bottleneck 夹具充分；原子写与授权拒绝已测。未把全部 10/10 级 crash/resume/fresh-machine 深度视为已穷尽证明。",
+      "evidence": [
+        "worker_replacement / bottleneck_dispatch",
+        "scripts/project.mjs atomicWriteJson",
+        "rubric_mutated 负向测试"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "node --test 全量 94 项通过，且含 harness/P0-T05/校验器契约确定性用例。",
+      "evidence": [
+        "node --test tests/ exit 0（94 pass）",
+        "tests/validators/p0-t05.test.mjs",
+        "tests/harness/project.test.mjs"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.9,
+      "rationale": "S0 以仓库内夹具与 CLI 校验为主；本轮对 candidate 做了现场重验。非托管运行时证明，符合切片天花板。",
+      "evidence": [
+        "CANDIDATE_SHA=aa01454 … validate P0-T05 exit 0",
+        "evidence/slices/S0/harness.json",
+        "evidence/portfolio/tip-bind-2026-07-20.json"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "project CLI、校验器注册表与 tip-bind/parent-of-tip 操作路径清晰可排障；validate 会改写 evidence 需调用方显式丢弃副作用。",
+      "evidence": [
+        "scripts/project.mjs validate P0-T05",
+        "git checkout -- 丢弃副作用",
+        "OPERATING_STATE.md seats / gates"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.95,
+      "rationale": "rubric 与 claims matrix 哈希与指令一致；声明层级未越级。历史 S0 门证据 SHA 与 portfolio tip 不一致属可改进点，但不构成无依据云声称。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "harness/rubrics/S0.freeze.v1.json",
+        "evidence/slices/S0/STREAM_COMPLETE-P0-T05.json"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "交接 schema、简体中文协议与 model_record 字段完整，便于后续 fresh 评委与编排接棒。",
+      "evidence": [
+        "harness/schemas/judge-result.schema.json",
+        "AGENTS.md worker handoff schema",
+        "本文件 model_record / notes_zh"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "S0 成本面主要为本地确定性校验与可选代理说明；代理非保证倍率已写明。扣微量分因成本度量证据偏薄（符合切片性质）。",
+      "evidence": [
+        "AGENTS.md 可选 Claude proxy 说明",
+        "claude_proxy_profile 校验器",
+        "environment.zero_secrets / repo-only"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "若将历史 integrated-gate（candidate_sha=5792a74）直接等同为本 portfolio tip aa01454 的已提交门证据而未做 CANDIDATE_SHA 重验，则绑定不完整；本轮已现场重验并丢弃副作用。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "将已提交的 evidence/slices/S0/integrated-gate.json 与 STREAM_COMPLETE 中的 candidate_sha 显式对齐到 portfolio tip aa01454（或保留历史实现 SHA 并增加 tip-bind 交叉引用）。",
+    "在 S0 证据中注明 H0 时期 partition 替代 pin（upstreams.lock=52c4aefe…）已被后续上游锁演进与 postbuild-partition-manifest（54fd67f4…）接替。",
+    "validate P0-T05 改写 judge 绑定字段的行为应在运行手册中标注，避免评委误判为校验器非只读。"
+  ],
+  "overall_score": 9.6,
+  "merge_ready": "provisional",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high-fast",
+    "mode": "clean-room-provisional-judge",
+    "role": "provisional-judge-r3"
+  },
+  "notes_zh": "独立 clean-room provisional R3。已验证 tip 0606812 的父提交为 candidate aa01454；rubric_sha256 与 docs/claims/matrix.json（evidence_manifest）哈希与任务绑定一致。node --test、terraform fmt、P0-T05 validate 均 exit 0，并 git checkout -- 丢弃 validate 对 evidence 的改写。未读取任何 provisional/fresh/saved judge 分数文件。U1–U14 与 S0-M1–S0-M13 均 pass；merge_ready=provisional。"
+}
