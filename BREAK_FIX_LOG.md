@@ -651,3 +651,9 @@ ContinuityOps incidents yet.
 ## BF-2026-027 — tip-bind elevate S1/S4/S5 gates for next streams
 
 Elevate integrated-gate/SUPERVISOR to tip-bound A3 L4 lab + aa01454 SHA so P1-T04/P4/P5 validate and provisional councils can run under candidate_sha_parent_of_tip.
+
+## BF-2026-028 — tidy architecture figures after tipbound gates
+
+- Refresh `docs/architecture/continuityops-architecture.png` (image2) + tipbound-dated copy.
+- SVG agentic band labels aligned to chief/junior/zero-hop topology.
+- Evidence index + README tip-bind pointers to 2026-07-20 tipbound artifacts.

@@ -27,7 +27,7 @@ performance **L1**, Azure live **out** (D-046). See [`docs/claims/matrix.json`](
 | Operations / drills | Runbooks + lab incident drill (not production) | [S5](evidence/slices/S5/) · [drill](evidence/hosted/lab-drill-rto-29645042815.json) |
 | Security / Azure / agentic | SBOM L2 · Azure L1 (no live) · agentic L3 hosted-control | [S6](evidence/slices/S6/) |
 | Recovery / perf / FinOps | Lab RTO + teardown L4; performance honest L1 | [S7](evidence/slices/S7/) |
-| Portfolio gate | A3-scoped matrix + tip-bind + recruiter front | [S8](evidence/slices/S8/) · [tip-bind](evidence/portfolio/tip-bind-2026-07-18.json) |
+| Portfolio gate | A3-scoped matrix + tip-bind + recruiter front | [S8](evidence/slices/S8/) · [tip-bind](evidence/portfolio/tip-bind-2026-07-20.json) · [tipbound S0–S8](evidence/portfolio/tipbound-s0-s8-aa01454.json) |
 
 ## Explicit non-claims
 
