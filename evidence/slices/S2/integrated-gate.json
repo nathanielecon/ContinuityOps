@@ -24,11 +24,11 @@
   "claim_level": "L4",
   "remaining_boundaries": [
     "managed_cluster_apply",
-    "No EKS OIDC apply evidence",
     "Scoped AWS lab L4 via continuityops-gha (A3); not production",
     "Azure live out (D-046) — L1 design only",
     "Local kind paths remain L1 synthetic; portfolio tip elevates with cloud_apply_evidence",
-    "No Cursor in-pod AWS credentials"
+    "No Cursor in-pod AWS credentials",
+    "EKS OIDC/lab apply evidenced then destroyed (see cloud_apply_evidence); not production"
   ],
   "started_at": "2026-07-20T12:09:53.758Z",
   "completed_at": "2026-07-20T12:09:53.786Z",

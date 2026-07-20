@@ -46,5 +46,6 @@
     "slice_landed_sha_preserved": "5792a74f5c684b007a9057b89b6d9a24f359bc7f"
   },
   "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
-  "notes": "Tip-bound aa01454: portfolio_tip_sha=aa01454; evidence_manifest_path=docs/claims/matrix.json with sha256 89642f65…; validation_results refreshed to aa01454 tip-bound commands. Historical slice land 5792a74 retained only via rebinding.slice_landed_sha_preserved. Tipbound provisional authority is r4; prior saved/fresh council files are historical."
+  "notes": "Tip-bound aa01454: portfolio_tip_sha=aa01454; evidence_manifest_path=docs/claims/matrix.json with sha256 89642f65…; validation_results refreshed to aa01454 tip-bound commands. Historical slice land 5792a74 retained only via rebinding.slice_landed_sha_preserved. Tipbound provisional authority is r4; prior saved/fresh council files are historical.",
+  "h0_tipbound_note_zh": "H0 人类收据绑定历史 freeze digest；tip-bound aa01454 不重签 H0。S0-M10 以 harness/approvals/H0.binding.json + 当前 freeze 并存为证，digest 漂移属历史绑定而非本轮伪造。"
 }
