@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "saved_provisional",
+  "judge_id": "S2-PROVISIONAL-JUDGE-R2-02",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "S2-M1",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml",
+        "evidence/slices/S2/chart-contract.json"
+      ]
+    },
+    {
+      "id": "S2-M2",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/templates/deployment.yaml",
+        "kubernetes/chart/templates/pdb.yaml",
+        "kubernetes/chart/templates/hpa.yaml",
+        "tests/kubernetes/chart-contract.test.mjs"
+      ]
+    },
+    {
+      "id": "S2-M3",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/templates/rbac.yaml",
+        "kubernetes/chart/templates/networkpolicy.yaml",
+        "kubernetes/policies/security-context.json",
+        "security/admission-negative.json"
+      ]
+    },
+    {
+      "id": "S2-M4",
+      "status": "fail",
+      "evidence": [
+        "node --test tests/：2026-07-20T11:17:45Z 至 2026-07-20T11:17:52Z，退出码 0，94 项通过",
+        "terraform fmt -check -recursive terraform：2026-07-20T11:17:52Z，退出码 0",
+        "node scripts/project.mjs validate P2-T03：2026-07-20T11:17:52Z，退出码 2，错误为 evidence candidate_sha 与期望不一致；执行后工作树无变化"
+      ]
+    },
+    {
+      "id": "S2-M5",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/runtime/kind-preflight.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "S2-M6",
+      "status": "not_proven",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json 证明 EKS 基础设施创建与销毁，但未给出候选版本工作负载的摘要、健康、版本、身份、滚动和扩缩容运行时证据"
+      ]
+    },
+    {
+      "id": "S2-M7",
+      "status": "not_proven",
+      "evidence": [
+        "evidence/slices/S2/scenarios/crashloop-reset.json 仅为合成 CrashLoop 重置记录；未提供 readiness、调度/资源、DNS 与网络拒绝的可复现运行记录"
+      ]
+    },
+    {
+      "id": "S2-M8",
+      "status": "not_proven",
+      "evidence": [
+        "evidence/slices/S2/scenarios/crashloop-reset.json 记录预期恢复步骤，但未提供实际集群重置后业务行为复验输出"
+      ]
+    },
+    {
+      "id": "S2-M9",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/templates/ingress.yaml",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "S2-M10",
+      "status": "pass",
+      "evidence": [
+        "terraform/modules/eks/main.tf",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "docs/claims/matrix.json"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U1 父提交绑定无法在本容器证明：git fetch origin candidate/portfolio-aa01454 退出码 128（未配置 origin）；git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b 与 git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ 均退出码 128；指定的 tip-proof、tip-bind 与 D-028 包在当前工作树也不存在。依硬门槛 merge_ready=no。",
+    "P2-T03 只读验证退出码 2，报告证据 candidate_sha 与期望不一致；候选绑定证据未完成重绑。",
+    "S2-M6 至 S2-M8 缺少绑定到本候选的托管工作负载运行时与故障恢复实测证据。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "rubric_coverage",
+      "score": 6.5,
+      "rationale": "静态交付契约覆盖较完整，但托管运行时和故障矩阵的核心证明缺失。",
+      "evidence": [
+        "docs/planning/JUDGE_RUBRICS.md#S2",
+        "evidence/slices/S2/"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 3.0,
+      "rationale": "测试与格式检查通过，但父提交对象、D-028 交叉证明和 P2-T03 候选绑定均未成立。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S2/scenarios/matrix-evidence.json"
+      ]
+    },
+    {
+      "id": "operational_depth",
+      "score": 4.5,
+      "rationale": "已有 EKS 基础设施应用和销毁记录，但没有候选工作负载的扩缩容、滚动与完整故障恢复实测。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "evidence/slices/S2/scenarios/crashloop-reset.json"
+      ]
+    },
+    {
+      "id": "claim_discipline",
+      "score": 8.0,
+      "rationale": "AWS 实验室、非生产与 Azure live out 边界明确，未提高 A3 上限。",
+      "evidence": [
+        "docs/claims/matrix.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "不支持声称托管 EKS 上已验证候选工作负载的摘要、健康、版本、身份、滚动与扩缩容。",
+    "不支持声称完整故障矩阵已经在托管集群复现、重置并完成业务复验。",
+    "不支持生产或 Azure live 能力；A3 仍限定 AWS 实验室 L4、Azure live out。"
+  ],
+  "security_findings": [
+    "静态 RBAC、非 root 与网络策略契约存在，但缺少托管集群中的负向执行证据，因此不得提升对应运行时安全声明。"
+  ],
+  "improvements": [
+    "在可读取目标提交对象的环境中重新执行 U1，并提交可解析的 tip-proof、tip-bind 与 D-028 包。",
+    "将 P2-T03 matrix-evidence 重绑到 aa01454f8808c173deb43cc4b9b803287eec851e 后重新运行只读验证。",
+    "补充绑定候选摘要的托管工作负载健康、版本、身份、滚动、扩缩容及六类故障复现与重置后的业务复验证据。"
+  ],
+  "overall_score": 5.5,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-read-only-judge"
+  },
+  "notes_zh": "本轮按 clean-room 规则仅依据冻结 rubric、声明矩阵、S2 原始证据与允许的 tip 证明路径独立判断；未以旧 provisional/fresh 结论或分数为目标。当前检出为 aa01454f8808c173deb43cc4b9b803287eec851e；请求的 base_sha 与 tip 对象均不在本地对象库。"
+}

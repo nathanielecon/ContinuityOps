@@ -8,8 +8,8 @@
     "P8-T03",
     "P8-T04"
   ],
-  "candidate_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
-  "baseline_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "claim_level": "L4",
   "remaining_boundaries": [
     "Scoped 100% under A3 ceilings pending fresh council pass",
@@ -24,24 +24,20 @@
   },
   "notes": "S8 portfolio delivery at scoped L4 lab after tip-bind repair.",
   "slice_landed_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
-  "portfolio_tip_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "bind_model": "candidate_sha_parent_of_tip",
   "rebinding": {
-    "recorded_utc": "2026-07-18T18:58:15Z",
-    "reason": "Fixer after fresh council fail on c2e6610: exact tip bind + claim/boundary reconcile + deterministic green",
-    "prior_portfolio_tip_sha": "196bed4775128efbe193e028c722f13816a7f91b",
+    "recorded_utc": "2026-07-20T10:50:59Z",
+    "reason": "TIP-BIND-AA01454: tip-bound aa01454 / Emergency package C",
+    "prior_portfolio_tip_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
     "issue_ids": [
-      "NIX-PORTFOLIO-001",
-      "FJ2-001",
-      "FJ2-002",
-      "FJ2-003",
-      "FJ2-004"
-    ],
-    "post_squash_utc": "2026-07-18T19:41:21Z"
+      "TIP-BIND-AA01454"
+    ]
   },
   "cloud_apply_evidence": [
     "evidence/hosted/cloud-apply-staging-2026-07-18.json",
     "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
     "evidence/hosted/lab-drill-rto-29645042815.json"
-  ]
+  ],
+  "tipbound_note_zh": "Tip-bound aa01454 portfolio S8 last; A3 ceilings; Azure out; do not raise A3 gate."
 }

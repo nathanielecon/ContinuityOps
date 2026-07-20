@@ -3,7 +3,12 @@
   "verdict_type": "stream_boundary",
   "task_id": "S8",
   "slice": "S8",
-  "tasks": ["P8-T01", "P8-T02", "P8-T03", "P8-T04"],
+  "tasks": [
+    "P8-T01",
+    "P8-T02",
+    "P8-T03",
+    "P8-T04"
+  ],
   "decision": "approve",
   "d037_verdict": "pass",
   "reviewer": "cursor-cloud-chief-actuation",
@@ -14,11 +19,12 @@
     "role": "d037-independent-reviewer"
   },
   "at": "2026-07-18T06:35:00Z",
-  "claim_level": "L1",
+  "claim_level": "L4",
   "remaining_boundaries": [
     "Portfolio certified L1 only",
     "No L4+ live cloud",
     "D-044 waived H3-H6; placeholders retained"
   ],
-  "notes": "BF-PRE-015 S8. Final portfolio L1 certification; is_100_percent_as_specified=false without L4+."
+  "notes": "Tip-bound aa01454 S8 last; A3; Azure out; no A3 raise.",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e"
 }

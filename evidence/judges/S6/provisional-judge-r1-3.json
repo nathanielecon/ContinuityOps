@@ -1,0 +1,277 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S6",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r1-3",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "candidate_sha_parent_of_tip：0606812354dae2e23356278f10f9b76b7ebd010b^ = aa01454f8808c173deb43cc4b9b803287eec851e",
+        "tree=36ebb3d；rubric_sha256=f122c1d0…；manifest_sha256=89642f65… 现场 sha256sum 复核",
+        "tip-proof-aa01454.json 与 STREAM_COMPLETE rebinding TIP-BIND-AA01454 交叉核验"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → tests 94 / pass 94 / fail 0",
+        "terraform fmt -check -recursive + envs/staging validate exit 0",
+        "CANDIDATE_SHA validate P6-T04 exit 0（2026-07-20T13:41:50Z）；写回已丢弃"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "zero_secrets + secrets-policy 红线；SBOM 组件仅为路径/sha256 清单"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无 critical/high triage；U4 与 S6-M10 字面重叠处按 stub 诚实通过（M10 非本轮 must）"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "宣称分层：L3 tipbound 组合 ≠ security-sbom L2 ≠ Azure L1",
+        "SUPERVISOR_VERDICT remaining_boundaries：SBOM stub / Azure designed/static / H4 waived / No live mutation"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "负例覆盖 IAM、admission、Azure policy、prompt injection、forged evidence"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "现场命令+exit+时间+工具版本齐全；cloud_apply_evidence 路径绑定",
+        "read_only_proof 意图保留；实际副作用用 checkout 清理（禁 git clean）"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "仅新增 provisional-judge-r1-3.json；P6 写范围外未改"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG TIP-BIND 批次记录存在；本轮无新 break 未登"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "文档/证据/matrix 时态对齐：不把 L2 SBOM 写成 hosted scanner"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "notes_zh 简体中文；外部招聘向英文保持"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S6 内部顺序；judge 输出路径互不覆盖"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "tipbound provisional 与 historical fresh/saved 分轨；未读旧分数"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "失败入账规则满足；本轮验证无新增失败"
+      ]
+    },
+    {
+      "id": "S6-M1",
+      "status": "pass",
+      "evidence": [
+        "least-privilege roles + negative_cases；policy.test 解析 deny"
+      ]
+    },
+    {
+      "id": "S6-M2",
+      "status": "pass",
+      "evidence": [
+        "secrets-policy 管理/轮换/脱敏/禁入仓；证据无密钥"
+      ]
+    },
+    {
+      "id": "S6-M3",
+      "status": "pass",
+      "evidence": [
+        "可复现 SBOM 生成器测试通过；triage 不隐藏；claim 停 L2"
+      ]
+    },
+    {
+      "id": "S6-M4",
+      "status": "pass",
+      "evidence": [
+        "admission-negative + azure policy-negative / blocked_change_examples"
+      ]
+    },
+    {
+      "id": "S6-M5",
+      "status": "pass",
+      "evidence": [
+        "designed_static 显式；ExpressRoute/live Policy non-claims；D-046"
+      ]
+    },
+    {
+      "id": "S6-M6",
+      "status": "pass",
+      "evidence": [
+        "default_mutation_authority=false；hosted 控制面与 in-pod 凭据 non-claims"
+      ]
+    },
+    {
+      "id": "S6-M7",
+      "status": "pass",
+      "evidence": [
+        "human_gate + OIDC 短寿命路径；D-044 占位如实保留"
+      ]
+    },
+    {
+      "id": "S6-M8",
+      "status": "pass",
+      "evidence": [
+        "注入/伪造/不安全提案拒绝有单测与 validator_details"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.9,
+      "rationale": "M1–M8 证据闭环；S6-M9/M10 不在本轮 must_haves，亦未超额宣称。",
+      "evidence": [
+        "must_haves S6-M1–M8",
+        "JUDGE_RUBRICS.md S6 节"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.4,
+      "rationale": "权限与门控成立，但对 H4 waived / protected-environment placeholders 更保守扣分。",
+      "evidence": [
+        "workflow-contract human_gate.waived_receipt=D-044",
+        "SUPERVISOR_VERDICT H4 waived 边界"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "契约负例充分；缺 live 安全恢复深度，按 A3 天花板给分。",
+      "evidence": [
+        "admission-negative.json",
+        "agentic.json remaining_boundaries"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "确定性套件与 P6-T04 全绿，无摇摆。",
+      "evidence": [
+        "94/94 + P6-T04 exit 0"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.85,
+      "rationale": "hosted agentic/OIDC 可引用；security-sbom 明确非 live——runtime 维保守对齐诚实宣称。",
+      "evidence": [
+        "security-sbom-2026-07-18.json bomFormat=ContinuityOps-repository-sbom",
+        "matrix notes vulnerability remain below hosted/live"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "策略与脚本可运维；薄评审扣轻微。",
+      "evidence": [
+        "security/secrets-policy.json",
+        "docs/reviews/S6/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 1.0,
+      "rationale": "L3 tipbound 与 security-sbom L2 分层最干净；未抬 scanner/Azure live。",
+      "evidence": [
+        "STREAM_COMPLETE remaining_boundaries",
+        "docs/claims/matrix.json security-sbom=L2"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.45,
+      "rationale": "矩阵/STREAM 可交接，但工程评审几乎空白，handoff 略扣。",
+      "evidence": [
+        "docs/reviews/S6/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.5,
+      "rationale": "按非生产/非 FinOps 主切片计；designed 预算告警足够。",
+      "evidence": [
+        "azure/governance.json controls.cost"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "S6-M9/M10 本轮未列入 must_haves，亦未证明审计完备或零残留高危的 live 结论",
+    "不得将 tipbound L3 解释为 live cloud security proof",
+    "不得将仓库 SBOM 解释为完整依赖/镜像/IaC live 扫描矩阵"
+  ],
+  "security_findings": [
+    "无阻断项；残留风险限于声明天花板内的 stub/designed 深度"
+  ],
+  "improvements": [
+    "补齐 engineering-qa-security 评审正文",
+    "后续可选纳入 S6-M9 审计轨迹 fixture（仍保持 claim 分层）",
+    "对齐 workflow-contract claim_ceiling 与 matrix agentic L3"
+  ],
+  "overall_score": 9.45,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-tipbound-provisional-judge",
+    "role": "s6-tipbound-provisional-judge-03"
+  },
+  "notes_zh": "独立 clean-room tipbound provisional R1 #3（S6）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=36ebb3d / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf、P6-T04 均 exit 0；未 git clean；未读旧分数。对 H4 占位与薄评审更保守，对宣称完整性给满。诚实 L3 tipbound + security-sbom L2。U1–U14+S6-M1–M8 全 pass；merge_ready=yes；overall_score=9.45；provisional_pass=true。"
+}

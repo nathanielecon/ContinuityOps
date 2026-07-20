@@ -1,0 +1,303 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "fresh",
+  "judge_id": "S2-TIPBOUND-FRESH-01",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "tip=0606812354dae2e23356278f10f9b76b7ebd010b；git rev-parse tip^=aa01454f8808c173deb43cc4b9b803287eec851e（parent-bind OK）",
+        "tree HEAD=7a8beca1e678f41285bd402b13eb859eeb87549c",
+        "sha256sum docs/planning/JUDGE_RUBRICS.md → f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "sha256sum docs/claims/matrix.json → 89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "/tmp/s2-fresh-judge/parent-bind.log"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → 94/94 pass（/tmp/s2-fresh-judge/tests.log）",
+        "terraform fmt -check -recursive terraform/ exit 0",
+        "CANDIDATE_SHA=aa01454… node scripts/project.mjs validate P2-T04 exit 0；副作用经 git checkout -- 丢弃（未 git clean）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/* environment.zero_secrets=true",
+        "仓库无长寿命集群凭证；workload identity 为注解占位"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "ISSUES.md / S2 SUPERVISOR issue_ids 无未关闭 critical/high 安全项"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "分层：组件 L1 合成（chart/runtime/scenarios）vs 组合 tip-bound A3 L4 lab（continuityops-gha）",
+        "STREAM_COMPLETE/SUPERVISOR remaining_boundaries 明示非生产、Azure out、managed_cluster_apply"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json + evidence/slices/S2/scenarios/*",
+        "P2-T03 scenario_schema/reset/recovery_smoke 契约通过"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "门禁/STREAM_COMPLETE/SUPERVISOR 已 tip-bound 重绑 aa01454，含 cloud_apply_evidence 与时间戳",
+        "本席现场验证日志：/tmp/s2-fresh-judge/{parent-bind,tests,tf-fmt,validate-p2-t04}.log"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "评判只写 evidence/judges/S2/tipbound-fresh-judge-1.json；未改实现分区",
+        "validate 改写已 checkout 丢弃"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 含 BF-2026-022/023/024/025（S2 tip-bound / managed_cluster_apply / validate 副作用）"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "权威 tip-bound 工件（integrated-gate / STREAM_COMPLETE / SUPERVISOR / matrix）一致为 A3 scoped lab L4",
+        "gate 无「No EKS OIDC apply evidence」；组件可保留 L1 合成标签（tip-bound 诚实分层）",
+        "docs/reviews/S2 历史表滞后列为改进，不构成权威叙述矛盾"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本席 notes_zh 与 must-have 自由文本为简体中文；对外工件保持英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S2 分区 kubernetes/** + evidence/slices/S2/**；本席只读评判、无跨流合并"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本文件为 tip-bound fresh；与 historical fresh-judge-* / saved-council / provisional-r* 分离"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "观察到的 tip-bound/validate 改写类已在 BREAK_FIX_LOG 落账（BF-2026-023 等）"
+      ]
+    },
+    {
+      "id": "S2-M1",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/policies/digest-pin.json + values.yaml image.digest",
+        "tests/kubernetes/chart-contract.test.mjs"
+      ]
+    },
+    {
+      "id": "S2-M2",
+      "status": "pass",
+      "evidence": [
+        "templates: deployment probes/resources、pdb、hpa；values 拓扑相关字段",
+        "chart-contract 校验覆盖"
+      ]
+    },
+    {
+      "id": "S2-M3",
+      "status": "pass",
+      "evidence": [
+        "rbac/serviceaccount/networkpolicy + policies/security-context.json + network-negative.json",
+        "runAsNonRoot / drop capabilities 在 values"
+      ]
+    },
+    {
+      "id": "S2-M4",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/chart-contract.json validators 全过（helm CLI 缺席时静态契约代替并标注）"
+      ]
+    },
+    {
+      "id": "S2-M5",
+      "status": "pass",
+      "evidence": [
+        "kind-preflight label=local-only / L1；组合门禁 L4 lab + cloud_apply_evidence 分离"
+      ]
+    },
+    {
+      "id": "S2-M6",
+      "status": "pass",
+      "evidence": [
+        "STREAM_COMPLETE.s2_m6_tipbound_note_zh：以 lab elevation/cloud_apply_evidence 为界",
+        "managed_cluster_apply 保留；EKS cops-staging apply 29644662492 + teardown 29645052414",
+        "无生产 workload 捕获 → tip-bound 下 must-have pass（不自动 fail）"
+      ]
+    },
+    {
+      "id": "S2-M7",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/scenarios/{crashloop,readiness,scheduling,dns,network-policy,resource,failure-matrix}.json"
+      ]
+    },
+    {
+      "id": "S2-M8",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/scenarios/crashloop-reset.json + scripts/kubernetes/reset-scenario.mjs",
+        "P2-T03 scenario_reset / recovery_smoke"
+      ]
+    },
+    {
+      "id": "S2-M9",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/templates/ingress.yaml 含 tls/hosts/paths 边界"
+      ]
+    },
+    {
+      "id": "S2-M10",
+      "status": "pass",
+      "evidence": [
+        "cloud-apply-staging-elevation-2026-07-18.json#runs.teardown_staging（29645052414）",
+        "非生产 lab 成本/销毁边界在 remaining_boundaries 明示"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 1.95,
+      "rationale": "Helm 工作负载契约与四任务门禁在候选上闭合；托管工作负载 live 运行时未捕获，但不否定 tip-bound lab 集群证明。",
+      "evidence": [
+        "kubernetes/chart/**",
+        "evidence/slices/S2/integrated-gate.json",
+        "evidence/slices/S2/chart-contract.json"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.45,
+      "rationale": "digest 钉扎、非 root、NetworkPolicy 与负向策略齐备；无仓库内长寿命集群凭证。",
+      "evidence": [
+        "kubernetes/policies/*.json",
+        "kubernetes/chart/values.yaml",
+        "kubernetes/chart/templates/rbac.yaml"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "失败矩阵与 reset/业务检查契约完整；仅合成注入，无 live failure injection。",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json",
+        "evidence/slices/S2/scenarios/crashloop-reset.json"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "现场 94/94 测试与 chart/scenario 契约测试稳定复现。",
+      "evidence": [
+        "/tmp/s2-fresh-judge/tests.log",
+        "tests/kubernetes/"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 0.9,
+      "rationale": "lab EKS 资源级 apply/teardown 证据扎实；候选绑定托管 workload digest/health/rollout 运行时按 tip-bound 说明封顶。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "evidence/slices/S2/runtime/kind-preflight.json"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "渲染/预检/reset 脚本与压力矩阵文档可操作；helm/kind 缺席路径已标注。",
+      "evidence": [
+        "scripts/kubernetes/",
+        "operations/incidents/kubernetes/failure-matrix.md"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 1.0,
+      "rationale": "parent-bind、rubric/manifest 哈希、tip-bound L4 与组件 L1 分层一致；hosted apply SHA≠aa01454 已明示可接受。",
+      "evidence": [
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "docs/claims/matrix.json",
+        "/tmp/s2-fresh-judge/parent-bind.log"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.5,
+      "rationale": "SUPERVISOR/STREAM_COMPLETE tip-bound 字段齐全，handoff 可脱离聊天复现。",
+      "evidence": [
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.5,
+      "rationale": "staging teardown 与非生产边界明确；无夸大持续运行成本。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json#runs.teardown_staging"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "候选 SHA 上托管 workload digest/health/rollout/scaling 的持续 live 捕获（未宣称）",
+    "生产级 EKS / Azure live（A3/D-046 边界外）"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "刷新 docs/reviews/S2 证据表以匹配 tip-bound L4 lab + managed_cluster_apply",
+    "对齐 project.mjs P2-T04 默认边界文案与 tip-bound gate，减少 validate 改写摩擦"
+  ],
+  "overall_score": 9.65,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s2-tipbound-fresh-judge-01"
+  },
+  "notes_zh": "独立 tip-bound fresh #1（S2）。绑定 tip=0606812 / candidate=aa01454（parent-of-tip）/ tree=7a8beca / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf fmt、CANDIDATE_SHA validate P2-T04 全绿；validate 曾改写 gate 为 L1+旧串，已 git checkout -- 丢弃（未 git clean）。未读旧分。U10 按 tip-bound 权威工件 L4 lab + 组件 L1 分层判 pass；S2-M6 按 s2_m6_tipbound_note_zh 以 lab elevation 为界 + managed_cluster_apply → pass。must_haves 全过；overall_score=9.65；merge_ready=yes。"
+}

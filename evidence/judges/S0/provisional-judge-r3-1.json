@@ -1,0 +1,339 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "saved_provisional",
+  "judge_id": "S0-PROVISIONAL-R3-01",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "not_proven",
+      "evidence": [
+        "已核验 tip_under_review=0606812354dae2e23356278f10f9b76b7ebd010b 为 commit，且 parent 等于 candidate_sha=aa01454f8808c173deb43cc4b9b803287eec851e（bind_model=candidate_sha_parent_of_tip）。",
+        "冻结 rubric SHA-256 与 harness/rubrics/S0.freeze.v1.json 一致（724232f…）；evidence_manifest 与 docs/claims/matrix.json 一致（89642f…）。",
+        "但 evidence/slices/S0/rubric-freeze.json 中 plan_sha256、validator_bundle_sha256、partition_bundle_sha256 与 tip 候选树上当前文件不一致，故无法证明全部分区/上游 pin 哈希在候选上仍一致。"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "在 CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e 下执行 node scripts/project.mjs validate P0-T05，exit_code=0，全部 P0-T05 校验器通过。",
+        "node --test tests/：94 通过、0 失败；terraform fmt -check -recursive terraform：exit_code=0。校验后 git checkout -- 丢弃副作用。"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "P0-T05 校验环境记录 zero_secrets=true；S0 切片与 H0 绑定证据未观察到长效凭据或密钥材料。",
+        "claims matrix 明确非声明：Cloud 座位无 CursorCloudAgent/in-pod AWS 凭据，OIDC 控制面按设计。"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "S0 为治理/编排底座；未见影响本切片的未关闭 critical/high 安全缺陷证据。",
+        "A3 天花板保留：Azure live 出局、非生产；matrix.max_claim_scope 限定 AWS lab staging。"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json 区分组件声明级别（如 azure-governance=L1、agentic-workflow=L3、lab 栈最高 L4），并列出 non_claims。",
+        "S0 集成门证据描述 harness/夹具级证明，未把本地校验抬升为生产或 Azure live。"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "validator-contract.json 记录未知 validator fail-closed、陈旧 SHA、非简体中文 handoff、越权路径等负向用例。",
+        "P0-T05 测试覆盖重叠写范围拒绝、saved council 不得 merge_ready=yes、fresh 不得携带 saved_scores。"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "evidence": [
+        "tip-proof/tip-bind（2026-07-20）对 tip/parent 绑定新鲜且可复现。",
+        "但提交内 evidence/slices/S0/integrated-gate.json 与 STREAM_COMPLETE-P0-T05.json 的 candidate_sha 仍为历史实现 5792a74…（虽为 aa01454 祖先），本轮现场校验结果未固化为候选绑定证据清单，故不能完全证明“最后一次修复后的候选绑定证据已刷新”。"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "H0.binding.json status=bound，agent_minted_receipt=false，收据指向真实 issue comment。",
+        "harness/postbuild-partition-manifest.json 提供分区 owner；stream_isolation 夹具拒绝写范围重叠。"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 含 BF-2026-007（plan_sha256 漂移）与 tip 绑定相关 BF-2026-019 等记录。",
+        "rubric-freeze 证据也记录已知合约解析/分区清单限制等剩余风险。"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "OPERATING_STATE/PLAN 与 S0 STREAM_COMPLETE、claims matrix 在“非生产、Azure 非 live、S0 为 harness 底座”表述上一致。",
+        "未发现把 S0 夹具结果写成生产运行时证明的文档冲突。"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "validator-contract 含 worker_language 通过；夹具负向拒绝非简体中文 handoff。",
+        "对外招聘向文档保持英文，符合语言协议。"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "integrated-gate / P0-T05：stream_isolation 与三流互不重叠夹具通过，流内顺序执行。",
+        "worker_replacement 演示 fresh_grok 与同会话 bottleneck（can_write=false）。"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "saved_fresh_council 与 judge_result_schema 校验通过；测试断言 saved 仅 provisional、fresh 不得泄漏 saved 分数。",
+        "本法官未读取任何 provisional-judge*/fresh-judge*/saved-council* 分数文件。"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "观察到的 plan hash 漂移与 tip 绑定问题已在 BREAK_FIX_LOG 与 tip-proof/nixer 包中留痕。",
+        "本轮复现 validate-rubric-freeze 失败，归类为既有漂移类问题，未隐瞒。"
+      ]
+    },
+    {
+      "id": "S0-M1",
+      "status": "pass",
+      "evidence": [
+        "harness/postbuild-partition-manifest.json 为分区提供唯一 id/owner/paths。",
+        "缺少 harness/partition-manifest.json 已在 rubric-freeze 中明示，并以 integration/upstreams.lock.json 作为上游 pin 输入。"
+      ]
+    },
+    {
+      "id": "S0-M2",
+      "status": "pass",
+      "evidence": [
+        "P0-T05 harness_smoke 通过：授权边界与生命周期夹具生效。",
+        "历史 harness.json（P0-T02）记录 authorization_boundary / state_reconciliation 通过。"
+      ]
+    },
+    {
+      "id": "S0-M3",
+      "status": "pass",
+      "evidence": [
+        "acceptance_notes 与 OPERATING_STATE：authorized_through_phase=8，phase 9+ 拒绝（D-044）。",
+        "harness_smoke 备注授权 N/N+1 夹具通过。"
+      ]
+    },
+    {
+      "id": "S0-M4",
+      "status": "pass",
+      "evidence": [
+        "测试：未知 validator ID 抛 ValidationError code=validator_unknown。",
+        "validator-contract.json：unknown_validator_fail_closed=true。"
+      ]
+    },
+    {
+      "id": "S0-M5",
+      "status": "pass",
+      "evidence": [
+        "P0-T05 输出 read_only_proof：校验前后 git status porcelain 不变。",
+        "mutation_isolation / forbidden_operations 在 P0-T03 证据中通过。"
+      ]
+    },
+    {
+      "id": "S0-M6",
+      "status": "pass",
+      "evidence": [
+        "H0 绑定规则明确禁止代理铸造收据；binding.agent_attestation 声明未铸造。",
+        "bottleneck can_write=false，不得扩大权限。"
+      ]
+    },
+    {
+      "id": "S0-M7",
+      "status": "fail",
+      "evidence": [
+        "在 tip 候选工作区执行 node harness/rubrics/validate-rubric-freeze.mjs 失败：plan_sha256 / validator_bundle_sha256 / partition_bundle_sha256 与 evidence/slices/S0/rubric-freeze.json 钉扎值不匹配。",
+        "rubric_sha256 与 execution_contract_sha256 仍匹配；H0 收据仍绑定冻结 rubric 724232f…，但无法证明五类 bundle 哈希在 aa01454 上同时一致。"
+      ]
+    },
+    {
+      "id": "S0-M8",
+      "status": "pass",
+      "evidence": [
+        "stream_isolation、worker_replacement、bottleneck_dispatch 在 CANDIDATE_SHA=aa01454 的 P0-T05 中均为 true。",
+        "测试覆盖三流互斥与替换模式。"
+      ]
+    },
+    {
+      "id": "S0-M9",
+      "status": "pass",
+      "evidence": [
+        "judge_result_schema 校验器通过；harness/schemas/judge-result.schema.json 约束 round/must_haves/merge_ready。",
+        "saved/fresh 隔离由 assertSavedFreshCouncil / assertFreshJudgeExit 测试覆盖。"
+      ]
+    },
+    {
+      "id": "S0-M10",
+      "status": "pass",
+      "evidence": [
+        "H0.binding.json status=bound；receipt.environment=repo-only；无云调用声明。",
+        "approved_rubric_sha256 与当前冻结 rubric 文件一致。"
+      ]
+    },
+    {
+      "id": "S0-M11",
+      "status": "pass",
+      "evidence": [
+        "model_routing / worker_language / bottleneck_dispatch 在 validator-contract 中通过。",
+        "AGENTS.md/PLAN 记录云端 Claude、Mandarin 协议与瓶颈约束；P0-T05 model_record 为显式模型 ID。"
+      ]
+    },
+    {
+      "id": "S0-M12",
+      "status": "pass",
+      "evidence": [
+        "claude_proxy_profile 校验要求 pxpipe-proxy@0.9.0 且政策/凭据/度量/直连 fallback 门禁为真。",
+        "文档声明可选代理、无保证倍率。"
+      ]
+    },
+    {
+      "id": "S0-M13",
+      "status": "pass",
+      "evidence": [
+        "typescript_7 校验器在无根 package.json TypeScript 依赖时返回通过（出现时才强制 7.0.2+strict）。",
+        "本候选未见违反 TypeScript 7.x 钉扎的 package 依赖。"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "S0-M7 失败：rubric-freeze bundle 钉扎相对 tip 候选 aa01454 已漂移，validate-rubric-freeze.mjs 不能通过。",
+    "U1/U7 未完全证明：分区/计划/校验器哈希与提交内 S0 候选绑定证据未与 tip 候选完全对齐。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 1.85,
+      "rationale": "P0-T05 与全量 node 测试在 tip 父提交上通过，编排夹具正确；但冻结 bundle 复验失败拉低完整性。",
+      "evidence": [
+        "CANDIDATE_SHA=aa01454 下 validate P0-T05 exit 0",
+        "node --test 94/94 pass"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.4,
+      "rationale": "H0 人类收据、fail-closed 校验器、bottleneck 只读与 zero_secrets 边界清晰，未见密钥暴露。",
+      "evidence": [
+        "harness/approvals/H0.binding.json",
+        "validator-contract unknown_validator_fail_closed"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.3,
+      "rationale": "负向与替换/瓶颈路径有夹具证明；S0 非运行时恢复切片，深度达到底座预期但非满分。",
+      "evidence": [
+        "tests/validators/p0-t05.test.mjs",
+        "worker_replacement modes fresh_grok/bottleneck"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 0.95,
+      "rationale": "确定性测试与 terraform fmt 均绿，覆盖隔离、council 规则与未知校验器。",
+      "evidence": [
+        "node --test tests/ exit 0",
+        "terraform fmt -check exit 0"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 0.8,
+      "rationale": "S0 以 hermetic 夹具为主；本轮对 tip 父提交的现场校验通过，但提交内 integrated-gate 仍钉历史 SHA。",
+      "evidence": [
+        "evidence/slices/S0/integrated-gate.json candidate_sha=5792a74…",
+        "本轮 P0-T05 现场校验 candidate_sha=aa01454"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.9,
+      "rationale": "校验命令、STREAM_COMPLETE、tip-proof 复现步骤可操作；漂移需运维刷新钉扎。",
+      "evidence": [
+        "evidence/portfolio/tip-proof-aa01454.json",
+        "scripts/project.mjs validate P0-T05"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 0.65,
+      "rationale": "rubric 与 claims matrix 哈希正确，tip parent-bind 成立；plan/validator/partition 钉扎漂移是主要扣分点。",
+      "evidence": [
+        "validate-rubric-freeze.mjs code=bundle_hashes",
+        "docs/claims/matrix.json sha256=89642f…"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.45,
+      "rationale": "handoff/schema/中文协议与分区说明可读；需持续刷新 bundle 钉扎以免复现 BF-2026-007。",
+      "evidence": [
+        "evidence/slices/S0/rubric-freeze.json hash_refresh_note",
+        "BREAK_FIX_LOG.md BF-2026-007"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "S0 无云成本声明膨胀；A3 明确排除 Azure live 与生产，成本叙事克制。",
+      "evidence": [
+        "docs/claims/matrix.json engagement_ceilings_A3",
+        "H0 receipt environment=repo-only"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "不得将本轮结果解释为生产认证或 Azure live 证明。",
+    "不得声称 evidence/slices/S0/rubric-freeze.json 的五类 bundle 哈希仍全部匹配 aa01454 当前树。"
+  ],
+  "security_findings": [
+    "未发现密钥或长效凭据进入 S0 证据。",
+    "权威边界依赖 H0 人类收据与 fail-closed 校验器；代理不得铸造批准。"
+  ],
+  "improvements": [
+    "刷新 evidence/slices/S0/rubric-freeze.json 的 plan/validator/partition 钉扎并复跑 validate-rubric-freeze.mjs，使 S0-M7 在 tip 候选上可复验。",
+    "可选：将本轮 CANDIDATE_SHA=aa01454 的 P0-T05 校验输出固化为 tip 绑定证据，消除 integrated-gate 历史 SHA 歧义。",
+    "notes_zh：tip_under_review=0606812354dae2e23356278f10f9b76b7ebd010b；bind_model=candidate_sha_parent_of_tip；parent_bind_verified=true；context_remaining≈62%。"
+  ],
+  "overall_score": 8.75,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "high-fast",
+    "role": "provisional-judge"
+  },
+  "notes_zh": "独立 clean-room provisional R3。parent-bind 已核验；现场 tests/fmt/P0-T05 通过。因 rubric-freeze bundle 漂移判定 S0-M7 失败且 U1/U7 未完全证明，故 provisional_pass=false、merge_ready=no。未读旧 judge 分数。A3 天花板未抬升。"
+}

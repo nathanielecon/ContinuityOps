@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "role": "nixer",
+  "task_id": "NIX-TIPBOUND-AA01454-02",
+  "status": "complete",
+  "path": "B",
+  "fail_class": "claim_level_L1_L4_conflict_stale_task_gate_sha",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "baseline_sha": "6f3d362b21847d5931cc5c0f95769f607f515fa0",
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "source_evidence": [
+    "evidence/judges/S0/provisional-judge-r3-1.json",
+    "evidence/judges/S0/provisional-judge-r3-2.json",
+    "evidence/judges/S0/provisional-judge-r3-3.json",
+    "evidence/judges/S2/provisional-judge-r3-1.json",
+    "evidence/judges/S2/provisional-judge-r3-2.json",
+    "evidence/judges/S2/provisional-judge-r3-3.json",
+    "evidence/judges/S3/provisional-judge-r3-1.json",
+    "evidence/judges/S3/provisional-judge-r3-2.json",
+    "evidence/judges/S3/provisional-judge-r3-3.json",
+    "docs/claims/matrix.json",
+    "BREAK_FIX_LOG.md#BF-2026-020"
+  ],
+  "deduped": true,
+  "seeded_by": "orch-local-unblock",
+  "issue": 165,
+  "issue_ids": [
+    {
+      "id": "NIX-TIPBOUND-010",
+      "summary_zh": "调和 tip-bound 声明：STREAM_COMPLETE/matrix A3 范围内 L4 lab 与任务门/SUPERVISOR 的 L1 不一致",
+      "finding_zh": "S2/S3 STREAM_COMPLETE 与 matrix 为 scoped L4 lab，但 integrated-gate 与 SUPERVISOR_VERDICT 仍写 L1+managed_cluster_apply，触发 U5/U10。应在不提高 Azure/A3 的前提下把门禁与 verdict 对齐到 tip-bound L4 lab，并保留诚实边界。",
+      "reproduction_check": "jq -r '.claim_level' evidence/slices/S2/STREAM_COMPLETE.json evidence/slices/S2/integrated-gate.json evidence/slices/S2/SUPERVISOR_VERDICT.json",
+      "failed_evidence_paths": [
+        "evidence/judges/S2/provisional-judge-r3-1.json",
+        "evidence/judges/S3/provisional-judge-r3-1.json"
+      ],
+      "recommended_write_scope": [
+        "evidence/slices/S2/integrated-gate.json",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json",
+        "evidence/slices/S3/integrated-gate.json",
+        "evidence/slices/S3/SUPERVISOR_VERDICT.json"
+      ]
+    },
+    {
+      "id": "NIX-TIPBOUND-011",
+      "summary_zh": "重绑 S2/S3 任务级与门禁过期 SHA 到 aa01454；区分 slice_landed_sha 与 portfolio_tip_sha",
+      "finding_zh": "S3 integrated-gate/SUPERVISOR/serverless/saas 仍钉历史 SHA；S2 SUPERVISOR 仍钉 1fd88ff…。任务级可保留 slice_landed_sha 元数据，但 candidate_sha/baseline_sha/implementation_sha 须对齐 portfolio tip parent。",
+      "reproduction_check": "rg -n '\"candidate_sha\"' evidence/slices/S2 evidence/slices/S3 -g '*.json' | rg -v 'aa01454f8808c173deb43cc4b9b803287eec851e'",
+      "failed_evidence_paths": [
+        "evidence/slices/S3/integrated-gate.json",
+        "evidence/slices/S3/serverless.json",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json"
+      ],
+      "recommended_write_scope": [
+        "evidence/slices/S2/**",
+        "evidence/slices/S3/**"
+      ]
+    },
+    {
+      "id": "NIX-TIPBOUND-012",
+      "summary_zh": "刷新 S0 rubric-freeze bundle 哈希并使 validate-rubric-freeze 通过；同步 S0 门禁候选 SHA",
+      "finding_zh": "S0-M7：plan/validator/partition bundle 哈希相对 tip 候选漂移；integrated-gate 与 STREAM_COMPLETE-P0-T05 仍钉 5792a74…。",
+      "reproduction_check": "node harness/rubrics/validate-rubric-freeze.mjs",
+      "failed_evidence_paths": [
+        "evidence/judges/S0/provisional-judge-r3-1.json",
+        "evidence/slices/S0/rubric-freeze.json"
+      ],
+      "recommended_write_scope": [
+        "evidence/slices/S0/rubric-freeze.json",
+        "evidence/slices/S0/integrated-gate.json",
+        "evidence/slices/S0/STREAM_COMPLETE-P0-T05.json"
+      ]
+    }
+  ],
+  "constraints_zh": [
+    "禁止修改 .github/** 与实现代码",
+    "禁止合并 main",
+    "禁止提高 A3 / Azure live",
+    "勿再按 tip_object class 循环（BF-2026-020）"
+  ],
+  "recommended_next_step": [
+    "fixer 按 010–012 互不重叠落地",
+    "重派 Cursor Grok clean-room provisional R4（carrier=cursor-grok-chief-seat）"
+  ],
+  "requires_escalation": false,
+  "context_remaining": "orch-seed",
+  "recorded_utc": "2026-07-20T11:54:43Z"
+}

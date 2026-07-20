@@ -1,0 +1,305 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "fresh",
+  "judge_id": "tipbound-fresh-judge-1",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "tree=c8d7aa12409cc4d145d957bd9b64325f471914e8 与 git rev-parse HEAD 一致",
+        "tip=0606812354dae2e23356278f10f9b76b7ebd010b^ == candidate aa01454f8808c173deb43cc4b9b803287eec851e（PARENT_BIND_OK）",
+        "sha256sum docs/planning/JUDGE_RUBRICS.md → f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "sha256sum docs/claims/matrix.json → 89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → exit 0；# tests 94 / # pass 94（2026-07-20T13:10:29Z）",
+        "terraform fmt -check -recursive terraform → exit 0",
+        "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P3-T03 → exit 0；副作用已 git checkout -- 丢弃（未 git clean）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/integrated-gate.json environment.zero_secrets=true",
+        "serverless/worker-contract.json iam.long_lived_keys=false"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "docs/reviews/S3/engineering-qa-security.md 无未关闭 critical/high",
+        "本切片未引入开放高危安全缺陷记录"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "STREAM_COMPLETE/integrated-gate claim_level=L4（A3 scoped lab）与 remaining_boundaries 分层一致",
+        "任务级 serverless/saas 证据诚实标为合成/契约 L1；Azure live out（D-046）",
+        "tipbound_fresh_note_zh 明确实验室 L4 + 合成 must-have 边界"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless/dlq.test.mjs 毒消息/审批回放负路径",
+        "tests/serverless/idempotency.test.mjs 重复 event_id 跳过",
+        "iam_negative / least-privilege 相关单测与契约存在"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "本轮现场重跑 parent-bind + tests + tf + P3-T03 validate，含 exit code 与时间戳",
+        "cloud_apply_evidence 绑定 hosted apply/teardown run URL"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "本评判只写入 evidence/judges/S3/tipbound-fresh-judge-1.json；未改实现分区",
+        "P3-T03 write_scope 允许 evidence/judges/S3/"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 持续维护；S3 tipbound 相关 BF/NIX 有记录路径",
+        "hosted elevation 记录 BF-2026-012 EKS 版本失败后修复再 apply"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "手册/证据对「无 live Lambda 任务级运行时」与 lab apply+teardown 分层一致",
+        "不以过时「一律无 Lambda」句否定 A3 lab L4 举证"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本 judge notes_zh 与证据说明为简体中文；对外招聘向文档保持英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S3 顺序门禁 P3-T01→P3-T02→P3-T03；无并行写冲突迹象"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本文件为 tipbound-fresh-*，与 historical fresh/provisional/saved 分轨；未读取旧 tipbound/provisional/saved 分数"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "已观察失败路径有 BF/NIX 轨迹；本轮验证无新增未记录失败"
+      ]
+    },
+    {
+      "id": "S3-M1",
+      "status": "pass",
+      "evidence": [
+        "serverless/worker-contract.json telemetry.correlation_header=x-correlation-id",
+        "tests/observability/signal-path.test.mjs 传播跳点覆盖",
+        "remaining_boundaries：任务级 E2E 为合成/契约诚实成立（tipbound_fresh_note_zh）"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "pass",
+      "evidence": [
+        "worker-contract：visibility_timeout=60、concurrency=10、exponential backoff、function timeout=30",
+        "tests/serverless/idempotency.test.mjs + dlq.test.mjs 覆盖重复与重试边界"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless/dlq.test.mjs：alarm、poison、approval replay、回放后清空",
+        "operations/incidents/serverless/dlq-replay.md 合成 playbook"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "pass",
+      "evidence": [
+        "worker-contract iam.least_privilege=true；P3-T01 iam_negative validator pass",
+        "security/least-privilege.json + tests/security/policy.test.mjs；边界内合成负测诚实成立"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/lifecycle.json tenant_isolation.cross_tenant_reads=prohibited",
+        "docs/architecture/tenant-boundary.md + tests/saas/lifecycle.test.mjs"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "lifecycle.json 七阶段 onboarding→deprovision；P3-T02 lifecycle_contract pass"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/severity-escalation.json 严重性/所有权/升级路径",
+        "tests/saas/lifecycle.test.mjs 覆盖 severity ownership"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "pass",
+      "evidence": [
+        "tests/observability/redaction.test.mjs 敏感字段脱敏",
+        "任务级事件路径脱敏在契约/单测边界内诚实成立"
+      ]
+    },
+    {
+      "id": "S3-M9",
+      "status": "pass",
+      "evidence": [
+        "worker-contract concurrency/timeouts + cost_metric=worker.invocations",
+        "按 tipbound_fresh_note_zh：成本/性能以实验室非生产上限描述，不作生产规模证伪"
+      ]
+    },
+    {
+      "id": "S3-M10",
+      "status": "pass",
+      "evidence": [
+        "integrated-gate/STREAM_COMPLETE remaining_boundaries 明确 lab non-production、非客户 SaaS 规模",
+        "SaaS operations 未抬升超证据"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.95,
+      "rationale": "P3-T01..T03 契约、合成运行时与 tip-bound L4 lab 资源举证齐全；E2E 相关在声明边界内为合成成立，故略低于满分。",
+      "evidence": [
+        "evidence/slices/S3/serverless.json、saas-operations.json、integrated-gate.json",
+        "CANDIDATE_SHA validate P3-T03 exit 0"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.45,
+      "rationale": "least-privilege、无长寿命密钥、零密钥环境与租户隔离契约清晰；负测深度为合成级。",
+      "evidence": [
+        "serverless/worker-contract.json iam",
+        "tests/security/policy.test.mjs；environment.zero_secrets=true"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "DLQ 毒消息捕获、审批回放与幂等去重已单测；非 live SQS 回放演练，按边界给高但非满分。",
+      "evidence": [
+        "tests/serverless/dlq.test.mjs",
+        "operations/incidents/serverless/dlq-replay.md"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "94/94 确定性测试与 terraform fmt、P3-T03 机检全绿。",
+      "evidence": [
+        "node --test tests/ → 94 pass",
+        "terraform fmt -check exit 0"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.9,
+      "rationale": "A3 lab Lambda/SQS apply+teardown 有 hosted run 举证；任务级 worker 路径仍为合成，故 runtime 维略扣。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json resources_proven_live 含 Lambda/SQS；teardown 29645052414",
+        "matrix serverless-worker claim_level L4"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "DLQ playbook、生命周期与升级路径可用；实验室范围完整。",
+      "evidence": [
+        "operations/incidents/serverless/dlq-replay.md",
+        "operations/saas/lifecycle.json + severity-escalation.json"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.95,
+      "rationale": "L4 lab 与任务级 L1 合成分层清楚；hosted apply SHA≠aa01454 已声明 tip-bound 关联。",
+      "evidence": [
+        "integrated-gate remaining_boundaries + tipbound_fresh_note_zh",
+        "parent-bind tip^==candidate"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "契约、证据索引与评审文档可交接。",
+      "evidence": [
+        "docs/reviews/S3/engineering-qa-security.md",
+        "serverless/*.json + operations/saas/*"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "concurrency/timeout/cost_metric 在实验室非生产上限内描述准确；按 tipbound_fresh_note_zh 不以未证生产规模压低。",
+      "evidence": [
+        "serverless/worker-contract.json queue/timeouts/telemetry.cost_metric",
+        "tipbound_fresh_note_zh 实验室成本评分指引"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "生产客户 SaaS 规模与 live 请求路径全链路延迟/成本测量（明确 non-claim）"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "后续可在隔离实验室补充一次 tip-bound 关联的合成负载成本采样，仍勿抬升生产宣称"
+  ],
+  "overall_score": 9.55,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "judge"
+  },
+  "notes_zh": "独立 clean-room tipbound-fresh #1（第三届）。绑定 tip=0606812… / candidate=aa01454… / tree=c8d7aa1 / rubric=f122c1d0… / manifest=89642f65…。现场验证 parent-bind、94 测、tf fmt、CANDIDATE_SHA validate P3-T03 均 exit 0；副作用已丢弃（未 git clean）。未读旧 tipbound/provisional/saved 分数。按 tipbound_fresh_note_zh：实验室 L4 + 合成 must-have 诚实 pass；成本/性能按非生产实验室上限。must_haves 全 pass；merge_ready=yes；overall_score=9.55。"
+}

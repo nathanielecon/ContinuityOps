@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "P3-T03",
-  "baseline_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
-  "candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P3-T03",
   "exit_code": 0,
   "recorded_at": "2026-07-18T06:18:18.946Z",
@@ -22,10 +22,14 @@
     "mode": "default",
     "role": "validator-worker"
   },
-  "claim_level": "L1",
+  "claim_level": "L4",
   "remaining_boundaries": [
-    "No live AWS Lambda",
-    "DLQ path synthetic/unit only"
+    "Scoped AWS lab L4 via continuityops-gha (A3); not production customer workloads",
+    "Azure live out (D-046) — L1 design only",
+    "Task-level serverless/saas evidence is synthetic/contract-level (component L1): S3-M1 correlation E2E, S3-M2 backoff/visibility/concurrency/timeout behavior, S3-M4 IAM least-privilege negative depth, S3-M8 event-path redaction, S3-M9 per-event/idle cost ceilings are not live-proven",
+    "DLQ/idempotency validators are unit-test/synthetic paths — not live SQS/Lambda runtime",
+    "Hosted apply SHA may differ from aa01454; lab evidence tip-bound associated via cloud_apply_evidence",
+    "No ContinuityOps known-good rollback proven"
   ],
   "started_at": "2026-07-18T06:18:18.929Z",
   "completed_at": "2026-07-18T06:18:18.946Z",
@@ -71,5 +75,26 @@
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
   "evidence_path": "evidence/slices/S3/integrated-gate.json",
-  "bind_model": "candidate_sha_equals_head"
+  "bind_model": "candidate_sha_parent_of_tip",
+  "cloud_apply_evidence": [
+    "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+    "evidence/hosted/lab-drill-rto-29645042815.json"
+  ],
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "slice_landed_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "rebinding": {
+    "recorded_utc": "2026-07-20T11:54:43Z",
+    "reason": "NIX-TIPBOUND-010/011 FIX-TIPBOUND-AA01454-02: tip-bound claim/SHA reconcile under A3",
+    "prior_candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+    "prior_claim_level": "L1",
+    "issue_ids": [
+      "NIX-TIPBOUND-010",
+      "NIX-TIPBOUND-011"
+    ]
+  },
+  "tipbound_fresh_note_zh": "Tip-bound aa01454 fresh：A3 scoped L4 lab（Lambda/SQS apply+teardown 已举证）；任务级合成/契约 must-have 在 remaining_boundaries 内诚实成立；成本/性能按实验室非生产上限评分，不得压到生产级未证。",
+  "acceptance_notes": [
+    "Tip-bound fresh scoring: synthetic must-haves pass within declared boundaries; lab L4 does not claim production SaaS scale."
+  ]
 }

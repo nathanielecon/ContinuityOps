@@ -1,0 +1,313 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "judge_id": "S3-PROVISIONAL-JUDGE-02",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "not_proven",
+      "evidence": [
+        "目标 tip 0606812354dae2e23356278f10f9b76b7ebd010b 在本地对象库中不存在；网络获取因 CONNECT 403 失败，因此无法执行 parent-bind 验证",
+        "本地候选对象 aa01454f8808c173deb43cc4b9b803287eec851e 存在"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/：exit 0，94 项通过",
+        "terraform fmt -check -recursive terraform：exit 0",
+        "node scripts/project.mjs validate P3-T01、P3-T02、P3-T03：均 exit 0；验证器副作用已丢弃"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "tests/workflows/hosted-ci.test.mjs",
+        "evidence/slices/S3/serverless.json"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "evidence/hosted/cloud-apply-staging-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless/",
+        "terraform/policies/iam-negative.json"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/serverless.json",
+        "evidence/slices/S3/saas-operations.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/SUPERVISOR_VERDICT.json",
+        "docs/planning/PLAN.md"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "README.md",
+        "docs/claims/matrix.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md",
+        "tests/harness/project.test.mjs"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "docs/planning/PLAN.md",
+        "tests/harness/project.test.mjs"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "harness/schemas/judge-result.schema.json",
+        "tests/harness/project.test.mjs"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "S3-M1",
+      "status": "pass",
+      "evidence": [
+        "serverless/event-contract.json",
+        "evidence/slices/S3/serverless.json"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless/",
+        "serverless/worker-contract.json"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "operations/incidents/serverless/dlq-replay.md",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "pass",
+      "evidence": [
+        "terraform/policies/iam-negative.json",
+        "evidence/slices/S3/serverless.json"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "docs/architecture/tenant-boundary.md",
+        "evidence/slices/S3/saas-operations.json"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/lifecycle.json",
+        "evidence/slices/S3/saas-operations.json"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/severity-escalation.json",
+        "tests/serverless/"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "pass",
+      "evidence": [
+        "tests/observability/redaction.test.mjs",
+        "tests/serverless/"
+      ]
+    },
+    {
+      "id": "S3-M9",
+      "status": "pass",
+      "evidence": [
+        "serverless/worker-contract.json",
+        "operations/saas/severity-escalation.json"
+      ]
+    },
+    {
+      "id": "S3-M10",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "无法在当前容器验证 tip 0606812354dae2e23356278f10f9b76b7ebd010b 的父提交；按 Universal 规则，U1 未证明强制 merge_ready=no。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 2,
+      "rationale": "端到端事件契约、幂等、毒消息与租户生命周期均有确定性覆盖。",
+      "evidence": [
+        "tests/serverless/",
+        "evidence/slices/S3/serverless.json",
+        "evidence/slices/S3/saas-operations.json"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "最小权限负向场景、租户边界和脱敏行为均有可执行检查。",
+      "evidence": [
+        "terraform/policies/iam-negative.json",
+        "tests/serverless/"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.5,
+      "rationale": "重复、畸形、毒消息、DLQ 告警和需审批重放路径覆盖完整。",
+      "evidence": [
+        "operations/incidents/serverless/dlq-replay.md",
+        "tests/serverless/"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1,
+      "rationale": "全仓 94 项测试与三个 S3 验证器在本轮均通过。",
+      "evidence": [
+        "tests/serverless/",
+        "scripts/project.mjs"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 0.9,
+      "rationale": "存在 AWS 实验室应用证据，但本轮无法取得派遣 tip 对象完成精确父绑定。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1,
+      "rationale": "生命周期、严重度、所有权、升级与安全重放契约可用。",
+      "evidence": [
+        "operations/saas/severity-escalation.json",
+        "operations/saas/lifecycle.json"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 0.8,
+      "rationale": "A3 边界和非生产声明清晰；本轮 tip parent-bind 缺口降低绑定完整性。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.5,
+      "rationale": "契约、场景、工作器与测试分层清晰，便于交接。",
+      "evidence": [
+        "serverless/",
+        "operations/saas/",
+        "tests/serverless/"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.4,
+      "rationale": "并发、超时和空闲成本边界已描述，但缺少更细的实测每事件成本曲线。",
+      "evidence": [
+        "serverless/worker-contract.json",
+        "operations/saas/severity-escalation.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "未证明 Azure live；本评判不提高 A3 声明。",
+    "实验室证据不得解释为生产客户工作负载或生产级 SaaS 控制面。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在可访问目标 Git 对象的执行环境重新运行 parent-bind 命令并生成绑定到该 tip 的新评判。",
+    "补充重试和并发选择对应的实测每事件成本与延迟曲线。"
+  ],
+  "overall_score": 9.6,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "medium",
+    "role": "independent-provisional-judge"
+  },
+  "notes_zh": "clean-room saved_provisional 评判；未查看或复用其他 S3 judge 分数。tip_under_review=0606812354dae2e23356278f10f9b76b7ebd010b；bind_model=candidate_sha_parent_of_tip；parent_bind_verified=false。候选内容检查通过且维持 A3 上限，但目标 tip 对象在容器中缺失，网络获取又被 403 阻断，因此依规则不授予 provisional_pass。"
+}

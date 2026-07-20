@@ -1,0 +1,312 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "fresh",
+  "judge_id": "tipbound-fresh-judge-3",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "parent-bind PASS；candidate=aa01454f8808c173deb43cc4b9b803287eec851e",
+        "rubric=724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205；manifest=89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "tree=7a8beca",
+        "upstreams.lock.json partition pin 匹配 freeze"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "确定性检查全集通过（tests/tf/P0-T05/freeze）",
+        "2026-07-20T12:53:12Z"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "密钥暴露检查通过（S0 证据抽检 + zero_secrets）"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无 open critical/high 阻塞 S0"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "designed/static/harness 主张与证据匹配；未声称 recovery-tested 生产回滚"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "负向行为覆盖：unknown ID、相位越权、只读断言失败路径"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "fresh#3 现场复跑 2026-07-20T12:53:12Z；证据含命令/退出码/时间",
+        "副作用 discard 完成"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "写入范围限 tipbound-fresh-judge-3.json"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "break/fix 日志含 tip-bound 系列 BF"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "STREAM/SUPERVISOR tip-bound 叙述一致；portfolio_tip_sha=aa01454"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "简体中文评判文本；外向招聘材料保持英文之约定未违反"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "并发流夹具：三流 disjoint + 顺序执行"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "fresh 与 saved council 分离；未读旧分；无 provisional_pass 字段"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "闭合前 tip-bound 观察失败已入账"
+      ]
+    },
+    {
+      "id": "S0-M1",
+      "status": "pass",
+      "evidence": [
+        "分区/上游 pin 明确"
+      ]
+    },
+    {
+      "id": "S0-M2",
+      "status": "pass",
+      "evidence": [
+        "合法生命周期由 CLI 强制"
+      ]
+    },
+    {
+      "id": "S0-M3",
+      "status": "pass",
+      "evidence": [
+        "N 成功 / N+1 拒绝"
+      ]
+    },
+    {
+      "id": "S0-M4",
+      "status": "pass",
+      "evidence": [
+        "unknown validator fail-closed"
+      ]
+    },
+    {
+      "id": "S0-M5",
+      "status": "pass",
+      "evidence": [
+        "check-only + 完成核对；副作用已丢弃"
+      ]
+    },
+    {
+      "id": "S0-M6",
+      "status": "pass",
+      "evidence": [
+        "不可铸造收据"
+      ]
+    },
+    {
+      "id": "S0-M7",
+      "status": "pass",
+      "evidence": [
+        "五类 bundle hash 绑定通过"
+      ]
+    },
+    {
+      "id": "S0-M8",
+      "status": "pass",
+      "evidence": [
+        "并发/替换/瓶颈夹具通过"
+      ]
+    },
+    {
+      "id": "S0-M9",
+      "status": "pass",
+      "evidence": [
+        "judge schema 与隔离可测"
+      ]
+    },
+    {
+      "id": "S0-M10",
+      "status": "pass",
+      "evidence": [
+        "H0 bound + 人类收据；tip-bound 不重签；rubric hash 仍钉死"
+      ]
+    },
+    {
+      "id": "S0-M11",
+      "status": "pass",
+      "evidence": [
+        "模型/中文/瓶颈配置强制"
+      ]
+    },
+    {
+      "id": "S0-M12",
+      "status": "pass",
+      "evidence": [
+        "proxy pin 与非保证倍率"
+      ]
+    },
+    {
+      "id": "S0-M13",
+      "status": "pass",
+      "evidence": [
+        "TS 7.0.2 钉扎"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 2.0,
+      "rationale": "必须项全数 pass；parent-bind 与 tip-bound 证据链闭合。",
+      "evidence": [
+        "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ == aa01454f8808c173deb43cc4b9b803287eec851e",
+        "node --test tests/ → 94/94 pass",
+        "terraform fmt -check -recursive terraform exit=0",
+        "terraform -chdir=terraform/envs/staging validate exit=0",
+        "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e BASELINE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P0-T05 exit=0",
+        "node harness/rubrics/validate-rubric-freeze.mjs exit=0"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "权威与密钥边界满足 S0；无伪造 H0。",
+      "evidence": [
+        "H0.binding.json",
+        "agent_minted_receipt=false"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.5,
+      "rationale": "fail-closed、worker 替换与 bottleneck 在无害夹具上完整演示。",
+      "evidence": [
+        "integrated-gate validators",
+        "tests fail-closed suite"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "94/94 稳定复现。",
+      "evidence": [
+        "node --test tests/ → 94/94"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.95,
+      "rationale": "harness 运行证据充分且声明为 repo-only。",
+      "evidence": [
+        "integrated-gate.json",
+        "validator-contract.json"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1.0,
+      "rationale": "复跑步骤短、丢弃纪律清楚、绑定一眼可核。",
+      "evidence": [
+        "parent-bind",
+        "R6 同款验证集"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.95,
+      "rationale": "哈希与 tip 绑定一致；历史 council 指针不混淆本 fresh 轮。",
+      "evidence": [
+        "matrix.json",
+        "STREAM tipbound notes"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.45,
+      "rationale": "交接字段完整；规划种子 STATUS 仍偏旧，但不阻断 tip-bound 权威链。",
+      "evidence": [
+        "STREAM_COMPLETE-P0-T05.json",
+        "SUPERVISOR_VERDICT-P0-T05.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.5,
+      "rationale": "成本叙事克制，符合 Phase 0。",
+      "evidence": [
+        "repo-only / no multiplier claim"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "STATUS.md / OPERATING_STATE 种子块仍为早期 Phase 0 叙述，不作为 tip-bound 候选权威",
+    "不得将本轮 merge_ready=yes 解释为生产部署批准"
+  ],
+  "security_findings": [
+    "无阻断项"
+  ],
+  "improvements": [
+    "将 tipbound-fresh 文件纳入 P0-T05 机检路径或保留与 historical fresh-judge-* 的显式分轨说明",
+    "统一 tip-bound 文档中的权威轮次指针，降低历史 council 误读"
+  ],
+  "overall_score": 9.85,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-tipbound-fresh-judge",
+    "role": "judge"
+  },
+  "notes_zh": "独立 clean-room tip-bound fresh #3（S0）。验证集与 #1/#2 相同但独立成文；绑定 tip=0606812 / candidate=aa01454 / tree=7a8beca；时间窗 2026-07-20T12:53:12Z。全部 U*/S0-M* 为 pass；merge_ready=yes。未读旧分数；禁止 git clean；副作用已 discard。"
+}

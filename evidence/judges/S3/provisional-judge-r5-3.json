@@ -1,0 +1,290 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "judge_id": "S3-PROVISIONAL-R5-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high-fast",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "candidate_sha_parent_of_tip：aa01454… → 0606812… → workspace 95e9c10",
+        "rubric f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "manifest 89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "确定性检查：tests 94 pass；terraform fmt check pass；validate P3-T03 pass",
+        "validate 曾改写 integrated-gate/fresh-judge 时间戳字段，已全部 checkout 丢弃"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "zero_secrets=true；elevation non_claims_retained 无密钥"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无 open critical/high 安全 issue 绑定本切片"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "明确区分：designed/static（契约）→ local-runtime（单测）→ cloud-applied lab（GHA OIDC Lambda+SQS）→ 非 recovery-tested / 非 Azure",
+        "A3 scoped L4 lab；生产与 Azure 明确 out"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "失败路径：duplicate_skipped、poison→dlq、replay 无审批拒绝"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "hosted apply/teardown URL 绑定；BF-2026-024 后门禁字段新鲜",
+        "命令/exit/环境字段存在于 P3 证据 JSON"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "write_scope_sane；本文件为唯一本轮写入目标之一"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BF-2026-024 记录 S3 SUPERVISOR/边界修复"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "STREAM_COMPLETE / SUPERVISOR_VERDICT / integrated-gate / matrix 对 lab L4 + 任务合成 叙述一致",
+        "手册「无 live Lambda」按任务指引不构成一律 U10 fail"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "简体中文评判；英文招聘向路径未改写为本轮对象"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "单流顺序；与其他流分区无交叉写证据"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "provisional R5 与历史 fresh/saved 分离；未读取旧分数"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "观察到的 tip-bound 断裂已记入 BREAK_FIX_LOG"
+      ]
+    },
+    {
+      "id": "S3-M1",
+      "status": "pass",
+      "evidence": [
+        "合成 signal-path + telemetry correlation hops 覆盖 queue/function",
+        "worker-contract correlation_header；边界诚实"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "pass",
+      "evidence": [
+        "幂等/重复安全已测；backoff/visibility/concurrency/timeout 在契约与 terraform 一致存在",
+        "remaining_boundaries 标明行为非 live-proven → 合成可 pass"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "DLQ alarm/poison/replay 执行于单测；手册可复现步骤"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "pass",
+      "evidence": [
+        "least-privilege 负向用例 + serverless long_lived_keys=false",
+        "合成深度边界已声明"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "租户边界文档与 cross_tenant_reads=prohibited 一致"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "七阶段运营合同齐全"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "severity/ownership/escalation 可用"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "pass",
+      "evidence": [
+        "日志/载荷脱敏模块与测试存在；事件路径按合成计"
+      ]
+    },
+    {
+      "id": "S3-M9",
+      "status": "pass",
+      "evidence": [
+        "concurrency/timeout/cost_metric 准确描述契约上限；未声称已测美元成本"
+      ]
+    },
+    {
+      "id": "S3-M10",
+      "status": "pass",
+      "evidence": [
+        "SaaS 主张未超越 lab/契约证据"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 1.8,
+      "rationale": "tip-bound L4 lab 与任务合成分层正确，must-have 证据闭合。",
+      "evidence": [
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "evidence/slices/S3/SUPERVISOR_VERDICT.json"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.35,
+      "rationale": "密钥与租户边界干净；IAM 负向合成可接受。",
+      "evidence": [
+        "security/least-privilege.json",
+        "docs/architecture/tenant-boundary.md"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.35,
+      "rationale": "幂等/DLQ/审批回放覆盖主要失败类。",
+      "evidence": [
+        "tests/serverless/idempotency.test.mjs",
+        "tests/serverless/dlq.test.mjs"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "全量确定性门禁绿。",
+      "evidence": [
+        "/tmp/s3-r5-judge/node-test.log",
+        "/tmp/s3-r5-judge/validate-p3t03.log"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 0.75,
+      "rationale": "Lambda+SQS+teardown lab 证据充分；业务相关仍合成。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "docs/claims/matrix.json#serverless-worker"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.9,
+      "rationale": "生命周期、SEV、DLQ 手册形成可操作闭环。",
+      "evidence": [
+        "operations/saas/lifecycle.json",
+        "operations/incidents/serverless/dlq-replay.md"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 0.95,
+      "rationale": "哈希绑定与 claim 分层在 BF-2026-024 后一致。",
+      "evidence": [
+        "/tmp/s3-r5-judge/parent-bind.log",
+        "evidence/slices/S3/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.45,
+      "rationale": "结构清晰；仅评审表需轻量措辞刷新。",
+      "evidence": [
+        "docs/reviews/S3/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.4,
+      "rationale": "契约层缩放/指标描述准确且未夸大。",
+      "evidence": [
+        "serverless/worker-contract.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "不得主张 ContinuityOps known-good rollback 已证明",
+    "不得把合成 signal-path 说成生产级 live 追踪"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "评审文档声明表与 tip-bound L4 lab 措辞对齐",
+    "可选：为 M9 增加 idle 成本示例数字（仍标 synthetic）"
+  ],
+  "overall_score": 8.95,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high-fast",
+    "mode": "clean-room-provisional-judge",
+    "role": "independent-provisional-judge"
+  },
+  "notes_zh": "独立 clean-room provisional R5 #3（S3-PROVISIONAL-R5-03）。tip parent-bind 与哈希绑定成立；tests/fmt/P3-T03 validate 全绿，副作用已丢弃（未 git clean）。未读取既有 judge 分数。U5 pass（实验室 L4 vs Azure/生产 out）。U10 pass（不以手册「无 live Lambda」一律失败）。S3-M1/M2/M4/M8/M9 在合成/契约边界下 pass。provisional_pass=true、merge_ready=yes。overall_score=8.95。"
+}

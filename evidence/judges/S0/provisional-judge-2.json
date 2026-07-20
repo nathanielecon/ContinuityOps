@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "saved_provisional",
+  "judge_id": "S0-PROVISIONAL-JUDGE-02",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {"id": "U1", "status": "fail", "evidence": ["目标 tip 0606812354dae2e23356278f10f9b76b7ebd010b 在本地对象库中不存在，无法证明其父提交等于 aa01454f8808c173deb43cc4b9b803287eec851e；候选提交本身与当前 HEAD 一致。"]},
+    {"id": "U2", "status": "pass", "evidence": ["node --test tests/：退出码 0，94 项通过；terraform fmt -check -recursive terraform：退出码 0；node scripts/project.mjs validate P0-T05：退出码 0。"]},
+    {"id": "U3", "status": "pass", "evidence": ["测试覆盖 PR 只读凭据边界与密钥式派遣拒绝；环境记录为 zero_secrets。"]},
+    {"id": "U4", "status": "pass", "evidence": ["S0 证据与验证结果未显示影响本切片的开放 critical/high 安全问题。"]},
+    {"id": "U5", "status": "pass", "evidence": ["docs/claims/matrix.json 明确区分 AWS lab、hosted/static 层级，并将 Azure live 列为非声明。"]},
+    {"id": "U6", "status": "pass", "evidence": ["测试覆盖未知 validator、陈旧 SHA、越界路径、非法生命周期与未授权阶段等失败行为。"]},
+    {"id": "U7", "status": "not_proven", "evidence": ["本轮命令在候选提交 aa01454 上重跑，但目标 tip 对象缺失，因此无法把完整新鲜性证明绑定到派遣指定 tip。"]},
+    {"id": "U8", "status": "pass", "evidence": ["本轮仅新增 evidence/judges/S0/provisional-judge-2.json；未修改实现或 .github。"]},
+    {"id": "U9", "status": "pass", "evidence": ["BREAK_FIX_LOG.md 存在，完整仓库验证器与测试均通过。"]},
+    {"id": "U10", "status": "pass", "evidence": ["声明矩阵保持 A3 ceiling：Azure live out、performance L1、security/SBOM L2、agentic workflow L3。"]},
+    {"id": "U11", "status": "pass", "evidence": ["语言验证测试通过；本报告自由文本使用简体中文。"]},
+    {"id": "U12", "status": "pass", "evidence": ["stream_isolation 与 integration_queue 测试通过，验证互斥写域及流内顺序。"]},
+    {"id": "U13", "status": "pass", "evidence": ["saved_fresh_council 隔离测试通过；本轮未将其他 judge 分数作为评分依据。"]},
+    {"id": "U14", "status": "pass", "evidence": ["完整仓库验证通过，未发现未登记且阻止 S0 的新增 break。"]},
+    {"id": "S0-M1", "status": "pass", "evidence": ["分区与 stream isolation/integration queue 夹具通过。"]},
+    {"id": "S0-M2", "status": "pass", "evidence": ["生命周期、revision 与 worker 禁止自标 verified/done 测试通过。"]},
+    {"id": "S0-M3", "status": "pass", "evidence": ["authorization boundary 正向与下一阶段拒绝测试通过。"]},
+    {"id": "S0-M4", "status": "pass", "evidence": ["unknown validator IDs fail closed 测试通过。"]},
+    {"id": "S0-M5", "status": "pass", "evidence": ["只读验证后已丢弃 project validator 的证据刷新副作用；late forbidden path 检测测试通过。"]},
+    {"id": "S0-M6", "status": "pass", "evidence": ["worker receipt/adapter evidence 权限边界及陈旧 SHA 拒绝测试通过。"]},
+    {"id": "S0-M7", "status": "not_proven", "evidence": ["rubric 与 manifest hash 已计算，但派遣 tip 对象缺失使 parent-of-tip bundle 绑定无法闭合。"]},
+    {"id": "S0-M8", "status": "pass", "evidence": ["三流隔离、worker replacement 与 bottleneck dispatch 验证通过。"]},
+    {"id": "S0-M9", "status": "pass", "evidence": ["judge isolation 与 judge result schema 验证通过。"]},
+    {"id": "S0-M10", "status": "not_proven", "evidence": ["未执行云调用，但目标 tip 的父绑定无法在本地对象库验证。"]},
+    {"id": "S0-M11", "status": "pass", "evidence": ["model routing、worker language 与 bottleneck profile 测试通过。"]},
+    {"id": "S0-M12", "status": "pass", "evidence": ["Claude proxy policy gate 测试通过，保留直连回退且无配额保证声明。"]},
+    {"id": "S0-M13", "status": "pass", "evidence": ["TypeScript 7.x 缺省/固定版本策略测试通过。"]}
+  ],
+  "blocking_findings": [
+    "无法执行必需 parent bind：git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ 返回对象不存在；在该对象可用并重新验证前不得 provisional pass。"
+  ],
+  "scored_dimensions": [
+    {"id": "correctness_completeness", "score": 1.6, "rationale": "S0 确定性测试完整通过，但 tip 绑定硬门槛未闭合。", "evidence": ["node --test tests/：94/94 通过", "node scripts/project.mjs validate P0-T05：退出码 0"]},
+    {"id": "security_authority_boundaries", "score": 1.5, "rationale": "授权、凭据、receipt 与越权负向控制均有测试。", "evidence": ["tests/", "evidence/slices/S0/validator-contract.json"]},
+    {"id": "failure_recovery_depth", "score": 1.3, "rationale": "非法状态、未知 validator、陈旧 SHA、越界路径及替换路径均有负向覆盖。", "evidence": ["tests/", "evidence/slices/S0/integrated-gate.json"]},
+    {"id": "deterministic_test_quality", "score": 1.0, "rationale": "94 项测试、Terraform 格式检查与 S0 项目验证均以退出码 0 完成。", "evidence": ["node --test tests/", "terraform fmt -check -recursive terraform", "node scripts/project.mjs validate P0-T05"]},
+    {"id": "live_runtime_evidence_quality", "score": 0.5, "rationale": "S0 以治理与静态/本地 harness 为主；无云调用符合边界，但 tip 对象缺失削弱提交绑定。", "evidence": ["evidence/slices/S0/harness.json", "目标 tip 本地缺失"]},
+    {"id": "operability_troubleshooting", "score": 0.9, "rationale": "break/fix、bottleneck 与确定性错误路径可检查。", "evidence": ["BREAK_FIX_LOG.md", "evidence/slices/S0/integrated-gate.json"]},
+    {"id": "evidence_claim_integrity", "score": 0.5, "rationale": "A3 ceiling 保持不变，但 parent-of-tip 绑定不可验证是实质缺口。", "evidence": ["docs/claims/matrix.json", "harness/rubrics/S0.freeze.v1.json"]},
+    {"id": "maintainability_handoff", "score": 0.5, "rationale": "schema、简体中文与 context_remaining 交接要求明确。", "evidence": ["harness/schemas/judge-result.schema.json", "AGENTS.md"]},
+    {"id": "cost_performance_realism", "score": 0.5, "rationale": "S0 未扩大性能或云成本声明，A3 performance 仍为 L1。", "evidence": ["docs/claims/matrix.json"]}
+  ],
+  "unsupported_claims": [
+    "不得声称 tip 0606812354dae2e23356278f10f9b76b7ebd010b 已完成 parent bind 验证。",
+    "不得提高 A3 ceiling，尤其不得声称 Azure live。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在包含目标 tip 对象的 candidate/portfolio-aa01454 引用上重新运行 parent bind，并对同一 tip 重跑声明检查。"
+  ],
+  "overall_score": 8.3,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-judge"
+  },
+  "notes_zh": "clean-room saved_provisional 评判。tip_under_review=0606812354dae2e23356278f10f9b76b7ebd010b；bind_model=candidate_sha_parent_of_tip；parent_bind_verified=false。验证运行于 candidate_sha aa01454f8808c173deb43cc4b9b803287eec851e。context_remaining=63%。"
+}

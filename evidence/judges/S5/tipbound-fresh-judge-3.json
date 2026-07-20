@@ -1,0 +1,274 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S5",
+  "round": "fresh",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "judge_id": "tipbound-fresh-judge-3",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "tip 0606812354dae2e23356278f10f9b76b7ebd010b 的 parent = candidate aa01454f8808c173deb43cc4b9b803287eec851e",
+        "tree 0721108；rubric=f122c1d0…；manifest=89642f65…",
+        "dispatch packet tipbound-aa01454 与 tip-proof 一致"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test → 94 pass；tf fmt + staging validate exit 0",
+        "CANDIDATE_SHA validate P5-T03 exit 0（2026-07-20T13:37:50Z）；副作用已丢弃且未 git clean"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "zero_secrets=true；安全命令只读；无凭证暴露"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无影响本切片 tip-bound 的开放 critical/high"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "组件：合成 drill/runbook L1 dry-run；组合：A3 tip-bound L4 lab RTO",
+        "remaining_boundaries 与 tipbound_note_zh 时态一致，禁止抬升生产演练"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "破坏性命令负测 + incident/reset/smoke 校验器覆盖失败行为"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "新鲜现场验证绑定 candidate/tip；命令/退出码/时间/环境已举证"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "仅写入 tipbound-fresh-judge-3.json；未改权威状态或实现"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BF/NIX 轨迹覆盖已知 tip-bind 类故障；本轮无新断点"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "README/评审/STREAM/drills 对合成与 lab 边界表述一致"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "notes_zh 简体中文；对外英文保持"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S5 顺序流；集成经 candidate tip 队列，非法自合并未发生"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "fresh tipbound 与 saved council / provisional 分轨；未读旧分数"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "闭合前无未记录观察失败"
+      ]
+    },
+    {
+      "id": "S5-M1",
+      "status": "pass",
+      "evidence": [
+        "八 required drills 文件齐备且 synthetic 可复现校验"
+      ]
+    },
+    {
+      "id": "S5-M2",
+      "status": "pass",
+      "evidence": [
+        "两则 misleading 症状→诱因→实际根因→排除方法完整"
+      ]
+    },
+    {
+      "id": "S5-M3",
+      "status": "pass",
+      "evidence": [
+        "timeline/hypotheses/ruled_out/root_cause/recovery/verification 字段齐全（合成）"
+      ]
+    },
+    {
+      "id": "S5-M4",
+      "status": "pass",
+      "evidence": [
+        "Linux 压力 runbook：负载/内存/磁盘/内核日志只读诊断 + 审批门禁"
+      ]
+    },
+    {
+      "id": "S5-M5",
+      "status": "pass",
+      "evidence": [
+        "DNS/TLS/LB-edge/路由隔离逻辑 + NetworkPolicy deny 合成演练",
+        "flow-log 深度记入 improvements，不在合成天花板下阻断"
+      ]
+    },
+    {
+      "id": "S5-M6",
+      "status": "pass",
+      "evidence": [
+        "首五分钟步骤、精确命令、升级、禁令均在 schema 强制下通过"
+      ]
+    },
+    {
+      "id": "S5-M7",
+      "status": "pass",
+      "evidence": [
+        "rollback / restore / remediation 契约分流；lab restore RTO 与生产 failover 非宣称"
+      ]
+    },
+    {
+      "id": "S5-M8",
+      "status": "pass",
+      "evidence": [
+        "复位步骤 + post-recovery business smoke（verified_business）经校验器确认"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.85,
+      "rationale": "门禁完整但 drill 根因文本高度模板化（「Synthetic root cause for …」），正确性较另两席更保守。",
+      "evidence": [
+        "operations/drills/*.json root_cause 同构",
+        "P5-T03 仍 exit 0"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.45,
+      "rationale": "禁令与只读诊断权威清晰；agentic 无默认变异。",
+      "evidence": [
+        "do_not_do_yet 集",
+        "operations/runbooks/agentic.md"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "合成恢复与 smoke 成立；恢复类型区分偏契约层，给高但非满分。",
+      "evidence": [
+        "recovery_smoke / scenario_reset",
+        "operations/recovery/*-contract.json"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "94 测与机检全绿，无可争议。",
+      "evidence": [
+        "node --test tests/ → 94 pass",
+        "terraform validate Success"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.95,
+      "rationale": "在声明的 tip-bound L4 lab 天花板内，lab-drill-rto hosted 证据充分；不要求 live fleets。",
+      "evidence": [
+        "evidence/hosted/lab-drill-rto-29645042815.json",
+        "cloud_apply_evidence 列表于 STREAM_COMPLETE"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "三 runbook 压力路径实用；合成 drill 仍可支持交接演练。",
+      "evidence": [
+        "linux-pressure / kubernetes-pressure / network-isolation",
+        "runbook_dry_run pass"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.95,
+      "rationale": "宣称分层诚实；任务级 SHA 部分仍指向历史落地 tip，但不破坏 tip-bound parent 模型。",
+      "evidence": [
+        "evidence/slices/S5/drills/*.json candidate_sha 历史落地值 vs portfolio tip-bind",
+        "STREAM bind_model=candidate_sha_parent_of_tip"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "索引与 tipbound 说明便于交接。",
+      "evidence": [
+        "STREAM tipbound_note_zh",
+        "drill-index.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "成本维度非主轴；实验室边界内描述充分。",
+      "evidence": [
+        "remaining_boundaries 实验室范围",
+        "FinOps 相关 do_not_do_yet"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "生产机群独立操作员 dry-run 成功（仅契约 dry-run）",
+    "生产 postmortem 归责后的真实回归门禁落地（仅有合成样本）"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "刷新任务级 drills 证据 SHA 至 tip-bound candidate（非 must-have 阻断）",
+    "为 S5-M5 增加 flow-log/route/LB 可机器校验字段"
+  ],
+  "overall_score": 9.5,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s5-tipbound-fresh-judge-03"
+  },
+  "notes_zh": "独立 clean-room tipbound-fresh #3（S5）。绑定 tip=0606812… / candidate=aa01454… / tree=0721108 / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf、P5-T03 全绿；副作用 checkout（未 git clean）。未读旧分。对模板化 drill 正确性更保守，对 lab runtime 在声明天花板内略高。诚实 L1 契约+合成 must-have；组合 L4 lab 不抬生产。must_haves 全 pass；overall_score=9.50；merge_ready=yes。"
+}

@@ -1,0 +1,309 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r4-3",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "评委包绑定：candidate=aa01454…、rubric=724232f…、manifest(matrix)=89642f65… 三者一致",
+        "parent-bind：0606812^ = aa01454",
+        "rubric-freeze plan_sha256 与现场 PLAN.md 一致；partition 注记明确"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test、terraform fmt -check、P0-T05 validate、validate-rubric-freeze 全部 exit 0"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "zero_secrets 门禁环境；无凭据泄漏迹象"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "S0 无开放 critical/high 安全缺陷"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "A3 天花板保留：matrix lab_stack=L4、azure_live=out",
+        "gate/STREAM tip-bind 存在；cloud_apply_evidence 在 S2 gate 引用 hosted 证据"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "fail-closed 与否定夹具由 integrated-gate 验证器集合覆盖"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "integrated-gate.json 含 command/exit_code/recorded_at/environment/model_record",
+        "tipbound rebinding.recorded_utc=2026-07-20T11:54:43Z 后顶层 SHA 字段已指向 aa01454",
+        "本席于 tip b9bdb4f 工作区现场复验并通过"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "遵守 write_scope；仅写 provisional-judge-r4-3.json"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG 与 tipbound nixer/fixer 链路完整"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "evidence": [
+        "同一 STREAM_COMPLETE 文件内：notes 声明 Prior 5792a74 narrative superseded，notes_zh 仍以 5792a74 为现行叙事并错误描述 manifest 字节归属",
+        "validation_results 命令字符串仍钉 5792a74/531aa6ff，与顶层 tip-bound 字段及英文 notes 不一致",
+        "文档/状态/证据时态未收敛，构成 U10 失败（即便机器主键 SHA 已重绑）"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "简体中文自由文本；字段名英文可解析"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "三流隔离与流内顺序已证明"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "provisional 与 fresh 分离；本席无他评分数上下文"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "失败类已入库 break/fix"
+      ]
+    },
+    {
+      "id": "S0-M1",
+      "status": "pass",
+      "evidence": [
+        "路径所有权与共享接口规则明确"
+      ]
+    },
+    {
+      "id": "S0-M2",
+      "status": "pass",
+      "evidence": [
+        "合法生命周期与 revision 检查生效"
+      ]
+    },
+    {
+      "id": "S0-M3",
+      "status": "pass",
+      "evidence": [
+        "当前授权相位成功、越权相位拒绝"
+      ]
+    },
+    {
+      "id": "S0-M4",
+      "status": "pass",
+      "evidence": [
+        "validator allowlist + 未知 ID 关闭"
+      ]
+    },
+    {
+      "id": "S0-M5",
+      "status": "pass",
+      "evidence": [
+        "check-only 与完成对账"
+      ]
+    },
+    {
+      "id": "S0-M6",
+      "status": "pass",
+      "evidence": [
+        "禁止铸造 receipt/adapter 证据"
+      ]
+    },
+    {
+      "id": "S0-M7",
+      "status": "pass",
+      "evidence": [
+        "plan/execution/validator/rubric/partition 哈希绑定；validate-rubric-freeze pass"
+      ]
+    },
+    {
+      "id": "S0-M8",
+      "status": "pass",
+      "evidence": [
+        "并发流、替换、bottleneck 夹具通过"
+      ]
+    },
+    {
+      "id": "S0-M9",
+      "status": "pass",
+      "evidence": [
+        "judge 隔离与 schema 测试通过"
+      ]
+    },
+    {
+      "id": "S0-M10",
+      "status": "pass",
+      "evidence": [
+        "H0 精确 bundle 绑定；无云调用"
+      ]
+    },
+    {
+      "id": "S0-M11",
+      "status": "pass",
+      "evidence": [
+        "模型角色/实际 ID/语言协议可强制"
+      ]
+    },
+    {
+      "id": "S0-M12",
+      "status": "pass",
+      "evidence": [
+        "可选 Claude proxy 完整性与回退约束"
+      ]
+    },
+    {
+      "id": "S0-M13",
+      "status": "pass",
+      "evidence": [
+        "TypeScript 7.x 策略校验存在"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U10：STREAM_COMPLETE 中英文叙述与 validation_results 命令仍残留 5792a74 时代内容，证据时态未与 tip-bound aa01454 收敛。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.9,
+      "rationale": "S0 能力与 tip-bound 主键完整；仅文档时态残留阻塞退出规则。",
+      "evidence": [
+        "integrated-gate 全绿",
+        "STREAM notes_zh 残留"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "权威边界与 H0 完整。",
+      "evidence": [
+        "H0.binding.json",
+        "zero_secrets"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "夹具级恢复路径充分。",
+      "evidence": [
+        "worker_replacement",
+        "bottleneck_dispatch"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "确定性测试全通过。",
+      "evidence": [
+        "node --test exit 0"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.9,
+      "rationale": "现场 tip-bound validate 证明充分；S0 无额外 live 要求。",
+      "evidence": [
+        "CANDIDATE_SHA=aa01454 validate P0-T05"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "操作面清晰；残留文案是审计噪音而非命令失败。",
+      "evidence": [
+        "project.mjs validate",
+        "STREAM_COMPLETE"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.55,
+      "rationale": "主键绑定与 A3 声称诚实；U10 文档不一致拉低完整性。",
+      "evidence": [
+        "matrix L4/A3",
+        "STREAM notes vs notes_zh"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.4,
+      "rationale": "rebinding 块可交接，但未清 notes_zh 仍有误导风险。",
+      "evidence": [
+        "STREAM_COMPLETE.rebinding",
+        "notes_zh"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.5,
+      "rationale": "无不当成本/Azure 抬升。",
+      "evidence": [
+        "engagement_ceilings_A3"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "STREAM_COMPLETE notes_zh 将现行 candidate 描述为 5792a74"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "重写 STREAM_COMPLETE notes_zh 与 validation_results，使其仅反映 aa01454 tip-bound。",
+    "若 evidence_manifest 意图指向 matrix，则更正 path 字段以避免审计歧义。"
+  ],
+  "overall_score": 9.1,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-provisional-judge",
+    "role": "provisional-judge"
+  },
+  "notes_zh": "独立 clean-room provisional R4 #3。机器主键与 S0-M*、现场校验均成立；唯一阻塞为 U10（STREAM 文案/命令时态未收敛）。故 provisional_pass=false、merge_ready=no。A3 天花板未抬升。未读取其他 judge 分数。"
+}

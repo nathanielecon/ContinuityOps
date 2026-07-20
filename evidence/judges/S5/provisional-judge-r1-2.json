@@ -1,0 +1,312 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S5",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r1-2",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "tip 0606812354dae2e23356278f10f9b76b7ebd010b 的唯一父提交 = candidate aa01454f8808c173deb43cc4b9b803287eec851e",
+        "rubric JUDGE_RUBRICS.md sha256=f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "manifest docs/claims/matrix.json sha256=89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "working tree short=7b14c09；gate portfolio_tip_sha=aa01454…"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ exit=0（# tests 94 / # pass 94）",
+        "terraform fmt -check -recursive terraform exit=0；staging terraform validate Success",
+        "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e BASELINE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P5-T03 → runbook_dry_run/incident_consistency/full_repository/judge_exit 全过"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "S5 证据与 runbook/drill 路径无 AKIA/私钥命中",
+        "integrated-gate.environment.zero_secrets=true"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无 open critical/high 安全 issue 绑定 S5",
+        "runbook schema + command_safety 负向夹具绿"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "组件：runbooks.json / drills-summary.json 仍为 L1 契约/合成",
+        "门禁：integrated-gate/STREAM claim_level=L4 + Lab incident drill only / Synthetic fixtures / Diagnostics not executed on live fleets",
+        "matrix#runbooks-drills notes 指向 lab run 29645042815，非客户生产演练"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "incident_schema 拒绝 live_production_drills=true",
+        "misleading 症状夹具 + command_safety 拒绝未标记危险命令",
+        "do_not_do_yet 覆盖 reboot/kill/宽网策/关 TLS 校验"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "本席现场复跑 parent-bind/tests/tf/P5-T03（2026-07-20T13:14Z）",
+        "writeEvidence 改动已 git checkout 还原；未使用 git clean",
+        "lab-drill-rto 与 cloud-apply-staging* 路径绑定在 gate.cloud_apply_evidence"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "评判写入路径仅 provisional-judge-r1-2.json",
+        "未触碰 operations/ 实现或 rubric 冻结文件"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BF-2026-027 记载 tip-bind elevate S5",
+        "STREAM rebinding.issue_ids 含 TIP-BIND-AA01454"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "SUPERVISOR_VERDICT 与 STREAM tip-bound aa01454 / A3 L4 lab 一致",
+        "engineering-qa-security.md 时态仍声明 No live production drills"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本报告自由文本为简体中文",
+        "对外操作文档保持英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S5 单流顺序任务；本席只读评分",
+        "无跨流分区写入"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "saved_provisional 与历史 fresh/saved council 文件分离",
+        "未打开/未采信旧分数"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "观测到的 tip-bind 变更已在 BREAK_FIX_LOG / STREAM.rebinding",
+        "本轮验证无新增未记录失败"
+      ]
+    },
+    {
+      "id": "S5-M1",
+      "status": "pass",
+      "evidence": [
+        "required_drills=8 且 operations/drills 与 evidence/slices/S5/drills 一一对应",
+        "P5-T02 incident_schema + P5-T03 incident_consistency 通过"
+      ]
+    },
+    {
+      "id": "S5-M2",
+      "status": "pass",
+      "evidence": [
+        "misleading-cpu-as-network：网络表象 vs CPU steal",
+        "misleading-5xx-as-app-bug：应用表象 vs 上游 TLS"
+      ]
+    },
+    {
+      "id": "S5-M3",
+      "status": "pass",
+      "evidence": [
+        "各 drill 具备时间线、假设、排除、根因、恢复与回归控制",
+        "业务验证标志 verified_business=true",
+        "说明：字段级满足合成 schema；取证粒度偏模板"
+      ]
+    },
+    {
+      "id": "S5-M4",
+      "status": "pass",
+      "evidence": [
+        "linux-pressure：uptime/free/df/dmesg（进程/日志/磁盘）",
+        "kubernetes-pressure：describe/logs；权限类停手项在 do_not_do_yet",
+        "diagnostic first-five 仅打印清单 claim_level=L1"
+      ]
+    },
+    {
+      "id": "S5-M5",
+      "status": "pass",
+      "evidence": [
+        "network-isolation 覆盖 DNS、TLS、edge、in-cluster 与 app-vs-network",
+        "networkpolicy-deny + dns-partial-failure 演示安全边界与 DNS 路径",
+        "说明：flow-log/LB/route 未做 live 证明，停留在契约隔离叙述"
+      ]
+    },
+    {
+      "id": "S5-M6",
+      "status": "pass",
+      "evidence": [
+        "runbook schema 强制 first_five_minutes/safe_commands/stop_escalation/do_not_do_yet",
+        "validators.runbook_dry_run 明确契约 dry-run",
+        "escalation 与停手项充当压力下的 blast-radius 限制"
+      ]
+    },
+    {
+      "id": "S5-M7",
+      "status": "pass",
+      "evidence": [
+        "rollback-contract vs backup-contract（isolated_restore）分立",
+        "agentic remediation 提案路径与默认无变更权分立",
+        "说明：逐 drill 未枚举 failover/rebuild 分支，依赖全局恢复契约"
+      ]
+    },
+    {
+      "id": "S5-M8",
+      "status": "pass",
+      "evidence": [
+        "各 drill recovery 含 Reset fixture + verified_business",
+        "lab-drill-rto steps 含 apply_restore_plan 与 health_check"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.91,
+      "rationale": "必须资产与校验链完整；合成 drill 覆盖面够用，细节同构略扣。",
+      "evidence": [
+        "operations/incidents/S5/drill-index.json",
+        "validate P5-T03 exit=0",
+        "tests 94/94"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.46,
+      "rationale": "只读诊断默认、破坏性标记与零密钥声明扎实。",
+      "evidence": [
+        "operations/runbooks/schema.json",
+        "scripts/validators/core.mjs#command_safety",
+        "integrated-gate.environment.zero_secrets"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.38,
+      "rationale": "误导症状与 lab restore 有证据；恢复选择区分不够细，故中高分。",
+      "evidence": [
+        "operations/drills/misleading/misleading-5xx-as-app-bug.json",
+        "evidence/hosted/lab-drill-rto-29645042815.json",
+        "operations/recovery/backup-contract.json"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 0.98,
+      "rationale": "仓库级 node:test 与 P5 相关夹具全绿。",
+      "evidence": [
+        "node --test tests/ → 94/94 pass",
+        "tests/runbooks/command-safety.test.mjs"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.88,
+      "rationale": "存在 lab RTO hosted 证据，但 runbook/诊断明确非 live fleets；按诚实边界给分。",
+      "evidence": [
+        "evidence/hosted/lab-drill-rto-29645042815.json",
+        "evidence/slices/S5/runbooks.json",
+        "scripts/diagnostics/first-five.mjs"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.93,
+      "rationale": "三份压力/网络 runbook 可操作；dry-run 注记清晰。",
+      "evidence": [
+        "operations/runbooks/linux-pressure.json",
+        "operations/runbooks/network-isolation.json",
+        "runbook_dry_run note"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.96,
+      "rationale": "哈希与 parent-bind 正确；L1 组件与 L4 lab 门禁分层未混淆。",
+      "evidence": [
+        "sha256sum JUDGE_RUBRICS.md / matrix.json",
+        "evidence/slices/S5/integrated-gate.json",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.48,
+      "rationale": "STREAM tipbound_note_zh 与评审笔记便于交接。",
+      "evidence": [
+        "evidence/slices/S5/STREAM_COMPLETE.json",
+        "evidence/slices/S5/SUPERVISOR_VERDICT.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.44,
+      "rationale": "RTO 自报为合成墙钟；未宣称生产级成本优化。",
+      "evidence": [
+        "lab-drill-rto notes：Lab drill only",
+        "STREAM remaining_boundaries：RTO measured in lab recorder"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "禁止把 P5-T01 契约校验当作 live 诊断执行证明",
+    "禁止把 synthetic drill 的 verified_business 当作生产业务恢复证明",
+    "禁止把 matrix L4 runbooks-drills 解释为生产事故演练已完成"
+  ],
+  "security_findings": [
+    "无阻断：默认无 mutation；危险命令需 approval；证据区未见密钥"
+  ],
+  "improvements": [
+    "按场景拆分 root_cause/recovery_choice，避免八 drill 复制同一骨架",
+    "为 network-isolation 增加 flow-log/route/LB 检查清单条目并纳入 schema",
+    "将 lab RTO 与契约 dry-run 在 matrix 组件层再拆一条 L1/L4 对照说明"
+  ],
+  "overall_score": 9.42,
+  "merge_ready": "provisional",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-provisional-judge",
+    "role": "provisional-judge"
+  },
+  "notes_zh": "独立 tipbound provisional R1 #2（S5）。绑定 tip=0606812 / candidate=aa01454 / tree=7b14c09 / rubric=f122c1d0… / manifest=89642f65…。现场验证 parent-bind+tests+tf+P5-T03 全绿；副作用 checkout 还原。must_haves U1–U14+S5-M1–M8 在契约/合成+lab 边界内通过；强调 runbook/诊断为 L1 dry-run。总分 9.42。未读旧分；未 git clean。"
+}

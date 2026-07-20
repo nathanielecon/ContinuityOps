@@ -21,7 +21,7 @@ re-applied on every tip.
 | recovery | **L4** | `evidence/slices/S7/recovery/` · lab-drill-rto hosted artifact | Lab RTO wall-clock from drill recorder (tip-inherited) |
 | performance | **L1** | `evidence/slices/S7/performance/` | Honest L1 — no live load proof |
 | finops-teardown | **L4** | `evidence/slices/S7/cost/` · elevation hosted artifact | Live `terraform destroy` staging (tip-inherited) |
-| portfolio-delivery | **L4** | `evidence/slices/S8/` · `evidence/portfolio/tip-bind-2026-07-18.json` · fresh judges | A3-scoped portfolio gate + tip-bind |
+| portfolio-delivery | **L4** | `evidence/slices/S8/` · `evidence/portfolio/tip-bind-2026-07-20.json` · `evidence/portfolio/tipbound-s0-s8-aa01454.json` · tipbound fresh judges | A3-scoped portfolio gate + tip-bound S0–S8 on aa01454 (do not raise A3) |
 
 ## Slice folder map
 

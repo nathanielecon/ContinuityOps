@@ -1,0 +1,277 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S4",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r1-3",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "派单 tip/candidate/tree/rubric/manifest 五元组现场核验一致",
+        "candidate 为 tip 的第一父提交（parent-bind）"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "tests 94 pass；terraform fmt -check 0；validate P4-T03 0（CANDIDATE_SHA 绑定）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "红action 路径与 zero_secrets 环境；无敏感 payload 入证据"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无 open high/critical；安全评审残留仅为 live 后端未证"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "任务证据 L1 合成 vs 组合 tip-bound L4 lab 分层",
+        "drill/claim_ceiling/remaining_boundaries/tipbound_note_zh 互证",
+        "Azure live out；性能天花板 L1"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "负向告警与缺失信号契约 + 单测"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "本席独立复验四项门禁；未污染工作树（未 git clean）"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "仅新增 provisional-judge-r1-3.json"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BF 日志覆盖 tip-bind 与观测抬升相关项"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "文档与证据均标明 Synthetic signal-path retained；无 live fire 虚报"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "简体中文评判文本；英文外部工件"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "分区写入隔离遵守"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "provisional 与 fresh/saved 分离；未读旧分"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "无未入账失败关闭切片"
+      ]
+    },
+    {
+      "id": "S4-M1",
+      "status": "pass",
+      "evidence": [
+        "ingress/app/queue/function 全路径可追踪（契约+单测）"
+      ]
+    },
+    {
+      "id": "S4-M2",
+      "status": "pass",
+      "evidence": [
+        "logs/metrics/traces/alerts 共享 correlation 键"
+      ]
+    },
+    {
+      "id": "S4-M3",
+      "status": "pass",
+      "evidence": [
+        "服务 RED + 队列深度回答主路径问题；根因链接存在",
+        "在「schema-only / 非生产 SLA」边界内判定 pass"
+      ]
+    },
+    {
+      "id": "S4-M4",
+      "status": "pass",
+      "evidence": [
+        "owner/severity/runbook/condition/dedup/recovery（drill resolves）齐全"
+      ]
+    },
+    {
+      "id": "S4-M5",
+      "status": "pass",
+      "evidence": [
+        "SLO 窗口与 burn/error-budget 数学自洽"
+      ]
+    },
+    {
+      "id": "S4-M6",
+      "status": "pass",
+      "evidence": [
+        "密钥与租户敏感字段脱敏测试通过"
+      ]
+    },
+    {
+      "id": "S4-M7",
+      "status": "pass",
+      "evidence": [
+        "缺失遥测与噪声告警负向契约已测"
+      ]
+    },
+    {
+      "id": "S4-M8",
+      "status": "pass",
+      "evidence": [
+        "误导症状（error-rate）→ drill 根因路径已建模"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.95,
+      "rationale": "四跳+SLO+告警+脱敏主链完整；仪表盘扩展项记改进不记阻断。",
+      "evidence": [
+        "telemetry-contract.json",
+        "burn-rate.json",
+        "signal-path.test.mjs"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.45,
+      "rationale": "脱敏与无凭据入仓达标。",
+      "evidence": [
+        "redaction.mjs",
+        "zero_secrets"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "合成 fire/resolve 与负向噪声处理清楚。",
+      "evidence": [
+        "drill.alert",
+        "negative_tests"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "确定性测试全绿。",
+      "evidence": [
+        "node --test tests/"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.9,
+      "rationale": "合成路径诚实；实验室 tip-bound 证据不越权。",
+      "evidence": [
+        "synthetic=true",
+        "cloud_apply_evidence",
+        "tipbound_note_zh"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1.0,
+      "rationale": "告警所有权与 runbook/根因链接可操作。",
+      "evidence": [
+        "owner/runbook/links"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.95,
+      "rationale": "声明与边界基本一致；任务级 SHA 可后续对齐 tip。",
+      "evidence": [
+        "STREAM_COMPLETE.json",
+        "matrix.json",
+        "P4-T03 validate"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "模块边界清晰，便于后续 fresh。",
+      "evidence": [
+        "observability/ 与 operations/slo/"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "保留/成本权衡未深写（M10 不在本轮 must_haves），略扣。",
+      "evidence": [
+        "remaining_boundaries",
+        "A3 ceilings"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "禁止将合成 drill 的 fires_when/resolves_when 当作 live 通道证据",
+    "禁止将 tip-bound L4 lab 观测抬升解释为生产 SLO/告警运营证明",
+    "S4-M9/M10 不在本轮 must_haves，亦未证明"
+  ],
+  "security_findings": [
+    "无阻断安全项"
+  ],
+  "improvements": [
+    "显式补齐 dashboard 对 kubernetes/依赖/成本问题的面板",
+    "在 alert 对象内联 recovery 条件字段",
+    "任务级 telemetry/signals 证据 SHA 与 tip-bound candidate 对齐"
+  ],
+  "overall_score": 9.6,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-provisional-judge",
+    "role": "provisional-judge"
+  },
+  "notes_zh": "独立 clean-room tipbound provisional R1 #3（S4）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=7b14c09 / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf fmt、CANDIDATE_SHA validate P4-T03 均 exit 0；未 git clean；未读旧分数。合成信号路径诚实计分；U1–U14+S4-M1–M8 全 pass；merge_ready=yes；overall_score=9.60；provisional_pass=true。"
+}

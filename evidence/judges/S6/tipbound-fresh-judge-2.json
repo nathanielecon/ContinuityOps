@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S6",
+  "round": "fresh",
+  "judge_id": "tipbound-fresh-judge-2",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "0606812…^ == aa01454…（tip-proof + 现场 rev-parse）",
+        "rubric JUDGE_RUBRICS.md sha256=f122c1d0…；manifest matrix.json sha256=89642f65…",
+        "dispatch-packets/tipbound-aa01454/TIP_PARENT_PROOF.txt 交叉一致"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "94/94 node --test；terraform fmt -check exit 0；staging validate Success",
+        "validate P6-T04（CANDIDATE_SHA=aa01454）exit 0 @ 2026-07-20T13:45:34Z",
+        "写回 integrated-gate 已 checkout 丢弃；禁止 git clean 已遵守"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "zero_secrets=true；secrets-policy 禁 .env/id_rsa/AWS_SECRET_ACCESS_KEY",
+        "agentic-evidence.yml 仅 read permissions"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "S6 评审无开放 critical/high；负例与注入拒绝关闭高危路径",
+        "不抬升为 live 漏洞扫描通过结论"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "组件宣称：SBOM L2 / Azure L1 / agentic L3；STREAM 组合 L3",
+        "remaining_boundaries 区分 designed/static、hosted-control、非 live apply"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "IAM/RBAC/admission/Azure policy 负例 fixtures",
+        "prompt injection + forged evidence + unsafe proposal 单测"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "本轮现场命令/退出码/时间/工具版本齐全",
+        "hosted SBOM 与 agentic-workflow 证据路径可寻址"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "仅写 tipbound-fresh-judge-2.json；遵守 P6-T04 write_scope",
+        "未扩大权限、未改 rubric"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BF-2026-019 / tip-bind 修复在 BREAK_FIX_LOG；本轮无新断点"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "matrix notes、STREAM tipbound_note_zh、评审「No live cloud security proof」一致"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "notes_zh 简体中文；对外英文工件未改写为中文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S6 内部顺序；与并行切片无写冲突迹象"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "fresh tipbound 与 provisional/saved 分轨；未读旧分、未互抄 #1"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "历史 tip-bind 失败已入 BF；本轮验证全绿无新增失败"
+      ]
+    },
+    {
+      "id": "S6-M1",
+      "status": "pass",
+      "evidence": [
+        "least-privilege 角色边界 + deny-wildcard-admin / deny-agent-iam-create",
+        "iam-negative / rbac-negative 策略契约；policy.test.mjs 覆盖"
+      ]
+    },
+    {
+      "id": "S6-M2",
+      "status": "pass",
+      "evidence": [
+        "secrets-policy：托管/轮换/脱敏/禁入源码",
+        "证据 environment.zero_secrets"
+      ]
+    },
+    {
+      "id": "S6-M3",
+      "status": "pass",
+      "evidence": [
+        "可复现仓库 SBOM（SOURCE_DATE_EPOCH + sha256 inventory）",
+        "triage 边界诚实：无 live scanner；L2 宣称"
+      ]
+    },
+    {
+      "id": "S6-M4",
+      "status": "pass",
+      "evidence": [
+        "admission 阻断 latest/root/缺 digest；K8s/TF network-negative 协同"
+      ]
+    },
+    {
+      "id": "S6-M5",
+      "status": "pass",
+      "evidence": [
+        "Azure governance 具体 controls + blocked_change_examples",
+        "implemented_versus_designed 与 non_claims 显式"
+      ]
+    },
+    {
+      "id": "S6-M6",
+      "status": "pass",
+      "evidence": [
+        "default_mutation_authority=false；evidence/proposal 双模式",
+        "hosted agentic-workflow 证明托管控制平面而非容器凭据"
+      ]
+    },
+    {
+      "id": "S6-M7",
+      "status": "pass",
+      "evidence": [
+        "人闸必选 + proposeRemediation 强制 awaiting_approval",
+        "短时 OIDC（continuityops-gha）路径有 hosted 证据"
+      ]
+    },
+    {
+      "id": "S6-M8",
+      "status": "pass",
+      "evidence": [
+        "注入短语拒绝、伪造/陈旧证据拒绝、agent 无 iam:CreateUser",
+        "workflow defenses 与单测对齐"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.85,
+      "rationale": "安全/Azure/agentic 门禁完整，但任务级证据 SHA 仍为历史落地提交，正确性略保守。",
+      "evidence": [
+        "security.json candidate_sha=95f847f…；agentic.json=ddfca8e…（历史任务）",
+        "STREAM_COMPLETE tip-bound aa01454"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "只读默认、人闸、OIDC、负例与注入拒绝形成多层权威边界，本维给满。",
+      "evidence": [
+        "agentic/workflow-contract.json + remediation-proposal.mjs",
+        "evidence/hosted/agentic-workflow-2026-07-18.json hosted_controls"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "失败负例与伪造证据路径扎实；缺安全事故闭环恢复深度。",
+      "evidence": [
+        "admission-negative + prompt-injection.test.mjs",
+        "azure/policy-negative.json"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "确定性套件与 P6-T04/terraform 机检全绿。",
+      "evidence": [
+        "94/94 pass",
+        "validate P6-T04 exit 0"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.95,
+      "rationale": "相对 #1 更肯定托管 agentic L3 举证；仍不把 SBOM/Azure 抬到 live。",
+      "evidence": [
+        "agentic-workflow-2026-07-18.json claim_level=L3",
+        "security-sbom-2026-07-18.json（仓库文件级）"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "契约与 workflow 可操作；薄评审仍限制现场排障示范。",
+      "evidence": [
+        "agentic-evidence.yml / agentic-remediate.yml",
+        "operations 边界在 agentic remaining_boundaries"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.9,
+      "rationale": "分层宣称清楚，但对历史任务 SHA 未刷新更敏感，证据完整性略扣。",
+      "evidence": [
+        "docs/claims/matrix.json S6 组件",
+        "任务级 evidence candidate_sha ≠ aa01454"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "fixtures、validators、STREAM 绑定可交接。",
+      "evidence": [
+        "evidence/slices/S6/STREAM_COMPLETE.json",
+        "tests/security + tests/agentic + tests/azure"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "短时凭据与 lab 天花板控制支出合理；非本切片成本证明。",
+      "evidence": [
+        "D-046 Azure out；OIDC 短时角色",
+        "workflow permissions 最小读"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "生产/客户侧 agentic 自动 mutation",
+    "live Azure governance apply",
+    "仓库 SBOM 等同 hosted vuln scanner 通过"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "刷新任务级 evidence 的 tip-bound candidate_sha",
+    "为 secret-request / excessive-scope 增加显式单测用例（当前由角色与注入模式间接覆盖）"
+  ],
+  "overall_score": 9.5,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s6-tipbound-fresh-judge-02"
+  },
+  "notes_zh": "独立 clean-room tipbound-fresh #2（S6）。同绑定 tip=0606812… / candidate=aa01454… / tree=0721108 / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind+94+tf+P6-T04 全绿；副作用 checkout（未 git clean）。未读旧分、未互抄 #1。相对 #1 更肯定权威边界与 hosted agentic，对正确性（历史任务 SHA）与宣称完整性更保守。诚实 L3 tipbound + security-sbom L2 + Azure L1。must_haves 全 pass；overall_score=9.50；merge_ready=yes。"
+}
