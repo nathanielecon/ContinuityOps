@@ -1,0 +1,340 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "saved_provisional",
+  "judge_id": "S2-PROVISIONAL-R4-01",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high-fast",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "git rev-parse tip^ == aa01454f8808c173deb43cc4b9b803287eec851e (PARENT_BIND_OK)",
+        "sha256 docs/planning/JUDGE_RUBRICS.md == f122c1d0…；docs/claims/matrix.json == 89642f65…",
+        "evidence/slices/S2/{integrated-gate,STREAM_COMPLETE,SUPERVISOR_VERDICT,chart-contract,runtime-evidence,scenarios/matrix-evidence}.json candidate_sha=aa01454…",
+        "evidence/portfolio/tip-proof-aa01454.json；integration/upstreams.lock.json；harness/postbuild-partition-manifest.json"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → 94 pass / exit 0",
+        "terraform fmt -check -recursive terraform/ → exit 0",
+        "CANDIDATE_SHA=aa01454… node scripts/project.mjs validate P2-T04 → exit 0（claim_level 保持 L4）",
+        "CANDIDATE_SHA=aa01454… validate P2-T03 → exit 0；随后 git checkout -- 丢弃副作用"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml 使用 ACCOUNT_ID/PLACEHOLDER，无长寿命密钥",
+        "integrated-gate.environment.zero_secrets=true",
+        "云席 NoCredentials 预期；托管路径为 GHA OIDC continuityops-gha"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "未发现切片级未关闭 critical/high 安全缺陷记录",
+        "networkPolicy/RBAC/non-root 在 chart 与 kubernetes_negative 契约中存在",
+        "Azure live 仍为 L1（A3/D-046），未抬升"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "fail",
+      "evidence": [
+        "SUPERVISOR_VERDICT.json claim_level=L4 但 checks.claim_level_max=L1 且 notes 仍写 honest L1",
+        "组件证据 chart/runtime/scenarios 为 L1，门禁/STREAM 为 L4 — 分层本身可接受，但 SUPERVISOR 内部互相矛盾",
+        "integrated-gate 同时保留 managed_cluster_apply 与 No EKS OIDC apply evidence，与 elevation 已证 EKS 集群 apply 的表述需更清晰区分 workload vs cluster"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/scenarios/{crashloop,readiness,scheduling,resource,dns,network-policy}.json",
+        "evidence/slices/S2/scenarios/matrix-evidence.json + crashloop-reset.json（synthetic）",
+        "chart-contract kubernetes_negative=true"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "fail",
+      "evidence": [
+        "evidence/judges/S2/fresh-judge-{1,2,3}.json 与 saved-council-provisional.json 仍绑定 candidate_sha=1fd88ff…、rubric_sha256=7d843e20…，未 tip-bound 到 aa01454…/f122c1d0…",
+        "P2-T04 judge_exit 仍消费上述陈旧 council，门禁 tip-bound 后认证链未刷新",
+        "托管 apply candidate_sha_apply=f059ffa…≠aa01454… — 按任务规则可接受（cloud_apply_evidence 引用实验室证据）"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "PLAN.md P2-T0x write_scope 限于 kubernetes/、evidence/slices/S2/、evidence/judges/S2/ 等",
+        "本席仅写入 evidence/judges/S2/provisional-judge-r4-*.json"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md BF-2026-019/021/022/023 记录 tip-bind、L1↔L4、managed_cluster_apply、validate 降级",
+        "BF-2026-012 EKS 版本失败与后续绿 apply 已入账"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "evidence": [
+        "OPERATING_STATE.md 仍称 S2 claim L1；PLAN.md P2-T04 note 仍写 honest L1",
+        "SUPERVISOR_VERDICT notes 与 claim_level=L4 时态不一致",
+        "README 已描述 lab EKS L4，与 OPERATING_STATE/PLAN 残留 L1 叙事冲突"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本席 notes/rationale 为简体中文；README/matrix 对外英文",
+        "AGENTS.md Language protocol"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "harness/postbuild-partition-manifest.json runtime-k8s → kubernetes/ owner s2",
+        "流式并发规则见 RALPHY_ORCHESTRATION / AGENTS.md"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "harness/schemas/judge-result.schema.json round∈{saved_provisional,fresh}",
+        "本文件 round=saved_provisional；未读取既有 judge 分数"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 含 BF-2026-019..023 与本轮相关失败",
+        "未关闭流前观察项已记录"
+      ]
+    },
+    {
+      "id": "S2-M1",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml digest pin + probes/resources/HPA/PDB/topology",
+        "helm_template 校验要求 digest: sha256:[64hex]"
+      ]
+    },
+    {
+      "id": "S2-M2",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml digest pin + probes/resources/HPA/PDB/topology",
+        "templates/{deployment,hpa,pdb,rbac,networkpolicy,ingress,serviceaccount}.yaml",
+        "evidence/slices/S2/chart-contract.json validators pass（helm/kubeconform 缺席时静态代替）"
+      ]
+    },
+    {
+      "id": "S2-M3",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml digest pin + probes/resources/HPA/PDB/topology",
+        "templates/{deployment,hpa,pdb,rbac,networkpolicy,ingress,serviceaccount}.yaml",
+        "evidence/slices/S2/chart-contract.json validators pass（helm/kubeconform 缺席时静态代替）",
+        "kubernetes_policy / kubernetes_negative 在 chart-contract 通过"
+      ]
+    },
+    {
+      "id": "S2-M4",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/chart-contract.json passed 全部静态门禁",
+        "helm/kubeconform 缺席时 L1 静态代替已披露"
+      ]
+    },
+    {
+      "id": "S2-M5",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/runtime/kind-preflight.json label=local-only claim L1",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json EKS cops-staging 与 teardown"
+      ]
+    },
+    {
+      "id": "S2-M6",
+      "status": "not_proven",
+      "evidence": [
+        "elevation 证明 EKS 集群/节点组 apply+teardown，但无候选 SHA 上的 workload digest/health/version/identity/rollout/scaling 运行时捕获",
+        "runtime-evidence autoscaling_runtime 注明实时扩缩容未声明；kind 不可用",
+        "remaining_boundaries 保留 managed_cluster_apply — 诚实披露缺口，故不得判 pass"
+      ]
+    },
+    {
+      "id": "S2-M7",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json 六类失败+reset_script",
+        "evidence/slices/S2/scenarios/crashloop-reset.json synthetic reset + business_check"
+      ]
+    },
+    {
+      "id": "S2-M8",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json 六类失败+reset_script",
+        "evidence/slices/S2/scenarios/crashloop-reset.json synthetic reset + business_check",
+        "reset-scenario.mjs 契约 + business_check"
+      ]
+    },
+    {
+      "id": "S2-M9",
+      "status": "pass",
+      "evidence": [
+        "ingress.yaml + values ingress/tls 占位 ARN/host 标明边界",
+        "未声称生产证书或公网已接通"
+      ]
+    },
+    {
+      "id": "S2-M10",
+      "status": "pass",
+      "evidence": [
+        "elevation teardown_staging run 29645052414",
+        "docs/claims/matrix.json finops-teardown L4；remaining_boundaries Not production",
+        "docs/claims/matrix.json azure-governance claim_level=L1；engagement_ceilings_A3.azure_live=out",
+        "integrated-gate remaining_boundaries 含 Azure live out (D-046)"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U5：SUPERVISOR_VERDICT 同时持有 claim_level=L4 与 checks.claim_level_max/notes=L1，声明分层失败。",
+    "U7：S2 fresh/saved judge 仍绑定 1fd88ff…/旧 rubric，未随 tip-bound aa01454… 刷新。",
+    "U10：OPERATING_STATE/PLAN/SUPERVISOR 残留 honest L1 与门禁 L4/README lab L4 不一致。",
+    "S2-M6：无候选上托管 workload digest/health/rollout/scaling 运行时证明（managed_cluster_apply 保留）。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 1.6,
+      "rationale": "Chart/场景/门禁与 tip parent-bind 完整，但托管 workload 运行时与 SUPERVISOR 声明裂缝拉低完备性。",
+      "evidence": [
+        "kubernetes/chart/",
+        "evidence/slices/S2/integrated-gate.json",
+        "PARENT_BIND_OK"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.3,
+      "rationale": "非 root/RBAC/NetworkPolicy 与 OIDC 边界清楚；占位 ARN 可接受；无密钥暴露。",
+      "evidence": [
+        "kubernetes/chart/values.yaml 使用 ACCOUNT_ID/PLACEHOLDER，无长寿命密钥",
+        "integrated-gate.environment.zero_secrets=true",
+        "云席 NoCredentials 预期；托管路径为 GHA OIDC continuityops-gha",
+        "kubernetes/chart/templates/rbac.yaml"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.2,
+      "rationale": "六类合成失败+reset 齐全；无 live injection，深度止于 L1 synthetic。",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json 六类失败+reset_script",
+        "evidence/slices/S2/scenarios/crashloop-reset.json synthetic reset + business_check"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "本轮 node --test、tf fmt、P2-T03/T04 validate 全绿。",
+      "evidence": [
+        "node --test tests/ → 94 pass / exit 0",
+        "terraform fmt -check -recursive terraform/ → exit 0",
+        "CANDIDATE_SHA=aa01454… node scripts/project.mjs validate P2-T04 → exit 0（claim_level 保持 L4）",
+        "CANDIDATE_SHA=aa01454… validate P2-T03 → exit 0；随后 git checkout -- 丢弃副作用"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 0.5,
+      "rationale": "kind 缺席；EKS 仅为集群基建，缺 workload 运行时证据。",
+      "evidence": [
+        "kind-preflight.json",
+        "cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.8,
+      "rationale": "场景/reset/ingress 边界可操作；缺托管排障实测。",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json 六类失败+reset_script",
+        "evidence/slices/S2/scenarios/crashloop-reset.json synthetic reset + business_check",
+        "ingress.yaml"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 0.4,
+      "rationale": "U5/U7/U10：SUPERVISOR 内外声明冲突且旧 judge 未 tip-bound。",
+      "evidence": [
+        "SUPERVISOR_VERDICT.json",
+        "evidence/judges/S2/fresh-judge-1.json"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.4,
+      "rationale": "tip-proof 与 BREAK_FIX 可交接；OPERATING_STATE/PLAN 残留降低可维护性。",
+      "evidence": [
+        "tip-proof-aa01454.json",
+        "OPERATING_STATE.md"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.4,
+      "rationale": "teardown 与 Not production 明确；无性能抬升（A3）。",
+      "evidence": [
+        "elevation teardown_staging run 29645052414",
+        "docs/claims/matrix.json finops-teardown L4；remaining_boundaries Not production"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "不得将 EKS 集群 apply 表述为已在候选 SHA 上完成 digest 钉扎工作负载的托管运行时证明",
+    "不得因 A3 实验室 L4 而抬升 Azure live"
+  ],
+  "security_findings": [
+    "未发现密钥或长寿命凭据泄漏",
+    "Ingress/TLS 与 IRSA ARN 仍为占位，保持设计级边界"
+  ],
+  "improvements": [
+    "统一 SUPERVISOR_VERDICT 的 claim_level、claim_level_max 与 notes 为 tip-bound A3 L4 叙事",
+    "将 OPERATING_STATE/PLAN P2-T04 note 与 README/matrix 对齐",
+    "tip-bound 后重跑/重绑 S2 saved+fresh council，或明确其仅历史 L1 认证",
+    "若主张 S2-M6：补充 EKS 上 workload digest/health/rollout/HPA 证据或保持 not_proven"
+  ],
+  "overall_score": 7.6,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high-fast",
+    "mode": "clean-room-provisional-r4",
+    "role": "provisional-judge"
+  },
+  "notes_zh": "独立 clean-room provisional R4 #1（S2-PROVISIONAL-R4-01）。workspace HEAD=b9bdb4f…；评判绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b parent/candidate=aa01454f8808c173deb43cc4b9b803287eec851e；rubric_sha256/manifest 与任务一致。parent-bind、tests、tf fmt、validate P2-T04/T03 均 exit 0；validate 保持 integrated-gate L4+managed_cluster_apply，副作用已 git checkout -- 丢弃。未读既有 judge 分数。因 U5/U7/U10 失败且 S2-M6 未证明，provisional_pass=false、merge_ready=no。A3 未抬升 Azure。"
+}
