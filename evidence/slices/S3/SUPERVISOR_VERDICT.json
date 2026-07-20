@@ -67,5 +67,6 @@
       "NIX-TIPBOUND-011",
       "BF-2026-024"
     ]
-  }
+  },
+  "tipbound_fresh_note_zh": "Tip-bound aa01454 fresh：A3 scoped L4 lab（Lambda/SQS apply+teardown 已举证）；任务级合成/契约 must-have 在 remaining_boundaries 内诚实成立；成本/性能按实验室非生产上限评分，不得压到生产级未证。"
 }
