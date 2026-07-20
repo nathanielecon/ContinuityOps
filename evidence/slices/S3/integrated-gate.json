@@ -26,7 +26,9 @@
   "remaining_boundaries": [
     "Scoped AWS lab L4 via continuityops-gha (A3); not production customer workloads",
     "Azure live out (D-046) — L1 design only",
-    "Task-level serverless/saas synthetic contracts remain component L1 unless cloud-applied",
+    "Task-level serverless/saas evidence is synthetic/contract-level (component L1): S3-M1 correlation E2E, S3-M2 backoff/visibility/concurrency/timeout behavior, S3-M4 IAM least-privilege negative depth, S3-M8 event-path redaction, S3-M9 per-event/idle cost ceilings are not live-proven",
+    "DLQ/idempotency validators are unit-test/synthetic paths — not live SQS/Lambda runtime",
+    "Hosted apply SHA may differ from aa01454; lab evidence tip-bound associated via cloud_apply_evidence",
     "No ContinuityOps known-good rollback proven"
   ],
   "started_at": "2026-07-18T06:18:18.929Z",

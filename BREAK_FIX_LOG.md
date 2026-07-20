@@ -627,3 +627,12 @@ ContinuityOps incidents yet.
 ### BF-2026-023 follow-up
 
 `scripts/project.mjs` `writeEvidence` now preserves elevated `claim_level` (no L4→L1 downgrade) and merges `remaining_boundaries` / tip-bind fields when `CANDIDATE_SHA` validate rewrites gates.
+
+## BF-2026-024 — R4 tip-bound evidence residue (S0/S2/S3)
+
+- **Detected:** 2026-07-20T12:23Z via tip-bound provisional R4 (nine tickets, all `merge_ready=no`).
+- **Symptom (S0):** `STREAM_COMPLETE-P0-T05` paired `evidence_manifest_sha256=89642f65…` (matrix) with `evidence_manifest_path=integrated-gate.json`; `validation_results`/`notes_zh` still narrated 5792a74; SUPERVISOR baseline not tip-bound aligned.
+- **Symptom (S2):** `SUPERVISOR_VERDICT` held `claim_level=L4` with `checks.claim_level_max=L1` and notes “honest L1”; U7 old council SHA not re-judged (historical).
+- **Symptom (S3):** SUPERVISOR notes/claim_level_max still “honest L1 / no live Lambda” vs tip-bound A3 L4 lab; S3-M* gaps need honest synthetic boundaries, not forged live Lambda.
+- **Repair (narrow fixer on candidate):** Point S0 manifest path to `docs/claims/matrix.json`; refresh S0 validation_results/notes to aa01454 tip-bound; unify S2/S3 SUPERVISOR `claim_level_max`+notes to A3 scoped L4 lab + `managed_cluster_apply` + non-production; declare hosted apply SHA≠aa01454 acceptable via tip-bound `cloud_apply_evidence`; label S3 remaining_boundaries as synthetic/contract for S3-M1/M2/M4/M8/M9; declare tipbound provisional authority = r4 (old council historical). Did **not** edit historical `fresh-judge-*` score files; did **not** raise A3; did **not** touch #103; did **not** merge `main`.
+- **Next:** Chief prepares clean-room provisional R5 on tip after this push; sticky #94 brief.
