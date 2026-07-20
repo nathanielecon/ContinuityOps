@@ -607,3 +607,9 @@ ContinuityOps incidents yet.
 - **Strike:** 2 same-class → stop App blind retry.
 - **Fix:** Chief unblocked with Cursor Grok clean-room provisional R3 in cloud seat (full git). Parent-bind verified; S0 2/3 provisional_pass; S2/S3 fail on L1↔L4 claim / hosted SHA bind (new class).
 - **Next:** Nixer cohort for claim/SHA rebind; keep App tip fetch as open platform debt.
+
+## BF-2026-021 — R3 claim/SHA conflict after tip-object unblock
+
+- **Detected:** 2026-07-20T11:50Z via tip-bound provisional R3 (chief Grok): S0 2/3 pass; S2/S3 0/3 on U5/U7/U10 (L1↔L4) + stale gate SHAs; S0-M7 rubric-freeze bundle drift.
+- **Repair:** NIX-TIPBOUND-AA01454-02 / FIX-TIPBOUND-AA01454-02 — refresh S0 rubric-freeze hashes; rebind S0/S2/S3 gate+SUPERVISOR SHAs to aa01454; elevate S2/S3 integrated-gate/SUPERVISOR to A3-scoped L4 lab with cloud_apply_evidence; keep task-level component L1.
+- **Prevention:** tip-bind must rebind task gates and claim_level together with STREAM_COMPLETE; run validate-rubric-freeze on tip-bound candidates.

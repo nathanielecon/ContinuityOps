@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "P0-T05",
-  "baseline_sha": "531aa6ffb37517efc6b3c705c040d6d838ab36d0",
-  "candidate_sha": "5792a74f5c684b007a9057b89b6d9a24f359bc7f",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P0-T05",
   "exit_code": 0,
   "recorded_at": "2026-07-18T05:47:50.878Z",
@@ -103,5 +103,15 @@
   ],
   "evidence_path": "evidence/slices/S0/integrated-gate.json",
   "bind_model": "candidate_sha_parent_of_tip",
-  "implementation_sha": "5792a74f5c684b007a9057b89b6d9a24f359bc7f"
+  "implementation_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rebinding": {
+    "recorded_utc": "2026-07-20T11:54:43Z",
+    "reason": "NIX-TIPBOUND-012: rebind S0 gate evidence to portfolio tip parent aa01454",
+    "prior_candidate_sha": "5792a74f5c684b007a9057b89b6d9a24f359bc7f",
+    "issue_ids": [
+      "NIX-TIPBOUND-012"
+    ],
+    "slice_landed_sha_preserved": "5792a74f5c684b007a9057b89b6d9a24f359bc7f"
+  },
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e"
 }

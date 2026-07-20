@@ -18,9 +18,9 @@
     "role": "d037-independent-reviewer"
   },
   "at": "2026-07-18T06:19:00Z",
-  "candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
-  "implementation_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
-  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "implementation_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "checks": {
     "tests": {
       "command": "node --test tests/",
@@ -39,11 +39,30 @@
     "false_l4_claim": false
   },
   "remaining_boundaries": [
-    "No live AWS Lambda",
-    "DLQ path synthetic/unit only",
-    "No live SaaS control plane"
+    "Scoped AWS lab L4 via continuityops-gha (A3); not production customer workloads",
+    "Azure live out (D-046) — L1 design only",
+    "Task-level serverless/saas synthetic contracts remain component L1 unless cloud-applied",
+    "No ContinuityOps known-good rollback proven"
   ],
-  "claim_level": "L1",
+  "claim_level": "L4",
   "issue_ids": [],
-  "notes": "BF-PRE-015 S3 stream boundary. Tests+validators green; honest L1; no live Lambda."
+  "notes": "BF-PRE-015 S3 stream boundary. Tests+validators green; honest L1; no live Lambda.",
+  "cloud_apply_evidence": [
+    "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+    "evidence/hosted/lab-drill-rto-29645042815.json"
+  ],
+  "bind_model": "candidate_sha_parent_of_tip",
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "slice_landed_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "rebinding": {
+    "recorded_utc": "2026-07-20T11:54:43Z",
+    "reason": "NIX-TIPBOUND-010/011 FIX-TIPBOUND-AA01454-02: tip-bound claim/SHA reconcile under A3",
+    "prior_candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+    "prior_claim_level": "L1",
+    "issue_ids": [
+      "NIX-TIPBOUND-010",
+      "NIX-TIPBOUND-011"
+    ]
+  }
 }
