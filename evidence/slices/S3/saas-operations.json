@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "P3-T02",
-  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
-  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P3-T02",
   "exit_code": 0,
   "recorded_at": "2026-07-18T06:17:17.398Z",
@@ -24,7 +24,9 @@
   "claim_level": "L1",
   "remaining_boundaries": [
     "Lifecycle tests are contractual/unit only",
-    "No live SaaS control plane"
+    "No live SaaS control plane",
+    "Component/task evidence remains L1 synthetic or local; portfolio STREAM_COMPLETE/integrated-gate carry A3-scoped L4 lab",
+    "slice_landed_sha may differ from portfolio_tip_sha / candidate_sha under candidate_sha_parent_of_tip"
   ],
   "started_at": "2026-07-18T06:17:17.389Z",
   "completed_at": "2026-07-18T06:17:17.398Z",
@@ -58,5 +60,18 @@
   ],
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
-  "evidence_path": "evidence/slices/S3/saas-operations.json"
+  "evidence_path": "evidence/slices/S3/saas-operations.json",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "slice_landed_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+  "rebinding": {
+    "recorded_utc": "2026-07-20T11:54:43Z",
+    "reason": "NIX-TIPBOUND-010/011 FIX-TIPBOUND-AA01454-02: tip-bound claim/SHA reconcile under A3",
+    "prior_candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+    "prior_claim_level": "L1",
+    "issue_ids": [
+      "NIX-TIPBOUND-010",
+      "NIX-TIPBOUND-011"
+    ]
+  }
 }

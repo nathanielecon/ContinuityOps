@@ -31,8 +31,13 @@
     "reason": "TIP-BIND-AA01454: tip-bound aa01454 / Emergency package C",
     "prior_portfolio_tip_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
     "issue_ids": [
-      "TIP-BIND-AA01454"
-    ]
+      "TIP-BIND-AA01454",
+      "NIX-TIPBOUND-010",
+      "NIX-TIPBOUND-011",
+      "FIX-TIPBOUND-AA01454-02"
+    ],
+    "claim_reconcile_utc": "2026-07-20T11:54:43Z",
+    "notes_zh": "门禁/SUPERVISOR 已与 tip-bound L4 lab 对齐；任务级证据保持组件 L1。"
   },
   "cloud_apply_evidence": [
     "evidence/hosted/cloud-apply-staging-2026-07-18.json",
