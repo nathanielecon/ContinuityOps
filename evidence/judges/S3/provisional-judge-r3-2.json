@@ -1,0 +1,454 @@
+{
+  "schema_version": "1.0",
+  "task_id": "S3-PROVISIONAL-R3-02",
+  "judge_id": "provisional-judge-r3-2",
+  "slice_id": "S3",
+  "round": "provisional-r3",
+  "seat": 2,
+  "role": "independent-provisional-judge",
+  "clean_room": true,
+  "prior_scores_read": false,
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "rubric_path": "docs/planning/JUDGE_RUBRICS.md",
+  "evidence_manifest_path": "docs/claims/matrix.json",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "judge_model_id": "cursor-grok-4.5-high-fast",
+  "judge_provider": "xAI",
+  "judge_mode": "default",
+  "recorded_utc": "2026-07-20T11:28:05Z",
+  "environment": {
+    "node": "v22.14.0",
+    "npm": "10.9.7",
+    "terraform": "1.9.8",
+    "git": "2.43.0",
+    "zero_secrets": true,
+    "aws_in_seat": "NoCredentials_expected"
+  },
+  "parent_bind": {
+    "commands": [
+      {
+        "command": "git fetch origin candidate/portfolio-aa01454",
+        "exit_code": 0,
+        "result": "FETCH_HEAD updated",
+        "recorded_utc": "2026-07-20T11:26:19Z"
+      },
+      {
+        "command": "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b",
+        "exit_code": 0,
+        "expected": "commit",
+        "result": "commit",
+        "recorded_utc": "2026-07-20T11:26:19Z"
+      },
+      {
+        "command": "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^",
+        "exit_code": 0,
+        "expected": "aa01454f8808c173deb43cc4b9b803287eec851e",
+        "result": "aa01454f8808c173deb43cc4b9b803287eec851e",
+        "recorded_utc": "2026-07-20T11:26:19Z"
+      }
+    ],
+    "status": "pass",
+    "cross_check": [
+      "evidence/portfolio/tip-proof-aa01454.json",
+      "evidence/portfolio/tip-bind-2026-07-20.json"
+    ]
+  },
+  "hash_checks": {
+    "docs/planning/JUDGE_RUBRICS.md": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+    "docs/claims/matrix.json": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+    "status": "pass"
+  },
+  "validation_commands": [
+    "git fetch origin candidate/portfolio-aa01454",
+    "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b",
+    "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^",
+    "node --test tests/",
+    "terraform fmt -check -recursive terraform/",
+    "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P3-T03"
+  ],
+  "validation_results": [
+    {
+      "command": "git fetch origin candidate/portfolio-aa01454 && git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b && git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^",
+      "exit_code": 0,
+      "result": "parent-bind 通过：tip 为 commit，parent 等于 candidate aa01454…",
+      "recorded_utc": "2026-07-20T11:26:19Z",
+      "evidence_path": "evidence/judges/S3/provisional-judge-r3-2.json"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "result": "94 pass / 0 fail",
+      "recorded_utc": "2026-07-20T11:26:35Z",
+      "evidence_path": "evidence/judges/S3/provisional-judge-r3-2.json"
+    },
+    {
+      "command": "terraform fmt -check -recursive terraform/",
+      "exit_code": 0,
+      "result": "terraform fmt 检查通过",
+      "recorded_utc": "2026-07-20T11:26:35Z",
+      "evidence_path": "evidence/judges/S3/provisional-judge-r3-2.json"
+    },
+    {
+      "command": "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P3-T03",
+      "exit_code": 0,
+      "result": "P3-T03 验证器通过；生成的副作用已丢弃（未保留 validate 改写的 evidence）",
+      "recorded_utc": "2026-07-20T11:26:35Z",
+      "evidence_path": "evidence/judges/S3/provisional-judge-r3-2.json"
+    }
+  ],
+  "side_effects": {
+    "validate_touched": [
+      "evidence/judges/S3/fresh-judge-1.json",
+      "evidence/judges/S3/fresh-judge-2.json",
+      "evidence/judges/S3/fresh-judge-3.json",
+      "evidence/judges/S3/saved-council-provisional.json",
+      "evidence/slices/S3/integrated-gate.json"
+    ],
+    "discarded": true,
+    "method": "git checkout -- ."
+  },
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "fail",
+      "evidence": [
+        "evidence/judges/S3/provisional-judge-r3-2.json#parent_bind",
+        "evidence/slices/S3/integrated-gate.json",
+        "evidence/slices/S3/serverless.json",
+        "evidence/slices/S3/saas-operations.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ],
+      "finding": "parent-bind 与 rubric/manifest 哈希已对齐，但提交的 S3 门禁证据 candidate_sha 未统一绑定到 aa01454…（integrated-gate=1fd88ff…；serverless/saas-operations=08433d79…）。"
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ (exit 0, 94 pass)",
+        "terraform fmt -check -recursive terraform/ (exit 0)",
+        "CANDIDATE_SHA=aa01454… validate P3-T03 (exit 0)"
+      ],
+      "finding": "本席确定性检查在 tip/parent-bind 后全部通过。"
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "serverless/worker-contract.json",
+        "terraform/modules/serverless/main.tf",
+        "scripts/validators/core.mjs#iam_negative"
+      ],
+      "finding": "未见长期密钥或敏感载荷进入证据；serverless 模块声明 long_lived_keys=false。"
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "docs/reviews/S3/engineering-qa-security.md"
+      ],
+      "finding": "切片审查未记录影响 S3 的未关闭 critical/high 安全项。"
+    },
+    {
+      "id": "U5",
+      "status": "fail",
+      "evidence": [
+        "evidence/slices/S3/integrated-gate.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "docs/claims/matrix.json",
+        "serverless/worker-contract.json"
+      ],
+      "finding": "声明层级冲突：integrated-gate/worker-contract 为 L1 且保留无 live Lambda 边界，而 STREAM_COMPLETE 与 claims matrix（serverless-worker）为 L4。"
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless/dlq.test.mjs",
+        "tests/serverless/idempotency.test.mjs"
+      ],
+      "finding": "毒消息、重复事件与 DLQ 拒绝/重放否定路径有单测覆盖。"
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "evidence": [
+        "evidence/slices/S3/integrated-gate.json",
+        "evidence/slices/S3/serverless.json",
+        "evidence/slices/S3/saas-operations.json",
+        "BREAK_FIX_LOG.md#BF-2026-019"
+      ],
+      "finding": "tip-bind/BF-2026-019 修复后，S3 门禁 JSON 仍绑定旧 SHA 与 2026-07-18 时间戳；本席即时 validate 的副作用已丢弃，不能替代已提交的候选绑定证据。"
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "docs/planning/PLAN.md#P3-T03",
+        "evidence/judges/S3/provisional-judge-r3-2.json"
+      ],
+      "finding": "本法官仅写入 evidence/judges/S3/ 指定路径；未修改实现或权威任务状态。"
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md#BF-2026-019"
+      ],
+      "finding": "tip 对象/parent-bind 历史故障已记入 break/fix。"
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "evidence": [
+        "evidence/slices/S3/SUPERVISOR_VERDICT.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "docs/reviews/S3/engineering-qa-security.md",
+        "docs/claims/matrix.json"
+      ],
+      "finding": "文档/证据时态不一致：监督裁决与工程评审按 L1，STREAM_COMPLETE/matrix 按 L4。"
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "evidence/judges/S3/provisional-judge-r3-2.json"
+      ],
+      "finding": "本报告自由文本为简体中文；对外招聘向文档保持英文。"
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "docs/planning/PLAN.md"
+      ],
+      "finding": "S3 流为顺序门禁；未见与本轮写范围冲突的并发分区。"
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "evidence/judges/S3/provisional-judge-r3-2.json"
+      ],
+      "finding": "本轮为独立 clean-room provisional R3，未读取既有 judge 分数文件。"
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md#BF-2026-019"
+      ],
+      "finding": "已观察的 tip-bind 失败类已在 break/fix 记录。"
+    },
+    {
+      "id": "S3-M1",
+      "status": "not_proven",
+      "evidence": [
+        "serverless/worker-contract.json",
+        "serverless/worker.mjs"
+      ],
+      "finding": "仅有 correlation_header/event_id 合约声明；未见 Kubernetes 请求→队列→函数→结果的端到端相关执行证据。"
+    },
+    {
+      "id": "S3-M2",
+      "status": "not_proven",
+      "evidence": [
+        "tests/serverless/idempotency.test.mjs",
+        "tests/serverless/dlq.test.mjs",
+        "serverless/worker-contract.json"
+      ],
+      "finding": "幂等与重复/毒消息路径已测；退避、可见性超时、并发与函数超时多为合约字段，缺少行为测试。"
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless/dlq.test.mjs",
+        "operations/incidents/serverless/dlq-replay.md",
+        "serverless/dlq.mjs"
+      ],
+      "finding": "合成路径覆盖 DLQ 告警、毒消息、审批重放；重放后依赖幂等跳过验证。"
+    },
+    {
+      "id": "S3-M4",
+      "status": "pass",
+      "evidence": [
+        "scripts/validators/core.mjs#iam_negative",
+        "terraform/modules/serverless/main.tf",
+        "serverless/worker-contract.json"
+      ],
+      "finding": "否定检查锁定 long_lived_keys=false；least_privilege 为合约声明（非完整 IAM 策略矩阵）。"
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/lifecycle.json",
+        "docs/architecture/tenant-boundary.md",
+        "tests/saas/lifecycle.test.mjs"
+      ],
+      "finding": "逻辑租户隔离与跨租户读取禁止与实现合约一致。"
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/lifecycle.json",
+        "tests/saas/lifecycle.test.mjs"
+      ],
+      "finding": "七个 SaaS 运营阶段均有合约与确定性检查。"
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/severity-escalation.json"
+      ],
+      "finding": "严重级别、SLA 与升级所有者可用。"
+    },
+    {
+      "id": "S3-M8",
+      "status": "pass",
+      "evidence": [
+        "observability/otel/redaction.mjs",
+        "tests/observability/redaction.test.mjs"
+      ],
+      "finding": "共享脱敏模块覆盖密钥与租户敏感字段；worker 路径未直接调用但仍有仓库级证明。"
+    },
+    {
+      "id": "S3-M9",
+      "status": "not_proven",
+      "evidence": [
+        "serverless/worker-contract.json"
+      ],
+      "finding": "仅有 cost_metric 名称，缺少每事件/空闲成本与扩展上限的准确描述或测量。"
+    },
+    {
+      "id": "S3-M10",
+      "status": "fail",
+      "evidence": [
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "evidence/slices/S3/integrated-gate.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "terraform/modules/serverless/main.tf"
+      ],
+      "finding": "SaaS/serverless 运营被 L4 抬升，但门禁仍写 L1；elevation 证明的是另一 SHA 上的资源创建/销毁与桩 Lambda，不足以支撑当前 tip/candidate 的 live 相关路径声明。"
+    }
+  ],
+  "blocking_findings": [
+    "U1：S3 门禁证据 candidate_sha 未绑定到 tip parent aa01454…。",
+    "U5/U10/S3-M10：L1 与 L4 声明冲突，存在过度声明风险。",
+    "U7：tip-bind 之后缺少重新提交的、绑定候选的新鲜 S3 门禁证据。",
+    "S3-M1/S3-M2/S3-M9：端到端相关、多项队列行为与成本描述未证明。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "Correctness and completeness",
+      "score": 1.5,
+      "max": 2.0,
+      "rationale": "队列工人与 SaaS 生命周期的 L1 合约/单测完整，但端到端相关与若干队列行为未证明。",
+      "evidence": [
+        "tests/serverless/",
+        "tests/saas/lifecycle.test.mjs",
+        "serverless/worker.mjs"
+      ]
+    },
+    {
+      "id": "Security and authority boundaries",
+      "score": 1.2,
+      "max": 1.5,
+      "rationale": "无长期密钥与租户隔离合约清晰；IAM least-privilege 深度有限。",
+      "evidence": [
+        "terraform/modules/serverless/main.tf",
+        "operations/saas/lifecycle.json"
+      ]
+    },
+    {
+      "id": "Failure/recovery depth",
+      "score": 1.1,
+      "max": 1.5,
+      "rationale": "合成 DLQ/重放扎实，但无候选绑定的 live 否定路径。",
+      "evidence": [
+        "tests/serverless/dlq.test.mjs",
+        "operations/incidents/serverless/dlq-replay.md"
+      ]
+    },
+    {
+      "id": "Deterministic test quality",
+      "score": 0.8,
+      "max": 1.0,
+      "rationale": "关键否定路径有稳定单测；退避/并发/超时缺少行为断言。",
+      "evidence": [
+        "tests/serverless/idempotency.test.mjs",
+        "tests/serverless/event-contract.test.mjs"
+      ]
+    },
+    {
+      "id": "Live/runtime evidence quality",
+      "score": 0.5,
+      "max": 1.0,
+      "rationale": "存在历史 lab apply/teardown，但 apply SHA 与候选不一致，且桩处理器不证明业务相关路径。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "Operability and troubleshooting",
+      "score": 0.85,
+      "max": 1.0,
+      "rationale": "DLQ 手册与严重级别路径可用，步骤可跟。",
+      "evidence": [
+        "operations/incidents/serverless/dlq-replay.md",
+        "operations/saas/severity-escalation.json"
+      ]
+    },
+    {
+      "id": "Evidence/claim integrity",
+      "score": 0.3,
+      "max": 1.0,
+      "rationale": "候选 SHA 绑定断裂与 L1/L4 冲突严重削弱声明完整性。",
+      "evidence": [
+        "evidence/slices/S3/integrated-gate.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "Maintainability and handoff",
+      "score": 0.4,
+      "max": 0.5,
+      "rationale": "合约与评审文档结构清晰，便于后续修复绑定。",
+      "evidence": [
+        "docs/reviews/S3/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "Cost/performance realism",
+      "score": 0.25,
+      "max": 0.5,
+      "rationale": "仅有调用指标名，缺少成本/空闲/扩展后果说明。",
+      "evidence": [
+        "serverless/worker-contract.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "STREAM_COMPLETE / matrix 将 serverless-worker 抬到 L4，同时 integrated-gate 与 worker-contract 仍声明 L1 且无 live Lambda。",
+    "elevation 证据中的 Lambda/SQS 创建不能自动等同于候选 aa01454… 上的 e2e 相关与业务行为证明。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "将 evidence/slices/S3/{integrated-gate,serverless,saas-operations}.json 的 candidate_sha/baseline_sha 重绑到 aa01454… 并刷新 recorded_at。",
+    "统一 L1/L4：要么把门禁与 worker-contract 提升并附候选绑定的 live 相关证据，要么将 STREAM_COMPLETE/matrix 降回诚实 L1。",
+    "为退避/可见性超时/并发/超时与成本模型补充行为测试或测量附件。",
+    "补充 Kubernetes→队列→函数→结果的相关追踪证明（可为合成夹具，但需可复现）。"
+  ],
+  "overall_score": 6.9,
+  "merge_ready": "no",
+  "verdict_rationale_zh": "parent-bind 与确定性校验本轮已绿，但 S3 提交证据未绑定候选 SHA，且 L1/L4 声明互相矛盾；任一未通过/未证明的通用必选项即强制 merge_ready=no。",
+  "recommended_next_step": [
+    "nixer：以 U1/U5/U7/U10/S3-M10 为主去重开修复单元，先重绑 S3 门禁 SHA 并调和声明层级，再重跑 clean-room provisional。"
+  ]
+}

@@ -600,3 +600,10 @@ ContinuityOps incidents yet.
 - **Recorded:** 2026-07-20T11:16Z via FIX-TIPBOUND-AA01454-01 (orch local unblock + nixer #143).
 - **Repair:** `evidence/portfolio/tip-proof-aa01454.json` + `evidence/portfolio/packets/NIX-TIPBOUND-001/`; rebind S2 matrix/chart/runtime/integrated-gate `candidate_sha` → `aa01454…`.
 - **Follow-up:** re-dispatch clean-room provisional×3 with hard `git fetch` + `git cat-file` gate (NIX-TIPBOUND-003).
+
+## BF-2026-020 — App tip object miss → chief local Grok provisional R3
+
+- **Symptom:** Batch A + R2 App `@codex` provisional 9/9 failed U1 (`origin` missing / tip `0606812` absent).
+- **Strike:** 2 same-class → stop App blind retry.
+- **Fix:** Chief unblocked with Cursor Grok clean-room provisional R3 in cloud seat (full git). Parent-bind verified; S0 2/3 provisional_pass; S2/S3 fail on L1↔L4 claim / hosted SHA bind (new class).
+- **Next:** Nixer cohort for claim/SHA rebind; keep App tip fetch as open platform debt.
