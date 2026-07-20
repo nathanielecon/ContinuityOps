@@ -1,0 +1,380 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "provisional-r3",
+  "judge_id": "S3-PROVISIONAL-R3-01",
+  "task_id": "S3-PROVISIONAL-R3-01",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "git fetch origin candidate/portfolio-aa01454 → exit 0",
+        "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b → commit (exit 0)",
+        "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ → aa01454f8808c173deb43cc4b9b803287eec851e (exit 0)",
+        "sha256sum docs/planning/JUDGE_RUBRICS.md → f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "sha256sum docs/claims/matrix.json → 89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "evidence/portfolio/tip-proof-aa01454.json",
+        "integration/upstreams.lock.json",
+        "harness/postbuild-partition-manifest.json (runtime-serverless → s3)"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → 94 pass / 0 fail (exit 0, 2026-07-20T11:26:48Z, node v22.14.0)",
+        "terraform fmt -check -recursive → exit 0 (Terraform v1.9.8)",
+        "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P3-T03 → exit 0; passed serverless_runtime, dlq_runtime, full_repository, judge_exit"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "terraform/modules/serverless/main.tf locals.long_lived_keys = false",
+        "serverless/worker-contract.json iam.long_lived_keys=false",
+        "P3-T03 environment.zero_secrets=true",
+        "iam_negative 校验路径要求 serverless 禁止长期密钥"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "docs/reviews/S3/engineering-qa-security.md 残余为可选 live 实验室路径，无 critical/high 未关闭项",
+        "ISSUES.md 无开放 S3/serverless critical/high 命中"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "fail",
+      "evidence": [
+        "evidence/slices/S3/SUPERVISOR_VERDICT.json claim_level=L1 且 remaining_boundaries 含 No live AWS Lambda",
+        "serverless/worker-contract.json claim_ceiling=L1",
+        "operations/incidents/serverless/dlq-replay.md Claim: L1 … No live Lambda/SQS",
+        "git show aa01454…:evidence/slices/S3/STREAM_COMPLETE.json claim_level=L4",
+        "docs/claims/matrix.json component serverless-worker claim_level=L4",
+        "P3-T03 validate 输出 remaining_boundaries 仍含 No live AWS Lambda / DLQ synthetic"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless/idempotency.test.mjs（重复 event_id、缺 event_id 失败关闭）",
+        "tests/serverless/dlq.test.mjs（poison、max receive→DLQ+alarm、replay 需批准）",
+        "tests/serverless/event-contract.test.mjs"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "evidence": [
+        "evidence/slices/S3/serverless.json candidate_sha=08433d79…（≠ aa01454…）",
+        "evidence/slices/S3/saas-operations.json candidate_sha=08433d79…",
+        "evidence/slices/S3/integrated-gate.json candidate_sha=1fd88ff8…",
+        "git show aa01454…:evidence/slices/S3/STREAM_COMPLETE.json candidate_sha/portfolio_tip_sha=4674506…（≠ 被审 candidate）",
+        "本轮虽重新执行 parent-bind/tests/fmt/P3-T03 且通过，但仓库内 S3 切片证据未重绑到 aa01454…"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "PLAN.md P3-T01..T03 write_scope 覆盖 serverless/、operations/saas/、evidence/slices/S3/ 等",
+        "本评委仅写入 evidence/judges/S3/provisional-judge-r3-1.json；校验副作用已 git checkout 丢弃",
+        "evidence/portfolio/tip-proof-aa01454.json / packets/NIX-TIPBOUND-001 支持上游 tip 对象保全"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 含 tipbound / provisional merge_ready:no 相关条目（BF-2026-019 族）",
+        "evidence/portfolio/nixer-tipbound-aa01454-01.json"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "evidence": [
+        "STREAM_COMPLETE（L4 lab apply）与 SUPERVISOR_VERDICT / worker-contract / dlq-replay（L1 无 live Lambda）时态与声明层级冲突",
+        "docs/reviews/S3/engineering-qa-security.md 表称 Worker unit=L1、Live Lambda/SQS=not claimed，与 matrix L4 不一致"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "仓库 AGENTS.md / 调度协议要求简体中文交接；本报告自由文本为简体中文",
+        "对外招聘向文档（README/架构）保持英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "harness/postbuild-partition-manifest.json runtime-serverless owner=s3 与 S2/S4 路径分离",
+        "PLAN.md P3-T01→T02→T03 顺序依赖"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本轮为独立 clean-room provisional-r3；未读取其他 provisional/fresh 分数文件",
+        "输出路径 evidence/judges/S3/provisional-judge-r3-1.json 与权威 fresh 分离"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 记录 tip 对象/parent-bind 失败类问题（BF-2026-019）",
+        "evidence/portfolio/tip-bind-2026-07-20.json"
+      ]
+    },
+    {
+      "id": "S3-M1",
+      "status": "not_proven",
+      "evidence": [
+        "serverless/worker-contract.json 仅声明 telemetry.correlation_header=x-correlation-id",
+        "serverless/worker.mjs 未传播 Kubernetes 请求相关上下文",
+        "evidence/slices/S3/serverless.json / integrated-gate.json 无 request→queue→function→result 相关执行记录",
+        "observability/otel/telemetry-contract.json 与 signal-path 测试属跨切片合约，不能单独证明 S3 端到端相关已执行"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "pass",
+      "evidence": [
+        "serverless/worker-contract.json：visibility_timeout、max_receive_count、concurrency、backoff、timeouts",
+        "terraform/modules/serverless/main.tf：visibility_timeout_seconds=60、redrive maxReceiveCount=3、timeout=30、batch_size=5",
+        "tests/serverless/idempotency.test.mjs 与 dlq.test.mjs"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless/dlq.test.mjs：poison、DLQ+alarm、replay 批准门",
+        "operations/incidents/serverless/dlq-replay.md",
+        "serverless/dlq.mjs"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "pass",
+      "evidence": [
+        "terraform/modules/serverless/main.tf long_lived_keys=false",
+        "tests/serverless/event-contract.test.mjs 断言 TF 禁止长期密钥",
+        "scripts/validators/core.mjs iam_negative 覆盖 serverless 模块"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "docs/architecture/tenant-boundary.md",
+        "operations/saas/lifecycle.json tenant_isolation.cross_tenant_reads=prohibited",
+        "tests/saas/lifecycle.test.mjs"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/lifecycle.json 七阶段：onboarding/config/migration/support/suspension/export/deprovision",
+        "tests/saas/lifecycle.test.mjs",
+        "evidence/slices/S3/saas-operations.json validators.lifecycle_contract"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/severity-escalation.json（SEV1–SEV3、owner、SLA）",
+        "operations/incidents/serverless/dlq-replay.md",
+        "tests/saas/lifecycle.test.mjs 要求 severities.length>=3"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "pass",
+      "evidence": [
+        "observability/otel/redaction.mjs",
+        "tests/observability/redaction.test.mjs（secrets 与 tenant payload 字段）",
+        "observability/otel/telemetry-contract.json redaction 节"
+      ]
+    },
+    {
+      "id": "S3-M9",
+      "status": "pass",
+      "evidence": [
+        "serverless/worker-contract.json cost_metric=worker.invocations、concurrency=10、timeouts",
+        "terraform/modules/serverless/main.tf 批大小/超时/队列参数与合约对齐"
+      ]
+    },
+    {
+      "id": "S3-M10",
+      "status": "fail",
+      "evidence": [
+        "STREAM_COMPLETE 将 S3（含 P3-T02 SaaS）标为 L4，而 SaaS 证据与审查仍为合约/单元 L1（无 live SaaS control plane）",
+        "SUPERVISOR_VERDICT / dlq-replay / worker-contract 保留 No live Lambda 边界，与 matrix serverless-worker L4 未在切片内调和",
+        "docs/reviews/S3/engineering-qa-security.md 明确 Live AWS Lambda/SQS not claimed"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U5：同一候选上 S3 声明层级冲突（L1 合约/监督裁决 vs L4 STREAM_COMPLETE/matrix）。",
+    "U7：仓库内 S3 切片证据与 STREAM_COMPLETE 未绑定到候选 aa01454…；本轮新鲜校验未固化进证据清单。",
+    "U10：文档/证据/声明时态不一致。",
+    "S3-M1：未见 Kubernetes 请求→队列→函数→结果的端到端相关执行证明。",
+    "S3-M10：SaaS/serverless 声明被 L4 切片完成信号过度抬升，超出可调和的实验室证据叙事。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "Correctness and completeness",
+      "score": 1.4,
+      "rationale": "队列工人、幂等、DLQ 与 SaaS 生命周期合约完整且单测通过；端到端相关与声明绑定缺口拉低完备性。",
+      "evidence": [
+        "serverless/",
+        "tests/serverless/",
+        "operations/saas/",
+        "CANDIDATE_SHA=aa01454… validate P3-T03 exit 0"
+      ]
+    },
+    {
+      "id": "Security and authority boundaries",
+      "score": 1.3,
+      "rationale": "禁止长期密钥与租户隔离合约明确；Lambda 角色外置且无密钥泄漏迹象。负向 IAM 深度有限。",
+      "evidence": [
+        "terraform/modules/serverless/main.tf",
+        "docs/architecture/tenant-boundary.md",
+        "iam_negative 校验"
+      ]
+    },
+    {
+      "id": "Failure/recovery depth",
+      "score": 1.1,
+      "rationale": "poison/DLQ/批准重放单测扎实；重放后业务验证与 live DLQ 路径仍为合成。",
+      "evidence": [
+        "tests/serverless/dlq.test.mjs",
+        "operations/incidents/serverless/dlq-replay.md"
+      ]
+    },
+    {
+      "id": "Deterministic test quality",
+      "score": 0.9,
+      "rationale": "幂等、事件合约、DLQ、生命周期测试稳定；退避/可见性超时/并发缺少行为级断言。",
+      "evidence": [
+        "tests/serverless/*.test.mjs",
+        "tests/saas/lifecycle.test.mjs",
+        "node --test tests/ 94/94"
+      ]
+    },
+    {
+      "id": "Live/runtime evidence quality",
+      "score": 0.5,
+      "rationale": "托管 elevation 记录含 Lambda/SQS 创建，但与 L1 边界文案冲突，且未证明请求相关链路的 live 运行。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json",
+        "evidence/slices/S3/SUPERVISOR_VERDICT.json"
+      ]
+    },
+    {
+      "id": "Operability and troubleshooting",
+      "score": 0.8,
+      "rationale": "DLQ 手册与 SEV 升级表可用；维护窗口/对外沟通路径较薄。",
+      "evidence": [
+        "operations/incidents/serverless/dlq-replay.md",
+        "operations/saas/severity-escalation.json"
+      ]
+    },
+    {
+      "id": "Evidence/claim integrity",
+      "score": 0.3,
+      "rationale": "parent-bind 与本轮校验通过，但切片证据 SHA 陈旧且 L1/L4 叙事冲突，完整性不足。",
+      "evidence": [
+        "evidence/slices/S3/*.json",
+        "docs/claims/matrix.json",
+        "evidence/portfolio/tip-proof-aa01454.json"
+      ]
+    },
+    {
+      "id": "Maintainability and handoff",
+      "score": 0.4,
+      "rationale": "模块与合约结构清晰；声明冲突增加后续交接歧义。",
+      "evidence": [
+        "docs/reviews/S3/engineering-qa-security.md",
+        "serverless/worker-contract.json"
+      ]
+    },
+    {
+      "id": "Cost/performance realism",
+      "score": 0.3,
+      "rationale": "仅有 cost_metric 与并发/超时参数描述，无测得的重试/空闲成本后果。",
+      "evidence": [
+        "serverless/worker-contract.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "在未调和 SUPERVISOR_VERDICT/worker-contract L1 边界的情况下，将整个 S3 流（含 SaaS 运营）表述为已证明的 L4。",
+    "声称已具备 Kubernetes 请求到函数结果的端到端相关执行（仅有 header/跨切片 OTEL 合约不足）。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "将 evidence/slices/S3/{serverless,saas-operations,integrated-gate,STREAM_COMPLETE}.json 重绑到 aa01454… 并统一 claim_level 阶梯。",
+    "为 S3-M1 增加可复现的相关传播证据（至少合成信号路径绑定 worker event_id/correlation_id）。",
+    "为退避/可见性超时/并发补充行为测试或明确降级为“合约-only”声明。"
+  ],
+  "overall_score": 7.0,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5",
+    "mode": "default",
+    "role": "provisional-judge-r3"
+  },
+  "validation_results": [
+    {
+      "command": "git fetch origin candidate/portfolio-aa01454 && git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b && git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^",
+      "exit_code": 0,
+      "recorded_at": "2026-07-20T11:26:30Z",
+      "result": "commit; parent=aa01454f8808c173deb43cc4b9b803287eec851e",
+      "evidence_path": "/tmp/s3-prov-r3-1-51688/parent-bind.txt"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "recorded_at": "2026-07-20T11:26:48Z",
+      "result": "94 pass / 0 fail",
+      "evidence_path": "/tmp/s3-prov-r3-1-51688/node-test.txt"
+    },
+    {
+      "command": "terraform fmt -check -recursive",
+      "exit_code": 0,
+      "recorded_at": "2026-07-20T11:26:48Z",
+      "result": "formatted",
+      "evidence_path": "/tmp/s3-prov-r3-1-51688/terraform-fmt.txt"
+    },
+    {
+      "command": "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P3-T03",
+      "exit_code": 0,
+      "recorded_at": "2026-07-20T11:26:48Z",
+      "result": "passed: serverless_runtime, dlq_runtime, full_repository, judge_exit",
+      "evidence_path": "/tmp/s3-prov-r3-1-51688/validate-p3-t03.txt",
+      "side_effects": "validate 曾改写 evidence/judges/S3/fresh-judge-*.json、saved-council-provisional.json、integrated-gate.json；已 git checkout 丢弃"
+    }
+  ],
+  "notes_zh": "独立 clean-room provisional R3 #1。已验证 tip 0606812… 的 parent 为 candidate aa01454…；rubric/manifest 哈希匹配。确定性检查全绿，但 U5/U7/U10 与 S3-M1/S3-M10 未通过或未证明，故 merge_ready=no。未读取任何既有 judge 分数文件。"
+}
