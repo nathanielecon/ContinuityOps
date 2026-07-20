@@ -1,0 +1,281 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "saved_provisional",
+  "judge_id": "S2-PROVISIONAL-JUDGE-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "not_proven",
+      "evidence": [
+        "目标 tip 0606812354dae2e23356278f10f9b76b7ebd010b 在本地对象库中不存在，无法独立执行 parent-bind 校验；当前检出提交为声明的 parent aa01454f8808c173deb43cc4b9b803287eec851e。",
+        "docs/planning/JUDGE_RUBRICS.md",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "fail",
+      "evidence": [
+        "node --test tests/：退出码 0，94 项通过。",
+        "terraform fmt -check -recursive terraform：退出码 0。",
+        "P2-T01、P2-T02、P2-T04 只读评估退出码 0；P2-T03 退出码 2，错误为 evidence candidate_sha 与期望不一致。"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "tests/ 中只读凭据边界与未受信 PR 检查通过；本轮未引入凭据或密钥。"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "在本轮所给 S2 证据和仓库状态中未发现影响该切片的未关闭严重或高危安全问题。"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json 将 Kubernetes 声明限定为实验室 L4，并明确 EKS 已销毁；本地 kind 证据仍标为 L1 且未冒充托管运行时。",
+        "evidence/slices/S2/runtime/kind-preflight.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "tests/ 覆盖 Kubernetes 策略负例及六类故障矩阵契约。",
+        "evidence/slices/S2/scenarios/matrix-evidence.json"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "evidence": [
+        "P2-T03 的证据仍绑定实现提交 08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9，针对当前 parent 的 freshness 校验失败。",
+        "evidence/slices/S2/scenarios/matrix-evidence.json"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "本轮仅新增指定 judge JSON，未改实现、工作流或权威任务状态。"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md",
+        "evidence/portfolio/nixer-council-fail-760827d.json"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json 与 S2 STREAM_COMPLETE 均保留实验室、销毁后和非生产边界。",
+        "evidence/slices/S2/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本评判的自由文本均使用简体中文。"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ 中流隔离、顺序执行及集成队列测试通过。"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本轮标记为 saved_provisional，未作为 fresh 终局评判，也未读取或复用其他 judge 分数。"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 记录了当前组合候选形成前的已知修复历史。"
+      ]
+    },
+    {
+      "id": "S2-M1",
+      "status": "pass",
+      "evidence": [
+        "tests/ 的 Helm chart 与摘要固定测试通过。",
+        "evidence/slices/S2/chart-contract.json"
+      ]
+    },
+    {
+      "id": "S2-M2",
+      "status": "pass",
+      "evidence": [
+        "tests/ 验证探针、资源、HPA、PDB 和拓扑配置契约。"
+      ]
+    },
+    {
+      "id": "S2-M3",
+      "status": "pass",
+      "evidence": [
+        "P2-T01 的 Kubernetes 策略与负例验证通过；tests/ 的最小权限及准入负例通过。"
+      ]
+    },
+    {
+      "id": "S2-M4",
+      "status": "not_proven",
+      "evidence": [
+        "P2-T01 静态验证通过，但 chart-contract 明确 helm 与 kubeconform 被跳过，因此不能把替代静态检查表述为完整 CLI gate。",
+        "evidence/slices/S2/chart-contract.json"
+      ]
+    },
+    {
+      "id": "S2-M5",
+      "status": "pass",
+      "evidence": [
+        "kind-preflight 将本地证据标为 local、L1；托管 EKS 证据单独位于 hosted 证据。",
+        "evidence/slices/S2/runtime/kind-preflight.json"
+      ]
+    },
+    {
+      "id": "S2-M6",
+      "status": "not_proven",
+      "evidence": [
+        "托管运行时 apply 证据绑定 f059ffa3d2b73e26fb61c849f2a6bfeebdd0259a，而目标 tip 对象不可用；无法证明 digest、健康、版本、身份、滚动与扩缩容全部绑定本次受评 tip。",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "S2-M7",
+      "status": "not_proven",
+      "evidence": [
+        "六类故障具有静态或合成场景契约，但现有 evidence 明确无实时故障注入。",
+        "evidence/slices/S2/scenarios/matrix-evidence.json"
+      ]
+    },
+    {
+      "id": "S2-M8",
+      "status": "not_proven",
+      "evidence": [
+        "crashloop-reset 明确为合成重置且无实时集群变更，不能证明每种托管故障均已重置并复验业务。",
+        "evidence/slices/S2/scenarios/crashloop-reset.json"
+      ]
+    },
+    {
+      "id": "S2-M9",
+      "status": "pass",
+      "evidence": [
+        "chart 与声明矩阵保持实验室 ingress、TLS 和负载均衡边界，未声称生产入口。"
+      ]
+    },
+    {
+      "id": "S2-M10",
+      "status": "pass",
+      "evidence": [
+        "声明矩阵及托管 apply 证据明确实验室成本边界和集群销毁结果。",
+        "docs/claims/matrix.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "无法取得目标 tip 对象，parent-bind 未被独立验证。",
+    "P2-T03 freshness 校验失败，场景证据未绑定当前受评 parent。",
+    "托管故障、重置、业务复验及完整运行时属性未绑定本次受评 tip。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "Correctness and completeness",
+      "score": 1.4,
+      "rationale": "静态实现与多数验证完整，但 tip 绑定和 P2-T03 freshness 阻断完整性。",
+      "evidence": ["node --test tests/", "node scripts/project.mjs validate P2-T03"]
+    },
+    {
+      "id": "Security and authority boundaries",
+      "score": 1.4,
+      "rationale": "最小权限、准入负例和非生产边界清楚，本轮未扩权。",
+      "evidence": ["tests/", "docs/claims/matrix.json"]
+    },
+    {
+      "id": "Failure/recovery depth",
+      "score": 0.7,
+      "rationale": "故障类别覆盖充分，但主要为合成契约，缺少绑定 tip 的托管注入与逐项恢复复验。",
+      "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json", "evidence/slices/S2/scenarios/crashloop-reset.json"]
+    },
+    {
+      "id": "Deterministic test quality",
+      "score": 0.9,
+      "rationale": "94 项测试及 Terraform 格式检查通过，但 S2 freshness 验证失败。",
+      "evidence": ["node --test tests/", "terraform fmt -check -recursive terraform"]
+    },
+    {
+      "id": "Live/runtime evidence quality",
+      "score": 0.5,
+      "rationale": "存在 EKS 实验室 apply 与销毁证据，但未绑定目标 tip，且运行时属性与故障恢复覆盖不足。",
+      "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]
+    },
+    {
+      "id": "Operability and troubleshooting",
+      "score": 0.8,
+      "rationale": "场景矩阵与重置步骤可操作，但缺少全部故障的现场执行证据。",
+      "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json"]
+    },
+    {
+      "id": "Evidence/claim integrity",
+      "score": 0.5,
+      "rationale": "声明层级总体诚实，但目标 tip 不可验证且 P2-T03 SHA freshness 失败。",
+      "evidence": ["docs/claims/matrix.json", "evidence/slices/S2/scenarios/matrix-evidence.json"]
+    },
+    {
+      "id": "Maintainability and handoff",
+      "score": 0.4,
+      "rationale": "契约、测试和边界说明结构清晰。",
+      "evidence": ["evidence/slices/S2/STREAM_COMPLETE.json"]
+    },
+    {
+      "id": "Cost/performance realism",
+      "score": 0.4,
+      "rationale": "实验室成本与销毁边界明确，但未提供绑定 tip 的扩缩容实测。",
+      "evidence": ["docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]
+    }
+  ],
+  "unsupported_claims": [
+    "不得据当前证据声称目标 tip 已完成托管 EKS 全属性运行时验证。",
+    "不得把合成故障矩阵提升为托管集群实时故障恢复证明。",
+    "不得提高 portfolio-scoped-100-A3 或 Azure live 声明。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "提供目标 tip 对象并重新执行 parent-bind 校验。",
+    "将 P2-T03 场景证据重新绑定受评候选并通过 freshness 验证。",
+    "补充绑定候选的托管运行时属性、故障注入、逐项重置和业务复验证据。",
+    "在具有 helm 与 kubeconform 的环境中执行完整 chart gate。"
+  ],
+  "overall_score": 7.0,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "medium",
+    "role": "independent-provisional-judge"
+  },
+  "notes_zh": "clean-room provisional 评判；未复用其他 judge 分数。受评 parent 为 aa01454f8808c173deb43cc4b9b803287eec851e，声明的 tip 为 0606812354dae2e23356278f10f9b76b7ebd010b，bind_model 为 candidate_sha_parent_of_tip；因本地缺少 tip 对象，parent_bind_verified 为未证明。A3 上限保持不变。"
+}
