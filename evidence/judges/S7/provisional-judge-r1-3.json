@@ -1,0 +1,290 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S7",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r1-3",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "tree_sha": "36ebb3db0f92607ef66ab987a8fd42a8b1ffb62a",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "tip=0606812354dae2e23356278f10f9b76b7ebd010b；candidate=aa01454f8808c173deb43cc4b9b803287eec851e；parent-bind 成立",
+        "tree=36ebb3d…；rubric_sha256=f122c1d0…；manifest_sha256=89642f65… 现场 sha256sum 复核"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test：94 pass",
+        "terraform fmt -check：exit 0",
+        "validate P7-T04（含 recovery/performance/cost_consistency + full_repository + judge_exit）exit 0"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "S7 证据无敏感载荷；合成 checksum 为 fixture 标记值（deadbeef）而非真实客户数据"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无 open critical/high；破坏性操作受 dry-run/人类门控约束"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "restore-fixture claim_level=L1；gate/STREAM L4 仅 lab；Performance remains honest L1",
+        "宣称区分 designed/static/synthetic/lab-applied，未混生产"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "失败路径：restore checks 与 before_after 改善门槛由校验器强制",
+        "capacity claim_ceiling 禁止抬到 L4+"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "证据含命令、exit、时间、环境、cloud_apply_evidence 哈希路径",
+        "本轮 tipbound 校验时间 ≈2026-07-20T13:42Z"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "仅写入 provisional-judge-r1-3.json；P7-T04 scope 内",
+        "未 git clean"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG 覆盖 lab 证据与 validate rewrite 类问题",
+        "无未记录阻断失败"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "docs/reviews/S7、PLAN note、STREAM tipbound_note_zh 时态一致：合成 + lab 边界"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本 judge 中文叙述；外部合约/矩阵英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S7 单流 tipbound 绑定；分区路径未越界"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "provisional-r1 与 saved/fresh 分轨；清洁室未读旧分"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "断裂记录完备性满足 provisional 关闭条件"
+      ]
+    },
+    {
+      "id": "S7-M1",
+      "status": "pass",
+      "evidence": [
+        "RTO/RPO 目标+理由在 backup-contract；边界写明未测 live RTO",
+        "lab-drill 仅记录合成 restore 步骤耗时——按 tipbound 诚实计量"
+      ]
+    },
+    {
+      "id": "S7-M2",
+      "status": "pass",
+      "evidence": [
+        "隔离合成恢复 + 多检查完整性；P7-T01 restore/data_integrity 绿"
+      ]
+    },
+    {
+      "id": "S7-M3",
+      "status": "pass",
+      "evidence": [
+        "回滚验证清单与 first-release 例外齐全；known-good digest 缺口在 remaining_boundaries 诚实披露"
+      ]
+    },
+    {
+      "id": "S7-M4",
+      "status": "pass",
+      "evidence": [
+        "恢复/回滚安全执行路径经校验器证明；live 依赖故障注入不在本切片声称范围"
+      ]
+    },
+    {
+      "id": "S7-M5",
+      "status": "pass",
+      "evidence": [
+        "合成负载档案可重复；p50/p95/p99/errors/saturation/scaling 字段满足 must-have"
+      ]
+    },
+    {
+      "id": "S7-M6",
+      "status": "pass",
+      "evidence": [
+        "量化改善（p95/error_rate）+ repair 叙述通过 before_after"
+      ]
+    },
+    {
+      "id": "S7-M7",
+      "status": "pass",
+      "evidence": [
+        "成本模型、预算告警、标签、idle/rightsize 规则存在且校验绿"
+      ]
+    },
+    {
+      "id": "S7-M8",
+      "status": "pass",
+      "evidence": [
+        "估计/合约假设显式（claim_ceiling=L1）；lab 成本/teardown 指向 hosted 证据索引"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.94,
+      "rationale": "合约与校验覆盖 U/S7 must-have；对模板化合成路径的正确性略保守于满分。",
+      "evidence": [
+        "operations/recovery + performance + finops",
+        "validate P7-T01..T04"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.45,
+      "rationale": "权威边界清楚：合成恢复、dry-run teardown、无密钥。",
+      "evidence": [
+        "zero_secrets",
+        "live_cloud=false",
+        "docs/reviews/S7"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.38,
+      "rationale": "合成恢复深度足够 tipbound；缺 live 部分依赖故障，故低于维度顶格。",
+      "evidence": [
+        "restore-fixture.json",
+        "rollback-contract.json",
+        "contract-evidence remaining_boundaries"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 0.98,
+      "rationale": "确定性门禁稳定；合成同构略影响“真实故障覆盖”观感但不阻断。",
+      "evidence": [
+        "node --test 94 pass",
+        "P7 validators"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.87,
+      "rationale": "托管 apply/drill 有绑定；恢复与性能主体仍为合成——live 分居中上。",
+      "evidence": [
+        "lab-drill-rto-29645042815.json",
+        "cloud-apply-staging-*.json",
+        "performance synthetic flags"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.93,
+      "rationale": "运维清单与 FinOps 告警可执行；模板化略扣。",
+      "evidence": [
+        "budgets/alerts",
+        "teardown scripts",
+        "backup verification list"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.96,
+      "rationale": "lab RTO 措辞需结合 drill notes 阅读；整体宣称诚实且可核对。",
+      "evidence": [
+        "matrix recovery notes",
+        "STREAM remaining_boundaries",
+        "tipbound_note_zh"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.48,
+      "rationale": "索引与 tipbound 说明便于无聊天上下文交接。",
+      "evidence": [
+        "STREAM_COMPLETE.json",
+        "integrated-gate.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.46,
+      "rationale": "相对另两份更肯定 FinOps 合约可用性；性能仍为合成，故未给满。",
+      "evidence": [
+        "operations/finops/budgets.json",
+        "idle-detection.json",
+        "baseline-after repair narrative"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "合成 restore / lab-drill 墙钟 ≠ 生产 RTO 认证",
+    "合成负载前后对比 ≠ 生产性能基线",
+    "dry-run teardown ≠ 本会话 live 销毁完成"
+  ],
+  "security_findings": [
+    "无阻断项；隔离合成恢复与零密钥证据符合切片安全期望"
+  ],
+  "improvements": [
+    "统一 SUPERVISOR 与 STREAM 对 lab RTO 措辞，减少读者误读为 live incident RTO",
+    "为 rollback 增加 telemetry 证据钩子",
+    "若保留 L4 recovery 宣称，补充与 fixture 解耦的实验室恢复计时原始日志哈希"
+  ],
+  "overall_score": 9.45,
+  "merge_ready": "provisional",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-tipbound-provisional-judge",
+    "role": "s7-tipbound-provisional-judge-03"
+  },
+  "notes_zh": "独立 clean-room tipbound provisional #3（S7）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=36ebb3d / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf fmt、validate P7-T04 全绿；未 git clean；未读旧分数。对模板化合成恢复正确性略保守，对 FinOps 合约可运维性略高。合成 restore/RTO 诚实：U1–U14+S7-M1–M8 全 pass；overall_score=9.45；merge_ready=provisional；provisional_pass=true。"
+}

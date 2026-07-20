@@ -1,0 +1,298 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S6",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r1-1",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "parent-bind：git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ == aa01454f8808c173deb43cc4b9b803287eec851e",
+        "workspace tree=36ebb3d（tip-bind elevate）；tip tree 短 0721108",
+        "sha256sum docs/planning/JUDGE_RUBRICS.md → f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "sha256sum docs/claims/matrix.json → 89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "evidence/portfolio/tip-proof-aa01454.json tip_under_review/candidate 与 bind_model=candidate_sha_parent_of_tip 一致"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → 94/94 pass（2026-07-20T13:41:43Z）",
+        "terraform fmt -check -recursive terraform → exit 0；terraform -chdir=terraform/envs/staging validate → Success",
+        "CANDIDATE_SHA=aa01454… BASELINE_SHA=aa01454… node scripts/project.mjs validate P6-T04 → exit 0；副作用已 git checkout 丢弃（未 git clean）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "integrated-gate.environment.zero_secrets=true",
+        "security/secrets-policy.json：managed_secrets_required + redaction_required + forbidden_in_repo",
+        "抽检 S6 证据/SBOM 无长寿命密钥材料"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "security/sbom-stub.json triage.critical=0 / high=0；note=非 live scanner",
+        "本切片 tipbound 路径无开放 critical/high 安全 issue 记录"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "STREAM_COMPLETE claim_level=L3；remaining_boundaries 明示 security-sbom L2、agentic L3 hosted-control、Azure L1、No Cursor in-pod AWS",
+        "matrix security-sbom=L2；azure-governance=L1；agentic-workflow=L3 — 与 tipbound_note_zh 分层一致，不抬 live scanner/Azure apply"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "security/least-privilege.json negative_cases expect=deny；admission-negative blocked_deployments≥2",
+        "tests/security/policy.test.mjs + tests/agentic/prompt-injection.test.mjs + tests/azure/governance.test.mjs 全绿"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "现场验证窗 2026-07-20T13:41:43Z–13:41:50Z：parent-bind + 94 测 + tf + P6-T04 全绿",
+        "elevated integrated-gate 保留命令/exit/environment/validators；validate 写回已 checkout 丢弃",
+        "node v22.14.0；Terraform v1.9.8"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "本 judge 仅写入 evidence/judges/S6/provisional-judge-r1-1.json",
+        "未改实现/rubric/权威 PLAN 状态；未 git clean"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG 含 TIP-BIND / BF-2026-019 治理轨迹",
+        "本轮验证无新增未记录失败"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "STREAM/SUPERVISOR/matrix 时态一致：组合 L3 + security-sbom L2 诚实；Azure designed/static",
+        "不以仓库 SBOM stub 声称 live vulnerability scanner"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本 judge notes_zh 与 must_have 说明为简体中文；招聘向文档保持英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S6 顺序门禁 P6-T01→T04；本轮无跨切片写冲突（仅写本 provisional 路径）"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本文件为 provisional-judge-r1-1，与 fresh-judge / saved-council-provisional 分轨；未读旧分数"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "已观察 tip-bind/治理失败有 BF 轨迹；本轮无新增未入账失败"
+      ]
+    },
+    {
+      "id": "S6-M1",
+      "status": "pass",
+      "evidence": [
+        "security/least-privilege.json：ci-plan/ci-apply/agent-evidence 最小权限 + deny-wildcard-admin / deny-agent-iam-create",
+        "tests/security/policy.test.mjs 断言 negative expect=deny"
+      ]
+    },
+    {
+      "id": "S6-M2",
+      "status": "pass",
+      "evidence": [
+        "security/secrets-policy.json：rotation_days_max=90、redaction_required、forbidden_in_repo",
+        "integrated-gate zero_secrets=true；证据中未见密钥明文"
+      ]
+    },
+    {
+      "id": "S6-M3",
+      "status": "pass",
+      "evidence": [
+        "scripts/security/generate-sbom.mjs + SOURCE_DATE_EPOCH 可复现；tests/security/sbom-generator.test.mjs pass",
+        "sbom-stub triage 未隐藏 critical/high；claim_ceiling/matrix 诚实 L2（非 live scanner）"
+      ]
+    },
+    {
+      "id": "S6-M4",
+      "status": "pass",
+      "evidence": [
+        "security/admission-negative.json：latest tag / runAsRoot / missing digest → deny",
+        "azure/policy-negative.json：public-ip-lab / missing-cost-center-tag → deny（契约层）"
+      ]
+    },
+    {
+      "id": "S6-M5",
+      "status": "pass",
+      "evidence": [
+        "azure/governance.json implemented_versus_designed=designed_static；claim_ceiling=L1",
+        "non_claims 含 ExpressRoute / live Azure Policy；D-046 Azure live apply out"
+      ]
+    },
+    {
+      "id": "S6-M6",
+      "status": "pass",
+      "evidence": [
+        "agentic/workflow-contract.json default_mutation_authority=false；evidence-gather mutation=false",
+        "hosted agentic-workflow L3：App publish / junior-actuate / OIDC，非 in-pod 凭据"
+      ]
+    },
+    {
+      "id": "S6-M7",
+      "status": "pass",
+      "evidence": [
+        "remediation-proposal.mjs requires_human_gate=true；workflow-contract human_gate.required=true",
+        "D-044 protected environment placeholders retained；短寿命路径走 GHA OIDC（continuityops-gha 证据绑定）"
+      ]
+    },
+    {
+      "id": "S6-M8",
+      "status": "pass",
+      "evidence": [
+        "tests/agentic/prompt-injection.test.mjs：注入检测、伪造证据拒绝、默认无 mutation authority",
+        "workflow-contract prompt_injection_defenses 覆盖 untrusted text / forged evidence"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.9,
+      "rationale": "IAM/密钥/准入/Azure/agentic 契约与 P6-T04 门禁齐全；评审笔记极薄，正确性略低于满分。",
+      "evidence": [
+        "security/* + agentic/* + azure/*",
+        "CANDIDATE_SHA validate P6-T04 exit 0"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.45,
+      "rationale": "最小权限负例、人类门控、OIDC 变异路径清楚；H4 占位 waived 记轻微扣分。",
+      "evidence": [
+        "least-privilege.json + remediation-proposal.mjs",
+        "evidence/hosted/agentic-workflow-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "负例与注入/伪造拒绝覆盖充分；无 live 安全事件恢复深度，按契约天花板计。",
+      "evidence": [
+        "admission-negative.json",
+        "tests/agentic/prompt-injection.test.mjs"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "94/94、security/azure/agentic 专项与 tf fmt/validate、P6-T04 全绿。",
+      "evidence": [
+        "node --test tests/ → 94 pass",
+        "terraform fmt/validate + validate P6-T04"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.85,
+      "rationale": "agentic 有 hosted L3 控制面证据；security-sbom 诚实停在 L2 可复现仓库清单，无 live scanner——runtime 维保守。",
+      "evidence": [
+        "matrix security-sbom claim_level=L2",
+        "agentic-workflow-2026-07-18.json hosted_controls"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "策略文件、生成器脚本与门禁可操作；评审文档过短限制交接深度。",
+      "evidence": [
+        "scripts/security/generate-sbom.mjs",
+        "docs/reviews/S6/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.95,
+      "rationale": "组合 L3 与 security-sbom L2 / Azure L1 分层清楚；parent-bind 与哈希一致。",
+      "evidence": [
+        "STREAM_COMPLETE tipbound_note_zh + remaining_boundaries",
+        "tip-proof-aa01454.json"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "契约与测试可交接；STREAM/matrix 边界句足够。",
+      "evidence": [
+        "evidence/slices/S6/STREAM_COMPLETE.json",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.5,
+      "rationale": "非 FinOps 主切片；Azure 成本告警为 designed，不作生产/live 成本证明。",
+      "evidence": [
+        "azure/governance.json controls.cost",
+        "remaining_boundaries Azure live out"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "不得将 security-sbom 解释为 live vulnerability scanner 或 L3+ 供应链扫描",
+    "不得将 Azure governance 解释为 live Policy/ExpressRoute 证明",
+    "不得声称 Cursor in-pod AWS 或生产客户 mutation 权威"
+  ],
+  "security_findings": [
+    "无阻断项：密钥策略与 zero_secrets 成立；SBOM stub triage 无 critical/high"
+  ],
+  "improvements": [
+    "充实 docs/reviews/S6/engineering-qa-security.md，交叉引用 tipbound L3/L2 分层",
+    "将任务级 security.json/agentic.json 历史 candidate_sha tip-bind 刷新到 aa01454（非本 must_haves 阻断）",
+    "workflow-contract.claim_ceiling 与 matrix agentic L3 文案对齐，减少串读"
+  ],
+  "overall_score": 9.5,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-tipbound-provisional-judge",
+    "role": "s6-tipbound-provisional-judge-01"
+  },
+  "notes_zh": "独立 clean-room tipbound provisional R1 #1（S6）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=36ebb3d / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf fmt+staging validate、CANDIDATE_SHA validate P6-T04 均 exit 0；副作用已 checkout 丢弃（未 git clean）。未读旧 provisional/fresh/saved 分数。诚实：组合 claim L3，security-sbom 停 L2，Azure L1 designed/static，agentic L3 hosted-control。must_haves U1–U14+S6-M1–M8 全 pass；merge_ready=yes；overall_score=9.50；provisional_pass=true。"
+}
