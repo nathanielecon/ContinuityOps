@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "task_id": "S2-PROVISIONAL-JUDGE-R2-01",
+  "slice_id": "S2",
+  "round": "saved_provisional",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "expected_tip_parent": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "baseline_sha": "43db8d33d58ce9170d63ce0b514c460e1c4449be",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "openai/gpt-5.6-sol",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-read-only-judge"
+  },
+  "recorded_at": "2026-07-20T11:17:24Z",
+  "clean_room": {
+    "prohibited_judge_result_paths_opened": false,
+    "prior_scores_used": false,
+    "allowed_inputs": [
+      "docs/planning/JUDGE_RUBRICS.md#S2",
+      "docs/claims/matrix.json",
+      "evidence/slices/S2/",
+      "evidence/portfolio/tip-bind-2026-07-18.json",
+      "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+      "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+      "evidence/hosted/lab-drill-rto-29645042815.json",
+      "BREAK_FIX_LOG.md"
+    ]
+  },
+  "validation_results": [
+    {
+      "command": "git fetch origin candidate/portfolio-aa01454",
+      "exit_code": 128,
+      "recorded_at": "2026-07-20T11:14:49Z",
+      "environment": "Codex cloud worktree without an origin remote",
+      "result": "not_proven",
+      "output": "fatal: 'origin' does not appear to be a git repository",
+      "evidence_path": "evidence/judges/S2/provisional-judge-r2-1.json"
+    },
+    {
+      "command": "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b",
+      "exit_code": 128,
+      "recorded_at": "2026-07-20T11:14:49Z",
+      "environment": "Codex cloud worktree",
+      "result": "not_proven",
+      "output": "fatal: git cat-file: could not get object info",
+      "evidence_path": "evidence/judges/S2/provisional-judge-r2-1.json"
+    },
+    {
+      "command": "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^",
+      "exit_code": 128,
+      "recorded_at": "2026-07-20T11:14:49Z",
+      "environment": "Codex cloud worktree",
+      "result": "not_proven",
+      "output": "fatal: ambiguous argument; tip commit object is unavailable",
+      "evidence_path": "evidence/judges/S2/provisional-judge-r2-1.json"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "recorded_at": "2026-07-20T11:17:18Z",
+      "environment": "Codex cloud worktree; Node.js 22",
+      "result": "pass",
+      "summary": "94 tests passed, 0 failed",
+      "evidence_path": "evidence/judges/S2/provisional-judge-r2-1.json"
+    },
+    {
+      "command": "terraform fmt -check -recursive terraform",
+      "exit_code": 0,
+      "recorded_at": "2026-07-20T11:17:24Z",
+      "environment": "Codex cloud worktree",
+      "result": "pass",
+      "evidence_path": "evidence/judges/S2/provisional-judge-r2-1.json"
+    },
+    {
+      "command": "node scripts/project.mjs validate P2-T03",
+      "exit_code": 2,
+      "recorded_at": "2026-07-20T11:17:24Z",
+      "environment": "Codex cloud worktree; validator side effects discarded; git status unchanged",
+      "result": "fail",
+      "output": "ValidationError: evidence candidate_sha 与期望不一致",
+      "evidence_path": "evidence/slices/S2/scenarios/matrix-evidence.json"
+    }
+  ],
+  "must_haves": [
+    { "id": "U1", "status": "fail", "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json"], "finding": "The required tip object and its parent cannot be verified. The fallback NIX-TIPBOUND-001 packet and tip-proof-aa01454.json are absent, while the available tip-bind names an older portfolio tip." },
+    { "id": "U2", "status": "fail", "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json"], "finding": "The repository test suite and Terraform formatting pass, but the required P2-T03 validation fails its candidate-SHA binding check." },
+    { "id": "U3", "status": "pass", "evidence": ["tests/continuityops.test.mjs", ".github/workflows/pr-validate.yml"], "finding": "Deterministic checks cover credential-free PR behavior and negative credential injection." },
+    { "id": "U4", "status": "not_proven", "evidence": ["evidence/slices/S2/chart-contract.json"], "finding": "No candidate-bound security review proving the absence of open critical/high S2 issues was supplied." },
+    { "id": "U5", "status": "pass", "evidence": ["docs/claims/matrix.json", "README.md", "evidence/slices/S2/runtime/kind-preflight.json"], "finding": "Static, local-only, hosted lab, Azure-out, and non-production boundaries are explicit." },
+    { "id": "U6", "status": "pass", "evidence": ["tests/continuityops.test.mjs", "evidence/slices/S2/scenarios/matrix-evidence.json"], "finding": "Deterministic failure-class and reset contracts are present, subject to the failed freshness binding." },
+    { "id": "U7", "status": "fail", "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"], "finding": "Required validation is stale against the judged candidate and the hosted evidence is inherited rather than bound to the unavailable tip object." },
+    { "id": "U8", "status": "not_proven", "evidence": ["evidence/judges/S2/provisional-judge-r2-1.json"], "finding": "The judge changed only its result path, but the missing tip/packet prevents end-to-end upstream-preservation and scope verification." },
+    { "id": "U9", "status": "pass", "evidence": ["BREAK_FIX_LOG.md"], "finding": "The observed EKS version failure and repair are recorded with hosted run identifiers." },
+    { "id": "U10", "status": "pass", "evidence": ["README.md", "docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"], "finding": "Recruiter-facing claims consistently retain AWS lab, non-production, and Azure-out ceilings." },
+    { "id": "U11", "status": "not_proven", "evidence": ["AGENTS.md"], "finding": "Repository policy is explicit, but the supplied evidence cannot prove every prior inter-agent handoff used Simplified Chinese." },
+    { "id": "U12", "status": "not_proven", "evidence": ["tests/harness/concurrency.test.mjs"], "finding": "Deterministic policy coverage exists, but exact tip-bound stream execution evidence is unavailable." },
+    { "id": "U13", "status": "pass", "evidence": ["scripts/validators/core.mjs"], "finding": "Validator policy separates saved provisional results from authoritative fresh judging." },
+    { "id": "U14", "status": "pass", "evidence": ["BREAK_FIX_LOG.md"], "finding": "Observed hosted apply failures sampled for S2 are represented in the break/fix log." },
+    { "id": "S2-M1", "status": "pass", "evidence": ["evidence/slices/S2/chart-contract.json", "tests/continuityops.test.mjs"], "finding": "Chart and tests enforce an immutable digest release contract." },
+    { "id": "S2-M2", "status": "pass", "evidence": ["evidence/slices/S2/chart-contract.json", "tests/continuityops.test.mjs"], "finding": "Probes, resources, HPA, PDB, and topology contracts have deterministic coverage." },
+    { "id": "S2-M3", "status": "pass", "evidence": ["evidence/slices/S2/chart-contract.json", "tests/continuityops.test.mjs"], "finding": "Least-privilege runtime and negative policy controls are statically tested." },
+    { "id": "S2-M4", "status": "not_proven", "evidence": ["evidence/slices/S2/chart-contract.json"], "finding": "Static substitute checks are recorded, but Helm and kubeconform were skipped and the required candidate-bound validator fails." },
+    { "id": "S2-M5", "status": "pass", "evidence": ["evidence/slices/S2/runtime/kind-preflight.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"], "finding": "Local kind/static boundaries are clearly separated from historical managed EKS lab apply evidence." },
+    { "id": "S2-M6", "status": "fail", "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"], "finding": "The hosted record proves EKS infrastructure creation but does not provide tip-bound workload digest, health, version endpoint, workload identity, rollout, and scaling observations for this candidate." },
+    { "id": "S2-M7", "status": "fail", "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json"], "finding": "Failure classes are synthetic contracts; managed runtime reproduction of CrashLoop, readiness, scheduling/resource, DNS, and network denial is not evidenced." },
+    { "id": "S2-M8", "status": "fail", "evidence": ["evidence/slices/S2/scenarios/crashloop-reset.json"], "finding": "The reset artifact is explicitly synthetic and cannot prove managed runtime business behavior after every required failure." },
+    { "id": "S2-M9", "status": "not_proven", "evidence": ["evidence/slices/S2/chart-contract.json"], "finding": "Static chart validation alone does not prove the managed ingress, TLS, and load-balancer runtime boundary." },
+    { "id": "S2-M10", "status": "pass", "evidence": ["docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"], "finding": "The lab ceiling and successful teardown run are explicit; no production or Azure-live claim is made." }
+  ],
+  "scored_dimensions": [
+    { "name": "Correctness and completeness", "score": 1.2, "max": 2.0, "evidence": ["tests/continuityops.test.mjs", "evidence/slices/S2/scenarios/matrix-evidence.json"] },
+    { "name": "Security and authority boundaries", "score": 1.2, "max": 1.5, "evidence": ["evidence/slices/S2/chart-contract.json", "docs/claims/matrix.json"] },
+    { "name": "Failure/recovery depth", "score": 0.5, "max": 1.5, "evidence": ["evidence/slices/S2/scenarios/crashloop-reset.json", "evidence/slices/S2/scenarios/matrix-evidence.json"] },
+    { "name": "Deterministic test quality", "score": 0.8, "max": 1.0, "evidence": ["tests/continuityops.test.mjs"] },
+    { "name": "Live/runtime evidence quality", "score": 0.4, "max": 1.0, "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"] },
+    { "name": "Operability and troubleshooting", "score": 0.6, "max": 1.0, "evidence": ["BREAK_FIX_LOG.md", "evidence/slices/S2/scenarios/matrix-evidence.json"] },
+    { "name": "Evidence/claim integrity", "score": 0.2, "max": 1.0, "evidence": ["evidence/portfolio/tip-bind-2026-07-18.json", "docs/claims/matrix.json"] },
+    { "name": "Maintainability and handoff", "score": 0.4, "max": 0.5, "evidence": ["docs/planning/JUDGE_RUBRICS.md", "tests/continuityops.test.mjs"] },
+    { "name": "Cost/performance realism", "score": 0.4, "max": 0.5, "evidence": ["docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"] }
+  ],
+  "overall_score": 5.7,
+  "provisional_pass": false,
+  "merge_ready": "no",
+  "blocking_findings": [
+    { "id": "S2-R2-001", "must_haves": ["U1"], "finding": "The required tip object is absent, origin is unavailable, and both prescribed D-028 fallback artifacts are absent; parent binding is not proven." },
+    { "id": "S2-R2-002", "must_haves": ["U2", "U7", "S2-M4"], "finding": "P2-T03 exits 2 because its evidence candidate_sha does not match the candidate under judgment." },
+    { "id": "S2-R2-003", "must_haves": ["S2-M6", "S2-M7", "S2-M8"], "finding": "Historical EKS infrastructure apply does not establish candidate-bound managed workload behavior or live failure/reset verification." }
+  ],
+  "a3_ceiling": {
+    "raised": false,
+    "azure_live": "out",
+    "performance": "L1",
+    "security_sbom": "L2",
+    "agentic_workflow": "L3",
+    "lab_stack": "L4 via continuityops-gha; non-production"
+  },
+  "recommended_next_step": "Publish the missing tip commit and NIX-TIPBOUND-001 D-028 packet on candidate/portfolio-aa01454, rebind P2-T03 evidence to the candidate, and provide tip-bound managed workload runtime and failure/reset evidence before a fresh independent provisional judgment. Do not merge main or raise A3 ceilings."
+}
