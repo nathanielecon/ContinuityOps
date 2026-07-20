@@ -578,3 +578,19 @@ ContinuityOps incidents yet.
 - **Symptom:** README still advertised L1 / no live apply while `docs/claims/matrix.json` and hosted evidence claimed scoped AWS lab L4 under A3.
 - **Repair:** Update README status, results table, non-claims, and recruiter bullets to match A3 ceilings; re-dispatch fresh council on rebind tip.
 - **Prevention:** Recruiter-facing claim prose updates atomically with matrix/hosted elevations (BF-PRE-001).
+
+## BF-2026-018 — GITHUB_TOKEN `publish-ok` does not retrigger zero-hop D-037
+
+- **Detected:** 2026-07-20T10:56Z–11:08Z during Plan A Batch A (TIP-BIND #123 / provisional #125–#133).
+- **Symptom:** `codex-patch-publish` posts `publish-ok (D-034): …/pull/N` as `github-actions[bot]` using `GITHUB_TOKEN`; `pipeline-zero-hop` never runs `publish-ok-d037`, so candidate merge stalls.
+- **Root cause:** GitHub Actions does not re-trigger workflows from `GITHUB_TOKEN` issue comments.
+- **Repair (interim):** Chief/orch unblock path — validate patch scope (`evidence/**` only) and FF/merge onto `candidate/portfolio-*` without main merge.
+- **Prevention:** Emit publish-ok via non-GITHUB_TOKEN actor, or add `workflow_run`/`repository_dispatch` hop after D-034 success; document in QUEUE.md.
+
+## BF-2026-019 — Codex App judges cannot `rev-parse` candidate tip objects
+
+- **Detected:** 2026-07-20T11:03Z–11:08Z via S0/S2/S3 provisional judges #125–#133 (all `merge_ready: no`).
+- **Symptom:** Universal U1 fail/not_proven — `git rev-parse 0606812…^` exits 128 / object missing inside App sandbox despite tip existing on `candidate/portfolio-aa01454`.
+- **Secondary:** S2 P2-T03 exit 2 — scenario evidence `candidate_sha` not rebound to tip-bound parent `aa01454…`; S0-01 also reported clean-room contamination from reading prior judge reports.
+- **Repair (pending nixer/fixer):** Package tip SHA + parent in dispatch packet (D-028 data-not-permission); ensure App env fetches candidate branch / deepen history; rebind S2 scenario evidence SHAs; re-dispatch clean-room provisional cohort.
+- **Prevention:** Tip-bound judge prompts must vendor `git cat-file` proof or shallow-fetch instructions for non-`main` tips; never assume App default clone contains stream/candidate tips.
