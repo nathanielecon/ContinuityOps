@@ -1,0 +1,331 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "saved_provisional",
+  "judge_id": "S0-PROVISIONAL-JUDGE-R2-02",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "fail",
+      "evidence": [
+        "git fetch origin candidate/portfolio-aa01454（exit 128：origin 不存在）",
+        "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b（对象不可用）",
+        "evidence/portfolio/tip-proof-aa01454.json（当前树中不存在）",
+        "evidence/portfolio/packets/NIX-TIPBOUND-001/COMMIT_OBJECTS.txt（当前树中不存在）"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "fail",
+      "evidence": [
+        "node --test tests/（exit 0，94/94 通过）",
+        "terraform fmt -check -recursive terraform（exit 0）",
+        "node scripts/project.mjs validate P2-T03（exit 2：evidence candidate_sha 与期望不一致）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "tests/ 中 PR 只读与凭据负向测试通过",
+        "evidence/slices/S0/validator-contract.json"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "OPERATING_STATE.md",
+        "evidence/slices/S0/validator-contract.json"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/（unknown validator、stale SHA、凭据与授权负向测试通过）"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "evidence": [
+        "目标 tip 对象与 D-028 tip-proof 包在当前树中均不可用，无法证明目标 tip 上证据新鲜度"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "git status --porcelain 在只读验证前后均为空",
+        "本轮仅新增指定 judge 输出"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "README.md",
+        "OPERATING_STATE.md",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md",
+        "evidence/slices/S0/validator-contract.json"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S0/harness.json",
+        "evidence/slices/S0/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ 中 saved/fresh 隔离测试通过"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "S0-M1",
+      "status": "pass",
+      "evidence": [
+        "harness/postbuild-partition-manifest.json",
+        "evidence/slices/S0/harness.json"
+      ]
+    },
+    {
+      "id": "S0-M2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ 中生命周期、revision 与 worker 权限测试通过"
+      ]
+    },
+    {
+      "id": "S0-M3",
+      "status": "pass",
+      "evidence": [
+        "PLAN.md（authorized_through_phase=8）",
+        "node --test tests/ 中授权边界测试通过"
+      ]
+    },
+    {
+      "id": "S0-M4",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S0/validator-contract.json",
+        "node --test tests/ 中 unknown validator fail-closed 测试通过"
+      ]
+    },
+    {
+      "id": "S0-M5",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S0/validator-contract.json",
+        "git status 验证前后未变化"
+      ]
+    },
+    {
+      "id": "S0-M6",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S0/validator-contract.json"
+      ]
+    },
+    {
+      "id": "S0-M7",
+      "status": "not_proven",
+      "evidence": [
+        "harness/rubrics/S0.freeze.v1.json sha256=724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+        "目标 tip parent 关系无法在当前对象库或缺失的 D-028 包中交叉证明"
+      ]
+    },
+    {
+      "id": "S0-M8",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S0/harness.json",
+        "node --test tests/ 中并发、队列、replacement 与 bottleneck 测试通过"
+      ]
+    },
+    {
+      "id": "S0-M9",
+      "status": "pass",
+      "evidence": [
+        "harness/schemas/judge-result.schema.json",
+        "node --test tests/ 中 judge 隔离测试通过"
+      ]
+    },
+    {
+      "id": "S0-M10",
+      "status": "pass",
+      "evidence": [
+        "harness/approvals/H0.binding.json",
+        "evidence/slices/S0/rubric-freeze.json"
+      ]
+    },
+    {
+      "id": "S0-M11",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md",
+        "evidence/slices/S0/validator-contract.json"
+      ]
+    },
+    {
+      "id": "S0-M12",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md",
+        "node --test tests/ 中 Claude proxy policy gate 测试通过"
+      ]
+    },
+    {
+      "id": "S0-M13",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ 中 TypeScript 7.x policy 测试通过"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U1 硬门槛失败：当前仓库没有 origin，fetch exit 128；tip 0606812 对象不存在，无法执行 cat-file 或证明其 parent=aa01454。",
+    "D-028 交叉证明材料 evidence/portfolio/tip-proof-aa01454.json 与 evidence/portfolio/packets/NIX-TIPBOUND-001/COMMIT_OBJECTS.txt 在当前树中均不存在。",
+    "必做只读验证 node scripts/project.mjs validate P2-T03 exit 2：evidence candidate_sha 与期望不一致。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.55,
+      "rationale": "大部分 S0 行为由 94 项测试覆盖，但目标 tip 身份与 P2-T03 只读验证未通过。",
+      "evidence": [
+        "node --test tests/",
+        "node scripts/project.mjs validate P2-T03"
+      ]
+    },
+    {
+      "id": "security_authority_boundaries",
+      "score": 1.45,
+      "rationale": "授权、凭据与 worker 权限负向控制通过；未发现 critical/high 安全问题。",
+      "evidence": [
+        "evidence/slices/S0/validator-contract.json",
+        "PLAN.md"
+      ]
+    },
+    {
+      "id": "failure_recovery_depth",
+      "score": 1.35,
+      "rationale": "fail-closed、replacement、bottleneck 与状态负向路径均有确定性测试。",
+      "evidence": [
+        "node --test tests/",
+        "evidence/slices/S0/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "deterministic_test_quality",
+      "score": 0.95,
+      "rationale": "全量 Node 测试 94/94 通过，Terraform 格式检查通过。",
+      "evidence": [
+        "node --test tests/",
+        "terraform fmt -check -recursive terraform"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence_quality",
+      "score": 0.55,
+      "rationale": "本地验证充分，但指定 tip 对象与交叉证明包缺失，不能绑定目标运行证据。",
+      "evidence": [
+        "evidence/portfolio/tip-proof-aa01454.json（缺失）",
+        "evidence/portfolio/packets/NIX-TIPBOUND-001/COMMIT_OBJECTS.txt（缺失）"
+      ]
+    },
+    {
+      "id": "operability_troubleshooting",
+      "score": 0.9,
+      "rationale": "状态、break/fix 与故障路由材料清晰。",
+      "evidence": [
+        "OPERATING_STATE.md",
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.55,
+      "rationale": "A3 ceiling 保持不变，但 U1 parent-bind 无法证明且 P2-T03 报 candidate_sha 不一致。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "node scripts/project.mjs validate P2-T03"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.45,
+      "rationale": "schema、中文协议与 handoff 约束均明确且受测试。",
+      "evidence": [
+        "harness/schemas/judge-result.schema.json",
+        "AGENTS.md"
+      ]
+    },
+    {
+      "id": "cost_performance_realism",
+      "score": 0.4,
+      "rationale": "性能维持 L1、Azure live 明确 out，未提高 A3。",
+      "evidence": [
+        "docs/claims/matrix.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "不能声称已对 tip 0606812354dae2e23356278f10f9b76b7ebd010b 完成 commit-object 或 parent-bind 验证。",
+    "不能将 Azure live 提高到 A3 范围内；其仍为 out / L1 static。",
+    "不能据本轮结果声称 S0 可合并。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在发布环境提供 candidate/portfolio-aa01454 remote ref 与 tip 0606812 commit object。",
+    "将 tip-proof-aa01454.json 及 NIX-TIPBOUND-001/COMMIT_OBJECTS.txt 纳入 base tree 后重新执行 clean-room provisional。",
+    "修复或重绑定 P2-T03 evidence candidate_sha 后重跑该只读验证。"
+  ],
+  "overall_score": 8.15,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-read-only-judge"
+  },
+  "notes_zh": "本轮未读取禁止路径中的旧 provisional/fresh judge 分数。当前 HEAD 为 aa01454f8808c173deb43cc4b9b803287eec851e；A3 ceiling 未提高，未合并 main。"
+}
