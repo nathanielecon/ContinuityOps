@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "saved_provisional",
+  "judge_id": "S2-PROVISIONAL-JUDGE-R2-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {"id": "U1", "status": "fail", "evidence": ["git fetch origin candidate/portfolio-aa01454: exit 128（未配置 origin）", "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b: exit 128（对象缺失）", "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^: exit 128（无法证明父提交）"]},
+    {"id": "U2", "status": "fail", "evidence": ["node --test tests/: exit 0，94/94 通过，2026-07-20T11:17:21Z 至 2026-07-20T11:17:27Z", "terraform fmt -check -recursive terraform: exit 0，2026-07-20T11:17:27Z", "node scripts/project.mjs validate P2-T03: exit 2，evidence candidate_sha 与期望不一致，2026-07-20T11:17:27Z"]},
+    {"id": "U3", "status": "pass", "evidence": ["tests/：PR 只读与凭据边界的正反测试通过"]},
+    {"id": "U4", "status": "not_proven", "evidence": ["提交对象与指定 D-028 包在当前检出中均不可用，无法对精确候选完成安全闭环"]},
+    {"id": "U5", "status": "pass", "evidence": ["docs/claims/matrix.json：AWS lab staging 上限明确，非生产且 Azure live out"]},
+    {"id": "U6", "status": "pass", "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json", "tests/kubernetes/scenarios.test.mjs"]},
+    {"id": "U7", "status": "fail", "evidence": ["P2-T03 只读验证因 candidate_sha 不一致退出 2；切片证据未绑定 aa01454f8808c173deb43cc4b9b803287eec851e"]},
+    {"id": "U8", "status": "pass", "evidence": ["本轮仅新增指定 judge 结果；验证副作用已丢弃"]},
+    {"id": "U9", "status": "not_proven", "evidence": ["无法取得指定 tip 与 D-028 包，不能对精确候选核验完整 break/fix 绑定"]},
+    {"id": "U10", "status": "not_proven", "evidence": ["matrix 的 L4 实验室声明与旧 S2 L1 证据层级并存，且 P2-T03 当前绑定失败"]},
+    {"id": "U11", "status": "pass", "evidence": ["tests/：worker 中文自由文本协议测试通过"]},
+    {"id": "U12", "status": "pass", "evidence": ["tests/：流隔离与集成队列测试通过"]},
+    {"id": "U13", "status": "pass", "evidence": ["tests/：saved/fresh 隔离测试通过；本轮遵守 clean-room 禁读路径"]},
+    {"id": "U14", "status": "not_proven", "evidence": ["精确 tip 不可用，无法确认其所有故障均已记录"]},
+    {"id": "S2-M1", "status": "pass", "evidence": ["evidence/slices/S2/chart-contract.json", "tests/：Helm digest pin 测试通过"]},
+    {"id": "S2-M2", "status": "pass", "evidence": ["evidence/slices/S2/chart-contract.json", "tests/：probes/resources/HPA/PDB/RBAC annotations 测试通过"]},
+    {"id": "S2-M3", "status": "pass", "evidence": ["evidence/slices/S2/chart-contract.json", "tests/：Kubernetes policy 与 negative 检查通过"]},
+    {"id": "S2-M4", "status": "not_proven", "evidence": ["静态测试通过；P2-T03 当前退出 2，且现有 chart 证据注明 Helm/kubeconform 跳过"]},
+    {"id": "S2-M5", "status": "pass", "evidence": ["evidence/slices/S2/runtime-evidence.json", "docs/claims/matrix.json"]},
+    {"id": "S2-M6", "status": "not_proven", "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json 证明 EKS 创建，但未给出绑定本候选的 digest、health、version、identity、rollout、scaling 全套运行证据"]},
+    {"id": "S2-M7", "status": "pass", "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json：六类合成故障矩阵", "tests/：failure matrix coverage 通过"]},
+    {"id": "S2-M8", "status": "not_proven", "evidence": ["现有证据为合成 reset；未证明每类托管运行时故障后的业务行为复验"]},
+    {"id": "S2-M9", "status": "not_proven", "evidence": ["当前提供的 S2 原始证据未形成绑定候选的 ingress/TLS/load-balancer 运行边界证明"]},
+    {"id": "S2-M10", "status": "pass", "evidence": ["docs/claims/matrix.json", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json：实验室边界与 teardown run 已记录"]}
+  ],
+  "blocking_findings": [
+    "U1 硬门槛失败：仓库未配置 origin，指定 tip 对象缺失，无法机械证明其父提交等于 aa01454f8808c173deb43cc4b9b803287eec851e。",
+    "PR 指定的 D-028 包、tip-proof 与 tip-bind 路径在当前基线均不存在，无法使用替代交叉证明。",
+    "必做 P2-T03 验证退出 2：evidence candidate_sha 与期望不一致；证据未重绑当前候选。"
+  ],
+  "scored_dimensions": [
+    {"id": "Correctness and completeness", "score": 1.2, "rationale": "静态契约覆盖较广，但 tip 绑定和必做验证失败。", "evidence": ["node --test tests/: 94/94", "node scripts/project.mjs validate P2-T03: exit 2"]},
+    {"id": "Security and authority boundaries", "score": 1.1, "rationale": "只读、凭据和非生产边界有测试，但精确候选安全闭环不可证明。", "evidence": ["tests/", "docs/claims/matrix.json"]},
+    {"id": "Failure/recovery depth", "score": 0.8, "rationale": "六类合成矩阵存在，托管运行时逐项故障与业务复验不足。", "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json"]},
+    {"id": "Deterministic test quality", "score": 0.8, "rationale": "全量测试和 Terraform 格式检查通过，但切片验证失败。", "evidence": ["node --test tests/: exit 0", "terraform fmt -check -recursive terraform: exit 0"]},
+    {"id": "Live/runtime evidence quality", "score": 0.4, "rationale": "EKS apply 有记录，但缺少绑定候选的完整运行行为证据。", "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]},
+    {"id": "Operability and troubleshooting", "score": 0.6, "rationale": "故障分类和 reset 契约可用，但压力场景托管操作证据不足。", "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json"]},
+    {"id": "Evidence/claim integrity", "score": 0.2, "rationale": "tip、替代包均缺失且候选 SHA 重绑失败。", "evidence": ["U1 命令均无法完成", "P2-T03 exit 2"]},
+    {"id": "Maintainability and handoff", "score": 0.4, "rationale": "结构化证据与测试清晰，但候选重绑未完成。", "evidence": ["harness/schemas/judge-result.schema.json", "evidence/slices/S2/"]},
+    {"id": "Cost/performance realism", "score": 0.3, "rationale": "实验室 teardown 已记录，实时扩缩容测量未证明。", "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "evidence/slices/S2/runtime-evidence.json"]}
+  ],
+  "unsupported_claims": [
+    "不能把 EKS 资源创建等同于 S2-M6 所需的 digest、health、version、identity、rollout、scaling 全套证明。",
+    "不能把合成故障矩阵描述为托管 EKS 故障注入与恢复证明。",
+    "不能声称当前证据已绑定指定 tip 或候选 aa01454f8808c173deb43cc4b9b803287eec851e。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在可取得 origin 与指定 tip 的环境重新执行 U1 三条命令，或把声明的 D-028 交叉证明包实际纳入基线。",
+    "将 P2-T03 原始证据重绑精确候选后重新执行验证。",
+    "补齐绑定候选的托管 EKS digest、健康、版本、身份、发布、扩缩容以及逐项故障恢复证据。"
+  ],
+  "overall_score": 5.8,
+  "merge_ready": "no",
+  "model_record": {"provider": "OpenAI", "model": "gpt-5.6-sol", "mode": "default", "role": "independent-read-only-judge"},
+  "notes_zh": "clean-room provisional path B 重派；未提高 A3，Azure live out。验证时间均为 UTC；当前工作树基线 HEAD 为 aa01454f8808c173deb43cc4b9b803287eec851e。"
+}
