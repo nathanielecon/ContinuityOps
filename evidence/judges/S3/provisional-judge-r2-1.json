@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "task_id": "S3-PROVISIONAL-JUDGE-R2-01",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "medium",
+    "role": "judge"
+  },
+  "clean_room": {
+    "prior_provisional_or_fresh_scores_read": false,
+    "sources": [
+      "docs/planning/JUDGE_RUBRICS.md#S3",
+      "docs/claims/matrix.json",
+      "evidence/slices/S3/serverless.json",
+      "evidence/slices/S3/saas-operations.json",
+      "evidence/slices/S3/integrated-gate.json",
+      "evidence/portfolio/tip-bind-2026-07-18.json"
+    ]
+  },
+  "must_haves": [
+    { "id": "S3-M1", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json"] },
+    { "id": "S3-M2", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json"] },
+    { "id": "S3-M3", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json"] },
+    { "id": "S3-M4", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json"] },
+    { "id": "S3-M5", "status": "pass", "evidence": ["evidence/slices/S3/saas-operations.json"] },
+    { "id": "S3-M6", "status": "pass", "evidence": ["evidence/slices/S3/saas-operations.json"] },
+    { "id": "S3-M7", "status": "pass", "evidence": ["evidence/slices/S3/saas-operations.json"] },
+    { "id": "S3-M8", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json"] },
+    { "id": "S3-M9", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json", "docs/claims/matrix.json"] },
+    { "id": "S3-M10", "status": "pass", "evidence": ["evidence/slices/S3/integrated-gate.json", "docs/claims/matrix.json"] }
+  ],
+  "scored_dimensions": {
+    "serverless_correctness": 9.3,
+    "saas_operability": 9.2,
+    "evidence_fidelity": 8.0,
+    "claim_discipline": 9.4
+  },
+  "overall_score": 8.8,
+  "provisional_pass": false,
+  "merge_ready": "no",
+  "blocking_findings": [
+    {
+      "id": "U1-TIP-PARENT-NOT-PROVEN",
+      "severity": "blocking",
+      "finding": "The required tip object is unavailable, so its parent cannot be proven equal to aa01454f8808c173deb43cc4b9b803287eec851e.",
+      "reproduction": [
+        { "command": "git fetch origin candidate/portfolio-aa01454", "exit_code": 128, "result": "origin is not configured" },
+        { "command": "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b", "exit_code": 128, "result": "object unavailable" },
+        { "command": "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^", "exit_code": 128, "result": "unknown revision" }
+      ],
+      "cross_proof": "The requested NIX-TIPBOUND-001 packet and tip-proof-aa01454.json are also absent from this checkout."
+    }
+  ],
+  "validation_results": [
+    { "command": "node --test tests/", "exit_code": 0, "result": "94 tests passed", "recorded_utc": "2026-07-20T11:16:00Z", "evidence_path": "terminal output" },
+    { "command": "terraform fmt -check -recursive terraform", "exit_code": 0, "result": "format check passed", "recorded_utc": "2026-07-20T11:16:00Z", "evidence_path": "terminal output" },
+    { "command": "node scripts/project.mjs validate P2-T03", "exit_code": 2, "result": "candidate_sha does not match expected SHA; generated side effects were discarded", "recorded_utc": "2026-07-20T11:16:00Z", "evidence_path": "terminal output" },
+    { "command": "node scripts/project.mjs validate P3-T01", "exit_code": 0, "result": "S3 serverless validators passed; generated side effects were discarded", "recorded_utc": "2026-07-20T11:17:38Z", "evidence_path": "terminal output" },
+    { "command": "node scripts/project.mjs validate P3-T02", "exit_code": 0, "result": "S3 SaaS validators passed; generated side effects were discarded", "recorded_utc": "2026-07-20T11:17:38Z", "evidence_path": "terminal output" },
+    { "command": "node scripts/project.mjs validate P3-T03", "exit_code": 0, "result": "S3 integrated validators passed; generated side effects were discarded", "recorded_utc": "2026-07-20T11:17:39Z", "evidence_path": "terminal output" }
+  ],
+  "claim_ceiling": {
+    "azure_live": "out",
+    "performance": "L1",
+    "security_sbom": "L2",
+    "agentic_workflow": "L3",
+    "upstream_integration": "L2",
+    "lab_stack": "L4"
+  },
+  "remaining_risks": [
+    "U1 remains unresolved until the dispatched tip object or the complete D-028 proof packet is available.",
+    "The P2-T03 validation is not candidate-bound in this checkout."
+  ],
+  "recommended_next_step": [
+    "Publish the missing tip object and NIX-TIPBOUND-001 D-028 packet on candidate/portfolio-aa01454, then dispatch a new clean-room provisional judge."
+  ]
+}
