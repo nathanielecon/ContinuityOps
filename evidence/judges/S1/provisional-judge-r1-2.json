@@ -1,0 +1,327 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S1",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r1-2",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "tree=7b14c0945af5ec537990180bff8ec88e1df23ca4 与 git rev-parse HEAD 一致（7b14c09）",
+        "tip=0606812354dae2e23356278f10f9b76b7ebd010b^ == candidate aa01454f8808c173deb43cc4b9b803287eec851e（parent-bind PASS）",
+        "sha256sum docs/planning/JUDGE_RUBRICS.md → f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "sha256sum docs/claims/matrix.json → 89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "upstream pins：integration/upstreams.lock.json + upstream-integration.json digest/pin 一致"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → 94/94 pass，exit 0",
+        "terraform fmt -check -recursive terraform/ → exit 0",
+        "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P1-T04 → exit 0",
+        "validate 改写的 integrated-gate/judge 副作用已丢弃（未 git clean）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "environment.zero_secrets=true（S1 证据）",
+        "PR 负向测试使用 AKIATEST 合成值，非真实密钥",
+        "未见长寿命云密钥写入 evidence/judges 或 slices/S1"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "docs/reviews/S1/engineering-qa-security.md：无未关闭 critical/high",
+        "OIDC/最小权限与 untrusted-PR 负向覆盖存在",
+        "本轮未发现阻断性安全缺口"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "7b14c09 固化组件 claim_level=L1，同时 portfolio_combination_claim=L4",
+        "integrated-gate/STREAM_COMPLETE L4 + 三条 cloud_apply_evidence",
+        "claims matrix 将 scaffold/hosted stubs 升到 L4 lab，upstream 保持 L2",
+        "分层可读，未把本地 fmt/validate 伪造成唯一 L4 证明"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "IAM/network negative JSON + scaffold 测试",
+        "hosted-ci untrusted PR 注入 AWS_ACCESS_KEY_ID=AKIATEST 应被拒绝路径覆盖",
+        "失败行为在切片要求范围内可复现"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "证据含 command/exit/time/env/model_record",
+        "tip-bound candidate 与 parent tip 绑定现场复核",
+        "apply 证据 URL/run_id 在 hosted JSON 可追溯"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "写范围限 provisional-judge-r1-2.json",
+        "上游 packet 只读；无扩大 worker 仓权限",
+        "SUPERVISOR reviewed_paths 与 S1 分区一致"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BF 日志持续维护；tip-bind elevate S1 有条目",
+        "历史 fmt/claim 串线问题已记录"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "权威 tip-bound 叙事：组件 L1 / 组合 L4 lab / Azure out",
+        "历史评审文档偏旧作 improvements，不单独打落 U10",
+        "README/matrix 组合声明与 gate 一致于 A3"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "评判与笔记简体中文",
+        "对外英文产物未在本轮改写"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "单流顺序执行；证据命名空间 S1 独立",
+        "不经本评判合并 main"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "saved_provisional 与 fresh 分轨",
+        "禁止分数泄漏：未打开旧 judge 分数字段"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG 覆盖已观察失败",
+        "本轮无新增未登记 break"
+      ]
+    },
+    {
+      "id": "S1-M1",
+      "status": "pass",
+      "evidence": [
+        "pins + consumed contracts 验证记录在 upstream-integration.json",
+        "co-004-digest-proof + lock；A/C 未改"
+      ]
+    },
+    {
+      "id": "S1-M2",
+      "status": "pass",
+      "evidence": [
+        "远程 state：encrypt + dynamodb lock + 环境分离",
+        "live-marker apply 证明 state 桶/锁表路径",
+        "组件仍声明 CLI 可跳过的 L1 边界"
+      ]
+    },
+    {
+      "id": "S1-M3",
+      "status": "pass",
+      "evidence": [
+        "OIDC trust 条件与 continuityops-gha 角色显式",
+        "least-privilege 角色脚手架 + 负向测试",
+        "workflow id-token: write 仅突变作业"
+      ]
+    },
+    {
+      "id": "S1-M4",
+      "status": "pass",
+      "evidence": [
+        "PR jobs 无 deployment credentials",
+        "actions 钉选（hosted-ci validators）",
+        "stubs L1 与 apply L4 分层"
+      ]
+    },
+    {
+      "id": "S1-M5",
+      "status": "pass",
+      "evidence": [
+        "protected environment continuityops",
+        "H1/human gate 保留在 P1-T04",
+        "无自动生产突变"
+      ]
+    },
+    {
+      "id": "S1-M6",
+      "status": "pass",
+      "evidence": [
+        "网络/数据/信任边界模块可检查",
+        "cost drivers / teardown 在架构与 workflow 可见"
+      ]
+    },
+    {
+      "id": "S1-M7",
+      "status": "pass",
+      "evidence": [
+        "无害非法变更由 policy/untrusted 路径阻断",
+        "validators 记录 hosted_required_checks"
+      ]
+    },
+    {
+      "id": "S1-M8",
+      "status": "pass",
+      "evidence": [
+        "证据 SHA 绑 aa01454",
+        "hosted pass 经 tip-bound cloud_apply_evidence 关联",
+        "现场 P1-T04 validate 绿"
+      ]
+    },
+    {
+      "id": "S1-M9",
+      "status": "pass",
+      "evidence": [
+        "drift 与 teardown workflow 存在",
+        "未授权删除未授予；lab destroy 有独立证据轨"
+      ]
+    },
+    {
+      "id": "S1-M10",
+      "status": "pass",
+      "evidence": [
+        "本地/静态验证不冒充 live cloud 全量证明",
+        "L4 仅组合 tip-bound lab 举证",
+        "S1-M10 与 tipbound_note 一致"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 2.0,
+      "rationale": "门禁、绑定与 S1 must-have 覆盖完整；分层声明与验证一致。",
+      "evidence": [
+        "U1/U2 现场绿",
+        "S1-M1..M10 证据链闭合"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.5,
+      "rationale": "OIDC、PR 隔离、环境门控与负向测试扎实，权威边界清晰。",
+      "evidence": [
+        "OIDC → continuityops-gha",
+        "untrusted_pr + iam_negative"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "负向与 drift/teardown 足够支撑 lab 失败面；深度按非生产。",
+      "evidence": [
+        "negative policies",
+        "teardown.yml"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "94 项确定性测试与 P1 校验器全通过。",
+      "evidence": [
+        "tests/ 94 pass"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.95,
+      "rationale": "GHA OIDC apply/elevation 证据支撑组合 L4；组件不虚抬。",
+      "evidence": [
+        "cloud-apply-staging-*.json",
+        "lab-drill-rto 引用"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1.0,
+      "rationale": "托管计划/应用/漂移/拆除路径可跟随；边界说明清楚。",
+      "evidence": [
+        "continuityops-terraform.yml",
+        "STREAM_COMPLETE remaining_boundaries"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.95,
+      "rationale": "组件 L1 / 组合 L4 / matrix 映射基本一致；历史评审文案列入改进。",
+      "evidence": [
+        "7b14c09 tipbound_note_zh",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "切片证据与评判产物可交接；字段完整。",
+      "evidence": [
+        "evidence/slices/S1/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.4,
+      "rationale": "成本/拆除按实验室上限；不要求生产级 FinOps 测量。",
+      "evidence": [
+        "非生产 remaining_boundaries"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "无 ContinuityOps 生产/客户持续所有权声明",
+    "upstream rollback none proven 不得升格为已证明回滚",
+    "不得把 PLAN 历史 L1 note 与 tip-bound L4 gate 混读为矛盾阻断"
+  ],
+  "security_findings": [
+    "无阻断：短时 OIDC；PR 只读；密钥未进入 S1 证据"
+  ],
+  "improvements": [
+    "刷新 SUPERVISOR remaining_boundaries 去掉与 claim_level=L4 冲突的历史句",
+    "engineering-qa-security.md 增加 tip-bound 分层脚注",
+    "integrated-gate 中 “Live AWS mutation not executed” 与 cloud_apply_evidence 并存时建议改写为 “no production mutation”"
+  ],
+  "overall_score": 9.7,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-provisional-judge",
+    "role": "provisional-judge"
+  },
+  "notes_zh": "独立 clean-room tipbound provisional R1 #2（S1）。tip/candidate/tree/rubric/manifest 与任务书一致；现场验证 parent-bind、94 测、tf fmt、P1-T04 validate 全绿并丢弃副作用（未 git clean）。未读既有 judge 分数。强调 OIDC/PR 权威边界与组合 L4 lab apply 证据；组件保持 L1。must_haves 全 pass；merge_ready=yes；overall_score=9.7；provisional_pass=true。"
+}
