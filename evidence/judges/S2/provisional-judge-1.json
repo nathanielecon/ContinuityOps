@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "saved_provisional",
+  "judge_id": "S2-PROVISIONAL-JUDGE-01",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    { "id": "U1", "status": "fail", "evidence": ["派遣指定 tip 0606812354dae2e23356278f10f9b76b7ebd010b，但本地对象库缺少该对象，无法执行 parent-bind 验证；当前 HEAD 为绑定候选 aa01454f8808c173deb43cc4b9b803287eec851e。"] },
+    { "id": "U2", "status": "fail", "evidence": ["node --test tests/：退出码 0，94 项通过。", "terraform fmt -check -recursive terraform：退出码 0。", "P2-T01、P2-T02、P2-T04 只读验证退出码 0；P2-T03 退出码 2，报错为 evidence candidate_sha 与期望不一致。"] },
+    { "id": "U3", "status": "pass", "evidence": ["S2 清单使用摘要固定镜像，工作负载安全上下文、RBAC 与网络策略均有静态负向契约；本轮未发现凭据写入。"] },
+    { "id": "U4", "status": "pass", "evidence": ["现有 S2 证据与问题记录未显示影响该切片的开放 critical/high 安全问题。"] },
+    { "id": "U5", "status": "pass", "evidence": ["evidence/slices/S2/STREAM_COMPLETE.json 明确区分本地契约、历史托管实验室证据与非生产边界，未将 A3 提升。"] },
+    { "id": "U6", "status": "pass", "evidence": ["kubernetes/scenarios/failure-matrix.json 覆盖 CrashLoop、readiness、调度、资源、DNS 与网络拒绝场景。"] },
+    { "id": "U7", "status": "fail", "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json 仍绑定 08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9，导致候选绑定验证失败；目标 tip 对象也不可用。"] },
+    { "id": "U8", "status": "pass", "evidence": ["本轮只新增指定 judge JSON，未修改实现或 .github 路径。"] },
+    { "id": "U9", "status": "pass", "evidence": ["BREAK_FIX_LOG.md 存在，且本轮只读验证失败已作为阻塞发现保留，不宣告闭环。"] },
+    { "id": "U10", "status": "pass", "evidence": ["README、S2 STREAM_COMPLETE 与声明矩阵保持 A3 范围及非生产措辞。"] },
+    { "id": "U11", "status": "pass", "evidence": ["本报告自由文本使用简体中文。"] },
+    { "id": "U12", "status": "pass", "evidence": ["本轮写入范围仅为独立 S2 judge 证据命名空间，未执行集成或合并。"] },
+    { "id": "U13", "status": "pass", "evidence": ["本报告明确标记 saved_provisional，未作为 fresh 评判，且未复用其他 judge 分数。"] },
+    { "id": "U14", "status": "not_proven", "evidence": ["本轮发现的 P2-T03 候选绑定失败尚未形成已修复并复验的 break/fix 闭环。"] },
+    { "id": "S2-M1", "status": "pass", "evidence": ["kubernetes/chart/values.yaml 与 digest-pin 策略提供不可变摘要及发布身份契约。"] },
+    { "id": "S2-M2", "status": "pass", "evidence": ["Helm 模板包含 probes、资源、PDB、拓扑与 HPA；P2-T01 静态验证通过。"] },
+    { "id": "S2-M3", "status": "pass", "evidence": ["RBAC、ServiceAccount、安全上下文与网络策略具备最小权限和负向静态验证。"] },
+    { "id": "S2-M4", "status": "pass", "evidence": ["node scripts/project.mjs validate P2-T01：退出码 0；terraform fmt 检查亦通过。"] },
+    { "id": "S2-M5", "status": "pass", "evidence": ["evidence/slices/S2/runtime/kind-preflight.json 与 STREAM_COMPLETE 明确区分 kind、本地静态契约和托管 EKS 实验室证据。"] },
+    { "id": "S2-M6", "status": "not_proven", "evidence": ["仓库保留托管实验室 apply 证据，但本轮无法把目标 tip 及全部运行属性重新绑定到可解析的 0606812 tip。"] },
+    { "id": "S2-M7", "status": "pass", "evidence": ["kubernetes/scenarios/failure-matrix.json 列出要求的六类失败，场景契约完整。"] },
+    { "id": "S2-M8", "status": "not_proven", "evidence": ["crashloop-reset.json 记录合成 reset 与业务检查，但 P2-T03 的候选绑定失败使全套恢复证据在本候选上未获证明。"] },
+    { "id": "S2-M9", "status": "pass", "evidence": ["kubernetes/chart/templates/ingress.yaml 与 values 契约保留 ingress、TLS 和负载均衡边界。"] },
+    { "id": "S2-M10", "status": "pass", "evidence": ["S2 STREAM_COMPLETE 保留集群成本、实验室销毁及非生产边界。"] }
+  ],
+  "blocking_findings": [
+    "无法解析派遣指定 tip 0606812354dae2e23356278f10f9b76b7ebd010b，因此 parent-bind 未获证明。",
+    "node scripts/project.mjs validate P2-T03 以退出码 2 失败：场景证据 candidate_sha 与当前候选不一致。"
+  ],
+  "scored_dimensions": [
+    { "id": "Correctness and completeness", "score": 1.5, "rationale": "主要 Kubernetes 契约齐全，但候选绑定失败阻止完整性证明。", "evidence": ["kubernetes/chart/", "P2-T03 退出码 2"] },
+    { "id": "Security and authority boundaries", "score": 1.4, "rationale": "最小权限、安全上下文、摘要固定与网络拒绝契约完整，且未扩大权限。", "evidence": ["kubernetes/policies/", "kubernetes/chart/templates/rbac.yaml"] },
+    { "id": "Failure/recovery depth", "score": 1.0, "rationale": "六类失败场景存在，但恢复证据未绑定当前候选。", "evidence": ["kubernetes/scenarios/failure-matrix.json", "evidence/slices/S2/scenarios/matrix-evidence.json"] },
+    { "id": "Deterministic test quality", "score": 0.8, "rationale": "94 项测试及多数切片验证通过，但 P2-T03 正确地 fail closed。", "evidence": ["node --test tests/：94/94 通过", "P2-T03：退出码 2"] },
+    { "id": "Live/runtime evidence quality", "score": 0.5, "rationale": "有实验室运行记录，但无法对目标 tip 完成 clean-room 绑定。", "evidence": ["evidence/hosted/cloud-apply-staging-2026-07-18.json", "目标 tip 对象缺失"] },
+    { "id": "Operability and troubleshooting", "score": 0.8, "rationale": "场景、reset 和边界说明可操作，但本候选恢复链未闭环。", "evidence": ["kubernetes/scenarios/", "evidence/slices/S2/scenarios/crashloop-reset.json"] },
+    { "id": "Evidence/claim integrity", "score": 0.4, "rationale": "A3 声明边界诚实，但 tip 与场景证据绑定均未通过。", "evidence": ["evidence/slices/S2/STREAM_COMPLETE.json", "P2-T03 绑定错误"] },
+    { "id": "Maintainability and handoff", "score": 0.4, "rationale": "Helm、策略、场景与证据结构清晰。", "evidence": ["kubernetes/chart/", "evidence/slices/S2/"] },
+    { "id": "Cost/performance realism", "score": 0.4, "rationale": "HPA、资源与实验室销毁边界明确，未宣称生产规模。", "evidence": ["kubernetes/chart/templates/hpa.yaml", "evidence/slices/S2/STREAM_COMPLETE.json"] }
+  ],
+  "unsupported_claims": [
+    "不得把本轮结果用于提高 portfolio-scoped-100-A3。",
+    "不得将无法绑定目标 tip 的历史托管实验室证据表述为当前候选的新鲜 managed-runtime 证明。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在可解析的目标 tip 上重新执行 parent-bind 检查。",
+    "将 S2 场景证据重新绑定到候选并重跑 P2-T03，然后进行新的独立评判。"
+  ],
+  "overall_score": 7.2,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-clean-room-provisional-judge"
+  },
+  "notes_zh": "评判对象声明为 tip 0606812354dae2e23356278f10f9b76b7ebd010b，绑定模型为 candidate_sha_parent_of_tip；因该 tip 对象在工作区不可用，parent_bind_verified 为否。本报告不复用任何其他 judge 分数，并维持 A3 声明上限。"
+}
