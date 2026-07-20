@@ -1,0 +1,288 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "fresh",
+  "judge_id": "S2-TIPBOUND-FRESH-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "tip parent-bind OK → candidate aa01454…",
+        "tree=7a8beca…；rubric=f122c1d0…；manifest=89642f65…（matrix.json）",
+        "/tmp/s2-fresh-judge/summary.txt"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "parent-bind+tests+tf+validate P2-T04 全 exit 0",
+        "权威 integrated-gate 在丢弃副作用后仍为 L4 + managed_cluster_apply + cloud_apply_evidence"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "零密钥环境声明；证据无敏感合成载荷泄露"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无未关闭 critical/high 影响本切片"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "matrix kubernetes-chart L4 lab note + 组件 component_claim_level=L1 并存且解释清楚"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "负向/失败行为在场景与策略层覆盖"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "本席验证包时间戳 2026-07-20T12:53Z；候选绑定未漂"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "写范围限 tipbound-fresh-judge-3.json"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG tip-bound S2 条目连续"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "STATUS 权威链：SUPERVISOR decision=approve、claim_level=L4、cloud_apply_evidence 指针齐全",
+        "不以组件/评审旧串否定组合 tip-bound L4"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "notes_zh 简体中文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "无并发写冲突；只读证据评审"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "tipbound-fresh-* 与 historical fresh/provisional 分离"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BF-2026-023 validate 改写与丢弃规程已记录"
+      ]
+    },
+    {
+      "id": "S2-M1",
+      "status": "pass",
+      "evidence": [
+        "不可变 digest 发布身份在策略与 values 验证"
+      ]
+    },
+    {
+      "id": "S2-M2",
+      "status": "pass",
+      "evidence": [
+        "探针/资源/PDB/HPA 实现并测"
+      ]
+    },
+    {
+      "id": "S2-M3",
+      "status": "pass",
+      "evidence": [
+        "workload 身份占位 + RBAC/secrets 边界 + 非 root + NetworkPolicy 负向"
+      ]
+    },
+    {
+      "id": "S2-M4",
+      "status": "pass",
+      "evidence": [
+        "Helm/schema/policy/static 门禁在 chart-contract 通过"
+      ]
+    },
+    {
+      "id": "S2-M5",
+      "status": "pass",
+      "evidence": [
+        "kind 与 managed 证明清晰分离（local-only vs lab apply refs）"
+      ]
+    },
+    {
+      "id": "S2-M6",
+      "status": "pass",
+      "evidence": [
+        "tip-bound：lab elevation 证明托管集群存在与销毁；managed_cluster_apply 边界保留",
+        "STREAM_COMPLETE.s2_m6_tipbound_note_zh 为评分边界权威说明之一"
+      ]
+    },
+    {
+      "id": "S2-M7",
+      "status": "pass",
+      "evidence": [
+        "CrashLoop/readiness/scheduling/DNS/network-denial 场景再现（合成）"
+      ]
+    },
+    {
+      "id": "S2-M8",
+      "status": "pass",
+      "evidence": [
+        "reset 后 business_check 契约存在"
+      ]
+    },
+    {
+      "id": "S2-M9",
+      "status": "pass",
+      "evidence": [
+        "Ingress/TLS/LB 边界在模板层准确、未夸大 live 证书"
+      ]
+    },
+    {
+      "id": "S2-M10",
+      "status": "pass",
+      "evidence": [
+        "集群成本与 teardown 含义在 elevation 证据中显式"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 2.0,
+      "rationale": "在宣称边界内契约与组合门禁完整；tip-bound lab 证明支撑 L4 组合主张。",
+      "evidence": [
+        "evidence/slices/S2/integrated-gate.json",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json",
+        "kubernetes/chart/"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.45,
+      "rationale": "策略与运行时安全上下文闭合；权限未越权到生产。",
+      "evidence": [
+        "kubernetes/policies/",
+        "kubernetes/chart/templates/networkpolicy.yaml"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "失败/复位链证据完整且可复现；合成深度满足切片要求。",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json",
+        "scripts/kubernetes/reset-scenario.mjs"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "全量 node --test 与 fmt 门禁稳定。",
+      "evidence": [
+        "/tmp/s2-fresh-judge/tests.log",
+        "/tmp/s2-fresh-judge/tf-fmt.log"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 0.9,
+      "rationale": "GHA OIDC lab EKS apply+teardown 证据链强；workload 运行时按 tip-bound 诚实封顶。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json#runs.apply_green_full",
+        "evidence/hosted/lab-drill-rto-29645042815.json"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1.0,
+      "rationale": "渲染/预检/复位工具齐全，压力矩阵文档可跟做。",
+      "evidence": [
+        "scripts/kubernetes/",
+        "operations/incidents/kubernetes/failure-matrix.md"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 1.0,
+      "rationale": "绑定哈希、parent-bind、cloud_apply_evidence 关联与组件/组合分层高度一致。",
+      "evidence": [
+        "/tmp/s2-fresh-judge/parent-bind.log",
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.45,
+      "rationale": "权威 tip-bound 工件清晰；评审文档滞后轻微扣维持性。",
+      "evidence": [
+        "docs/reviews/S2/engineering-qa-security.md",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.5,
+      "rationale": "teardown 已证，成本主张未越界。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json#runs.teardown_staging"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "生产 workload 持续运行证明",
+    "Cursor 座内 AWS 凭证路径"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "刷新 docs/reviews/S2 证据表以匹配 tip-bound L4 lab + managed_cluster_apply",
+    "减少 validate 对 tip-bound gate 的默认 L1 改写面"
+  ],
+  "overall_score": 9.7,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s2-tipbound-fresh-judge-03"
+  },
+  "notes_zh": "独立 tip-bound fresh #3（S2）。绑定与验证同包（parent-bind+94 tests+tf fmt+P2-T04）；副作用已丢弃且未 git clean。未读既有分数。焦点在证据完整性与 U10/S2-M6 tip-bound 诚实边界：lab apply 在则 M6 pass，组件 L1 合成不打落 U10。must_haves 全过；overall_score=9.7；merge_ready=yes。"
+}
