@@ -1,0 +1,281 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S4",
+  "round": "fresh",
+  "judge_id": "tipbound-fresh-judge-2",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "tip=0606812354dae2e23356278f10f9b76b7ebd010b 之父提交 == candidate=aa01454f8808c173deb43cc4b9b803287eec851e",
+        "rubric/manifest 哈希与派单一致（JUDGE_RUBRICS.md / docs/claims/matrix.json）",
+        "STREAM_COMPLETE/integrated-gate portfolio_tip / candidate 绑定同一 tipbound 模型"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "确定性：node --test tests/ 94/94 pass",
+        "terraform fmt -check 通过",
+        "hosted/local 门禁：validate P4-T03 四校验器全 pass（含 full_repository JSON 解析）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "去敏契约 + 单测阻断未脱敏 secret",
+        "评审记录写明无 live telemetry 凭证；gate environment.zero_secrets"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "S4 评审记录无 critical/high 未闭环项",
+        "SUPERVISOR_VERDICT.decision=approve 且 issue_ids 为空"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "组件 telemetry/signals=L1；组合 gate/STREAM_COMPLETE=L4 lab",
+        "明示 No live alert fire/resolve、Synthetic fixtures、Not production observability SLA",
+        "matrix.max_claim_scope=AWS lab staging；azure_live=out"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "missing_signal / noisy_flap 负例字段存在且被 dashboard-alert 单测断言",
+        "error budget exhausted/burn 路径有单测"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "本席现场复跑 parent-bind + tests + tf + P4-T03，证据新鲜",
+        "gate 含 started_at/completed_at/exit_code/model_record/cloud_apply_evidence"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "仅写 tipbound-fresh-judge-2.json；未越权改 observability 实现或 PLAN 状态"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG 记录 tip-bind / S1–S4 gate 抬升与相关修复"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "engineering-qa-security 表格与 STREAM_COMPLETE notes 同向：Live fire 未声明",
+        "drill.synthetic=true / claim_ceiling=L1 与文档一致"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "评审自由文本简体中文；对外契约/路径英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S4 流内顺序门禁；本席不跨流改写"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "tipbound-fresh 与 saved-council-provisional 文件分离"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "观测到的 tip-bind/gate 类失败已在 BREAK_FIX_LOG 留痕"
+      ]
+    },
+    {
+      "id": "S4-M1",
+      "status": "pass",
+      "evidence": [
+        "四跳 path + spans 名称一一对应；单测强制 hops 顺序"
+      ]
+    },
+    {
+      "id": "S4-M2",
+      "status": "pass",
+      "evidence": [
+        "logs/metrics/traces/alerts 共享 correlation / SLO 标识",
+        "baggage_keys 与 fixture correlation_id 一致"
+      ]
+    },
+    {
+      "id": "S4-M3",
+      "status": "pass",
+      "evidence": [
+        "service-overview 回答服务健康与队列饱和问题；非 vanity 空面板",
+        "k8s/依赖/成本字面覆盖不足 → improvements，不在 A3 合成边界内打 fail"
+      ]
+    },
+    {
+      "id": "S4-M4",
+      "status": "pass",
+      "evidence": [
+        "owner/severity/runbook/expression/for + resolves_when + require_for_duration 去抖"
+      ]
+    },
+    {
+      "id": "S4-M5",
+      "status": "pass",
+      "evidence": [
+        "双 SLO 窗口与 objective；burn_rate_window=1h / threshold=14.4 与单测 burn 检测一致",
+        "维护排除未建模 → 非阻断改进"
+      ]
+    },
+    {
+      "id": "S4-M6",
+      "status": "pass",
+      "evidence": [
+        "secret 与 tenant_payload 字段去敏单测通过"
+      ]
+    },
+    {
+      "id": "S4-M7",
+      "status": "pass",
+      "evidence": [
+        "missing/noisy 负例 + 双 outcome fixture；轨迹不连续由 hop/span 对齐测试兜底"
+      ]
+    },
+    {
+      "id": "S4-M8",
+      "status": "pass",
+      "evidence": [
+        "error-rate 面板链接 drill；从误导性 burn 症状导航到四跳路径"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.92,
+      "rationale": "相关与告警/SLO 主体完备；仪表盘广度略逊于 rubric 字面五问清单。",
+      "evidence": [
+        "observability/dashboards/service-overview.json",
+        "operations/slo/definitions.json"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.48,
+      "rationale": "去敏与凭证边界扎实；权限未因观测后端扩张。",
+      "evidence": [
+        "observability/otel/redaction.mjs",
+        "tests/observability/redaction.test.mjs"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "负例与合成恢复条件够用；live fire/resolve 明确不在证据内。",
+      "evidence": [
+        "observability/alerts/burn-rate.json",
+        "evidence/slices/S4/integrated-gate.json remaining_boundaries"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 0.98,
+      "rationale": "观测单测面完整且全仓 94 绿，确定性高。",
+      "evidence": [
+        "tests/observability/slo-math.test.mjs",
+        "tests/observability/dashboard-alert.test.mjs",
+        "tests/observability/signal-path.test.mjs"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.9,
+      "rationale": "按 tip-bound lab apply/RTO 计运行时分；信号 drill 仍合成，不加成生产运行时。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "operations/incidents/observability/signal-path-drill.json"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.92,
+      "rationale": "runbook 与症状链接可用；独立操作员导航深度一般。",
+      "evidence": [
+        "observability/alerts/burn-rate.json runbook",
+        "docs/reviews/S4/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.97,
+      "rationale": "声明分层非常干净；历史任务 SHA 滞后已披露，不构成超声明。",
+      "evidence": [
+        "evidence/slices/S4/telemetry.json claim_level",
+        "evidence/slices/S4/STREAM_COMPLETE.json tipbound_note_zh"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.47,
+      "rationale": "门禁与评审可交接；维护排除/成本专章仍可补。",
+      "evidence": [
+        "evidence/slices/S4/SUPERVISOR_VERDICT.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.46,
+      "rationale": "A3 实验室成本天花板诚实；保留策略未展开。",
+      "evidence": [
+        "docs/claims/matrix.json max_claim_scope"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "live alert fire/resolve（S4-M9）",
+    "生产级遥测保留/成本优化已证明（S4-M10）"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "为 S4-M3 补齐 kubernetes/依赖/成本问题面板（schema 级即可）",
+    "telemetry.json/signals.json candidate_sha 仍偏历史实现 tip，建议后续 tip-bind 刷新任务级证据 SHA（非本 must_haves 阻断）"
+  ],
+  "overall_score": 9.5,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-tipbound-fresh-judge",
+    "role": "judge"
+  },
+  "notes_zh": "独立 clean-room tipbound fresh #2（S4）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=07211087… / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf fmt、CANDIDATE_SHA validate P4-T03 均 exit 0；未 git clean；未读旧分数。合成信号路径（synthetic + 非 live alert）诚实计分；tip-bound 实验室 L4 不抬生产 SLA。must_haves 全 pass；merge_ready=yes；overall_score=9.50。"
+}
