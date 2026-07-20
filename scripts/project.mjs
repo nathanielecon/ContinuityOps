@@ -314,7 +314,7 @@ function writeEvidence(result) {
       payload.bind_commit = headSha;
     }
   }
-  if ((result.task_id?.startsWith('P1-') || result.task_id?.startsWith('P2-') || result.task_id?.startsWith('P3-') || result.task_id?.startsWith('P4-') || result.task_id?.startsWith('P5-') || result.task_id?.startsWith('P6-') || result.task_id?.startsWith('P7-') || result.task_id?.startsWith('P8-')) && existsSync(evidencePath)) {
+  if ((result.task_id === 'P0-T05' || result.task_id?.startsWith('P1-') || result.task_id?.startsWith('P2-') || result.task_id?.startsWith('P3-') || result.task_id?.startsWith('P4-') || result.task_id?.startsWith('P5-') || result.task_id?.startsWith('P6-') || result.task_id?.startsWith('P7-') || result.task_id?.startsWith('P8-')) && existsSync(evidencePath)) {
     try {
       const prior = JSON.parse(readFileSync(evidencePath, 'utf8'));
       const claimRank = { L1: 1, L2: 2, L3: 3, L4: 4 };

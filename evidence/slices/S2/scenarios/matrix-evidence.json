@@ -22,7 +22,7 @@
     "mode": "default",
     "role": "validator-worker"
   },
-  "claim_level": "L1",
+  "claim_level": "L4",
   "remaining_boundaries": [
     "Synthetic failure matrix only",
     "managed_cluster_apply",
@@ -82,5 +82,7 @@
       "NIX-TIPBOUND-011"
     ]
   },
-  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e"
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "component_claim_level": "L1",
+  "claim_notes_zh": "组件契约可为 L1/合成；组合门禁 tip-bound A3 为 scoped L4 lab（continuityops-gha）。Azure live out。"
 }

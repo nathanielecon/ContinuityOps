@@ -636,3 +636,9 @@ ContinuityOps incidents yet.
 - **Symptom (S3):** SUPERVISOR notes/claim_level_max still “honest L1 / no live Lambda” vs tip-bound A3 L4 lab; S3-M* gaps need honest synthetic boundaries, not forged live Lambda.
 - **Repair (narrow fixer on candidate):** Point S0 manifest path to `docs/claims/matrix.json`; refresh S0 validation_results/notes to aa01454 tip-bound; unify S2/S3 SUPERVISOR `claim_level_max`+notes to A3 scoped L4 lab + `managed_cluster_apply` + non-production; declare hosted apply SHA≠aa01454 acceptable via tip-bound `cloud_apply_evidence`; label S3 remaining_boundaries as synthetic/contract for S3-M1/M2/M4/M8/M9; declare tipbound provisional authority = r4 (old council historical). Did **not** edit historical `fresh-judge-*` score files; did **not** raise A3; did **not** touch #103; did **not** merge `main`.
 - **Next:** Chief prepares clean-room provisional R5 on tip after this push; sticky #94 brief.
+
+## BF-2026-025 — R5 residue: S2 claim labels + P0-T05 tip-bind preserve
+
+- S2 subordinate evidence claim_level labels reconciled for tip-bound A3 L4 lab; remove stale "No EKS OIDC apply evidence" gate boundary.
+- `writeEvidence` tip-bind/claim preserve extended to P0-T05.
+- H0/S2-M6 tip-bound notes: do not re-mint H0; workload runtime bounded by lab evidence.

@@ -44,5 +44,6 @@
     "evidence/hosted/cloud-apply-staging-2026-07-18.json",
     "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
     "evidence/hosted/lab-drill-rto-29645042815.json"
-  ]
+  ],
+  "s2_m6_tipbound_note_zh": "S2-M6 tip-bound：托管 workload 运行时以 lab elevation/cloud_apply_evidence 为界；managed_cluster_apply 保留；无生产 workload 捕获。"
 }
