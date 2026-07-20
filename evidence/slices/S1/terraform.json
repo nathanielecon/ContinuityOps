@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "P1-T02",
-  "baseline_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
-  "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P1-T02",
   "exit_code": 0,
   "recorded_at": "2026-07-18T06:09:03.122Z",
@@ -25,7 +25,7 @@
     "mode": "default",
     "role": "validator-worker"
   },
-  "claim_level": "L1",
+  "claim_level": "L4",
   "remaining_boundaries": [
     "terraform CLI absent — fmt/validate skipped",
     "No hosted OIDC plan evidence (not L3 plan)",
@@ -100,5 +100,6 @@
     "terraform_scaffold": "L1",
     "terraform_cli_fmt_validate": "skipped_tool_absent",
     "cloud_apply": "not_claimed"
-  }
+  },
+  "prior_candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
 }

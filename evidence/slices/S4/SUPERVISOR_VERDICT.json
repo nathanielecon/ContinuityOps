@@ -18,7 +18,7 @@
     "role": "d037-independent-reviewer"
   },
   "at": "2026-07-18T06:19:00Z",
-  "candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "implementation_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
   "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
   "checks": {
@@ -34,7 +34,7 @@
       "P4-T03": true
     },
     "write_scope_sane": true,
-    "claim_level_max": "L1",
+    "claim_level_max": "L4",
     "remaining_boundaries_present": true,
     "false_l4_claim": false
   },
@@ -43,7 +43,7 @@
     "No live alert fire/resolve channel",
     "No live OTLP exporter"
   ],
-  "claim_level": "L1",
+  "claim_level": "L4",
   "issue_ids": [],
-  "notes": "BF-PRE-015 S4 stream boundary. Tests+validators green; honest L1; synthetic signal-path only."
+  "notes": "Tip-bound aa01454 parent-of-tip; A3 scoped L4 lab; Azure out."
 }
