@@ -38,5 +38,6 @@
     "evidence/hosted/cloud-apply-staging-2026-07-18.json",
     "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
     "evidence/hosted/lab-drill-rto-29645042815.json"
-  ]
+  ],
+  "tipbound_note_zh": "Tip-bound aa01454; A3 ceilings; Azure out; synthetic/contract must-haves honest."
 }
