@@ -11,8 +11,10 @@
   "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "claim_level": "L4",
   "remaining_boundaries": [
-    "Live Lambda+SQS lab apply evidenced then destroyed",
-    "Not production customer workloads"
+    "Scoped AWS lab L4 via continuityops-gha (A3); Live Lambda+SQS lab apply evidenced then destroyed",
+    "Azure live out (D-046); not production customer workloads",
+    "Task-level serverless/saas synthetic/contract evidence remains component L1 — no forged live Lambda for S3-M1/M2/M4/M8/M9",
+    "Hosted apply SHA may differ from aa01454; lab evidence tip-bound associated via cloud_apply_evidence"
   ],
   "model_record": {
     "provider": "xAI",
@@ -20,7 +22,7 @@
     "mode": "default",
     "role": "s3-gate-controller"
   },
-  "notes": "S3 serverless complete; scoped L4 lab apply evidenced.",
+  "notes": "S3 tip-bound aa01454: scoped A3 L4 lab apply evidenced via cloud_apply_evidence (hosted apply SHA need not equal aa01454). Azure out; lab non-production. Tipbound provisional authority is provisional-judge-r4-*; older council historical. Task-level worker/DLQ/SaaS remain synthetic/contract-level.",
   "slice_landed_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
   "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "bind_model": "candidate_sha_parent_of_tip",
