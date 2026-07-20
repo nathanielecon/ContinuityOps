@@ -618,3 +618,8 @@ ContinuityOps incidents yet.
 
 - **Symptom:** After NIX/FIX-TIPBOUND-02, `validate P2-T04` failed: S2 must retain `managed_cluster_apply`.
 - **Fix:** Re-append boundary on S2 integrated-gate + SUPERVISOR_VERDICT; keep A3 L4 lab claim.
+
+## BF-2026-023 — validate rewrite + botched L4 restore
+
+- **Symptom:** `project.mjs validate P2-T04` rewrites S2 integrated-gate to PLAN L1; BF-2026-022 commit accidentally captured that L1 tree. R4 judges also lost files to a `git clean -fd` side effect.
+- **Fix:** Restore S2 L4 from e112c19 and append `managed_cluster_apply`; refresh S0 STREAM_COMPLETE/SUPERVISOR tip-bound fields; judges must `git checkout --` after validate and never `git clean`.
