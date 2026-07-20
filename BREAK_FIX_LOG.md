@@ -647,3 +647,7 @@ ContinuityOps incidents yet.
 
 - validate remaining_boundaries merge no longer reintroduces stale "No EKS OIDC apply evidence" onto L4 gates.
 - S3 tipbound fresh means 9.483/9.467 missed ≥9.5; add tipbound_fresh_note_zh for honest lab scoring; re-dispatch fresh.
+
+## BF-2026-027 — tip-bind elevate S1/S4/S5 gates for next streams
+
+Elevate integrated-gate/SUPERVISOR to tip-bound A3 L4 lab + aa01454 SHA so P1-T04/P4/P5 validate and provisional councils can run under candidate_sha_parent_of_tip.
