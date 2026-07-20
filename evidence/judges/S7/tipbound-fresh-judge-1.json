@@ -1,0 +1,294 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S7",
+  "round": "fresh",
+  "judge_id": "tipbound-fresh-judge-1",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "parent-bind：0606812354dae2e23356278f10f9b76b7ebd010b^ == aa01454f8808c173deb43cc4b9b803287eec851e",
+        "tip tree=072110873be91c9024467ac87a733eb23fa06663（短 0721108）",
+        "sha256sum docs/planning/JUDGE_RUBRICS.md → f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "sha256sum docs/claims/matrix.json → 89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "evidence/portfolio/tip-proof-aa01454.json 与 dispatch-packets/tipbound-aa01454 交叉核验"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → 94/94 pass（2026-07-20T13:45:39Z）",
+        "terraform fmt -check -recursive terraform → exit 0",
+        "terraform -chdir=terraform/envs/staging validate → Success",
+        "CANDIDATE_SHA=aa01454… BASELINE_SHA=aa01454… node scripts/project.mjs validate P7-T01..T04 → 均 exit 0；副作用已 git checkout -- 丢弃（未 git clean）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "integrated-gate.environment.zero_secrets=true",
+        "teardown inventory live_teardown_executed=false；restore-fixture live_cloud=false；抽检无长寿命密钥"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "docs/reviews/S7/engineering-qa-security.md：合成 recovery/perf/finops，无开放 critical/high",
+        "本切片 tip-bound 路径无未关闭高危安全 issue"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "任务级 backup/rollback/load claim_ceiling=L1（synthetic；No live RTO）",
+        "组合 tip-bound：matrix recovery=L4 + finops-teardown=L4 + performance=L1；lab-drill-rto-29645042815 + teardown run 29645052414",
+        "STREAM remaining_boundaries 明确「Lab RTO/teardown L4；无 known-good rollback digest；Not production」"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "tests/recovery/contracts.test.mjs：rollback 无 known-good 拒绝；teardown live_teardown_executed=true 抛错",
+        "before_after 要求 p95/error 改善；validators 对 live_cloud=true 失败关闭"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "现场验证窗 2026-07-20T13:45:39Z–13:45:47Z：parent-bind + 94 测 + tf fmt/validate + P7-T01..T04 全绿",
+        "validate 写回已 checkout 丢弃；node v22.14.0；Terraform v1.9.8"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "本 judge 只写 evidence/judges/S7/tipbound-fresh-judge-1.json；未改实现/rubric",
+        "未 git clean；未扩大写范围"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG 持续维护；tip-bind/BF-2026-019 等治理修复有轨迹",
+        "本轮验证无新增未记录失败"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "STREAM/matrix/contracts 时态一致：任务 L1 合成 + 组合 L4 lab；非生产",
+        "engineering-qa 偏简但仍声明 synthetic / no live teardown；不以历史任务 SHA 否定 tip-bound 组合举证"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本 judge notes_zh 与证据说明为简体中文；对外招聘向文档保持英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S7 顺序门禁 P7-T01→P7-T02→P7-T03→P7-T04；写范围 recovery/performance/finops 与他切片分区无冲突迹象"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本文件为 tipbound-fresh-*，与 historical fresh/provisional/saved 分轨；未读取旧 tipbound/provisional/saved 分数"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "已观察失败路径有 BF/NIX 轨迹；本轮无新增未入账失败"
+      ]
+    },
+    {
+      "id": "S7-M1",
+      "status": "pass",
+      "evidence": [
+        "operations/recovery/backup-contract.json：rto_minutes_target=60、rpo_minutes_target=15 + justification",
+        "组合层 lab-drill-rto-29645042815 记录 wall-clock RTO（lab-incident-restore）；契约层声明未测 live RTO"
+      ]
+    },
+    {
+      "id": "S7-M2",
+      "status": "pass",
+      "evidence": [
+        "isolated_restore_required=true；restore-fixture target_env=recovery-lab-synthetic、live_cloud=false",
+        "checks：digest/health/version/data_checksum/business_smoke 均 pass；validators restore_runtime+data_integrity 绿"
+      ]
+    },
+    {
+      "id": "S7-M3",
+      "status": "pass",
+      "evidence": [
+        "rollback-contract：requires_known_good_digest + first_release_exception + verification_after_rollback",
+        "scripts/recovery/rollback-check.mjs 否定路径覆盖；matrix non-claim：无 ContinuityOps known-good rollback digest（诚实边界）"
+      ]
+    },
+    {
+      "id": "S7-M4",
+      "status": "pass",
+      "evidence": [
+        "terraform/envs/recovery-lab 与 staging 分离；lab drill + synthetic restore 在隔离目标执行",
+        "teardown.yml 需 confirm=teardown；inventory dry-run 禁止误毁证据路径"
+      ]
+    },
+    {
+      "id": "S7-M5",
+      "status": "pass",
+      "evidence": [
+        "performance/load-profile.json synthetic=true；baseline-before/after 含 p50/p95/p99、error_rate、saturation、scaling",
+        "claim_ceiling=L1；非 live 负载"
+      ]
+    },
+    {
+      "id": "S7-M6",
+      "status": "pass",
+      "evidence": [
+        "baseline-after.repair 根因叙述（HPA max + N+1）；p95 340→210、error 0.02→0.005 量化改善",
+        "tests/recovery before_after 断言强制改善"
+      ]
+    },
+    {
+      "id": "S7-M7",
+      "status": "pass",
+      "evidence": [
+        "operations/finops/budgets.json：monthly_budget_usd、alerts 50/80/100、required_tags 含 cost-center",
+        "idle-detection.json：idle-asg / unattached-ebs → flag_rightsize / flag_teardown_candidate"
+      ]
+    },
+    {
+      "id": "S7-M8",
+      "status": "pass",
+      "evidence": [
+        "组合层 cloud-apply-staging-elevation teardown_staging run 29645052414（实际 lab destroy）",
+        "任务级 finops claim_ceiling=L1 + remaining_boundaries 声明未执行 live teardown（分层诚实）"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.85,
+      "rationale": "P7 合约/fixture/门禁齐全且机检绿；合成 restore 字段高度模板化，工程评审笔记过薄，故正确性略低于满分。",
+      "evidence": [
+        "operations/recovery/* + performance/* + operations/finops/*",
+        "CANDIDATE_SHA validate P7-T01..T04 exit 0"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.45,
+      "rationale": "zero_secrets、dry-run teardown、restore 禁 live_cloud、OIDC teardown 确认门清晰；未授权 live 变异。",
+      "evidence": [
+        "integrated-gate.environment.zero_secrets=true",
+        "scripts/teardown/reconcile.mjs 拒绝 live_teardown_executed=true"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "隔离合成 restore + lab RTO 举证成立；无 known-good rollback digest，深度止于实验室天花板。",
+      "evidence": [
+        "evidence/slices/S7/recovery/restore-fixture.json",
+        "evidence/hosted/lab-drill-rto-29645042815.json"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "94/94 确定性测试与 terraform fmt/validate、P7 机检全绿。",
+      "evidence": [
+        "node --test tests/ → 94 pass",
+        "terraform fmt -check + envs/staging validate exit 0"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.95,
+      "rationale": "组合层有 tip-bound L4 lab RTO 与 staging teardown 举证；任务级 perf/restore 为合成，故略扣。",
+      "evidence": [
+        "lab-drill-rto-29645042815 + elevation teardown 29645052414",
+        "performance baselines synthetic=true"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "backup/rollback/teardown 合约与脚本可操作；评审笔记过简略限制交接示范价值。",
+      "evidence": [
+        "scripts/recovery/* + scripts/teardown/*",
+        "docs/reviews/S7/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 1.0,
+      "rationale": "L1 合成与 tip-bound L4 lab 分层清楚；parent-bind 与 rubric/manifest 哈希一致；non-claims 显式。",
+      "evidence": [
+        "STREAM remaining_boundaries + matrix recovery/finops/performance",
+        "tip-proof-aa01454.json parent-bind"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "门禁、索引与 STREAM 可交接。",
+      "evidence": [
+        "evidence/slices/S7/STREAM_COMPLETE.json",
+        "evidence/slices/S7/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "FinOps 预算/空闲/标签与 lab destroy 证据足够；perf 为合成 fixture，不作生产成本证明。",
+      "evidence": [
+        "operations/finops/budgets.json + idle-detection.json",
+        "performance/baseline-after.json synthetic"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "生产客户 RTO/RPO 实测与 ContinuityOps known-good rollback digest（明确 non-claim）",
+    "不得将合成 load/restore 解释为 live 机群压测或生产恢复证明"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "充实 engineering-qa-security.md 的恢复/FinOps 边界举证段落",
+    "为 S7-M10 增加显式 reliability-versus-cost 权衡记录",
+    "降低 restore-fixture 模板同构感，补充差异化完整性夹具"
+  ],
+  "overall_score": 9.55,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s7-tipbound-fresh-judge-01"
+  },
+  "notes_zh": "独立 clean-room tipbound-fresh #1（S7）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=0721108 / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf fmt+staging validate、CANDIDATE_SHA validate P7-T01..T04 均 exit 0；副作用已 checkout 丢弃（未 git clean）。未读旧 tipbound/provisional/saved 分数。诚实：任务 L1 合成 + 组合 tip-bound L4 lab（RTO/teardown）；perf 停 L1。must_haves U1–U14+S7-M1–M8 全 pass；merge_ready=yes；overall_score=9.55。"
+}
