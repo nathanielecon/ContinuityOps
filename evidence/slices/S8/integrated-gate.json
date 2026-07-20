@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "P8-T04",
-  "baseline_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
-  "candidate_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P8-T04",
   "exit_code": 0,
   "recorded_at": "2026-07-18T18:58:54.377Z",
@@ -28,7 +28,7 @@
   "claim_level": "L4",
   "remaining_boundaries": [
     "Scoped 100% under A3 ceilings (AWS lab via continuityops-gha)",
-    "Azure live apply out (D-046) \u2014 L1 design only",
+    "Azure live apply out (D-046) — L1 design only",
     "Performance remains honest L1",
     "security-sbom L2; agentic-workflow L3; upstream-integration L2",
     "No ContinuityOps known-good rollback proven",
@@ -105,6 +105,6 @@
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
   "evidence_path": "evidence/slices/S8/integrated-gate.json",
   "bind_model": "candidate_sha_parent_of_tip",
-  "implementation_sha": "4674506bf963d9bf8915a73e6a28358acf089c71",
-  "portfolio_tip_sha": "4674506bf963d9bf8915a73e6a28358acf089c71"
+  "implementation_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e"
 }
