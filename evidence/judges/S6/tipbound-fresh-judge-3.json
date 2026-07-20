@@ -1,0 +1,273 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S6",
+  "round": "fresh",
+  "judge_id": "tipbound-fresh-judge-3",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "现场 parent-bind tip^==candidate；tree 短哈希 0721108",
+        "rubric/manifest sha256 与派发给定值一致",
+        "tip-proof-aa01454.json bind_model=candidate_sha_parent_of_tip"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "94/94；tf fmt；staging validate；P6-T04 validate 均 exit 0",
+        "校验副作用仅 checkout 回滚，未 git clean"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "secrets-policy + zero_secrets；workflow 无写 token 授予 untrusted PR"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无开放 critical/high 记录；阻断路径有 fixture/测试",
+        "S6-M10 式「零残留高危 live」不在本轮 must_haves，亦未超额宣称"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "matrix/STREAM/任务证据分层清晰：L1 Azure、L2 SBOM、L3 agentic、组合 tipbound L3"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "IAM/admission/Azure/agentic 负行为均有可执行断言或契约负例"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "2026-07-20T13:45Z 现场窗：命令、exit、node/tf 版本、hash 绑定齐全"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "仅 tipbound-fresh-judge-3.json；judge 只读实现"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG 覆盖 tip 对象/BF-2026-019；本轮无新失败"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "评审/STREAM/matrix 均保持「无 live cloud security proof」时态"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "notes_zh 简体；对外英文保持"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S6 顺序门禁；judge 输出路径隔离"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "tipbound-fresh 与 saved/provisional 分轨；未读旧分、未互抄 #1/#2"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "观察失败已入 BF；本轮验证无未入账失败"
+      ]
+    },
+    {
+      "id": "S6-M1",
+      "status": "pass",
+      "evidence": [
+        "least-privilege + iam/rbac 负例；agent-evidence mutation=false"
+      ]
+    },
+    {
+      "id": "S6-M2",
+      "status": "pass",
+      "evidence": [
+        "托管密钥策略与证据 zero_secrets；禁入路径列表"
+      ]
+    },
+    {
+      "id": "S6-M3",
+      "status": "pass",
+      "evidence": [
+        "可复现 SBOM + stub claim_ceiling；不隐藏 scanner 缺口"
+      ]
+    },
+    {
+      "id": "S6-M4",
+      "status": "pass",
+      "evidence": [
+        "admission/K8s/TF 策略阻断不安全部署与网络变更"
+      ]
+    },
+    {
+      "id": "S6-M5",
+      "status": "pass",
+      "evidence": [
+        "Azure 控件具体；designed_static 与 non_claims 显式（D-046）"
+      ]
+    },
+    {
+      "id": "S6-M6",
+      "status": "pass",
+      "evidence": [
+        "默认无 mutation；evidence gather 只读 workflow"
+      ]
+    },
+    {
+      "id": "S6-M7",
+      "status": "pass",
+      "evidence": [
+        "人闸必选（D-044 占位保留）+ OIDC 短时凭据路径",
+        "对 H4 占位诚实：机制存在但非生产 hardened environment reviewers"
+      ]
+    },
+    {
+      "id": "S6-M8",
+      "status": "pass",
+      "evidence": [
+        "注入/伪造证据/无控 mutation 请求被拒绝；诊断权限不可升格"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.9,
+      "rationale": "S6 交付面完整且 tip-bound 可复验；薄评审与 stub fixture 使正确性略低于满分。",
+      "evidence": [
+        "P6-T01..T04 证据链 + validate P6-T04",
+        "docs/reviews/S6/engineering-qa-security.md（极简）"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.4,
+      "rationale": "权威边界总体正确，但对 H4/D-044 环境占位更保守，故低于满分。",
+      "evidence": [
+        "workflow-contract.human_gate.waived_receipt=D-044",
+        "agentic-evidence environment: agentic-proposal placeholder"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.35,
+      "rationale": "负例覆盖足够 must-have；安全故障恢复深度有限，本维更保守。",
+      "evidence": [
+        "admission-negative / prompt-injection",
+        "无独立安全事件恢复演练证据"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "机检全绿，确定性维满分。",
+      "evidence": [
+        "94/94 + tf + P6-T04"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.9,
+      "rationale": "托管 agentic L3 可计；SBOM/Azure 不抬 live。",
+      "evidence": [
+        "evidence/hosted/agentic-workflow-2026-07-18.json",
+        "matrix azure-governance=L1 / security-sbom=L2"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "契约与 workflow 可运维；薄评审限制排障深度。",
+      "evidence": [
+        "agentic/*.mjs + workflows",
+        "STREAM remaining_boundaries"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 1.0,
+      "rationale": "宣称分层与 non-claims/tipbound_note 高度一致，本维给满。",
+      "evidence": [
+        "matrix + STREAM tipbound_note_zh",
+        "unsupported live 边界在证据中显式"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "索引与门禁可交接。",
+      "evidence": [
+        "evidence/slices/S6/STREAM_COMPLETE.json",
+        "evidence/portfolio/tip-proof-aa01454.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "短时凭据与范围控制合理；非 FinOps 证明。",
+      "evidence": [
+        "OIDC continuityops-gha；Azure out of ceiling"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "S6-M9/M10 审计完备或零残留高危的 live 结论",
+    "生产环境保护规则已硬化（D-044 仅为占位保留）",
+    "live cloud security / Azure apply 证明"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "扩展 engineering-qa-security 威胁模型与攻击路径",
+    "补强 H4 占位之外的可机检 environment protection 证据（若策略允许）"
+  ],
+  "overall_score": 9.45,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s6-tipbound-fresh-judge-03"
+  },
+  "notes_zh": "独立 clean-room tipbound-fresh #3（S6）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=0721108 / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf、P6-T04 均 exit 0；未 git clean；未读旧分数。对 H4 占位与薄评审更保守，对宣称完整性给满。诚实 L3 tipbound + security-sbom L2。U1–U14+S6-M1–M8 全 pass；overall_score=9.45；merge_ready=yes。"
+}
