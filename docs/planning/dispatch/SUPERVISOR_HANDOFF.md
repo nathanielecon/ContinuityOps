@@ -1,5 +1,7 @@
 # 监督者交接 — ORCH-ROUND-06 治理修复后（2026-07-17）
 
+> **Chief-coasts framework (forward plan):** [`CHIEF_COASTS_FRAMEWORK_PLAN.md`](./CHIEF_COASTS_FRAMEWORK_PLAN.md) — automate software creation with chief as exception coast; exact worker permissions in [`WORKER_PERMISSIONS.md`](./WORKER_PERMISSIONS.md); tip smoke in [`TIP_VISIBILITY_SMOKE.zh.md`](./TIP_VISIBILITY_SMOKE.zh.md).
+
 > **2026-07-18 LIVE AWS chief handoff (current):** [`CHIEF_HANDOFF_2026-07-18.md`](./CHIEF_HANDOFF_2026-07-18.md) — use that for new chief resume.
 
 > 面向所有者 / 控制中心的持久交接。机器字段英文；自由文本简体中文。
