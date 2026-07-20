@@ -27,7 +27,7 @@
     }
   ],
   "evidence_manifest_path": "evidence/slices/S0/integrated-gate.json",
-  "evidence_manifest_sha256": "2942961587f9d05ab53e258da679c3092f59e64fd23c67507d432089bae8a250",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
   "context_remaining": "68%",
   "preflight_ok": {
     "warm_fresh": false,
@@ -44,5 +44,6 @@
     ],
     "slice_landed_sha_preserved": "5792a74f5c684b007a9057b89b6d9a24f359bc7f"
   },
-  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e"
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "notes": "Tip-bound aa01454 (Emergency package C): portfolio_tip_sha=aa01454; slice_landed_sha retained if present. A3 L4 lab ceilings unchanged. Prior 5792a74 narrative superseded for portfolio tip bind."
 }
