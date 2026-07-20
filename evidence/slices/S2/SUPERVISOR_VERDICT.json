@@ -44,7 +44,8 @@
     "Scoped AWS lab L4 via continuityops-gha (A3); not production",
     "Azure live out (D-046) — L1 design only",
     "Local kind paths remain L1 synthetic; portfolio tip elevates with cloud_apply_evidence",
-    "No Cursor in-pod AWS credentials"
+    "No Cursor in-pod AWS credentials",
+    "managed_cluster_apply"
   ],
   "claim_level": "L4",
   "issue_ids": [],

@@ -613,3 +613,8 @@ ContinuityOps incidents yet.
 - **Detected:** 2026-07-20T11:50Z via tip-bound provisional R3 (chief Grok): S0 2/3 pass; S2/S3 0/3 on U5/U7/U10 (L1↔L4) + stale gate SHAs; S0-M7 rubric-freeze bundle drift.
 - **Repair:** NIX-TIPBOUND-AA01454-02 / FIX-TIPBOUND-AA01454-02 — refresh S0 rubric-freeze hashes; rebind S0/S2/S3 gate+SUPERVISOR SHAs to aa01454; elevate S2/S3 integrated-gate/SUPERVISOR to A3-scoped L4 lab with cloud_apply_evidence; keep task-level component L1.
 - **Prevention:** tip-bind must rebind task gates and claim_level together with STREAM_COMPLETE; run validate-rubric-freeze on tip-bound candidates.
+
+## BF-2026-022 — S2 gate lost managed_cluster_apply during claim rebind
+
+- **Symptom:** After NIX/FIX-TIPBOUND-02, `validate P2-T04` failed: S2 must retain `managed_cluster_apply`.
+- **Fix:** Re-append boundary on S2 integrated-gate + SUPERVISOR_VERDICT; keep A3 L4 lab claim.
