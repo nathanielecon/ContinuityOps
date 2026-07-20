@@ -25,7 +25,7 @@
     "mode": "default",
     "role": "validator-worker"
   },
-  "claim_level": "L4",
+  "claim_level": "L1",
   "remaining_boundaries": [
     "terraform CLI absent — fmt/validate skipped",
     "No hosted OIDC plan evidence (not L3 plan)",
@@ -101,5 +101,8 @@
     "terraform_cli_fmt_validate": "skipped_tool_absent",
     "cloud_apply": "not_claimed"
   },
-  "prior_candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
+  "prior_candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "component_claim_level": "L1",
+  "portfolio_combination_claim": "L4",
+  "tipbound_note_zh": "组件契约 L1；组合 tip-bound A3 L4 lab 见 integrated-gate/STREAM_COMPLETE。"
 }
