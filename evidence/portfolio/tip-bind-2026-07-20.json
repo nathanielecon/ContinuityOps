@@ -19,5 +19,8 @@
       "standalone_json_errors": 0
     }
   ],
-  "notes_zh": "tip-bind 提交 E 的 parent(E) 为 portfolio tip aa01454f8808c173deb43cc4b9b803287eec851e；candidate_sha、baseline_sha、portfolio_tip_sha 与绑定 tip 一致。"
+  "notes_zh": "tip-bind 提交 E 的 parent(E) 为 portfolio tip aa01454f8808c173deb43cc4b9b803287eec851e；candidate_sha、baseline_sha、portfolio_tip_sha 与绑定 tip 一致。",
+  "tip_proof_path": "evidence/portfolio/tip-proof-aa01454.json",
+  "d028_packet": "evidence/portfolio/packets/NIX-TIPBOUND-001/",
+  "related_nixer": "evidence/portfolio/nixer-tipbound-aa01454-01.json"
 }

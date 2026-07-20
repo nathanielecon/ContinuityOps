@@ -594,3 +594,9 @@ ContinuityOps incidents yet.
 - **Secondary:** S2 P2-T03 exit 2 — scenario evidence `candidate_sha` not rebound to tip-bound parent `aa01454…`; S0-01 also reported clean-room contamination from reading prior judge reports.
 - **Repair (pending nixer/fixer):** Package tip SHA + parent in dispatch packet (D-028 data-not-permission); ensure App env fetches candidate branch / deepen history; rebind S2 scenario evidence SHAs; re-dispatch clean-room provisional cohort.
 - **Prevention:** Tip-bound judge prompts must vendor `git cat-file` proof or shallow-fetch instructions for non-`main` tips; never assume App default clone contains stream/candidate tips.
+
+## BF-2026-019 repair — tip proof packet + S2 SHA rebind (path B)
+
+- **Recorded:** 2026-07-20T11:16Z via FIX-TIPBOUND-AA01454-01 (orch local unblock + nixer #143).
+- **Repair:** `evidence/portfolio/tip-proof-aa01454.json` + `evidence/portfolio/packets/NIX-TIPBOUND-001/`; rebind S2 matrix/chart/runtime/integrated-gate `candidate_sha` → `aa01454…`.
+- **Follow-up:** re-dispatch clean-room provisional×3 with hard `git fetch` + `git cat-file` gate (NIX-TIPBOUND-003).

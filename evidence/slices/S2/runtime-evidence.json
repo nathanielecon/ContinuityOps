@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "P2-T02",
-  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
-  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P2-T02",
   "exit_code": 0,
   "recorded_at": "2026-07-18T06:17:17.241Z",
@@ -77,5 +77,14 @@
   ],
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
-  "evidence_path": "evidence/slices/S2/runtime-evidence.json"
+  "evidence_path": "evidence/slices/S2/runtime-evidence.json",
+  "rebinding": {
+    "recorded_utc": "2026-07-20T11:16:00Z",
+    "reason": "NIX-TIPBOUND-002 / FIX-TIPBOUND-AA01454-01: rebind S2 evidence to tip-bound parent aa01454",
+    "prior_candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+    "issue_ids": [
+      "NIX-TIPBOUND-002"
+    ]
+  },
+  "bind_model": "candidate_sha_parent_of_tip"
 }
