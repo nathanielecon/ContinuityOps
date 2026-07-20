@@ -1,0 +1,308 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "judge_id": "S3-PROVISIONAL-JUDGE-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "not_proven",
+      "evidence": [
+        "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^（退出码 128；本地对象缺失）",
+        "当前可读候选 HEAD 为 aa01454f8808c173deb43cc4b9b803287eec851e",
+        "docs/planning/JUDGE_RUBRICS.md（SHA-256 f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31）",
+        "docs/claims/matrix.json（SHA-256 89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5）"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/（退出码 0，94/94 通过）",
+        "terraform fmt -check -recursive terraform（退出码 0）",
+        "P3-T01/P3-T02/P3-T03 只读验证均退出码 0"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "tests/portfolio.test.mjs：PR 只读凭据负向检查通过",
+        "evidence/slices/S3/serverless.json：iam_negative=true"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "docs/security/security-review.md",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/serverless.json：明确 L1 与无 live Lambda/SQS 边界",
+        "evidence/slices/S3/saas-operations.json：明确无 live SaaS 控制面"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless.test.mjs：重复、毒消息、DLQ 与审批负向路径",
+        "evidence/slices/S3/serverless.json"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "PLAN.md",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "README.md",
+        "docs/claims/matrix.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "PLAN.md",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "harness/schemas/judge-result.schema.json",
+        "tests/portfolio.test.mjs"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "S3-M1",
+      "status": "pass",
+      "evidence": [
+        "docs/contracts/serverless/event-contract.json",
+        "tests/serverless.test.mjs"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless.test.mjs",
+        "docs/contracts/serverless/worker-config.json"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless.test.mjs",
+        "docs/runbooks/serverless-dlq-replay.md"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/serverless.json：iam_negative=true",
+        "terraform/modules/serverless"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "docs/operations/saas-lifecycle.json",
+        "tests/serverless.test.mjs"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "docs/operations/saas-lifecycle.json",
+        "evidence/slices/S3/saas-operations.json"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "docs/operations/saas-lifecycle.json",
+        "docs/runbooks/serverless-dlq-replay.md"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless.test.mjs：敏感字段脱敏检查通过"
+      ]
+    },
+    {
+      "id": "S3-M9",
+      "status": "pass",
+      "evidence": [
+        "docs/operations/serverless-cost.md",
+        "docs/contracts/serverless/worker-config.json"
+      ]
+    },
+    {
+      "id": "S3-M10",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/saas-operations.json：claim_level=L1 且无 live SaaS 控制面",
+        "docs/claims/matrix.json"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "无法读取目标 tip 0606812354dae2e23356278f10f9b76b7ebd010b；父绑定命令退出码 128，因此 U1 按冻结规则为 not_proven，强制 merge_ready=no。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "Correctness and completeness",
+      "score": 1.8,
+      "rationale": "核心契约、生命周期及确定性检查完整；目标 tip 的父绑定未能在本地对象库复核。",
+      "evidence": [
+        "tests/serverless.test.mjs",
+        "evidence/slices/S3/serverless.json"
+      ]
+    },
+    {
+      "id": "Security and authority boundaries",
+      "score": 1.5,
+      "rationale": "IAM 负向、重放审批、脱敏和零秘密边界均有检查。",
+      "evidence": [
+        "tests/serverless.test.mjs",
+        "evidence/slices/S3/serverless.json"
+      ]
+    },
+    {
+      "id": "Failure/recovery depth",
+      "score": 1.4,
+      "rationale": "覆盖重复、毒消息、DLQ、报警与安全重放；live 路径仍受声明边界约束。",
+      "evidence": [
+        "docs/runbooks/serverless-dlq-replay.md",
+        "tests/serverless.test.mjs"
+      ]
+    },
+    {
+      "id": "Deterministic test quality",
+      "score": 1.0,
+      "rationale": "全库 94 项测试及三个 S3 验证均通过。",
+      "evidence": [
+        "node --test tests/（退出码 0，94/94 通过）",
+        "node scripts/project.mjs validate P3-T01/P3-T02/P3-T03（退出码均为 0）"
+      ]
+    },
+    {
+      "id": "Live/runtime evidence quality",
+      "score": 0.8,
+      "rationale": "存在绑定的 AWS 实验室证据，但本轮无法读取目标 tip 对象完成父绑定。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "Operability and troubleshooting",
+      "score": 1.0,
+      "rationale": "DLQ 重放、生命周期、严重度与升级路径可操作。",
+      "evidence": [
+        "docs/runbooks/serverless-dlq-replay.md",
+        "docs/operations/saas-lifecycle.json"
+      ]
+    },
+    {
+      "id": "Evidence/claim integrity",
+      "score": 0.7,
+      "rationale": "L1/L4 实验室边界清晰且未提高 A3；但 U1 的 tip 父绑定未证明。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "Maintainability and handoff",
+      "score": 0.5,
+      "rationale": "契约、测试和操作文档分层清晰。",
+      "evidence": [
+        "docs/contracts/serverless",
+        "docs/operations/saas-lifecycle.json"
+      ]
+    },
+    {
+      "id": "Cost/performance realism",
+      "score": 0.5,
+      "rationale": "记录每事件、空闲成本以及重试与并发限制。",
+      "evidence": [
+        "docs/operations/serverless-cost.md",
+        "docs/contracts/serverless/worker-config.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "本轮不证明 Azure live、生产客户工作负载或生产级 SaaS 控制面。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在可读取目标 tip 对象的环境重新执行父绑定命令，再进行新的 tip-bound 评判。"
+  ],
+  "overall_score": 9.2,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "medium",
+    "role": "independent-read-only-judge"
+  },
+  "notes_zh": "评判对象按 candidate_sha_parent_of_tip 模型绑定候选 aa01454f8808c173deb43cc4b9b803287eec851e；tip_under_review 为 0606812354dae2e23356278f10f9b76b7ebd010b。parent_bind_verified=false。本轮未查看或复用其他 judge 分数，未提高 A3。"
+}
