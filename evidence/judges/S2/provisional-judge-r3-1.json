@@ -1,0 +1,344 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "saved_provisional",
+  "judge_id": "S2-PROVISIONAL-R3-01",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high-fast",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ → aa01454f8808c173deb43cc4b9b803287eec851e",
+        "evidence/portfolio/tip-proof-aa01454.json",
+        "docs/planning/JUDGE_RUBRICS.md#sha256=f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+        "docs/claims/matrix.json#sha256=89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+        "evidence/dispatch-packets/tipbound-aa01454/TIP_PARENT_PROOF.txt"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ → exit 0（94 pass）",
+        "terraform fmt -check -recursive terraform → exit 0",
+        "CANDIDATE_SHA=aa01454… node scripts/project.mjs validate P2-T04 → exit 0",
+        "CANDIDATE_SHA=aa01454… node scripts/project.mjs validate P2-T03 → exit 0"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml（ACCOUNT_ID/REGION/PLACEHOLDER，无实密钥）",
+        "evidence/slices/S2/chart-contract.json#environment.zero_secrets",
+        "evidence/slices/S2/integrated-gate.json#environment.zero_secrets"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml（runAsNonRoot、capabilities drop ALL、NetworkPolicy）",
+        "kubernetes/policies/network-negative.json",
+        "kubernetes/policies/digest-pin.json"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "fail",
+      "evidence": [
+        "evidence/slices/S2/integrated-gate.json#claim_level=L1 + remaining_boundaries.managed_cluster_apply",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json#claim_level=L1",
+        "evidence/slices/S2/STREAM_COMPLETE.json#claim_level=L4",
+        "docs/claims/matrix.json#components.kubernetes-chart.claim_level=L4",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json#candidate_sha_apply=f059ffa3…≠aa01454…"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json（6 类合成失败）",
+        "kubernetes/policies/network-negative.json",
+        "evidence/slices/S2/scenarios/matrix-evidence.json"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "evidence": [
+        "evidence/slices/S2/scenarios/matrix-evidence.json#rebinding（绑定 aa01454…）",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json（apply SHA 非候选，缺少候选上的完整运行时字段）",
+        "evidence/slices/S2/runtime/kind-preflight.json（kind/helm 不可用，L1 模板契约）"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "evidence/dispatch-packets/tipbound-aa01454/",
+        "evidence/portfolio/packets/NIX-TIPBOUND-001/",
+        "evidence/judges/S2/provisional-judge-r3-1.json（本法官仅写本路径）"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md#BF-2026-012",
+        "BREAK_FIX_LOG.md#BF-2026-019",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json#runs.apply_partial_fail_eks_version"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "evidence": [
+        "docs/claims/matrix.json（kubernetes-chart L4）",
+        "evidence/slices/S2/STREAM_COMPLETE.json（L4）",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json（L1，false_l4_claim=false）",
+        "evidence/slices/S2/integrated-gate.json（L1 + managed_cluster_apply）"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "not_proven",
+      "evidence": [
+        "AGENTS.md（简体中文协议）",
+        "本席无法审计历史全部跨代理交接原文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "tests/harness/concurrency.test.mjs",
+        "scripts/validators/core.mjs#stream_isolation"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "harness/schemas/judge-result.schema.json#round",
+        "scripts/validators/core.mjs#assertSavedFreshCouncil",
+        "scripts/validators/core.mjs#assertFreshJudgeExit"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md#BF-2026-012",
+        "BREAK_FIX_LOG.md#BF-2026-019"
+      ]
+    },
+    {
+      "id": "S2-M1",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml#image.digest",
+        "kubernetes/policies/digest-pin.json",
+        "tests/kubernetes/chart-contract.test.mjs",
+        "evidence/slices/S2/chart-contract.json"
+      ]
+    },
+    {
+      "id": "S2-M2",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml（probes/resources/PDB/topology/HPA）",
+        "kubernetes/chart/templates/hpa.yaml",
+        "kubernetes/chart/templates/pdb.yaml",
+        "tests/kubernetes/chart-contract.test.mjs"
+      ]
+    },
+    {
+      "id": "S2-M3",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml（IRSA 注解占位、non-root、NetworkPolicy）",
+        "kubernetes/chart/templates/rbac.yaml",
+        "kubernetes/chart/templates/networkpolicy.yaml",
+        "kubernetes/policies/network-negative.json",
+        "evidence/slices/S2/chart-contract.json#validators.kubernetes_negative"
+      ]
+    },
+    {
+      "id": "S2-M4",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/chart-contract.json（helm/kubeconform 跳过但静态契约与策略门通过）",
+        "CANDIDATE_SHA=aa01454… validate P2-T04 → exit 0"
+      ]
+    },
+    {
+      "id": "S2-M5",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/scenarios/kind-local.json#label=local-only",
+        "evidence/slices/S2/runtime/kind-preflight.json",
+        "evidence/slices/S2/runtime-evidence.json#remaining_boundaries.managed_cluster_apply",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json（托管路径独立记录）"
+      ]
+    },
+    {
+      "id": "S2-M6",
+      "status": "fail",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json（证明 EKS 集群 apply 于 f059ffa3…，非 aa01454…；无候选上的 digest/health/version/identity/rollout/scaling）",
+        "evidence/slices/S2/runtime-evidence.json#claim_level=L1；autoscaling 仅模板",
+        "evidence/slices/S2/runtime/kind-preflight.json#kind_available=false"
+      ]
+    },
+    {
+      "id": "S2-M7",
+      "status": "not_proven",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json#claim_ceiling=L1；synthetic only",
+        "kubernetes/scenarios/crashloop.json#synthetic=true",
+        "evidence/slices/S2/scenarios/matrix-evidence.json#remaining_boundaries.No live failure injection"
+      ]
+    },
+    {
+      "id": "S2-M8",
+      "status": "not_proven",
+      "evidence": [
+        "evidence/slices/S2/scenarios/crashloop-reset.json#synthetic=true；note=无实时集群变更",
+        "scripts/validators/core.mjs#recovery_smoke（仅校验字段/脚本契约）",
+        "kubernetes/scenarios/failure-matrix.json#note=Live injection requires kind/EKS evidence"
+      ]
+    },
+    {
+      "id": "S2-M9",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml#ingress（internal ALB + TLS 占位）",
+        "kubernetes/chart/templates/ingress.yaml",
+        "kubernetes/chart/values.yaml#service.type=ClusterIP"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U5/U10：S2 任务门与 SUPERVISOR_VERDICT 保持 L1+managed_cluster_apply，但 STREAM_COMPLETE 与 claims matrix 将 kubernetes-chart 升为 L4，声明层级不一致。",
+    "S2-M6：托管运行时（digest/health/version/identity/rollout/scaling）未在候选 SHA aa01454… 上证明；elevation 证据绑定 f059ffa3… 且仅证明 EKS 控制面/节点组存在后已 teardown。",
+    "U7/S2-M7/S2-M8：失败注入与恢复复验停留在合成契约；kind/helm 不可用，无候选绑定的实时复现证据。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.3,
+      "rationale": "Chart/策略/场景契约与确定性校验完整，但候选上缺少托管运行时闭环，完整性不足。",
+      "evidence": [
+        "evidence/slices/S2/chart-contract.json",
+        "evidence/slices/S2/runtime-evidence.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "security_authority_boundaries",
+      "score": 1.2,
+      "rationale": "非 root、digest pin、NetworkPolicy 与负向策略齐备；IRSA/证书仍为占位，未见候选上的托管身份负向实证。",
+      "evidence": [
+        "kubernetes/chart/values.yaml",
+        "kubernetes/policies/network-negative.json",
+        "kubernetes/policies/digest-pin.json"
+      ]
+    },
+    {
+      "id": "failure_recovery_depth",
+      "score": 0.8,
+      "rationale": "六类失败矩阵与 reset 脚本契约存在，但均为合成；无 kind/EKS 实注入与业务复验。",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json",
+        "evidence/slices/S2/scenarios/crashloop-reset.json"
+      ]
+    },
+    {
+      "id": "deterministic_test_quality",
+      "score": 0.95,
+      "rationale": "node --test 94 全绿，chart/scenario 契约测试与 P2-T03/T04 校验通过。",
+      "evidence": [
+        "tests/kubernetes/chart-contract.test.mjs",
+        "tests/kubernetes/scenarios.test.mjs",
+        "node --test tests/ → exit 0"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence_quality",
+      "score": 0.3,
+      "rationale": "实验室 EKS apply/teardown 有托管证据，但 SHA 非候选，且无工作负载 digest/健康/扩缩容运行时记录。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "evidence/slices/S2/runtime/kind-preflight.json"
+      ]
+    },
+    {
+      "id": "operability_troubleshooting",
+      "score": 0.65,
+      "rationale": "场景 inject/recover/business_check 与 reset 脚本可操作，但缺少压力可用的实时诊断证据。",
+      "evidence": [
+        "kubernetes/scenarios/crashloop.json",
+        "scripts/kubernetes/reset-scenario.mjs"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.25,
+      "rationale": "L1 任务证据与 L4 matrix/STREAM_COMPLETE 冲突，且 L4 托管证据未绑定 aa01454…。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "evidence/slices/S2/integrated-gate.json",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.4,
+      "rationale": "目录、tip-proof 与 rebinding 元数据清晰，便于交接；声明冲突仍增加后续修复成本。",
+      "evidence": [
+        "evidence/portfolio/tip-proof-aa01454.json",
+        "evidence/slices/S2/STREAM_COMPLETE.json#rebinding"
+      ]
+    },
+    {
+      "id": "cost_performance_realism",
+      "score": 0.35,
+      "rationale": "HPA 模板与实验室 teardown 暗示成本边界，但无候选上的可测量扩缩容或成本核对。",
+      "evidence": [
+        "kubernetes/chart/templates/hpa.yaml",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json#runs.teardown_staging",
+        "docs/claims/matrix.json#max_claim_scope"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "docs/claims/matrix.json 将 kubernetes-chart 标为 L4，并暗示候选具备托管工作负载运行时证明。",
+    "evidence/slices/S2/STREAM_COMPLETE.json 在仍保留 managed_cluster_apply 历史边界标签的同时声明 claim_level=L4。",
+    "托管运行时已在候选 SHA aa01454… 上展示 digest/health/version/identity/rollout/scaling。"
+  ],
+  "security_findings": [
+    "未发现提交的长效云密钥；values 中 IAM/证书为占位符。",
+    "IRSA role-arn 与 ACM certificate-arn 仍为 ACCOUNT_ID/REGION 占位，不得解读为已验证的最小权限托管身份。"
+  ],
+  "improvements": [
+    "统一 S2 声明天花板：要么将 matrix/STREAM_COMPLETE 降回与 integrated-gate 一致的 L1，要么提供绑定 aa01454… 的托管工作负载运行时证据并更新 SUPERVISOR_VERDICT。",
+    "在候选 SHA 上补充 EKS 工作负载证据：镜像 digest、就绪/存活、版本、身份、rollout 与 HPA 行为。",
+    "对 CrashLoop/readiness/scheduling/DNS/network-deny 执行至少一次可复现注入并记录 reset 后的业务复验，或明确永久保持合成 L1 天花板。"
+  ],
+  "overall_score": 6.2,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high-fast",
+    "mode": "clean-room",
+    "role": "provisional-judge"
+  },
+  "notes_zh": "R3 clean-room provisional：已独立核验 tip 0606812 父提交=aa01454，rubric/manifest 哈希一致；确定性校验全绿。因 L1/L4 声明冲突与候选缺失托管运行时证明，merge_ready=no。未读取任何既有 judge 分数 JSON。"
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "role": "nixer",
+  "task_id": "NIX-TIPBOUND-AA01454-01",
+  "status": "complete",
+  "path": "B",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "baseline_sha": "53d5e908fb8a2f433716c73b187c877ff88b97a0",
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "source_evidence": [
+    "evidence/judges/S0/provisional-judge-1.json",
+    "evidence/judges/S0/provisional-judge-2.json",
+    "evidence/judges/S0/provisional-judge-3.json",
+    "evidence/judges/S2/provisional-judge-1.json",
+    "evidence/judges/S2/provisional-judge-2.json",
+    "evidence/judges/S2/provisional-judge-3.json",
+    "evidence/judges/S3/provisional-judge-1.json",
+    "evidence/judges/S3/provisional-judge-2.json",
+    "evidence/judges/S3/provisional-judge-3.json",
+    "evidence/portfolio/tip-bind-2026-07-20.json",
+    "BREAK_FIX_LOG.md#BF-2026-019"
+  ],
+  "deduped": true,
+  "issue_ids": [
+    {
+      "id": "NIX-TIPBOUND-001",
+      "summary_zh": "向 App 工作区提供候选 tip 与父提交的可验证对象，同时保持 D-028 的只读数据边界",
+      "finding_zh": "评审必须能直接读取受审 tip 0606812 及其父提交 aa01454；仅提供提交名称而不提供对象会使 tip 绑定不可复现。修复只能打包只读提交数据或从既有候选分支取回对象，不得扩大仓库授权。",
+      "reproduction_check": "git fetch origin candidate/portfolio-aa01454 && git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b && test \"$(git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^)\" = aa01454f8808c173deb43cc4b9b803287eec851e",
+      "expected_result_zh": "命令依次返回 commit，且受审 tip 的唯一父提交等于候选 SHA；不得向 worker 增加写权限或跨仓库授权。",
+      "failed_evidence_paths": [
+        "evidence/portfolio/tip-bind-2026-07-20.json",
+        "BREAK_FIX_LOG.md#BF-2026-019"
+      ],
+      "recommended_write_scope": [
+        "evidence/portfolio/tip-bind-2026-07-20.json",
+        "evidence/portfolio/packets/NIX-TIPBOUND-001/**"
+      ]
+    },
+    {
+      "id": "NIX-TIPBOUND-002",
+      "summary_zh": "将 S2 场景与证据中的候选绑定统一重绑到 aa01454，消除 P2-T03 的陈旧 SHA",
+      "finding_zh": "S2 的 P2-T03 失败属于候选身份不一致；场景、证据清单及其校验字段必须共同绑定到 aa01454，且不得借重绑提高 A3 声明上限。",
+      "reproduction_check": "rg -n --fixed-strings 'aa01454f8808c173deb43cc4b9b803287eec851e' evidence/slices/S2 evidence/scenarios && ! rg -n 'candidate_sha[^a-f0-9]+(?!aa01454f8808c173deb43cc4b9b803287eec851e)' evidence/slices/S2 evidence/scenarios --pcre2",
+      "expected_result_zh": "所有参与 P2-T03 的 S2 场景与证据候选字段均指向 aa01454，验证仍保持 A3 上限。",
+      "failed_evidence_paths": [
+        "evidence/judges/S2/provisional-judge-1.json",
+        "evidence/judges/S2/provisional-judge-2.json",
+        "evidence/judges/S2/provisional-judge-3.json"
+      ],
+      "recommended_write_scope": [
+        "evidence/slices/S2/**",
+        "evidence/scenarios/P2-T03/**"
+      ]
+    },
+    {
+      "id": "NIX-TIPBOUND-003",
+      "summary_zh": "重派独立 provisional 评审并强制 clean-room 输入隔离",
+      "finding_zh": "修复后旧候选绑定的评审结论全部失效。新评审不得读取旧 provisional 或 fresh 的分数、阈值导向摘要、其他评审报告或实现对话；只能接收冻结 rubric、任务政策、修复后的候选与允许的原始证据。",
+      "reproduction_check": "test \"$(find evidence/judges/S0 evidence/judges/S2 evidence/judges/S3 -name 'provisional-judge-*.json' | wc -l)\" -eq 9 && rg -n 'clean.room|clean-room|独立|禁止.*(旧|分数)' evidence/portfolio evidence/judges",
+      "expected_result_zh": "三组共九份新 provisional 报告均绑定修复后 tip，并各自声明未接触旧 provisional/fresh 分数或其他评审结论。",
+      "failed_evidence_paths": [
+        "evidence/judges/S0/provisional-judge-1.json",
+        "evidence/judges/S2/provisional-judge-1.json",
+        "evidence/judges/S3/provisional-judge-1.json",
+        "BREAK_FIX_LOG.md#BF-2026-019"
+      ],
+      "recommended_write_scope": [
+        "evidence/judges/S0/provisional-judge-*.json",
+        "evidence/judges/S2/provisional-judge-*.json",
+        "evidence/judges/S3/provisional-judge-*.json"
+      ]
+    }
+  ],
+  "constraints_zh": [
+    "禁止修改实现文件或 .github/**。",
+    "禁止合并 main。",
+    "禁止提高 A3 声明上限。",
+    "修复会使现有候选绑定证据与评审结果失效，必须执行全量复验与独立重评。"
+  ],
+  "recommended_next_step": [
+    "按 NIX-TIPBOUND-001 至 003 的互不重叠范围派遣 fixer。",
+    "冻结修复后 tip，再向未接触历史分数的新评审派遣 provisional council。",
+    "只有 provisional 通过后才可进入 fresh；禁止在同一 tip 上盲重试 fresh。"
+  ],
+  "requires_escalation": false,
+  "context_remaining": "78%"
+}

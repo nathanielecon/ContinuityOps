@@ -1,0 +1,301 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "judge_id": "S3-PROVISIONAL-R5-02",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high-fast",
+  "provisional_pass": true,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "tip 0606812354dae2e23356278f10f9b76b7ebd010b 之第一父提交 = candidate aa01454f8808c173deb43cc4b9b803287eec851e",
+        "rubric_sha256 与 JUDGE_RUBRICS.md 一致；evidence_manifest_sha256 与 docs/claims/matrix.json 一致",
+        "workspace tree tip 95e9c10 含 BF-2026-024 tip-bound 残差修复"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "/tmp/s3-r5-judge/parent-bind.log OK_candidate_ancestor_of_tip",
+        "/tmp/s3-r5-judge/node-test.log #fail 0",
+        "/tmp/s3-r5-judge/tf-fmt.log TF_EXIT:0",
+        "/tmp/s3-r5-judge/validate-p3t03.log VALIDATE_EXIT:0；integrated-gate 写回已 checkout 丢弃"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "P3-T03 environment.zero_secrets=true",
+        "serverless 模块 locals.long_lived_keys=false"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "S3 评审未列 critical/high 未决项",
+        "SUPERVISOR issue_ids 空"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "分层：portfolio STREAM/SUPERVISOR L4 lab apply；P3-T01/T02 组件 L1；Azure D-046 out",
+        "false_l4_claim=false 且 claim_level_max=L4 对齐"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "重复与 poison 负向路径有确定性测试；iam_negative 至少覆盖长期密钥禁止"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "cloud_apply_evidence 三文件 tip-bound 关联；apply SHA=f059ffa… 与 candidate 不等属声明内可接受",
+        "rebinding.recorded_utc 2026-07-20 与 BF-2026-024 一致"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "checks.write_scope_sane=true",
+        "评判写入路径仅 provisional-judge-r5-2.json"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG BF-2026-022/023/024 覆盖 tip-bound 与 S3 边界修复"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "权威 tip-bound 门禁与 matrix serverless-worker=L4（run 29644662492）一致",
+        "worker-contract/serverless.json「No live Lambda」保留为任务级边界，不判 U10 fail",
+        "评审表「Live AWS Lambda / SQS | not claimed」与 matrix 字面冲突属文案债，改进项"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "评判正文简体中文；机读字段英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S3 顺序门禁 P3-T01→P3-T02→P3-T03；无并行写冲突迹象"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "round=saved_provisional；未载入历史 judge 分数文件"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BF-2026-024 已入 BREAK_FIX_LOG"
+      ]
+    },
+    {
+      "id": "S3-M1",
+      "status": "pass",
+      "evidence": [
+        "signal-path-drill.json synthetic=true 且 hops=[ingress,app,queue,function]",
+        "tests/observability/signal-path.test.mjs 与 spans 契约交叉核对",
+        "integrated-gate remaining_boundaries 标明相关 E2E 非 live-proven → 按合成契约评分"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "pass",
+      "evidence": [
+        "idempotency 单测 + worker-contract backoff/visibility/concurrency/timeout 字段齐全",
+        "边界声明行为非 live-proven；契约与单测文件存在且一致"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "dlq.test.mjs 覆盖 alarm/poison/approval replay",
+        "dlq-replay.md 运行手册"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "pass",
+      "evidence": [
+        "iam_negative + least-privilege.json negative_cases",
+        "lambda_role_arn 为外部输入；深度不足已由 remaining_boundaries 标为合成，不伪造 live 负向矩阵"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "tenant-boundary.md + lifecycle.tenant_isolation"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "lifecycle.json 七阶段契约 + lifecycle_contract 校验"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "severity-escalation.json 含 ownership/escalation/sla"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "pass",
+      "evidence": [
+        "redaction.mjs + redaction.test.mjs + telemetry-contract.redaction",
+        "事件路径脱敏按合成边界计 pass"
+      ]
+    },
+    {
+      "id": "S3-M9",
+      "status": "pass",
+      "evidence": [
+        "worker-contract concurrency=10、cost_metric、function_seconds=30 构成契约层缩放/成本描述",
+        "未主张已测金额；与 remaining_boundaries 一致"
+      ]
+    },
+    {
+      "id": "S3-M10",
+      "status": "pass",
+      "evidence": [
+        "SaaS 证据 claim_level=L1；未把运营合同抬成 live 控制面"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 1.6,
+      "rationale": "门禁与分层正确；IAM/成本契约偏薄但与诚实边界匹配。",
+      "evidence": [
+        "evidence/slices/S3/integrated-gate.json",
+        "serverless/worker-contract.json"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.2,
+      "rationale": "无密钥暴露；函数角色策略动作集合负向深度有限。",
+      "evidence": [
+        "scripts/validators/core.mjs#iam_negative",
+        "security/least-privilege.json"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.25,
+      "rationale": "DLQ/幂等合成路径扎实；无 live 毒丸注入证据。",
+      "evidence": [
+        "tests/serverless/dlq.test.mjs"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 0.95,
+      "rationale": "tests + P3-T03 全绿。",
+      "evidence": [
+        "/tmp/s3-r5-judge/node-test.log",
+        "/tmp/s3-r5-judge/validate-p3t03.log"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 0.65,
+      "rationale": "lab 资源创建/销毁已证；worker 业务路径仍为合成。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json#resources_proven_live"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.8,
+      "rationale": "运行手册与 SEV 路径可用。",
+      "evidence": [
+        "operations/saas/severity-escalation.json",
+        "operations/incidents/serverless/dlq-replay.md"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 0.85,
+      "rationale": "tip-bound 哈希与 L4/L1 分层一致；评审表文案仍有摩擦。",
+      "evidence": [
+        "docs/claims/matrix.json#serverless-worker",
+        "docs/reviews/S3/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.4,
+      "rationale": "模块与证据路径清晰，评审声明表需一次性和解。",
+      "evidence": [
+        "docs/reviews/S3/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.3,
+      "rationale": "仅有指标名与并发上限，无 idle/per-event 量化，但未过称。",
+      "evidence": [
+        "serverless/worker-contract.json#telemetry.cost_metric"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "基础设施 apply ≠ S3-M1 相关传播已在 live 路径完成",
+    "不得把 saas-operations L1 合同说成 live SaaS 控制面"
+  ],
+  "security_findings": [
+    "iam_negative 主要为 long_lived_keys 文本门；函数策略动作集合负向仍浅（已边界化）"
+  ],
+  "improvements": [
+    "对齐 docs/reviews/S3 声明表与 matrix L4 lab apply 措辞",
+    "扩展 serverless IAM 负向用例（仍可合成）",
+    "补充 idle/per-event 成本描述段落"
+  ],
+  "overall_score": 8.0,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high-fast",
+    "mode": "clean-room-provisional-judge",
+    "role": "independent-provisional-judge"
+  },
+  "notes_zh": "独立 clean-room provisional R5 #2（S3-PROVISIONAL-R5-02）。绑定 tip/candidate/rubric/manifest 与任务书一致；现场验证 parent-bind、94 测、tf fmt、P3-T03 validate 全绿并丢弃副作用（未 git clean）。未读既有 judge 分数。U5/U10 按 tip-bound 诚实分层判 pass；S3-M* 在 remaining_boundaries 合成/契约标注下以存在且一致的证据判 pass。provisional_pass=true、merge_ready=yes。overall_score=8.0（runtime/成本维度保守）。A3 未抬 Azure。"
+}

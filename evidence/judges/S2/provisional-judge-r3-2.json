@@ -1,0 +1,448 @@
+{
+  "schema_version": "1.0",
+  "task_id": "S2-PROVISIONAL-R3-02",
+  "judge_id": "S2-PROVISIONAL-R3-02",
+  "slice_id": "S2",
+  "round": "saved_provisional_r3",
+  "seat": 2,
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high-fast",
+  "judge_provider": "xAI",
+  "clean_room": true,
+  "prior_scores_opened": false,
+  "recorded_utc": "2026-07-20T11:28:10Z",
+  "parent_bind": {
+    "status": "pass",
+    "commands": [
+      {
+        "command": "git fetch origin candidate/portfolio-aa01454",
+        "exit_code": 0
+      },
+      {
+        "command": "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b",
+        "exit_code": 0,
+        "result": "commit",
+        "expected": "commit"
+      },
+      {
+        "command": "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^",
+        "exit_code": 0,
+        "result": "aa01454f8808c173deb43cc4b9b803287eec851e",
+        "expected": "aa01454f8808c173deb43cc4b9b803287eec851e"
+      }
+    ],
+    "cross_checks": [
+      "evidence/portfolio/tip-proof-aa01454.json",
+      "evidence/portfolio/packets/NIX-TIPBOUND-001/README.md"
+    ]
+  },
+  "validation_commands": [
+    "git fetch origin candidate/portfolio-aa01454 && git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b && git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^",
+    "node --test tests/",
+    "terraform fmt -check -recursive terraform",
+    "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P2-T04"
+  ],
+  "validation_results": [
+    {
+      "command": "parent-bind (fetch + cat-file tip + rev-parse tip^)",
+      "exit_code": 0,
+      "recorded_at": "2026-07-20T11:26:20Z",
+      "environment": {
+        "node": "v22.14.0",
+        "terraform": "v1.9.8"
+      },
+      "evidence_path": "evidence/judges/S2/provisional-judge-r3-2.json",
+      "notes_zh": "tip 父提交等于 candidate_sha"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "recorded_at": "2026-07-20T11:26:51Z",
+      "summary": {
+        "tests": 94,
+        "pass": 94,
+        "fail": 0
+      },
+      "evidence_path": "evidence/judges/S2/provisional-judge-r3-2.json"
+    },
+    {
+      "command": "terraform fmt -check -recursive terraform",
+      "exit_code": 0,
+      "recorded_at": "2026-07-20T11:26:51Z",
+      "evidence_path": "evidence/judges/S2/provisional-judge-r3-2.json"
+    },
+    {
+      "command": "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P2-T04",
+      "exit_code": 0,
+      "recorded_at": "2026-07-20T11:26:51Z",
+      "evidence_path": "evidence/judges/S2/provisional-judge-r3-2.json",
+      "notes_zh": "校验器只读；工作区无写入副作用"
+    }
+  ],
+  "hash_checks": {
+    "rubric_path": "docs/planning/JUDGE_RUBRICS.md",
+    "rubric_sha256_observed": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+    "manifest_path": "docs/claims/matrix.json",
+    "manifest_sha256_observed": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+    "match": true
+  },
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "evidence/portfolio/tip-proof-aa01454.json",
+        "docs/planning/JUDGE_RUBRICS.md",
+        "docs/claims/matrix.json",
+        "integration/upstreams.lock.json",
+        "harness/postbuild-partition-manifest.json"
+      ],
+      "finding": "parent-bind 证明 tip^==aa01454；rubric/manifest 哈希一致；上游锁与分区清单存在。"
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "evidence/judges/S2/provisional-judge-r3-2.json",
+        "evidence/slices/S2/integrated-gate.json"
+      ],
+      "finding": "node --test、terraform fmt、P2-T04 均 exit 0。"
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/chart-contract.json",
+        "docs/reviews/S2/engineering-qa-security.md",
+        "kubernetes/policies/security-context.json"
+      ],
+      "finding": "未见长寿命集群凭据；环境标记 zero_secrets；安全上下文为非 root/只读根文件系统契约。"
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "docs/reviews/S2/engineering-qa-security.md"
+      ],
+      "finding": "S2 评审未记录未关闭的 critical/high；残留项为托管申请边界而非已确认高危漏洞。"
+    },
+    {
+      "id": "U5",
+      "status": "fail",
+      "evidence": [
+        "docs/reviews/S2/engineering-qa-security.md",
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "docs/claims/matrix.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "evidence/slices/S2/runtime-evidence.json"
+      ],
+      "finding": "声明层级冲突：评审写明托管 EKS 未声明（L1），STREAM_COMPLETE 与 claims matrix 将 kubernetes-chart 标为 L4；且 elevation 证据 candidate_sha_apply=f059ffa… 不等于本轮 candidate。"
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json",
+        "tests/kubernetes/scenarios.test.mjs",
+        "evidence/slices/S2/scenarios/matrix-evidence.json"
+      ],
+      "finding": "六类失败场景与负向策略契约存在且由确定性测试覆盖（合成上限）。"
+    },
+    {
+      "id": "U7",
+      "status": "fail",
+      "evidence": [
+        "evidence/slices/S2/scenarios/matrix-evidence.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "BREAK_FIX_LOG.md"
+      ],
+      "finding": "S2 任务证据已 rebind 到 aa01454，但用于抬升托管声明的 hosted apply 仍绑定 f059ffa…，不能作为本候选的新鲜托管运行时证据。"
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "docs/planning/PLAN.md",
+        "integration/upstreams.lock.json",
+        "evidence/judges/S2/provisional-judge-r3-2.json"
+      ],
+      "finding": "本轮仅写入本评委结果路径；上游以锁/包消费，未见上游仓修改。"
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ],
+      "finding": "BF-2026-019 与 tipbound 修复已记录。"
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "evidence": [
+        "docs/reviews/S2/engineering-qa-security.md",
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json",
+        "docs/claims/matrix.json"
+      ],
+      "finding": "README/评审/STREAM_COMPLETE/claims matrix/SUPERVISOR_VERDICT 对 S2 声明层级与绑定 SHA 不一致（L1 vs L4；旧候选 SHA 残留）。"
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md",
+        "evidence/judges/S2/provisional-judge-r3-2.json"
+      ],
+      "finding": "本报告自由文本使用简体中文；对外招聘向工件保持英文。"
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "harness/postbuild-partition-manifest.json",
+        "docs/planning/PLAN.md"
+      ],
+      "finding": "分区清单与计划写范围将 S2 路径与其他流分离。"
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "docs/planning/RALPHY_ORCHESTRATION.md",
+        "evidence/judges/S2/provisional-judge-r3-2.json"
+      ],
+      "finding": "本轮为 clean-room provisional R3，未打开既有评委分数文件。"
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md"
+      ],
+      "finding": "观察到的 tip 对象可见性故障已写入 break/fix 日志。"
+    },
+    {
+      "id": "S2-M1",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/policies/digest-pin.json",
+        "tests/kubernetes/chart-contract.test.mjs",
+        "evidence/slices/S2/chart-contract.json"
+      ],
+      "finding": "摘要固定（digest-pin）契约与确定性测试通过。"
+    },
+    {
+      "id": "S2-M2",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/chart/values.yaml",
+        "kubernetes/chart/templates/hpa.yaml",
+        "kubernetes/chart/templates/pdb.yaml",
+        "tests/kubernetes/chart-contract.test.mjs"
+      ],
+      "finding": "探针、资源、HPA、PDB、拓扑扩散约束在 chart 中实现并有静态测试。"
+    },
+    {
+      "id": "S2-M3",
+      "status": "pass",
+      "evidence": [
+        "kubernetes/policies/security-context.json",
+        "kubernetes/policies/network-negative.json",
+        "kubernetes/chart/templates/rbac.yaml",
+        "tests/kubernetes/chart-contract.test.mjs"
+      ],
+      "finding": "非 root、能力丢弃、NetworkPolicy 负向与 RBAC/工作负载身份注解占位均有静态覆盖。"
+    },
+    {
+      "id": "S2-M4",
+      "status": "not_proven",
+      "evidence": [
+        "evidence/slices/S2/chart-contract.json"
+      ],
+      "finding": "helm/kubeconform 被跳过，仅静态 chart 契约代替；不能证明真实 Helm/schema 门禁在本环境执行。"
+    },
+    {
+      "id": "S2-M5",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/runtime/kind-preflight.json",
+        "kubernetes/scenarios/kind-local.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ],
+      "finding": "local-only kind 边界与历史托管 EKS 证据路径分离清晰。"
+    },
+    {
+      "id": "S2-M6",
+      "status": "fail",
+      "evidence": [
+        "evidence/slices/S2/runtime-evidence.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "docs/reviews/S2/engineering-qa-security.md"
+      ],
+      "finding": "未提供绑定到 aa01454 的托管运行时证据（摘要/健康/版本/身份/滚动/扩缩）；elevation 绑定其他 SHA，且评审声明托管申请未主张。"
+    },
+    {
+      "id": "S2-M7",
+      "status": "fail",
+      "evidence": [
+        "kubernetes/scenarios/failure-matrix.json",
+        "evidence/slices/S2/scenarios/matrix-evidence.json"
+      ],
+      "finding": "失败矩阵明确为合成契约（claim_ceiling L1，无实时注入）；不能证明 CrashLoop/就绪/调度/DNS/网络拒绝在托管或 kind 集群上被复现。"
+    },
+    {
+      "id": "S2-M8",
+      "status": "fail",
+      "evidence": [
+        "evidence/slices/S2/scenarios/crashloop-reset.json",
+        "scripts/kubernetes/reset-scenario.mjs"
+      ],
+      "finding": "重置证据标记 synthetic=true，仅记录预期业务检查，未证明故障后真实业务行为复验。"
+    },
+    {
+      "id": "S2-M9",
+      "status": "not_proven",
+      "evidence": [
+        "kubernetes/chart/templates/ingress.yaml",
+        "kubernetes/policies/network-negative.json"
+      ],
+      "finding": "Ingress/TLS 模板与策略占位存在，但无候选绑定的托管边界运行证明。"
+    },
+    {
+      "id": "S2-M10",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+        "evidence/slices/S2/STREAM_COMPLETE.json"
+      ],
+      "finding": "实验室 teardown/成本边界在矩阵与 hosted 记录中显式保留；不将此等同于本候选的托管运行时证明。"
+    }
+  ],
+  "blocking_findings": [
+    "U5/U10：S2 声明层级与对外叙事冲突（L1 评审 vs L4 STREAM_COMPLETE/matrix）。",
+    "U7/S2-M6：托管 apply 证据 candidate_sha_apply=f059ffa3d2b73e26fb61c849f2a6bfeebdd0259a，不等于 aa01454f8808c173deb43cc4b9b803287eec851e。",
+    "S2-M7/S2-M8：失败复现与恢复复验停留在合成契约，不满足托管 Kubernetes must-have。",
+    "S2-M4/S2-M9：Helm/kubeconform 与托管 Ingress/TLS 边界未在本候选上证明。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness_and_completeness",
+      "name": "Correctness and completeness",
+      "score": 1.2,
+      "max": 2.0,
+      "rationale": "Chart/策略/场景在 L1 静态层面完整，但托管 must-have 与声明一致性未闭合。",
+      "evidence": [
+        "tests/kubernetes/chart-contract.test.mjs",
+        "evidence/slices/S2/scenarios/matrix-evidence.json"
+      ]
+    },
+    {
+      "id": "security_and_authority_boundaries",
+      "name": "Security and authority boundaries",
+      "score": 1.2,
+      "max": 1.5,
+      "rationale": "最小权限运行时与负向网络策略静态扎实；未发现凭据泄露。",
+      "evidence": [
+        "kubernetes/policies/security-context.json",
+        "docs/reviews/S2/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "failure_recovery_depth",
+      "name": "Failure/recovery depth",
+      "score": 0.4,
+      "max": 1.5,
+      "rationale": "仅有合成失败矩阵与合成重置，缺少真实注入与恢复后业务复验。",
+      "evidence": [
+        "evidence/slices/S2/scenarios/crashloop-reset.json",
+        "kubernetes/scenarios/failure-matrix.json"
+      ]
+    },
+    {
+      "id": "deterministic_test_quality",
+      "name": "Deterministic test quality",
+      "score": 0.9,
+      "max": 1.0,
+      "rationale": "仓库测试 94/94 通过，含 chart 与场景契约。",
+      "evidence": [
+        "evidence/judges/S2/provisional-judge-r3-2.json"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence_quality",
+      "name": "Live/runtime evidence quality",
+      "score": 0.3,
+      "max": 1.0,
+      "rationale": "kind/helm 不可用；历史 EKS apply 未绑定本候选 SHA。",
+      "evidence": [
+        "evidence/slices/S2/runtime/kind-preflight.json",
+        "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"
+      ]
+    },
+    {
+      "id": "operability_and_troubleshooting",
+      "name": "Operability and troubleshooting",
+      "score": 0.6,
+      "max": 1.0,
+      "rationale": "场景脚本与 break/fix 可跟，但缺少托管故障诊断证据链。",
+      "evidence": [
+        "scripts/kubernetes/reset-scenario.mjs",
+        "BREAK_FIX_LOG.md"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "name": "Evidence/claim integrity",
+      "score": 0.3,
+      "max": 1.0,
+      "rationale": "parent-bind 已修复，但 L1/L4 冲突与 hosted SHA 错绑仍阻塞声明完整性。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S2/STREAM_COMPLETE.json",
+        "docs/reviews/S2/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "maintainability_and_handoff",
+      "name": "Maintainability and handoff",
+      "score": 0.4,
+      "max": 0.5,
+      "rationale": "证据路径、计划任务与评审文档可导航。",
+      "evidence": [
+        "docs/planning/PLAN.md",
+        "docs/reviews/S2/engineering-qa-security.md"
+      ]
+    },
+    {
+      "id": "cost_performance_realism",
+      "name": "Cost/performance realism",
+      "score": 0.3,
+      "max": 0.5,
+      "rationale": "teardown/成本边界被显式保留，但本候选无新的托管成本度量。",
+      "evidence": [
+        "docs/claims/matrix.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "将 docs/claims/matrix.json 中 kubernetes-chart L4 直接归因于候选 aa01454（hosted apply 绑定 f059ffa…）。",
+    "evidence/slices/S2/STREAM_COMPLETE.json 的 claim_level=L4 作为本 tip-bound 候选的托管运行时证明。",
+    "合成 failure matrix / crashloop-reset 等同于托管集群失败复现与业务恢复证明。",
+    "在 helm/kubeconform 跳过的情况下声称完整 Helm/schema 门禁已执行。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "统一 S2 对外声明为诚实 L1，或提供绑定 aa01454 的托管 runtime 证据后再抬升。",
+    "在 kind 或 EKS 上实际注入并记录 S2-M7/S2-M8 六类失败与恢复后业务检查。",
+    "更新 SUPERVISOR_VERDICT.json 中陈旧 candidate_sha，消除与 tip-bound 证据的漂移。",
+    "在可用环境执行 helm lint/template 与 kubeconform，消除 S2-M4 的 skipped 缺口。"
+  ],
+  "overall_score": 5.6,
+  "merge_ready": "no",
+  "notes_zh": "Clean-room provisional R3 #2。parent-bind 与确定性校验通过，但托管 must-have 与声明完整性未满足，故 merge_ready=no。"
+}

@@ -19,7 +19,7 @@
     "role": "d037-independent-reviewer"
   },
   "at": "2026-07-18T06:10:45Z",
-  "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "implementation_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
   "branch_tip_sha": "9ee601c2b9c043b50fa2d3e33bb0fa80484ecb5f",
   "baseline_sha": "b01e40dbba1198c8720f3992c7563f4c039f3f16",
@@ -37,7 +37,7 @@
       "P1-T04": true
     },
     "write_scope_sane": true,
-    "claim_level_max": "L1",
+    "claim_level_max": "L4",
     "remaining_boundaries_present": true,
     "false_l4_claim": false
   },
@@ -50,9 +50,9 @@
     "No L4 cloud apply",
     "Upstream digest/tree packaging open (CO-004/CO-006)",
     "OIDC roles/environments not configured",
-    "terraform CLI absent in validator environment \u2014 fmt/validate skipped with static coverage"
+    "terraform CLI absent in validator environment — fmt/validate skipped with static coverage"
   ],
-  "claim_level": "L1",
+  "claim_level": "L4",
   "issue_ids": [],
   "open_prs_closed": [],
   "reviewed_paths": [
@@ -66,6 +66,6 @@
     "scripts/validators/core.mjs",
     "tests/"
   ],
-  "notes": "BF-PRE-015 S1 stream boundary. Independent D-037-style review: tests+validators green; write_scope sane; claim_level L1 with remaining_boundaries; no false L4. Verdict artifact landed via follow-up cherry-pick after content merge 1d76a98.",
+  "notes": "Tip-bound aa01454; A3 L4 lab; Azure out.",
   "merge_of_s1_content_sha": "1d76a987c021fe4101a65f3d84045ecf75a669f2"
 }

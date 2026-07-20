@@ -4,18 +4,18 @@
   "role": "rubric-setter",
   "slice": "S0",
   "baseline_sha": "a195e74c51e758d1e655915c8a063760153e3b53",
-  "candidate_context": "main_tip_after_H0_package_refresh",
+  "candidate_context": "tip_bound_portfolio_aa01454",
   "rubric": {
     "path": "harness/rubrics/S0.freeze.v1.json",
     "version": "S0-freeze-v1",
     "status": "frozen_pending_H0"
   },
   "bundle_hashes": {
-    "plan_sha256": "c44fbac28eb76347e1b15bbf561a8aabb17c118c01f3ac9d003635eacd34400e",
+    "plan_sha256": "b94ca9bdefc5e57410f6b805852092490309004c03c5eac1047c2c5f9ac66dd0",
     "execution_contract_sha256": "5a3eff5d41baf5afac2a8c82d9b0312df1e65d86bce142ba07ed088f3cc184bf",
-    "validator_bundle_sha256": "b8c1b48235315d183e34978f79544294d958cc0b95dd520f9005002be9d3c6bc",
+    "validator_bundle_sha256": "3a3e45aebf50d12db5aae0b1df297c32f2da749f98a54c91cb3c62ca0f3edaac",
     "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
-    "partition_bundle_sha256": "52c4aefe62b7355e5abea13f4ee79967b5a28363b8f1866cde6b399c1fcbeab3",
+    "partition_bundle_sha256": "f01b2099f47ea87ef8418c75f4fc2efccde6972d8295d4b86af3c560236b764f",
     "partition_bundle_note": "当前 main 未包含 harness/partition-manifest.json；P0-T04 在允许写入范围内以 integration/upstreams.lock.json 作为现有分区/上游 pin bundle 输入并明确记录该限制。"
   },
   "approval_binding": {
@@ -74,5 +74,22 @@
     "evidence/slices/S0/rubric-freeze.json"
   ],
   "recorded_at": "2026-07-17T21:45:59.335Z",
-  "hash_refresh_note": "2026-07-17 supervisor refreshed plan_sha256 after PLAN.md P0-T04 verified + H0 bind (prior sign-time plan digest retained on human receipt: 72e21d7e58e351d2bd4b22cfcd73d5a0fc5d6c1ce29f73843375674ad31e2026)."
+  "hash_refresh_note": "2026-07-17 supervisor refreshed plan_sha256 after PLAN.md P0-T04 verified + H0 bind (prior sign-time plan digest retained on human receipt: 72e21d7e58e351d2bd4b22cfcd73d5a0fc5d6c1ce29f73843375674ad31e2026).",
+  "rebinding": {
+    "recorded_utc": "2026-07-20T11:54:43Z",
+    "reason": "NIX-TIPBOUND-012 / FIX-TIPBOUND-AA01454-02: refresh bundle hashes for tip-bound aa01454",
+    "prior_bundle_hashes": {
+      "plan_sha256": "c44fbac28eb76347e1b15bbf561a8aabb17c118c01f3ac9d003635eacd34400e",
+      "execution_contract_sha256": "5a3eff5d41baf5afac2a8c82d9b0312df1e65d86bce142ba07ed088f3cc184bf",
+      "validator_bundle_sha256": "b8c1b48235315d183e34978f79544294d958cc0b95dd520f9005002be9d3c6bc",
+      "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+      "partition_bundle_sha256": "52c4aefe62b7355e5abea13f4ee79967b5a28363b8f1866cde6b399c1fcbeab3",
+      "partition_bundle_note": "当前 main 未包含 harness/partition-manifest.json；P0-T04 在允许写入范围内以 integration/upstreams.lock.json 作为现有分区/上游 pin bundle 输入并明确记录该限制。"
+    },
+    "issue_ids": [
+      "NIX-TIPBOUND-012"
+    ],
+    "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+    "bind_model": "candidate_sha_parent_of_tip"
+  }
 }

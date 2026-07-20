@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "saved_provisional",
+  "judge_id": "S0-PROVISIONAL-JUDGE-R2-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {"id": "U1", "status": "not_proven", "evidence": ["本地 HEAD 为 aa01454f8808c173deb43cc4b9b803287eec851e，但 origin 不存在，tip 0606812354dae2e23356278f10f9b76b7ebd010b 与指定 base 43db8d33d58ce9170d63ce0b514c460e1c4449be 均不可读取，且 D-028 tip-proof 包缺失。"]},
+    {"id": "U2", "status": "fail", "evidence": ["node --test tests/：退出码 0，94 项通过。", "terraform fmt -check -recursive terraform：退出码 0。", "node scripts/project.mjs validate P2-T03：退出码 2，报错为 evidence candidate_sha 与期望不一致。"]},
+    {"id": "U3", "status": "pass", "evidence": ["evidence/slices/S0/validator-contract.json", "docs/claims/matrix.json 的 non_claims 与 A3 ceilings"]},
+    {"id": "U4", "status": "not_proven", "evidence": ["无法取得并核对指定 tip，不能证明该 tip 没有影响 S0 的未决高危问题。"]},
+    {"id": "U5", "status": "pass", "evidence": ["docs/claims/matrix.json 明确区分 L1-L4，并明确 Azure live 为 out。"]},
+    {"id": "U6", "status": "pass", "evidence": ["evidence/slices/S0/validator-contract.json", "node --test tests/ 的负向授权、未知 validator、陈旧 SHA 与凭据测试通过。"]},
+    {"id": "U7", "status": "not_proven", "evidence": ["指定 tip、tip-proof、tip-bind 与 D-028 包不可用，无法证明证据在最后修复后新鲜且绑定完整。"]},
+    {"id": "U8", "status": "not_proven", "evidence": ["当前快照含分区与批准证据，但无法核对指定 tip 的 changed paths 与 write_scope。"]},
+    {"id": "U9", "status": "not_proven", "evidence": ["无法把指定 tip 的失败与修复同 BREAK_FIX_LOG.md 完整绑定。"]},
+    {"id": "U10", "status": "not_proven", "evidence": ["无法读取指定 tip，不能完成该 tip 上文档、状态、证据与 README 的一致性复核。"]},
+    {"id": "U11", "status": "pass", "evidence": ["evidence/slices/S0/validator-contract.json 的 worker_language 检查通过。"]},
+    {"id": "U12", "status": "pass", "evidence": ["evidence/slices/S0/harness.json", "evidence/slices/S0/integrated-gate.json 的 stream_isolation 记录。"]},
+    {"id": "U13", "status": "pass", "evidence": ["node --test tests/ 中 saved_fresh_council 隔离测试通过；本轮未读取受禁旧 provisional/fresh judge 文件。"]},
+    {"id": "U14", "status": "not_proven", "evidence": ["指定 tip 不可读，因此不能证明其所有观察到的失败均已在 break/fix 日志闭环。"]},
+    {"id": "S0-M1", "status": "pass", "evidence": ["evidence/slices/S0/harness.json 的 stream_isolation 与 integration_queue 记录。"]},
+    {"id": "S0-M2", "status": "pass", "evidence": ["node --test tests/ 的生命周期、revision 与 worker 状态边界测试通过。"]},
+    {"id": "S0-M3", "status": "pass", "evidence": ["node --test tests/ 的当前 phase 接受、下一 phase 拒绝测试通过。"]},
+    {"id": "S0-M4", "status": "pass", "evidence": ["evidence/slices/S0/validator-contract.json 记录 unknown_validator_fail_closed=true。"]},
+    {"id": "S0-M5", "status": "pass", "evidence": ["evidence/slices/S0/validator-contract.json 的 mutation_isolation 与 late forbidden path 负向测试。"]},
+    {"id": "S0-M6", "status": "pass", "evidence": ["node --test tests/ 的 worker receipt 权限边界与 stale adapter evidence 测试通过。"]},
+    {"id": "S0-M7", "status": "not_proven", "evidence": ["evidence/slices/S0/rubric-freeze.json 含 bundle hashes，但指定 tip 与 D-028 绑定材料缺失。"]},
+    {"id": "S0-M8", "status": "pass", "evidence": ["evidence/slices/S0/integrated-gate.json 记录 stream_isolation、worker_replacement 与 bottleneck_dispatch 通过。"]},
+    {"id": "S0-M9", "status": "pass", "evidence": ["harness/schemas/judge-result.schema.json", "node --test tests/ 的 judge 隔离测试通过。"]},
+    {"id": "S0-M10", "status": "pass", "evidence": ["harness/approvals/H0.binding.json", "evidence/slices/S0/rubric-freeze.json"]},
+    {"id": "S0-M11", "status": "pass", "evidence": ["evidence/slices/S0/validator-contract.json 的 model_routing、worker_language 与 bottleneck_dispatch 检查通过。"]},
+    {"id": "S0-M12", "status": "pass", "evidence": ["evidence/slices/S0/validator-contract.json 的 claude_proxy_profile 检查通过。"]},
+    {"id": "S0-M13", "status": "pass", "evidence": ["evidence/slices/S0/validator-contract.json 的 typescript_7 检查通过。"]}
+  ],
+  "blocking_findings": [
+    "U1 阻塞：git fetch origin candidate/portfolio-aa01454 退出码 128，因为本容器没有 origin；cat-file tip 与 rev-parse tip^ 均退出码 128。",
+    "U1 阻塞：evidence/portfolio/packets/NIX-TIPBOUND-001/、tip-proof-aa01454.json 与 tip-bind-2026-07-20.json 在当前快照均不存在，无法按 D-028 交叉证明 parent-bind。",
+    "U2 阻塞：node scripts/project.mjs validate P2-T03 退出码 2，candidate_sha 绑定不一致。"
+  ],
+  "scored_dimensions": [
+    {"id": "correctness_completeness", "score": 0.8, "rationale": "本地测试充分，但指定 tip 身份与必做 P2 验证未通过，不能判定被审对象完整正确。", "evidence": ["node --test tests/：94/94 通过", "node scripts/project.mjs validate P2-T03：退出码 2"]},
+    {"id": "security_authority_boundaries", "score": 1.1, "rationale": "权限、H0、凭据负向控制与 A3 ceiling 有静态及测试证据；tip 不可读限制最终确认。", "evidence": ["evidence/slices/S0/validator-contract.json", "harness/approvals/H0.binding.json", "docs/claims/matrix.json"]},
+    {"id": "failure_recovery_depth", "score": 0.9, "rationale": "未知 validator、陈旧 SHA、worker replacement 与 bottleneck 有负向覆盖，但 tip 级 break/fix 闭环不可核验。", "evidence": ["evidence/slices/S0/validator-contract.json", "evidence/slices/S0/integrated-gate.json"]},
+    {"id": "deterministic_test_quality", "score": 0.9, "rationale": "94 项 Node 测试与 Terraform 格式检查通过，确定性覆盖较强。", "evidence": ["node --test tests/：退出码 0", "terraform fmt -check -recursive terraform：退出码 0"]},
+    {"id": "live_runtime_evidence_quality", "score": 0.2, "rationale": "S0 以本地治理为主，且本轮缺少可读取的指定 tip 与 D-028 证明包。", "evidence": ["git fetch origin candidate/portfolio-aa01454：退出码 128"]},
+    {"id": "operability_troubleshooting", "score": 0.6, "rationale": "失败输出明确且 validator fail-closed，但缺少任务指定的补救证据包。", "evidence": ["P2-T03 ValidationError", "evidence/slices/S0/validator-contract.json"]},
+    {"id": "evidence_claim_integrity", "score": 0.3, "rationale": "rubric 与 manifest hash 可重算，A3 未提高；关键 tip/parent/base 绑定不能证明。", "evidence": ["harness/rubrics/S0.freeze.v1.json", "docs/claims/matrix.json"]},
+    {"id": "maintainability_handoff", "score": 0.4, "rationale": "schema、简体中文协议与 handoff 检查存在，输出遵循固定 judge schema。", "evidence": ["harness/schemas/judge-result.schema.json", "evidence/slices/S0/validator-contract.json"]},
+    {"id": "cost_performance_realism", "score": 0.4, "rationale": "matrix 对 performance 保持 L1 且 Azure live 为 out，没有提高 A3。", "evidence": ["docs/claims/matrix.json"]}
+  ],
+  "unsupported_claims": [
+    "不能声称 0606812354dae2e23356278f10f9b76b7ebd010b 的父提交已证明为 aa01454f8808c173deb43cc4b9b803287eec851e。",
+    "不能声称指定 tip 已通过 P2-T03 validator。",
+    "不能据此 provisional 结果合并 main 或提高 A3。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在发布环境提供 candidate/portfolio-aa01454 remote 对象，或随 D-028 包提供 COMMIT_OBJECTS.txt、tip-proof 与 tip-bind 后重新执行 parent-bind。",
+    "修复或重新生成与 aa01454f8808c173deb43cc4b9b803287eec851e 一致的 P2-T03 证据，再重跑只读 validator。"
+  ],
+  "overall_score": 5.6,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-read-only-judge"
+  },
+  "notes_zh": "clean-room saved provisional path B 重派。评审只使用冻结 rubric、matrix、S0 原始证据与当前命令输出；未打开受禁旧 provisional/fresh judge 文件。验证窗口 2026-07-20T11:17:22Z 至 2026-07-20T11:17:28Z。project validator 前后 git status 均为空，副作用为零。context_remaining=42%。"
+}

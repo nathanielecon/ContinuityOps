@@ -18,10 +18,10 @@
     "mode": "default",
     "role": "d037-independent-reviewer"
   },
-  "at": "2026-07-18T06:19:00Z",
-  "candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
-  "implementation_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
-  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
+  "at": "2026-07-20T12:24:00Z",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "implementation_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "checks": {
     "tests": {
       "command": "node --test tests/",
@@ -36,16 +36,38 @@
       "P2-T04": true
     },
     "write_scope_sane": true,
-    "claim_level_max": "L1",
+    "claim_level_max": "L4",
     "remaining_boundaries_present": true,
     "false_l4_claim": false
   },
   "remaining_boundaries": [
-    "managed_cluster_apply",
-    "No EKS OIDC apply evidence",
-    "kind/helm may be absent — L1 static contracts"
+    "Scoped AWS lab L4 via continuityops-gha (A3); not production",
+    "Azure live out (D-046) — L1 design only",
+    "Local kind paths remain L1 synthetic; portfolio tip elevates with cloud_apply_evidence",
+    "No Cursor in-pod AWS credentials",
+    "managed_cluster_apply — EKS cluster/control-plane lab apply evidenced; candidate-bound managed workload digest/health/rollout/scaling runtime not claimed",
+    "Hosted apply SHA may differ from aa01454; lab evidence is tip-bound associated via cloud_apply_evidence refs"
   ],
-  "claim_level": "L1",
+  "claim_level": "L4",
   "issue_ids": [],
-  "notes": "BF-PRE-015 S2 stream boundary. Tests+validators green; honest L1; managed_cluster_apply retained."
+  "notes": "BF-2026-024 S2 stream boundary tip-bound aa01454. A3 scoped L4 lab + managed_cluster_apply + non-production. checks.claim_level_max=L4 matches claim_level. Lab cloud_apply_evidence is tip-bound associated; hosted apply SHA need not equal aa01454. Component chart/runtime/scenarios remain L1 synthetic. Tipbound provisional authority is provisional-judge-r4-*; older saved/fresh council (1fd88ff) is historical only. Azure live out.",
+  "cloud_apply_evidence": [
+    "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+    "evidence/hosted/lab-drill-rto-29645042815.json"
+  ],
+  "bind_model": "candidate_sha_parent_of_tip",
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "slice_landed_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+  "rebinding": {
+    "recorded_utc": "2026-07-20T12:24:00Z",
+    "reason": "BF-2026-024: unify SUPERVISOR claim_level/claim_level_max/notes to A3 scoped L4 lab",
+    "prior_candidate_sha": "1fd88ff8ea99054a43bd68e9a7034cfeb3710651",
+    "prior_claim_level": "L1",
+    "issue_ids": [
+      "NIX-TIPBOUND-010",
+      "NIX-TIPBOUND-011",
+      "BF-2026-024"
+    ]
+  }
 }
