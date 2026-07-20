@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "task_id": "P1-T04",
-  "baseline_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
-  "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P1-T04",
   "exit_code": 0,
-  "recorded_at": "2026-07-18T06:09:03.200Z",
+  "recorded_at": "2026-07-20T13:12:52.451Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -22,21 +22,24 @@
     "mode": "default",
     "role": "validator-worker"
   },
-  "claim_level": "L1",
+  "claim_level": "L4",
   "remaining_boundaries": [
     "Live AWS mutation not executed",
     "H1 cloud identity receipts optional under D-044; accounts still unset",
-    "Upstream digest packaging still open (CO-004/CO-006)"
+    "Upstream digest packaging still open (CO-004/CO-006)",
+    "Scoped AWS lab L4 via continuityops-gha (not production)",
+    "Upstream-integration component claim L2 (digest pin; rollback none proven)",
+    "No Cursor in-pod AWS credentials"
   ],
-  "started_at": "2026-07-18T06:09:03.184Z",
-  "completed_at": "2026-07-18T06:09:03.200Z",
+  "started_at": "2026-07-20T13:12:52.421Z",
+  "completed_at": "2026-07-20T13:12:52.451Z",
   "validator_details": [
     {
       "id": "full_repository",
       "result": {
         "pass": true,
-        "standalone_json": 51,
-        "fenced_json": 14,
+        "standalone_json": 305,
+        "fenced_json": 16,
         "skipped_allowlisted": 0
       }
     },
@@ -44,13 +47,15 @@
       "id": "evidence_freshness",
       "result": {
         "pass": true,
-        "candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
+        "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+        "path": "evidence/slices/S1/integrated-gate.json"
       }
     },
     {
       "id": "claim_consistency",
       "result": {
-        "pass": true
+        "pass": true,
+        "slice": "S1"
       }
     },
     {
@@ -72,6 +77,11 @@
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
   "evidence_path": "evidence/slices/S1/integrated-gate.json",
   "bind_model": "candidate_sha_parent_of_tip",
-  "implementation_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "implementation_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "cloud_apply_evidence": [
+    "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+    "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
+    "evidence/hosted/lab-drill-rto-29645042815.json"
+  ],
   "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e"
 }
