@@ -623,3 +623,7 @@ ContinuityOps incidents yet.
 
 - **Symptom:** `project.mjs validate P2-T04` rewrites S2 integrated-gate to PLAN L1; BF-2026-022 commit accidentally captured that L1 tree. R4 judges also lost files to a `git clean -fd` side effect.
 - **Fix:** Restore S2 L4 from e112c19 and append `managed_cluster_apply`; refresh S0 STREAM_COMPLETE/SUPERVISOR tip-bound fields; judges must `git checkout --` after validate and never `git clean`.
+
+### BF-2026-023 follow-up
+
+`scripts/project.mjs` `writeEvidence` now preserves elevated `claim_level` (no L4→L1 downgrade) and merges `remaining_boundaries` / tip-bind fields when `CANDIDATE_SHA` validate rewrites gates.

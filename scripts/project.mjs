@@ -317,8 +317,24 @@ function writeEvidence(result) {
   if ((result.task_id?.startsWith('P1-') || result.task_id?.startsWith('P2-') || result.task_id?.startsWith('P3-') || result.task_id?.startsWith('P4-') || result.task_id?.startsWith('P5-') || result.task_id?.startsWith('P6-') || result.task_id?.startsWith('P7-') || result.task_id?.startsWith('P8-')) && existsSync(evidencePath)) {
     try {
       const prior = JSON.parse(readFileSync(evidencePath, 'utf8'));
-      for (const key of ['claim_level', 'remaining_boundaries', 'cloud_apply_evidence', 'acceptance_notes', 'component_claims']) {
-        if (prior[key] !== undefined && payload[key] === undefined) payload[key] = prior[key];
+      const claimRank = { L1: 1, L2: 2, L3: 3, L4: 4 };
+      for (const key of ['claim_level', 'remaining_boundaries', 'cloud_apply_evidence', 'acceptance_notes', 'component_claims', 'portfolio_tip_sha', 'bind_model']) {
+        if (prior[key] === undefined) continue;
+        if (key === 'claim_level') {
+          // Tip-bound / portfolio elevated gates must not be downgraded by PLAN L1 fixtures (BF-2026-023).
+          const priorRank = claimRank[prior.claim_level] || 0;
+          const nextRank = claimRank[payload.claim_level] || 0;
+          if (priorRank > nextRank || payload.claim_level === undefined) {
+            payload.claim_level = prior.claim_level;
+          }
+          continue;
+        }
+        if (key === 'remaining_boundaries') {
+          const merged = [...new Set([...(payload.remaining_boundaries || []), ...(prior.remaining_boundaries || [])])];
+          if (merged.length) payload.remaining_boundaries = merged;
+          continue;
+        }
+        if (payload[key] === undefined) payload[key] = prior[key];
       }
     } catch {
       /* ignore malformed prior */
