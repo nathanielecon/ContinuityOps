@@ -1,0 +1,311 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r5-3",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "现场核对 tip^=aa01454f8808c173deb43cc4b9b803287eec851e；rubric/manifest 与任务书一致",
+        "STREAM_COMPLETE 指向 matrix 且 sha 匹配"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "tests/tf/validate/rubric-freeze 全绿"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "无密钥/敏感载荷入证"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无 open critical/high"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "claim 分层：S0 夹具 vs 其他切片 L4"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "负向行为夹具覆盖未知 ID/禁止路径等"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "evidence": [
+        "提交态 integrated-gate.recorded_at 仍为 2026-07-18，与 STREAM validation_results 2026-07-20 叙述不完全同证",
+        "CANDIDATE_SHA validate P0-T05 会重写 integrated-gate 并丢弃 portfolio_tip_sha/rebinding（P1–P8 保留逻辑未覆盖 P0-T05）",
+        "同次 validate 还会改写 historical fresh-judge-* 的 candidate_sha/evidence_manifest_sha256（改为 integrated-gate 字节 hash，而非 matrix 89642f65…）",
+        "因此“最后一次修复后证据新鲜且含 tip-bind 身份”在不依赖丢弃副作用的前提下未能复证"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "遵守 write_scope；仅写 r5-3"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BF-2026-023/024 记录 validate 副作用与 tip-bound 残渣"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "BF-2026-024 后 path/sha 文案对齐；剩余为证据刷新机制问题而非文档互斥"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "简体中文自由文本"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "并发流夹具通过"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "clean-room；未读既有分数"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "失败已记入 break/fix"
+      ]
+    },
+    {
+      "id": "S0-M1",
+      "status": "pass",
+      "evidence": [
+        "分区/上游 pin 有记录"
+      ]
+    },
+    {
+      "id": "S0-M2",
+      "status": "pass",
+      "evidence": [
+        "生命周期 CLI 证明"
+      ]
+    },
+    {
+      "id": "S0-M3",
+      "status": "pass",
+      "evidence": [
+        "N/N+1 授权边界证明"
+      ]
+    },
+    {
+      "id": "S0-M4",
+      "status": "pass",
+      "evidence": [
+        "fail-closed validator ID"
+      ]
+    },
+    {
+      "id": "S0-M5",
+      "status": "not_proven",
+      "evidence": [
+        "夹具层 assertValidatorsReadOnly 通过，但 P0-T05 writeEvidence/refreshP0T05JudgeBindings 会修改已跟踪证据/judge 文件",
+        "integrated-gate.read_only_proof 声称 porcelain unchanged，与现场 git status 观察到的改写矛盾",
+        "故“validators are check-only”在端到端 validate 命令层面未完全证明"
+      ]
+    },
+    {
+      "id": "S0-M6",
+      "status": "pass",
+      "evidence": [
+        "收据铸造禁令有效"
+      ]
+    },
+    {
+      "id": "S0-M7",
+      "status": "pass",
+      "evidence": [
+        "freeze hash 钉扎匹配当前文件"
+      ]
+    },
+    {
+      "id": "S0-M8",
+      "status": "pass",
+      "evidence": [
+        "并发/替换/bottleneck 夹具"
+      ]
+    },
+    {
+      "id": "S0-M9",
+      "status": "pass",
+      "evidence": [
+        "judge schema 测试存在且通过"
+      ]
+    },
+    {
+      "id": "S0-M10",
+      "status": "pass",
+      "evidence": [
+        "H0 bound + 人类 comment；rubric sha 对齐；附属 hash tip-bound 刷新已在 rebinding 披露"
+      ]
+    },
+    {
+      "id": "S0-M11",
+      "status": "pass",
+      "evidence": [
+        "模型路由与协议夹具"
+      ]
+    },
+    {
+      "id": "S0-M12",
+      "status": "pass",
+      "evidence": [
+        "proxy 档案夹具"
+      ]
+    },
+    {
+      "id": "S0-M13",
+      "status": "pass",
+      "evidence": [
+        "TS 7.x 策略"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U7 not_proven：提交态 gate 时间戳与 tip-bound 叙述不完全同证；validate 会剥 tip-bind 字段并改写 historical judges",
+    "S0-M5 not_proven：端到端 validate 修改跟踪文件，与 read_only_proof 声明冲突",
+    "任一 must-have 非 pass → merge_ready=no"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.65,
+      "rationale": "功能门禁通过，但 tip-bind 证据在 validate 下不稳定，完整性不足。",
+      "evidence": [
+        "scripts/project.mjs#refreshP0T05JudgeBindings",
+        "evidence/slices/S0/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.35,
+      "rationale": "权威边界与 H0 人类门仍成立。",
+      "evidence": [
+        "harness/approvals/H0.binding.json"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.2,
+      "rationale": "已知 validate 副作用依赖 checkout 纪律，恢复路径偏脆。",
+      "evidence": [
+        "BREAK_FIX_LOG.md#BF-2026-023"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 0.95,
+      "rationale": "测试与 fmt 稳定绿。",
+      "evidence": [
+        "node --test tests/"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.8,
+      "rationale": "本地复跑与提交态时间戳/ tip-bind 字段不一致。",
+      "evidence": [
+        "evidence/slices/S0/STREAM_COMPLETE-P0-T05.json#validation_results",
+        "evidence/slices/S0/integrated-gate.json#recorded_at"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.75,
+      "rationale": "每次 tip-bound 验证都需记得 checkout，且 P0 路径未合并 tip-bind 保留逻辑。",
+      "evidence": [
+        "scripts/project.mjs#writeEvidence"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.7,
+      "rationale": "matrix 配对已好；read_only_proof 与 judge 绑定刷新目标（matrix vs gate hash）不一致。",
+      "evidence": [
+        "scripts/project.mjs#writeEvidence",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.4,
+      "rationale": "handoff 可理解，但未警告 P0-T05 validate 会剥 tip-bind 字段。",
+      "evidence": [
+        "evidence/slices/S0/STREAM_COMPLETE-P0-T05.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "无成本过声明。",
+      "evidence": [
+        "repo-only H0"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "不可在未 checkout 的前提下声称 P0-T05 validate 保持 tip-bound 元数据不变",
+    "不可将 validate 刷新后的 evidence_manifest_sha256（gate 字节）当作 matrix 89642f65…"
+  ],
+  "security_findings": [
+    "未见凭据泄漏；主要是证据完整性/只读声明张力"
+  ],
+  "improvements": [
+    "扩展 writeEvidence tip-bind 保留逻辑至 P0-T05",
+    "refreshP0T05JudgeBindings 应使用 STREAM 声明的 matrix manifest sha，或停止改写 historical judges",
+    "修正 read_only_proof 文案或真正做到 porcelain 不变"
+  ],
+  "overall_score": 8.25,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-provisional-judge",
+    "role": "provisional-judge"
+  },
+  "notes_zh": "独立 clean-room provisional R5 #3（S0）。同绑定与验证；未读既有分数、未互抄。焦点在证据新鲜度与只读性：BF-2026-024 修了 path/sha，但 P0-T05 validate 仍破坏 tip-bind 字段并改写 historical judges，U7/S0-M5 标 not_proven → provisional_pass=false、merge_ready=no。"
+}
