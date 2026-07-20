@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "artifact": "portfolio_tip_proof",
+  "recorded_utc": "2026-07-20T11:15:47Z",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "branch": "candidate/portfolio-aa01454",
+  "nixer_ids": ["NIX-TIPBOUND-001"],
+  "commands": [
+    {
+      "command": "git fetch origin candidate/portfolio-aa01454",
+      "purpose_zh": "确保 App 工作区含 candidate 对象"
+    },
+    {
+      "command": "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b",
+      "expected": "commit",
+      "exit_code": 0,
+      "result": "commit"
+    },
+    {
+      "command": "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^",
+      "expected": "aa01454f8808c173deb43cc4b9b803287eec851e",
+      "exit_code": 0,
+      "result": "aa01454f8808c173deb43cc4b9b803287eec851e"
+    }
+  ],
+  "packet_paths": [
+    "evidence/portfolio/packets/NIX-TIPBOUND-001/",
+    "evidence/dispatch-packets/tipbound-aa01454/"
+  ],
+  "notes_zh": "BF-2026-019 修复：法官须先 fetch candidate 分支，再用 tip-proof 交叉核验 parent-bind。Clean-room：禁止打开旧 provisional/fresh 分数。",
+  "related": [
+    "evidence/portfolio/tip-bind-2026-07-20.json",
+    "evidence/portfolio/nixer-tipbound-aa01454-01.json",
+    "BREAK_FIX_LOG.md#BF-2026-019"
+  ]
+}
