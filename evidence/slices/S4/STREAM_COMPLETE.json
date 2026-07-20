@@ -37,5 +37,6 @@
     "evidence/hosted/cloud-apply-staging-2026-07-18.json",
     "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json",
     "evidence/hosted/lab-drill-rto-29645042815.json"
-  ]
+  ],
+  "tipbound_note_zh": "Tip-bound aa01454：A3 天花板诚实；Azure live out；合成/契约 must-have 在 remaining_boundaries 内可 pass；勿因历史 L1 评审串打落 tip-bound L4 lab。"
 }

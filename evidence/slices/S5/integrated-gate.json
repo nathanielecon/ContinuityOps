@@ -71,5 +71,6 @@
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
   "evidence_path": "evidence/slices/S5/integrated-gate.json",
   "bind_model": "candidate_sha_parent_of_tip",
-  "implementation_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93"
+  "implementation_sha": "74f2ba35e48f96f2eabe41991d762d16900fbb93",
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e"
 }
