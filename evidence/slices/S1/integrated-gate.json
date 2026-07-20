@@ -5,7 +5,7 @@
   "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P1-T04",
   "exit_code": 0,
-  "recorded_at": "2026-07-20T13:12:52.451Z",
+  "recorded_at": "2026-07-20T13:13:12.140Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -31,8 +31,8 @@
     "Upstream-integration component claim L2 (digest pin; rollback none proven)",
     "No Cursor in-pod AWS credentials"
   ],
-  "started_at": "2026-07-20T13:12:52.421Z",
-  "completed_at": "2026-07-20T13:12:52.451Z",
+  "started_at": "2026-07-20T13:13:12.107Z",
+  "completed_at": "2026-07-20T13:13:12.140Z",
   "validator_details": [
     {
       "id": "full_repository",

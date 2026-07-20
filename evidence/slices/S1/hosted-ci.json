@@ -23,7 +23,7 @@
     "mode": "default",
     "role": "validator-worker"
   },
-  "claim_level": "L4",
+  "claim_level": "L1",
   "remaining_boundaries": [
     "OIDC plan/apply/drift/teardown are stubs",
     "GitHub Environments / AWS roles not configured",
@@ -80,5 +80,8 @@
     "oidc_plan_apply": "not_claimed",
     "validate_yml_contracts": "L3_when_ci_green"
   },
-  "prior_candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4"
+  "prior_candidate_sha": "4be8a30a02bd023cd877910f921eef2bacac67b4",
+  "component_claim_level": "L1",
+  "portfolio_combination_claim": "L4",
+  "tipbound_note_zh": "组件契约 L1；组合 tip-bound A3 L4 lab 见 integrated-gate/STREAM_COMPLETE。"
 }
