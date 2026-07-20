@@ -23,7 +23,7 @@
     "mode": "default",
     "role": "validator-worker"
   },
-  "claim_level": "L1",
+  "claim_level": "L4",
   "remaining_boundaries": [
     "helm CLI may be absent — static chart contract",
     "managed_cluster_apply",
@@ -91,5 +91,7 @@
     ]
   },
   "bind_model": "candidate_sha_parent_of_tip",
-  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e"
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "component_claim_level": "L1",
+  "claim_notes_zh": "组件契约可为 L1/合成；组合门禁 tip-bound A3 为 scoped L4 lab（continuityops-gha）。Azure live out。"
 }

@@ -5,10 +5,12 @@
   "kind_available": false,
   "helm_available": false,
   "scenario_present": true,
-  "claim_level": "L1",
+  "claim_level": "L4",
   "remaining_boundaries": [
     "managed_cluster_apply",
     "No OIDC EKS apply executed"
   ],
-  "note": "kind/helm absent — L1 template contract only"
+  "note": "kind/helm absent — L1 template contract only",
+  "component_claim_level": "L1",
+  "claim_notes_zh": "组件契约可为 L1/合成；组合门禁 tip-bound A3 为 scoped L4 lab（continuityops-gha）。Azure live out。"
 }
