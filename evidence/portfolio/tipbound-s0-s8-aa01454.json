@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "artifact": "tipbound_s0_s8_complete",
+  "recorded_utc": "2026-07-20T13:52:27Z",
+  "freeze_tip": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "candidate_branch": "candidate/portfolio-aa01454",
+  "a3_raised": false,
+  "slices": [
+    "S0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8"
+  ],
+  "notes_zh": "Emergency package C Plan A 完成：全切片 tip-bound provisional+fresh；未提高 A3；未合 main。"
+}
