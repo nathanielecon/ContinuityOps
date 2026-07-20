@@ -1,0 +1,260 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "judge_id": "S3-PROVISIONAL-JUDGE-01",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "not_proven",
+      "evidence": [
+        "目标 tip 0606812354dae2e23356278f10f9b76b7ebd010b 在本地对象库中不存在；git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ 退出码为 128，无法机械确认其父提交。",
+        "本地 HEAD 为派遣指定父提交 aa01454f8808c173deb43cc4b9b803287eec851e；rubric 与 manifest 的 SHA-256 已在该提交上重新计算。"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "node --test tests/ 退出码为 0，共 94 项通过。",
+        "terraform fmt -check -recursive terraform 退出码为 0。",
+        "node scripts/project.mjs validate P3-T01、P3-T02、P3-T03 均以退出码 0 完成。"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "全量测试中的只读 PR 凭据边界与敏感字段脱敏测试通过；S3 验证环境声明 zero_secrets=true。"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "S3 提供最小权限 IAM 负向验证，所审材料中未发现影响该切片的开放严重或高危安全问题。"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/serverless.json 与 saas-operations.json 明示 L1 合成或单测边界；STREAM_COMPLETE.json 将 AWS 实验室应用与非生产客户负载边界分开。"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "tests/serverless 覆盖重复、缺失事件标识、毒消息、最大接收次数与需要批准的重放路径。"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "evidence": [
+        "本轮只读命令在父提交 aa01454f8808c173deb43cc4b9b803287eec851e 上执行，但目标 tip 对象不可用，无法证明结果与 0606812354dae2e23356278f10f9b76b7ebd010b 完全绑定。"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "本轮仅新增指定 judge JSON；未修改实现、.github、rubric 或 manifest。"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 存在且仓库验证通过；本轮未观察到实现检查失败。"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "S3 证据同时保留实验室 L4 事实与非生产边界，README、声明矩阵和切片证据未将 Azure 或生产 SaaS 说成已上线。"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本评判自由文本使用简体中文，外部招聘者材料继续使用英文。"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "全量测试中的流隔离与集成队列测试通过；本轮未进行并发写入或合并。"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本输出明确标记 saved_provisional，不作为 fresh 评判，也未读取或复用其他 judge 分数。"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "本轮唯一阻碍是目标 Git 对象不可用，已直接记录在本结果中；实现验证未出现需修复失败。"
+      ]
+    },
+    {
+      "id": "S3-M1",
+      "status": "pass",
+      "evidence": [
+        "事件契约与信号路径测试验证跨请求、队列、函数和结果的 correlation 传播。"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "pass",
+      "evidence": [
+        "P3-T01 验证器与 tests/serverless 覆盖幂等、重复安全、重试上限、可见性和超时契约。"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "DLQ 测试覆盖毒消息捕获、告警、批准门控重放和重放后处理验证；证据准确标记为合成或单测路径。"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "pass",
+      "evidence": [
+        "P3-T01 iam_negative 验证通过，函数权限边界具有负向检查。"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "P3-T02 tenant_boundary 验证通过，租户跨界读取被明确禁止。"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "SaaS 生命周期测试覆盖 onboarding、config、migration、support、suspension、export 与 deprovision 七阶段。"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "operations/saas/severity-escalation.json 与生命周期测试覆盖严重度、责任人和升级路径。"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "pass",
+      "evidence": [
+        "tests/observability/redaction.test.mjs 验证密钥与租户敏感字段脱敏。"
+      ]
+    },
+    {
+      "id": "S3-M9",
+      "status": "pass",
+      "evidence": [
+        "S3 文档与契约描述每事件及空闲成本、重试和并发限制，并保持实验室边界。"
+      ]
+    },
+    {
+      "id": "S3-M10",
+      "status": "pass",
+      "evidence": [
+        "saas-operations.json 明示生命周期验证仅为契约或单测且不存在 live SaaS control plane，未提高 A3。"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "目标 tip Git 对象不可用，强制的 parent-bind 命令无法成功；依据通用规则，U1 与 U7 未证明时 merge_ready 必须为 no。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "Correctness and completeness",
+      "score": 1.9,
+      "rationale": "S3 三项验证器及相关单元测试完整通过，生命周期与事件处理契约覆盖充分。",
+      "evidence": ["node scripts/project.mjs validate P3-T01/P3-T02/P3-T03", "tests/serverless/", "tests/saas/"]
+    },
+    {
+      "id": "Security and authority boundaries",
+      "score": 1.4,
+      "rationale": "最小权限负向测试、租户边界、重放批准和脱敏均有确定性验证。",
+      "evidence": ["evidence/slices/S3/serverless.json", "tests/observability/redaction.test.mjs"]
+    },
+    {
+      "id": "Failure/recovery depth",
+      "score": 1.4,
+      "rationale": "重复、毒消息、DLQ 告警和批准重放覆盖良好，但并非生产运行证明。",
+      "evidence": ["tests/serverless/dlq.test.mjs", "evidence/slices/S3/serverless.json"]
+    },
+    {
+      "id": "Deterministic test quality",
+      "score": 1.0,
+      "rationale": "全量 94 项测试与三个 S3 验证器均稳定通过。",
+      "evidence": ["node --test tests/", "node scripts/project.mjs validate P3-T01/P3-T02/P3-T03"]
+    },
+    {
+      "id": "Live/runtime evidence quality",
+      "score": 0.8,
+      "rationale": "存在 AWS 实验室应用记录，但目标 tip 无法在本环境解析，且 SaaS 控制面仍明确非 live。",
+      "evidence": ["evidence/slices/S3/STREAM_COMPLETE.json", "evidence/hosted/cloud-apply-staging-2026-07-18.json"]
+    },
+    {
+      "id": "Operability and troubleshooting",
+      "score": 0.9,
+      "rationale": "生命周期、严重度、告警与重放操作契约可用且边界明确。",
+      "evidence": ["operations/saas/", "tests/saas/lifecycle.test.mjs"]
+    },
+    {
+      "id": "Evidence/claim integrity",
+      "score": 0.4,
+      "rationale": "声明层级保守，但目标 tip 与父提交的机械绑定无法在本地对象库验证。",
+      "evidence": ["git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^", "docs/claims/matrix.json"]
+    },
+    {
+      "id": "Maintainability and handoff",
+      "score": 0.5,
+      "rationale": "契约、测试与证据路径清晰，结果符合机器可解析 schema。",
+      "evidence": ["harness/schemas/judge-result.schema.json", "evidence/slices/S3/"]
+    },
+    {
+      "id": "Cost/performance realism",
+      "score": 0.4,
+      "rationale": "成本和扩展限制有明确描述且未外推为生产测量。",
+      "evidence": ["evidence/slices/S3/saas-operations.json", "docs/claims/matrix.json"]
+    }
+  ],
+  "unsupported_claims": [
+    "不能把本轮结果描述为已在 0606812354dae2e23356278f10f9b76b7ebd010b 上完成机械绑定。",
+    "不能把合成或实验室路径描述为生产 SaaS 控制面、生产 Lambda/SQS 或 Azure live 证明。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在可读取 candidate/portfolio-aa01454 tip 对象的环境重新执行 parent-bind 与全部声明检查，再进行 fresh 独立评判。"
+  ],
+  "overall_score": 8.7,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-provisional-judge"
+  },
+  "notes_zh": "评判对象声明为 tip 0606812354dae2e23356278f10f9b76b7ebd010b，绑定模型为 candidate_sha_parent_of_tip，预期父提交为 aa01454f8808c173deb43cc4b9b803287eec851e；parent_bind_verified=false。除绑定与 tip 新鲜度外，S3 确定性检查通过。此 saved_provisional 结果不复用任何其他 judge 分数，也不提高 A3。"
+}
