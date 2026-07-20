@@ -642,3 +642,8 @@ ContinuityOps incidents yet.
 - S2 subordinate evidence claim_level labels reconciled for tip-bound A3 L4 lab; remove stale "No EKS OIDC apply evidence" gate boundary.
 - `writeEvidence` tip-bind/claim preserve extended to P0-T05.
 - H0/S2-M6 tip-bound notes: do not re-mint H0; workload runtime bounded by lab evidence.
+
+## BF-2026-026 — tip-bound boundary merge + S3 fresh mean miss
+
+- validate remaining_boundaries merge no longer reintroduces stale "No EKS OIDC apply evidence" onto L4 gates.
+- S3 tipbound fresh means 9.483/9.467 missed ≥9.5; add tipbound_fresh_note_zh for honest lab scoring; re-dispatch fresh.

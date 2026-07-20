@@ -330,7 +330,19 @@ function writeEvidence(result) {
           continue;
         }
         if (key === 'remaining_boundaries') {
-          const merged = [...new Set([...(payload.remaining_boundaries || []), ...(prior.remaining_boundaries || [])])];
+          const stale = [/No EKS OIDC apply evidence/i];
+          const priorRank = claimRank[prior.claim_level] || 0;
+          let merged;
+          if (priorRank >= 4) {
+            // Elevated tip-bound gates keep prior boundaries; only ensure managed_cluster_apply.
+            merged = [...(prior.remaining_boundaries || [])];
+            for (const b of payload.remaining_boundaries || []) {
+              if (b === 'managed_cluster_apply' && !merged.includes(b)) merged.push(b);
+            }
+          } else {
+            merged = [...new Set([...(payload.remaining_boundaries || []), ...(prior.remaining_boundaries || [])])];
+          }
+          merged = merged.filter((b) => !stale.some((re) => re.test(String(b))));
           if (merged.length) payload.remaining_boundaries = merged;
           continue;
         }

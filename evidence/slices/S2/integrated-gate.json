@@ -5,7 +5,7 @@
   "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P2-T04",
   "exit_code": 0,
-  "recorded_at": "2026-07-20T12:09:53.786Z",
+  "recorded_at": "2026-07-20T12:59:50.646Z",
   "environment": {
     "id": "6a594ee667608191ab53cae15202815e",
     "zero_secrets": true
@@ -30,14 +30,14 @@
     "No Cursor in-pod AWS credentials",
     "EKS OIDC/lab apply evidenced then destroyed (see cloud_apply_evidence); not production"
   ],
-  "started_at": "2026-07-20T12:09:53.758Z",
-  "completed_at": "2026-07-20T12:09:53.786Z",
+  "started_at": "2026-07-20T12:59:50.613Z",
+  "completed_at": "2026-07-20T12:59:50.646Z",
   "validator_details": [
     {
       "id": "full_repository",
       "result": {
         "pass": true,
-        "standalone_json": 272,
+        "standalone_json": 305,
         "fenced_json": 16,
         "skipped_allowlisted": 0
       }
