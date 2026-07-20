@@ -1,0 +1,264 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S2",
+  "round": "saved_provisional",
+  "judge_id": "S2-PROVISIONAL-JUDGE-02",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "not_proven",
+      "evidence": [
+        "目标 tip 0606812354dae2e23356278f10f9b76b7ebd010b 不在容器对象库中，无法执行要求的父提交绑定命令；当前可见 HEAD 为 aa01454f8808c173deb43cc4b9b803287eec851e。"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "fail",
+      "evidence": [
+        "node --test tests/：退出码 0，94 项通过。",
+        "terraform fmt -check -recursive terraform：退出码 0。",
+        "node scripts/project.mjs validate P2-T01、P2-T02、P2-T04：退出码 0；P2-T03：退出码 2，报错为 evidence candidate_sha 与期望不一致。"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "测试覆盖只读拉取请求凭据边界、密钥检测与工作负载最小权限负向控制，全部通过。"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/SUPERVISOR_VERDICT.json 与安全负向测试未列出影响 S2 的开放关键或高危问题。"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/runtime-evidence.json 明确区分 L1 静态验证、kind 条件边界与托管集群断言；托管 AWS 证据保留实验室和非生产边界。"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S2/scenarios/matrix-evidence.json 覆盖 CrashLoop、就绪、调度资源、DNS 和网络拒绝，并记录复位与恢复冒烟。"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "fail",
+      "evidence": [
+        "P2-T03 只读验证因场景证据 candidate_sha 未绑定当前候选而失败；目标 tip 又不可读取，因此无法证明最后修复后的完整新鲜性和 tip 绑定。"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "本轮仅新增指定 judge JSON，未修改实现、.github、权威状态或 main。"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 记录已观察的 S2 托管应用失败、修复与后续绿色运行。"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "S2 流完成证据、托管运行证据和招聘者文档一致限定为 AWS 实验室证据，不声明生产或 Azure live。"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本结果自由文本使用简体中文；外部招聘者材料维持英文。"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "测试中的流隔离、顺序执行与集成队列用例通过。"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本结果标记为 saved_provisional，未将其冒充 fresh 判定，也未读取或复用其他 judge 分数。"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 包含仓库中已观察并保留的 S2 失败记录；本轮 P2-T03 新鲜性失败作为阻断项保留，不宣称闭环。"
+      ]
+    },
+    {
+      "id": "S2-M1",
+      "status": "pass",
+      "evidence": [
+        "Helm chart 与测试强制镜像摘要，发布契约绑定已证明的不可变摘要。"
+      ]
+    },
+    {
+      "id": "S2-M2",
+      "status": "pass",
+      "evidence": [
+        "chart 值与测试覆盖探针、资源请求/限制、PDB、拓扑约束和 HPA。"
+      ]
+    },
+    {
+      "id": "S2-M3",
+      "status": "pass",
+      "evidence": [
+        "工作负载身份、RBAC、非 root、安全上下文和网络策略均有静态及负向策略验证。"
+      ]
+    },
+    {
+      "id": "S2-M4",
+      "status": "pass",
+      "evidence": [
+        "P2-T01 退出码 0；Helm 与 kubeconform CLI 路径明确跳过并由 L1 静态契约替代，未夸大为实时工具证明。"
+      ]
+    },
+    {
+      "id": "S2-M5",
+      "status": "pass",
+      "evidence": [
+        "kind 证据标记为本地路径；evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json 单独记录 EKS 实验室应用与销毁。"
+      ]
+    },
+    {
+      "id": "S2-M6",
+      "status": "not_proven",
+      "evidence": [
+        "托管证据证明 EKS 与节点组创建，但未在目标 tip 上同时展示工作负载摘要、健康、版本、身份、滚动发布及可测扩缩容。"
+      ]
+    },
+    {
+      "id": "S2-M7",
+      "status": "not_proven",
+      "evidence": [
+        "所需故障类别由合成场景矩阵覆盖，但 P2-T03 新鲜性验证失败，且未证明这些故障在目标 tip 的托管运行时实际复现。"
+      ]
+    },
+    {
+      "id": "S2-M8",
+      "status": "not_proven",
+      "evidence": [
+        "场景契约含复位和业务冒烟，但绑定当前候选的 P2-T03 检查失败，因此不能证明每次故障后的新鲜恢复验证。"
+      ]
+    },
+    {
+      "id": "S2-M9",
+      "status": "pass",
+      "evidence": [
+        "chart 与文档准确限定入口、TLS 和负载均衡器边界，未把静态配置描述为生产流量证明。"
+      ]
+    },
+    {
+      "id": "S2-M10",
+      "status": "pass",
+      "evidence": [
+        "托管应用证据记录 EKS 成本边界和成功销毁运行，材料明确为短期实验室环境。"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "无法读取或验证目标 tip 0606812354dae2e23356278f10f9b76b7ebd010b 及其父提交绑定。",
+    "P2-T03 在候选 aa01454f8808c173deb43cc4b9b803287eec851e 上因场景证据 SHA 不一致而退出 2。",
+    "目标 tip 上的托管工作负载摘要、健康、版本、身份、滚动发布和扩缩容组合证明不足。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "Correctness and completeness",
+      "score": 1.6,
+      "rationale": "静态实现面完整，但 P2-T03 绑定失败且托管工作负载组合证明不完整。",
+      "evidence": ["tests/", "evidence/slices/S2/scenarios/matrix-evidence.json"]
+    },
+    {
+      "id": "Security and authority boundaries",
+      "score": 1.5,
+      "rationale": "身份、RBAC、非 root、网络策略与 OIDC 权限边界均有负向控制。",
+      "evidence": ["charts/continuityops/", "evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json"]
+    },
+    {
+      "id": "Failure/recovery depth",
+      "score": 1.1,
+      "rationale": "故障矩阵广，但当前绑定失败使复位后的新鲜业务证明不足。",
+      "evidence": ["evidence/slices/S2/scenarios/matrix-evidence.json", "evidence/slices/S2/scenarios/crashloop-reset.json"]
+    },
+    {
+      "id": "Deterministic test quality",
+      "score": 0.9,
+      "rationale": "全量 94 项测试通过，三个 S2 验证器通过；一个 SHA 新鲜性检查正确地失败关闭。",
+      "evidence": ["tests/", "scripts/project.mjs"]
+    },
+    {
+      "id": "Live/runtime evidence quality",
+      "score": 0.6,
+      "rationale": "EKS 创建与销毁有托管运行记录，但缺少目标 tip 的完整工作负载运行面。",
+      "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "evidence/slices/S2/runtime-evidence.json"]
+    },
+    {
+      "id": "Operability and troubleshooting",
+      "score": 0.9,
+      "rationale": "场景、复位和边界说明可操作，但主要为合成验证。",
+      "evidence": ["evidence/slices/S2/scenarios/", "docs/operator/README.md"]
+    },
+    {
+      "id": "Evidence/claim integrity",
+      "score": 0.6,
+      "rationale": "声明边界克制，但目标 tip 不可验证且 P2-T03 暴露陈旧 SHA。",
+      "evidence": ["docs/claims/matrix.json", "evidence/slices/S2/STREAM_COMPLETE.json"]
+    },
+    {
+      "id": "Maintainability and handoff",
+      "score": 0.5,
+      "rationale": "契约、操作文档和证据索引清晰。",
+      "evidence": ["docs/operator/README.md", "docs/evidence-index.md"]
+    },
+    {
+      "id": "Cost/performance realism",
+      "score": 0.4,
+      "rationale": "实验室成本与销毁边界明确，但实时 HPA 性能量测不足。",
+      "evidence": ["evidence/hosted/cloud-apply-staging-elevation-2026-07-18.json", "evidence/slices/S2/runtime-evidence.json"]
+    }
+  ],
+  "unsupported_claims": [
+    "目标 tip 上完整的托管 Kubernetes 工作负载运行证明。",
+    "Azure live 应用或生产运行。",
+    "实时 HPA 负载量测与生产回滚。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在可读取 0606812354dae2e23356278f10f9b76b7ebd010b 的对象库中重新执行父提交绑定。",
+    "将 P2-T03 场景证据重绑候选后重新执行全量只读验证。",
+    "补充目标 tip 上托管工作负载的摘要、健康、版本、身份、滚动发布和扩缩容量测证据。"
+  ],
+  "overall_score": 8.1,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "mode": "default",
+    "role": "independent-read-only-judge"
+  },
+  "notes_zh": "tip_under_review=0606812354dae2e23356278f10f9b76b7ebd010b；bind_model=candidate_sha_parent_of_tip；parent_bind_verified=false。未提高 A3，未读取或复用其他 judge 分数。"
+}

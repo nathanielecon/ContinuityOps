@@ -1,0 +1,288 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-r4-3",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "parent-bind：tip 0606812… → parent aa01454…",
+        "rubric=f122c1d0…3a31；manifest=89642f65…59b5"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "确定性检查：tests 94 pass；terraform fmt check pass；validate P3-T03 pass"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "zero_secrets 环境；无长期访问密钥进入 serverless 模块"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "无打开的 critical/high 安全 issue 作用于本切片退出条件"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "A3：integrated-gate/STREAM/SUPERVISOR 与 matrix 将 portfolio 天花板置于 AWS lab L4，并保留 Azure/生产出局边界",
+        "组件证据 serverless/saas 仍为 L1；worker-contract「无 live Lambda」解释为实现边界说明，与 scoped lab L4 举证分层共存"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "失败路径：poison→DLQ、重复跳过、回放需审批均有测试"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "本轮命令、exit code、时间环境已记录；切片 candidate_sha 与 tip-bound portfolio tip 对齐；validate 后已丢弃改写副作用"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "遵守评判写范围；未扩大凭据或改 PLAN"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 持续记录 tip-bound 修复"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "fail",
+      "evidence": [
+        "跨工件时态：SUPERVISOR notes + S3 engineering-qa + dlq-replay.md 仍强调无 live，而 tip-bound gate/matrix 已声明实验室 L4 apply",
+        "SUPERVISOR.checks.claim_level_max=L1 与顶层 claim_level=L4 直接矛盾"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "评判文本简体中文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "单流 S3；集成队列秩序未在本切片被破坏"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "saved provisional 不冒充 fresh"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "观测到的声明不一致已有 break/fix 条目可追溯"
+      ]
+    },
+    {
+      "id": "S3-M1",
+      "status": "not_proven",
+      "evidence": [
+        "存在 OTEL hop 合约与 worker correlation_header 声明，但无 S3 范围内可运行的端到端相关证明"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "not_proven",
+      "evidence": [
+        "幂等/重复已测；bounded retry/backoff、visibility timeout、concurrency、timeout 行为未测"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "pass",
+      "evidence": [
+        "DLQ alarm、poison 捕获、安全回放（需审批）在单测中执行；手册要求回放后核对幂等"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "not_proven",
+      "evidence": [
+        "least_privilege 合约布尔为 true，但负向测试未覆盖函数角色动作拒绝集合"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "租户边界文档与实现假设（logical tenant_id / 禁止跨租户读）一致"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "onboarding→deprovision 运营合约齐全"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "严重级别、所有权、升级与沟通路径以 JSON 合约形式可用"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "not_proven",
+      "evidence": [
+        "通用 redaction 测试在 observability；未证明 serverless 事件/日志路径执行脱敏"
+      ]
+    },
+    {
+      "id": "S3-M9",
+      "status": "not_proven",
+      "evidence": [
+        "无独立成本说明工件；contract 仅含 cost_metric 字段名"
+      ]
+    },
+    {
+      "id": "S3-M10",
+      "status": "pass",
+      "evidence": [
+        "SaaS 运营声明受 remaining_boundaries 约束，未夸大到生产客户工作负载"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U10 fail：文档/SUPERVISOR 与 tip-bound L4 lab 举证时态不一致。",
+    "S3-M1/M2/M4/M8/M9 未达到 must-have 证明标准。",
+    "任一 must-have 非 pass → merge_ready 必须为 no。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.3,
+      "rationale": "单元与门禁校验完整；端到端相关与若干运行时行为缺口限制得分。",
+      "evidence": [
+        "validate P3-T03",
+        "S3-M1 not_proven"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.1,
+      "rationale": "权威边界总体清晰（含 A3）；函数 IAM 与脱敏深度不足。",
+      "evidence": [
+        "matrix Azure L1",
+        "iam_negative 浅层"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.2,
+      "rationale": "合成 DLQ/幂等恢复路径较好；live 与相关失败链不足。",
+      "evidence": [
+        "dlq.test.mjs",
+        "idempotency.test.mjs"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 0.7,
+      "rationale": "关键确定性测试存在但未覆盖合约全部运行时旋钮。",
+      "evidence": [
+        "tests/serverless/",
+        "tests/saas/lifecycle.test.mjs"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.7,
+      "rationale": "实验室 apply 证据支撑 portfolio L4；切片级 DLQ/worker 仍合成。",
+      "evidence": [
+        "cloud_apply_evidence 三件套"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.8,
+      "rationale": "运营合约与升级路径可读可用；审查文档需同步。",
+      "evidence": [
+        "severity-escalation.json",
+        "lifecycle.json"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.6,
+      "rationale": "U5 分层诚实，但 U10 文档冲突扣分。",
+      "evidence": [
+        "STREAM_COMPLETE.json",
+        "SUPERVISOR_VERDICT.json"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.4,
+      "rationale": "代码结构清晰；门禁笔记滞后。",
+      "evidence": [
+        "serverless/worker.mjs",
+        "SUPERVISOR notes"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.2,
+      "rationale": "成本/扩展现实主义不足。",
+      "evidence": [
+        "worker-contract.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "组件「无 live Lambda」措辞 = 否定 tip-bound 实验室 L4",
+    "基础设施 apply = S3-M1 相关传播已完成"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "统一 SUPERVISOR/手册/审查文档与 tip-bound A3 L4 分层措辞。",
+    "补齐相关传播、退避/超时/并发测试、函数 IAM 负向、事件脱敏与成本上限。"
+  ],
+  "overall_score": 7.0,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "clean-room-provisional-judge",
+    "role": "provisional-judge"
+  },
+  "notes_zh": "独立 clean-room provisional R4 #3（S3-PROVISIONAL-R4-03）。tip parent-bind 与哈希绑定成立；tests/fmt/P3-T03 validate 全绿，副作用已丢弃。未读取既有 judge 分数。U5 pass（实验室 L4 vs 未抬升 Azure/生产）。因 U10 与 S3-M1/M2/M4/M8/M9，provisional_pass=false、merge_ready=no。overall_score=7.0。"
+}

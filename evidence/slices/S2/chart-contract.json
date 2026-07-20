@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "P2-T01",
-  "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
-  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P2-T01",
   "exit_code": 0,
   "recorded_at": "2026-07-18T06:17:17.203Z",
@@ -23,10 +23,12 @@
     "mode": "default",
     "role": "validator-worker"
   },
-  "claim_level": "L1",
+  "claim_level": "L4",
   "remaining_boundaries": [
     "helm CLI may be absent — static chart contract",
-    "managed_cluster_apply"
+    "managed_cluster_apply",
+    "Component/task evidence remains L1 synthetic or local; portfolio STREAM_COMPLETE/integrated-gate carry A3-scoped L4 lab",
+    "slice_landed_sha may differ from portfolio_tip_sha / candidate_sha under candidate_sha_parent_of_tip"
   ],
   "started_at": "2026-07-18T06:17:17.191Z",
   "completed_at": "2026-07-18T06:17:17.203Z",
@@ -77,5 +79,19 @@
   ],
   "failed": [],
   "read_only_proof": "git status --porcelain unchanged before/after validator execution",
-  "evidence_path": "evidence/slices/S2/chart-contract.json"
+  "evidence_path": "evidence/slices/S2/chart-contract.json",
+  "rebinding": {
+    "recorded_utc": "2026-07-20T11:54:43Z",
+    "reason": "NIX-TIPBOUND-010/011 FIX-TIPBOUND-AA01454-02: tip-bound claim/SHA reconcile under A3",
+    "prior_candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+    "prior_claim_level": "L1",
+    "issue_ids": [
+      "NIX-TIPBOUND-010",
+      "NIX-TIPBOUND-011"
+    ]
+  },
+  "bind_model": "candidate_sha_parent_of_tip",
+  "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "component_claim_level": "L1",
+  "claim_notes_zh": "组件契约可为 L1/合成；组合门禁 tip-bound A3 为 scoped L4 lab（continuityops-gha）。Azure live out。"
 }

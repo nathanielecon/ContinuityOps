@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "pointer": true,
+  "task_id": "NIX-TIPBOUND-AA01454-01",
+  "canonical_path": "evidence/portfolio/nixer-tipbound-aa01454-01.json",
+  "issue": 143,
+  "pr": 144,
+  "fixer_task": "FIX-TIPBOUND-AA01454-01"
+}

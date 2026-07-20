@@ -3,7 +3,12 @@
   "verdict_type": "stream_boundary",
   "task_id": "S6",
   "slice": "S6",
-  "tasks": ["P6-T01", "P6-T02", "P6-T03", "P6-T04"],
+  "tasks": [
+    "P6-T01",
+    "P6-T02",
+    "P6-T03",
+    "P6-T04"
+  ],
   "decision": "approve",
   "d037_verdict": "pass",
   "reviewer": "cursor-cloud-chief-actuation",
@@ -14,12 +19,13 @@
     "role": "d037-independent-reviewer"
   },
   "at": "2026-07-18T06:35:00Z",
-  "claim_level": "L1",
+  "claim_level": "L3",
   "remaining_boundaries": [
     "SBOM stub / no live scanner",
     "Azure designed/static; no ExpressRoute depth",
     "H4 waived under D-044; protected environment placeholders retained",
     "No live mutation"
   ],
-  "notes": "BF-PRE-015 S6. Security/Azure/agentic fixtures at honest L1."
+  "notes": "Tip-bound aa01454; claim L3; Azure out.",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e"
 }

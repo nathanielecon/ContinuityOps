@@ -9,7 +9,7 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
 ```json
 {
   "schema_version": "1.0",
-  "revision": 53,
+  "revision": 54,
   "project": "ContinuityOps",
   "current_phase": 8,
   "authorized_through_phase": 8,
@@ -51,10 +51,11 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "portfolio-scoped-100-A3"
   ],
   "next_actions": [
-    "Portfolio scoped-100% under A3 complete (fresh council 9.7/9.7/9.6)",
-    "D-047 zero-hop + pager operational; sticky chief-pager #94",
+    "Tip-bound S0–S8 councils complete on freeze aa01454 (candidate/portfolio-aa01454); do not raise portfolio-scoped-100-A3",
+    "PR #103 closed never-merge; issue #42 closed (H0 bound; D-044)",
+    "Optional tidy + architecture figure refresh; pager #94",
     "Do not invent ContinuityOps known-good rollback (none proven)",
-    "Optional: owner may wire Cursor webhook to chief-pager later"
+    "Azure live out (D-046)"
   ],
   "completed_bootstrap": [
     "Created ContinuityOps GitHub repository home",
@@ -92,7 +93,8 @@ split the machine-readable blocks into `STATUS.md`, `ISSUES.md`, and
     "ORCH-CLOSE-02 amended after worker elevation race (keep_l1 superseded for security/agentic)",
     "PR #86 merged at d499990: D-028 A/C packet; Project C pin 376b7e18… + ECR sha256:bffa93ad…; CO-004/CO-006 packaging closed",
     "D-047: zero-hop mechanical pipeline + chief/junior pager; junior exception-only; candidate branch before main",
-    "portfolio-scoped-100-A3: fresh council 9.7/9.7/9.6 merge_ready=yes; D-047 pager sticky #94"
+    "portfolio-scoped-100-A3: fresh council 9.7/9.7/9.6 merge_ready=yes; D-047 pager sticky #94",
+    "Emergency package C Plan A: tip-bound S0–S8 provisional+fresh on candidate/portfolio-aa01454 (freeze aa01454 / tip-bind 0606812); Plan B closed #103+#42"
   ],
   "verified_baseline": [
     "GHA OIDC apply green run 29643569047 (staging live-marker + remote state)",

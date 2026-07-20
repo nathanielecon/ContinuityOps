@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "task_id": "COMPLETE-B-UPSTREAM-01",
-  "baseline_sha": "d499990df153ff786f211dd67914b4b50f893813",
-  "candidate_sha": "d499990df153ff786f211dd67914b4b50f893813",
+  "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node --test tests/integration/upstream-contracts.test.mjs",
   "exit_code": 0,
   "recorded_at": "2026-07-18T17:17:06.588Z",
@@ -23,7 +23,7 @@
     "mode": "default",
     "role": "chief-supervisor"
   },
-  "claim_level": "L2",
+  "claim_level": "L1",
   "remaining_boundaries": [
     "Rollback none proven (CO-004 satisfied with explicit none-proven)",
     "Packet is read-only vendored snapshot (D-028), not live multi-repo worker grants",
@@ -87,5 +87,9 @@
     "integration/upstreams/packets/2026-07-18-a-c/manifest.json",
     "integration/upstreams/packets/2026-07-18-a-c/co-004-digest-proof.json",
     "integration/upstreams.lock.json"
-  ]
+  ],
+  "prior_candidate_sha": "d499990df153ff786f211dd67914b4b50f893813",
+  "component_claim_level": "L1",
+  "portfolio_combination_claim": "L4",
+  "tipbound_note_zh": "组件契约 L1；组合 tip-bound A3 L4 lab 见 integrated-gate/STREAM_COMPLETE。"
 }

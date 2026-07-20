@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "judge_id": "S3-PROVISIONAL-JUDGE-R2-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "S3-M1",
+      "status": "not_proven",
+      "evidence": [
+        "evidence/slices/S3/serverless.json",
+        "evidence/slices/S3/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "S3-M2",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/serverless.json",
+        "tests/slices.test.mjs"
+      ]
+    },
+    {
+      "id": "S3-M3",
+      "status": "not_proven",
+      "evidence": [
+        "evidence/slices/S3/serverless.json",
+        "evidence/slices/S3/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "S3-M4",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/serverless.json"
+      ]
+    },
+    {
+      "id": "S3-M5",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/saas-operations.json"
+      ]
+    },
+    {
+      "id": "S3-M6",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/saas-operations.json"
+      ]
+    },
+    {
+      "id": "S3-M7",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S3/saas-operations.json"
+      ]
+    },
+    {
+      "id": "S3-M8",
+      "status": "pass",
+      "evidence": [
+        "tests/slices.test.mjs"
+      ]
+    },
+    {
+      "id": "S3-M9",
+      "status": "not_proven",
+      "evidence": [
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "S3-M10",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "U1 失败：仓库未配置 origin，git fetch origin candidate/portfolio-aa01454 以退出码 128 失败；随后 git cat-file 与 git rev-parse 均以退出码 128 失败，无法证明评审 tip 0606812 的父提交为 aa01454。",
+    "指定的 D-028 交叉证明 evidence/portfolio/packets/NIX-TIPBOUND-001/COMMIT_OBJECTS.txt、evidence/portfolio/tip-proof-aa01454.json 与 evidence/portfolio/tip-bind-2026-07-20.json 在当前检出中均不存在，不能替代缺失的提交对象证明。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "serverless-correctness",
+      "score": 8.0,
+      "rationale": "单元证据覆盖幂等、毒消息、DLQ 路由与回放审批，但缺少绑定 tip 上的端到端关联和实跑回放证明。",
+      "evidence": [
+        "evidence/slices/S3/serverless.json",
+        "tests/slices.test.mjs"
+      ]
+    },
+    {
+      "id": "saas-operations",
+      "score": 8.0,
+      "rationale": "租户边界和七阶段生命周期合同可验证，且声明保持实验室边界；未证明真实 SaaS 控制面运行。",
+      "evidence": [
+        "evidence/slices/S3/saas-operations.json",
+        "docs/claims/matrix.json"
+      ]
+    },
+    {
+      "id": "evidence-binding",
+      "score": 3.0,
+      "rationale": "当前提交的仓库检查通过，但硬性 parent-bind 无法执行成功，且替代证明包缺失。",
+      "evidence": [
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "claim-discipline",
+      "score": 9.0,
+      "rationale": "矩阵把 AWS 实验室栈限制在 L4，并明确排除生产、Azure live 和真实 SaaS 控制面；本轮未提高 A3。",
+      "evidence": [
+        "docs/claims/matrix.json",
+        "evidence/slices/S3/STREAM_COMPLETE.json"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "评审 tip 0606812354dae2e23356278f10f9b76b7ebd010b 的父提交等于 aa01454f8808c173deb43cc4b9b803287eec851e 尚未证明。",
+    "Kubernetes 请求到队列、函数和结果的端到端关联尚未由当前允许证据证明。",
+    "DLQ 告警触发、毒消息捕获、安全回放及回放后验证的实跑链路尚未由当前允许证据证明。",
+    "每事件成本、空闲成本以及重试和并发选择的实测后果尚未由当前允许证据证明。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在可解析 origin 的环境重新执行三条 U1 命令，或补齐并校验指定 D-028 提交对象证明包。",
+    "为 S3 补充绑定候选提交的端到端关联、DLQ 实跑回放和成本测量证据。",
+    "修复 P2-T03 证据 candidate_sha 与期望不一致；本轮验证以退出码 2 失败且未留下工作树副作用。"
+  ],
+  "overall_score": 7.0,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "independent-read-only-judge"
+  },
+  "notes_zh": "独立 clean-room path B provisional。未读取旧 provisional/fresh 分数。检查结果：node --test tests/ 退出码 0（94/94）；terraform fmt -check -recursive terraform 退出码 0；node scripts/project.mjs validate P2-T03 退出码 2（candidate_sha 不一致），执行前后工作树均为空。由于 U1 为硬门槛，merge_ready 必须为 no；Azure live 仍为 out，A3 未提高。"
+}

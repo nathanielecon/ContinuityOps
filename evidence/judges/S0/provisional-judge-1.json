@@ -1,0 +1,298 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "saved_provisional",
+  "judge_id": "provisional-judge-1",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "not_proven",
+      "evidence": [
+        "目标 tip 0606812354dae2e23356278f10f9b76b7ebd010b 不在本地对象库，无法执行 parent-bind 命令；本地 HEAD 为 candidate aa01454f8808c173deb43cc4b9b803287eec851e。"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "`node --test tests/` 退出码 0（94/94）；`terraform fmt -check -recursive terraform` 退出码 0。"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "只读检查与测试未发现凭据写入；本次仅新增 judge JSON。"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "S0 证据与测试未显示影响本切片的开放 critical/high 安全问题。"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "docs/claims/matrix.json 保持 A3 声明上限，Azure live 未被提升。"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "tests/ 覆盖未知 validator、非法生命周期、越权状态与凭据负例。"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "not_proven",
+      "evidence": [
+        "必做命令已在本轮执行，但目标 tip 对象缺失，无法证明所有证据绑定到派遣 tip。"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "修改范围仅 evidence/judges/S0/provisional-judge-1.json。"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG.md 与 S0 任务证据提供 break/fix 记录。"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "README、状态与 claims matrix 的 A3 措辞未被本次评判更改。"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本结果自由文本使用简体中文，外部招聘材料未改动。"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "tests/ 的 stream isolation 与 integration queue 用例通过。"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "本轮标记 saved_provisional，未给出 fresh 最终认证。"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "仓库 BREAK_FIX_LOG.md 存在，测试未发现未闭合的 S0 实现失败。"
+      ]
+    },
+    {
+      "id": "S0-M1",
+      "status": "pass",
+      "evidence": [
+        "PLAN.md 分区规则与 stream isolation 测试通过。"
+      ]
+    },
+    {
+      "id": "S0-M2",
+      "status": "pass",
+      "evidence": [
+        "生命周期与 revision 检查测试通过；对已 verified 的 P0-T04 请求 validate 被拒绝。"
+      ]
+    },
+    {
+      "id": "S0-M3",
+      "status": "pass",
+      "evidence": [
+        "授权边界测试通过。"
+      ]
+    },
+    {
+      "id": "S0-M4",
+      "status": "pass",
+      "evidence": [
+        "未知 validator ID fail-closed 测试通过。"
+      ]
+    },
+    {
+      "id": "S0-M5",
+      "status": "pass",
+      "evidence": [
+        "只读 validator 与 late-created forbidden path 测试通过。"
+      ]
+    },
+    {
+      "id": "S0-M6",
+      "status": "pass",
+      "evidence": [
+        "worker 禁止状态与 receipt/adapter 边界测试通过。"
+      ]
+    },
+    {
+      "id": "S0-M7",
+      "status": "pass",
+      "evidence": [
+        "rubric SHA-256 为 724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205。"
+      ]
+    },
+    {
+      "id": "S0-M8",
+      "status": "pass",
+      "evidence": [
+        "三流隔离、顺序、worker replacement 与 bottleneck fixture 测试通过。"
+      ]
+    },
+    {
+      "id": "S0-M9",
+      "status": "pass",
+      "evidence": [
+        "judge 隔离相关 validator 测试通过；输出按 judge-result schema 字段生成。"
+      ]
+    },
+    {
+      "id": "S0-M10",
+      "status": "pass",
+      "evidence": [
+        "harness/approvals/H0.binding.json 与 S0 evidence 保留人工门绑定；本轮未调用云控制面。"
+      ]
+    },
+    {
+      "id": "S0-M11",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md 的模型角色、云端位置与简体中文协议明确；actual model 记录测试通过。"
+      ]
+    },
+    {
+      "id": "S0-M12",
+      "status": "pass",
+      "evidence": [
+        "Claude proxy policy gate 测试通过。"
+      ]
+    },
+    {
+      "id": "S0-M13",
+      "status": "pass",
+      "evidence": [
+        "TypeScript 7.x policy 测试通过。"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "无法验证 `git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^`：目标 tip 对象不在本地对象库。",
+    "本评判会话误读了仓库内既有 S0 judge 报告，clean-room 独立性已受污染；未复用其分数，但本轮必须作废并由新会话重评。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 0,
+      "rationale": "clean-room 与目标 tip 绑定前提未成立，不对候选实现给出可复用分数。",
+      "evidence": [
+        "目标 tip 对象缺失；评判会话已接触仓库内既有 judge 报告，独立性无法证明。"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 0,
+      "rationale": "clean-room 与目标 tip 绑定前提未成立，不对候选实现给出可复用分数。",
+      "evidence": [
+        "目标 tip 对象缺失；评判会话已接触仓库内既有 judge 报告，独立性无法证明。"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 0,
+      "rationale": "clean-room 与目标 tip 绑定前提未成立，不对候选实现给出可复用分数。",
+      "evidence": [
+        "目标 tip 对象缺失；评判会话已接触仓库内既有 judge 报告，独立性无法证明。"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 0,
+      "rationale": "clean-room 与目标 tip 绑定前提未成立，不对候选实现给出可复用分数。",
+      "evidence": [
+        "目标 tip 对象缺失；评判会话已接触仓库内既有 judge 报告，独立性无法证明。"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 0,
+      "rationale": "clean-room 与目标 tip 绑定前提未成立，不对候选实现给出可复用分数。",
+      "evidence": [
+        "目标 tip 对象缺失；评判会话已接触仓库内既有 judge 报告，独立性无法证明。"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0,
+      "rationale": "clean-room 与目标 tip 绑定前提未成立，不对候选实现给出可复用分数。",
+      "evidence": [
+        "目标 tip 对象缺失；评判会话已接触仓库内既有 judge 报告，独立性无法证明。"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 0,
+      "rationale": "clean-room 与目标 tip 绑定前提未成立，不对候选实现给出可复用分数。",
+      "evidence": [
+        "目标 tip 对象缺失；评判会话已接触仓库内既有 judge 报告，独立性无法证明。"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0,
+      "rationale": "clean-room 与目标 tip 绑定前提未成立，不对候选实现给出可复用分数。",
+      "evidence": [
+        "目标 tip 对象缺失；评判会话已接触仓库内既有 judge 报告，独立性无法证明。"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0,
+      "rationale": "clean-room 与目标 tip 绑定前提未成立，不对候选实现给出可复用分数。",
+      "evidence": [
+        "目标 tip 对象缺失；评判会话已接触仓库内既有 judge 报告，独立性无法证明。"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "目标 tip 的 parent-bind 尚未证明。",
+    "本轮不得用于提高或重新认证 portfolio-scoped-100-A3。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在可读取目标 tip 的干净工作区重新派遣独立 provisional judge。",
+    "新 judge 在查看任何既有 judge 文件前先验证 parent-bind，并仅读取 rubric、manifest 与 slice evidence。"
+  ],
+  "overall_score": 0,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "judge"
+  },
+  "notes_zh": "本轮检查：`node --test tests/` 退出码 0（94 项通过）；`terraform fmt -check -recursive terraform` 退出码 0；`node scripts/project.mjs validate P0-T04` 退出码 2，原因是任务已处于 verified，CLI 按预期拒绝 verified -> running。因 parent-bind 不可执行且 clean-room 被污染，本结果只记录失败，不评价候选质量。"
+}

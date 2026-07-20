@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S0",
+  "round": "saved_provisional",
+  "judge_id": "S0-PROVISIONAL-JUDGE-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "provisional_pass": false,
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "not_proven",
+      "evidence": [
+        "目标 tip 0606812354dae2e23356278f10f9b76b7ebd010b 在本地对象库中不可用；2026-07-20T11:00:37Z 执行 git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^ 返回 128，因此无法独立确认其父提交为 aa01454f8808c173deb43cc4b9b803287eec851e。",
+        "harness/rubrics/S0.freeze.v1.json 的 SHA-256 为 724232f475e99749b5fc58098dc6e1eb8956748602332938ef1a106bc0ec8205；docs/claims/matrix.json 的 SHA-256 为 89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5。"
+      ]
+    },
+    {
+      "id": "U2-U14",
+      "status": "pass",
+      "evidence": [
+        "2026-07-20T11:00:33Z 至 11:00:37Z 执行 node --test tests/，退出码 0，94 项测试全部通过。",
+        "2026-07-20T11:00:37Z 执行 node scripts/project.mjs validate P0-T05，退出码 0；验证输出声明 harness、隔离、替换、bottleneck、saved/fresh 分离、全仓 JSON 与 judge schema 均通过。",
+        "2026-07-20T11:00:37Z 执行 terraform fmt -check -recursive terraform，退出码 0。",
+        "docs/planning/JUDGE_RUBRICS.md 的 U2-U14 合约以及 evidence/slices/S0/ 的当前证据未显示密钥、开放高危问题、越权写入、夸大证据层级或未记录故障。"
+      ]
+    },
+    {
+      "id": "S0-M1-S0-M13",
+      "status": "pass",
+      "evidence": [
+        "evidence/slices/S0/harness.json 记录授权边界、状态协调、stream 隔离、集成队列与 scope 检查通过。",
+        "evidence/slices/S0/validator-contract.json 记录未知 validator fail-closed、只读验证、证据 schema、模型路由、中文协议、bottleneck、代理约束与 TypeScript 7 检查通过。",
+        "evidence/slices/S0/rubric-freeze.json 记录冻结 rubric、bundle hashes 与人类 H0 收据绑定；evidence/slices/S0/integrated-gate.json 记录 P0-T05 集成检查通过。"
+      ]
+    }
+  ],
+  "blocking_findings": [
+    "parent-bind 未被本评判环境独立验证：目标 tip 对象缺失。按 universal fail-closed 规则，在可读取目标 tip 并确认其父提交前不得给出 provisional_pass。"
+  ],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.5,
+      "rationale": "S0 验证与证据覆盖充分，但目标 tip 的父绑定不可独立复核。",
+      "evidence": ["node --test tests/：退出码 0，94/94 通过。", "git rev-parse 目标 tip 的父提交：退出码 128。"]
+    },
+    {
+      "id": "security_authority_boundaries",
+      "score": 1.5,
+      "rationale": "授权、收据、validator fail-closed 与零密钥边界具有明确证据。",
+      "evidence": ["evidence/slices/S0/validator-contract.json", "evidence/slices/S0/rubric-freeze.json"]
+    },
+    {
+      "id": "failure_recovery_depth",
+      "score": 1.5,
+      "rationale": "负向验证、worker replacement 与 bottleneck 路径已有确定性覆盖。",
+      "evidence": ["evidence/slices/S0/validator-contract.json", "evidence/slices/S0/integrated-gate.json"]
+    },
+    {
+      "id": "deterministic_test_quality",
+      "score": 1.0,
+      "rationale": "全量 Node 测试与 S0 集成 validator 在本轮均通过。",
+      "evidence": ["node --test tests/：退出码 0。", "node scripts/project.mjs validate P0-T05：退出码 0。"]
+    },
+    {
+      "id": "live_runtime_evidence_quality",
+      "score": 0.7,
+      "rationale": "本轮证明本地确定性与 Terraform 格式检查，不将其提升为 Azure live 或生产证明。",
+      "evidence": ["terraform fmt -check -recursive terraform：退出码 0。", "docs/claims/matrix.json"]
+    },
+    {
+      "id": "operability_troubleshooting",
+      "score": 1.0,
+      "rationale": "集成证据覆盖隔离、替换、bottleneck 与故障记录约束。",
+      "evidence": ["evidence/slices/S0/integrated-gate.json", "BREAK_FIX_LOG.md"]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.5,
+      "rationale": "rubric 与 manifest 哈希已计算，但 tip/parent 绑定缺少可读取对象，必须降分并 fail-closed。",
+      "evidence": ["harness/rubrics/S0.freeze.v1.json", "docs/claims/matrix.json"]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "证据结构、中文说明与交接约束清晰。",
+      "evidence": ["harness/schemas/judge-result.schema.json", "AGENTS.md"]
+    },
+    {
+      "id": "cost_performance_realism",
+      "score": 0.5,
+      "rationale": "评判未扩大成本、性能或生产能力声明。",
+      "evidence": ["docs/claims/matrix.json"]
+    }
+  ],
+  "unsupported_claims": [
+    "本轮不证明 Azure live、生产运行、生产回滚或恢复测试。",
+    "本轮不证明缺失对象 0606812354dae2e23356278f10f9b76b7ebd010b 的 parent-bind。"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "在发布环境提供目标 tip 对象后重新执行 parent-bind 命令；仅当输出精确等于 aa01454f8808c173deb43cc4b9b803287eec851e 时，才可重新判断 U1 与 provisional_pass。"
+  ],
+  "overall_score": 8.7,
+  "merge_ready": "no",
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "mode": "medium",
+    "role": "独立 provisional judge"
+  },
+  "notes_zh": "clean-room saved_provisional 评判；未读取或复用其他 judge 分数。tip_under_review=0606812354dae2e23356278f10f9b76b7ebd010b；bind_model=candidate_sha_parent_of_tip；parent_bind_verified=false。A3 维持 portfolio-scoped-100-A3，不提高声明等级。"
+}

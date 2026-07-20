@@ -1,0 +1,159 @@
+{
+  "schema_version": "1.0",
+  "task_id": "S3-PROVISIONAL-JUDGE-R2-02",
+  "judge_id": "provisional-judge-r2-2",
+  "slice_id": "S3",
+  "round": "saved_provisional",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "gpt-5.6-sol",
+  "clean_room": {
+    "prior_provisional_or_fresh_scores_read": false,
+    "sources": [
+      "docs/planning/JUDGE_RUBRICS.md",
+      "docs/claims/matrix.json",
+      "evidence/slices/S3/serverless.json",
+      "evidence/slices/S3/saas-operations.json",
+      "evidence/slices/S3/integrated-gate.json"
+    ],
+    "unavailable_sources": [
+      "evidence/portfolio/tip-proof-aa01454.json",
+      "evidence/portfolio/tip-bind-2026-07-20.json",
+      "evidence/portfolio/packets/NIX-TIPBOUND-001/COMMIT_OBJECTS.txt"
+    ]
+  },
+  "validation_results": [
+    {
+      "command": "git fetch origin candidate/portfolio-aa01454",
+      "exit_code": 128,
+      "started_at": "2026-07-20T11:17:04Z",
+      "completed_at": "2026-07-20T11:17:04Z",
+      "environment": "cloud repository checkout without an origin remote",
+      "result": "not_proven",
+      "output_summary": "origin does not appear to be a git repository"
+    },
+    {
+      "command": "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b",
+      "exit_code": 128,
+      "started_at": "2026-07-20T11:17:04Z",
+      "completed_at": "2026-07-20T11:17:04Z",
+      "environment": "cloud repository checkout",
+      "result": "not_proven",
+      "output_summary": "the required tip object is absent"
+    },
+    {
+      "command": "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^",
+      "exit_code": 128,
+      "started_at": "2026-07-20T11:17:04Z",
+      "completed_at": "2026-07-20T11:17:04Z",
+      "environment": "cloud repository checkout",
+      "result": "not_proven",
+      "output_summary": "the required tip parent cannot be resolved"
+    },
+    {
+      "command": "node --test tests/",
+      "exit_code": 0,
+      "started_at": "2026-07-20T11:17:24Z",
+      "completed_at": "2026-07-20T11:17:30Z",
+      "environment": "cloud repository checkout; Node.js 22",
+      "result": "pass",
+      "output_summary": "94 tests passed; 0 failed"
+    },
+    {
+      "command": "terraform fmt -check -recursive terraform",
+      "exit_code": 0,
+      "started_at": "2026-07-20T11:17:30Z",
+      "completed_at": "2026-07-20T11:17:30Z",
+      "environment": "cloud repository checkout",
+      "result": "pass",
+      "output_summary": "all Terraform files are formatted"
+    },
+    {
+      "command": "node scripts/project.mjs validate P2-T03",
+      "exit_code": 2,
+      "started_at": "2026-07-20T11:17:30Z",
+      "completed_at": "2026-07-20T11:17:30Z",
+      "environment": "cloud repository checkout",
+      "result": "fail",
+      "output_summary": "ValidationError: evidence candidate_sha does not match the expected SHA; working tree remained unchanged"
+    }
+  ],
+  "must_haves": [
+    {"id": "U1", "status": "not_proven", "evidence": ["required tip object and D-028 cross-proof are unavailable"]},
+    {"id": "U2", "status": "fail", "evidence": ["node tests and Terraform formatting pass, but P2-T03 validation exits 2"]},
+    {"id": "U3", "status": "pass", "evidence": ["node --test tests/ credential-boundary tests"]},
+    {"id": "U4", "status": "not_proven", "evidence": ["no tip-bound security result was supplied"]},
+    {"id": "U5", "status": "pass", "evidence": ["docs/claims/matrix.json", "evidence/slices/S3/integrated-gate.json"]},
+    {"id": "U6", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json", "node --test tests/"]},
+    {"id": "U7", "status": "not_proven", "evidence": ["slice evidence predates and is not bound to the required tip"]},
+    {"id": "U8", "status": "not_proven", "evidence": ["tip-bound partition and upstream packet are unavailable"]},
+    {"id": "U9", "status": "not_proven", "evidence": ["tip-bound break/fix closure could not be checked"]},
+    {"id": "U10", "status": "pass", "evidence": ["docs/claims/matrix.json", "evidence/slices/S3/integrated-gate.json"]},
+    {"id": "U11", "status": "not_proven", "evidence": ["inter-agent transcripts were not supplied to this clean-room judge"]},
+    {"id": "U12", "status": "not_proven", "evidence": ["tip-bound integration-queue proof is unavailable"]},
+    {"id": "U13", "status": "pass", "evidence": ["this result is a separately dispatched path-B clean-room provisional judgment"]},
+    {"id": "U14", "status": "not_proven", "evidence": ["tip-bound break/fix closure could not be checked"]},
+    {"id": "S3-M1", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json", "node --test tests/"]},
+    {"id": "S3-M2", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json", "node --test tests/"]},
+    {"id": "S3-M3", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json", "node --test tests/"]},
+    {"id": "S3-M4", "status": "pass", "evidence": ["evidence/slices/S3/serverless.json"]},
+    {"id": "S3-M5", "status": "pass", "evidence": ["evidence/slices/S3/saas-operations.json"]},
+    {"id": "S3-M6", "status": "pass", "evidence": ["evidence/slices/S3/saas-operations.json"]},
+    {"id": "S3-M7", "status": "pass", "evidence": ["evidence/slices/S3/saas-operations.json"]},
+    {"id": "S3-M8", "status": "pass", "evidence": ["node --test tests/"]},
+    {"id": "S3-M9", "status": "not_proven", "evidence": ["no tip-bound measured per-event cost or scaling-limit result was available"]},
+    {"id": "S3-M10", "status": "pass", "evidence": ["evidence/slices/S3/integrated-gate.json", "docs/claims/matrix.json"]}
+  ],
+  "blocking_findings": [
+    {
+      "id": "S3-R2-02-U1-TIP-BIND",
+      "severity": "high",
+      "finding": "The required tip commit cannot be resolved and no D-028 cross-proof packet exists in this checkout, so the parent relationship to aa01454f8808c173deb43cc4b9b803287eec851e is not proven.",
+      "reproduction": [
+        "git fetch origin candidate/portfolio-aa01454",
+        "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b",
+        "git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^"
+      ]
+    },
+    {
+      "id": "S3-R2-02-U2-P2-T03",
+      "severity": "medium",
+      "finding": "The required P2-T03 read-only validation fails because its evidence candidate SHA does not match the checkout expectation.",
+      "reproduction": ["node scripts/project.mjs validate P2-T03"]
+    }
+  ],
+  "scored_dimensions": [
+    {"id": "Correctness and completeness", "score": 1.3, "max_score": 2.0, "rationale": "S3 unit contracts are broad, but exact-tip completeness is unproven.", "evidence": ["evidence/slices/S3/serverless.json", "evidence/slices/S3/saas-operations.json"]},
+    {"id": "Security and authority boundaries", "score": 1.1, "max_score": 1.5, "rationale": "Negative controls pass locally; no tip-bound security result is available.", "evidence": ["node --test tests/"]},
+    {"id": "Failure/recovery depth", "score": 1.1, "max_score": 1.5, "rationale": "Duplicate, poison and replay paths are tested synthetically, not proven on the required tip.", "evidence": ["evidence/slices/S3/serverless.json"]},
+    {"id": "Deterministic test quality", "score": 0.9, "max_score": 1.0, "rationale": "All 94 repository tests pass.", "evidence": ["node --test tests/"]},
+    {"id": "Live/runtime evidence quality", "score": 0.4, "max_score": 1.0, "rationale": "The matrix cites lab apply, while supplied slice evidence retains synthetic boundaries and the tip bind is absent.", "evidence": ["docs/claims/matrix.json", "evidence/slices/S3/integrated-gate.json"]},
+    {"id": "Operability and troubleshooting", "score": 0.7, "max_score": 1.0, "rationale": "Lifecycle and severity contracts exist, but tip-bound operability evidence is unavailable.", "evidence": ["evidence/slices/S3/saas-operations.json"]},
+    {"id": "Evidence/claim integrity", "score": 0.3, "max_score": 1.0, "rationale": "Claim ceilings are explicit, but the mandatory tip and D-028 proof are unavailable.", "evidence": ["docs/claims/matrix.json"]},
+    {"id": "Maintainability and handoff", "score": 0.35, "max_score": 0.5, "rationale": "Contracts are structured, but the required proof packet is missing from this checkout.", "evidence": ["evidence/slices/S3/saas-operations.json"]},
+    {"id": "Cost/performance realism", "score": 0.2, "max_score": 0.5, "rationale": "No tip-bound measured per-event cost or scaling result was supplied.", "evidence": ["docs/planning/JUDGE_RUBRICS.md"]}
+  ],
+  "overall_score": 6.35,
+  "provisional_pass": false,
+  "merge_ready": "no",
+  "unsupported_claims": [
+    "The relationship 0606812354dae2e23356278f10f9b76b7ebd010b^ = aa01454f8808c173deb43cc4b9b803287eec851e is not proven in this checkout.",
+    "No Azure live capability is credited.",
+    "No A3 claim level is raised by this judgment."
+  ],
+  "security_findings": [],
+  "improvements": [
+    "Republish the required tip object or provide the named D-028 packet, then rerun the three parent-bind commands.",
+    "Refresh P2-T03 evidence against the intended candidate without changing the A3 ceiling, then rerun the validator."
+  ],
+  "model_record": {
+    "provider": "OpenAI",
+    "model": "gpt-5.6-sol",
+    "mode": "default",
+    "role": "judge"
+  },
+  "context_remaining": "32%"
+}

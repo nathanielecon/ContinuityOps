@@ -1,0 +1,271 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S7",
+  "round": "fresh",
+  "judge_id": "tipbound-fresh-judge-3",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "parent-bind 成立：tip 0606812… 的唯一父提交 = candidate aa01454…",
+        "tree 0721108；JUDGE_RUBRICS.md / matrix.json 哈希与任务包一致",
+        "portfolio tip-proof + dispatch tipbound 包可交叉复核"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "确定性：94 tests pass；terraform fmt/validate Success",
+        "hosted-path 机检：P7-T01..T04 在 CANDIDATE_SHA=aa01454 下全绿",
+        "副作用 checkout 丢弃（禁止 git clean 已遵守）"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "zero_secrets=true；fixture/inventory 无敏感载荷；teardown 默认 dry-run"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "工程/安全短评无开放高危；切片路径未见未关闭 critical/high"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "明确区分：designed/static L1 合约 vs hosted L4 lab RTO/teardown vs 非生产",
+        "performance 诚实停 L1；recovery/finops 组合可至 L4 lab"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "否定路径：无 known-good → rollback 拒绝；live teardown → reconcile 抛错；live_cloud restore → validator 失败"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "本席现场重跑命令绑定 tip/candidate；exit 0 + 工具版本记录完整"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "仅产出 tipbound-fresh-judge-3.json；未触实现分区"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BF 日志覆盖 tip-bind 修复链；本轮无新失败"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "STREAM/matrix/contracts/non-claims 时态一致；未把 lab 说成 production"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "本文件自由文本为简体中文；外向文档保持英文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S7 单流顺序；recovery/performance/finops 写范围与他流 disjoint"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "fresh tipbound 权威轨独立；未读 provisional/saved/historical fresh 分数"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "历史失败已入 BREAK_FIX_LOG；本轮验证无遗漏入账项"
+      ]
+    },
+    {
+      "id": "S7-M1",
+      "status": "pass",
+      "evidence": [
+        "RTO/RPO 目标+理由在 backup-contract；lab drill 提供实验室测量；边界声明 No live RTO"
+      ]
+    },
+    {
+      "id": "S7-M2",
+      "status": "pass",
+      "evidence": [
+        "隔离目标 restore + digest/checksum/business 完整性；P7-T01 绿"
+      ]
+    },
+    {
+      "id": "S7-M3",
+      "status": "pass",
+      "evidence": [
+        "rollback 合约+脚本覆盖 digest/health/version/business；first-release 例外显式；known-good 缺口诚实非宣称"
+      ]
+    },
+    {
+      "id": "S7-M4",
+      "status": "pass",
+      "evidence": [
+        "recovery-lab 分离 + 确认门控 teardown + 合成恢复不碰 live；满足实验室安全执行"
+      ]
+    },
+    {
+      "id": "S7-M5",
+      "status": "pass",
+      "evidence": [
+        "可重复 synthetic profile；p50/p95/p99/errors/saturation/scaling 字段齐全"
+      ]
+    },
+    {
+      "id": "S7-M6",
+      "status": "pass",
+      "evidence": [
+        "瓶颈修复叙述 + 量化前后对比由测试锁死"
+      ]
+    },
+    {
+      "id": "S7-M7",
+      "status": "pass",
+      "evidence": [
+        "预算/告警/标签/idle rightsize/orphan 检测均存在"
+      ]
+    },
+    {
+      "id": "S7-M8",
+      "status": "pass",
+      "evidence": [
+        "lab destroy 有 hosted run 证据；估计假设（月预算）在 budgets 显式；任务级 dry-run 边界保留"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.9,
+      "rationale": "三子域门禁与 must-have 证据对齐良好；对薄评审略保守但不阻断。",
+      "evidence": [
+        "P7-T01..T04 validators 全 pass",
+        "docs/reviews/S7/engineering-qa-security.md（短但边界正确）"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.4,
+      "rationale": "权威边界总体正确；安全评审过薄故本维略扣（非发现高危，而是深度不足）。",
+      "evidence": [
+        "engineering-qa-security.md 三行摘要",
+        "teardown confirm 门 + zero_secrets"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "隔离 restore 与 lab RTO 支撑 must-have；部分依赖失效场景仍偏薄。",
+      "evidence": [
+        "restore-fixture + rollback-contract",
+        "lab-drill-rto-29645042815.json"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "机检全绿且可复现。",
+      "evidence": [
+        "94/94 + tf + P7-T04"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.95,
+      "rationale": "组合 L4 lab 证据充分；任务合成不抬生产。",
+      "evidence": [
+        "elevation teardown 29645052414",
+        "lab-drill-rto 29645042815"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "合约+脚本+workflow 可运维；希望更完整的操作笔记。",
+      "evidence": [
+        "operations/recovery + finops + .github/workflows/teardown.yml"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.95,
+      "rationale": "claim 分层与 tip-bind 一致；S7-M10 权衡文档缺失但不在本轮 must_haves。",
+      "evidence": [
+        "docs/claims/matrix.json recovery/performance/finops-teardown",
+        "STREAM remaining_boundaries"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "门禁与 STREAM 足以交接。",
+      "evidence": [
+        "evidence/slices/S7/integrated-gate.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "FinOps 与 lab destroy 支撑成本维；perf 合成限制满分。",
+      "evidence": [
+        "operations/finops/*",
+        "performance claim_ceiling=L1"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "生产 failover / known-good digest 回滚证明",
+    "S7-M10 级显式 reliability-versus-cost 决策备忘（本轮未列 must_haves，亦不超额宣称）"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "扩展 S7 安全/工程评审正文",
+    "增加显式 reliability-versus-cost 权衡条目（S7-M10）"
+  ],
+  "overall_score": 9.5,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s7-tipbound-fresh-judge-03"
+  },
+  "notes_zh": "独立 clean-room tipbound-fresh #3（S7）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=0721108 / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf、P7-T01..T04 全绿；未 git clean；未读旧分数。对薄安全评审略保守，对宣称完整性与 lab runtime 较肯定。must_haves U1–U14+S7-M1–M8 全 pass；overall_score=9.50；merge_ready=yes。"
+}

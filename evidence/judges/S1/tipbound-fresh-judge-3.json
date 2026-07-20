@@ -1,0 +1,292 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S1",
+  "round": "fresh",
+  "judge_id": "S1-TIPBOUND-FRESH-03",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "candidate 为 tip 的第一父提交（parent-bind）",
+        "tree=9c280eaf39ac40668299ec1e7060abc731b09549（origin/candidate/portfolio-aa01454）",
+        "rubric=f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31；manifest=89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "deterministic：94/94 tests + terraform fmt -check",
+        "hosted/task：CANDIDATE_SHA validate P1-T04 passed=full_repository,evidence_freshness,claim_consistency,judge_exit"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "zero_secrets 环境标记；PR 路径无 id-token/部署密钥"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "ISSUES.md：open_issues=[]"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "claim 分层清晰：组件 L1 / upstream L2 / 组合 L4 lab",
+        "non_claims 与 engagement_ceilings_A3 限制生产与 Azure"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "负向：untrusted_pr、iam_negative、network_negative",
+        "失败路径：首 apply 竞态记录 + teardown 证据"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "现场验证日志 /tmp/s1-tipbound-fresh/*；gate 含时间戳与 candidate_sha"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "仅新增 tipbound-fresh-judge-3.json；遵守写范围"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG BF-2026-023/027 覆盖本轮相关故障类"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "权威 tip-bound 组合工件时态一致；组件 L1 标签为诚实分层而非隐瞒",
+        "历史 SUPERVISOR 边界串不阻断（改进项）"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "简体中文评判文本；英文对外工件"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S1 分区所有权清晰；评判无跨流写入"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "fresh tipbound 输出与 saved council / provisional 分离"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "相关 break 已入账后方可关闭流门禁"
+      ]
+    },
+    {
+      "id": "S1-M1",
+      "status": "pass",
+      "evidence": [
+        "A/C pins + consumed contracts；D-028 只读包"
+      ]
+    },
+    {
+      "id": "S1-M2",
+      "status": "pass",
+      "evidence": [
+        "远程加密版本化 state + lock；staging/recovery-lab 分离"
+      ]
+    },
+    {
+      "id": "S1-M3",
+      "status": "pass",
+      "evidence": [
+        "OIDC→continuityops-gha 显式；条件与负向测试齐备"
+      ]
+    },
+    {
+      "id": "S1-M4",
+      "status": "pass",
+      "evidence": [
+        "PR jobs 无部署凭据；actions 钉扎"
+      ]
+    },
+    {
+      "id": "S1-M5",
+      "status": "pass",
+      "evidence": [
+        "mutation 经 environment:continuityops；lab 非生产"
+      ]
+    },
+    {
+      "id": "S1-M6",
+      "status": "pass",
+      "evidence": [
+        "网络/数据/信任/成本边界可检视"
+      ]
+    },
+    {
+      "id": "S1-M7",
+      "status": "pass",
+      "evidence": [
+        "hosted/static 校验阻断无凭据有害变更"
+      ]
+    },
+    {
+      "id": "S1-M8",
+      "status": "pass",
+      "evidence": [
+        "hosted 通过证据经 gate+cloud_apply_evidence 绑定候选"
+      ]
+    },
+    {
+      "id": "S1-M9",
+      "status": "pass",
+      "evidence": [
+        "drift/teardown 存在且不授予未授权删除"
+      ]
+    },
+    {
+      "id": "S1-M10",
+      "status": "pass",
+      "evidence": [
+        "本地校验与 live lab 证明分层，未混淆"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness",
+      "score": 1.95,
+      "rationale": "P1 门禁、OIDC 控面与 tip-bound 组合 L4 lab 证据闭合，验收路径可复现。",
+      "evidence": [
+        "evidence/slices/S1/integrated-gate.json",
+        ".github/workflows/continuityops-terraform.yml",
+        "/tmp/s1-tipbound-fresh/validate-p1-t04.log"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.4,
+      "rationale": "权威边界总体正确；bootstrap 角色权限面较宽，按 lab 可接受但安全维度略保守。",
+      "evidence": [
+        "terraform/ci-bootstrap/bootstrap-oidc-cloudshell.sh",
+        ".github/workflows/terraform-pr.yml",
+        "tests/workflows/hosted-ci.test.mjs"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.35,
+      "rationale": "负向与 teardown 证明存在；深度故障注入/锁争用测试仍偏契约级。",
+      "evidence": [
+        "evidence/slices/S1/terraform.json",
+        ".github/workflows/drift.yml",
+        ".github/workflows/teardown.yml"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "现场全绿确定性测试覆盖脚手架与 workflow 契约。",
+      "evidence": [
+        "/tmp/s1-tipbound-fresh/tests.log",
+        "tests/terraform/scaffold.test.mjs"
+      ]
+    },
+    {
+      "id": "runtime_evidence",
+      "score": 0.95,
+      "rationale": "staging apply/elevation/lab-drill 证据充分且声明非生产。",
+      "evidence": [
+        "evidence/hosted/cloud-apply-staging-2026-07-18.json",
+        "evidence/hosted/lab-drill-rto-29645042815.json"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 1.0,
+      "rationale": "ensure-tfstate、env 根与 workflow 输入使运维路径清晰可跟。",
+      "evidence": [
+        "terraform/ci-bootstrap/ensure-tfstate.sh",
+        ".github/workflows/continuityops-terraform.yml",
+        "terraform/README.md"
+      ]
+    },
+    {
+      "id": "evidence_integrity",
+      "score": 0.95,
+      "rationale": "parent-bind 与哈希绑定成立；组件/组合分层诚实。SUPERVISOR 滞后小扣。",
+      "evidence": [
+        "/tmp/s1-tipbound-fresh/parent-bind.log",
+        "docs/claims/matrix.json",
+        "evidence/slices/S1/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "maintainability",
+      "score": 0.5,
+      "rationale": "rebinding/tipbound_note 支持干净交接。",
+      "evidence": [
+        "evidence/slices/S1/STREAM_COMPLETE.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.45,
+      "rationale": "成本驱动可检视且有 teardown；量化成本分析非本切片深项。",
+      "evidence": [
+        "docs/claims/matrix.json#components.finops-teardown",
+        "evidence/slices/S1/STREAM_COMPLETE.json#remaining_boundaries"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "生产账户持续 apply",
+    "Azure 治理 live"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "收紧 ci-bootstrap 角色权限面并保留负向证明",
+    "同步 SUPERVISOR remaining_boundaries 至 tip-bound 叙述"
+  ],
+  "overall_score": 9.55,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s1-tipbound-fresh-judge-03"
+  },
+  "notes_zh": "独立 tip-bound fresh #3（S1）。绑定 tip=0606812354dae2e23356278f10f9b76b7ebd010b / candidate=aa01454f8808c173deb43cc4b9b803287eec851e / tree=9c280ea / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind、94 测、tf fmt、CANDIDATE_SHA validate P1-T04 均 exit 0；副作用已丢弃（未 git clean）。未读旧分数。合成/契约 must-have 在 remaining_boundaries 内诚实 pass；U1–U14+S1-M1–M10 全 pass；merge_ready=yes；overall_score=9.55。"
+}

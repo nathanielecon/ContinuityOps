@@ -1,0 +1,285 @@
+{
+  "schema_version": "1.0",
+  "slice_id": "S7",
+  "round": "fresh",
+  "judge_id": "tipbound-fresh-judge-2",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "rubric_sha256": "f122c1d0d37fd279dad499ba2149d95ce916cf33e0e651554c59dc1714423a31",
+  "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
+  "judge_model_id": "cursor-grok-4.5-high",
+  "must_haves": [
+    {
+      "id": "U1",
+      "status": "pass",
+      "evidence": [
+        "git rev-parse tip^ → aa01454f8808c173deb43cc4b9b803287eec851e（candidate_sha_parent_of_tip）",
+        "tip^{tree}=072110873be91c9024467ac87a733eb23fa06663",
+        "rubric SHA-256 f122c1d0…；manifest（docs/claims/matrix.json）SHA-256 89642f65…",
+        "tip-proof-aa01454 + tipbound-aa01454 包交叉核验"
+      ]
+    },
+    {
+      "id": "U2",
+      "status": "pass",
+      "evidence": [
+        "94/94 node:test pass；terraform fmt -check + staging validate Success",
+        "validate P7-T01（recovery）/T02（perf）/T03（finops）/T04（gate）均 exit 0（CANDIDATE_SHA=aa01454）",
+        "写回副作用仅 checkout 丢弃，未 git clean"
+      ]
+    },
+    {
+      "id": "U3",
+      "status": "pass",
+      "evidence": [
+        "gate environment.zero_secrets=true；合成 restore/teardown 路径无密钥材料",
+        "inventory-dry-run 明确 live_teardown_executed=false"
+      ]
+    },
+    {
+      "id": "U4",
+      "status": "pass",
+      "evidence": [
+        "S7 评审声明合成天花板；无未关闭 critical/high 安全 findings"
+      ]
+    },
+    {
+      "id": "U5",
+      "status": "pass",
+      "evidence": [
+        "matrix：recovery L4、finops-teardown L4、performance L1；engagement_ceilings_A3.performance=L1",
+        "non_claims 保留「无 known-good rollback digest」「非生产客户演练」",
+        "hosted lab-drill-rto + elevation teardown 支撑组合 L4"
+      ]
+    },
+    {
+      "id": "U6",
+      "status": "pass",
+      "evidence": [
+        "rollback-check 否定路径；reconcile 拒绝 live teardown；before_after 强制 perf 改善",
+        "restore_runtime 对 live_cloud=true 失败关闭"
+      ]
+    },
+    {
+      "id": "U7",
+      "status": "pass",
+      "evidence": [
+        "本轮现场命令/exit/时间/工具版本完整（2026-07-20T13:45:39Z 窗）",
+        "P7-T04 integrated-gate 记录 validators + environment"
+      ]
+    },
+    {
+      "id": "U8",
+      "status": "pass",
+      "evidence": [
+        "仅写入 tipbound-fresh-judge-2.json；写范围未逸出 judges/S7",
+        "未 git clean；未改 rubric/实现"
+      ]
+    },
+    {
+      "id": "U9",
+      "status": "pass",
+      "evidence": [
+        "BREAK_FIX_LOG 含 tip-bind 相关 BF；本轮机检无新失败未入账"
+      ]
+    },
+    {
+      "id": "U10",
+      "status": "pass",
+      "evidence": [
+        "contracts claim_ceiling=L1 与 STREAM L4 lab 分层可读；文档未宣称生产 RTO"
+      ]
+    },
+    {
+      "id": "U11",
+      "status": "pass",
+      "evidence": [
+        "notes_zh/证据叙述简体中文；招聘向英文资产未改写为中文"
+      ]
+    },
+    {
+      "id": "U12",
+      "status": "pass",
+      "evidence": [
+        "S7 串行 P7-T01..T04；与 S5 drills / S6 agentic 分区路径无重叠写冲突"
+      ]
+    },
+    {
+      "id": "U13",
+      "status": "pass",
+      "evidence": [
+        "tipbound-fresh 与 saved/provisional/historical fresh 分轨；未打开旧分文件"
+      ]
+    },
+    {
+      "id": "U14",
+      "status": "pass",
+      "evidence": [
+        "历史修复有 BF 记录；本轮无新增未登记失败"
+      ]
+    },
+    {
+      "id": "S7-M1",
+      "status": "pass",
+      "evidence": [
+        "backup-contract 给出 RTO/RPO 目标与 justification；rto_rpo 校验器要求非 live 边界声明",
+        "lab-drill-rto 提供实验室 wall-clock 测量（非生产）"
+      ]
+    },
+    {
+      "id": "S7-M2",
+      "status": "pass",
+      "evidence": [
+        "合成 restore 至 recovery-lab-synthetic；digest+data_checksum+business_smoke 完整性链",
+        "P7-T01 restore_runtime/data_integrity exit 0"
+      ]
+    },
+    {
+      "id": "S7-M3",
+      "status": "pass",
+      "evidence": [
+        "rollback 合约要求 known-good + first-release 例外；verification 含 digest/health/version/business_smoke",
+        "诚实保留「无 ContinuityOps known-good rollback digest」non-claim"
+      ]
+    },
+    {
+      "id": "S7-M4",
+      "status": "pass",
+      "evidence": [
+        "recovery-lab env 与 staging 分离测试覆盖；OIDC teardown workflow 受 confirm 门控",
+        "合成恢复路径不触 live cloud（restore-synthetic.mjs 注释与 fixture 一致）"
+      ]
+    },
+    {
+      "id": "S7-M5",
+      "status": "pass",
+      "evidence": [
+        "可重复 synthetic load-profile；before/after 含分位数、错误率、饱和度、副本数",
+        "capacity plan claim_ceiling=L1 防过度声明"
+      ]
+    },
+    {
+      "id": "S7-M6",
+      "status": "pass",
+      "evidence": [
+        "after.repair 量化瓶颈修复；p95/error 改善由单测锁死"
+      ]
+    },
+    {
+      "id": "S7-M7",
+      "status": "pass",
+      "evidence": [
+        "预算阈值告警 + 强制标签 + idle/rightsize/orphan EBS 规则齐全"
+      ]
+    },
+    {
+      "id": "S7-M8",
+      "status": "pass",
+      "evidence": [
+        "elevation 证据含实际 staging destroy run；任务级仍声明 dry-run 边界（分层）",
+        "budget 假设（monthly_budget_usd=500）显式存在于合约"
+      ]
+    }
+  ],
+  "blocking_findings": [],
+  "scored_dimensions": [
+    {
+      "id": "correctness_completeness",
+      "score": 1.9,
+      "rationale": "恢复/性能/FinOps 合约与校验器闭环完整；相对 #1 更肯定契约完备性，仍承认合成 fixture 叙事性。",
+      "evidence": [
+        "scripts/validators recovery/perf/cost 注册项",
+        "tests/recovery/contracts.test.mjs"
+      ]
+    },
+    {
+      "id": "security_authority",
+      "score": 1.45,
+      "rationale": "隔离恢复、确认型 teardown、zero_secrets 与失败关闭路径清楚。",
+      "evidence": [
+        ".github/workflows/teardown.yml confirm==teardown",
+        "rollback-check / reconcile 否定路径"
+      ]
+    },
+    {
+      "id": "failure_recovery",
+      "score": 1.4,
+      "rationale": "隔离 restore + lab RTO 足以支撑 must-have；依赖部分失效与 known-good digest 深度有限。",
+      "evidence": [
+        "restore-fixture.json + lab-drill-rto-29645042815.json",
+        "matrix non_claims known-good rollback"
+      ]
+    },
+    {
+      "id": "deterministic_tests",
+      "score": 1.0,
+      "rationale": "全量 94 测与 P7/tf 机检可复现全绿。",
+      "evidence": [
+        "node --test → 94 pass",
+        "validate P7-T04 exit 0"
+      ]
+    },
+    {
+      "id": "live_runtime_evidence",
+      "score": 0.9,
+      "rationale": "对合成负载更保守：组合有 lab RTO/teardown，但 perf 基线纯 fixture，runtime 维明显扣分。",
+      "evidence": [
+        "performance/*.json synthetic=true",
+        "hosted lab RTO + teardown runs"
+      ]
+    },
+    {
+      "id": "operability",
+      "score": 0.95,
+      "rationale": "脚本与 workflow 可跟跑；容量触发与预算动作可读。",
+      "evidence": [
+        "operations/capacity/plan.json",
+        "scripts/teardown/inventory-dry-run.mjs"
+      ]
+    },
+    {
+      "id": "evidence_claim_integrity",
+      "score": 0.95,
+      "rationale": "tip-bind 与 claim 分层诚实；任务证据 SHA 仍停在 slice_landed，依赖 tipbound 再绑定解释。",
+      "evidence": [
+        "STREAM bind_model + cloud_apply_evidence",
+        "tip-proof-aa01454.json"
+      ]
+    },
+    {
+      "id": "maintainability_handoff",
+      "score": 0.5,
+      "rationale": "STREAM/SUPERVISOR/gate 可交接。",
+      "evidence": [
+        "evidence/slices/S7/SUPERVISOR_VERDICT.json"
+      ]
+    },
+    {
+      "id": "cost_performance",
+      "score": 0.4,
+      "rationale": "FinOps 合约可用，但对合成负载成本现实主义更严：不作 lab 成本曲线证明。",
+      "evidence": [
+        "operations/finops/budgets.json",
+        "performance claim_ceiling=L1"
+      ]
+    }
+  ],
+  "unsupported_claims": [
+    "live 生产压测与客户级 RTO",
+    "将 synthetic baseline 数字当作实测吞吐"
+  ],
+  "security_findings": [],
+  "improvements": [
+    "补充可复现的 lab 成本抓取假设表（即使仍非生产）",
+    "为依赖故障恢复增加非模板化场景夹具"
+  ],
+  "overall_score": 9.45,
+  "merge_ready": "yes",
+  "model_record": {
+    "provider": "xAI",
+    "model": "cursor-grok-4.5-high",
+    "mode": "default",
+    "role": "s7-tipbound-fresh-judge-02"
+  },
+  "notes_zh": "独立 clean-room tipbound-fresh #2（S7）。同绑定 tip=0606812… / candidate=aa01454… / tree=0721108 / rubric=f122c1d0… / manifest=89642f65…。现场 parent-bind+94+tf+P7-T01..T04 全绿；未 git clean；未读旧分、未互抄 #1。相对 #1 更肯定合约完备，对合成负载 runtime/成本维更保守。must_haves 全 pass；overall_score=9.45；merge_ready=yes。"
+}
