@@ -8,25 +8,25 @@
   "implementation_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "validation_results": [
     {
-      "command": "CANDIDATE_SHA=5792a74f5c684b007a9057b89b6d9a24f359bc7f BASELINE_SHA=531aa6ffb37517efc6b3c705c040d6d838ab36d0 node scripts/project.mjs validate P0-T05",
+      "command": "CANDIDATE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e BASELINE_SHA=aa01454f8808c173deb43cc4b9b803287eec851e node scripts/project.mjs validate P0-T05",
       "exit": 0,
-      "time": "2026-07-18T05:47:50Z",
+      "time": "2026-07-20T12:23:39Z",
       "evidence_path": "evidence/slices/S0/integrated-gate.json"
     },
     {
       "command": "node --test tests/",
       "exit": 0,
-      "time": "2026-07-18T05:47:50Z",
+      "time": "2026-07-20T12:23:39Z",
       "evidence_path": "evidence/slices/S0/integrated-gate.json"
     },
     {
       "command": "git diff --check",
       "exit": 0,
-      "time": "2026-07-18T05:47:50Z",
+      "time": "2026-07-20T12:23:39Z",
       "evidence_path": "evidence/slices/S0/integrated-gate.json"
     }
   ],
-  "evidence_manifest_path": "evidence/slices/S0/integrated-gate.json",
+  "evidence_manifest_path": "docs/claims/matrix.json",
   "evidence_manifest_sha256": "89642f65a7bcb53aa5e37aaae27c0599c20ddd0ddc699634f58dbeca0c1159b5",
   "context_remaining": "68%",
   "preflight_ok": {
@@ -34,16 +34,17 @@
     "last_warm_utc": null,
     "context_package_ready": "n/a"
   },
-  "notes_zh": "P0-T05 S0 集成门已绑定：candidate_sha=实现提交 5792a74（父提交）；tip 为证据对齐提交。evidence_manifest_sha256 为 integrated-gate.json 字节 sha256。saved council 仅 provisional；fresh judges 独立退出均分≥9.5。validate 支持 CANDIDATE_SHA/BASELINE_SHA。",
+  "notes_zh": "P0-T05 S0 tip-bound：candidate_sha=portfolio_tip_sha=aa01454f8808c173deb43cc4b9b803287eec851e（parent-of-tip 模型）。evidence_manifest_path=docs/claims/matrix.json，evidence_manifest_sha256=89642f65… 为其字节 sha256。slice_landed_sha 历史 5792a74 仅作落地记录，不构成现行候选。tipbound 认证轮次以 provisional-judge-r4-* 为准；旧 saved/fresh council 为历史。",
   "rebinding": {
-    "recorded_utc": "2026-07-20T11:54:43Z",
-    "reason": "NIX-TIPBOUND-012: rebind S0 gate evidence to portfolio tip parent aa01454",
+    "recorded_utc": "2026-07-20T12:24:00Z",
+    "reason": "BF-2026-024: fix STREAM evidence_manifest path/sha pairing and purge 5792a74 tipbound residue",
     "prior_candidate_sha": "5792a74f5c684b007a9057b89b6d9a24f359bc7f",
     "issue_ids": [
-      "NIX-TIPBOUND-012"
+      "NIX-TIPBOUND-012",
+      "BF-2026-024"
     ],
     "slice_landed_sha_preserved": "5792a74f5c684b007a9057b89b6d9a24f359bc7f"
   },
   "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
-  "notes": "Tip-bound aa01454 (Emergency package C): portfolio_tip_sha=aa01454; slice_landed_sha retained if present. A3 L4 lab ceilings unchanged. Prior 5792a74 narrative superseded for portfolio tip bind."
+  "notes": "Tip-bound aa01454: portfolio_tip_sha=aa01454; evidence_manifest_path=docs/claims/matrix.json with sha256 89642f65…; validation_results refreshed to aa01454 tip-bound commands. Historical slice land 5792a74 retained only via rebinding.slice_landed_sha_preserved. Tipbound provisional authority is r4; prior saved/fresh council files are historical."
 }

@@ -12,9 +12,10 @@
   "baseline_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "claim_level": "L4",
   "remaining_boundaries": [
-    "Live EKS cops-staging evidenced then destroyed in lab teardown",
-    "managed_cluster_apply retained as historical boundary label for local-only kind paths",
-    "Not production"
+    "Scoped AWS lab L4 via continuityops-gha (A3); Live EKS cops-staging evidenced then destroyed in lab teardown",
+    "managed_cluster_apply — cluster lab apply tip-bound associated; candidate-bound managed workload runtime not claimed; kind paths remain L1 synthetic",
+    "Hosted apply SHA may differ from aa01454; lab evidence linked via cloud_apply_evidence",
+    "Not production; Azure live out (D-046)"
   ],
   "model_record": {
     "provider": "xAI",
@@ -22,7 +23,7 @@
     "mode": "default",
     "role": "s2-gate-controller"
   },
-  "notes": "S2 chart/scenarios complete; scoped L4 lab apply evidenced.",
+  "notes": "S2 tip-bound aa01454: scoped A3 L4 lab apply evidenced via cloud_apply_evidence (hosted apply SHA need not equal aa01454). Tipbound provisional authority is provisional-judge-r4-*; older saved/fresh council is historical. Component chart/runtime/scenarios remain L1 synthetic; managed_cluster_apply retained.",
   "slice_landed_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
   "portfolio_tip_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "bind_model": "candidate_sha_parent_of_tip",
