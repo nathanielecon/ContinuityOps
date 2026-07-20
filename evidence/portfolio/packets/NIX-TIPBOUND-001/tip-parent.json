@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "issue_id": "NIX-TIPBOUND-001",
+  "tip_sha": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "parent_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "canonical_proof": "evidence/portfolio/tip-proof-aa01454.json"
+}

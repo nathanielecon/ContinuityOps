@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "artifact": "portfolio_tip_parent_proof",
+  "task_id": "FIX-TIPBOUND-AA01454-01",
+  "issue_ids": [
+    "NIX-TIPBOUND-001",
+    "NIX-TIPBOUND-002"
+  ],
+  "base_branch": "candidate/portfolio-aa01454",
+  "dispatch_base_sha": "47ff0370b5dfd635d2718ee83e4e7348b095ea12",
+  "tip_under_review": "0606812354dae2e23356278f10f9b76b7ebd010b",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "expected_parent_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
+  "bind_model": "candidate_sha_parent_of_tip",
+  "verification": {
+    "commands": [
+      "git cat-file -t 0606812354dae2e23356278f10f9b76b7ebd010b",
+      "test \"$(git rev-parse 0606812354dae2e23356278f10f9b76b7ebd010b^)\" = \"aa01454f8808c173deb43cc4b9b803287eec851e\""
+    ],
+    "expected_results": [
+      "commit",
+      "exit code 0"
+    ],
+    "execution_boundary": "Run after the dispatch patch is applied to candidate/portfolio-aa01454; the worker checkout did not contain the review-tip object."
+  },
+  "claim_ceiling": "A3 unchanged",
+  "d028_packet": "evidence/dispatch-packets/tipbound-aa01454/packet.json"
+}

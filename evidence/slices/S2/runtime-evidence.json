@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "P2-T02",
   "baseline_sha": "0d61b881e078d775a5bca2e6b6ff6d1628bcb159",
-  "candidate_sha": "08433d79e34ec3d0d1c97a44d04dfafa7d79bcd9",
+  "candidate_sha": "aa01454f8808c173deb43cc4b9b803287eec851e",
   "command": "node scripts/project.mjs validate P2-T02",
   "exit_code": 0,
   "recorded_at": "2026-07-18T06:17:17.241Z",

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "artifact": "nixer_pointer",
+  "nixer_id": "NIX-TIPBOUND-AA01454-01",
+  "canonical_nixer": "evidence/portfolio/nixer-tipbound-aa01454-01.json",
+  "bound_issue_ids": [
+    "NIX-TIPBOUND-001",
+    "NIX-TIPBOUND-002"
+  ],
+  "repair_proof": "evidence/portfolio/tip-proof-aa01454.json"
+}
