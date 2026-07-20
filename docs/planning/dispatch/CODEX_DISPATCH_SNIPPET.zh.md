@@ -2,6 +2,8 @@
 
 将下列块粘贴到每一次所有者/监督者发布的 `@codex` 评论末尾(任务正文之后)。
 
+> **Tip 可见性(D-CC-001):** 对非 `main` 候选 tip 的派遣，须先通过 [`TIP_VISIBILITY_SMOKE.zh.md`](./TIP_VISIBILITY_SMOKE.zh.md)。权限边界见 [`WORKER_PERMISSIONS.md`](./WORKER_PERMISSIONS.md)。总计划 [`CHIEF_COASTS_FRAMEWORK_PLAN.md`](./CHIEF_COASTS_FRAMEWORK_PLAN.md)。
+
 ```text
 完成定义(硬门槛,D-034):最终回复必须包含可机械发布的完整 unified diff。
 禁止:仅 make_pr / "PR 元数据" / 无 patch 标记的摘要并宣称完成。
