@@ -1,0 +1,90 @@
+[
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 16,
+    "locator": "E2 > Work the problem one tiny step at a time, steps 3 and 5, and the displayed equation under the butterfly figure",
+    "category": "spacing",
+    "severity": "medium",
+    "quote": "Cross multiply along the red lines: 4 × 21 = 7×?.",
+    "correction": "Cross multiply along the red lines: 4 × 21 = 7 × ?.",
+    "why": "The multiplication sign in \"7×?\" is set tight with no spaces while the identical operation two characters earlier is spaced (\"4 × 21\"), so the same equation uses two different multiplication spacings.",
+    "occurrences": "p.16 step 3 (\"4 × 21 = 7×?\"), p.16 step 5 (\"So 84 = 7×?.\"), and the centered display line \"84 = 7×?\" above the ÷7 ÷7 annotation"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 16,
+    "locator": "E2 > Work the problem one tiny step at a time, step 8",
+    "category": "spacing",
+    "severity": "medium",
+    "quote": "So 12 =?.",
+    "correction": "So ? = 12.",
+    "why": "There is no space after the equals sign, so \"=?\" renders as a single glyph cluster that reads like a typo rather than \"the missing number is 12\"; every other step in the section spaces its equals sign.",
+    "occurrences": "single"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 17,
+    "locator": "E3 > Work the problem one tiny step at a time, step 2 (the proportion set-up)",
+    "category": "spacing",
+    "severity": "medium",
+    "quote": "One correct setup: [4 snacks / 20dollars] = [7snacks / xdollars].",
+    "correction": "One correct setup: [4 snacks / 20 dollars] = [7 snacks / x dollars].",
+    "why": "Three of the four labels in the proportion are fused to their numbers in the render (\"20dollars\", \"7snacks\", \"xdollars\") while the first one (\"4 snacks\") is correctly spaced, so the same expression is typeset two different ways.",
+    "occurrences": "single (all three fusions are in the one displayed proportion in step 2)"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 25,
+    "locator": "H2 > Work the problem one tiny step at a time, step 4, centered display above the \"×4 ×4\" annotation",
+    "category": "formatting",
+    "severity": "medium",
+    "quote": "x/4 = 6   (with ×4  ×4 written underneath)",
+    "correction": "Set the whole display at text size so the fraction matches: x/4 = 6",
+    "why": "In the render the fraction x/4 is typeset at 8pt (script size) while the \"= 6\" beside it is 10.9pt and the blue \"×4 ×4\" beneath it is 10pt, so the fraction is visibly shrunken inside its own equation — every other step-4 display in section H (H1, H3, H4) is uniform size.",
+    "occurrences": "single"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 24,
+    "locator": "H2 > Question block (bold \"Question\" heading immediately followed by an inline fraction)",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "Question\nx/4 = 6",
+    "correction": "Add vertical space (or set the equation as a display) so the fraction's numerator clears the \"Question\" heading.",
+    "why": "The numerator glyph sits inside the bounding box of the bold heading above it (heading spans y 650.4–661.3, numerator y 657.3–668.2, both starting at x≈47), so the letter visibly collides with the descender of the \"Q\" in the render.",
+    "occurrences": "worst at p.24 H2 (4pt overlap); the same collision, milder, at p.15 E2 (\"Question\" / 4-7) and p.18 E4 (\"Question\" / 5-6)"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 16,
+    "locator": "E2 > Important words, sixth bullet",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "Cross products are the two diagonal multiplies from the butterfly (a · d and b · c).",
+    "correction": "Cross products are the two diagonal products from the butterfly (a × d and b × c).",
+    "why": "\"multiplies\" is a verb being used as a plural noun; the bullet is defining products, and the surrounding bullets correctly say \"multiplies along the diagonals\" as a verb.",
+    "occurrences": "single"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 16,
+    "locator": "E2 > Important words, sixth bullet",
+    "category": "notation",
+    "severity": "low",
+    "quote": "(a · d and b · c)",
+    "correction": "(a × d and b × c)",
+    "why": "The centered-dot multiplication symbol appears only here in section E, while every worked step in E1–E4 and every other Important-words bullet writes multiplication as ×, so the student meets two symbols for the same operation inside one question.",
+    "occurrences": "single within E2; the doc otherwise reserves · for prime factorizations in section K"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 16,
+    "locator": "Closing-section heading, pattern across the document",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Before leaving this question",
+    "correction": "Why this makes sense",
+    "why": "The final block of each worked question is headed \"Why this makes sense\" 55 times and \"Before leaving this question\" 14 times with no discernible rule, so structurally identical blocks carry two different labels.",
+    "occurrences": "within pages 13–26: \"Before leaving this question\" at p.16 (E2), p.18 (E4), p.24 (H1), p.25 (H2); \"Why this makes sense\" at p.13 (D2, D3), p.14 (D4), p.15 (E1), p.17 (E3), p.19–22 (F1–F6), p.23 (G1), p.26 (H3, H4)"
+  }
+]

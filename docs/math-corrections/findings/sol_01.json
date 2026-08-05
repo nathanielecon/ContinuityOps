@@ -1,0 +1,270 @@
+[
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 1,
+    "locator": "Topic 1-1 Question 1 > We Need / Answer",
+    "category": "inconsistency",
+    "severity": "high",
+    "quote": "We Need: The additive inverse of a 4.5 m climb.",
+    "correction": "We Need: The sum of a +18 m rise and an 18 m descent (Part A), and why they are additive inverses (Part B).",
+    "why": "Topic1ExplanationsPart1 states this question as \"A submarine rises 18 meters ... then descends 18 meters\" with Checked answer \"+18 + (-18) = 0\", so the answer key's 4.5 m climb / \"4.5 meters downward\" answers a different problem (the companion's own worked steps also drift to 4.5 m, so one of the two source blocks is wrong)."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 2,
+    "locator": "Topic 1-2 Understand Rational Numbers > Question 3 absent (key jumps Q2 -> Lesson SC-1)",
+    "category": "inconsistency",
+    "severity": "high",
+    "quote": "We Solve: C is not right.",
+    "correction": "Add: Question 3 — We Need: Who is correct about 0.27-repeating. We Know: 100x - x = 99x. We Solve: 99x = 27 so x = 27/99 = 3/11. Answer: Jordan; 0.27-repeating = 3/11",
+    "why": "Topic1ExplanationsPart1 documents a Topic 1-2 Question 3 (Jordan vs Casey, Checked answer \"Jordan; 0.27 = 3/11\") that the answer key omits entirely, leaving students with no check for that item."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 3,
+    "locator": "Topic 1-4 Subtract Integers > Question 4 absent (key jumps Q3 -> Topic 1-5)",
+    "category": "inconsistency",
+    "severity": "high",
+    "quote": "Answer: Distance 15 ft; any correct distance expressions",
+    "correction": "Add: Question 4 — We Solve: |8 - (-3)| = 11 and |-1 - 8| = 9; 11 + 9 = 20. Answer: 20 floors",
+    "why": "Topic1ExplanationsPart1 documents a Topic 1-4 Question 4 (elevator, Checked answer \"20 floors\") that the answer key omits."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 3,
+    "locator": "Topic 1-5 Add and Subtract Rational Numbers > Questions 2 and 3 absent (key jumps Q1 -> Topic 1-6)",
+    "category": "inconsistency",
+    "severity": "high",
+    "quote": "Answer: $140",
+    "correction": "Add: Question 2 — We Solve: -3.75 - 2.4 - 1.85 = -8.00. Answer: -8 °C.  Question 3 — We Solve: 2 1/2 = 2.5; |2.5 - (-1.75)| = 4.25. Answer: 4.25 miles",
+    "why": "Topic1ExplanationsPart1 documents Topic 1-5 Questions 2 (Checked answer -8 °C) and 3 (Checked answer 4.25 miles), both missing from the answer key; Topic 1-5 is the only multi-question topic reduced to a single item."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 3,
+    "locator": "Topic 1-6 Multiply Integers Question 2 > We Solve vs Answer",
+    "category": "math",
+    "severity": "medium",
+    "quote": "We Solve: 250.50 × 4.5 = 1127.25 m = 1.12725 km ≈ 1 km down.",
+    "correction": "We Solve: (−250.50) × 4.5 = −1127.25 m = −1.12725 km ≈ −1 km (down).",
+    "why": "The stated computation is entirely positive and yields +1 km, but the Answer asserts \"−1 kilometer\"; the descent rate's negative sign is never introduced, so the intermediate step does not produce the answer given."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 5,
+    "locator": "Topic 1-9 Question 1 > Answer",
+    "category": "notation",
+    "severity": "medium",
+    "quote": "Answer: −150.25 (or $ − 150.25 per owner)",
+    "correction": "Answer: −150.25 (or −$150.25 per owner)",
+    "why": "The dollar sign is typeset outside the math minus, rendering as \"$ − 150.25\" with binary-operator spacing, which reads as \"dollars minus 150.25\" rather than negative $150.25; the companion writes \"$−150.25\"."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 4,
+    "locator": "Topic 1-9 Question 1 > Answer",
+    "category": "notation",
+    "severity": "medium",
+    "quote": "Answer: −125.10 (or $ − 125.10 per owner)",
+    "correction": "Answer: −125.10 (or −$125.10 per owner)",
+    "why": "Same defect as Part 1: the dollar sign is separated from the numeral by a spaced binary minus, so it reads as a subtraction rather than a negative money amount."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 1,
+    "locator": "Topic 1-1 Question 1 > We Solve parenthetical",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "We Solve: Go 3.5 meters up (toward / above the surface).",
+    "correction": "We Solve: Go 3.5 meters up (toward / above the starting level).",
+    "why": "The additive inverse of a descent returns you to the starting level, not necessarily above the water surface; Part 1's parallel line correctly says \"(toward / below the starting level)\", so Part 2 asserts an absolute position the problem does not support."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 1,
+    "locator": "Topic 1-2 Question 2 > We Know",
+    "category": "math",
+    "severity": "medium",
+    "quote": "We Know: A fraction decimal terminates or repeats.",
+    "correction": "We Know: A fraction (with nonzero denominator) becomes a decimal that terminates or repeats.",
+    "why": "Part 2 drops the \"(with nonzero denominator)\" qualifier that Part 1 carries — the claim is false without it — and \"A fraction decimal\" is ungrammatical (missing verb/possessive)."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 1,
+    "locator": "Topic 1-2 Question 2 > We Solve / Answer",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "We Solve: B is always right.",
+    "correction": "We Solve: B is not right.  (or restore a \"We Need:\" line stating exactly what the item asks)",
+    "why": "Part 1's parallel item asks which statement is NOT right and answers \"C is not right\"; Part 2 has no We Need line and flips to an \"always right\" claim, which the preceding We Know line does not establish (a fraction's decimal may terminate instead of repeating), so the reader cannot tell whether B is the correct selection."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 2,
+    "locator": "Lesson SC-1 Question 2 (only question in either document with no We Solve or Part line)",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "We Know: 2/5 = 0.4\nAnswer: =, ≤, ≥",
+    "correction": "We Need: Symbols that fit 2/5 and 0.4.\nWe Know: 2/5 = 0.4\nWe Solve: Equal numbers also satisfy ≤ and ≥.\nAnswer: =, ≤, ≥",
+    "why": "Part 1's parallel item has all four blocks; here the reasoning step that explains why ≤ and ≥ also apply is missing, so the answer of three symbols is unjustified."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 3,
+    "locator": "Topic 1-5 Question 1 > We Solve",
+    "category": "math",
+    "severity": "medium",
+    "quote": "We Solve: 180 − 12 = 168; 156; 144; 132; 120.",
+    "correction": "We Solve: 180 − 12 = 168; 168 − 12 = 156; 156 − 12 = 144; 144 − 12 = 132; 132 − 12 = 120.",
+    "why": "Only the first subtraction is written out; the remaining four values are bare numbers, so the single stated step does not produce the asserted $120 (Part 1's parallel line writes every subtraction in full)."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 3,
+    "locator": "Topic 1-6 Questions 3 and 4 > We Solve",
+    "category": "math",
+    "severity": "medium",
+    "quote": "We Solve: −6² = −36",
+    "correction": "Q3: We Solve: (−6)² = (−6) × (−6) = 36.  Q4: We Solve: −6² = −(6²) = −36",
+    "why": "Part 2 omits the two intermediate steps that Part 1 shows ((−5) × (−5) and −(5²)); those steps are exactly what the shared \"Difference:\" note refers to, so as written each answer is asserted without the order-of-operations step that produces it.",
+    "occurrences": "Q3 and Q4, both p.3"
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 2,
+    "locator": "Topic 1-3 Question 1 > Part A",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "Part A: Move right 12, left 5, left 9 on a number line.",
+    "correction": "Part A: Start at 0. Move right 12, left 5, left 9.",
+    "why": "Part 2 drops the \"Start at 0.\" that Part 1 gives; without a starting point the number-line description does not determine the landing point that Part B's −2 depends on."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 6,
+    "locator": "Topic SC-2 Question 10 (duplicates the middle term already worked in Question 6, p.5)",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "We Solve: (2 · 3)² = 6² = 36",
+    "correction": "Replace with the intended distinct power-of-a-product item (Part 1's parallel Q10 is (2 · 5)³ = 10³ = 1000).",
+    "why": "Question 6 already contains the identical expression and value — \"(2 · 3)² = 6² = 36\" — so Q10 appears to have been copied from Q6's second term; Part 1's Q6/Q10 pair is distinct, and Part 2's Q11 (15/3)² likewise mirrors Q6's third term (18/3)²."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 1,
+    "locator": "pattern: We Need / We Know blocks present in Part 1 but dropped in Part 2's parallel items",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "Question 2\nWe Solve: p + q = 0 means |p| = |q|.\nAnswer: |p| = |q| (or equivalent)",
+    "correction": "Restore the We Need: and We Know: lines for each listed item so both keys expose the same reasoning scaffold the header promises (\"Use We Need → We Know → We Solve\").",
+    "why": "The header of both documents tells students to work in three blocks, but Part 2 supplies fewer blocks than Part 1 for twelve parallel items, so the two keys model different amounts of reasoning for the same lesson.",
+    "occurrences": "Part 2 p.1: 1-1 Q2, Q3, Q4 (no We Need, no We Know); 1-2 Q1 (neither); 1-2 Q2 (no We Need); SC-1 Q1 (no We Need). p.2: SC-1 Q2 (no We Need, no We Solve); 1-3 Q3 (neither); 1-4 Q1 (neither). p.3: 1-8 Q2 and Q3 lose the \"Opposite signs ⇒ negative quotient\" / \"Same signs ⇒ positive quotient\" We Know lines (p.4). p.4: 1-9 Q2 (no We Need)."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 2,
+    "locator": "Lesson SC-1 Question 1 > Answer parenthetical",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Answer: 10.4 < 10.6 and 10.6 > 10.4 (units OK)",
+    "correction": "Answer: 10.4 < 10.6 and 10.6 > 10.4 (pounds OK)",
+    "why": "Topic1ExplanationsPart1's Final answer for this item reads \"(pounds OK)\", naming the actual unit (cat and rabbit weights); the key's generic \"(units OK)\" loses the check the companion intends.",
+    "occurrences": "Part 1 p.2 and Part 2 p.1 (same generic parenthetical)"
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 2,
+    "locator": "section headings: \"Lesson SC-1 ...\" vs \"Topic SC-2 ...\"",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Lesson SC-1 Compare Rational Numbers",
+    "correction": "Topic SC-1 Compare Rational Numbers",
+    "why": "Every other section heading in both documents begins \"Topic\"; only the SC-1 heading uses \"Lesson\", so the two supplementary lessons are labelled with different words.",
+    "occurrences": "Part 1 p.2 (Lesson SC-1) vs p.5 (Topic SC-2); Part 2 p.1 (Lesson SC-1) vs p.5 (Topic SC-2)"
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 1,
+    "locator": "subtitle line under the document title",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "Brief checks. Use We Need → We Know → We Solve on your notebook.",
+    "correction": "Brief checks. Use We Need → We Know → We Solve in your notebook.",
+    "why": "Work is done \"in\" a notebook, not \"on\" one.",
+    "occurrences": "Part 1 p.1 and Part 2 p.1 (identical subtitle)"
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 5,
+    "locator": "Topic 1-9 Question 2 > We Solve",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "Stations at the end of each interval (including finish) ⇒ 4.",
+    "correction": "Stations at the end of each interval (including the finish line) ⇒ 4.",
+    "why": "\"including finish\" is missing its article; the source question says \"and one at the finish line\".",
+    "occurrences": "Part 1 p.5 (\"including finish\") and Part 2 p.4 (\"Rest stops at the end of each interval (including finish)\")"
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 4,
+    "locator": "unlabelled trailing lines: \"Difference:\" (1-6 Q4) and \"Check:\" (1-8 Q4)",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "Difference: parentheses square the negative; without them, square first, then make negative.",
+    "correction": "Bold the label as with every other block: \"**Difference:** parentheses square the negative; ...\" and likewise \"**Check:**\".",
+    "why": "Every other inline label in both documents (We Need:, We Know:, We Solve:, Answer:, Part A:, Part B:) is bold; \"Difference:\" and \"Check:\" are set in roman, so they do not read as block labels.",
+    "occurrences": "Part 1 p.4 (Difference:) and p.5 (Check:); Part 2 p.3 (Difference:) and p.4 (Check:)"
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 6,
+    "locator": "Topic SC-2 Question 7 > Answer (compare Question 11)",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "Answer: 5 1/9",
+    "correction": "Answer: 46/9 or 5 1/9",
+    "why": "Question 11 on the same page answers \"289/36 or 8 1/36\" and Part 2's Q7 answers \"9/8 or 1 1/8\", giving both improper and mixed forms; Q7 here gives only the mixed form, so equivalent forms are accepted inconsistently."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 4,
+    "locator": "Topic 1-8 Question 4 (item split across the p.4/p.5 page break)",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "Butterfly: multiply along each red line.",
+    "correction": "Keep Question 4's We Need / We Know / figure / We Solve / Check / Answer on one page (as Part 2 does).",
+    "why": "The butterfly figure and caption end page 4 while the We Solve, Check and Answer lines that use it start page 5, so the cross-product step is separated from the diagram it refers to; Part 2's parallel item is unbroken on p.4."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 5,
+    "locator": "Topic SC-2 Question 2 > Answer, Part B",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Answer: Part A: 2⁴/2² (or equivalent); Part B: 4",
+    "correction": "Answer: Part A: 2⁴/2² (or equivalent); Part B: 4 cupcakes per friend",
+    "why": "Topic1ExplanationsPart1's Final answer is \"Part B: 4 cupcakes per friend\"; the key drops the unit even though Question 1 on the same page does label its answer (\"729 square inches\")."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 3,
+    "locator": "pattern: irregular use of the We Need / We Know blocks within a single topic",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "Question 2\nWe Solve: |150 − 120| = 30. Valid: |150 − 120|, |120 − 150|, 150 − 120.\nAnswer: Distance 30 ft; any correct distance expressions",
+    "correction": "Apply the same block set to every question within a topic (or state up front that later questions in a topic reuse the first question's We Need / We Know).",
+    "why": "Within Topic 1-4 the first question carries We Need and We Know while Questions 2 and 3 carry neither, and the same irregularity recurs elsewhere, so the promised \"We Need → We Know → We Solve\" pattern is applied unpredictably.",
+    "occurrences": "Part 1 p.3: 1-4 Q1 full vs Q2/Q3 bare; 1-5 Q1 has We Know but no We Need; p.2: 1-3 Q2 and Q4 have We Solve only; p.2: SC-1 Q1 has We Need but no We Know"
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 1,
+    "locator": "Topic 1-1 Question 1 > We Need / We Know",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "We Need: Additive inverse of a 3.5 m descent.\nWe Know: Same distance, opposite direction.",
+    "correction": "We Need: The additive inverse of a 3.5 m descent.\nWe Know: Additive inverse means same distance, opposite direction.",
+    "why": "Part 2 drops the article and the subject that Part 1's parallel lines carry, leaving the We Know line as a bare fragment that never names what it is defining."
+  }
+]

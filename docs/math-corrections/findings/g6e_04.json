@@ -1,0 +1,115 @@
+[
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 46,
+    "locator": "M4 (168.8 ÷ 8) > long-division display above the caption",
+    "category": "inconsistency",
+    "severity": "high",
+    "quote": "2 1 . 1\n8 ) 1 6 8 . 8\nQuotient digits sit above matching places; the decimal points line up.",
+    "correction": "Shift the quotient one column right so 2 sits above 6, 1 above 8, the quotient decimal point above the dividend decimal point, and the final 1 above the tenths 8.",
+    "why": "In the render the quotient is set one place too far left — 2 sits above the 1 (hundreds), 1 above the 6, and the quotient's decimal point above the 8 — so the figure contradicts its own caption and step 3 (\"Place the decimal point in the quotient directly above the decimal point in 168.8\") and step 1 (\"Write 2 in the tens place\")."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 49,
+    "locator": "N3 (5/8 × 4/15) > Work the problem one tiny step at a time, step 5",
+    "category": "math",
+    "severity": "medium",
+    "quote": "Also cancel: 5 and 15 share a factor of 5: 5/30 = 1/6 (because 5 ÷ 5 = 1 and 30 ÷ 5 = 6).",
+    "correction": "Also cancel: 5 and 30 share a factor of 5: 5/30 = 1/6 (because 5 ÷ 5 = 1 and 30 ÷ 5 = 6).",
+    "why": "The fraction actually being reduced is 5/30, and the parenthetical divides by 30, so naming \"5 and 15\" misidentifies the numbers being cancelled."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 40,
+    "locator": "K11 > What the question is asking (same sentence repeats in N6, p.51)",
+    "category": "grammar",
+    "severity": "medium",
+    "quote": "This question asks you to rewrite (b + 3) + 9 by moving the curved marks to group the add in a different way.",
+    "correction": "... by moving the curved marks to group the addition in a different way.",
+    "why": "\"the add\" is not a noun; the sentence needs \"the addition\" (or \"the addends\").",
+    "occurrences": "p.40 (K11) and p.51 (N6)"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 48,
+    "locator": "N2 (5/6 − 1/3) > Important words, third bullet",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "Then subtract numerators and simplify.",
+    "correction": "To subtract fractions with the same denominator, subtract the numerators and keep the denominator.",
+    "why": "A procedural sentence beginning \"Then\" is stranded in a vocabulary list with no antecedent — it follows the \"simplify\" bullet, so it reads as simplify-then-subtract-then-simplify, and N2 never states the subtraction rule the way the parallel N1 states the addition rule."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 44,
+    "locator": "Binary operators set tight (no spaces) where the rest of the document sets them spaced",
+    "category": "spacing",
+    "severity": "low",
+    "quote": "Tenths: 6+6+1 = 13 (write 3, carry 1). Ones: 5+4+1 = 10 (write 0, carry 1). Tens: 1+8+1 = 10",
+    "correction": "Tenths: 6 + 6 + 1 = 13 (write 3, carry 1). Ones: 5 + 4 + 1 = 10 (write 0, carry 1). Tens: 1 + 8 + 1 = 10",
+    "why": "The same sentence sets \"Hundredths: 3 + 7 = 10\" with spaces but \"6+6+1\", \"5+4+1\", \"1+8+1\" and \"4+2+1\" without, and the same defect recurs elsewhere, giving visibly inconsistent operator spacing on the rendered page.",
+    "occurrences": "p.44 (M2 check: 6+6+1, 5+4+1, 1+8+1, 4+2+1); p.41 (K11: \"Writing 9+(b+3)\"); p.50 (N5: \"rewrite 7×a by swapping\"); p.51 (N6 step 5: \"(2+5)+8 = 7+8 = 15 and 2+(5+8) = 2+13 = 15\" and \"Writing 8+(x+5)\")"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 46,
+    "locator": "M5 > Important words, third bullet (also M6 p.47, fifth bullet)",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "To multiply decimals: multiply as if they were whole numbers, then place the decimal point by counting all decimal digits in the factors.",
+    "correction": "To <i>multiply decimals</i>: multiply as if they were whole numbers, then place the decimal point by counting all decimal digits in the factors.",
+    "why": "Every other defined term in these sections is italicised on first use — M1 \"To <i>add decimals</i>\", M2 \"To <i>subtract decimals</i>\", M3 \"To <i>multiply decimals</i>\" — but M5's and M6's parallel bullets are set in roman.",
+    "occurrences": "p.46 (M5, \"To multiply decimals:\"); p.47 (M6, \"To divide by a decimal,\")"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 44,
+    "locator": "M2 (700.3 − 284.67) > Important words, fourth bullet vs. the numbered steps",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Borrowing means taking 1 from a higher place value and rewriting it as 10 in the place to its right when the top digit is too small.",
+    "correction": "Drop the bullet, or replace it with a definition of the break-apart method the steps actually use (e.g. \"Break apart means split the subtrahend into place-value parts and subtract one part at a time\").",
+    "why": "The nine worked steps subtract 200, 80, 4, 0.60 and 0.07 one part at a time and never borrow, so the only vocabulary term unique to this question is never used."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 50,
+    "locator": "N5 vs. K10 (pp. 39-40) — duplicated question",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "N5\nQuestion\nRewrite using the commutative property: 7 × a =\nChecked answer: a × 7",
+    "correction": "Give N5 a different expression (as N6 does relative to K11, using (x + 5) + 8 rather than (b + 3) + 9), or cross-reference K10 instead of re-explaining it.",
+    "why": "K10 on p.39 is the identical question with the identical numbers and answer, yet it gets a second full explanation under a different label with a different Important-words list (three bullets vs. two) — mirroring the same verbatim duplication in the worksheet (K10 and N5)."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 40,
+    "locator": "K10 > Work the problem one tiny step at a time, step 5",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Numeric check with numbers: 7 × 3 = 21 and 3 × 7 = 21. Same product after the order switch.",
+    "correction": "Numeric check with a number for a: if a = 3, then 7 × 3 = 21 and 3 × 7 = 21. Same product after the order switch.",
+    "why": "The step silently substitutes 3 for the variable a without saying so, while the identical question at N5 (p.51, step 5) and the neighbouring K11 (p.40, step 4) both state the substitution explicitly."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 42,
+    "locator": "L1 (Factor: 8x + 16) > What the question is asking",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "This question asks you to write 8x + 16 as a times pairing by pulling out a shared whole number that divides both parts evenly.",
+    "correction": "This question asks you to write 8x + 16 as a product by pulling out a shared whole number that divides both parts evenly.",
+    "why": "\"a times pairing\" is not English and is not used anywhere else in the document, which says \"product\" (including in this question's own Important words: \"Factored form means written as a product\")."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 42,
+    "locator": "L1 > Work the problem one tiny step at a time, step 1",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Look at coefficients (and constants): 8x and 16.",
+    "correction": "Look at the terms: 8x (coefficient 8) and the constant 16.",
+    "why": "8x is a term, not a coefficient — its coefficient is 8 — so the labels do not match the two items listed."
+  }
+]

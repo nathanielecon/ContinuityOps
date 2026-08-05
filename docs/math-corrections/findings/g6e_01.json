@@ -1,0 +1,134 @@
+[
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 1,
+    "locator": "Intro paragraph under the title",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Read every Important words box before you start the numbered steps.",
+    "correction": "Read every Important words section before you start the numbered steps.",
+    "why": "The document never renders \"Important words\" as a box — it is a plain bold heading followed by a bullet list — so the promised \"box\" does not exist anywhere in the companion.",
+    "occurrences": "intro only, but describes all 70 Important words blocks in the document"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 1,
+    "locator": "A1 > closing block heading (pattern: \"Before leaving this question\" vs \"Why this makes sense\")",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Before leaving this question",
+    "correction": "Why this makes sense",
+    "why": "The same structural slot (the closing commentary after \"Final answer\") is labelled two different ways across the companion — 14 questions use \"Before leaving this question\" and 55 use \"Why this makes sense\" — with no consistent rule (e.g. B3's \"Why this makes sense\" also contains a common-mistake caution).",
+    "occurrences": "\"Before leaving this question\" on pages 1, 7, 16, 18, 24, 25, 28, 30, 35, 37, 42, 44, 46, 47; \"Why this makes sense\" on all other question pages"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 3,
+    "locator": "B2 > Important words > third bullet",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Multiply means times, written ×.",
+    "correction": "Multiply means “times,” written ×.",
+    "why": "The identical gloss one page earlier (B1) is punctuated \"Multiply means “times,” written ×.\", so the same defined term is presented two different ways on adjacent questions (B2 also drops the quotes on \"take away\" for Subtract).",
+    "occurrences": "B2 bullets for Subtract and Multiply (page 3)"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 3,
+    "locator": "B3 > What the question is asking",
+    "category": "math",
+    "severity": "low",
+    "quote": "First build 2^4 as 2 times itself four times, then add 1.  [rendered with 4 as a superscript]",
+    "correction": "First build 2^4 by using 2 as a factor four times, then add 1.",
+    "why": "\"2 times itself four times\" literally describes 2 × 2 × 2 × 2 × 2 = 2^5; the document's own numbered steps and B3's closing paragraph correctly say \"four factors of 2\" / \"four twos multiplied\", so the summary line contradicts the worked steps.",
+    "occurrences": "page 3 (the same loose phrasing appears in the exponent bullet: \"tells how many times to multiply the base by itself\")"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 7,
+    "locator": "C1 > Question block (vs 6thGradeReview.pdf p.1, C1)",
+    "category": "punctuation",
+    "severity": "low",
+    "quote": "In 82.731, the tenths digit is __________.",
+    "correction": "In 82.731, the tenths digit is __________",
+    "why": "The worksheet item it restates ends with no period after the answer blank, so the companion's restatement does not match the worksheet verbatim.",
+    "occurrences": "page 7"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 7,
+    "locator": "C1 > What the question is asking",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "This question asks which single number 0–9 sits in the first place after the dot in 82.731.",
+    "correction": "This question asks which single digit 0–9 sits in the first place after the dot in 82.731.",
+    "why": "The very next block defines \"A digit is a single symbol 0 through 9\", and the question itself asks for the tenths digit, so calling it a \"number\" uses a different word for the term the page is about to define.",
+    "occurrences": "page 7"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 8,
+    "locator": "C2 > Work the problem one tiny step at a time > step 1",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "1. Write the numbers stacked, lining up the decimal points:",
+    "correction": "1. Write the numbers stacked, lining up the decimal points.",
+    "why": "The colon introduces a stacked-addition display that is not printed until after step 8, so step 1 ends by pointing at nothing and step 2 follows immediately.",
+    "occurrences": "page 8"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 8,
+    "locator": "C3 > Important words > fourth bullet",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "To borrow (also called borrowing) means: when a top digit is too small to subtract, take 1 from the next higher place on the left.",
+    "correction": "To borrow (also called regrouping) means: when a top digit is too small to subtract, take 1 from the next higher place on the left.",
+    "why": "\"also called borrowing\" gives the same word back as its own alternative name, which is vacuous; the standard second name for this operation is \"regrouping\" (contrast C6's plain gerund gloss \"To simplify (simplifying)\").",
+    "occurrences": "page 8"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 9,
+    "locator": "C4 > Work the problem one tiny step at a time > step 3",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "3. Moving the point two places right: 0.32 → 32.",
+    "correction": "3. Move the point two places right: 0.32 → 32.",
+    "why": "Every other step in C4 and the exactly parallel step in C5 (\"Move the point two places left: 65.0 → 0.65.\") are imperatives, so the gerund breaks the numbered-step parallelism.",
+    "occurrences": "page 9"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 10,
+    "locator": "C6 > What the question is asking",
+    "category": "math",
+    "severity": "medium",
+    "quote": "then shrink the top and bottom by the same amount until nothing bigger than 1 divides both evenly",
+    "correction": "then divide the top and bottom by the same common factor until nothing bigger than 1 divides both evenly",
+    "why": "\"Shrink by the same amount\" describes subtracting the same number from numerator and denominator (8−2 over 10−2 = 6/8, which is wrong), and it contradicts this same page's definition bullet \"To simplify ... means divide the top and bottom by the same common factor.\"",
+    "occurrences": "page 10"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 11,
+    "locator": "C6 > Important words > last bullet (carried over to top of page 11)",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "The digit in tenths place means “over 10.”",
+    "correction": "The digit in the tenths place means “over 10.”",
+    "why": "Missing the article \"the\"; the same page's step 1 correctly writes \"8 in the tenths place\".",
+    "occurrences": "page 11"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 11,
+    "locator": "C7 > Why this makes sense",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "Fifteen percent is a little more than one tenth of 80. One tenth of 80 is 8, so 12 is a sensible size.",
+    "correction": "Fifteen percent of 80 is a little more than one tenth of 80. One tenth of 80 is 8, so 12 is a sensible size.",
+    "why": "As written it equates the rate \"fifteen percent\" with the quantity \"one tenth of 80\" (= 8); the intended comparison is 15% of 80 against one tenth of 80.",
+    "occurrences": "page 11"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 1,
+    "locator": "Whole document (assigned range pp.1–14 checked); corpus-wide pattern",
+    "category": "formatting",
+    "severity": "medium",
+    "quote": "Instructor support, online resources, and AI are allowed onexplanations only. On Independent Practice Parts 1 and 2, donotuse the internet or AI.",
+    "correction": "Re-generate the PDF so the text layer carries word boundaries across font switches (e.g. add explicit spacing / use a PDF/A-friendly toolchain), keeping the visual render unchanged.",
+    "why": "The rendered page is correct (\"allowed on explanations only\", \"do not use\"), but the PDF's copyable text layer fuses words at every bold/italic boundary (\"onexplanations\", \"donotuse\", \"circleit\", \"thenreworkuntil\", \"Nonzeromeans\", \"Afraction\", \"Awhole numberis\") and splits \"We\" into \"W e\", so anything pasted, screen-read, or searched out of the file is corrupted.",
+    "occurrences": "all pages / every bold or italic run in the document",
+    "_src": "t1e_01.json"
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 28,
+    "locator": "corpus-wide PDF text layer (copy/paste and extraction), not the visual render",
+    "category": "formatting",
+    "severity": "medium",
+    "quote": "Nonzeromeans not equal to zero.",
+    "correction": "Nonzero means not equal to zero.",
+    "why": "The pages render with correct spacing, but the PDF's copyable text layer fuses the word immediately after each italic/bold run (\"Nonzeromeans\", \"Afraction\", \"Aunitis\", \"Checked answer:Part A:\", etc.), so copied text and screen readers get run-together words.",
+    "occurrences": "every page of all five PDFs in the corpus; reported once here",
+    "_src": "t1e_03.json"
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 14,
+    "locator": "corpus-wide: PDF copyable text layer (all pages of all five documents)",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "Anoperationis a math action. Add joins amounts.",
+    "correction": "An operation is a math action. Add joins amounts.",
+    "why": "The pages render correctly with spaces, but the PDF's extractable text layer fuses words across every \\textbf/\\emph run (\"Anoperationis\", \"Final answer:Part A\", \"Checked answer:−2\", \"W ork\"), which breaks copy-paste, search and screen readers.",
+    "occurrences": "single corpus-wide defect; visible on every page of pages 14–27 and, per the shared brief, across all five PDFs — NOT a rendering defect",
+    "_src": "t1e_02.json"
+  }
+]

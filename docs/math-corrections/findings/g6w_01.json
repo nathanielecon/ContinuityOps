@@ -1,0 +1,134 @@
+[
+  {
+    "doc": "6thGradeReview",
+    "page": 3,
+    "locator": "Section K item 10 (p.3) and Section N item 5 (p.4)",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "10. Rewrite using the commutative property: 7 × a =",
+    "correction": "Delete N5, or change one of the two to a different instance, e.g. N5: \"Rewrite using the commutative property: 9 × b =\"",
+    "why": "K10 and N5 are character-for-character the same item, so the student answers the identical prompt twice and the companion carries two identical worked explanations (K10 and N5 both \"Checked answer: a × 7\").",
+    "occurrences": "K10 (p.3) and N5 (p.4) — exact duplicate pair; the neighbouring associative items K11 \"(b + 3) + 9\" and N6 \"(x + 5) + 8\" are NOT duplicates (different letters and numbers), and K9 \"8 + 5\" is unique."
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 4,
+    "locator": "Sections C, D, M, N — the answer-format tag on every computation item",
+    "category": "formatting",
+    "severity": "medium",
+    "quote": "1. 428.5 + 37.26 = (decimal)",
+    "correction": "428.5 + 37.26 = ____________ (decimal)",
+    "why": "The format hint sits in the answer position with no answer blank, so the line reads as an equation whose right-hand side is the literal word \"(decimal)\" rather than as a fill-in with a format note.",
+    "occurrences": "C2, C3, D3, D4, M1–M6, N1–N4 (14 items across pp.1, 4)"
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 1,
+    "locator": "Section D item 4 (p.1) and Section M item 6 (p.4)",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "4. 5.6 ÷ 0.8 = (decimal)",
+    "correction": "5.6 ÷ 0.8 = ____________",
+    "why": "Both items are tagged \"(decimal)\" but their answers are whole numbers (7 and 9), and the companion's checked answers are plainly \"7\" and \"9\", so the tag contradicts the accepted answer and invites a student to write \"7.0\".",
+    "occurrences": "D4 (p.1, answer 7) and M6 (p.4, answer 9)"
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 2,
+    "locator": "Section H items 1–4",
+    "category": "grammar",
+    "severity": "medium",
+    "quote": "3. x + 3 > 8",
+    "correction": "3. Solve: x + 3 > 8",
+    "why": "H1–H4 are bare equations/inequalities with no directive verb, and because H6 and H7 in the same section say \"Graph …\", the student cannot tell whether items 1–4 are to be solved or graphed — the companion's checked answers (\"x = 11\", \"x > 5\") show \"Solve\" was intended.",
+    "occurrences": "H1 \"x + 7 = 18\", H2 \"x/4 = 6\", H3 \"x + 3 > 8\", H4 \"x − 4 < 2\""
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 1,
+    "locator": "Directions line, versus items A1, H6, H7 and all fill-in items",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "Show work in the space provided or on scrap paper as directed.",
+    "correction": "Show work on scrap paper.",
+    "why": "No work space is provided anywhere on the four pages — the items are set as tightly spaced lists — and A1, H6 and H7 ask the student to plot or graph on a number line that is never printed, so the promised \"space provided\" does not exist.",
+    "occurrences": "Directions (p.1); affected items A1 (p.1), H6 and H7 (p.2)"
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 1,
+    "locator": "Section C item 1",
+    "category": "punctuation",
+    "severity": "low",
+    "quote": "1. In 82.731, the tenths digit is __________",
+    "correction": "1. In 82.731, the tenths digit is __________.",
+    "why": "This is the only full-sentence fill-in on the worksheet with no terminal period; the structurally identical items F1, F2, F3, F4, K7 and K8 all end with a period after the blank.",
+    "occurrences": "C1 only"
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 2,
+    "locator": "Section G item 1, versus Section L item 1",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "1. 3(y + 6) =",
+    "correction": "1. Expand: 3(y + 6) =",
+    "why": "The parallel item in section L carries an explicit verb (\"Factor: 8x + 16 =\") while G1 has none, so the two distributive-property tasks are cued inconsistently.",
+    "occurrences": "G1 (p.2) vs L1 (p.3)"
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 2,
+    "locator": "Sections G and L (whole-section structure)",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "G. Distributive Property",
+    "correction": "Merge G into L as \"G. Distributive Property And Factoring\" containing both 3(y + 6) = and Factor: 8x + 16 =",
+    "why": "Two separate single-item sections four sections apart cover the same property, splitting one skill across the worksheet for no stated reason.",
+    "occurrences": "G (p.2) and L (p.3)"
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 2,
+    "locator": "Section E item 1, versus Section K item 6",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "1. Greater:  or 0.61?  [the blank is a built-up fraction five-eighths]",
+    "correction": "1. Which is greater: [five-eighths] or 0.61?",
+    "why": "E1 is a telegraphic fragment punctuated as a question, while the identical task type at K6 is written as a full question (\"Which is greater: …?\").",
+    "occurrences": "E1 (p.2) vs K6 (p.3)"
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 3,
+    "locator": "Section J items 3 and 5",
+    "category": "notation",
+    "severity": "low",
+    "quote": "3. 210 miles / 3 hours =",
+    "correction": "3. 210 miles ÷ 3 hours = __________ miles per hour",
+    "why": "These are the only two division items written with a slash rather than ÷ or a set fraction, and neither asks for the unit that the companion's checked answers supply (\"70 miles per hour\", \"30 miles per gallon\"), unlike J1 and J4 which do print the unit after the blank.",
+    "occurrences": "J3 and J5 (p.3)"
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 1,
+    "locator": "All fourteen section headings A–N",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "B. Order Of Operations",
+    "correction": "B. Order of Operations",
+    "why": "Every heading capitalises the short function words (\"Of\", \"And\"), the signature of a mechanical title-casing pass rather than a deliberate style, and it reads wrong in a student-facing document.",
+    "occurrences": "B \"Order Of Operations\", C \"Decimals, Fractions, And Percents\", D \"Facts And Decimal Multiply/Divide\", E \"Ratios, Fractions, And Proportions\", F \"Vocabulary, Expressions, And Equations\", H \"Equations, Inequalities, And Graphing\", J \"Units And Quantities\", K \"Expressions, Factors, And Fraction Structure\", L \"Distributive Property And Factoring\", N \"Fraction Operations And Properties\""
+  },
+  {
+    "doc": "6thGradeReview",
+    "page": 1,
+    "locator": "Section D items 3–4 versus Section M items 5–6",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "3. 2.4 × 1.5 = (decimal)",
+    "correction": "Drop D3/D4 or M5/M6, or vary the operand shape (e.g. M5: 4.2 × 0.25 =)",
+    "why": "D3/D4 and M5/M6 are the same two skills with digit-swapped operands (2.4 × 1.5 vs 4.2 × 1.5; 5.6 ÷ 0.8 vs 7.2 ÷ 0.8), which is redundant in a diagnostic that is otherwise one item per skill.",
+    "occurrences": "D3/M5 and D4/M6"
+  }
+]
