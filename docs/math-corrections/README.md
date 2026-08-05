@@ -10,11 +10,15 @@ full findings record from the scan that produced them.
 | `pdf/6thGradeReview.pdf` | 2 | yes (rebuilt from the revised worksheet) |
 | `pdf/6thGradeReviewExplanations.pdf` | 52 | yes |
 | `pdf/Topic1ExplanationsPart1.pdf` | 53 | yes |
-| `pdf/Topic1Part1Solutions.pdf` | 6 | yes |
+| `pdf/Topic1Part1Solutions.pdf` | 7 | no — 6 in the original, +1 by design (see below) |
 | `pdf/Topic1Part2Solutions.pdf` | 6 | yes |
 | `pdf/CorrectionsReport.pdf` | 27 | — (new) |
 
-Every rebuilt document has the same page count as the original it replaces.
+Every rebuilt document matches its source's page count except
+`Topic1Part1Solutions.pdf`, which grew 6 -> 7. That is intended, not drift: the
+key was missing four questions the assignment contains (Lesson 1-2 Q3, 1-4 Q4,
+1-5 Q2 and Q3) and they were added. A key that fits the old page count would
+still be missing them.
 
 ## Findings
 
@@ -55,6 +59,36 @@ Round 1's other high-severity findings, all still standing:
 
 Full detail, with the exact text found and the exact replacement, is in
 `pdf/CorrectionsReport.pdf`. Machine-readable records are in `findings/`.
+
+## Judge loop
+
+After the corrections were applied, every slice of both explanation companions
+was put through an adversarial judge loop: a dedicated judge per slice, scoring
+out of 10 against a fixed rubric, looping with a separate fixer until 10/10, then
+a second cold 10/10 to validate. **All 11 slices were accepted.**
+`judge/LOOP_STATE.md` holds the per-slice ledger.
+
+It was worth running. It caught a regression introduced by a fix, a fixer's
+false self-report, residue from a withdrawn edit, three fixes that displaced a
+defect rather than closing it, and 22 restatements missing the worksheet's answer
+blanks. One slice was accepted, then **revoked** when another slice's judge found
+that defect in it, then re-judged clean.
+
+Two caveats are recorded rather than smoothed over:
+- **Four of eleven slices** (A, H, I, J) completed their two passes with judges
+  that had lost memory of the earlier round. They got two independent 10/10
+  reads, not one judge confirming itself - a different property from the one
+  specified.
+- **Four instrument failures** were found, each capable of a confident wrong
+  verdict: a CJK guard that failed open, the same guard false-positiving on
+  PDFs, `\rule` emitting an `l` primitive so rectangle-counting reports every
+  blank missing, and `pdftotext -layout` transposing built-up fractions.
+
+## Known open item
+
+The revised worksheet sets its section headings as navy banner boxes with white
+text on light panels. The rebuild uses plain bold headings. No slice owns the
+worksheet, so no judge covers it. Unfixed.
 
 ## Withdrawn findings
 
