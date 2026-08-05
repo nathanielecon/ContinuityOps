@@ -12,14 +12,17 @@ Rule: a slice is ACCEPTED only on TWO CONSECUTIVE 10/10 from its judge
 | E | 1-9, 1-10 | 9 | 10 | — | died mid-read | **OPEN** — needs validation |
 | F | SC-2 Q1-12 | 9 | 10 | — | died mid-read | **OPEN** — needs validation |
 | G | A1, B, C | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
-| H | D, E, F | 9 | 9 | — | — | **OPEN** — new defect, unfixed |
+| H | D, E, F | 9 | 9 | — | — | **OPEN** — fix APPLIED, needs re-judge |
 | I | G, H, I, J | 8 | 10 | — | died mid-read | **OPEN** — needs validation |
-| J | K, L | 8 | 9 | — | — | **OPEN** — fix dispatched, never ran |
+| J | K, L | 8 | 9 | — | — | **OPEN** — fix APPLIED, needs re-judge |
 | K | M, N | 8 | 10 | — | died mid-read | **OPEN** — needs validation |
 
 ## Outstanding work, in order
 
-1. **Fix J** (g6e_J.tex). Fraction-size sweep was incomplete: prose inside
+1. ~~Fix J~~ **DONE** (applied by hand, not by a subagent). 17 prose lines
+   converted to \tfrac; the 11 remaining \dfrac are exactly the 3 restated
+   Question lines (which mirror the worksheet's own built-up fractions) plus the
+   4 \checked and 4 \finalans lines. Original spec was: Fraction-size sweep was incomplete: prose inside
    numbered work-steps and Important-words bullets still uses \dfrac while
    paragraph prose now uses \tfrac, so the same expression appears at two sizes
    within a few lines. Rule: \tfrac for ALL running prose incl. list items and
@@ -27,7 +30,8 @@ Rule: a slice is ACCEPTED only on TWO CONSECUTIVE 10/10 from its judge
    lines. Known loci: K4 "Why this makes sense" + step 4; K5 bullet 2 + step 4;
    K6 bullets 1-2 + steps 1-3; K7 steps 1-3; K8 steps 1-5.
 
-2. **Fix H** (g6e_H.tex). Seven restated Questions drop the worksheet's answer
+2. ~~Fix H~~ **DONE** (applied by hand). All 7 answer slots added; compiles
+   clean at 52 pages. Original spec was: Seven restated Questions drop the worksheet's answer
    blank: D1 "9 x 6 =", D2 "63 / 9 =", E1 "Greater: 5/8 or 0.61?", E2 "? =",
    E4 "x =", F5 "6y - 2y =", F6 "5n - 3 =". Append \ansblank to each (E1 takes
    \blank[2.4cm]). Source lines cited by the judge: g6e_H.tex 11, 45, 156, 536,
