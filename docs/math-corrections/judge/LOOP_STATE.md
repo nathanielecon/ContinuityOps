@@ -9,12 +9,12 @@ Rule: a slice is ACCEPTED only on TWO CONSECUTIVE 10/10 from its judge
 | B | SC-1, 1-3 | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
 | C | 1-4, 1-5 | 7 | 10 | — | **10 PASS** | **ACCEPTED** |
 | D | 1-6, 1-7, 1-8 | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
-| E | 1-9, 1-10 | 9 | 10 | 9→10 (r4→r5) | validating | 2nd validation in flight |
+| E | 1-9, 1-10 | 9 | 10 | 9→10 (r4→r5) | **10 PASS** | **ACCEPTED** |
 | F | SC-2 Q1-12 | 9 | 10 | — | **10 PASS** | **ACCEPTED** |
 | G | A1, B, C | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
 | H | D, E, F | 9 | 9 | 9 FAIL | — | **OPEN** — fixed, round 4 in flight |
-| I | G, H, I, J | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
-| J | K, L | 8 | 9 | **10** | validating | validation in flight |
+| I | G, H, I, J | 8 | 10 | — | 10 PASS | **REVOKED** — see systemic finding |
+| J | K, L | 8 | 9 | 10 | **9 FAIL** | **REOPENED** — systemic finding |
 | K | M, N | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
 
 ## TOOLING BUG FOUND BY THE JUDGES — the CJK guard failed open
@@ -127,3 +127,37 @@ TEXT (not merely its pagination) reopens that slice.
   replacement judge. Slice A cannot satisfy the same-judge rule: the original
   judge's transcript is unrecoverable. The replacement disclosed this at the top
   of every report rather than presenting itself as a continuation.
+
+
+## Systemic finding: 22 restatements were missing the worksheet's answer blanks
+
+The 6th Grade companion restates each worksheet item before explaining it. The
+revised worksheet prints a fill-in rule on EVERY item. 22 restatements across
+three slices dropped it.
+
+- Judge H found 7 (D1, D2, E1, E2, E4, F5, F6) in round 2, reversing its own
+  round-1 clearance and explaining why: it had hypothesised a house convention
+  of omitting the rule after a terminal "=" or a complete "?" and tested that
+  hypothesis only against K1. B1, C7 and M1-M6 falsify it.
+- Judge J found 10 more (K1-K6, K9-K11, L1) in its VALIDATION round, having
+  passed the slice at 10/10 one round earlier - and flagged a further 12 in
+  slice I, which it does not own.
+
+Judge J's method is why it saw what others did not: it measured every rule wider
+than 35pt with PyMuPDF get_drawings() across all 69 restatements - 47 present,
+22 absent - rather than reading for it. Its clinching evidence is internal:
+K10 and N5 are character-identical items; N5 renders a blank, K10 does not.
+
+**Slice I's acceptance is REVOKED.** It passed two rounds carrying this defect.
+Its judge was not careless - it recomputed all arithmetic, measured glyph
+clearances to 1.3pt and inspected arrowheads at 600 dpi. It simply never asked
+whether every restatement carried a blank. A question nobody asks does not get
+answered by care.
+
+## Open fidelity gap, unowned by any slice
+
+The revised worksheet sets its section headings as navy banner boxes with white
+text on light-blue rounded panels. The rebuilt worksheet uses plain bold
+headings. The rebuild agent disclosed this at the time ("Not reproduced: the
+source's colored banner boxes") and it was relayed in a summary rather than
+logged as a defect. It is a fidelity defect and is recorded here as one.
