@@ -8,7 +8,7 @@
 \question{Question 1}
 
 \blockhead{Question}
-Your pet cat weighs 10.4 pounds. Your friend's rabbit weighs 10.6 pounds. Write two different statements using the less than ($<$) and greater than ($>$) symbols that compare the weight of the cat and the rabbit.
+Your pet cat weighs 10.4 lbs. Your friend's rabbit weighs 10.6 lbs. Write two different statements using the less than ($<$) and greater than ($>$) symbols that compare the weights.
 
 \checked{$10.4 < 10.6$ and $10.6 > 10.4$}
 
@@ -105,9 +105,9 @@ The fraction $\frac{3}{4}$ and the decimal 0.75 are two ways of writing the very
 \question{Question 1}
 
 \blockhead{Question}
-In the first round of a board game, a player scores 10 points. On their next turn, they lose 4 points. On their last turn of the round, they lose 8 points.
+In round 1 of a game, a player scores 10 points, then loses 4 points, then loses 8 points.
 
-\par\noindent\runin{Part A:}Explain how to show the change in score using a number line.
+\par\noindent\runin{Part A:}Explain how to show the change on a number line.
 \par\noindent\runin{Part B:}What is the final score?
 
 \checked{Part A: start at 0, move right 10, left 4, left 8; Part B: $-2$}
@@ -138,9 +138,31 @@ This question asks you to show the score changes on a straight line of numbers a
   \item Then: $6 + (-8) = -2$.
 \end{steps}
 
-\numline{-4}{12}{2}{0,-2}
+\begin{center}
+\begin{tikzpicture}[x=0.62cm,y=0.62cm]
+  % Number line ticked at every integer, so one tick-mark step is exactly one unit.
+  \draw[{Stealth[length=2.4mm]}-{Stealth[length=2.4mm]}] (-4.7,0) -- (12.7,0);
+  \foreach \x in {-4,-3,...,12}{%
+    \draw (\x,0.16) -- (\x,-0.16);
+    \node[below=1pt,font=\footnotesize] at (\x,-0.16) {$\x$};}
+  % The four points the player stands on: start 0, then 10, then 6, then -2.
+  \foreach \p in {0,10,6,-2}{\fill (\p,0) circle (2.4pt);}
+  % Guides carrying each landing up to the move that starts there.
+  \draw[gray,dashed] (0,0) -- (0,1.0);
+  \draw[gray,dashed] (10,0) -- (10,2.3);
+  \draw[gray,dashed] (6,0) -- (6,3.6);
+  \draw[gray,dashed] (-2,0) -- (-2,3.6);
+  % The three moves of Part A.
+  \draw[-{Stealth[length=2.4mm]},thick] (0,1.0) --
+    node[above,font=\footnotesize] {1. right 10 (score 10)} (10,1.0);
+  \draw[-{Stealth[length=2.4mm]},thick] (10,2.3) --
+    node[above,font=\footnotesize] {2. left 4 (lose 4)} (6,2.3);
+  \draw[-{Stealth[length=2.4mm]},thick] (6,3.6) --
+    node[above,font=\footnotesize] {3. left 8 (lose 8)} (-2,3.6);
+\end{tikzpicture}
+\end{center}
 
-\finalans{Part A: right 10, left 4, left 8; Part B: $-2$}
+\finalans{Part A: start at 0, move right 10, left 4, left 8; Part B: $-2$}
 
 \blockhead{Why this makes sense}
 Gains go right; losses go left. Ending left of zero means a negative score. Check: $10 - 4 - 8 = -2$.

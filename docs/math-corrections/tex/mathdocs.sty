@@ -18,14 +18,20 @@
 \usetikzlibrary{arrows.meta,positioning,calc}
 
 % ---------------------------------------------------------------- headings --
+% How much vertical space a heading reserves so it is not orphaned at a page
+% foot. The explanation companions follow each heading with a large block and
+% need a generous reserve; the answer keys are dense and short-entried, where a
+% large reserve would force needless page breaks. Documents override as needed.
+\newcommand{\lessonneed}{10}
+\newcommand{\questionneed}{4}
 % Lesson banner, e.g. "Topic 1-1 Relate Integers and Opposites".
 \newcommand{\lesson}[1]{%
-  \needspace{4\baselineskip}%
+  \needspace{\lessonneed\baselineskip}%
   \bigskip\par\noindent{\Large\bfseries #1}\par\medskip\noindent\ignorespaces}
 
 % Question banner, e.g. "Question 1".
 \newcommand{\question}[1]{%
-  \needspace{3\baselineskip}%
+  \needspace{\questionneed\baselineskip}%
   \medskip\par\noindent{\large\bfseries #1}\par\smallskip\noindent\ignorespaces}
 
 % Bold block heading on its own line ("Question", "Important words",
@@ -63,8 +69,8 @@
 \newcommand{\abs}[1]{\ensuremath{\left\lvert #1 \right\rvert}}
 % Mixed number: unambiguous whole-plus-fraction, e.g. \mixed{15}{1}{2}.
 \newcommand{\mixed}[3]{\ensuremath{#1\tfrac{#2}{#3}}}
-\newcommand{\degF}{\ensuremath{^{\circ}\mathrm{F}}}
-\newcommand{\degC}{\ensuremath{^{\circ}\mathrm{C}}}
+\newcommand{\degF}{\ensuremath{^{\circ}\mathrm{F}}\xspace}
+\newcommand{\degC}{\ensuremath{^{\circ}\mathrm{C}}\xspace}
 % Money: keeps the dollar sign glued to its amount with a normal preceding space.
 \newcommand{\money}[1]{\ensuremath{\$#1}}
 
