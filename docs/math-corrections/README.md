@@ -138,6 +138,16 @@ and acting on them would desynchronise these documents from Independent Practice
 worksheets that are not part of this set. They are logged in the report and left
 alone — see "Not applied" on page 1 of `CorrectionsReport.pdf`.
 
+## Next run
+
+`MASTER_PROMPT.md` is the opening prompt for the next session: the three-variant
+rule, the agent roster with measured model tiers and effort levels, the judge
+loop, the four verified instrument traps, the planning layer, and the token
+strategy. Paste it into a fresh session launched under pxpipe.
+
+`DESIGN_SPEC.md` carries the three-variant rule on its own, referenced from the
+top of the judge rubric and the rebuild brief.
+
 ## Token strategy
 
 `TOKEN_STRATEGY.md` records what the tooling actually cost and saved on this

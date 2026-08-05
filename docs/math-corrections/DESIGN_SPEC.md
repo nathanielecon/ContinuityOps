@@ -83,11 +83,16 @@ For an **explanation companion** question:
 For the **6th Grade Review companion**: unresolved — that worksheet has no
 Part 1 / Part 2 (0 occurrences). Ask before applying variant C there.
 
-## Open questions before implementation
+## Answered
 
-1. Should the 6th Grade Review companion also use different numbers from its
-   worksheet, or mirror it exactly? It has no two-part structure.
-2. Does variant C already exist somewhere authoritative — an earlier draft, or
-   the Canvas quizzes — or is it to be authored fresh?
-3. For questions with no numbers to vary (e.g. "Is 8x + 1 a linear expression?"),
-   confirm the intent is to vary the *variable* instead.
+1. **Different numbers** — the companion uses its own set, distinct from both parts.
+2. **Author fresh.** Variant C exists nowhere: the documents were not built to
+   this spec.
+3. **Numbers and variables both vary.** Where an item has no number to change,
+   change the variable letter.
+
+Read as: variant C changes numbers AND variable letters — not as "replace every
+number with a symbol". A fully symbolic explanation cannot show a slow worked
+long division (3 / 8 = 0.375), which is what these companions exist to do. If
+fully symbolic is genuinely wanted, that is a different document and needs
+confirming before anyone builds it.
