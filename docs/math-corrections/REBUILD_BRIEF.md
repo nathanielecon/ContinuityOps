@@ -67,7 +67,7 @@ pages even if not individually listed for your range:
 | `| − 9|` binary-minus inside bars | `\abs{-9}` |
 | `written ||` (empty bars) | `written \barsym` |
 | `$ − 150.25` | `$-\$150.25$` |
-| `Lesson SC-1: …` / `Topic SC-2: …` | `Topic SC-1 …` / `Topic SC-2 …` (no colon, "Topic") |
+| ~~`Lesson SC-1:` -> `Topic SC-1`~~ | **SUPERSEDED — see RECONCILE.md section F.** The assignment and the weekly plan both use `Lesson N-M: Title`. Lesson headings are `Lesson 1-1:`, `Lesson SC-1:`, `Lesson SC-2:`. `Topic 1` names the unit only. |
 | Hyphen `-12` as a negative in prose or figures | math minus `$-12$` |
 | Tight operators `6+6+1` | spaced `$6 + 6 + 1$` |
 | `Important words box` in prose | `Important words list` |

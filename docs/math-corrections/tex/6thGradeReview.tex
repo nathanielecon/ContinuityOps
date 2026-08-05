@@ -1,151 +1,225 @@
-% 6th Grade Review — corrected edition.
-% Corrections applied in this file are listed in CORRECTIONS.md.
+% 6th Grade Math Review — transcribed from 6thGradeReviewUpdated.pdf.
+% This edition follows the UPDATED worksheet: author wording and title case
+% restored, revised math values transcribed, printed number lines, two-column
+% section layout. See CORRECTIONS.md for the reconciliation notes.
 \documentclass[11pt]{article}
-\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage[letterpaper,top=0.65in,bottom=0.6in,left=0.85in,right=0.85in]{geometry}
 \usepackage{mathdocs}
 
-\setlist[enumerate,1]{leftmargin=2.4em,itemsep=0.45\baselineskip,topsep=0.4\baselineskip}
-\newcommand{\wssection}[1]{\needspace{4\baselineskip}\bigskip\par\noindent{\Large\bfseries #1}\par\medskip}
+\setlist[enumerate,1]{leftmargin=2.1em,itemsep=0.1\baselineskip,topsep=0.1\baselineskip,parsep=0pt}
+\newcommand{\wssection}[1]{\needspace{4\baselineskip}\par\vspace{0.45\baselineskip}\noindent{\large\bfseries #1}\par\vspace{0.05\baselineskip}}
+% Printed number line, tightened vertically for worksheet use.
+\newcommand{\wsnumline}[3]{\par\nobreak\vspace{-0.35\baselineskip}\blanknumline{#1}{#2}{#3}\vspace{-1.25\baselineskip}}
+
+% Two-column item block: \begin{itemcols} ... \colbreak ... \end{itemcols}
+\newcommand{\colgap}{\hfill}
+\newenvironment{lcol}{\par\noindent\begin{minipage}[t]{0.47\textwidth}}{\end{minipage}\colgap\ignorespaces}
+\newenvironment{rcol}{\begin{minipage}[t]{0.47\textwidth}}{\end{minipage}\par}
 
 \begin{document}
 
-\begin{center}
-  {\LARGE\bfseries 6th Grade Review}
-\end{center}
-\medskip
+\noindent{\LARGE\bfseries 6th Grade Math Review}\hfill
+\runin{Name:}\blank[3.2cm]\quad\runin{Date:}\blank[2.4cm]
 
-\noindent\runin{Name:}\blank[7cm]\hfill\runin{Date:}\blank[3.5cm]
-
-\medskip
-\noindent\runin{Directions:}No calculator. Write decimal answers as decimals.
-Write fraction answers in simplest terms. Show your work on scrap paper.
+\wssection{Directions}
+\noindent\textbf{No calculator.} Write decimal answers as decimals. Write
+fraction answers in simplest terms. Show work in space provided or on scrap
+paper as directed.
 
 \wssection{A. Number Lines}
 \begin{enumerate}
-  \item Plot the point $4$ on the number line below.
-  \blanknumline{0}{8}{1}
+  \item Plot the point $4$ on the number line below:
+  \wsnumline{0}{5}{1}
 \end{enumerate}
 
-\wssection{B. Order of Operations}
+\wssection{B. Order Of Operations}
+\begin{lcol}
 \begin{enumerate}
-  \item $8 + 3 \times 4 = $
-  \item $(21 - 4) \times 3 = $
-  \item $2^{4} + 1 = $
-  \item $(5 + 1)^{2} = $
-  \item $3(2^{2}) = $
-  \item $(3 \times 2)^{2} = $
+  \item $8 + 3 \times 4 = $\ansblank
+  \item $(21 - 4) \times 3 = $\ansblank
+  \item $2^{4} + 1 = $\ansblank
 \end{enumerate}
+\end{lcol}
+\begin{rcol}
+\begin{enumerate}[start=4]
+  \item $(5 + 1)^{2} = $\ansblank
+  \item $3(2^{2}) = $\ansblank
+  \item $(3 \times 2)^{2} = $\ansblank
+\end{enumerate}
+\end{rcol}
 
-\wssection{C. Decimals, Fractions, and Percents}
+\wssection{C. Decimals, Fractions, And Percents}
+\begin{lcol}
 \begin{enumerate}
-  \item In $82.731$, the tenths digit is \blank[2.4cm].
-  \item $314.7 + 29.58 = $\ansblank\hint{decimal}
-  \item $81.5 - 7.94 = $\ansblank\hint{decimal}
-  \item $0.32 = $\ansblank[1.8cm]\ \%
-  \item $65\% = $\ansblank[1.8cm]\ as a decimal
-  \item $0.8 = $\ansblank[1.8cm]\ as a fraction
-  \item $15\%$ of $80 = $
+  \item In $82.731$, the tenths digit is \blank[2.2cm]
+  \item $314.7 + 29.58 = $\ansblank[1.8cm]\hint{\emph{decimal}}
+  \item $81.5 - 7.94 = $\ansblank[1.8cm]\hint{\emph{decimal}}
+  \item $0.32 = $\ansblank[1.8cm]\%
 \end{enumerate}
+\end{lcol}
+\begin{rcol}
+\begin{enumerate}[start=5]
+  \item $65\% = $\ansblank[1.8cm]\ \emph{as a decimal}
+  \item $0.8 = $\ansblank[1.8cm]\ \emph{as a fraction}
+  \item $15\%$ of \money{80} $= $\ansblank[1.8cm]
+\end{enumerate}
+\end{rcol}
 
-\wssection{D. Facts and Decimal Multiply/Divide}
+\wssection{D. Facts And Decimal Multiply/Divide}
+\begin{lcol}
 \begin{enumerate}
-  \item $9 \times 6 = $
-  \item $63 \div 9 = $
-  \item $2.4 \times 1.5 = $\ansblank\hint{decimal}
-  \item $5.6 \div 0.8 = $\ansblank
+  \item $9 \times 6 = $\ansblank
+  \item $63 \div 9 = $\ansblank
 \end{enumerate}
+\end{lcol}
+\begin{rcol}
+\begin{enumerate}[start=3]
+  \item $2.4 \times 1.5 = $\ansblank[1.8cm]\hint{\emph{decimal}}
+  \item $5.6 \div 0.8 = $\ansblank[1.8cm]\hint{\emph{decimal}}
+\end{enumerate}
+\end{rcol}
 
-\wssection{E. Ratios, Fractions, and Proportions}
+\wssection{E. Ratios, Fractions, And Proportions}
+\begin{lcol}
 \begin{enumerate}
-  \item Which is greater: $\dfrac{5}{8}$ or $0.61$?
-  \item $\dfrac{4}{7} = \dfrac{?}{21}$
-  \item $4$ snacks cost \money{20}. $7$ snacks cost \blank[2.4cm]\ dollars.
-  \item $\dfrac{5}{6} = \dfrac{x}{18}$
+  \item Greater: $\tfrac{5}{8}$ or $0.61$?\ansblank
+  \item $\tfrac{4}{7} = \tfrac{?}{21}$\quad $? = $\ansblank
 \end{enumerate}
+\end{lcol}
+\begin{rcol}
+\begin{enumerate}[start=3]
+  \item $4$ snacks cost \money{20}. $7$ snacks cost \blank[1.3cm]\ dollars.
+  \item $\tfrac{5}{6} = \tfrac{x}{18}$\quad $x = $\ansblank
+\end{enumerate}
+\end{rcol}
 
-\wssection{F. Vocabulary, Expressions, and Equations}
+\wssection{F. Vocabulary, Expressions, And Equations}
+\begin{lcol}
 \begin{enumerate}
-  \item In $7m$, the number $7$ is the \blank[3.2cm].
-  \item In $n + 8 = 12$, $n$ is the \blank[3.2cm].
-  \item To undo $+8$, use the inverse operation \blank[2.4cm].
-  \item To undo $\div 5$, use the inverse operation \blank[2.4cm].
-  \item Combine like terms: $6y - 2y = $
-  \item If $n = 4$, then $5n - 3 = $
+  \item In $7m$, $7$ is the \blank[2.2cm]
+  \item In $n + 8 = 12$, $n$ is the \blank[2.2cm]
+  \item Undo $+8$, use inverse op: \blank[2.2cm]
 \end{enumerate}
+\end{lcol}
+\begin{rcol}
+\begin{enumerate}[start=4]
+  \item Undo $\times 5$, use inverse op: \blank[2.2cm]
+  \item Combine like terms: $6y - 2y = $\ansblank[1.8cm]
+  \item If $n = 4$, then $5n - 3 = $\ansblank[1.8cm]
+\end{enumerate}
+\end{rcol}
 
 \wssection{G. Distributive Property}
 \begin{enumerate}
-  \item Expand: $3(y + 6) = $
+  \item Expand: $3(y + 6) = $\ansblank[4.2cm]
 \end{enumerate}
 
-\wssection{H. Equations, Inequalities, and Graphing}
+\wssection{H. Equations, Inequalities, And Graphing}
+\begin{lcol}
 \begin{enumerate}
-  \item Solve: $x + 7 = 18$
-  \item Solve: $\dfrac{x}{4} = 6$
-  \item Solve: $x + 3 > 8$
-  \item Solve: $x - 4 < 2$
-  \item Write an equivalent way to express $6 < y$.
-  \item Graph $6 < y$ on the number line below.
-  \blanknumline{0}{12}{2}
-  \item Graph $x > 2$ on the number line below.
-  \blanknumline{-2}{10}{2}
+  \item $x + 7 = 18$\quad $x = $\ansblank
+  \item $\tfrac{x}{4} = 6$\quad $x = $\ansblank
+\end{enumerate}
+\end{lcol}
+\begin{rcol}
+\begin{enumerate}[start=3]
+  \item Solve: $x + 3 > 8$\ansblank
+  \item Solve: $x - 4 < 2$\ansblank
+\end{enumerate}
+\end{rcol}
+\begin{enumerate}[start=5]
+  \item Write an equivalent way to express $6 < y$: \blank[4.2cm]
+  \item Graph $6 < y$ on a number line:
+  \wsnumline{4}{8}{1}
+  \item Graph $x > 2$ on a number line:
+  \wsnumline{0}{5}{1}
 \end{enumerate}
 
 \wssection{I. Geometry}
 \begin{enumerate}
-  \item Rectangle: length $9$, width $4$. Area $= $
-  \item Rectangle: length $11$, width $3$. Perimeter $= $
-  \item Rectangle: area is $42$ square units and width is $6$. Length $= $
+  \item Rectangle with length $9$ and width $4$:\quad Area $= $\ansblank[3.2cm]
+  \item Rectangle with length $11$ and width $3$:\quad Perimeter $= $\ansblank[3.2cm]
+  \item Rectangle with area $42$ sq units and width $6$:\quad Length $= $\ansblank[3.2cm]
 \end{enumerate}
 
-\wssection{J. Units and Quantities}
-\begin{enumerate}
-  \item $3$ hours $= $\ansblank\ minutes
-  \item $\dfrac{3}{5}$ of $35 = $
-  \item $210$ miles $\div$ $3$ hours $= $\ansblank\ miles per hour
-  \item $72$ inches $= $\ansblank\ yards
-  \item $150$ miles $\div$ $5$ gallons $= $\ansblank\ miles per gallon
-\end{enumerate}
+\newpage
 
-\wssection{K. Expressions, Factors, and Fraction Structure}
+\wssection{J. Units And Quantities}
+\begin{lcol}
 \begin{enumerate}
-  \item Is $8x + 1$ a linear expression?
-  \item Prime factorization of $90 = $
-  \item Find the GCF of $27$ and $36$.
-  \item Simplify $\dfrac{27}{36}$.
-  \item Convert $2\tfrac{2}{3}$ to an improper fraction.
-  \item Which is greater: $1\tfrac{3}{4}$ or $(1)\!\left(\tfrac{3}{4}\right)$?
-  \item In $\dfrac{m}{2}$, the coefficient of $m$ is \blank[1.8cm].
-  \item In $\dfrac{q}{5}$, the coefficient of $q$ is \blank[1.8cm].
-  \item Rewrite using the commutative property: $8 + 5 = $
-  \item Rewrite using the commutative property: $7 \times a = $
-  \item Rewrite using the associative property: $(b + 3) + 9 = $
+  \item $3$ hours $= $\ansblank[1.8cm]\ minutes
+  \item $\tfrac{3}{5}$ of $35 = $\ansblank[1.8cm]
+  \item $210$ miles$/3$ hours $= $\ansblank[1.8cm]
 \end{enumerate}
+\end{lcol}
+\begin{rcol}
+\begin{enumerate}[start=4]
+  \item $72$ inches $= $\ansblank[1.8cm]\ yards
+  \item $150$ miles$/5$ gallons $= $\ansblank[1.8cm]
+\end{enumerate}
+\end{rcol}
 
-\wssection{L. Distributive Property and Factoring}
+\wssection{K. Expressions, Factors, And Fraction Structure}
 \begin{enumerate}
-  \item Factor: $8x + 16 = $
+  \item Is $8x + 1$ a linear expression?\ansblank[2.6cm]
+  \item Prime factorization of $90 = $\ansblank[3.6cm]
+  \item Find the GCF of $27$ and $36$: \blank[2.8cm]
+  \item Simplify $\tfrac{27}{36} = $\ansblank[2.6cm]
+  \item Convert $2\tfrac{2}{3}$ to an improper fraction: \blank[2.8cm]
+  \item Which is greater: $1\tfrac{3}{4}$ or $(1)\left(\tfrac{3}{4}\right)$? \blank[2.8cm]
+\end{enumerate}
+\begin{lcol}
+\begin{enumerate}[start=7]
+  \item In $\tfrac{m}{2}$, coeff of $m$ is \blank[1.4cm]
+  \item In $\tfrac{q}{5}$, coeff of $q$ is \blank[1.4cm]
+  \item Commutative: $8 + 5 = $\ansblank[1.4cm]
+\end{enumerate}
+\end{lcol}
+\begin{rcol}
+\begin{enumerate}[start=10]
+  \item Commutative: $7 \times a = $\ansblank[1.4cm]
+  \item Associative: $(b + 3) + 9 = $\ansblank[1.4cm]
+\end{enumerate}
+\end{rcol}
+
+\wssection{L. Distributive Property And Factoring}
+\begin{enumerate}
+  \item Factor: $8x + 16 = $\ansblank[4.2cm]
 \end{enumerate}
 
 \wssection{M. Decimal Computation}
+\begin{lcol}
 \begin{enumerate}
-  \item $428.5 + 37.26 = $\ansblank\hint{decimal}
-  \item $700.3 - 284.67 = $\ansblank\hint{decimal}
-  \item $18.4 \times 12 = $\ansblank\hint{decimal}
-  \item $168.8 \div 8 = $\ansblank\hint{decimal}
-  \item $4.2 \times 1.5 = $\ansblank\hint{decimal}
-  \item $7.2 \div 0.8 = $\ansblank
+  \item $428.5 + 37.26 = $\ansblank[1.8cm]\hint{\emph{decimal}}
+  \item $700.32 - 84.67 = $\ansblank[1.8cm]\hint{\emph{decimal}}
+  \item $18.4 \times 12 = $\ansblank[1.8cm]\hint{\emph{decimal}}
 \end{enumerate}
+\end{lcol}
+\begin{rcol}
+\begin{enumerate}[start=4]
+  \item $168.8 \div 8 = $\ansblank[1.8cm]\hint{\emph{decimal}}
+  \item $4.2 \times 1.5 = $\ansblank[1.8cm]\hint{\emph{decimal}}
+  \item $7.2 \div 0.8 = $\ansblank[1.8cm]\hint{\emph{decimal}}
+\end{enumerate}
+\end{rcol}
 
-\wssection{N. Fraction Operations and Properties}
+\wssection{N. Fraction Operations And Properties}
+\begin{lcol}
 \begin{enumerate}
-  \item $\dfrac{1}{2} + \dfrac{1}{4} = $\ansblank\hint{simplest fraction}
-  \item $\dfrac{5}{6} - \dfrac{1}{3} = $\ansblank\hint{simplest fraction}
-  \item $\dfrac{5}{8} \times \dfrac{4}{15} = $\ansblank\hint{simplest fraction}
-  \item $\dfrac{7}{8} \div \dfrac{1}{4} = $\ansblank\hint{simplest fraction}
-  \item Rewrite using the commutative property: $9 \times b = $
-  \item Rewrite using the associative property: $(x + 5) + 8 = $
-  \item Is subtraction associative? Compare $(12 - 4) - 3$ and $12 - (4 - 3)$.
+  \item $\tfrac{1}{2} + \tfrac{1}{4} = $\ansblank[1.8cm]\hint{\emph{simplest}}
+  \item $\tfrac{5}{6} - \tfrac{1}{3} = $\ansblank[1.8cm]\hint{\emph{simplest}}
+  \item $\tfrac{5}{8} \times \tfrac{4}{15} = $\ansblank[1.8cm]\hint{\emph{simplest}}
+\end{enumerate}
+\end{lcol}
+\begin{rcol}
+\begin{enumerate}[start=4]
+  \item $\tfrac{7}{8} \div \tfrac{1}{4} = $\ansblank[1.8cm]\hint{\emph{simplest}}
+  \item Commutative: $7 \times a = $\ansblank[1.8cm]
+  \item Associative: $(x + 5) + 8 = $\ansblank[1.8cm]
+\end{enumerate}
+\end{rcol}
+\begin{enumerate}[start=7]
+  \item Is subtraction associative? Compare $(12 - 4) - 3$ and $12 - (4 - 3)$: \blank[3.2cm]
 \end{enumerate}
 
 \end{document}

@@ -1,30 +1,6 @@
 [
   {
     "doc": "6thGradeReview",
-    "page": 1,
-    "locator": "Section D item 4 (p.1) and Section M item 6 (p.4)",
-    "category": "inconsistency",
-    "severity": "medium",
-    "quote": "4. 5.6 ÷ 0.8 = (decimal)",
-    "correction": "5.6 ÷ 0.8 = ____________",
-    "why": "Both items are tagged \"(decimal)\" but their answers are whole numbers (7 and 9), and the companion's checked answers are plainly \"7\" and \"9\", so the tag contradicts the accepted answer and invites a student to write \"7.0\".",
-    "occurrences": "D4 (p.1, answer 7) and M6 (p.4, answer 9)",
-    "_src": "g6w_01.json"
-  },
-  {
-    "doc": "6thGradeReview",
-    "page": 1,
-    "locator": "Directions line, versus items A1, H6, H7 and all fill-in items",
-    "category": "inconsistency",
-    "severity": "medium",
-    "quote": "Show work in the space provided or on scrap paper as directed.",
-    "correction": "Show work on scrap paper.",
-    "why": "No work space is provided anywhere on the four pages — the items are set as tightly spaced lists — and A1, H6 and H7 ask the student to plot or graph on a number line that is never printed, so the promised \"space provided\" does not exist.",
-    "occurrences": "Directions (p.1); affected items A1 (p.1), H6 and H7 (p.2)",
-    "_src": "g6w_01.json"
-  },
-  {
-    "doc": "6thGradeReview",
     "page": 2,
     "locator": "Section H items 1–4",
     "category": "grammar",
@@ -33,66 +9,6 @@
     "correction": "3. Solve: x + 3 > 8",
     "why": "H1–H4 are bare equations/inequalities with no directive verb, and because H6 and H7 in the same section say \"Graph …\", the student cannot tell whether items 1–4 are to be solved or graphed — the companion's checked answers (\"x = 11\", \"x > 5\") show \"Solve\" was intended.",
     "occurrences": "H1 \"x + 7 = 18\", H2 \"x/4 = 6\", H3 \"x + 3 > 8\", H4 \"x − 4 < 2\"",
-    "_src": "g6w_01.json"
-  },
-  {
-    "doc": "6thGradeReview",
-    "page": 3,
-    "locator": "Section K item 10 (p.3) and Section N item 5 (p.4)",
-    "category": "inconsistency",
-    "severity": "medium",
-    "quote": "10. Rewrite using the commutative property: 7 × a =",
-    "correction": "Delete N5, or change one of the two to a different instance, e.g. N5: \"Rewrite using the commutative property: 9 × b =\"",
-    "why": "K10 and N5 are character-for-character the same item, so the student answers the identical prompt twice and the companion carries two identical worked explanations (K10 and N5 both \"Checked answer: a × 7\").",
-    "occurrences": "K10 (p.3) and N5 (p.4) — exact duplicate pair; the neighbouring associative items K11 \"(b + 3) + 9\" and N6 \"(x + 5) + 8\" are NOT duplicates (different letters and numbers), and K9 \"8 + 5\" is unique.",
-    "_src": "g6w_01.json"
-  },
-  {
-    "doc": "6thGradeReview",
-    "page": 4,
-    "locator": "Sections C, D, M, N — the answer-format tag on every computation item",
-    "category": "formatting",
-    "severity": "medium",
-    "quote": "1. 428.5 + 37.26 = (decimal)",
-    "correction": "428.5 + 37.26 = ____________ (decimal)",
-    "why": "The format hint sits in the answer position with no answer blank, so the line reads as an equation whose right-hand side is the literal word \"(decimal)\" rather than as a fill-in with a format note.",
-    "occurrences": "C2, C3, D3, D4, M1–M6, N1–N4 (14 items across pp.1, 4)",
-    "_src": "g6w_01.json"
-  },
-  {
-    "doc": "6thGradeReview",
-    "page": 1,
-    "locator": "Section C item 1",
-    "category": "punctuation",
-    "severity": "low",
-    "quote": "1. In 82.731, the tenths digit is __________",
-    "correction": "1. In 82.731, the tenths digit is __________.",
-    "why": "This is the only full-sentence fill-in on the worksheet with no terminal period; the structurally identical items F1, F2, F3, F4, K7 and K8 all end with a period after the blank.",
-    "occurrences": "C1 only",
-    "_src": "g6w_01.json"
-  },
-  {
-    "doc": "6thGradeReview",
-    "page": 1,
-    "locator": "All fourteen section headings A–N",
-    "category": "formatting",
-    "severity": "low",
-    "quote": "B. Order Of Operations",
-    "correction": "B. Order of Operations",
-    "why": "Every heading capitalises the short function words (\"Of\", \"And\"), the signature of a mechanical title-casing pass rather than a deliberate style, and it reads wrong in a student-facing document.",
-    "occurrences": "B \"Order Of Operations\", C \"Decimals, Fractions, And Percents\", D \"Facts And Decimal Multiply/Divide\", E \"Ratios, Fractions, And Proportions\", F \"Vocabulary, Expressions, And Equations\", H \"Equations, Inequalities, And Graphing\", J \"Units And Quantities\", K \"Expressions, Factors, And Fraction Structure\", L \"Distributive Property And Factoring\", N \"Fraction Operations And Properties\"",
-    "_src": "g6w_01.json"
-  },
-  {
-    "doc": "6thGradeReview",
-    "page": 1,
-    "locator": "Section D items 3–4 versus Section M items 5–6",
-    "category": "inconsistency",
-    "severity": "low",
-    "quote": "3. 2.4 × 1.5 = (decimal)",
-    "correction": "Drop D3/D4 or M5/M6, or vary the operand shape (e.g. M5: 4.2 × 0.25 =)",
-    "why": "D3/D4 and M5/M6 are the same two skills with digit-swapped operands (2.4 × 1.5 vs 4.2 × 1.5; 5.6 ÷ 0.8 vs 7.2 ÷ 0.8), which is redundant in a diagnostic that is otherwise one item per skill.",
-    "occurrences": "D3/M5 and D4/M6",
     "_src": "g6w_01.json"
   },
   {
@@ -120,28 +36,24 @@
     "_src": "g6w_01.json"
   },
   {
-    "doc": "6thGradeReview",
-    "page": 2,
-    "locator": "Section E item 1, versus Section K item 6",
-    "category": "grammar",
-    "severity": "low",
-    "quote": "1. Greater:  or 0.61?  [the blank is a built-up fraction five-eighths]",
-    "correction": "1. Which is greater: [five-eighths] or 0.61?",
-    "why": "E1 is a telegraphic fragment punctuated as a question, while the identical task type at K6 is written as a full question (\"Which is greater: …?\").",
-    "occurrences": "E1 (p.2) vs K6 (p.3)",
-    "_src": "g6w_01.json"
+    "doc": "6thGradeReviewExplanations",
+    "page": 22,
+    "locator": "F4 - superseded by the updated worksheet",
+    "category": "math",
+    "severity": "high",
+    "quote": "To undo /5, use the inverse operation -> multiply by 5",
+    "correction": "Undo x5, use inverse op: -> divide by 5",
+    "why": "The updated worksheet flips the operation, so the checked answer and every step of F4's explanation invert."
   },
   {
-    "doc": "6thGradeReview",
-    "page": 3,
-    "locator": "Section J items 3 and 5",
-    "category": "notation",
-    "severity": "low",
-    "quote": "3. 210 miles / 3 hours =",
-    "correction": "3. 210 miles ÷ 3 hours = __________ miles per hour",
-    "why": "These are the only two division items written with a slash rather than ÷ or a set fraction, and neither asks for the unit that the companion's checked answers supply (\"70 miles per hour\", \"30 miles per gallon\"), unlike J1 and J4 which do print the unit after the blank.",
-    "occurrences": "J3 and J5 (p.3)",
-    "_src": "g6w_01.json"
+    "doc": "6thGradeReviewExplanations",
+    "page": 44,
+    "locator": "M2 - superseded by the updated worksheet",
+    "category": "math",
+    "severity": "high",
+    "quote": "700.3 - 284.67 = 415.63",
+    "correction": "700.32 - 84.67 = 615.65, with the place-value decomposition and the check step reworked",
+    "why": "The updated worksheet changes M2's operands, so the previous answer and every worked step for that item are now wrong."
   },
   {
     "doc": "6thGradeReviewExplanations",
@@ -165,6 +77,16 @@
     "why": "\"Shrink by the same amount\" describes subtracting the same number from numerator and denominator (8−2 over 10−2 = 6/8, which is wrong), and it contradicts this same page's definition bullet \"To simplify ... means divide the top and bottom by the same common factor.\"",
     "occurrences": "page 10",
     "_src": "g6e_01.json"
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 11,
+    "locator": "C7 - superseded by the updated worksheet",
+    "category": "notation",
+    "severity": "medium",
+    "quote": "15% of 80 = 12",
+    "correction": "15% of $80 = $12",
+    "why": "The updated worksheet makes the quantity a money amount, so the answer must carry the dollar sign."
   },
   {
     "doc": "6thGradeReviewExplanations",
@@ -562,17 +484,6 @@
     "why": "Every other defined term in these sections is italicised on first use — M1 \"To <i>add decimals</i>\", M2 \"To <i>subtract decimals</i>\", M3 \"To <i>multiply decimals</i>\" — but M5's and M6's parallel bullets are set in roman.",
     "occurrences": "p.46 (M5, \"To multiply decimals:\"); p.47 (M6, \"To divide by a decimal,\")",
     "_src": "g6e_04.json"
-  },
-  {
-    "doc": "Topic1ExplanationsPart1",
-    "page": 2,
-    "locator": "Topic 1-1 Question 1 > Question block + Checked answer (mismatch continues onto p.3)",
-    "category": "inconsistency",
-    "severity": "high",
-    "quote": "A submarine rises 18 meters from a point below sea level, then descends 18 meters. Part A: Represent both changes with signed numbers and find their sum. Part B: Explain why the two changes are additive inverses.\nChecked answer: +18 + (−18) = 0; equal magnitude and opposite signs.",
-    "correction": "Question: A climber climbs 4.5 meters up. Name the move that is the additive inverse of that climb and explain why the two moves add to zero.\nChecked answer: −4.5 meters (4.5 meters downward); +4.5 + (−4.5) = 0.",
-    "why": "Every other block of this question is about a 4.5 m climb — 'What the question is asking' (\"undoes a climb of 4.5 meters\"), the Important words bullet \"A climb of 4.5 meters means moving up 4.5 meters\", steps 1–5 (\"+4.5 meters (up)\", \"the inverse move is −4.5 meters\", \"Check: +4.5 + (−4.5) = 0\"), and \"Final answer: 4.5 meters downward\", which is exactly what Topic1Part1Solutions gives (\"Answer: 4.5 meters downward\"); the submarine/18-meter stem and its Checked answer are the odd ones out, and the p.3 'Why this makes sense' line (\"The rise and descent cancel\") is left describing the wrong scenario as well.",
-    "_src": "t1e_01.json"
   },
   {
     "doc": "Topic1ExplanationsPart1",
@@ -1069,6 +980,27 @@
     "_src": "t1e_04.json"
   },
   {
+    "doc": "Topic1ExplanationsPart1 + both keys",
+    "page": 2,
+    "locator": "Lesson 1-1 Question 1 (companion worked steps; Part 1 key Q1; Part 2 key Q1)",
+    "category": "math",
+    "severity": "high",
+    "quote": "Companion steps: 'Write the climb as a signed move: +4.5 meters (up)'. Part 1 key: 'The additive inverse of a 4.5 m climb -> 4.5 meters downward'. Part 2 key: 'Additive inverse of a 3.5 m descent -> 3.5 meters upward'.",
+    "correction": "Part 1: +18 + (-18) = 0 (submarine rises 18 m, then descends 18 m). Part 2: (-24) + (+24) = 0 (hiker descends 24 m, then climbs 24 m).",
+    "why": "The assignment asks for the SUM of two signed moves and why they are additive inverses. The companion's own question stem said so correctly, but its worked steps and BOTH answer keys solved a single-move inverse question using 4.5 m and 3.5 m - numbers that appear nowhere in the assignment. Round 1 wrongly 'fixed' the correct stem to match the incorrect steps."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1 + both keys",
+    "page": 1,
+    "locator": "every lesson heading",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "Topic 1-1 Relate Integers and Opposites",
+    "correction": "Lesson 1-1: Relate Integers and Opposites",
+    "why": "The assignment heads every section 'Lesson 1-1:', 'Lesson SC-1:', 'Lesson SC-2:', and the weekly lesson plan agrees. 'Topic 1' is the UNIT ('Topic 1: Independent Practice Covering Lessons 1-1 to SC-2'), so the companion's 'Topic 1-N' headings conflated lesson with unit. Document titles keep 'Topic 1', where it is correct.",
+    "occurrences": "all 12 lesson headings in the companion and in both keys"
+  },
+  {
     "doc": "Topic1Part1Solutions",
     "page": 1,
     "locator": "Topic 1-1 Question 1 > We Need / Answer",
@@ -1216,6 +1148,46 @@
     "_src": "sol_01.json"
   },
   {
+    "doc": "Topic1Part1Solutions + Topic1Part2Solutions + companion",
+    "page": 2,
+    "locator": "Lesson SC-1 Question 2 (both keys and the companion's choice row)",
+    "category": "math",
+    "severity": "high",
+    "quote": "Answer: =, <=, >=",
+    "correction": "Answer: = (only)",
+    "why": "The assignment offers exactly four symbols to select from - <, >, =, and != - so <= and >= are not available choices. Since 3/4 = 0.75 exactly (and 2/5 = 0.4 in Part 2), the only true relation among the four offered is =. The companion additionally printed a six-symbol choice row that does not match the assignment."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 1,
+    "locator": "Lesson 1-2 Question 3 absent",
+    "category": "inconsistency",
+    "severity": "high",
+    "quote": "key jumps from Lesson 1-2 Q2 straight to Lesson SC-1",
+    "correction": "Add Q3: let x = 0.6 repeating; 10x - x = 9x; 9x = 6; x = 6/9 = 2/3. Answer: Mia; 0.6 repeating = 2/3.",
+    "why": "The assignment's Part 2 Lesson 1-2 has a Question 3 (Mia vs Lee, 0.6 repeating) with no entry in the Part 2 key."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 2,
+    "locator": "Lesson 1-4 Question 4 absent",
+    "category": "inconsistency",
+    "severity": "high",
+    "quote": "key jumps from Lesson 1-4 Q3 straight to Lesson 1-5",
+    "correction": "Add Q4: |6-(-5)| = 11 and |-2-6| = 8; 11 + 8 = 19. Answer: 19 floors.",
+    "why": "The assignment's Part 2 Lesson 1-4 has a Question 4 (elevator from floor -5 to 6 to -2) with no entry in the Part 2 key."
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 3,
+    "locator": "Lesson 1-5 Questions 2 and 3 absent",
+    "category": "inconsistency",
+    "severity": "high",
+    "quote": "key jumps from Lesson 1-5 Q1 straight to Lesson 1-6",
+    "correction": "Add Q2: -4.6 - 1.35 - 2.05 = -8.00 degC. Add Q3: 3 1/4 = 3.25; |3.25 - (-2.5)| = 5.75 miles.",
+    "why": "The assignment's Part 2 Lesson 1-5 has Questions 2 and 3, neither of which appears in the Part 2 key."
+  },
+  {
     "doc": "Topic1Part2Solutions",
     "page": 1,
     "locator": "Topic 1-1 Question 1 > We Solve parenthetical",
@@ -1224,28 +1196,6 @@
     "quote": "We Solve: Go 3.5 meters up (toward / above the surface).",
     "correction": "We Solve: Go 3.5 meters up (toward / above the starting level).",
     "why": "The additive inverse of a descent returns you to the starting level, not necessarily above the water surface; Part 1's parallel line correctly says \"(toward / below the starting level)\", so Part 2 asserts an absolute position the problem does not support.",
-    "_src": "sol_01.json"
-  },
-  {
-    "doc": "Topic1Part2Solutions",
-    "page": 1,
-    "locator": "Topic 1-2 Question 2 > We Know",
-    "category": "math",
-    "severity": "medium",
-    "quote": "We Know: A fraction decimal terminates or repeats.",
-    "correction": "We Know: A fraction (with nonzero denominator) becomes a decimal that terminates or repeats.",
-    "why": "Part 2 drops the \"(with nonzero denominator)\" qualifier that Part 1 carries — the claim is false without it — and \"A fraction decimal\" is ungrammatical (missing verb/possessive).",
-    "_src": "sol_01.json"
-  },
-  {
-    "doc": "Topic1Part2Solutions",
-    "page": 1,
-    "locator": "Topic 1-2 Question 2 > We Solve / Answer",
-    "category": "inconsistency",
-    "severity": "medium",
-    "quote": "We Solve: B is always right.",
-    "correction": "We Solve: B is not right.  (or restore a \"We Need:\" line stating exactly what the item asks)",
-    "why": "Part 1's parallel item asks which statement is NOT right and answers \"C is not right\"; Part 2 has no We Need line and flips to an \"always right\" claim, which the preceding We Know line does not establish (a fraction's decimal may terminate instead of repeating), so the reader cannot tell whether B is the correct selection.",
     "_src": "sol_01.json"
   },
   {
@@ -1315,6 +1265,16 @@
     "correction": "Answer: −125.10 (or −$125.10 per owner)",
     "why": "Same defect as Part 1: the dollar sign is separated from the numeral by a spaced binary minus, so it reads as a subtraction rather than a negative money amount.",
     "_src": "sol_01.json"
+  },
+  {
+    "doc": "Topic1Part2Solutions",
+    "page": 5,
+    "locator": "Lesson SC-2 Question 2 Part B",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "Part B: 9 cupcakes per friend",
+    "correction": "Part B: 9 muffins per friend",
+    "why": "Part 2's assignment item is muffins (3^4 muffins among 3^2 friends); cupcakes belongs to the Part 1 item."
   },
   {
     "doc": "Topic1Part2Solutions",
