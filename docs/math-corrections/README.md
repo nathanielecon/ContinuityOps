@@ -127,6 +127,15 @@ and acting on them would desynchronise these documents from Independent Practice
 worksheets that are not part of this set. They are logged in the report and left
 alone — see "Not applied" on page 1 of `CorrectionsReport.pdf`.
 
+## Token strategy
+
+`TOKEN_STRATEGY.md` records what the tooling actually cost and saved on this
+run, measured rather than quoted, and how to apply pxpipe next time. Short
+version: the cost was input, not output; the two output-compression tools
+produced no net saving; the cheap-fixer/frontier-judge split was the one clear
+win; and pxpipe is the correctly-aimed tool but is a launch-time wrapper, not
+something that can be enabled mid-session in a managed remote environment.
+
 ## Building
 
 Requires TeX Live with `lmodern`, `tcolorbox`-free `tikz`, `enumitem`,
