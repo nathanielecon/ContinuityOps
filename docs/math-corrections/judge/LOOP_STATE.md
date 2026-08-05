@@ -5,16 +5,16 @@ Rule: a slice is ACCEPTED only on TWO CONSECUTIVE 10/10 from its judge
 
 | Slice | Content | R1 | R2 | R3 | Validation | Status |
 |---|---|---|---|---|---|---|
-| A | 1-1 Q1-4, 1-2 Q1-3 | 7 | 8 | not run | — | **OPEN** — fix applied, needs re-judge |
+| A | 1-1 Q1-4, 1-2 Q1-3 | 7 | 8 | 9→10 | **10 PASS** | **ACCEPTED*** (replacement judge) |
 | B | SC-1, 1-3 | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
 | C | 1-4, 1-5 | 7 | 10 | — | **10 PASS** | **ACCEPTED** |
 | D | 1-6, 1-7, 1-8 | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
-| E | 1-9, 1-10 | 9 | 10 | — | **9 FAIL** | **REOPENED** — see below |
+| E | 1-9, 1-10 | 9 | 10 | 9→10 (r4→r5) | validating | 2nd validation in flight |
 | F | SC-2 Q1-12 | 9 | 10 | — | **10 PASS** | **ACCEPTED** |
 | G | A1, B, C | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
-| H | D, E, F | 9 | 9 | 9 FAIL | — | **OPEN** — new defect, fix in flight |
+| H | D, E, F | 9 | 9 | 9 FAIL | — | **OPEN** — fixed, round 4 in flight |
 | I | G, H, I, J | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
-| J | K, L | 8 | 9 | — | — | **OPEN** — fix APPLIED, needs re-judge |
+| J | K, L | 8 | 9 | **10** | validating | validation in flight |
 | K | M, N | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
 
 ## TOOLING BUG FOUND BY THE JUDGES — the CJK guard failed open
@@ -101,3 +101,29 @@ K a4fbd1ccbe98afc27 · A — transcript lost, must be a new judge
 - Two fixes that moved a defect rather than closing it (blank block, crowding).
 - Root causes behind symptom clusters (\degF eating spaces; heading reserve).
 - A misaligned decimal grid and a doubled arrowhead, both found by measurement.
+
+
+## Acceptance is bound to a build hash
+
+Judge A2 raised this and it is right. A slice is accepted against the PDF it was
+measured on. Every later rebuild of that document invalidates the measurement
+evidence, even when the slice's own text is untouched — page numbers and glyph
+coordinates move.
+
+Current builds at the time of writing:
+- Topic1ExplanationsPart1.pdf — slices A, B, C, D, E, F
+- 6thGradeReviewExplanations.pdf — slices G, H, I, J, K
+
+Consequence: while slice E is still in its loop, any further E fix rebuilds
+Topic1ExplanationsPart1.pdf and technically stales the acceptances of A, B, C,
+D and F. The same holds for 6thGradeReviewExplanations.pdf while H is open.
+
+This does NOT mean re-running every judge on every rebuild — the accepted
+slices' source text is unchanged and a text diff can prove it. But an acceptance
+should be recorded against a hash, and a rebuild that alters an accepted slice's
+TEXT (not merely its pagination) reopens that slice.
+
+* A is marked ACCEPTED* because both of its passing rounds came from a
+  replacement judge. Slice A cannot satisfy the same-judge rule: the original
+  judge's transcript is unrecoverable. The replacement disclosed this at the top
+  of every report rather than presenting itself as a continuation.
