@@ -1,5 +1,8 @@
 # Fixer addendum (token-lean mode)
 
+> **Read `WORKER_DIRECTIVES.md` first** — it governs language (Mandarin reasoning
+> and reporting, English-only deliverables) and rtk output compression.
+
 ## Reasoning language
 Think in Mandarin. Internal reasoning only.
 
