@@ -268,12 +268,11 @@ straight line of numbers.
   \item Put an arrow on the shaded part to show it keeps going.
         \begin{center}
         \begin{tikzpicture}[x=0.62cm,y=0.62cm]
-          \draw (3.3,0) -- (8.7,0);
-          \draw[-{Stealth[length=2.4mm]}] (8,0) -- (8.7,0);
+          \draw[{Stealth[length=2.4mm]}-{Stealth[length=2.4mm]}] (3.3,0) -- (8.7,0);
           \foreach \x in {4,5,...,8}{%
             \draw (\x,0.16) -- (\x,-0.16);
             \node[below=1pt,font=\footnotesize] at (\x,-0.16) {$\x$};}
-          \draw[blue,very thick,-{Stealth[length=2.6mm]}] (6,0) -- (8.6,0);
+          \draw[blue,very thick,-{Stealth[length=2.6mm]}] (6,0) -- (8.1,0);
           \draw[thick,fill=white] (6,0) circle (2.6pt);
         \end{tikzpicture}
         \end{center}
@@ -311,12 +310,11 @@ of numbers.
   \item Add an arrow to show the shading continues forever.
         \begin{center}
         \begin{tikzpicture}[x=0.62cm,y=0.62cm]
-          \draw (-0.7,0) -- (5.7,0);
-          \draw[-{Stealth[length=2.4mm]}] (5,0) -- (5.7,0);
+          \draw[{Stealth[length=2.4mm]}-{Stealth[length=2.4mm]}] (-0.7,0) -- (5.7,0);
           \foreach \x in {0,1,...,5}{%
             \draw (\x,0.16) -- (\x,-0.16);
             \node[below=1pt,font=\footnotesize] at (\x,-0.16) {$\x$};}
-          \draw[blue,very thick,-{Stealth[length=2.6mm]}] (2,0) -- (5.6,0);
+          \draw[blue,very thick,-{Stealth[length=2.6mm]}] (2,0) -- (5.1,0);
           \draw[thick,fill=white] (2,0) circle (2.6pt);
         \end{tikzpicture}
         \end{center}
@@ -325,7 +323,8 @@ of numbers.
 \finalans{Open circle at 2, shade right.}
 
 \blockhead{Why this makes sense}
-Numbers like 3, 4, 10, and 100 are shaded. The number 2 itself is not shaded.
+Numbers like 3, 4 and 5 are shaded, and the arrow shows that larger numbers
+such as 10 and 100 are included too. The number 2 itself is not shaded.
 
 \lesson{I. Geometry}
 
@@ -464,7 +463,7 @@ gets a larger number of smaller units.
 \question{J2}
 
 \blockhead{Question}
-$\dfrac{3}{5}$ of $35 = $
+\[ \frac{3}{5} \text{ of } 35 = \]
 
 \checked{$21$}
 
