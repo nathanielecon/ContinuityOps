@@ -18,7 +18,7 @@ Every rebuilt document has the same page count as the original it replaces.
 
 ## Findings
 
-**120 verified findings** — 6 high, 39 medium, 75 low — across
+**116 verified findings** — 6 high, 39 medium, 71 low — across
 inconsistency (46), formatting (22), grammar (19), notation (15), math (8),
 punctuation (5) and spacing (5).
 
@@ -41,7 +41,7 @@ The six high-severity ones:
 Full detail, with the exact text found and the exact replacement, is in
 `pdf/CorrectionsReport.pdf`. Machine-readable records are in `findings/`.
 
-## One finding withdrawn
+## Withdrawn findings
 
 Extracting these PDFs with `pypdf` produces run-together words
 (`onexplanations`, `donotuse`, `Nonzeromeans`) and flattened exponents. Three
@@ -49,8 +49,21 @@ scanners raised this as a corpus-wide text-layer fault. It is not a document
 defect: the pages render correctly and poppler's `pdftotext` extracts the same
 originals cleanly (0 fused words vs `pypdf`'s 29 in the Topic 1 companion). It
 is an artefact of one extractor's word-break heuristic. The finding was
-withdrawn and nothing in the rebuild was changed on its account. It is retained
-in `findings/findings_dismissed.json` for the record.
+withdrawn and nothing in the rebuild was changed on its account.
+
+**SC-lesson naming (3 findings).** `Lesson SC-1: Compare Rational Numbers` was
+flagged as a one-off against the `Topic 1-N` pattern and normalised to
+`Topic SC-1`. The teacher's weekly lesson plan names it
+**Lesson SC-1: Compare Rational Numbers (SC1-1)**, so the source was correct.
+Reverted in all three documents, along with `Topic SC-2: Use the Laws of
+Exponents`. The remaining Lesson SC-1 / Topic SC-2 asymmetry is left as written
+and flagged as a question for the teacher.
+
+**"on your notebook" (1 finding).** Changed to "in your notebook", then
+reverted: the lesson plan's own wording is "Independent Practice *on* notebook",
+so this is the author's register, not an error.
+
+All withdrawn findings are retained in `findings/findings_dismissed.json`.
 
 ## Not applied
 

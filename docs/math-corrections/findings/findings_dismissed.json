@@ -34,5 +34,55 @@
     "why": "The pages render correctly with spaces, but the PDF's extractable text layer fuses words across every \\textbf/\\emph run (\"Anoperationis\", \"Final answer:Part A\", \"Checked answer:−2\", \"W ork\"), which breaks copy-paste, search and screen readers.",
     "occurrences": "single corpus-wide defect; visible on every page of pages 14–27 and, per the shared brief, across all five PDFs — NOT a rendering defect",
     "_src": "t1e_02.json"
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 10,
+    "locator": "Section heading above Question 1 of the SC-1 lesson",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Lesson SC-1: Compare Rational Numbers",
+    "correction": "Topic SC-1 Compare Rational Numbers",
+    "why": "Every other section heading in the companion uses the pattern \"Topic 1-N Title\" with no colon (\"Topic 1-1 Relate Integers and Opposites\", \"Topic 1-2 Understand Rational Numbers\", \"Topic 1-3 Add Integers\"), and the answer key names the later supporting-cluster section \"Topic SC-2 Use the Laws of Exponents\", so \"Lesson\" plus a colon is a one-off.",
+    "_src": "t1e_01.json",
+    "withdrawn_reason": "Contradicted by the teacher's weekly lesson plan, which names the lesson 'Lesson SC-1: Compare Rational Numbers (SC1-1)' and uses the idiom 'Independent Practice on notebook'. The source naming is correct; the normalisation was an unjustified imposition and has been reverted."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 40,
+    "locator": "Topic SC-2 section heading",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "Topic SC-2: Use the Laws of Exponents",
+    "correction": "Topic SC-2 Use the Laws of Exponents",
+    "why": "Every other topic heading in the companion (e.g. \"Topic 1-9 Divide Rational Numbers\" on p.35, \"Topic 1-10 Solve Problems with Rational Numbers\" on p.38) omits the colon, as does the matching heading in Topic1Part1Solutions.",
+    "_src": "t1e_03.json",
+    "withdrawn_reason": "Contradicted by the teacher's weekly lesson plan, which names the lesson 'Lesson SC-1: Compare Rational Numbers (SC1-1)' and uses the idiom 'Independent Practice on notebook'. The source naming is correct; the normalisation was an unjustified imposition and has been reverted."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 1,
+    "locator": "subtitle line under the document title",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "Brief checks. Use We Need → We Know → We Solve on your notebook.",
+    "correction": "Brief checks. Use We Need → We Know → We Solve in your notebook.",
+    "why": "Work is done \"in\" a notebook, not \"on\" one.",
+    "occurrences": "Part 1 p.1 and Part 2 p.1 (identical subtitle)",
+    "_src": "sol_01.json",
+    "withdrawn_reason": "Contradicted by the teacher's weekly lesson plan, which names the lesson 'Lesson SC-1: Compare Rational Numbers (SC1-1)' and uses the idiom 'Independent Practice on notebook'. The source naming is correct; the normalisation was an unjustified imposition and has been reverted."
+  },
+  {
+    "doc": "Topic1Part1Solutions",
+    "page": 2,
+    "locator": "section headings: \"Lesson SC-1 ...\" vs \"Topic SC-2 ...\"",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Lesson SC-1 Compare Rational Numbers",
+    "correction": "Topic SC-1 Compare Rational Numbers",
+    "why": "Every other section heading in both documents begins \"Topic\"; only the SC-1 heading uses \"Lesson\", so the two supplementary lessons are labelled with different words.",
+    "occurrences": "Part 1 p.2 (Lesson SC-1) vs p.5 (Topic SC-2); Part 2 p.1 (Lesson SC-1) vs p.5 (Topic SC-2)",
+    "_src": "sol_01.json",
+    "withdrawn_reason": "Contradicted by the teacher's weekly lesson plan, which names the lesson 'Lesson SC-1: Compare Rational Numbers (SC1-1)' and uses the idiom 'Independent Practice on notebook'. The source naming is correct; the normalisation was an unjustified imposition and has been reverted."
   }
 ]

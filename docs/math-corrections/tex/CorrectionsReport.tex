@@ -24,15 +24,15 @@
 \section*{Summary}
 \begin{center}\begin{tabular}{lrrrr}\toprule
 Document & High & Medium & Low & Total\\\midrule
-Topic 1 --- Explanations companion (Part 1) & 1 & 12 & 33 & 46\\
-Topic 1 --- Part 1 Solutions & 4 & 2 & 9 & 15\\
+Topic 1 --- Explanations companion (Part 1) & 1 & 12 & 31 & 44\\
+Topic 1 --- Part 1 Solutions & 4 & 2 & 7 & 13\\
 Topic 1 --- Part 2 Solutions & 0 & 10 & 1 & 11\\
 6th Grade Review (worksheet) & 0 & 5 & 7 & 12\\
 6th Grade Review --- Explanations companion & 1 & 10 & 25 & 36\\
 \midrule
-\textbf{Total} & \textbf{6} & \textbf{39} & \textbf{75} & \textbf{120}\\
+\textbf{Total} & \textbf{6} & \textbf{39} & \textbf{71} & \textbf{116}\\
 \bottomrule\end{tabular}\end{center}
-\medskip\noindent\textbf{By category:} inconsistency (46), formatting (22), grammar (19), notation (15), math (8), punctuation (5), spacing (5).
+\medskip\noindent\textbf{By category:} inconsistency (44), formatting (21), grammar (18), notation (15), math (8), punctuation (5), spacing (5).
 
 \section*{Method, and what was ruled out}
 Ten scanners each owned a page range and worked from the \emph{rendered} pages,
@@ -50,13 +50,21 @@ words against \texttt{pypdf}'s 29 in the Topic~1 companion. The fusion is an
 artefact of one extractor's word-break heuristic, so the finding was withdrawn
 rather than ``fixed''. Nothing in the rebuild was changed on its account.
 
-\medskip\noindent\textbf{Also checked and found sound.} All arithmetic in all
-five documents was recomputed independently: the 24 exponent-law items across
-both keys, the mixed-number conversions, the butterfly cross-products, and all
-69 checked answers in the 6th Grade Review companion. Only the items listed
-below were wrong. Section lettering A--N is complete and sequential, and the
-worksheet maps 1:1 onto its companion with no orphans in either direction.
+\medskip\noindent\textbf{Withdrawn: the SC-lesson naming ``fix''.} Scanners
+flagged ``Lesson SC-1: Compare Rational Numbers'' as a one-off, since every
+numbered heading reads ``Topic 1-N'' with no colon, and it was normalised to
+``Topic SC-1''. The teacher's weekly lesson plan names the lesson
+\textbf{Lesson SC-1: Compare Rational Numbers (SC1-1)}, so the source was right
+and the normalisation was wrong. It has been reverted in all three documents,
+along with ``Topic SC-2: Use the Laws of Exponents''. The remaining
+Lesson~SC-1 / Topic~SC-2 asymmetry is left as the author wrote it and is noted
+here as a question for the teacher rather than silently resolved.
 
+\medskip\noindent\textbf{Withdrawn: ``on your notebook''.} Changed to ``in your
+notebook'', then reverted --- the lesson plan's own wording is ``Independent
+Practice \emph{on} notebook'', so this is the author's register, not an error.
+
+\medskip\noindent\textbf{Also checked and found sound.}
 \section*{Not applied --- logged as recommendations}
 Four findings propose restructuring an assignment rather than correcting an
 error, and changing them would desynchronise these documents from the
@@ -171,7 +179,7 @@ here and left alone:
 \noindent\textbf{Found: }\textit{A person is designing a rectangular poster. The area of the poster is given as the expression 3$^2$ $\times$ 3$^4$ square inches.}\par
 \noindent\textbf{Corrected to: }Set the Topic SC-2 section in the same 10.91 pt body type used on pp.1--39.\par
 \noindent\textbf{Why: }Body text drops from 10.91 pt (with \textasciitilde{}22 pt leading) to 9.96 pt (with \textasciitilde{}18.5 pt leading) starting at the Topic SC-2 heading, so the last quarter of the document is visibly smaller and tighter than the rest.\par\vspace{4pt}
-\subsection*{Low severity (33)}
+\subsection*{Low severity (31)}
 \needspace{5\baselineskip}
 \noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
 \noindent\textbf{p.~1} \quad \sevlow{Low} \quad \textit{inconsistency}\par
@@ -201,13 +209,6 @@ here and left alone:
 \noindent\textbf{Found: }\textit{A repeating decimal goes on forever but in a repeating pattern, like 0.333 . . .}\par
 \noindent\textbf{Corrected to: }A repeating decimal goes on forever but in a repeating pattern, like 0.333 . . ..\par
 \noindent\textbf{Why: }This is the only bullet on the page with no closing period, and it disagrees with the same definition on p.2, which renders "like 0.333 . . .." with the sentence period after the ellipsis.\par\vspace{4pt}
-\needspace{5\baselineskip}
-\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
-\noindent\textbf{p.~10} \quad \sevlow{Low} \quad \textit{inconsistency}\par
-\noindent\textbf{Where: }Section heading above Question 1 of the SC-1 lesson\par
-\noindent\textbf{Found: }\textit{Lesson SC-1: Compare Rational Numbers}\par
-\noindent\textbf{Corrected to: }Topic SC-1 Compare Rational Numbers\par
-\noindent\textbf{Why: }Every other section heading in the companion uses the pattern "Topic 1-N Title" with no colon ("Topic 1-1 Relate Integers and Opposites", "Topic 1-2 Understand Rational Numbers", "Topic 1-3 Add Integers"), and the answer key names the later supporting-cluster section "Topic SC-2 Use the Laws of Exponents", so "Lesson" plus a colon is a one-off.\par\vspace{4pt}
 \needspace{5\baselineskip}
 \noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
 \noindent\textbf{p.~11} \quad \sevlow{Low} \quad \textit{formatting}\par
@@ -352,13 +353,6 @@ here and left alone:
 \noindent\textbf{Why: }The figure's negative tick labels use an ASCII hyphen, whereas every negative number in the body text (including $-$120 in step 1 on the same page) uses the longer math minus sign.\par\vspace{4pt}
 \needspace{5\baselineskip}
 \noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
-\noindent\textbf{p.~40} \quad \sevlow{Low} \quad \textit{formatting}\par
-\noindent\textbf{Where: }Topic SC-2 section heading\par
-\noindent\textbf{Found: }\textit{Topic SC-2: Use the Laws of Exponents}\par
-\noindent\textbf{Corrected to: }Topic SC-2 Use the Laws of Exponents\par
-\noindent\textbf{Why: }Every other topic heading in the companion (e.g. "Topic 1-9 Divide Rational Numbers" on p.35, "Topic 1-10 Solve Problems with Rational Numbers" on p.38) omits the colon, as does the matching heading in Topic1Part1Solutions.\par\vspace{4pt}
-\needspace{5\baselineskip}
-\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
 \noindent\textbf{p.~40} \quad \sevlow{Low} \quad \textit{inconsistency}\par
 \noindent\textbf{Where: }Topic SC-2 Question 1 > Important words, "expression" and "simplify" bullets\par
 \noindent\textbf{Occurrences: }p.40 only (both bullets); contrast pp.41, 43, 45, 47, 48, 49, 50, 51, 52.\par
@@ -461,15 +455,7 @@ here and left alone:
 \noindent\textbf{Found: }\textit{Answer: $-$150.25 (or \$ $-$ 150.25 per owner)}\par
 \noindent\textbf{Corrected to: }Answer: $-$150.25 (or $-$\$150.25 per owner)\par
 \noindent\textbf{Why: }The dollar sign is typeset outside the math minus, rendering as "\$ $-$ 150.25" with binary-operator spacing, which reads as "dollars minus 150.25" rather than negative \$150.25; the companion writes "\$$-$150.25".\par\vspace{4pt}
-\subsection*{Low severity (9)}
-\needspace{5\baselineskip}
-\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
-\noindent\textbf{p.~1} \quad \sevlow{Low} \quad \textit{grammar}\par
-\noindent\textbf{Where: }subtitle line under the document title\par
-\noindent\textbf{Occurrences: }Part 1 p.1 and Part 2 p.1 (identical subtitle)\par
-\noindent\textbf{Found: }\textit{Brief checks. Use We Need $\to$ We Know $\to$ We Solve on your notebook.}\par
-\noindent\textbf{Corrected to: }Brief checks. Use We Need $\to$ We Know $\to$ We Solve in your notebook.\par
-\noindent\textbf{Why: }Work is done "in" a notebook, not "on" one.\par\vspace{4pt}
+\subsection*{Low severity (7)}
 \needspace{5\baselineskip}
 \noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
 \noindent\textbf{p.~2} \quad \sevlow{Low} \quad \textit{inconsistency}\par
@@ -478,14 +464,6 @@ here and left alone:
 \noindent\textbf{Found: }\textit{Answer: 10.4 < 10.6 and 10.6 > 10.4 (units OK)}\par
 \noindent\textbf{Corrected to: }Answer: 10.4 < 10.6 and 10.6 > 10.4 (pounds OK)\par
 \noindent\textbf{Why: }Topic1ExplanationsPart1's Final answer for this item reads "(pounds OK)", naming the actual unit (cat and rabbit weights); the key's generic "(units OK)" loses the check the companion intends.\par\vspace{4pt}
-\needspace{5\baselineskip}
-\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
-\noindent\textbf{p.~2} \quad \sevlow{Low} \quad \textit{inconsistency}\par
-\noindent\textbf{Where: }section headings: "Lesson SC-1 ..." vs "Topic SC-2 ..."\par
-\noindent\textbf{Occurrences: }Part 1 p.2 (Lesson SC-1) vs p.5 (Topic SC-2); Part 2 p.1 (Lesson SC-1) vs p.5 (Topic SC-2)\par
-\noindent\textbf{Found: }\textit{Lesson SC-1 Compare Rational Numbers}\par
-\noindent\textbf{Corrected to: }Topic SC-1 Compare Rational Numbers\par
-\noindent\textbf{Why: }Every other section heading in both documents begins "Topic"; only the SC-1 heading uses "Lesson", so the two supplementary lessons are labelled with different words.\par\vspace{4pt}
 \needspace{5\baselineskip}
 \noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
 \noindent\textbf{p.~3} \quad \sevlow{Low} \quad \textit{formatting}\par
