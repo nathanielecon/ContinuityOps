@@ -53,3 +53,8 @@ tmp/
 kubeconfig
 *.kubeconfig
 .aws/
+
+# LaTeX build artefacts
+docs/math-corrections/tex/*.aux
+docs/math-corrections/tex/*.log
+docs/math-corrections/tex/*.out
