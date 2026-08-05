@@ -1,10 +1,12 @@
 # Worker directives (applies to ALL agents: fixers and judges)
 
 ## 1. Language + compression — caveman wenyan mode
-The `caveman` skill is installed (~/.claude/skills/caveman). Invoke it and set
-wenyan mode, which is Mandarin AND compressed in one setting:
-
-    /caveman wenyan-full
+The `caveman` skill is installed at /root/.claude/skills/caveman. NOTE: an
+agent's available-skill list is fixed when it spawns, so an agent RESUMED from
+an earlier transcript will not see it and cannot invoke `/caveman wenyan-full`.
+That is expected — do not report it as a fault, and do not claim to have invoked
+a skill you could not. Follow the rules below directly instead; they are the
+substance of what the skill does.
 
 Reason in Mandarin. Write your report back to the coordinator in Mandarin.
 Caveman rules still bind: drop filler, no tool-call narration, no preamble.
@@ -16,12 +18,27 @@ NO CJK character may enter any file under docs/math-corrections/.
 These are US school worksheets for 7th graders. Mandarin is for your reasoning
 and your report ONLY. File content stays English.
 
-Before you finish, run on every file you touched:
+Before you finish, check every file you touched. **Use this Python check, not
+grep.** The obvious grep incantation FAILS OPEN on this machine:
 
-    grep -nP '[\x{4e00}-\x{9fff}\x{3000}-\x{303f}\x{ff00}-\x{ffef}]' <file>
+    grep -P '[\x{4e00}-\x{9fff}]' file    # -> "character code point value
+                                           #     too large", prints nothing,
+                                           #     exits 0. Looks clean. Is not.
 
-It must print nothing. If it prints, remove the characters and re-check.
+Verified: a planted CJK character passes that command undetected. Use:
+
+    python3 -c "
+    import re,sys,glob
+    pat=re.compile('[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]')
+    bad=[f for f in sys.argv[1:] if pat.search(open(f,encoding='utf-8',errors='replace').read())]
+    print('CJK FOUND:',bad) if bad else print('clean')" <files...>
+
+(`LC_ALL=C.UTF-8 grep -P` also works, but the Python check is the one to use —
+it cannot fail silently.)
+
 A judge that finds CJK in a .tex file must score the slice 0 and say so.
+A judge that reports "clean" on the strength of the broken grep has not
+checked at all.
 
 This guard is why wenyan mode is safe here: the compression and the language
 apply to YOUR REASONING AND REPORT, never to the artefact. Quoted LaTeX, defect

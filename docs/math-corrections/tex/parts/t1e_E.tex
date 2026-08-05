@@ -145,9 +145,9 @@ and the other is below zero.
   % vertical number line
   \draw[{Stealth[length=2.4mm]}-{Stealth[length=2.4mm]}] (0,-250) -- (0,500);
   % ticks and labels
-  \foreach \y/\lab in {450/$450$, 225/$225$, 0/sea level: $0$, -120/$-120$, -200/$-200$}{%
+  \foreach \y/\lab/\nm in {450/$450$/labyPeak, 225/$225$/labyMid, 0/sea level: $0$/labyZero, -120/$-120$/labyValley, -200/$-200$/labyLow}{%
     \draw (-0.08,\y) -- (0.08,\y);
-    \node[right=2pt,font=\footnotesize] at (0.08,\y) {\lab};}
+    \node[right=2pt,font=\footnotesize,inner xsep=2pt] (\nm) at (0.08,\y) {\lab};}
   % marked points
   \fill[red] (0,450) circle (2.2pt);
   \fill[blue] (0,-120) circle (2.2pt);
@@ -156,8 +156,8 @@ and the other is below zero.
   % measurement arrow, clear of the "sea level: 0" label
   \draw[teal,{Stealth[length=2.2mm]}-{Stealth[length=2.2mm]}] (2.35,450) -- (2.35,-120);
   \node[right=3pt,font=\footnotesize,teal] at (2.35,165) {570 ft};
-  \draw[teal,dotted] (0.75,450) -- (2.35,450);
-  \draw[teal,dotted] (0.75,-120) -- (2.35,-120);
+  \draw[teal,dotted] (labyPeak.east) -- (2.35,450);
+  \draw[teal,dotted] (labyValley.east) -- (2.35,-120);
 \end{tikzpicture}
 \end{center}
 

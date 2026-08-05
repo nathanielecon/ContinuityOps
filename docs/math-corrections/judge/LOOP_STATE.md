@@ -6,16 +6,53 @@ Rule: a slice is ACCEPTED only on TWO CONSECUTIVE 10/10 from its judge
 | Slice | Content | R1 | R2 | R3 | Validation | Status |
 |---|---|---|---|---|---|---|
 | A | 1-1 Q1-4, 1-2 Q1-3 | 7 | 8 | not run | — | **OPEN** — fix applied, needs re-judge |
-| B | SC-1, 1-3 | 8 | 10 | — | died mid-read | **OPEN** — needs validation |
-| C | 1-4, 1-5 | 7 | 10 | — | died mid-read | **OPEN** — needs validation |
-| D | 1-6, 1-7, 1-8 | 8 | 10 | — | died mid-read | **OPEN** — needs validation |
-| E | 1-9, 1-10 | 9 | 10 | — | died mid-read | **OPEN** — needs validation |
-| F | SC-2 Q1-12 | 9 | 10 | — | died mid-read | **OPEN** — needs validation |
+| B | SC-1, 1-3 | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
+| C | 1-4, 1-5 | 7 | 10 | — | **10 PASS** | **ACCEPTED** |
+| D | 1-6, 1-7, 1-8 | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
+| E | 1-9, 1-10 | 9 | 10 | — | **9 FAIL** | **REOPENED** — see below |
+| F | SC-2 Q1-12 | 9 | 10 | — | **10 PASS** | **ACCEPTED** |
 | G | A1, B, C | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
-| H | D, E, F | 9 | 9 | — | — | **OPEN** — fix APPLIED, needs re-judge |
-| I | G, H, I, J | 8 | 10 | — | died mid-read | **OPEN** — needs validation |
+| H | D, E, F | 9 | 9 | 9 FAIL | — | **OPEN** — new defect, fix in flight |
+| I | G, H, I, J | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
 | J | K, L | 8 | 9 | — | — | **OPEN** — fix APPLIED, needs re-judge |
-| K | M, N | 8 | 10 | — | died mid-read | **OPEN** — needs validation |
+| K | M, N | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
+
+## TOOLING BUG FOUND BY THE JUDGES — the CJK guard failed open
+
+The guard I wrote into WORKER_DIRECTIVES was
+`grep -nP '[\x{4e00}-\x{9fff}...]'`. On this machine that errors with
+"character code point value in \x{} or \o{} is too large", prints nothing,
+and exits 0. It reads as "clean" while checking nothing.
+
+Verified by planting a real CJK character in a file: the command missed it.
+`LC_ALL=C.UTF-8 grep -P` catches it; a Python regex catches it. The directive
+now mandates the Python check and documents the trap, because a guard that
+fails open is worse than no guard — it manufactures false confidence.
+
+Judges D and F both reported this independently. Judge D also caught that its
+first run had produced a FALSE POSITIVE (17 .tex files flagged) before it
+switched to Python and got the true answer of zero.
+
+## Slice E — validation overturned its own round-2 pass
+
+Rounds 1-2 cleared the p.35 number-line figure by LOOKING at it (150/400 dpi).
+The validation round pulled glyph coordinates and scanned at 600 dpi and found
+the teal dotted leader lines start at a hard-coded x=296.46pt, which sits INSIDE
+the label glyph boxes, so they cross "-120" and "450" at mid-glyph height and
+read as a strikethrough. Root cause: one shared start x sized for the
+3-character "450", never widened for the 4-character "-120" (whose math minus is
+wider still).
+
+Note what this is: the EARLIER fix for this same figure did clear the
+strikethrough on "sea level: 0" - the judge confirmed that label is now at zero
+teal pixels. The defect did not return; it MIGRATED to two neighbouring labels
+the fix never measured. Third time in this run a repair has moved a defect
+instead of closing it.
+
+The fix in flight anchors each leader to its own label node's east edge rather
+than raising the magic number, so the geometry survives the next label that gets
+wider, and must prove it by measuring teal pixels in all five label boxes -
+including the three already clean.
 
 ## Outstanding work, in order
 
