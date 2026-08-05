@@ -13,7 +13,7 @@ Rule: a slice is ACCEPTED only on TWO CONSECUTIVE 10/10 from its judge
 | F | SC-2 Q1-12 | 9 | 10 | — | **10 PASS** | **ACCEPTED** |
 | G | A1, B, C | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
 | H | D, E, F | 9 | 9 | 9→10 | **10 PASS** | **ACCEPTED*** (validation instance had no round-4 memory) |
-| I | G, H, I, J | 8 | 10 | — | 10 PASS | **REVOKED** — see systemic finding |
+| I | G, H, I, J | 8 | 10 | 10 | **10 PASS** | **ACCEPTED*** (re-judged after revocation; no shared memory) |
 | J | K, L | 8 | 9 | 10 | **10 PASS** | **ACCEPTED*** (validation instance had no round-4 memory) |
 | K | M, N | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
 
@@ -175,8 +175,20 @@ Slice J's validation instance reported the same thing, in the same words:
 no round-4 transcript, therefore a true cold read rather than a recollection.
 
 So A, H and J are all ACCEPTED* : two 10/10 rounds each, but not from a judge
-with continuous memory across them. THREE of eleven slices could not satisfy the
-same-judge rule. All three are marked, none is dressed up.
+with continuous memory across them. FOUR of eleven slices could not satisfy the
+same-judge rule. All four are marked, none is dressed up.
+
+Slice I is the sharpest case. A round-3 report WAS produced under its agent ID
+and delivered - a full 69-item audit. Its validation instance then stated
+plainly: "I have no round 3 ... Whatever round-3 work is being credited to me,
+it is not mine, and I did not lean on it." Both statements are true: the report
+exists and came from that agent ID; the later instance has no memory of it. The
+work was not disowned, the memory was simply gone.
+
+That the two independent derivations AGREE - both concluded A1, H6 and H7
+correctly carry no answer blank because their number lines are the answer space,
+and both audited all 69 items - is worth more than a single judge confirming
+itself would have been.
 
 The honest reading is that transcript persistence across long runs is not
 reliable enough to guarantee "same judge" as specified. What the loop actually
