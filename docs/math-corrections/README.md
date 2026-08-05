@@ -136,6 +136,11 @@ produced no net saving; the cheap-fixer/frontier-judge split was the one clear
 win; and pxpipe is the correctly-aimed tool but is a launch-time wrapper, not
 something that can be enabled mid-session in a managed remote environment.
 
+`PXPIPE_HANDOFF.md` is a runnable handoff for an agent wiring pxpipe up, with a
+decision gate for the managed-gateway case, a validation gate to run before
+trusting imaged context on a judge loop, and an explicit "you cannot do this
+from inside a session" section.
+
 ## Building
 
 Requires TeX Live with `lmodern`, `tcolorbox`-free `tikz`, `enumitem`,
