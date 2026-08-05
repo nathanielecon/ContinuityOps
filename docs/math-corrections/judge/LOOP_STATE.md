@@ -14,7 +14,7 @@ Rule: a slice is ACCEPTED only on TWO CONSECUTIVE 10/10 from its judge
 | G | A1, B, C | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
 | H | D, E, F | 9 | 9 | 9→10 | **10 PASS** | **ACCEPTED*** (validation instance had no round-4 memory) |
 | I | G, H, I, J | 8 | 10 | — | 10 PASS | **REVOKED** — see systemic finding |
-| J | K, L | 8 | 9 | 10 | **9 FAIL** | **REOPENED** — systemic finding |
+| J | K, L | 8 | 9 | 10 | **10 PASS** | **ACCEPTED*** (validation instance had no round-4 memory) |
 | K | M, N | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
 
 ## TOOLING BUG FOUND BY THE JUDGES — the CJK guard failed open
@@ -163,7 +163,7 @@ source's colored banner boxes") and it was relayed in a summary rather than
 logged as a defect. It is a fidelity defect and is recorded here as one.
 
 
-## A second broken same-judge guarantee: slice H
+## Broken same-judge guarantees: slices A, H and J
 
 Slice H's validation instance reported that it had NO record of its own round 4 -
 its prompt arrived labelled "Round 1". Same agent ID, but the transcript did not
@@ -171,9 +171,18 @@ carry. It disclosed this at the top of its report rather than writing as though
 it remembered, and noted that for a VALIDATION round a cold read is a benefit
 rather than a harm, which is fair.
 
-So H, like A, is ACCEPTED* : two 10/10 rounds, but not from a judge with
-continuous memory across them. Two of eleven slices could not satisfy the
-same-judge rule. Both are marked, neither is dressed up.
+Slice J's validation instance reported the same thing, in the same words:
+no round-4 transcript, therefore a true cold read rather than a recollection.
+
+So A, H and J are all ACCEPTED* : two 10/10 rounds each, but not from a judge
+with continuous memory across them. THREE of eleven slices could not satisfy the
+same-judge rule. All three are marked, none is dressed up.
+
+The honest reading is that transcript persistence across long runs is not
+reliable enough to guarantee "same judge" as specified. What the loop actually
+delivered on those three slices is two independent 10/10 reads, which is a
+different - and for a validation pass arguably stronger - property than the one
+requested. It is not the property that was requested.
 
 ## Methodological finding from slice H: -layout extraction inverts fractions
 
@@ -187,3 +196,22 @@ correct.
 A judge trusting -layout here would have failed a correct item as a fatal
 fidelity defect. Every fraction claim in this corpus must be settled by glyph
 y-coordinates, never by extracted text order.
+
+
+## Detector paradoxes, and the rule that resolved them
+
+Instrument errors outnumbered document defects in the late rounds. Four were
+found, every one capable of producing a confident wrong answer:
+
+1. CJK guard failed OPEN — `grep -P` errored, printed nothing, exited 0.
+2. The same guard fails CLOSED on PDFs — compressed-stream bytes decode to
+   stray CJK, false-positiving 6 of 6 files.
+3. `\rule` emits an `l` line primitive, not an `re` rectangle. Counting `re`
+   reports every answer blank as missing.
+4. `pdftotext -layout` TRANSPOSES built-up fractions, so a correct 4/7 = ?/21
+   extracts as "47 = 21 / ?" and reads as corruption.
+
+The working rule, arrived at independently by judge J: when a measurement
+contradicts a visible fact, suspect the instrument first, then confirm along a
+second and third independent path (bitmap render, source, coordinates). Judge J
+hit two such paradoxes in one round and resolved both correctly.
