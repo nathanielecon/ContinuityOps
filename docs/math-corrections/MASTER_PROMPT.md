@@ -5,7 +5,23 @@ It encodes everything learned on the previous run, including the mistakes.
 
 ---
 
-## 0. Before anything else: sources first
+## 0a. Bootstrap the container FIRST
+
+```sh
+bash docs/math-corrections/bootstrap.sh
+```
+
+Containers are ephemeral — a fresh session has no `pdflatex`, `pdftotext` or
+`pdftoppm`. Run this and confirm it exits 0 **before dispatching any agent**.
+
+`pdftoppm` is the critical one: it backs the Read tool's PDF page rendering.
+Without it, an agent told to "read the rendered page" gets an error and falls
+back to text extraction — which fuses words and flattens exponents — and then
+reports a flood of defects that do not exist. On the first run, ten scanners
+were dispatched before poppler existed and all ten had to be corrected in
+flight.
+
+## 0b. Before anything else: sources first
 
 **Do not plan, slice, or dispatch until every authoritative source is in hand.**
 

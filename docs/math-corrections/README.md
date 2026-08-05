@@ -164,8 +164,20 @@ from inside a session" section.
 
 ## Building
 
-Requires TeX Live with `lmodern`, `tcolorbox`-free `tikz`, `enumitem`,
-`needspace`, `xspace`, `microtype`.
+**Containers are ephemeral — run the bootstrap first:**
+
+```sh
+bash docs/math-corrections/bootstrap.sh
+```
+
+It installs TeX Live, poppler, pypdf and PyMuPDF, verifies each, and proves
+`mathdocs.sty` actually compiles. Idempotent; exits non-zero if anything is
+missing, so it can gate a run. It also documents four traps that cost real time
+on the first run — the stale apt index, `lmodern.sty` not being in
+`texlive-latex-base`, an un-uninstallable Debian `cryptography` that breaks
+`pypdf`, and most importantly that **`pdftoppm` must exist before any agent is
+dispatched**, or `Read(pages=...)` silently degrades to text extraction and
+agents report defects that do not exist.
 
 ```sh
 cd tex
