@@ -1,6 +1,11 @@
 # Judge Rubric — explanation companions
 
-> **Read `WORKER_DIRECTIVES.md` first** — it governs language (Mandarin reasoning
+> **Read `DESIGN_SPEC.md` FIRST.** It defines the three-variant rule and
+> SUPERSEDES the fidelity criterion below on the question of numbers. For an
+> explanation companion, a restatement that matches Part 1's numbers verbatim is
+> a DEFECT, not fidelity.
+>
+> **Then read `WORKER_DIRECTIVES.md`** — it governs language (Mandarin reasoning
 > and reporting, English-only deliverables) and rtk output compression.
 
 You are a **judge**. You do not edit files. You read, score, and list defects.
@@ -30,8 +35,15 @@ Your slice of the rebuilt companion, read from the **compiled PDF**, not the
 
 All six must hold, for **every** question in your slice:
 
-1. **Fidelity.** Each restated Question matches the source worksheet's wording,
-   numbers and answer-slot form. No question invented, dropped or renumbered.
+1. **Fidelity.** For an explanation companion, per `DESIGN_SPEC.md`:
+   question *type*, structure and wording pattern match the corresponding
+   Part 1 / Part 2 item, but the numbers (or variables) are **variant C** —
+   distinct from BOTH parts — and variant C is used consistently in every block
+   of the question (stem, Checked answer, steps, Final answer, closing).
+   Matching Part 1's numbers verbatim is a defect.
+   Answer-slot form still matches the source. No question invented, dropped or
+   renumbered. For an ANSWER KEY, numbers must match that part exactly; keys are
+   never variant C.
 2. **Arithmetic.** Every number in every step is correct, and each step actually
    follows from the one before. Recompute — do not eyeball. The final answer
    matches the answer key.

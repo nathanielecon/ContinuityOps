@@ -84,11 +84,22 @@ Two caveats are recorded rather than smoothed over:
   PDFs, `\rule` emitting an `l` primitive so rectangle-counting reports every
   blank missing, and `pdftotext -layout` transposing built-up fractions.
 
-## Known open item
+## Known open items
 
-The revised worksheet sets its section headings as navy banner boxes with white
-text on light panels. The rebuild uses plain bold headings. No slice owns the
-worksheet, so no judge covers it. Unfixed.
+**The explanation companion uses the wrong number variant.** Each question is
+supposed to exist in three variants: the explanation teaches on one set of
+numbers, Part 1 practises another, Part 2 a third, so a student cannot copy the
+worked answer into their homework. The companion instead carries Part 1's
+numbers throughout — as did the original — and my Lesson 1-1 Q1 correction
+removed the single vestige of the intended design. See `DESIGN_SPEC.md`. This
+voids the judges' numbers-match clause for `Topic1ExplanationsPart1`; their
+arithmetic, typography and figure findings still stand.
+
+
+
+**Worksheet banners.** The revised worksheet sets its section headings as navy
+banner boxes with white text on light panels. The rebuild uses plain bold
+headings. No slice owns the worksheet, so no judge covers it. Unfixed.
 
 ## Withdrawn findings
 
