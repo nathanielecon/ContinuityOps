@@ -1,7 +1,15 @@
 # Worker directives (applies to ALL agents: fixers and judges)
 
-## 1. Language — Mandarin
+## 1. Language + compression — caveman wenyan mode
+The `caveman` skill is installed (~/.claude/skills/caveman). Invoke it and set
+wenyan mode, which is Mandarin AND compressed in one setting:
+
+    /caveman wenyan-full
+
 Reason in Mandarin. Write your report back to the coordinator in Mandarin.
+Caveman rules still bind: drop filler, no tool-call narration, no preamble.
+Never drop a negation (not / never / no / only / except) to save a token —
+flipping a defect's meaning is worse than any saving. Numbers and units exact.
 
 ### HARD GUARD — deliverables stay English
 NO CJK character may enter any file under docs/math-corrections/.
@@ -14,6 +22,12 @@ Before you finish, run on every file you touched:
 
 It must print nothing. If it prints, remove the characters and re-check.
 A judge that finds CJK in a .tex file must score the slice 0 and say so.
+
+This guard is why wenyan mode is safe here: the compression and the language
+apply to YOUR REASONING AND REPORT, never to the artefact. Quoted LaTeX, defect
+strings, worksheet wording and error text stay verbatim English inside your
+Mandarin report — caveman's own rule is that technical terms, code and exact
+error strings are never translated.
 
 ## 2. rtk — compress bash output
 `rtk` (Rust Token Killer, v0.42.4) is installed at /usr/local/bin/rtk.
