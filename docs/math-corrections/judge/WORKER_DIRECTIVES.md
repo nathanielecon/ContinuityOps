@@ -36,6 +36,15 @@ Verified: a planted CJK character passes that command undetected. Use:
 (`LC_ALL=C.UTF-8 grep -P` also works, but the Python check is the one to use —
 it cannot fail silently.)
 
+**Scan TEXT files only.** Do not run the check over .pdf files. A PDF read as
+UTF-8 with errors='replace' will decode compressed-stream bytes into stray CJK
+codepoints and report a hit on essentially every file — a false positive, not
+contamination. To check a PDF, compare its `pdftotext` output instead.
+
+**Self-test your detector before trusting a "clean" result.** Feed it a known
+CJK string and confirm it returns true, then scan. Two judges reported "clean"
+from a command that was not running at all.
+
 A judge that finds CJK in a .tex file must score the slice 0 and say so.
 A judge that reports "clean" on the strength of the broken grep has not
 checked at all.
