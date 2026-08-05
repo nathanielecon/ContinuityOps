@@ -145,9 +145,16 @@ and the other is below zero.
   % vertical number line
   \draw[{Stealth[length=2.4mm]}-{Stealth[length=2.4mm]}] (0,-250) -- (0,500);
   % ticks and labels
-  \foreach \y/\lab/\nm in {450/$450$/labyPeak, 225/$225$/labyMid, 0/sea level: $0$/labyZero, -120/$-120$/labyValley, -200/$-200$/labyLow}{%
-    \draw (-0.08,\y) -- (0.08,\y);
-    \node[right=2pt,font=\footnotesize,inner xsep=2pt] (\nm) at (0.08,\y) {\lab};}
+  % Ticks may live in the loop; the LABELS must not. TikZ scopes each \foreach
+  % iteration in its own group, so a node named inside the loop is invisible to
+  % the \draw calls below and the anchor silently falls back to a stale
+  % coordinate -- which compiles clean while keeping the old geometry.
+  \foreach \y in {450,225,0,-120,-200}{\draw (-0.08,\y) -- (0.08,\y);}
+  \node[right=2pt,font=\footnotesize,inner xsep=2pt] (labyPeak)   at (0.08,450)  {$450$};
+  \node[right=2pt,font=\footnotesize,inner xsep=2pt] (labyMid)    at (0.08,225)  {$225$};
+  \node[right=2pt,font=\footnotesize,inner xsep=2pt] (labyZero)   at (0.08,0)    {sea level: $0$};
+  \node[right=2pt,font=\footnotesize,inner xsep=2pt] (labyValley) at (0.08,-120) {$-120$};
+  \node[right=2pt,font=\footnotesize,inner xsep=2pt] (labyLow)    at (0.08,-200) {$-200$};
   % marked points
   \fill[red] (0,450) circle (2.2pt);
   \fill[blue] (0,-120) circle (2.2pt);
