@@ -12,7 +12,7 @@ Rule: a slice is ACCEPTED only on TWO CONSECUTIVE 10/10 from its judge
 | E | 1-9, 1-10 | 9 | 10 | 9→10 (r4→r5) | **10 PASS** | **ACCEPTED** |
 | F | SC-2 Q1-12 | 9 | 10 | — | **10 PASS** | **ACCEPTED** |
 | G | A1, B, C | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
-| H | D, E, F | 9 | 9 | 9 FAIL | — | **OPEN** — fixed, round 4 in flight |
+| H | D, E, F | 9 | 9 | 9→10 | **10 PASS** | **ACCEPTED*** (validation instance had no round-4 memory) |
 | I | G, H, I, J | 8 | 10 | — | 10 PASS | **REVOKED** — see systemic finding |
 | J | K, L | 8 | 9 | 10 | **9 FAIL** | **REOPENED** — systemic finding |
 | K | M, N | 8 | 10 | — | **10 PASS** | **ACCEPTED** |
@@ -161,3 +161,29 @@ text on light-blue rounded panels. The rebuilt worksheet uses plain bold
 headings. The rebuild agent disclosed this at the time ("Not reproduced: the
 source's colored banner boxes") and it was relayed in a summary rather than
 logged as a defect. It is a fidelity defect and is recorded here as one.
+
+
+## A second broken same-judge guarantee: slice H
+
+Slice H's validation instance reported that it had NO record of its own round 4 -
+its prompt arrived labelled "Round 1". Same agent ID, but the transcript did not
+carry. It disclosed this at the top of its report rather than writing as though
+it remembered, and noted that for a VALIDATION round a cold read is a benefit
+rather than a harm, which is fair.
+
+So H, like A, is ACCEPTED* : two 10/10 rounds, but not from a judge with
+continuous memory across them. Two of eleven slices could not satisfy the
+same-judge rule. Both are marked, neither is dressed up.
+
+## Methodological finding from slice H: -layout extraction inverts fractions
+
+`pdftotext -layout` renders a built-up fraction with numerator and denominator
+transposed. On the authoritative worksheet, E2 extracts as "47 = 21 / ?" and E4
+as "56 = 18 / x". Read literally, both look like the companion has corrupted the
+problem. By span coordinates the truth is the opposite: E2 numerator "?" sits at
+y=403.7 above denominator "21" at y=411.1, i.e. 4/7 = ?/21, and the companion is
+correct.
+
+A judge trusting -layout here would have failed a correct item as a fatal
+fidelity defect. Every fraction claim in this corpus must be settled by glyph
+y-coordinates, never by extracted text order.
