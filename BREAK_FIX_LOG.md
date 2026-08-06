@@ -761,3 +761,70 @@ Elevate integrated-gate/SUPERVISOR to tip-bound A3 L4 lab + aa01454 SHA so P1-T0
 - Residual, recorded not fixed: the 39 pre-existing numeric items state format
   only as "a bare number" and do not say integer vs decimal. Uniform, correct,
   and left alone — rewording 39 shipped stems is authoring, not repair.
+- **Superseded by BF-2026-038**, which prescribes an exact format on all 106.
+
+## 2026-08-06 — BF-2026-036 — six items shipped TRUE statements as wrong answers
+
+Under all-or-nothing select-all, a student who selects a true choice scores
+**zero for the whole item**. Criterion 2, the primary hunt, live in the corpus.
+
+| Item | True, and scored wrong |
+|---|---|
+| `K9` | `8 + 5` (the stem verbatim), `13`, `(8 + 5) + 0`, `8 + (5 + 0)` — all equal 13 |
+| `K10`, `N5` | `7a + 0`, `7 × a` (stem verbatim) — identically `7a` for every a |
+| `K11` | `(b + 9) + 3`, `b + 12`, `(b + 3) + 9` (stem verbatim) — all equal `b + 12` |
+| `N6` | `(x + 8) + 5`, `x + 13`, `(x + 5) + 8` (stem verbatim) |
+| `topic-1-2` P2Q2 | `The sign does not matter here.` — true; `The denominator alone determines answer.` — the textbook rule, so it punishes the taught student |
+
+- **Systemic cause: every rewrite item included its own stem expression as a
+  distractor.** Under "select all *equivalent* rewrites" that is a correct
+  answer, not a trap. The value-collapsed choices (`13`, `b + 12`, `x + 13`)
+  compound it.
+- The stem had to be tightened as well as the choices: under "select all
+  equivalent rewrites" no choice set can be made correct, because `13` genuinely
+  is equivalent to `8 + 5`. The narrowing is the author's own definition, quoted
+  from the explanations PDF: *"Regroup means move the parentheses without
+  changing the left-to-right order of the terms."*
+- Fix: in-place text replacement on existing choice idents — no ident added or
+  removed, so `resprocessing` and `original_answer_ids` cannot drift. Each
+  replacement is one edit from the true choice it replaces, so the item still
+  discriminates exactly where it broke.
+- Forbidden near-misses are recorded per item in `CHANGES.md`, because the
+  failure mode now is an editor "correcting" `8 + (5 × 0)` back to `× 1` and
+  silently restoring a true choice.
+
+## 2026-08-06 — BF-2026-037 — self-referential choices, and a missing guard
+
+- `topic-1-2` P2Q2 offered `More than one listed choice is correct.`, `All listed
+  choices are correct.`, `No listed choice can be correct.` **Their truth is a
+  function of the other choices.** `More than one…` became true only because a
+  different distractor was true — so a later edit re-keys it with no signal at
+  the site of the edit, which is exactly how this defect arose.
+- They also carry no mathematical content, and they are not authored: the source
+  worksheet has only options A, B, C. The trio is padding added to reach the
+  option floor, and it is where every defect in the item lived.
+- **Structural rule recorded: no self-referential choice in any item.**
+- Same item's stem omitted the `b ≠ 0` guard that Part 1 carries and the solution
+  PDF states. Without it the key is not "always right" — `b = 0` yields no
+  decimal at all. Guard added.
+- **`topic-1-2` P1Q2 deliberately untouched.** It carries the same trio and is
+  currently safe only because its stem asks which outcome is **NOT** possible,
+  which makes those choices non-answers. That framing is load-bearing; the two
+  stems must not be harmonised in either direction. Flagged for a separate
+  structural pass.
+
+## 2026-08-06 — BF-2026-038 — every numeric stem now prescribes its exact format
+
+- The corpus stated format three different ways, and 37 of the numeric items (the
+  two 6th-grade packages) carried their instruction inline with no
+  "Canvas accuracy check:" prefix at all, so a first sweep missed them entirely.
+- Now every one of the **106** numeric items ends with exactly one of
+  `Enter your answer as a whole number.` (89) or
+  `Enter your answer as a decimal to two places, like 0.00.` (17), followed by
+  `Include the negative sign if the answer is negative.` where the key can be
+  negative, and the corpus's existing `Enter the number only, no units or
+  symbols.` clause last.
+- The format is derived from each item's own accepted values, never assumed.
+- Mathematical instructions already in a stem are preserved, not overwritten:
+  `Round to the nearest kilometer`, `omit the % symbol`, `without x =`. Dropping
+  those would change the question rather than its formatting.

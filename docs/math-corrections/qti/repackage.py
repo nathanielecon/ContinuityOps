@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild the 14 corrected QTI zips from /tmp/qtiwork/pkg and emit checksums.
+"""Rebuild the 14 corrected QTI zips from $QTI_SRC and emit checksums.
 
 Deliberately mirrors the originals' internal layout: the zip root holds
 imsmanifest.xml plus one directory named for the assessment. Canvas rejects a
@@ -9,7 +9,7 @@ package directory itself rather than from its parent.
 import hashlib, os, sys, zipfile
 import xml.etree.ElementTree as ET
 
-SRC = "/tmp/qtiwork/pkg"
+SRC = os.environ.get("QTI_SRC", "/tmp/qtiwork/pkg")
 OUT = sys.argv[1] if len(sys.argv) > 1 else "/tmp/qtiwork/out"
 os.makedirs(OUT, exist_ok=True)
 

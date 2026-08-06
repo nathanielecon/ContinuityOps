@@ -69,6 +69,101 @@ CONVERT = {
     ('topic-sc-2', 'Part 2 Question 1'): ('256', ONLY),
 }
 
+# --------------------------------------------------------------------------
+# topic-1-4 -- six select-all items become twelve short-answer items, one
+# expression each. The worksheet asks the student to WRITE expressions, and the
+# author's hierarchy puts short answer above select-all for that.
+#
+# Splitting by FORM (subtraction vs absolute value) rather than by "write a
+# different one" is what makes this safe: Canvas cannot compare one item's
+# answer with another's, so "a different expression" would accept the same
+# string twice. Form-a strings contain no "|" and form-b strings all do, so the
+# two accepted sets are provably disjoint.
+#
+# Every accepted string below was evaluated against the item's true distance.
+# The spaced twin of each is accepted as insurance against a correct student who
+# ignores the no-spaces instruction -- being marked wrong for a spacing choice
+# is exactly the harm this project exists to prevent.
+# --------------------------------------------------------------------------
+FORM_A = ('Type only the expression, with no words, no units, no equals sign, '
+          'and do not work out the answer. Use a minus sign and no '
+          'absolute-value bars. Type it with no spaces: write 4-(-9), not '
+          '4 - (-9). That example shows spacing only, not the correct order '
+          'for this problem. Remember that a distance is never negative.')
+FORM_B = ('Type only the expression, with no words, no units, no equals sign, '
+          'and do not work out the answer. Use the vertical bar key | for the '
+          'absolute-value bars, not the letters abs. Type it with no spaces: '
+          'write |4-(-9)|, not | 4 - (-9) |. That example shows spacing only, '
+          'not the correct order for this problem.')
+
+# (context, distance phrase, accepted form a, accepted form b)
+SHORTANS = {
+    ('topic-1-4', 'Part 1 Question 1'): (
+        'At 6:00 PM, the temperature was 5\\(^\\circ\\)F. By midnight, the '
+        'temperature was \\(-8^\\circ\\)F.', 'distance between the two temperatures',
+        ['5-(-8)', '5 - (-8)', '5--8', '5 - -8'],
+        # the |-8|+5 family is the "split the trip at zero" method, which the
+        # answer key itself lists. The stem must stay form-general ("uses
+        # absolute-value bars") -- saying "bars around a subtraction" would make
+        # the key's own method off-form and mark a correct student wrong.
+        ['|5-(-8)|', '|-8-5|', '|(-8)-5|', '|-8|+5', '5+|-8|', '|5|+|-8|',
+         '|-8|+|5|', '|5--8|', '|5 - (-8)|', '|-8 - 5|', '|(-8) - 5|',
+         '|-8| + 5', '5 + |-8|', '|5| + |-8|', '|-8| + |5|', '|5 - -8|']),
+    ('topic-1-4', 'Part 1 Question 2'): (
+        'Two birds are flying in the sky. Bird A is 150 feet above sea level. '
+        'Bird B is 120 feet above sea level.', 'vertical distance between the birds',
+        ['150-120', '150 - 120'],
+        ['|150-120|', '|120-150|', '|150 - 120|', '|120 - 150|']),
+    ('topic-1-4', 'Part 1 Question 3'): (
+        "Two fish are swimming beneath the water. Fish A's elevation is "
+        '\\(-25\\) feet relative to sea level. Fish B\'s elevation is \\(-40\\) '
+        'feet relative to sea level.', 'vertical distance between the fish',
+        # the key lists only 40-25, but -25-(-40) is equally valid and is what a
+        # student working from the signed elevations writes. Omitting it would
+        # be a wrong-answer generator.
+        ['-25-(-40)', '(-25)-(-40)', '40-25', '-25--40', '-25 - (-40)',
+         '(-25) - (-40)', '40 - 25', '-25 - -40'],
+        ['|-25-(-40)|', '|-40-(-25)|', '|(-25)-(-40)|', '|(-40)-(-25)|',
+         '|40-25|', '|25-40|', '|-25--40|', '|-40--25|', '|-25 - (-40)|',
+         '|-40 - (-25)|', '|(-25) - (-40)|', '|(-40) - (-25)|', '|40 - 25|',
+         '|25 - 40|', '|-25 - -40|', '|-40 - -25|']),
+    ('topic-1-4', 'Part 2 Question 1'): (
+        'At 7:00 AM, the temperature was 3\\(^\\circ\\)F. By noon, the '
+        'temperature was 12\\(^\\circ\\)F.', 'distance between the two temperatures',
+        ['12-3', '12 - 3'],
+        ['|12-3|', '|3-12|', '|12 - 3|', '|3 - 12|']),
+    ('topic-1-4', 'Part 2 Question 2'): (
+        'Two planes are flying in the sky. Plane A is 280 feet above sea level. '
+        'Plane B is 210 feet above sea level.', 'vertical distance between the planes',
+        ['280-210', '280 - 210'],
+        ['|280-210|', '|210-280|', '|280 - 210|', '|210 - 280|']),
+    ('topic-1-4', 'Part 2 Question 3'): (
+        "Two submarines are traveling beneath the water. Submarine A's "
+        'elevation is \\(-18\\) feet relative to sea level. Submarine B\'s '
+        'elevation is \\(-45\\) feet relative to sea level.',
+        'vertical distance between the submarines',
+        ['-18-(-45)', '(-18)-(-45)', '45-18', '-18--45', '-18 - (-45)',
+         '(-18) - (-45)', '45 - 18', '-18 - -45'],
+        ['|-18-(-45)|', '|-45-(-18)|', '|(-18)-(-45)|', '|(-45)-(-18)|',
+         '|45-18|', '|18-45|', '|-18--45|', '|-45--18|', '|-18 - (-45)|',
+         '|-45 - (-18)|', '|(-18) - (-45)|', '|(-45) - (-18)|', '|45 - 18|',
+         '|18 - 45|', '|-18 - -45|', '|-45 - -18|']),
+}
+
+
+def with_unicode_minus(vals):
+    """A student who copies the stem's rendered MathJax gets U+2212, not ASCII
+    hyphen-minus, and Canvas compares bytes. Accepting both costs nothing and
+    closes the one residual risk the design worker could not close in wording.
+    """
+    out = list(vals)
+    for v in vals:
+        u = v.replace('-', '−')
+        if u != v and u not in out:
+            out.append(u)
+    return out
+
+
 # Whole-stem numeric replacement. Kept as machinery; currently unused.
 #
 # topic-1-4 was briefly routed here (numeric distance: 13, 30, 15, 9, 70, 27, all
@@ -110,23 +205,38 @@ SPLIT = {
         ('num', '28', 'Enter your answer as an integer number of feet per '
                       'minute, using a negative sign for a descent. ' + ONLY),
         ('num', '84', SEA)),
-    # Part A is an expression, so it stays select-all; 2^4/2^2 = 4
+    # Part A is an expression -- the author's own example of a good select-all,
+    # since distinguishing expressions is the skill. 2^4/2^2 = 4.
+    # NEVER author 2^(4/2): dividing the exponents is the classic error, but with
+    # 4 and 2 it evaluates to the key in BOTH variants. Same for 3^(4/2).
     ('topic-sc-2', 'Part 1 Question 2'): (
-        ('sel', ['correct_1', 'wrong_1', 'wrong_2', 'wrong_5', 'wrong_6'], None),
+        ('sel', ['correct_1', 'wrong_1', 'wrong_2', 'wrong_5', 'wrong_6'],
+         [('wrong_7', '2^4 / 2'),        # divisor is 2^2 = 4, not 2; 16/2 = 8
+          ('wrong_8', '2^4 - 2^2'),      # 16 - 4 = 12; the rule subtracts exponents
+          ('wrong_9', '2^(2-4)')]),      # 2^-2 = 1/4; difference is 4 - 2
         ('num', '4', 'Enter your answer as a whole number of cupcakes. ' + ONLY)),
     # 3^4/3^2 = 9
     ('topic-sc-2', 'Part 2 Question 2'): (
-        ('sel', ['correct_1', 'wrong_1', 'wrong_2', 'wrong_5', 'wrong_6'], None),
+        ('sel', ['correct_1', 'wrong_1', 'wrong_2', 'wrong_5', 'wrong_6'],
+         [('wrong_7', '3^4 / 3'),        # divisor is 3^2 = 9, not 3; 81/3 = 27
+          ('wrong_8', '3^4 - 3^2'),      # 81 - 9 = 72
+          ('wrong_9', '3^(2-4)')]),      # 3^-2 = 1/9
         ('num', '9', 'Enter your answer as a whole number of muffins. ' + ONLY)),
     # Part A is an explanation, so it stays select-all; 10 - 4 - 8 = -2
     ('topic-1-3', 'Part 1 Question 1'): (
         ('sel', ['correct_1', 'correct_2', 'correct_3',
-                 'wrong_1', 'wrong_2', 'wrong_3'], None),
+                 'wrong_1', 'wrong_2', 'wrong_3'],
+         [('wrong_4', 'Start at 0; move right 10, left 4, then right 8.'),
+          ('wrong_5', '10 + (-4) - (-8)'),
+          ('wrong_6', 'After the first two turns, the point is at -6.')]),
         ('num', '-2', NUM_INT)),
-    # 12 - 5 - 9 = -2
+    # 12 - 5 - 9 = -2.  P2 says "moves" where P1 says "turns" -- track it.
     ('topic-1-3', 'Part 2 Question 1'): (
         ('sel', ['correct_1', 'correct_2', 'correct_3',
-                 'wrong_1', 'wrong_2', 'wrong_3'], None),
+                 'wrong_1', 'wrong_2', 'wrong_3'],
+         [('wrong_4', 'Start at 0; move right 12, left 5, then right 9.'),
+          ('wrong_5', '12 + (-5) - (-9)'),
+          ('wrong_6', 'After the first two moves, the point is at -7.')]),
         ('num', '-2', NUM_INT)),
 }
 
@@ -258,7 +368,9 @@ ITEM = '''      <item ident="{ident}" title="{title}">
 
 
 def item_block(raw, title):
-    m = re.search(r'      <item ident="[^"]*" title="%s">.*?</item>'
+    # Topic packages indent items six spaces; the two 6th-grade packages write
+    # them at line start in a compact single-line layout. Match either.
+    m = re.search(r'[ \t]*<item ident="[^"]*" title="%s">.*?</item>'
                   % re.escape(title), raw, re.S)
     return m.group(0) if m else None
 
@@ -339,12 +451,24 @@ def do_split(raw, pkg, title, halves, log):
                 body=FIB, resp=resp_numeric(value)))
             log.append(f'  split    {newtitle:19s} -> numeric {value}')
         else:
-            _, keep, _ = half
+            _, keep, authored = half
             ids = [f'{base}_{s}' for s in keep]
             missing = [i for i in ids if i not in labels]
             if missing:
                 log.append(f'  !! {pkg} {title}{suffix}: missing choices {missing}')
                 return raw
+            # The half's stem no longer mentions parts, so a choice reading
+            # "Part A: 2^4 / 2^2" would point at a label that is gone.
+            for i in ids:
+                labels[i] = re.sub(r'(&lt;p&gt;)\s*Part [AB]:\s*', r'\1', labels[i])
+            # Authored distractors bring the half up to the >=7 floor. Each
+            # carries a falsity proof in CHANGES.md and is judged adversarially:
+            # an authored choice that is accidentally TRUE zeroes a student who
+            # reasoned correctly, which is the worst defect available here.
+            for suf, text in (authored or []):
+                aid = f'{base}_{suf}'
+                labels[aid] = '&lt;p&gt;' + esc(text) + '&lt;/p&gt;'
+                ids.append(aid)
             keys = [i for i in ids if '_correct_' in i]
             wrongs = [i for i in ids if '_correct_' not in i]
             stem = wrap([intro, strip_part_label(prompt)]) + check_para(SELECT_BOILER)
@@ -368,6 +492,65 @@ def do_split(raw, pkg, title, halves, log):
 
 
 SIGN_SENTENCE = 'Include the negative sign if the answer is negative.'
+WHOLE = 'Enter your answer as a whole number.'
+DECIMAL = 'Enter your answer as a decimal to two places, like 0.00.'
+FRACTION = 'Enter a simplified a/b, no spaces or mixed numbers.'
+
+
+def do_format_sweep(raw, log):
+    """Every numeric stem prescribes the EXACT format its key has.
+
+    Derived from the item's own accepted values, never assumed. Any "Round to
+    the nearest X" clause already in the stem is preserved -- that is a
+    mathematical instruction, not a formatting one, and dropping it would change
+    the question. The 39 items shipped with only "Enter the number only, no
+    units or symbols" are swept too: that says the answer is a bare number but
+    not whether it is whole or decimal.
+    """
+    n = 0
+    for item in re.findall(r'[ \t]*<item ident="[^"]*" title="[^"]*">.*?</item>',
+                           raw, re.S):
+        if 'numerical_question' not in item:
+            continue
+        vals = [v.strip() for v in
+                re.findall(r'<varequal[^>]*>([^<]*)</varequal>', item)]
+        if not vals:
+            continue
+        m = BOILER_RE.search(item)
+        if m:
+            old = re.sub(r'<[^>]+>', '', html.unescape(html.unescape(m.group(0))))
+            old = re.sub(r'^.*?Canvas accuracy check:\s*', '', old).strip()
+        else:
+            # The two 6th-grade packages carry the instruction inline, with no
+            # "Canvas accuracy check:" prefix. Same rule applies to them.
+            m = re.search(r'(Enter [^<]*?\.)(?=\s*(?:&lt;img|</mattext>))', item)
+            if not m:
+                continue
+            old = m.group(1)
+
+        fmt = DECIMAL if any('.' in v for v in vals) else WHOLE
+        parts = []
+        # These are mathematical instructions, not formatting ones -- dropping
+        # them would change the question, so they survive the sweep.
+        for pat in (r'Round to the nearest [a-z]+',
+                    r'omit the % symbol', r'without x ='):
+            k = re.search('(' + pat + ')', old, re.I)
+            if k:
+                parts.append(k.group(1).rstrip('.') + '.')
+        parts.append(fmt)
+        if any(v.startswith('-') for v in vals):
+            parts.append(SIGN_SENTENCE)
+        parts.append(ONLY)
+        new_text = ' '.join(parts)
+        if new_text == old:
+            continue
+        body = (check_para(new_text) if m.group(0).startswith('&lt;p&gt;')
+                else esc(new_text))
+        raw = raw.replace(item, item.replace(m.group(0), body))
+        n += 1
+    if n:
+        log.append(f'  format   {n} numeric stems given an exact format')
+    return raw
 
 
 def do_sign_sweep(raw, log):
@@ -403,6 +586,283 @@ def do_sign_sweep(raw, log):
     return raw
 
 
+def do_repair(raw, pkg, title, spec, log):
+    """D1 -- replace choices that are TRUE while being scored as wrong.
+
+    In-place text replacement on existing choice idents: no ident is added or
+    removed, so <resprocessing> and original_answer_ids need no edit and the
+    key cannot drift. Each replacement is one edit away from the true choice it
+    replaces, so the item still discriminates exactly where it broke.
+
+    Several items also need the STEM tightened, because under "select all
+    equivalent rewrites" a choice like `13` genuinely is equivalent to `8 + 5`
+    and no choice set can be made correct without narrowing what is asked. The
+    narrowing is the author's own definition, quoted from the explanations PDF.
+    """
+    block = item_block(raw, title)
+    if block is None:
+        log.append(f'  !! {pkg} {title}: item not found')
+        return raw
+    newstem, swaps = spec
+    new = block
+
+    for ident, text in swaps.items():
+        m = re.search(r'(<response_label ident="[^"]*%s">\s*<material>\s*'
+                      r'<mattext[^>]*>)(.*?)(</mattext>)' % re.escape(ident),
+                      new, re.S)
+        if not m:
+            log.append(f'  !! {pkg} {title}: choice {ident} not found')
+            return raw
+        # Section-2 choices are text/plain; topic-1-2's are text/html wrapped in
+        # an escaped <p>. Match whichever the item already uses.
+        body = (('&lt;p&gt;' + esc(text) + '&lt;/p&gt;')
+                if m.group(2).lstrip().startswith('&lt;p&gt;') else esc(text))
+        new = new.replace(m.group(0), m.group(1) + body + m.group(3))
+
+    if newstem is not None:
+        old = re.search(r'(<mattext texttype="text/html">)(.*?)(</mattext>)',
+                        new, re.S)
+        new = new.replace(old.group(0), old.group(1) + newstem + old.group(3))
+
+    log.append(f'  repair   {title:18s} {len(swaps)} true choices replaced'
+               + ('  + stem tightened' if newstem else ''))
+    return raw.replace(block, new)
+
+
+# topic-1-1 Q1 -- Part A and Part B sit INLINE in one paragraph, which is why
+# both the recorded census and the first splitter missed these (BF-2026-032).
+# Part A itself asks two things: represent the pair, and find its sum. So each
+# item becomes three: the pair (select-all -- two signed numbers, not one), the
+# sum (numeric), and the explanation (select-all -- a statement).
+#
+# The explanation half has NO distractors in the source: all five wrongs belong
+# to Part A. Six are authored, each false for BOTH 18 and 24.
+# FORBIDDEN, all TRUE, never author here: "Their sum is zero." / "They have the
+# same absolute value." / "Each is the opposite of the other." / "They are the
+# same distance from zero." / "The second change undoes the first."
+_INV = [
+    ('wrong_7', 'equal magnitude and the same sign'),
+    ('wrong_8', 'different magnitudes and opposite signs'),
+    ('wrong_9', 'Their product is zero.'),
+    ('wrong_10', 'They are reciprocals of each other.'),
+    ('wrong_12', 'Subtracting the second change from the first gives 0.'),
+]
+_SUM = ('0', 'Enter your answer as a whole number. '
+             'Include the negative sign if the answer is negative. ' + ONLY)
+
+REBUILD = {
+    ('topic-1-1', 'Part 1 Question 1'): (
+        'A submarine rises 18 meters from a point below sea level, then '
+        'descends 18 meters.', [
+            # "in the order they happened" is load-bearing: without it the
+            # reversed pair is TRUE as an unordered pair, not a distractor.
+            ('a', 'sel', 'Which pair of signed numbers represents the two '
+                         'changes, in the order they happened?',
+             (['correct_1', 'wrong_1', 'wrong_2', 'wrong_3', 'wrong_4',
+               'wrong_5'], [('wrong_6', '-18 and +18')])),
+            ('b', 'num', 'Each change can be written as a signed number. What '
+                         'is the sum of the two signed changes?', _SUM),
+            ('c', 'sel', 'The two changes are additive inverses of each other. '
+                         'Which statement explains why?',
+             (['correct_3'], _INV + [
+                 ('wrong_11', 'The two changes are equal because both are '
+                              '18 meters.')])),
+        ]),
+    ('topic-1-1', 'Part 2 Question 1'): (
+        'A hiker descends 24 meters from a trail marker, then climbs 24 '
+        'meters.', [
+            ('a', 'sel', 'Which pair of signed numbers represents the two '
+                         'changes, in the order they happened?',
+             (['correct_1', 'wrong_1', 'wrong_2', 'wrong_3', 'wrong_4',
+               'wrong_5'], [('wrong_6', '+24 and -24')])),
+            ('b', 'num', 'Each change can be written as a signed number. What '
+                         'is the sum of the two signed changes?', _SUM),
+            ('c', 'sel', 'The two changes are additive inverses of each other. '
+                         'Which statement explains why?',
+             (['correct_3'], _INV + [
+                 ('wrong_11', 'The two changes are equal because both are '
+                              '24 meters.')])),
+        ]),
+}
+
+
+def _repairs():
+    """D1 repair table. Built as a function so the stems can call check_para.
+
+    Every replacement below is provably FALSE for the item's own values; the
+    proof is recorded in CHANGES.md. The forbidden near-misses are recorded too,
+    because the failure mode here is a later editor "correcting" `x 0` back to
+    `x 1` and silently reintroducing a true choice.
+    """
+    commutative = ('Enter select all choices that show the same two %s joined '
+                   'by the same operation in the opposite order; do not select '
+                   'the original expression or its computed value.')
+    associative = ('Enter select all choices that keep the addends %s in this '
+                   'same left-to-right order and move only the grouping; do not '
+                   'select the original expression, a reordered expression, or '
+                   'a partly added-up expression.')
+    return {
+        # 8 + 5 = 13. Removed: `8 + 5` (stem verbatim), `13`, `(8 + 5) + 0`,
+        # `8 + (5 + 0)` -- all equal 13, all were scored wrong.
+        ('6th-grade-review-section-2', 'K9'): (
+            esc('Rewrite using the commutative property: 8 + 5 = ')
+            + esc(commutative % 'addends'),
+            {'choice_2': '5 × 8',          # 40, order switched but operation too
+             'choice_3': '8 - 5',          # 3, operation changed, order kept
+             'choice_6': '-5 + 8',         # 3, "moving a term flips its sign"
+             'choice_7': '8 + (5 × 0)'}),  # 8, identity grabbed with the wrong op
+        # 7 x a = 7a. Removed: `7a + 0`, `7 x a` (stem verbatim).
+        ('6th-grade-review-section-2', 'K10'): (
+            esc('Rewrite using the commutative property: 7 × a = ')
+            + esc(commutative % 'factors'),
+            {'choice_3': 'a + 7',          # not an identity; 10 vs 21 at a=3
+             'choice_4': '7a + 1'}),       # differs by 1 for every a
+        ('6th-grade-review-section-2', 'N5'): (
+            esc('Rewrite using the commutative property: 7 × a = ')
+            + esc(commutative % 'factors'),
+            {'choice_3': 'a + 7', 'choice_4': '7a + 1'}),
+        # (b + 3) + 9 = b + 12. Removed: `(b + 9) + 3`, `b + 12`, `(b + 3) + 9`.
+        ('6th-grade-review-section-2', 'K11'): (
+            esc('Rewrite using the associative property: (b + 3) + 9 = ')
+            + esc(associative % 'b, 3, 9'),
+            {'choice_2': '(b + 3) + (3 + 9)',   # b + 15, old grouping left in
+             'choice_3': 'b - (3 + 9)',         # b - 12, outer operation flipped
+             'choice_4': '(b + 3) × 9'}),       # 9b + 27
+        ('6th-grade-review-section-2', 'N6'): (
+            esc('Rewrite using the associative property: (x + 5) + 8 = ')
+            + esc(associative % 'x, 5, 8'),
+            {'choice_2': '(x + 5) + (5 + 8)',   # x + 18
+             'choice_3': 'x - (5 + 8)',         # x - 13
+             'choice_4': '(x + 5) × 8'}),       # 8x + 40
+        # D6: the b != 0 guard the solution states and Part 1 carries. Without
+        # it the key is not "always right". The self-referential trio goes for
+        # good: their truth is a function of the OTHER choices, so a later edit
+        # re-keys them with no signal at the edit site -- which is how this
+        # defect arose. Part 1 Question 2 is NOT touched; its "which outcome is
+        # NOT possible" framing is what keeps its copies of these false.
+        ('topic-1-2', 'Part 2 Question 2'): (
+            wrap(['A student uses long division to convert a fraction '
+                  '\\(\\dfrac{a}{b}\\), where a and b are integers and '
+                  '\\(b\\neq 0\\), into a decimal. Which of the following '
+                  'statements about the long division and its result is always '
+                  'right?']) + check_para(SELECT_BOILER),
+            {'wrong_3': 'A remainder of 0 always appears eventually, so the '
+                        'division always stops.',
+             'wrong_4': 'During the long division, any whole number can turn up '
+                        'as a remainder.',
+             'wrong_5': 'If the division never stops, the digits never settle '
+                        'into a repeating block.',
+             'wrong_6': 'With the denominator fixed, changing the numerator can '
+                        'never change whether the decimal terminates.',
+             'wrong_7': 'A negative fraction gives a decimal that neither '
+                        'terminates nor repeats.'}),
+    }
+
+
+def do_rebuild(raw, pkg, title, context, parts, log):
+    """Replace one item with N single-task items, authored from scratch.
+
+    Used where the source packs several tasks into one stem with no structure a
+    splitter can key on -- topic-1-1 Q1 carries Part A and Part B inline in a
+    single paragraph, which is why the earlier census missed it entirely, and
+    Part A itself asks two things ("represent both changes AND find their sum").
+
+    parts: list of (suffix, kind, prompt, payload)
+      ('num',  (value, format sentence))
+      ('sel',  (keep-suffixes, [(ident-suffix, text), ...] authored))
+    """
+    block = item_block(raw, title)
+    if block is None:
+        log.append(f'  !! {pkg} {title}: item not found')
+        return raw
+    base = re.search(r'<item ident="([^"]*)"', block).group(1)
+    ref = re.search(r'<fieldlabel>assessment_question_identifierref</fieldlabel>\s*'
+                    r'<fieldentry>([^<]*)</fieldentry>', block).group(1)
+    labels = dict(re.findall(
+        r'<response_label ident="([^"]*)">\s*<material>\s*'
+        r'<mattext texttype="text/html">(.*?)</mattext>', block, re.S))
+
+    out = []
+    for suffix, kind, prompt, payload in parts:
+        ident, newtitle = f'{base}{suffix}', f'{title}{suffix}'
+        stem = wrap([context + ' ' + prompt])
+        if kind == 'num':
+            value, fmt = payload
+            out.append(ITEM.format(
+                ident=ident, title=newtitle, qtype='numerical_question',
+                answer_ids='choice_1', ref=f'{ref}{suffix}',
+                stem=stem + check_para(fmt), body=FIB, resp=resp_numeric(value)))
+            log.append(f'  rebuild  {newtitle:19s} -> numeric {value}')
+        else:
+            keep, authored = payload
+            ids = [f'{base}_{s}' for s in keep]
+            missing = [i for i in ids if i not in labels]
+            if missing:
+                log.append(f'  !! {pkg} {newtitle}: missing {missing}')
+                return raw
+            for suf, text in authored:
+                aid = f'{base}_{suf}'
+                labels[aid] = '&lt;p&gt;' + esc(text) + '&lt;/p&gt;'
+                ids.append(aid)
+            keys = [i for i in ids if '_correct_' in i]
+            wrongs = [i for i in ids if '_correct_' not in i]
+            choices = ''.join(
+                '\n              <response_label ident="%s">'
+                '\n                <material>'
+                '\n                  <mattext texttype="text/html">%s</mattext>'
+                '\n                </material>'
+                '\n              </response_label>' % (i, labels[i]) for i in ids)
+            body = ('<response_lid ident="response1" rcardinality="Multiple">'
+                    '\n            <render_choice>%s'
+                    '\n            </render_choice>'
+                    '\n          </response_lid>' % choices)
+            out.append(ITEM.format(
+                ident=ident, title=newtitle, qtype='multiple_answers_question',
+                answer_ids=','.join(ids), ref=f'{ref}{suffix}',
+                stem=stem + check_para(SELECT_BOILER), body=body,
+                resp=resp_select(keys, wrongs)))
+            log.append(f'  rebuild  {newtitle:19s} -> select-all, '
+                       f'{len(keys)} of {len(ids)}')
+    return raw.replace(block, '\n'.join(out))
+
+
+def do_shortsplit(raw, pkg, title, spec, log):
+    """One expression-writing item becomes two short-answer items, split by the
+    FORM of expression asked for. Splitting by form rather than by "write a
+    different one" is what makes this safe: Canvas cannot compare one item's
+    answer with another's, so "a different expression" would accept the same
+    string twice. Form-a strings contain no '|' and form-b strings all do, so the
+    two accepted sets are provably disjoint.
+    """
+    block = item_block(raw, title)
+    if block is None:
+        log.append(f'  !! {pkg} {title}: item not found')
+        return raw
+    context, phrase, acc_a, acc_b = spec
+    base = re.search(r'<item ident="([^"]*)"', block).group(1)
+    ref = re.search(r'<fieldlabel>assessment_question_identifierref</fieldlabel>\s*'
+                    r'<fieldentry>([^<]*)</fieldentry>', block).group(1)
+
+    out = []
+    for suffix, task, acc, check in (
+            ('a', 'Write one expression that uses subtraction and no '
+                  'absolute-value bars to represent the ' + phrase + '.',
+             acc_a, FORM_A),
+            # form-general on purpose: the answer key's own |-8|+5 method uses
+            # bars without a subtraction, and must not be ruled off-form.
+            ('b', 'Write one expression that uses absolute-value bars to '
+                  'represent the ' + phrase + '.', acc_b, FORM_B)):
+        vals = with_unicode_minus(acc)
+        stem = wrap([context + ' ' + task]) + check_para(check)
+        out.append(ITEM.format(
+            ident=f'{base}{suffix}', title=f'{title}{suffix}',
+            qtype='short_answer_question', answer_ids='choice_1',
+            ref=f'{ref}{suffix}', stem=stem, body=SHORT_FIB,
+            resp=resp_short(vals)))
+        log.append(f'  short    {title}{suffix:1s} -> {len(vals)} accepted strings')
+    return raw.replace(block, '\n'.join(out))
+
+
 def do_boiler(raw, log):
     """Every surviving select-all is single-part now; drop the parts sentence."""
     n = 0
@@ -417,7 +877,7 @@ def do_boiler(raw, log):
 
 
 def main(base):
-    total = {'convert': 0, 'split': 0}
+    total = {'convert': 0, 'split': 0, 'short': 0, 'repair': 0}
     for d in sorted(glob.glob(os.path.join(base, '*/'))):
         xs = [f for f in glob.glob(d + '*/*.xml')
               if 'manifest' not in f and 'meta' not in f]
@@ -444,12 +904,25 @@ def main(base):
             if p == pkg:
                 raw = do_convert(raw, pkg, t, v, fmt, log, newstem=stem)
                 total['convert'] += 1
+        for (p, t), spec in SHORTANS.items():
+            if p == pkg:
+                raw = do_shortsplit(raw, pkg, t, spec, log)
+                total['short'] += 1
+        for (p, t), spec in _repairs().items():
+            if p == pkg:
+                raw = do_repair(raw, pkg, t, spec, log)
+                total['repair'] += 1
+        for (p, t), (ctx, parts) in REBUILD.items():
+            if p == pkg:
+                raw = do_rebuild(raw, pkg, t, ctx, parts, log)
+                total['split'] += 1
         for (p, t), halves in SPLIT.items():
             if p == pkg:
                 raw = do_split(raw, pkg, t, halves, log)
                 total['split'] += 1
         raw = do_boiler(raw, log)
         raw = do_sign_sweep(raw, log)
+        raw = do_format_sweep(raw, log)
         after = raw.count('<item ident=')
         out = raw.replace('\n', '\r\n') if crlf else raw
         open(path, 'w', encoding='utf-8', newline='').write(out)
@@ -468,7 +941,8 @@ def main(base):
         if log:
             print(f'{pkg}:')
             print('\n'.join(log))
-    print(f"\n{total['convert']} converted, {total['split']} split")
+    print(f"\n{total['convert']} converted, {total['split']} split, "
+          f"{total['short']} expression items to short answer")
 
 
 if __name__ == '__main__':
