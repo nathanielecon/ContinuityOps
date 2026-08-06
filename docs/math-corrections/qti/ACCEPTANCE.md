@@ -107,3 +107,70 @@ Two checks do discriminate, and both are cleaner:
 An ordered scan that also tokenises `$` reports a false alarm on the currency
 stems, because their `$` counts are odd, and would have sent a correct file back
 around.
+
+---
+
+## Answer-format round — judge ledger
+
+A slice is accepted only at **10/10**. No partial acceptance, no "10/10 with
+minor notes". Gate: `judge/JUDGE_RUBRIC_QTI.md` + `judge/FORMAT_ROUND.md`,
+frozen and identical for every judge, amended only before the round opened.
+
+| Slice | r1 | r2 | Accepted |
+|---|---|---|---|
+| NUMERIC (106 keys) | **10** | pending | |
+| SELECTALL (34 items) | 8 | pending | |
+| AUTHORED (40 distractors, 5 stems) | 8 | pending | |
+| PERMUTE (structure, 177 items) | 9 | pending | |
+| SHORTANS (35 items) | 4 | 5 | |
+| G1b cold (18 items, content) | — | **10** | **yes**, at pre-round state |
+
+### What the judges caught that nothing else would have
+
+Every one of these was introduced *by this round*, while trying to improve the
+corpus. They are the argument for a gate that cannot be talked down.
+
+- **An instruction that disclosed its own answer.** "Enter one symbol only" on
+  `topic-sc-1` Q2 is a mathematical claim: of `< > = ≠`, two distinct numbers
+  make exactly two true, so demanding one symbol entails equality — the whole
+  question, with no arithmetic. Reverted to select-all.
+- **A stem false against its own key.** `F4` promised "one or two words" for a
+  three-word answer, steering a correct student to "division", which scored zero.
+- **A deleted task verb.** The `H3`/`H4` conversion dropped the worksheet's
+  "Solve:", leaving a stem that never said what to do with the inequality.
+- **A format line steering toward the wrong answer.** `K6` asks which is greater,
+  `1 3/4` or `(1)(3/4)`, then said "no mixed numbers" — pointing away from the
+  answer its own key prints, toward the wrong candidate. Pre-existing, never
+  checked.
+- **The last multi-prompt select-all.** `topic-1-6` Q4 welded the integer `-25`
+  to two prose choices under all-or-nothing, in a package whose siblings were
+  already numeric.
+
+### A disagreement between judges, resolved by measurement
+
+PERMUTE charged that permuting the choices broke `A1`/`H6`/`H7`; SELECTALL
+judged the same items clean. Reading the SVG settled it: each row is drawn as
+`"A. open circle at 6, ray right"` — letter **and** description — so matching is
+by content and no student can be scored wrong. PERMUTE overstated the harm;
+SELECTALL understated the confusion of drawn letters no longer parallel to
+checkbox order. Each choice now carries its own row letter, which closes it
+either way.
+
+### A judge corrected the coordinator
+
+The brief told judges that 12 of 14 packages are CRLF. It is **2 of 14**. The
+false count came from `grep -c $'\r'` in a shell loop where the pattern did not
+survive as a carriage return, so an empty pattern matched every line. It had
+already been written into `BF-2026-029` as fact. Corrected there.
+
+### Open, deliberately not decided by the coordinator
+
+- Whether the twelve `topic-1-4` items can remain short answer. The answer key's
+  own wording is "any correct distance expressions" — an open family that exact
+  string matching cannot close. Two widening rounds each revealed more correct
+  forms still rejected.
+- Whether `H3`/`H4`/`H5` and the two orderings stay short answer. The judge
+  certified their accepted sets complete and safe, and flagged them only against
+  the gate's F1 wording.
+
+Both are authoring calls, and both are with the author.

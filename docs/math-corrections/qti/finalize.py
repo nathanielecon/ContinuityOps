@@ -954,6 +954,11 @@ def _repairs():
         # re-keys them with no signal at the edit site -- which is how this
         # defect arose. Part 1 Question 2 is NOT touched; its "which outcome is
         # NOT possible" framing is what keeps its copies of these false.
+        ('topic-1-2', 'Part 1 Question 2'): (
+            None,
+            {'wrong_3': 'The decimal terminates after two places.',
+             'wrong_4': 'The decimal repeats a single digit forever.',
+             'wrong_5': 'The decimal repeats a block of six digits.'}),
         ('topic-1-2', 'Part 2 Question 2'): (
             wrap(['A student uses long division to convert a fraction '
                   '\\(\\dfrac{a}{b}\\), where a and b are integers and '
@@ -1077,6 +1082,14 @@ def do_shortsplit(raw, pkg, title, spec, log):
     return raw.replace(block, '\n'.join(out))
 
 
+def do_grammar(raw, log):
+    n = len(re.findall(r'Enter select all', raw))
+    if n:
+        raw = raw.replace('Enter select all', 'Select all')
+        log.append(f'  grammar  {n} stems: "Enter select all" -> "Select all"')
+    return raw
+
+
 def do_boiler(raw, log):
     """Every surviving select-all is single-part now; drop the parts sentence."""
     n = 0
@@ -1150,6 +1163,7 @@ def main(base):
         for (p, t), text in STEM_FIX.items():
             if p == pkg:
                 raw = do_stemfix(raw, pkg, t, text, log)
+        raw = do_grammar(raw, log)
         raw = do_boiler(raw, log)
         raw = do_sign_sweep(raw, log)
         raw = do_format_sweep(raw, log)
