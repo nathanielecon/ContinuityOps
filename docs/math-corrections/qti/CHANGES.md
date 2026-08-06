@@ -409,11 +409,24 @@ Details worth recording:
   Python's built-in `round()` is banker's rounding and turns 0.625 into 0.62,
   which is not what a student following the instruction types. 0.625 → 0.63.
 
-**66 items remain select-all**, and none of them can be a numeric entry: 39 have a
+**Three fraction answers** — `5^0+3^{-2}+\frac{2^6\cdot 2^3}{2^7}` = 46/9,
+`6^{-2}+(8/4)^3` = 289/36, and `2^0+2^{-3}` = 9/8 — became `short_answer_question`
+taking a simplified `a/b`, the pattern 6th-grade Section 2 item K4 already uses.
+They are the only fraction-valued answers in the corpus. Final tallies:
+select-all 109 → 63, numeric 37 → 80, short answer 11 → 14, total still 157.
+
+**63 items remain select-all**, and none of them can be a numeric entry: 39 have a
 single non-numeric answer (vocabulary such as "coefficient", algebraic forms such
 as `3y + 18`, inequalities such as `x > 5`, and the number-line graph choices),
-25 are multi-part questions combining a value with an explanation, and 2 ask for
+22 are multi-part questions combining a value with an explanation, and 2 ask for
 an ordered list rather than a single value.
+
+Of those 22, about ten do carry a numeric component that a split would expose —
+six ask Part A / Part B where both answers are numbers (`Part A: -24`,
+`Part B: 96 feet below sea level`), and two pair `Evaluate: -5^2` with an
+explanation. Splitting them into a numeric item plus a conceptual one would push
+further toward the contract, at the cost of changing the item count and the
+points total of each quiz. Not done here — flagged for the author.
 
 ## The answer is always the first choice
 
