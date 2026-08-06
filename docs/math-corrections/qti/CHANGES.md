@@ -336,6 +336,38 @@ What is certain is that the original packages were broken here: they carried no
 and declared the SVGs inside the `imsqti_xmlv1p2` resource rather than as
 `webcontent`, so Canvas would never have published them to any resolvable path.
 
+## The answer is always the first choice
+
+Raised independently by four judges, each correctly noting it falls outside the
+seven rubric criteria. Verified corpus-wide rather than sampled:
+
+- **88 of 88** Shape A items list their keyed choices as the leading contiguous
+  block — 63 key position 0 alone, 11 key positions 0–1, 11 key 0–2, 3 key 0–3.
+  Zero exceptions.
+- **21 of 21** Shape B select-all items key position 0.
+- All **14** packages set `<shuffle_answers>false</shuffle_answers>`.
+
+So "select the first option, or the first N" scores 100% on every select-all item
+in the corpus without doing any mathematics. On an instrument whose entire
+purpose is letting a student check whether they got a question right, that is
+worth the author's attention.
+
+**Nothing was changed.** Every key is correct and every item scores accurately
+for a student who actually answers, so this is not a defect in any item — it is a
+test-design property of the whole corpus, and the fix is a decision rather than a
+repair. Three routes, with the trade-off that makes it non-obvious:
+
+1. `shuffle_answers=true` on the 12 Topic packages and 6th-grade Section 2, which
+   reference no images. **Not** on Section 1: A1, H6 and H7 present seven lettered
+   rows in a single graphic and their choice texts mirror that order, so shuffling
+   would desynchronise the picture from the option list.
+2. `shuffle_answers=true` everywhere, and rewrite A1/H6/H7's choices to be
+   self-describing so they no longer depend on position.
+3. Permute the choice order inside each item and leave shuffling off. Preserves
+   the figure correspondence and makes the packages correct on their own rather
+   than depending on a Canvas setting, but touches all 109 select-all items and
+   every reorder needs its `original_answer_ids` updated to match.
+
 ## Known open items
 
 Neither is in this package set; both are recorded so they are not lost.
