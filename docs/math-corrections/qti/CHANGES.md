@@ -421,12 +421,35 @@ as `3y + 18`, inequalities such as `x > 5`, and the number-line graph choices),
 22 are multi-part questions combining a value with an explanation, and 2 ask for
 an ordered list rather than a single value.
 
-Of those 22, about ten do carry a numeric component that a split would expose —
-six ask Part A / Part B where both answers are numbers (`Part A: -24`,
-`Part B: 96 feet below sea level`), and two pair `Evaluate: -5^2` with an
-explanation. Splitting them into a numeric item plus a conceptual one would push
-further toward the contract, at the cost of changing the item count and the
-points total of each quiz. Not done here — flagged for the author.
+### The eight that a split would convert, with their answers already verified
+
+Eight of those 22 hold a numeric answer inside a multi-part item. Splitting each
+into a numeric item plus a conceptual one would carry the contract the rest of
+the way. It is **not done here**, because it changes the item count and every
+quiz's points total and requires authoring new stems — the author's call, not a
+repair. The values are recorded so that call is a mechanical step rather than
+another investigation. Each is quoted from the solutions PDFs, not inferred:
+
+| Item | Part A | Part B | Source line |
+|---|---|---|---|
+| topic-1-6 P1Q1 | **−15** | **−180** | `Answer: Part A: −15; Part B: −180 feet (below sea level)` |
+| topic-1-6 P2Q1 | **+20** | **+180** | `Answer: Part A: 20 (or +20); Part B: 180 feet above sea level` |
+| topic-1-8 P1Q1 | **−24** | **−96** | `Answer: Part A: −24; Part B: −96 feet (below sea level)` |
+| topic-1-8 P2Q1 | **+28** | **+84** | `Answer: Part A: 28 (or +28); Part B: 84 feet above sea level` |
+| topic-sc-2 P1Q2 | expression | **4** | `Answer: Part A: 2 (or equivalent); Part B: 4 cupcakes per friend` |
+| topic-sc-2 P2Q2 | expression | **9** | `Answer: Part A: 2 (or equivalent); Part B: 9 muffins per friend` |
+| topic-1-3 P1Q1 | number-line | **−2** | `Answer: Part A: number-line moves as above; Part B: −2` |
+| topic-1-3 P2Q1 | number-line | **−2** | `Answer: Part A: number-line moves as above; Part B: −2` |
+
+The two `topic-sc-2` Part A answers extract as a bare "2", which is the
+superscripts collapsing — the expression is `2^4 ÷ 2^2`, not the number 2. Those
+Part As are expressions and stay select-all. Same for the `topic-1-3` Part As.
+
+Worth noting in favour of the split: a numeric Part B **removes** the
+double-signing trap entirely. `-96 feet below sea level` is the phrasing that
+produced two of this project's worst defects, because a signed magnitude plus a
+direction word can assert the opposite of what it appears to. A box that takes
+−96 cannot be read two ways.
 
 ## The answer is always the first choice
 
