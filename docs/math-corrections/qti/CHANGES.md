@@ -366,6 +366,55 @@ What is certain is that the original packages were broken here: they carried no
 and declared the SVGs inside the `imsqti_xmlv1p2` resource rather than as
 `webcontent`, so Canvas would never have published them to any resolvable path.
 
+## Item format: 43 free-response questions restored to numeric entry
+
+The worksheet states the answer contract in its own directions: *"Write decimal
+answers as decimals and fraction answers in simplest terms. Round to two decimal
+places."* The Topic packages did not honour it. All 88 Topic items were
+`multiple_answers_question` — select-all — including questions whose source is a
+bare calculation. `Evaluate: |−9| =` shipped as eight choices with the key at
+position 0.
+
+**How it got past the judge loop.** This run's task, per `MASTER_PROMPT.md` §2.2,
+was to *verify* the Canvas quizzes against the assignment and keys. The quizzes
+arrived already built in select-all form, and the seven-criterion rubric covered
+key correctness, scoring, and rendering — not item-format fidelity. Judges who
+raised the format repeatedly and correctly ruled it outside the rubric. The loop
+was scoped so that it could not catch this.
+
+**Converted: 43 items** whose key is a single numeric value, now
+`numerical_question`, matching the shape the 6th-grade packages already use
+successfully (`response_str` / `render_fib fibtype="Decimal"`, scored by an `<or>`
+of an exact `varequal` and a `vargte`/`varlte` range).
+
+Corpus item types, before → after:
+
+| type | before | after |
+|---|---|---|
+| `multiple_answers_question` | 109 | 66 |
+| `numerical_question` | 37 | 80 |
+| `short_answer_question` | 11 | 11 |
+| **total** | **157** | **157** |
+
+Details worth recording:
+
+- Stems lost the select-all boilerplate and gained **"Enter the number only, no
+  units or symbols."** Keys carrying units or currency (`570 feet`, `$425`,
+  `20 floors`, `-150.25 per owner`) became bare numbers.
+- Decimal answers gained **"Round to two decimal places."**
+- **Two answers are exact at three decimals** — 3/8 = 0.375 and 5/8 = 0.625.
+  Rounding them blindly would mark the exact answer wrong, so both the exact
+  value and the two-place form are accepted.
+- The two-place form uses **round-half-up**, the convention taught in class.
+  Python's built-in `round()` is banker's rounding and turns 0.625 into 0.62,
+  which is not what a student following the instruction types. 0.625 → 0.63.
+
+**66 items remain select-all**, and none of them can be a numeric entry: 39 have a
+single non-numeric answer (vocabulary such as "coefficient", algebraic forms such
+as `3y + 18`, inequalities such as `x > 5`, and the number-line graph choices),
+25 are multi-part questions combining a value with an explanation, and 2 ask for
+an ordered list rather than a single value.
+
 ## The answer is always the first choice
 
 Raised independently by four judges, each correctly noting it falls outside the
