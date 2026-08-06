@@ -9,6 +9,6 @@ ad8c48e14b86e76f7e78ab4f8cacbb87ca5999e0a15905de90a65af8c74ceeee  topic-1-5-inde
 2b008487853c239df3459adda92ed9952804355a4c152fe21a097c2ae6da5364  topic-1-6-independent-practice-accuracy-check-qti.zip
 041350a3b5ce2c8ebb89f7cbba99004e38354130b017d6c40d4039e789bfda43  topic-1-7-independent-practice-accuracy-check-qti.zip
 57e9e375f962018e09379433fe95a0466dbcfb07480339529e9eed80cf55d74a  topic-1-8-independent-practice-accuracy-check-qti.zip
-4e46c511c23357daeae27a197d11a635ebbb40bec058e2bcfb223a1aed7aaa15  topic-1-9-independent-practice-accuracy-check-qti.zip
-9b19f165ffba118840e42aa2b6cf6be95b5d8d8feec021739995ce0d2d4f5c82  topic-sc-1-independent-practice-accuracy-check-qti.zip
+215efc786c1f4cad86f7241815211794b819ea89c3483a0df0347712dff93d8c  topic-1-9-independent-practice-accuracy-check-qti.zip
+900d84853c7ddb0e686d50383b864fde1f32f1f831f4cc34c71b61ff24e697c2  topic-sc-1-independent-practice-accuracy-check-qti.zip
 2c584786101758555300da121fa43317eb37d4dee3d612ee8b01a166145750bd  topic-sc-2-independent-practice-accuracy-check-qti.zip

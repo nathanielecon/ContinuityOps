@@ -18,8 +18,13 @@ itself a scoring failure.
 **Shape A — Topic 1 packages** (`topic-*`, 88 items total)
 - `multiple_answers_question`, select-all-that-apply, all-or-nothing.
 - Choice idents encode intent: `..._correct_N` and `..._wrong_N`.
-- Scoring: one `<respcondition>`, `maxvalue="100"`, every `correct_*` required
-  by a bare `<varequal>`, every `wrong_*` negated by `<not><varequal>`.
+- Scoring: one `<respcondition>` carrying
+  `<setvar action="Set" varname="SCORE">100</setvar>`, every `correct_*`
+  required by a bare `<varequal>`, every `wrong_*` negated by `<not><varequal>`.
+  **`maxvalue="100"` is on `<decvar>` in `<resprocessing><outcomes>`, not on the
+  `<respcondition>`** — an earlier draft of this rubric said otherwise and two
+  judges repeated it. Grepping for `maxvalue` inside a `<respcondition>` finds
+  nothing; that is correct, not a defect. The corpus is uniform at 163/163.
 - ≥8 choices per item.
 - **Verified corpus-wide: the scoring key equals the `correct_*` ident set on
   all 88 items, zero exceptions.** So the ident labels are the scoring truth —

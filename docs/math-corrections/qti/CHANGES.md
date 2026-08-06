@@ -167,12 +167,53 @@ accepts the obedient student. Good design, not a defect.
 the companion is out of date. Changing the key here would have been a serious
 regression.
 
+### What the cold round caught that the same-judge round had passed
+
+The cold validation round overturned two slices that had already been re-scored
+10/10 by the judge that repaired them. Both defects were invisible to the kind of
+reading that had cleared them.
+
+**topic-1-9, both Q1 stems.** They read "A business **owner** loses $450.75…"
+and then said the 3 owners share the loss equally — the first sentence gives the
+whole loss to one owner, the next says several share it. This project had
+**already found and corrected that exact sentence**: `CorrectionsReport.pdf`
+logs it and publishes the replacement, and it was applied to the explanations
+companion. Only the QTI still carried it, so the accuracy check and the
+companion beside it disagreed on the first line of the same question.
+
+The earlier judge cleared it by matching the stem verbatim against the
+companion — but against the **superseded** copy in the session scratchpad
+(timestamped 10:02) rather than the corrected rebuild in the repo (15:28). It
+matched the wording that had been corrected *away from*. Fixed by deleting one
+word in each of two stems. No key or choice was affected.
+
+**topic-sc-1 Q2, both parts.** `≡` (U+2261, "is identically equal to") and `~`
+were left as distractors. Both are **true**: 3/4 and 0.75 are two spellings of
+one rational, and the congruence reading does not rescue `≡` either, since the
+difference is 0 and therefore divisible by every modulus.
+
+They survived the repair round on the argument that the narrowed stem now
+enumerates a four-symbol answer space in which they do not sit. But that is
+exactly the protection the same judge had **rejected one round earlier** when it
+insisted `≤` and `≥` be deleted rather than re-labelled, on the ground that being
+outside the stem's symbol list does not license leaving a true choice in place.
+The package was left applying the strict standard to one pair and the lenient
+standard to the other. Replaced with `≉` (U+2249) and `≢` (U+2262), which are
+false precisely because the numbers *are* identical and *are* approximately
+equal.
+
 ## Method
 
 One dedicated judge per slice, 16 slices, no judge holding more than 18 items.
 Judges never edit; separate fixers apply. Each slice scored /10, repaired,
 re-scored **by the same judge**, then put through a cold adversarial validation
 round at higher effort. Two consecutive 10/10 accepts a package.
+
+The cold round was not a formality. Beyond the two overturns above, it corrected
+the *reasoning* in four reports that had reached the right verdict on unsound
+grounds — including a consistency argument that rested on treating the original
+worksheet's own wording as though the package had invented it, and a claim that
+a slice cache built *after* a repair could serve as that repair's before-image.
 
 Candidate findings from the first-pass audit were given to judges as *candidates
 to verify*, never as findings. Five of the six "select all equivalent"
@@ -195,6 +236,30 @@ have consistently outnumbered document defects.
    topic-1-3 and topic-1-9 that did not exist.
 3. **A glob for `topic-1-1*` matched `topic-1-10`**, briefly reporting three
    applied fixes as missing.
+4. **A prescribed verification method that could not detect the defect it was
+   for.** Judges were told to check math-delimiter nesting by an ordered scan of
+   `\(` and `\)` rather than by counting. A cold judge tested that against the
+   known-broken original: the ordered scan **passes** there too — token order
+   `\( \) \( \)`, depth never exceeding 1 — while the second span was actually
+   the prose `C, then drops $1.85^\circ`. The check that does discriminate is to
+   reject any `mattext` block containing both `$` and `\(`; corpus-wide, 39
+   blocks contain a bare `$` and none also contains `\(`, so it flags all four
+   original defects with no false positive on the currency stems.
+5. **A misdescription in the rubric.** It said each item's `<respcondition>`
+   carries `maxvalue="100"`. It does not — the respcondition carries
+   `<setvar action="Set" varname="SCORE">100</setvar>`, and `maxvalue` lives on
+   `<decvar>`. Two judges repeated the phrasing. Nothing is wrong with the
+   packages, but a later reader grepping for `maxvalue` inside a `<respcondition>`
+   would find nothing and could misread that as a structural defect.
+
+And one bookkeeping failure worth recording because it nearly corrupted the
+record rather than the artifact. I lost track of having dispatched the
+leftward-ray fix and announced it to the judge that found the defect, then
+reported the resulting file write as unattributable and accused that judge of
+fabricating a quotation from my own message. The judge was right, refused the
+amendment I demanded on the ground that it would put a false statement into the
+record to remove a true one, and was vindicated by its own timestamps. The
+artifact was never in doubt; my account of it was.
 
 A fourth, narrowly avoided: the slice caches were still pre-fix when the
 re-scoring round began, and would have resurrected every closed defect. A judge
