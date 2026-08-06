@@ -303,6 +303,36 @@ four affected lines, letting the `.ray` class supply `marker-end` and place the
 arrowhead at the unbounded end — the convention the other five rows already use.
 Verified by render, twice independently.
 
+### The same marker bug in row F, and two numbers I got wrong reporting it
+
+Row F of H6 draws a short ray, 25px. The 45px arrowhead is longer than the ray
+it terminates, so the wedge overhung the circle and put filled ink to the left of
+the 7 the row claims. I passed this as cosmetic in one round; the cold judge
+overturned it on a consistency argument that is decisive — the same slice had
+already charged rows C and D for putting ink on the side the graph must leave
+blank, and charged them while noting scoring was unaffected and the construction
+pre-existing, so neither fact can excuse row F.
+
+The fix is the same deletion, and the re-score measured it: row F's left ink
+boundary moved **+6.250 → +6.635**, the new edge being the open circle's own
+outer ring, with every other boundary in both figures moving exactly +0.000.
+
+Two figures I reported when recording the overturn do not survive measurement:
+
+- I said the misplaced ink spanned **0.962 units from +6.038**. Measured by
+  exact-RGB match against tick calibration, it is **0.750 units from +6.250**.
+  The 6.038 came from a tolerance-based colour test picking up the antialiased
+  grey tick at 6, not the wedge. On flat fills like these, exact match is the
+  right instrument and tolerance is not — at tolerance 40 the same test swallows
+  the option label text.
+- I said row F's ink began further left than the correct answer's. **It did not.**
+  Row A, the key, begins at +5.635 including its open-circle ring and +6.000
+  excluding it; row F began at +6.250. Row A's ring extending either side of 6
+  is ordinary number-line drafting, not a fault.
+
+The defect stands and the fix is right — 0.750 units of filled ink sat left of
+the 7 — but it stands on its own measurement, not on the comparison I drew.
+
 ## Needs a Canvas import test before the figures can be trusted
 
 **The `$IMS-CC-FILEBASE$` path depth is unverified.** The three image `src`
