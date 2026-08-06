@@ -42,10 +42,15 @@ render. Ink means membership and the ink is correct.
 
 **Scope of this acceptance.** The cold read was taken against the corpus *before*
 the answer-format round. Its finding is that the mathematics, keys, stems and
-figures are sound. The answer-format round then converts several of these items
-from select-all to single-answer multiple choice, which does not move a key but
-does change the structure — so the type change is verified separately, and this
-row is not a certification of the post-round file.
+figures are sound. The round then changed several of these items — `F1`–`F4` to
+short answer, `H3`–`H5` to short answer, `A1`/`H6`/`H7` re-lettered and their
+choices permuted — none of which moves a key, but all of which change the
+structure. So this row certifies the content, not the post-round file; the
+changes are verified separately in the answer-format ledger below.
+
+(An earlier draft of this note said the items became "single-answer multiple
+choice". That was the design before the author set the type hierarchy — numeric,
+then short answer, then select-all — and no multiple-choice item was ever built.)
 
 ## G1b took three rounds
 

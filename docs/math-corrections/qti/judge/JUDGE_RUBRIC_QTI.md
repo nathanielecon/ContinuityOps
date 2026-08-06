@@ -110,7 +110,15 @@ No rounding up. No "10/10 with minor notes". A note is a defect or it is not.
      alternative — padding every split half back to 8 — means authoring
      distractors wholesale, and every authored distractor is fresh criterion-2
      exposure, which is the trade this amendment refuses.
-   - **`multiple_choice_question` (amendment, answer-format round).** Exactly
+   - **`multiple_choice_question` (amendment, answer-format round —
+     UNEXERCISED).** This amendment was made before the round opened, when
+     single-answer multiple choice was the planned replacement for select-all.
+     The author then set the type hierarchy as numeric, then short answer, then
+     select-all, and **no multiple-choice item was ever built**. The clause is
+     left in place rather than removed, because the gate is frozen once a round
+     starts and striking text from it mid-round is the thing that rule exists to
+     prevent. It binds nothing: a corpus-wide census shows zero items of this
+     type. Rules follow, should the type ever be used. Exactly
      one keyed choice; `rcardinality="Single"`; no `<not>` blocks; the single
      `<varequal>` names the keyed ident. **No non-keyed choice may be true** —
      criterion 2 applies here with more force than under select-all, because a
