@@ -496,3 +496,148 @@ Neither is in this package set; both are recorded so they are not lost.
   `700.3 − 284.67` where the updated worksheet asks `700.32 − 84.67`, and it
   answers F4 for "undo ÷5" where the updated worksheet asks "undo ×5". The QTI
   matches the updated worksheet in both cases and was left alone.
+
+---
+
+# The answer-format round
+
+The corpus was built almost entirely as select-all with all-or-nothing scoring.
+That is the wrong instrument for most of these questions twice over: the choices
+leak the answer, and a distractor that happens to be true makes a student who
+reasons correctly score **zero**.
+
+The author's hierarchy for this round, in priority order:
+
+1. **Numeric entry** — almost all.
+2. **Short answer** — one or two words, or a symbolic answer where the stem
+   prescribes the exact format with a worked example.
+3. **Select-all** — last resort, **at least 7 close distractors**. Distinguishing
+   *expressions* is the good case and stays select-all.
+
+Every stem prescribes the exact format of its answer. Every item is auto-scored
+by Canvas; nothing requires manual grading.
+
+| | before | after |
+|---|---|---|
+| items | 157 | 175 |
+| numeric entry | 80 | 106 |
+| short answer | 14 | 37 |
+| select-all | 63 | 32 |
+
+Select-all falls from 40% of the corpus to 18%, and every survivor is a figure,
+an expression-discrimination item, or multi-statement reasoning.
+
+## Defects found this round that were mis-scoring students
+
+Found by parallel workers reading the pristine corpus against the source PDFs,
+not by any prior judge round.
+
+### Six items shipped TRUE statements as wrong answers
+
+Under all-or-nothing scoring, selecting one costs the whole item.
+
+| Item | True, and scored wrong |
+|---|---|
+| `K9` | `8 + 5` (its own stem), `13`, `(8 + 5) + 0`, `8 + (5 + 0)` — all equal 13 |
+| `K10`, `N5` | `7a + 0`, `7 × a` (the stem verbatim) — identically `7a` for every `a` |
+| `K11` | `(b + 9) + 3`, `b + 12`, `(b + 3) + 9` — all equal `b + 12` |
+| `N6` | `(x + 8) + 5`, `x + 13`, `(x + 5) + 8` |
+| `topic-1-2` P2Q2 | `The sign does not matter here.` — true; `The denominator alone determines answer.` — the textbook rule, so it punishes the taught student |
+
+**The systemic cause was that every rewrite item included its own stem
+expression as a distractor.** Under "select all *equivalent* rewrites" that is a
+correct answer, not a trap. The value-collapsed choices (`13`, `b + 12`,
+`x + 13`) compound it.
+
+The stems had to be tightened as well as the choices, because under the old
+wording no choice set could be made correct — `13` genuinely is equivalent to
+`8 + 5`. The narrowing is the author's own definition, from the explanations
+PDF: *"Regroup means move the parentheses without changing the left-to-right
+order of the terms."*
+
+### Other live defects
+
+- **`topic-1-4` scored "at least two" as all-or-nothing.** The worksheet asks for
+  at least two expressions; all six items keyed 3–4 under `<and>`. A student who
+  wrote two — exactly what was asked — scored zero.
+- **Eight numeric items keyed a negative value with no sign guidance.** "Enter
+  the number only, no units or symbols" reads as "omit the minus sign".
+- **`topic-1-2` P2Q3 keyed `3x = 2`** where its own solution PDF derives
+  `9x = 6`. Part 1 keys `99x = 27`, which does match its PDF.
+- **`topic-1-2` P2Q2's stem omitted the `b ≠ 0` guard** that Part 1 carries and
+  the solution states. Without it the key is not "always right".
+- **`topic-sc-1` Q2 offered `≉ ≢ ≪ ≫`**, symbols neither the assignment nor
+  either key ever names.
+
+## Load-bearing wording — do not "tidy" these
+
+Three items are correct **only** because of a single word. Normalising any of
+them creates a second true answer.
+
+- `K2` — "**prime** factorization". `9 × 10`, `3^2 × 10`, `2 × 45` all equal 90.
+- `L1` — "factor **completely**". `4(2x + 4)` expands to exactly `8x + 16`.
+- `topic-1-2` **P1Q2** — "which outcome is **NOT** possible". It carries the same
+  statement distractors that broke its Part 2 twin, and they are false only under
+  this framing. **The two stems must not be harmonised in either direction.**
+
+## Self-referential choices are banned
+
+`topic-1-2` P2Q2 offered `More than one listed choice is correct.`, `All listed
+choices are correct.`, `No listed choice can be correct.`
+
+Their truth is a function of the *other* choices. `More than one…` became true
+only because a different distractor was true — so an edit elsewhere re-keys them
+with no signal at the site of the edit, which is exactly how the defect arose.
+They also carry no mathematical content and are not authored: the source
+worksheet has only options A, B, C. Removed, and recorded as a structural rule.
+
+`topic-1-2` P1Q2 still carries the trio and was deliberately left alone; it is
+flagged for a separate structural pass with its stem untouched.
+
+## topic-1-4 → twelve short-answer items
+
+Split by **form**, not by "write a different one". Canvas cannot compare one
+item's answer with another's, so "a different expression" would accept the same
+string twice. Form-a strings contain no `|` and form-b strings all do, so the two
+accepted sets are provably disjoint.
+
+- **a** — "uses subtraction and no absolute-value bars"
+- **b** — "uses absolute-value bars", kept deliberately form-*general*: the
+  answer key's own `|-8| + 5` split-at-zero method must not be ruled off-form.
+
+172 accepted strings, each evaluated against the item's true distance, each
+listed compact, spaced, and with a U+2212 twin — a student who copies the stem's
+rendered MathJax gets a Unicode minus, and Canvas compares bytes.
+
+## Forbidden near-misses
+
+These are TRUE and must never be authored as distractors. The failure mode now
+is an editor "correcting" `8 + (5 × 0)` into `× 1` and silently restoring a true
+choice.
+
+- `2^(4/2)` and `3^(4/2)` — dividing the exponents is the classic error, but with
+  exponents 4 and 2 it evaluates to the key in **both** variants.
+- `27/99` (= 3/11), `6/9` (= 2/3), `a7` (reads as `7a`), `7a + 0`, `7a × 1`
+- `8 + (x + 5)`, `9 + (b + 3)`, `b + 12`, `x + 13` — any reordering of the
+  addends is value-true even though it is not an associative rewrite
+- `10 - 4 - 8`, `12 - 5 - 9`, `(-4) + (-8) + 10`
+- `Their sum is zero.`, `They have the same absolute value.`, `Each is the
+  opposite of the other.`, `They are the same distance from zero.`
+
+## Build reproducibility
+
+Two defects in the build itself, both caught late.
+
+`repackage.py` writes into `zips/`, and `zips/` was also the extraction source
+for the next build, so the pipeline was applying its transforms on top of its own
+output. `validate.py` still passed — every rule it enforces is a property of the
+final state, not of how that state was reached — but the permutation had run
+twice, so the shipped choice order was not the one this document describes.
+`build.sh` now takes a **git ref** as its source and extracts to a temp
+directory; feeding the pipeline its own output is impossible by construction.
+
+Separately, two builds of provably identical content produced different sha256s,
+because zip stores each entry's mtime and extraction stamps "now". Checksums are
+how this project proves an artifact is the one a judge scored, so entries are now
+written with a fixed date in sorted path order. Two independent builds are
+byte-identical.
