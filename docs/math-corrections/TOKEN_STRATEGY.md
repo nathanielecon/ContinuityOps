@@ -108,3 +108,37 @@ agents held to a strict report schema like the judge rubric.
 5. Skip prose-compression modes unless the run is prose-heavy. This one was not.
 6. Take the real number from `~/.pxpipe/events.jsonl` (per-request
    `count_tokens` counterfactual), not from list-price bill estimates.
+
+## Auth mode: CLI/API key vs subscription
+
+Asked whether running workers "on CLI instead of subscription" saves tokens.
+**It does not.** The distinction is billing, not consumption: the same worker
+sends the same prompts to the same models and burns the same tokens either way.
+What changes is how those tokens are metered and paid — a subscription meters
+against a usage limit that resets on a clock; an API key bills per token against
+rate limits.
+
+Worth doing anyway, for the reason it actually helps: **it removes the
+limit wall.** On the QTI run, 14 cold validation judges and one re-score were
+killed mid-flight by `session limit · resets 1am (UTC)`. Every one had to be
+relaunched from scratch, so the partial work was paid for twice. That is a real
+cost, and it is the cost API-key billing avoids — but it shows up as *fewer
+wasted* tokens, never as fewer tokens per unit of work.
+
+**It cannot be set from inside a session.** Subagents inherit the session's auth
+path. In the managed remote environment `ANTHROPIC_BASE_URL` is set to a gateway
+and no `ANTHROPIC_API_KEY` is present, so auth is the environment's to decide,
+not the running agent's. Same structural fact as pxpipe — a launch-time
+decision. An agent that sets the variable mid-session and reports success has
+changed nothing.
+
+To actually get it: launch Claude Code from a local CLI authenticated with an
+API key (`ANTHROPIC_API_KEY` in the launching shell, no `ANTHROPIC_BASE_URL`
+override), or configure the remote environment's auth before the session starts.
+Verify before trusting it — a trivial call plus a check that the key, not a
+subscription token, is what carried it.
+
+**Do not expect a token reduction from this and do not report one.** The
+measured savings on this project came from elsewhere: cheap fixers with frontier
+judges, not re-reading sources after every rebuild, and slicing by artifact
+boundary rather than page range.

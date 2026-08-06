@@ -182,6 +182,15 @@ Launch under **`pxpipe warp -- claude`** — see `PXPIPE_HANDOFF.md`, including 
 decision gate for managed gateways and the validation gate before trusting imaged
 context on a judge loop.
 
+**Launch authenticated with an API key, not a subscription.** This does not
+reduce tokens — the same workers send the same prompts and burn the same amount
+either way; it changes only how they are metered. Do it because it removes the
+limit wall: the QTI run lost 14 cold judges and a re-score mid-flight to
+`session limit · resets 1am (UTC)`, and every one had to be relaunched, paying
+for the partial work twice. Set it **at launch** — subagents inherit the
+session's auth path, and an agent that changes the variable mid-session has
+changed nothing. See `TOKEN_STRATEGY.md`.
+
 Measured last run:
 
 - The cost was **input**, not output: judge reports re-entering context, the same
