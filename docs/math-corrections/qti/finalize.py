@@ -113,7 +113,8 @@ SHORTANS = {
         'Two birds are flying in the sky. Bird A is 150 feet above sea level. '
         'Bird B is 120 feet above sea level.', 'vertical distance between the birds',
         ['150-120', '150 - 120'],
-        ['|150-120|', '|120-150|', '|150 - 120|', '|120 - 150|']),
+        ['|150-120|', '|120-150|', '|150 - 120|', '|120 - 150|',
+         '|150|-|120|', '|150| - |120|']),
     ('topic-1-4', 'Part 1 Question 3'): (
         "Two fish are swimming beneath the water. Fish A's elevation is "
         '\\(-25\\) feet relative to sea level. Fish B\'s elevation is \\(-40\\) '
@@ -127,17 +128,20 @@ SHORTANS = {
          '|40-25|', '|25-40|', '|-25--40|', '|-40--25|', '|-25 - (-40)|',
          '|-40 - (-25)|', '|(-25) - (-40)|', '|(-40) - (-25)|', '|40 - 25|',
          '|25 - 40|', '|-25 - -40|', '|-40 - -25|',
-         '|-40|-|-25|', '|-40| - |-25|']),
+         '|-40|-|-25|', '|-40| - |-25|', '|40|-|25|', '|40| - |25|',
+         '|-25+40|', '|-25 + 40|']),
     ('topic-1-4', 'Part 2 Question 1'): (
         'At 7:00 AM, the temperature was 3\\(^\\circ\\)F. By noon, the '
         'temperature was 12\\(^\\circ\\)F.', 'distance between the two temperatures',
         ['12-3', '12 - 3'],
-        ['|12-3|', '|3-12|', '|12 - 3|', '|3 - 12|']),
+        ['|12-3|', '|3-12|', '|12 - 3|', '|3 - 12|',
+         '|12|-|3|', '|12| - |3|']),
     ('topic-1-4', 'Part 2 Question 2'): (
         'Two planes are flying in the sky. Plane A is 280 feet above sea level. '
         'Plane B is 210 feet above sea level.', 'vertical distance between the planes',
         ['280-210', '280 - 210'],
-        ['|280-210|', '|210-280|', '|280 - 210|', '|210 - 280|']),
+        ['|280-210|', '|210-280|', '|280 - 210|', '|210 - 280|',
+         '|280|-|210|', '|280| - |210|']),
     ('topic-1-4', 'Part 2 Question 3'): (
         "Two submarines are traveling beneath the water. Submarine A's "
         'elevation is \\(-18\\) feet relative to sea level. Submarine B\'s '
@@ -149,7 +153,8 @@ SHORTANS = {
          '|45-18|', '|18-45|', '|-18--45|', '|-45--18|', '|-18 - (-45)|',
          '|-45 - (-18)|', '|(-18) - (-45)|', '|(-45) - (-18)|', '|45 - 18|',
          '|18 - 45|', '|-18 - -45|', '|-45 - -18|',
-         '|-45|-|-18|', '|-45| - |-18|']),
+         '|-45|-|-18|', '|-45| - |-18|', '|45|-|18|', '|45| - |18|',
+         '|-18+45|', '|-18 + 45|']),
 }
 
 
@@ -722,12 +727,11 @@ REBUILD = {
 # Canvas short answer is byte-exact string matching.
 WORDS = 'Your answer is one or two words.'
 INEQ = ('You may need to use >, <, or =. Type it with no spaces: if your answer '
-        'is x>4, write it as x>4.')
+        'were x greater than 4, write it as x>4.')
 SYMBOL = 'Enter one symbol only: <, >, =, or ≠.'
 ORDER = ('Separate the numbers with commas, least first. Type it like '
          '-5,0,2 with no spaces.')
-OPNAME = ('Name the operation and the number, like: add 3. Use words and the '
-          'number, no symbols.')
+OPNAME = 'Name the operation and the number, like: add 3.'
 
 TOSHORT = {
     # F3/F4: the old sentence promised "one or two words" while the key was three
@@ -738,10 +742,12 @@ TOSHORT = {
     ('6th-grade-review-section-1', 'F2'): (['variable', 'unknown'], WORDS, None),
     ('6th-grade-review-section-1', 'F3'): (
         ['subtract 8', 'subtract8', 'subtraction', 'subtract', 'minus 8',
-         'take away 8', 'subtract eight', '-8'], OPNAME, None),
+         'take away 8', 'subtract eight', 'subtracting 8', 'subtracting eight',
+         'minus eight', 'take away eight', '-8'], OPNAME, None),
     ('6th-grade-review-section-1', 'F4'): (
         ['divide by 5', 'divide by5', 'division', 'divide', 'dividing by 5',
-         'divide by five', 'divide 5', '/5'], OPNAME, None),
+         'divide by five', 'dividing by five', 'divide 5', '/5', '÷5',
+         '÷ 5'], OPNAME, None),
     # H3/H4: the worksheet says "Solve:"; the conversion dropped it, leaving a
     # stem with no instruction verb at all. The flipped form is the SAME
     # statement -- and H5 teaches that flip one item later.
@@ -818,6 +824,28 @@ def do_letter_prefix(raw, pkg, title, log):
 
 # Existing short-answer items whose accepted list is missing a form the answer
 # key itself prints.
+STEM_INSTR = {
+    ('6th-grade-review-section-2', 'K6'):
+        'Answer with whichever of the two values is greater. Type it the same '
+        'way it is written in the question.',
+    ('6th-grade-review-section-1', 'E1'):
+        'Type the greater of the two values exactly as it appears above.',
+}
+
+
+def do_stem_instr(raw, pkg, title, text, log):
+    block = item_block(raw, title)
+    if block is None:
+        log.append(f'  !! {pkg} {title}: item not found')
+        return raw
+    m = re.search(r'(Enter [^<]*?\.)(?=\s*(?:&lt;img|</mattext>))', block)
+    if not m:
+        log.append(f'  !! {pkg} {title}: instruction not found')
+        return raw
+    log.append(f'  instr    {title:18s} format line rewritten')
+    return raw.replace(block, block.replace(m.group(1), esc(text)))
+
+
 WIDEN = {
     # K6 asks which is greater, 1 3/4 or (1)(3/4). The key is 7/4 -- but the
     # explanations PDF answers "1 3/4", and the item's boilerplate format line
@@ -1101,6 +1129,9 @@ def main(base):
         for p, t in sorted(LETTERED):
             if p == pkg:
                 raw = do_letter_prefix(raw, pkg, t, log)
+        for (p, t), text in STEM_INSTR.items():
+            if p == pkg:
+                raw = do_stem_instr(raw, pkg, t, text, log)
         for (p, t), vals in WIDEN.items():
             if p == pkg:
                 raw = do_widen(raw, pkg, t, vals, log)
