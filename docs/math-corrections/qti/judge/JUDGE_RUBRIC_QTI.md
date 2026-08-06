@@ -3,6 +3,13 @@
 You are a **judge**. You score. You do **not** edit any file. A separate fixer
 applies changes. Editing disqualifies your verdict.
 
+> **Amended for the answer-format round, before dispatch.** Criterion 6 gains two
+> carve-outs: split halves are exempt from the ≥8-choice rule, and
+> `multiple_choice_question` is now a recognised structure. Both are recorded at
+> criterion 6. The amendment was made **before** the round opened —
+> `FORMAT_ROUND.md` forbids relaxing a gate once judging has started, and that
+> remains in force.
+
 ## What these artifacts are
 
 14 Canvas QTI 1.2 packages. Students import them and use them to check their
@@ -96,6 +103,19 @@ No rounding up. No "10/10 with minor notes". A note is a defect or it is not.
      `wrong_*` negated; ≥8 choices; no two choices with identical visible text.
    - Shape B: the required/negated split is coherent; duplicate visible text is
      still a defect; choice count and second respconditions are **not**.
+   - **Split halves (amendment, answer-format round).** An item produced by
+     splitting a multi-part item inherits only its own part's choices and will
+     land at 3–6. **Choice count is not a defect for these**, mirroring the
+     carve-out Shape B already has. Duplicate visible text still is. The
+     alternative — padding every split half back to 8 — means authoring
+     distractors wholesale, and every authored distractor is fresh criterion-2
+     exposure, which is the trade this amendment refuses.
+   - **`multiple_choice_question` (amendment, answer-format round).** Exactly
+     one keyed choice; `rcardinality="Single"`; no `<not>` blocks; the single
+     `<varequal>` names the keyed ident. **No non-keyed choice may be true** —
+     criterion 2 applies here with more force than under select-all, because a
+     true distractor does not merely cost a careful student the mark, it leaves
+     the item with two defensible answers and only one scored right.
 
 7. **Markup and import validity.** Math delimiters balanced and consistent
    (`\(...\)` throughout — a stray `$…$` or an interleaved `$…\(…\)…$` renders

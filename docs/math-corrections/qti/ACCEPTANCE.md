@@ -22,9 +22,30 @@ cold.
 | SC-2a | 7 | 10 | | |
 | SC-2b | 7 | 10 | | |
 | G1a | 6 | 10 | | |
-| G1b | 6 | 9 -> 10 (r3) | | |
+| G1b | 6 | 9 -> 10 (r3) | **10** | **yes** (content, at pre-format-round state) |
 | G2a | 10 | n/a | | |
 | G2b | 8 | 10 | | |
+
+## G1b cold read closed the outstanding bottleneck — 10/10
+
+18 of 18 items worked, no defects. It did not ratify: it ruled explicitly on nine
+near-misses, and the two that mattered were the ones where a true-but-unkeyed
+choice would actually hide — `H3/choice_6` and `H4/choice_6`, where an equivalent
+flip (`5 < x` for `x > 5`) would have been a criterion-2 defect. It read the raw
+entities to confirm both were the *reversed* form, and therefore false.
+
+**It re-verified the H6/H7 arrowhead fix along three independent paths** rather
+than taking r3's word for it: marker source (`markerUnits="userSpaceOnUse"`,
+`refX="17"`, so the marker no longer scales with `stroke-width:5`), coordinate
+geometry (leftward rays terminate at x=310, value −8, the open end), and a raster
+render. Ink means membership and the ink is correct.
+
+**Scope of this acceptance.** The cold read was taken against the corpus *before*
+the answer-format round. Its finding is that the mathematics, keys, stems and
+figures are sound. The answer-format round then converts several of these items
+from select-all to single-answer multiple choice, which does not move a key but
+does change the structure — so the type change is verified separately, and this
+row is not a certification of the post-round file.
 
 ## G1b took three rounds
 

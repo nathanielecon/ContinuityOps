@@ -657,3 +657,107 @@ Elevate integrated-gate/SUPERVISOR to tip-bound A3 L4 lab + aa01454 SHA so P1-T0
 - Refresh `docs/architecture/continuityops-architecture.png` (image2) + tipbound-dated copy.
 - SVG agentic band labels aligned to chief/junior/zero-hop topology.
 - Evidence index + README tip-bind pointers to 2026-07-20 tipbound artifacts.
+
+## 2026-08-06 — BF-2026-029 — QTI transform silently converted CRLF to LF
+
+- `docs/math-corrections/qti/finalize.py` read with `open(path)`. Python's
+  universal-newline translation collapses `\r\n` on **read**, so writing back
+  rewrote every line of both 6th-grade files — 304 lines each, 304 bytes lost.
+- Content was provably unchanged (`diff` after `tr -d '\r'` empty). The damage was
+  to the property the whole method rests on: that an item nobody touched stays
+  byte-identical, so a reviewer can trust the diff. 12 of 14 packages are CRLF.
+- Fix: `newline=''` on every read and write; normalise to LF for the transform,
+  restore the file's own convention on write.
+- Verified: all 14 packages preserve their line-ending convention, no file has
+  mixed endings, and no file differs from baseline by line endings alone.
+- Class: instrument error. The standing rule — suspect the instrument first —
+  applied and was what caught it, on a diff that looked like a whole-file rewrite.
+
+## 2026-08-06 — BF-2026-030 — stems referenced part labels that never existed
+
+- 42 items carried "Part 1 and Part 2 both must be correct when prompt has
+  multiple parts". **No item anywhere labels a part "Part 1."** Every multi-part
+  item uses Part A / Part B, and "Part 1" is the name of the quiz's own first
+  half — so the sentence pointed a student at the wrong thing entirely.
+- Counted, not sampled: 42 stems with the sentence, 40 uses of `Part A:`, 0 uses
+  of `Part 1:` as a question label.
+- Fix: sentence removed rather than reworded — after the multi-part splits no
+  choice-based item has parts at all. Same pass corrected "belongs in complete
+  correct answer" to "belongs in **the** complete correct answer".
+- Survived every prior judge round on this corpus. It sits in the instruction
+  block, which judges read as boilerplate rather than as content under test.
+
+## 2026-08-06 — BF-2026-031 — the answer was always the first choice
+
+- All 88 Shape A and 21 Shape B select-all items keyed their correct choices as
+  the **leading contiguous block**, and all 14 packages ship
+  `shuffle_answers=false`. "Pick the first option, or the first N" scored 100%
+  corpus-wide without doing any mathematics.
+- Verified corpus-wide, not sampled: 63 items key position 0 alone, 11 key 0–1,
+  11 key 0–2, 3 key 0–3. Zero exceptions.
+- No key was wrong and nothing mis-scored, which is why round after round passed
+  it: it is not a defect in any item. It is a property of the whole corpus, and
+  it meant the instrument measured nothing.
+- **It never should have survived a round.** Raised independently by four judges,
+  each correctly noting it fell outside the seven rubric criteria, and each time
+  recorded as an open authoring decision instead of being actioned. A finding
+  that four judges reach independently is a finding, not a note.
+- Fix: choices permuted in place (`qti/permute.py`), `original_answer_ids`
+  rewritten to match, `shuffle_answers` left `false` so the packages are correct
+  on their own rather than depending on a Canvas setting. Deterministic seed per
+  item ident (sha256, not Python's per-process `hash()`) so the build reproduces.
+- Scoring is untouched by construction — `resprocessing` references idents, not
+  positions — and that is asserted per item, not assumed.
+- Verified: 47/47 items had a key at position 0 before, **0/47 after**; key
+  positions now spread across 1–7.
+
+## 2026-08-06 — BF-2026-032 — the multi-part census was short by two
+
+- `qti/CHANGES.md` recorded 8 splittable multi-part items. There are **10**.
+- `topic-1-1` Part 1 Question 1 and Part 2 Question 1 carry Part A and Part B
+  **inline in a single paragraph**, where the other eight use one paragraph per
+  part. A paragraph-structured scan missed them, and so did the first splitter
+  written against that structure — the same blind spot twice, because the second
+  tool inherited the first tool's assumption.
+- Fix: detection keys on the text `Part A:` anywhere in a stem, independent of
+  markup. Re-scan finds 10 of 10.
+- Also found by the same re-scan: `topic-1-6` P1Q4/P2Q4 ask two questions
+  ("Evaluate −5²" and "Explain how Q3 and Q4 differ") with **no part labels at
+  all**, so no label-based scan of any kind would have found them. Caught by
+  reading the keyed set and noticing it mixed a number with two prose statements.
+- Class: a census derived from one structural assumption, then trusted by
+  everything downstream. The count was in the record as a fact for several rounds.
+
+## 2026-08-06 — BF-2026-033 — topic-1-4 scores "at least two" as all-or-nothing
+
+- The worksheet asks the student to "write **at least two** expressions" for a
+  distance. All 6 `topic-1-4` items key 3–4 equivalent expressions under
+  `<and>` with every distractor negated, so **only the full keyed set scores**.
+- A student who writes two valid expressions has done exactly what the
+  assignment asked and scores **0** on the accuracy check.
+- Live in the shipped package today. Not caused by a wrong key — every keyed
+  expression in all 6 items was independently worked and is correct, and no
+  non-keyed choice is true. The defect is the scoring shape against the
+  assignment's own wording, which is rubric criterion 4's "or" clause in a form
+  no round had looked for: not two keyed forms joined by "or", but a worksheet
+  quantifier that the key silently tightened.
+- Fixed as a side effect of this round: all 6 become numeric entry on the
+  distance value, which has one right answer and no set to complete.
+- Found by the design worker for the conversion, not by any judge round.
+
+## 2026-08-06 — BF-2026-034 — format-instruction variants across numeric items
+
+- The corpus carries two numeric instruction variants: 39 items with a bare
+  "Enter the number only, no units or symbols." and 4 that append "Round to two
+  decimal places."
+- The round's rule — the stem states the format of the number expected — risked
+  introducing a **third** variant by prepending an integer/sign sentence to every
+  converted item, leaving a student two instructions where the brief asks for one.
+- Resolution: the format clause is added **only where format is genuinely in
+  question** — the answer can be negative, rounding is required, or a decimal is
+  expected. Where the answer is an unambiguous non-negative whole number the bare
+  clause is used verbatim, matching the 39. Every variant still ends with the
+  same "Enter the number only, no units or symbols." sentence.
+- Residual, recorded not fixed: the 39 pre-existing numeric items state format
+  only as "a bare number" and do not say integer vs decimal. Uniform, correct,
+  and left alone — rewording 39 shipped stems is authoring, not repair.
