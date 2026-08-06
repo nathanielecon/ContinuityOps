@@ -96,7 +96,36 @@ FORM_B = ('Type only the expression, with no words, no units, no equals sign, '
           'write |4-(-9)|, not | 4 - (-9) |. That example shows spacing only, '
           'not the correct order for this problem.')
 
-# (context, distance phrase, accepted form a, accepted form b)
+# --------------------------------------------------------------------------
+# Method clauses. A stem that says only "uses absolute-value bars" leaves an
+# OPEN family -- the answer key's own wording is "any correct distance
+# expressions", and two rounds of widening each turned up more correct forms
+# still rejected. What closes a set is naming the methods, which is the same
+# device every other short-answer item in this corpus uses.
+#
+# The second method is NOT the same for every item, and this is easy to get
+# wrong: it depends on whether the two values straddle zero.
+#
+#   Part 1 Question 1 alone straddles (5 and -8), so the two distances from
+#   zero ADD:            |-8|+5 = 13.
+#   The other five sit on one side, so they SUBTRACT:
+#                        |150|-|120| = 30.
+#
+# Naming "the sum" globally would be wrong for five of six items -- on
+# Part 1 Question 2 it would name a method yielding 270, not 30. Verified by
+# evaluating every accepted string: Part 1 Question 1 has 8 sum-shaped forms
+# and 0 difference-shaped; the other five have 0 sum-shaped.
+# --------------------------------------------------------------------------
+A_ONE = ''
+A_TWO = (' You may either subtract the two given elevations, or subtract the '
+         'smaller distance from zero from the larger.')
+B_SUM = (' You may either write one absolute value of a difference, or add '
+         'the two distances from zero.')
+B_DIFF = (' You may either write one absolute value of a difference, or '
+          'subtract the smaller distance from zero from the larger.')
+
+# (context, distance phrase, accepted form a, accepted form b,
+#  (form-a method clause, form-b method clause))
 SHORTANS = {
     ('topic-1-4', 'Part 1 Question 1'): (
         'At 6:00 PM, the temperature was 5\\(^\\circ\\)F. By midnight, the '
@@ -108,13 +137,16 @@ SHORTANS = {
         # the key's own method off-form and mark a correct student wrong.
         ['|5-(-8)|', '|-8-5|', '|(-8)-5|', '|-8|+5', '5+|-8|', '|5|+|-8|',
          '|-8|+|5|', '|5--8|', '|5 - (-8)|', '|-8 - 5|', '|(-8) - 5|',
-         '|-8| + 5', '5 + |-8|', '|5| + |-8|', '|-8| + |5|', '|5 - -8|']),
+         '|-8| + 5', '5 + |-8|', '|5| + |-8|', '|-8| + |5|', '|5 - -8|'],
+        # the only item whose values straddle zero, so the two distances ADD
+        (A_ONE, B_SUM)),
     ('topic-1-4', 'Part 1 Question 2'): (
         'Two birds are flying in the sky. Bird A is 150 feet above sea level. '
         'Bird B is 120 feet above sea level.', 'vertical distance between the birds',
         ['150-120', '150 - 120'],
         ['|150-120|', '|120-150|', '|150 - 120|', '|120 - 150|',
-         '|150|-|120|', '|150| - |120|']),
+         '|150|-|120|', '|150| - |120|'],
+        (A_ONE, B_DIFF)),
     ('topic-1-4', 'Part 1 Question 3'): (
         "Two fish are swimming beneath the water. Fish A's elevation is "
         '\\(-25\\) feet relative to sea level. Fish B\'s elevation is \\(-40\\) '
@@ -129,19 +161,24 @@ SHORTANS = {
          '|-40 - (-25)|', '|(-25) - (-40)|', '|(-40) - (-25)|', '|40 - 25|',
          '|25 - 40|', '|-25 - -40|', '|-40 - -25|',
          '|-40|-|-25|', '|-40| - |-25|', '|40|-|25|', '|40| - |25|',
-         '|-25+40|', '|-25 + 40|']),
+         '|-25+40|', '|-25 + 40|'],
+        # form a admits two methods here too: the key lists 40-25, and a student
+        # working from the signed elevations writes -25-(-40). Both stay on-form.
+        (A_TWO, B_DIFF)),
     ('topic-1-4', 'Part 2 Question 1'): (
         'At 7:00 AM, the temperature was 3\\(^\\circ\\)F. By noon, the '
         'temperature was 12\\(^\\circ\\)F.', 'distance between the two temperatures',
         ['12-3', '12 - 3'],
         ['|12-3|', '|3-12|', '|12 - 3|', '|3 - 12|',
-         '|12|-|3|', '|12| - |3|']),
+         '|12|-|3|', '|12| - |3|'],
+        (A_ONE, B_DIFF)),
     ('topic-1-4', 'Part 2 Question 2'): (
         'Two planes are flying in the sky. Plane A is 280 feet above sea level. '
         'Plane B is 210 feet above sea level.', 'vertical distance between the planes',
         ['280-210', '280 - 210'],
         ['|280-210|', '|210-280|', '|280 - 210|', '|210 - 280|',
-         '|280|-|210|', '|280| - |210|']),
+         '|280|-|210|', '|280| - |210|'],
+        (A_ONE, B_DIFF)),
     ('topic-1-4', 'Part 2 Question 3'): (
         "Two submarines are traveling beneath the water. Submarine A's "
         'elevation is \\(-18\\) feet relative to sea level. Submarine B\'s '
@@ -154,7 +191,8 @@ SHORTANS = {
          '|-45 - (-18)|', '|(-18) - (-45)|', '|(-45) - (-18)|', '|45 - 18|',
          '|18 - 45|', '|-18 - -45|', '|-45 - -18|',
          '|-45|-|-18|', '|-45| - |-18|', '|45|-|18|', '|45| - |18|',
-         '|-18+45|', '|-18 + 45|']),
+         '|-18+45|', '|-18 + 45|'],
+        (A_TWO, B_DIFF)),
 }
 
 
@@ -1057,7 +1095,7 @@ def do_shortsplit(raw, pkg, title, spec, log):
     if block is None:
         log.append(f'  !! {pkg} {title}: item not found')
         return raw
-    context, phrase, acc_a, acc_b = spec
+    context, phrase, acc_a, acc_b, (clause_a, clause_b) = spec
     base = re.search(r'<item ident="([^"]*)"', block).group(1)
     ref = re.search(r'<fieldlabel>assessment_question_identifierref</fieldlabel>\s*'
                     r'<fieldentry>([^<]*)</fieldentry>', block).group(1)
@@ -1065,12 +1103,16 @@ def do_shortsplit(raw, pkg, title, spec, log):
     out = []
     for suffix, task, acc, check in (
             ('a', 'Write one expression that uses subtraction and no '
-                  'absolute-value bars to represent the ' + phrase + '.',
+                  'absolute-value bars to represent the ' + phrase + '.'
+                  + clause_a,
              acc_a, FORM_A),
-            # form-general on purpose: the answer key's own |-8|+5 method uses
-            # bars without a subtraction, and must not be ruled off-form.
+            # Method-enumerating, not form-general and not order-pinned. Pinning
+            # the order would close the set but rule the answer key's own
+            # |-8|+5 method off-form; staying form-general leaves the family
+            # open. Naming the methods does both: the set closes by enumeration
+            # and every method the key endorses stays on-form.
             ('b', 'Write one expression that uses absolute-value bars to '
-                  'represent the ' + phrase + '.', acc_b, FORM_B)):
+                  'represent the ' + phrase + '.' + clause_b, acc_b, FORM_B)):
         vals = with_unicode_minus(acc)
         stem = wrap([context + ' ' + task]) + check_para(check)
         out.append(ITEM.format(

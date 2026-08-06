@@ -24,11 +24,34 @@ it. Where the two conflict, this file wins for the items in your scope only.
 Concretely, an item passes the format gate only if **all** of these hold.
 
 **F1 — Type is right for the answer.** If the answer is a single number, the
-item is `numerical_question`. If the answer is an expression, an inequality, a
-graph description, a justification, an ordering, or a comparison statement, it
-stays `multiple_answers_question`. An item that could be answered by typing one
-number but is still select-all is a defect. So is a numeric-entry item whose
-answer is not a number.
+item is `numerical_question`.
+
+If the answer is an expression, an inequality, an ordering, or a comparison
+statement, the deciding question is **whether the accepted set is closed**:
+
+- **Closed** — the stem names the permitted method or methods, and every string
+  a student following that stem can produce is in the accepted list. Then
+  `short_answer_question` is correct, and forcing select-all would be the
+  defect: it puts the answer on screen for an item whose whole point is that the
+  student writes it.
+- **Open** — the stem admits a family of correct answers it does not delimit
+  ("write an expression that uses absolute-value bars"). Then it stays
+  `multiple_answers_question`. An open set cannot be enumerated, so short answer
+  will mark some correct student wrong, and widening the list is not a fix —
+  each widening round only reveals more forms still rejected.
+
+A graph description or a justification is always `multiple_answers_question`;
+prose has no closed form.
+
+An item that could be answered by typing one number but is still select-all is a
+defect. So is a numeric-entry item whose answer is not a number.
+
+*Amended mid-round — see BF-2026-042.* The original text said every expression
+or inequality "stays `multiple_answers_question`", full stop. That rule was
+written before this corpus had a third question type, and under it the judge
+correctly flagged `H3`/`H4`/`H5` and the two orderings whose accepted sets it had
+itself just certified **complete**. Closure, not answer shape, is the property
+that actually matters.
 
 **F2 — One part per item.** No item may contain both a "Part A" and a "Part B"
 prompt. No item stem may reference a part label at all.

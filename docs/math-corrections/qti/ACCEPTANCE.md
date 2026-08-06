@@ -168,14 +168,27 @@ false count came from `grep -c $'\r'` in a shell loop where the pattern did not
 survive as a carriage return, so an empty pattern matched every line. It had
 already been written into `BF-2026-029` as fact. Corrected there.
 
-### Open, deliberately not decided by the coordinator
+### Both open questions are now closed — BF-2026-042
 
-- Whether the twelve `topic-1-4` items can remain short answer. The answer key's
-  own wording is "any correct distance expressions" — an open family that exact
-  string matching cannot close. Two widening rounds each revealed more correct
-  forms still rejected.
-- Whether `H3`/`H4`/`H5` and the two orderings stay short answer. The judge
-  certified their accepted sets complete and safe, and flagged them only against
-  the gate's F1 wording.
+- **The twelve `topic-1-4` items stay short answer.** The open family is closed
+  by naming the permitted methods in the stem rather than by pinning the operand
+  order. Pinning would have closed it too, but at the cost of ruling the answer
+  key's own `|-8|+5` method off-form; naming the methods costs nothing and drops
+  nothing. The second method is per-item — distances from zero **add** on
+  Part 1 Q1, the only item straddling zero, and **subtract** on the other five.
+- **`H3`/`H4`/`H5` and the two orderings stay short answer.** F1 was amended to
+  turn on whether the accepted set is closed rather than on the answer's shape,
+  which is the property that was actually doing the work. Recorded, not silent.
 
-Both are authoring calls, and both are with the author.
+Verified: every accepted string in `topic-1-4` evaluates to its item's true
+distance (0 mismatches), and every one falls under a method its own stem names
+with every named method reachable (0 closure violations).
+
+### Still open — cannot be settled in this environment
+
+- **The Canvas import test.** Load-bearing for 35 short-answer items whose
+  scoring is byte-exact, and for the three SVG figure items. Nothing here proves
+  a package imports; the structural gate proves only that it is well-formed.
+- **Two consecutive 10/10 per slice**, this project's acceptance bar, is not yet
+  met by any slice. `topic-1-4` needs a fresh judge that has not seen the old
+  wording.

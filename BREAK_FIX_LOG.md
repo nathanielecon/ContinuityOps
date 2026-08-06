@@ -949,3 +949,70 @@ asking only "explain how to show the change using a number line", while its key
 still required the expression `10 + (−4) + (−8)` — which both solution PDFs file
 under Part B. A student answering the question as asked selected two of three
 keyed choices and scored zero. Stem widened to ask for what the key requires.
+
+## 2026-08-06 — BF-2026-042 — `topic-1-4` stems now name their methods, and F1 is amended
+
+Two changes, one idea: **what makes a short-answer set safe is closure, and what
+closes it is the stem naming the method — not the answer's shape, and not a
+longer accepted list.**
+
+**`topic-1-4` — the open family, closed at last.**
+
+The six absolute-value items asked the student to "write one expression that uses
+absolute-value bars". The answer key's own wording is *"any correct distance
+expressions"*, so the stem admitted an **open family**, and two rounds of
+widening each turned up more correct forms still rejected (`|150|-|120|`,
+`|-25+40|`, `|40|-|25|`, `|-40|-|-25|`). Widening cannot close what the stem
+left open.
+
+The obvious fix — pin the operand order — closes the set but rules the answer
+key's **own** `|-8|+5` "split the trip at zero" method off-form, marking a
+student who used the taught method wrong. That was the wrong trade.
+
+Fixed by naming the methods instead. The stem now says which methods are
+permitted, so the set closes by enumeration while every method the key endorses
+stays on-form. Nothing was dropped.
+
+**The trap in this, and it is not obvious: the second method is not the same for
+every item.** It depends on whether the two values straddle zero.
+
+| item | values | second method | example |
+|---|---|---|---|
+| Part 1 Q1 | `5`, `-8` — **straddles zero** | distances from zero **add** | `\|-8\|+5` = 13 |
+| the other five | both on one side | distances from zero **subtract** | `\|150\|-\|120\|` = 30 |
+
+A single global sentence naming "the sum of the two distances from zero" — which
+is what the plan for this change actually specified — would have been **wrong for
+five of the six items**: on Part 1 Q2 it names a method yielding `|150|+|120|` =
+270, not 30. Caught by classifying every accepted string before writing the
+wording: Part 1 Q1 has 8 sum-shaped forms and 0 difference-shaped; the other five
+have 0 sum-shaped. The clause is therefore per-item, not global.
+
+Form a needed the same treatment on the two signed-elevation items
+(`Part 1 Q3`, `Part 2 Q3`), which genuinely admit two methods: subtracting the
+given elevations (`-25-(-40)`) and subtracting the smaller distance from zero
+from the larger (`40-25`, which is the form the key prints). Both now named.
+
+Verified two ways, both green:
+- every accepted string across all 12 items evaluates to that item's true
+  distance — **0 mismatches**;
+- every accepted string falls under a method its own stem names, and every named
+  method is reachable by some accepted string — **0 closure violations**.
+
+**F1 amended, and recorded rather than done silently.**
+
+F1 read: an expression, inequality, ordering or comparison "stays
+`multiple_answers_question`", full stop. Under that rule the judge flagged
+`H3`/`H4`/`H5` and the two orderings — accepted sets it had, in the same report,
+certified **complete** — and correctly declined to relax a frozen gate on its own
+authority.
+
+The rule was drafted before this corpus had a third question type. It tested
+answer *shape*, when the property that matters is whether the accepted set is
+**closed**. F1 now turns on closure: short answer where the stem names the
+methods and the set is fully enumerated; select-all where the family is open.
+Under the amended rule `topic-1-4` would have failed *before* this change and
+passes after it, which is the right way round.
+
+No item changed type as a result. `H3`/`H4`/`H5` and the orderings keep the
+short-answer form the judge had already certified.

@@ -602,12 +602,28 @@ string twice. Form-a strings contain no `|` and form-b strings all do, so the tw
 accepted sets are provably disjoint.
 
 - **a** — "uses subtraction and no absolute-value bars"
-- **b** — "uses absolute-value bars", kept deliberately form-*general*: the
-  answer key's own `|-8| + 5` split-at-zero method must not be ruled off-form.
+- **b** — "uses absolute-value bars"
+
+Each stem then **names the methods it permits** (BF-2026-042). Form-general
+wording left an open family that exact string matching cannot close — the key's
+own phrase is "any correct distance expressions" — and two widening rounds each
+revealed more correct forms still rejected. Pinning the operand order would close
+it, but would rule the key's own `|-8| + 5` split-at-zero method off-form. Naming
+the methods closes the set by enumeration and drops nothing.
+
+**The second method is per-item, and this is the part that is easy to get wrong.**
+It depends on whether the two values straddle zero: on Part 1 Q1 (`5`, `-8`) the
+distances from zero **add** (`|-8|+5` = 13); on the other five, both values sit on
+one side and the distances **subtract** (`|150|-|120|` = 30). A single global
+"sum" clause would name a method yielding 270 on Part 1 Q2. Form a needs the same
+per-item treatment on the two signed-elevation items, which admit both
+`-25-(-40)` and the key's own `40-25`.
 
 172 accepted strings, each evaluated against the item's true distance, each
 listed compact, spaced, and with a U+2212 twin — a student who copies the stem's
-rendered MathJax gets a Unicode minus, and Canvas compares bytes.
+rendered MathJax gets a Unicode minus, and Canvas compares bytes. Two automated
+checks hold: 0 value mismatches, and 0 closure violations (every accepted string
+reachable from a named method, every named method reachable).
 
 ## Forbidden near-misses
 
