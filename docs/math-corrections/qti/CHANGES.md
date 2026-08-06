@@ -303,6 +303,39 @@ four affected lines, letting the `.ray` class supply `marker-end` and place the
 arrowhead at the unbounded end — the convention the other five rows already use.
 Verified by render, twice independently.
 
+## Needs a Canvas import test before the figures can be trusted
+
+**The `$IMS-CC-FILEBASE$` path depth is unverified.** The three image `src`
+attributes now read `$IMS-CC-FILEBASE$/media/<file>.svg`, while the manifest
+declares those files at
+`sixth_grade_review_section_1_accuracy_check/media/<file>.svg`.
+
+The token stands for the root of the package's imported web content, and
+Canvas's own exports place that content under `web_resources/`. On that reading
+the token resolves to `media/<file>.svg` — one path segment short of where the
+files actually sit — and the images would import as broken links. The repair
+verified that stripping the token and rejoining under the quiz folder finds a
+file on disk, which assumes the mapping rather than testing it.
+
+This is recorded as an open question rather than closed in either direction,
+because **it cannot be settled from this environment**: there is no Canvas to
+import into and no reference Canvas export in the repository to compare against.
+The judge that found it ruled it not a defect — the form present is the one this
+project's own rubric prescribes corpus-wide, and severity is low because all
+seven options in A1, H6 and H7 are also given verbatim as text choices, so each
+item is answerable and correctly scored with the image absent. A missing file
+yields a migration warning, not a failed import or a wrong key.
+
+**To settle it:** import one package into Canvas and look at A1. If the figure is
+broken, the remedy is to move the three SVGs to `web_resources/media/` and point
+the manifest `<file href>` entries there, leaving the `src` strings unchanged.
+The same question applies identically to H6 and H7.
+
+What is certain is that the original packages were broken here: they carried no
+`$IMS-CC-FILEBASE$` token at all — the token appears zero times in all 14 —
+and declared the SVGs inside the `imsqti_xmlv1p2` resource rather than as
+`webcontent`, so Canvas would never have published them to any resolvable path.
+
 ## Known open items
 
 Neither is in this package set; both are recorded so they are not lost.
