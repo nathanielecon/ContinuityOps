@@ -126,7 +126,8 @@ SHORTANS = {
         ['|-25-(-40)|', '|-40-(-25)|', '|(-25)-(-40)|', '|(-40)-(-25)|',
          '|40-25|', '|25-40|', '|-25--40|', '|-40--25|', '|-25 - (-40)|',
          '|-40 - (-25)|', '|(-25) - (-40)|', '|(-40) - (-25)|', '|40 - 25|',
-         '|25 - 40|', '|-25 - -40|', '|-40 - -25|']),
+         '|25 - 40|', '|-25 - -40|', '|-40 - -25|',
+         '|-40|-|-25|', '|-40| - |-25|']),
     ('topic-1-4', 'Part 2 Question 1'): (
         'At 7:00 AM, the temperature was 3\\(^\\circ\\)F. By noon, the '
         'temperature was 12\\(^\\circ\\)F.', 'distance between the two temperatures',
@@ -147,7 +148,8 @@ SHORTANS = {
         ['|-18-(-45)|', '|-45-(-18)|', '|(-18)-(-45)|', '|(-45)-(-18)|',
          '|45-18|', '|18-45|', '|-18--45|', '|-45--18|', '|-18 - (-45)|',
          '|-45 - (-18)|', '|(-18) - (-45)|', '|(-45) - (-18)|', '|45 - 18|',
-         '|18 - 45|', '|-18 - -45|', '|-45 - -18|']),
+         '|18 - 45|', '|-18 - -45|', '|-45 - -18|',
+         '|-45|-|-18|', '|-45| - |-18|']),
 }
 
 
@@ -651,6 +653,34 @@ _SUM = ('0', 'Enter your answer as a whole number. '
              'Include the negative sign if the answer is negative. ' + ONLY)
 
 REBUILD = {
+    ('topic-1-6', 'Part 1 Question 4'): ('', [
+        ('a', 'num', 'Evaluate: \\(-5^{2} =\\)',
+         ('-25', 'Enter your answer as a whole number. ' + SIGN_SENTENCE
+          + ' ' + ONLY)),
+        # the old stem said "how Question 3 and Question 4 differ" -- a
+        # cross-reference that stops resolving once the items are renumbered.
+        ('b', 'sel', 'Compare \\((-5)^{2}\\) and \\(-5^{2}\\). Explain '
+                     'briefly how the two expressions differ.',
+         (['correct_2', 'correct_3', 'wrong_2', 'wrong_3', 'wrong_4'],
+          # to the >=7 floor. Both false for BOTH variants:
+          # (-5)^2 = +25 and -5^2 = -25, so the values differ and the
+          # parentheses make the result positive, not negative.
+          [('wrong_6', 'Both expressions have the same value.'),
+           ('wrong_7', 'The parentheses make the answer negative.')])),
+    ]),
+    ('topic-1-6', 'Part 2 Question 4'): ('', [
+        ('a', 'num', 'Evaluate: \\(-6^{2} =\\)',
+         ('-36', 'Enter your answer as a whole number. ' + SIGN_SENTENCE
+          + ' ' + ONLY)),
+        ('b', 'sel', 'Compare \\((-6)^{2}\\) and \\(-6^{2}\\). Explain '
+                     'briefly how the two expressions differ.',
+         (['correct_2', 'correct_3', 'wrong_2', 'wrong_3', 'wrong_4'],
+          # to the >=7 floor. Both false for BOTH variants:
+          # (-6)^2 = +36 and -6^2 = -36, so the values differ and the
+          # parentheses make the result positive, not negative.
+          [('wrong_6', 'Both expressions have the same value.'),
+           ('wrong_7', 'The parentheses make the answer negative.')])),
+    ]),
     ('topic-1-1', 'Part 1 Question 1'): (
         'A submarine rises 18 meters from a point below sea level, then '
         'descends 18 meters.', [
@@ -696,19 +726,37 @@ INEQ = ('You may need to use >, <, or =. Type it with no spaces: if your answer 
 SYMBOL = 'Enter one symbol only: <, >, =, or ≠.'
 ORDER = ('Separate the numbers with commas, least first. Type it like '
          '-5,0,2 with no spaces.')
+OPNAME = ('Name the operation and the number, like: add 3. Use words and the '
+          'number, no symbols.')
 
 TOSHORT = {
-    ('6th-grade-review-section-1', 'F1'): (['coefficient'], WORDS),
-    ('6th-grade-review-section-1', 'F2'): (['variable'], WORDS),
-    ('6th-grade-review-section-1', 'F3'): (['subtract 8', 'subtract8'], WORDS),
-    ('6th-grade-review-section-1', 'F4'): (['divide by 5', 'divide by5'], WORDS),
-    ('6th-grade-review-section-1', 'H3'): (['x>5', 'x > 5'], INEQ),
-    ('6th-grade-review-section-1', 'H4'): (['x<6', 'x < 6'], INEQ),
-    ('6th-grade-review-section-1', 'H5'): (['y>6', 'y > 6'], INEQ),
-    ('topic-sc-1', 'Part 1 Question 2'): (['='], SYMBOL),
-    ('topic-sc-1', 'Part 2 Question 2'): (['='], SYMBOL),
-    ('topic-1-1', 'Part 1 Question 4'): (['-3,-1,8', '-3, -1, 8'], ORDER),
-    ('topic-1-1', 'Part 2 Question 4'): (['-2,4,6', '-2, 4, 6'], ORDER),
+    # F3/F4: the old sentence promised "one or two words" while the key was three
+    # ("divide by 5"), so a student who obeyed the stem was scored wrong. The key
+    # PDF also blesses a second form for each ("subtract 8 (or -8)").
+    ('6th-grade-review-section-1', 'F1'): (['coefficient', 'numerical coefficient'],
+                                           WORDS, None),
+    ('6th-grade-review-section-1', 'F2'): (['variable', 'unknown'], WORDS, None),
+    ('6th-grade-review-section-1', 'F3'): (
+        ['subtract 8', 'subtract8', 'subtraction', 'subtract', 'minus 8',
+         'take away 8', 'subtract eight', '-8'], OPNAME, None),
+    ('6th-grade-review-section-1', 'F4'): (
+        ['divide by 5', 'divide by5', 'division', 'divide', 'dividing by 5',
+         'divide by five', 'divide 5', '/5'], OPNAME, None),
+    # H3/H4: the worksheet says "Solve:"; the conversion dropped it, leaving a
+    # stem with no instruction verb at all. The flipped form is the SAME
+    # statement -- and H5 teaches that flip one item later.
+    ('6th-grade-review-section-1', 'H3'): (
+        ['x>5', 'x > 5', 'x> 5', 'x >5', '5<x', '5 < x', '5< x', '5 <x'],
+        INEQ, 'Solve: '),
+    ('6th-grade-review-section-1', 'H4'): (
+        ['x<6', 'x < 6', 'x< 6', 'x <6', '6>x', '6 > x', '6> x', '6 >x'],
+        INEQ, 'Solve: '),
+    ('6th-grade-review-section-1', 'H5'): (
+        ['y>6', 'y > 6', 'y> 6', 'y >6'], INEQ, None),
+    ('topic-1-1', 'Part 1 Question 4'): (
+        ['-3,-1,8', '-3, -1, 8', '-3,-1, 8', '-3, -1,8'], ORDER, None),
+    ('topic-1-1', 'Part 2 Question 4'): (
+        ['-2,4,6', '-2, 4, 6', '-2,4, 6', '-2, 4,6'], ORDER, None),
 }
 
 
@@ -718,7 +766,7 @@ def do_toshort(raw, pkg, title, spec, log):
     if block is None:
         log.append(f'  !! {pkg} {title}: item not found')
         return raw
-    accepted, fmt = spec
+    accepted, fmt, prefix = spec
     vals = with_unicode_minus(accepted)
     new = re.sub(r'<fieldentry>multiple_answers_question</fieldentry>',
                  '<fieldentry>short_answer_question</fieldentry>', block)
@@ -734,10 +782,93 @@ def do_toshort(raw, pkg, title, spec, log):
             log.append(f'  !! {pkg} {title}: instruction sentence not found')
             return raw
         new = new.replace(m2.group(1), esc(fmt))
+    if prefix:
+        # The conversion had deleted the worksheet's own task verb, leaving a
+        # stem that never says what to do with the inequality.
+        m3 = re.search(r'(<mattext texttype="text/html">)', new)
+        new = new.replace(m3.group(1), m3.group(1) + esc(prefix), 1)
     new = re.sub(r'<response_lid.*?</response_lid>', SHORT_FIB, new, flags=re.S)
     new = re.sub(r'[ \t]*<resprocessing>.*?</resprocessing>',
                  resp_short(vals), new, flags=re.S)
     log.append(f'  toshort  {title:18s} -> {len(vals)} accepted')
+    return raw.replace(block, new)
+
+
+LETTERED = {('6th-grade-review-section-1', t) for t in ('A1', 'H6', 'H7')}
+
+
+def do_letter_prefix(raw, pkg, title, log):
+    block = item_block(raw, title)
+    if block is None:
+        log.append(f'  !! {pkg} {title}: item not found')
+        return raw
+    new, n = block, 0
+    for m in re.finditer(r'(<response_label ident="[^"]*choice_(\d)">\s*<material>'
+                         r'\s*<mattext[^>]*>)(.*?)(</mattext>)', block, re.S):
+        letter = 'ABCDEFG'[int(m.group(2)) - 1]
+        if m.group(3).lstrip().startswith(letter + '.'):
+            continue
+        new = new.replace(m.group(0),
+                          m.group(1) + f'{letter}. ' + m.group(3) + m.group(4))
+        n += 1
+    if n:
+        log.append(f'  letters  {title:18s} {n} choices tied to their figure row')
+    return raw.replace(block, new)
+
+
+# Existing short-answer items whose accepted list is missing a form the answer
+# key itself prints.
+WIDEN = {
+    # K6 asks which is greater, 1 3/4 or (1)(3/4). The key is 7/4 -- but the
+    # explanations PDF answers "1 3/4", and the item's boilerplate format line
+    # ("no mixed numbers") forbids typing it. The key's own answer scored zero.
+    ('6th-grade-review-section-2', 'K6'): ['1 3/4', '1.75', '7/4'],
+}
+
+
+def do_widen(raw, pkg, title, vals, log):
+    block = item_block(raw, title)
+    if block is None:
+        log.append(f'  !! {pkg} {title}: item not found')
+        return raw
+    have = re.findall(r'<varequal[^>]*>([^<]*)</varequal>', block)
+    allv = with_unicode_minus(list(dict.fromkeys(list(have) + vals)))
+    new = re.sub(r'[ \t]*<resprocessing>.*?</resprocessing>',
+                 resp_short(allv), block, flags=re.S)
+    log.append(f'  widen    {title:18s} {len(have)} -> {len(allv)} accepted')
+    return raw.replace(block, new)
+
+
+# Stems whose wording no longer matches what their key requires.
+STEM_FIX = {
+    # The split left this asking only "explain ... using a number line", while
+    # the key still requires the expression 10 + (-4) + (-8) -- which both
+    # solution PDFs file under Part B. A student answering the question as
+    # asked selected two of three keyed choices and scored zero.
+    ('topic-1-3', 'Part 1 Question 1a'):
+        'In the first round of a board game, a player scores 10 points. On '
+        'their next turn, they lose 4 points. On their last turn of the round, '
+        'they lose 8 points. Which choices correctly describe the change in '
+        'score, including the moves on a number line and the expression for '
+        'the round?',
+    ('topic-1-3', 'Part 2 Question 1a'):
+        'In the first round of a card game, a player scores 12 points. On '
+        'their next turn, they lose 5 points. On their last turn of the round, '
+        'they lose 9 points. Which choices correctly describe the change in '
+        'score, including the moves on a number line and the expression for '
+        'the round?',
+}
+
+
+def do_stemfix(raw, pkg, title, text, log):
+    block = item_block(raw, title)
+    if block is None:
+        log.append(f'  !! {pkg} {title}: item not found')
+        return raw
+    m = re.search(r'(<mattext texttype="text/html">)&lt;p&gt;.*?&lt;/p&gt;',
+                  block, re.S)
+    new = block.replace(m.group(0), m.group(1) + wrap([text]))
+    log.append(f'  stemfix  {title:18s} widened to match its key')
     return raw.replace(block, new)
 
 
@@ -840,7 +971,7 @@ def do_rebuild(raw, pkg, title, context, parts, log):
     out = []
     for suffix, kind, prompt, payload in parts:
         ident, newtitle = f'{base}{suffix}', f'{title}{suffix}'
-        stem = wrap([context + ' ' + prompt])
+        stem = wrap([(context + ' ' + prompt).strip()])
         if kind == 'num':
             value, fmt = payload
             out.append(ITEM.format(
@@ -967,6 +1098,12 @@ def main(base):
             if p == pkg:
                 raw = do_toshort(raw, pkg, t, spec, log)
                 total['short'] += 1
+        for p, t in sorted(LETTERED):
+            if p == pkg:
+                raw = do_letter_prefix(raw, pkg, t, log)
+        for (p, t), vals in WIDEN.items():
+            if p == pkg:
+                raw = do_widen(raw, pkg, t, vals, log)
         for (p, t), spec in _repairs().items():
             if p == pkg:
                 raw = do_repair(raw, pkg, t, spec, log)
@@ -979,6 +1116,9 @@ def main(base):
             if p == pkg:
                 raw = do_split(raw, pkg, t, halves, log)
                 total['split'] += 1
+        for (p, t), text in STEM_FIX.items():
+            if p == pkg:
+                raw = do_stemfix(raw, pkg, t, text, log)
         raw = do_boiler(raw, log)
         raw = do_sign_sweep(raw, log)
         raw = do_format_sweep(raw, log)

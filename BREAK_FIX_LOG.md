@@ -665,7 +665,20 @@ Elevate integrated-gate/SUPERVISOR to tip-bound A3 L4 lab + aa01454 SHA so P1-T0
   rewrote every line of both 6th-grade files — 304 lines each, 304 bytes lost.
 - Content was provably unchanged (`diff` after `tr -d '\r'` empty). The damage was
   to the property the whole method rests on: that an item nobody touched stays
-  byte-identical, so a reviewer can trust the diff. 12 of 14 packages are CRLF.
+  byte-identical, so a reviewer can trust the diff.
+- **CORRECTION.** This entry first said "12 of 14 packages are CRLF". That is
+  false. **2 of 14 are CRLF** — the two 6th-grade packages, 4 files; the twelve
+  `topic-*` packages are pure LF, 24 files. Measured directly:
+  `crlf==lf` on 4 files, `crlf==0` on 24.
+- The false count came from measuring with `grep -c $'\r'` inside a shell loop,
+  where the pattern did not survive as a carriage return. An empty pattern
+  matches every line, so every file reported as CRLF and the reading looked
+  plausible. It went into this log as fact and was caught by a judge measuring
+  independently.
+- This project's own standing rule — when a measurement contradicts a visible
+  fact, suspect the instrument first — is what should have caught it, and I did
+  not apply it to my own instrument. The substantive fix below is unaffected and
+  was independently confirmed: 0 conversions, 0 mixed-ending files.
 - Fix: `newline=''` on every read and write; normalise to LF for the transform,
   restore the file's own convention on write.
 - Verified: all 14 packages preserve their line-ending convention, no file has
@@ -862,3 +875,77 @@ Under all-or-nothing select-all, a student who selects a true choice scores
 - Fix: `repackage.py` writes fixed `ZipInfo` entries (epoch 1980-01-01, mode
   0644) in sorted path order.
 - Verified: two independent builds now produce identical checksums for all 14.
+
+## 2026-08-06 — BF-2026-041 — judge round on the answer-format work
+
+Five judges, frozen gate, one slice each, no partial acceptance. Scores:
+NUMERIC **10/10** · PERMUTE **9/10** · SELECTALL **8/10** · AUTHORED **8/10** ·
+SHORTANS **4/10**. Four slices returned to the fixer. All findings below applied.
+
+**SHORTANS 4/10 — my conversions to short answer were the weakest work.**
+
+- `F4` — the stem promised "Your answer is one or two words" and the only
+  accepted answer was `divide by 5`, which is **three**. The format statement was
+  false against its own key, and it steered a student toward "division", which
+  scored zero. Fixed: the format line now says "Name the operation and the
+  number, like: add 3", and both `F3` and `F4` accept the operation name, the
+  key PDF's own second form, and the natural glosses.
+- `F3` — the explanations PDF says *"subtract 8 (or −8)"*; only the first form
+  was accepted, so the source's own alternative scored zero. Widened.
+- `H3`/`H4` — **the conversion deleted the task verb.** The worksheet says
+  "**Solve:** x + 3 > 8"; the old QTI carried the task in "Enter select all
+  equivalent inequalities". My stem had neither, so it never said what to do.
+  Restored.
+- `H3`/`H4` rejected `5<x`, which is the identical statement — and `H5`, one item
+  later, teaches exactly that flip. The select-all version never had this
+  exposure; the conversion created it. Both directions now accepted.
+- `topic-1-4` 3b ×2 rejected `|-40|-|-25|` — bars on each term rather than around
+  the difference. Correct, on-form, and the item already accepted `|40-25|`.
+- `K6` — **pre-existing, never checked.** It asks which is greater, `1 3/4` or
+  `(1)(3/4)`, keys `7/4`, and its boilerplate "no mixed numbers" line forbids
+  typing `1 3/4` — which is the answer the explanations PDF itself prints. The
+  key's own answer scored zero. Now accepts `1 3/4`, `1.75` and `7/4`.
+
+**AUTHORED 8/10 — an instruction that gave away its own answer.**
+
+- `topic-sc-1` Q2 ×2: my "Enter one symbol only" both contradicted the retained
+  "Select all symbols" in the same stem *and* **mathematically disclosed the
+  key**. Of `< > = ≠`, any two distinct numbers make exactly two true; only equal
+  numbers make exactly one. "One symbol only" therefore entails equality, which
+  is the entire question — derivable with no arithmetic. Reverted to select-all.
+- Clean otherwise: all 40 authored distractors proved false, no forbidden true
+  form present anywhere, no `× 0 → × 1` reversion, and the "Regroup means move
+  the parentheses without changing the left-to-right order of the terms"
+  quotation confirmed verbatim in the source with no rewritten stem excluding
+  its own key.
+
+**SELECTALL 8/10 — the last multi-prompt select-all.**
+
+- `topic-1-6` Q4 ×2 asked *"Evaluate −5²"* **and** *"Explain how Q3 and Q4
+  differ"* in one item, welding the integer `−25` to two prose choices under
+  all-or-nothing — in a package whose own Q1 and Q3 were already numeric. A
+  student with the arithmetic right and one half of the explanation scored zero.
+  Split into a numeric half and an explanation half; two distractors authored to
+  reach the 7-option floor. The old stem's "Question 3 and Question 4"
+  cross-reference is gone, since it stops resolving once items are renumbered.
+
+**PERMUTE 9/10 — and a disagreement worth recording.**
+
+- PERMUTE charged that permuting the choices broke `A1`/`H6`/`H7`, whose SVGs lay
+  out options as lettered rows A–G. SELECTALL judged the same items clean,
+  holding that each row is self-describing so desync is impossible.
+- **Resolved by reading the SVG.** Each row is drawn as `"A. open circle at 6,
+  ray right"` — letter **and** description — and each choice carries the same
+  description. Matching is by content, so no student can be scored wrong;
+  PERMUTE's "ticks the first box and scores zero" overstates it. But the drawn
+  letters no longer parallel the checkbox order on items whose stem says "use
+  the graphic", which is a real defect. Each choice is now prefixed with its own
+  row letter, so letter, description and checkbox agree and order is irrelevant.
+  Cheaper than regenerating three SVGs, and unlike reverting the order it does
+  not put a key back at position 0.
+
+**Found out of slice by AUTHORED, and real:** the split left `topic-1-3` Q1a
+asking only "explain how to show the change using a number line", while its key
+still required the expression `10 + (−4) + (−8)` — which both solution PDFs file
+under Part B. A student answering the question as asked selected two of three
+keyed choices and scored zero. Stem widened to ask for what the key requires.
