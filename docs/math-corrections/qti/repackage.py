@@ -48,10 +48,19 @@ for pkg in sorted(os.listdir(SRC)):
         if href and href not in rel:
             failures.append(f"{pkg}: manifest href does not resolve: {href}")
 
+    # Deterministic archives: zip stores each entry's mtime, and extracting to a
+    # fresh temp dir stamps "now" on every file, so two builds of byte-identical
+    # content produced different sha256s. Checksums are how this project proves
+    # an artifact is the one that was judged, so that had to be pinned. Fixed
+    # date and permissions; entries already sorted by path above.
     zpath = os.path.join(OUT, f"{pkg}.zip")
     with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
         for full, r in members:
-            z.write(full, r)
+            info = zipfile.ZipInfo(r, date_time=(1980, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o644 << 16
+            with open(full, "rb") as fh:
+                z.writestr(info, fh.read())
 
     sha = hashlib.sha256(open(zpath, "rb").read()).hexdigest()
     rows.append((sha, f"{pkg}.zip", len(members)))

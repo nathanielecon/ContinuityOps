@@ -828,3 +828,37 @@ Under all-or-nothing select-all, a student who selects a true choice scores
 - Mathematical instructions already in a stem are preserved, not overwritten:
   `Round to the nearest kilometer`, `omit the % symbol`, `without x =`. Dropping
   those would change the question rather than its formatting.
+
+## 2026-08-06 — BF-2026-039 — the build was fed its own output
+
+- `repackage.py` writes into `qti/zips/`, and `qti/zips/` was also the extraction
+  source for the next build. Re-running the pipeline therefore applied the
+  transforms **on top of their own output**.
+- It did not announce itself. The type census stayed correct and `validate.py`
+  still reported "all checks pass", because every rule it enforces is a property
+  of the final state, not of how the state was reached. What actually happened is
+  that `permute.py` ran twice, so the shipped choice order was not the one the
+  spec and the change log describe.
+- Caught only because a second pass logged 16 "item not found" lines — items the
+  first pass had already renamed. The noise was the signal.
+- Fix: `qti/build.sh`. The build source is a **git ref**, extracted to a temp
+  directory, never the working tree and never `zips/`. Feeding the pipeline its
+  own output is now impossible by construction. It also keeps an untouched copy
+  so `validate.py` can still prove no line endings moved.
+- Verified: the round's baseline is reproducible from `f63d392`, and a clean
+  single-pass build from it is byte-identical to a second independent build.
+
+## 2026-08-06 — BF-2026-040 — the zips were not byte-reproducible
+
+- Two builds of **provably identical content** produced different sha256s. Zip
+  stores each entry's mtime, and extracting to a fresh temp directory stamps
+  "now" on every file.
+- This matters more here than it would elsewhere: checksums are how this project
+  proves an artifact is the one a judge scored. A checksum that changes on every
+  rebuild cannot carry that guarantee, and `sha256sums.txt` would have recorded a
+  different value for the same packages every time.
+- Diagnosed by extracting both builds and diffing the trees — content identical,
+  only `date_time` differing — rather than by assuming the content had changed.
+- Fix: `repackage.py` writes fixed `ZipInfo` entries (epoch 1980-01-01, mode
+  0644) in sorted path order.
+- Verified: two independent builds now produce identical checksums for all 14.

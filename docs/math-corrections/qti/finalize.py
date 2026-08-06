@@ -686,6 +686,61 @@ REBUILD = {
 }
 
 
+# Select-all items whose answer is one or two words, or a short symbolic form.
+# The author's hierarchy puts short answer above select-all for these; each stem
+# names the exact characters to type and shows one worked example, because
+# Canvas short answer is byte-exact string matching.
+WORDS = 'Your answer is one or two words.'
+INEQ = ('You may need to use >, <, or =. Type it with no spaces: if your answer '
+        'is x>4, write it as x>4.')
+SYMBOL = 'Enter one symbol only: <, >, =, or ≠.'
+ORDER = ('Separate the numbers with commas, least first. Type it like '
+         '-5,0,2 with no spaces.')
+
+TOSHORT = {
+    ('6th-grade-review-section-1', 'F1'): (['coefficient'], WORDS),
+    ('6th-grade-review-section-1', 'F2'): (['variable'], WORDS),
+    ('6th-grade-review-section-1', 'F3'): (['subtract 8', 'subtract8'], WORDS),
+    ('6th-grade-review-section-1', 'F4'): (['divide by 5', 'divide by5'], WORDS),
+    ('6th-grade-review-section-1', 'H3'): (['x>5', 'x > 5'], INEQ),
+    ('6th-grade-review-section-1', 'H4'): (['x<6', 'x < 6'], INEQ),
+    ('6th-grade-review-section-1', 'H5'): (['y>6', 'y > 6'], INEQ),
+    ('topic-sc-1', 'Part 1 Question 2'): (['='], SYMBOL),
+    ('topic-sc-1', 'Part 2 Question 2'): (['='], SYMBOL),
+    ('topic-1-1', 'Part 1 Question 4'): (['-3,-1,8', '-3, -1, 8'], ORDER),
+    ('topic-1-1', 'Part 2 Question 4'): (['-2,4,6', '-2, 4, 6'], ORDER),
+}
+
+
+def do_toshort(raw, pkg, title, spec, log):
+    """Select-all -> short answer, dropping the choice list entirely."""
+    block = item_block(raw, title)
+    if block is None:
+        log.append(f'  !! {pkg} {title}: item not found')
+        return raw
+    accepted, fmt = spec
+    vals = with_unicode_minus(accepted)
+    new = re.sub(r'<fieldentry>multiple_answers_question</fieldentry>',
+                 '<fieldentry>short_answer_question</fieldentry>', block)
+    new = re.sub(r'(<fieldlabel>original_answer_ids</fieldlabel>\s*<fieldentry>)[^<]*(</fieldentry>)',
+                 r'\1choice_1\2', new)
+    m = BOILER_RE.search(new)
+    if m:
+        new = new.replace(m.group(0), check_para(fmt))
+    else:
+        # 6th-grade packages carry the instruction inline, before any <img>.
+        m2 = re.search(r'(Enter [^<]*?\.)(?=\s*(?:&lt;img|</mattext>))', new)
+        if not m2:
+            log.append(f'  !! {pkg} {title}: instruction sentence not found')
+            return raw
+        new = new.replace(m2.group(1), esc(fmt))
+    new = re.sub(r'<response_lid.*?</response_lid>', SHORT_FIB, new, flags=re.S)
+    new = re.sub(r'[ \t]*<resprocessing>.*?</resprocessing>',
+                 resp_short(vals), new, flags=re.S)
+    log.append(f'  toshort  {title:18s} -> {len(vals)} accepted')
+    return raw.replace(block, new)
+
+
 def _repairs():
     """D1 repair table. Built as a function so the stems can call check_para.
 
@@ -907,6 +962,10 @@ def main(base):
         for (p, t), spec in SHORTANS.items():
             if p == pkg:
                 raw = do_shortsplit(raw, pkg, t, spec, log)
+                total['short'] += 1
+        for (p, t), spec in TOSHORT.items():
+            if p == pkg:
+                raw = do_toshort(raw, pkg, t, spec, log)
                 total['short'] += 1
         for (p, t), spec in _repairs().items():
             if p == pkg:
