@@ -145,8 +145,13 @@ frozen and identical for every judge, amended only before the round opened.
 | **SHORTANS** (35 items) | 10 | 9 | **10** | **10** | — | — | **YES** |
 | **NUMERIC** (108 keys) | 10 | 10 | **10** | **10** | — | — | **YES** |
 | AUTHORED (distractors + stems) | 10 | 8 | 8 | **10** | — | pending | no — one 10 at the pinned hash, needs a second |
-| STRUCT (177 items + the gate) | 9 | 9 | 7 | 8 | 7 → 5 | pending | no |
+| STRUCT (177 items + the gate) | 9 | 9 | 7 | 8 | 7 | 5 | no — 11 reads, never a 10 |
 | G1b cold (18 items, content) | — | — | — | — | — | — | **yes**, at pre-round state |
+
+Columns C–F are all `4ee5bb50`: every round since C has been gate-only, so the
+177 items have not moved and a verdict rendered in C is still a verdict about the
+content in F. STRUCT's E and F are rounds J and K; both scored the instrument,
+neither found anything in the corpus.
 
 **Acceptance is pinned to CONTENT, not to a package hash.** A hash covers files a
 slice never reads. Every row was checked item-by-item across builds, so a slice
