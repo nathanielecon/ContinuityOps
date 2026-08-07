@@ -2322,3 +2322,207 @@ exactly one 10/10 at the pinned hash and needs a second. Four slices are
 accepted, not five. Recorded here rather than quietly fixed in the table,
 because a ledger that overstates acceptance is the specific failure D-5 was
 written to prevent.
+
+---
+
+## 2026-08-07 — BF-2026-062 — The gate had no notion of a number
+
+STRUCT's twelfth read, cold: **5/10, five defects.** Corpus clean on all 177
+items for the twelfth consecutive time.
+
+The judge reproduced the build hash exactly, ran three positive controls before
+anything else so that a silent harness could not masquerade as a clean result,
+and injected every claim.
+
+### 1. The numeric range arm was asserted by tag census, never by arithmetic
+
+This is the sharpest finding in twelve rounds, because it is the fourth
+instalment of one rule and the first to look at a value.
+
+`resp_numeric` emits `<and><vargte>V</vargte><varlte>V</varlte></and>` — *x ≥ V
+and x ≤ V*, i.e. exactly *x = V*, written as a degenerate closed interval so that
+`7.00` matches a key of `7`. BF-2026-058 asserted the connective joining the
+pair. BF-2026-059 asserted the top node as well. BF-2026-061 asserted that the
+pair exists. **Not one of the three ever read a bound's value.** The judge put it
+exactly right: `validate.py` never imported `Decimal`, never called `float()`
+except on `points_possible`, and every numeric rule in it was a census of tags or
+strings. The invariant is arithmetic and the code checked a proxy for it three
+times running.
+
+Four malformations survive a balanced count, all injected on `D3` (key `3.6`),
+all printing `all checks pass`:
+
+| injection | census | executed |
+|---|---|---|
+| `[0, 1000000]` | 1 = 1 | `0`, `4`, `1000`, `999999` all score 100 |
+| `<and><vargte>3.6</vargte></and><and><varlte>3.6</varlte></and>` | 1 = 1 | **every** entry scores 100, including `-500` |
+| `[9.9, 9.9]` | 1 = 1 | `9.9` scores 100 on an item whose answer is 3.6 |
+| `<vargt>`/`<varlt>` | 0 = 0 | range accepts nothing; **`3.60` scores 0** |
+
+The second is the one that matters most. Both bounds are still present and
+still one each — but they now sit in **separate disjuncts** of the top-level
+`<or>`, so the semantics is *x ≥ 3.6* **or** *x ≤ 3.6*, true for every real
+number. That is verbatim the tautology BF-2026-058 exists to prevent, reached
+with BF-2026-058's own predicate satisfied, because that rule only fires when a
+single `and`/`or` node contains both operators and here neither node does.
+
+The fourth is the one the census cannot see at all: `<vargt>` is not `<vargte>`,
+so it reads 0 and 0 and calls that balanced, while *x > 3.6 and x < 3.6* is the
+empty set. The exact-match arm is a **string** comparison under `case="No"`, so
+`"3.60" != "3.6"` — the degenerate range is the only thing making the
+trailing-zero spelling score. Kill it and the student who writes `3.60`, a
+correct answer and the very case the two-arm design exists to accept, is marked
+wrong. F5's worst shape: the failure lands on the student who followed the
+instruction.
+
+Replaced with a structural-plus-arithmetic assertion: every comparison operator
+must sit inside a degenerate `<and>` pair, both bounds must be the same number,
+and that number must be one the conditionvar's own `<varequal>` accepts.
+
+### 2. A numerical item's accepted values were never compared with each other
+
+BF-2026-061's respcondition-count rule is scoped to choice-bearing items on
+purpose — the rubric permits a fill-in a second arm as a trailing-zero or
+equivalent-form alternate. Nothing then checked that a second arm **is** an
+equivalent form. Copy an item's arm and change `0` to `77`: gate passes,
+executed scores are `0` → 100 and `77` → 100.
+
+Every rule is invariant. `keys_of()` unions across conditionvars, so `77` simply
+becomes a key and "no accepted value" is satisfied. The setvar, decvar and
+connective rules all pass on a faithful copy. `check_keys_vs_base` is a subset
+test **by explicit design** — widening is legitimate — so an *added* value is
+invisible to it in principle, not by accident.
+
+**This also defeats an execution-based auditor, and that is the important part.**
+Round K's executor, and the judge's own extension of it that probes every numeric
+literal in an item's scoring tree, both return zero findings here — because an
+executor derives the accepted set *from the artifact under test* and then asserts
+that each accepted value scores 100. Under this injection `77` is an accepted
+value and it does score 100. Execution and rule-checking are not substitutes.
+
+The invariant is decidable because the answer is a **number**. The corpus proves
+the shape: six two-arm items are `3.6`/`3.60`, `7`/`7.00`, `220.8`/`220.80`,
+`21.1`/`21.10`, `6.3`/`6.30`, `9`/`9.00`, and two more are a value with its
+two-decimal half-up rounding (`0.375`/`0.38`, `0.625`/`0.63`). All collapse to
+one number under that quantisation. `{0, 77}` does not.
+
+The judge separately injected an extra *wrong spelling* into a short-answer item,
+watched it pass, and **declined to score it** — `validate.py` cannot decide
+whether a string is a correct spelling, and BF-2026-041/042 deliberately widened
+those lists. That contrast is what makes the numeric case scoreable: a number is
+comparable where a spelling is not.
+
+### 3. An item could vanish, and the census that would show it was decoration
+
+`check_keys_vs_base` does `if wbody is None: continue` — a baseline item simply
+**gone** from the build is skipped in silence. Delete one of `topic-1-3`'s ten
+items and decrement its meta in the same breath: `all checks pass`.
+
+BF-2026-059 wrote the warning itself — *"the item census still prints 177 TOTAL,
+so the tool looks healthy while a whole rule is switched off"* — and BF-2026-061
+quoted that line back while closing a different hole. The census was still
+printed and still never asserted. Meanwhile the pristine baseline is passed into
+this gate on every build, and `build.sh`'s own comment says it is kept *"so any
+item can be diffed against how it shipped"*; it was consulted for line endings
+and for key text, and never for whether the item is still there.
+
+The test cannot be count equality — splits are legitimate, and the baseline holds
+157 items where the build holds 177. But the real invariant is F7 and it is
+mechanical: every baseline item either survives by ident or becomes at least two
+lettered halves in the same package. The 18 that disappear are split parents,
+each with its `1a`/`1b` siblings present. Now asserted, along with the census
+total.
+
+The judge also noticed that BF-2026-061's reconciliation used
+`_raw.count('<item ident=')` against `ITEM.findall()` — **two patterns sharing
+the prefix `<item ident=`**. Rewrite a tag as `<item title="…" ident="…">` and it
+is invisible to both, so the difference stays 0 and the reconciliation cannot
+fire. Changed to `<item\b`, which matches neither `<itemmetadata>` nor
+`<itemfeedback>` and yields exactly 177.
+
+**One correction against the judge, stated because the record must be exact.**
+Its second demonstration of this defect — reorder the attributes and set SCORE to
+0 — does **not** pass the pre-fix gate as described. Hiding the item drops the
+raw count to 9 while the meta still says 10, so the package-total rule fires. It
+passes only when the meta is decremented in the same breath, which I injected
+and confirmed: `all checks pass`, census `176 TOTAL`. The finding stands and the
+fix is right; the specific edit the judge described was incomplete.
+
+### 4. "Negated" meant "appears inside at least one `<not>`", not odd-depth negation
+
+The choice-negation rule builds its `negated` set with a flat regex, with no
+regard for how many `<not>` ancestors the node has, while its message promises a
+semantic property: *"choice c is neither keyed nor negated — selecting it would
+still score 100."*
+
+Wrap an existing `<not><varequal>WRONG</varequal></not>` in a second `<not>`.
+*not(not X) = X*, so the choice is now **required**. The item's true key set
+becomes `{correct_1, wrong_1}` while its `_correct_*` ident set is `{correct_1}`.
+A student who reasons correctly, ticks the key and leaves the distractor alone,
+scores **0** — the false negative the rubric's preamble calls worse than a
+worksheet typo, and the exact direction of error this project exists to prevent.
+
+Every other rule is invariant, and for the by-now familiar reason: `keys_of()`
+strips `<not>…</not>` non-greedily, so the outer swallows the inner and the key
+set is **unchanged**; `MIN_DISTRACTORS`, the contiguous-run test,
+`original_answer_ids` and `check_keys_vs_base` all read that unchanged set. And
+this rule matches the *inner* node and files the choice as negated.
+
+Now asserts the tree rather than the connective: the scoring `<and>` may hold
+nothing but bare `<varequal>` and single-depth `<not><varequal></not>` nodes.
+
+### 5. Three metadata rules read the first occurrence and were silent about the rest
+
+`decvar`, `points_possible` and `original_answer_ids` all use `re.search`, which
+returns the first match. A second `<decvar maxvalue="0">`, a second
+`points_possible` of `0`, and a second `original_answer_ids` of `bogus` each
+passed.
+
+The judge was careful not to overstate this, and it was right to be: QTI 1.2 does
+not define a duplicate `<decvar>` for one variable, so which one Canvas honours
+cannot be settled from here. **That ambiguity is itself the defect** — the rule's
+message is a claim about *the* decvar, asserted against one of several, so an
+item whose scoring declaration contradicts itself ships certified unambiguous.
+If Canvas takes the last, `maxvalue="0"` caps the outcome and every correct
+student scores 0. Cardinality is now asserted first, then every occurrence
+checked.
+
+### Verification
+
+Ten injections. Each passes the pre-fix gate with **zero** violations; each fails
+the post-fix gate on exactly the injected defect. Build hash unchanged at
+`4ee5bb50674db6fc`.
+
+### What the judge declined to score, and was right about
+
+`repackage.py` — three injections, all fired, nothing written. **No defect**, for
+the third round running. `permute.py` and `inventory.py` — the `os.path.basename`
+predicate is present at all four sites BF-2026-061 hardened; permute's three
+post-conditions hold and were verified independently. `verify_canvas_import.py`'s
+`read_expected` omits the range arms from a numeric item's accepted set, but the
+tool's live path does not yet run the per-item assertions and says so, and it is
+not in `build.sh` — latent, not a hole in an active gate. `<varsubset>`,
+`<varsubstring>` and `<varinside>` are missing from the operator alternations and
+appear nowhere in the corpus — a hypothesis about a shape that does not exist.
+
+BF-2026-060's and BF-2026-061's fixes were re-checked for completeness at every
+site, including the guard that round K found defeating the round-before's work.
+All complete except the two whose stated properties the code did not deliver,
+which are defects 1 and 3 above.
+
+### On the corpus
+
+The judge audited all 177 items with an `ElementTree` walk that **tracks
+negation parity** rather than pattern-matching `<not>` — the distinction that
+caught defect 4, which the shipped gate's flat regex files as "negated" — and
+executed every scoring tree against real submissions and fifteen adversarial
+probes per fill-in, including each item's own numeric literals. Zero findings.
+
+It also reported, and then withdrew, two probes showing `-0` scoring 100 on the
+items keyed `0`: `Decimal('-0') == Decimal('0')`, so a student typing `-0` has
+answered correctly and the probe was at fault. Recorded because the standing rule
+was applied correctly — the measurement contradicted a visible fact, and the
+instrument was the thing that turned out to be wrong.
+
+**Twelve reads, twelve clean corpora.** Every defect found in every round has
+been in the instrument, never in the 177 items.

@@ -12,6 +12,28 @@ runs too.
 """
 import glob, html, os, re, sys
 import xml.etree.ElementTree as ET
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
+
+# resp_numeric emits <and><vargte>V</vargte><varlte>V</varlte></and> -- "x >= V
+# and x <= V", i.e. exactly x = V, written as a degenerate closed interval so
+# that 7.00 matches a key of 7. Three rounds asserted PREDICATES over that
+# structure -- the connective joining the pair (BF-2026-058), the top node
+# (BF-2026-059), the pair's existence (BF-2026-061) -- and not one of them ever
+# read a bound's VALUE. This gate had no notion of a number at all: it never
+# imported Decimal and every numeric rule in it was a census of tags or strings.
+# The invariant is arithmetic, so it needs arithmetic (BF-2026-062).
+RANGE_AND = re.compile(
+    r'<and>\s*<vargte\b[^>]*>([^<]*)</vargte>\s*'
+    r'<varlte\b[^>]*>([^<]*)</varlte>\s*</and>')
+CMP_OP = re.compile(r'<var(?:gte|lte|gt|lt)\b')
+
+
+def dec(s):
+    """The value as a NUMBER, or None if it is not one."""
+    try:
+        return Decimal(s.strip())
+    except (InvalidOperation, ValueError):
+        return None
 
 AUTOSCORED = {'numerical_question', 'multiple_answers_question',
               'short_answer_question', 'multiple_choice_question'}
@@ -352,6 +374,41 @@ def check(work, base=None):
             if qt == 'numerical_question':
                 if not keys:
                     fails.append(f'{where}: numeric item has no accepted value')
+                # The respcondition-count rule is scoped to choice-bearing
+                # items on purpose: the rubric permits a fill-in a second arm
+                # as a trailing-zero or equivalent-form alternate. Nothing then
+                # checked that a second arm IS an equivalent form. Copy an
+                # item's arm and change 0 to 77 and the gate passes: keys_of()
+                # unions across conditionvars so 77 just becomes a key, the
+                # setvar/decvar/connective rules all pass on a faithful copy,
+                # and check_keys_vs_base is a SUBSET test by explicit design so
+                # an ADDED value is invisible to it in principle. An
+                # execution-based auditor cannot see this either -- it derives
+                # the accepted set FROM the artifact, so 77 is accepted and 77
+                # does score 100. Only knowing the semantic invariant catches
+                # it, and a NUMBER is comparable where a spelling is not: the
+                # corpus's six two-arm items are 3.6/3.60, 7/7.00, 220.8/220.80,
+                # 21.1/21.10, 6.3/6.30, 9/9.00, and two more are a value with
+                # its 2-dp half-up rounding (0.375/0.38, 0.625/0.63). All
+                # collapse to one number under that quantisation. {0, 77} does
+                # not (BF-2026-062).
+                q, bad_v = set(), []
+                for v in keys:
+                    d = dec(v)
+                    if d is None:
+                        bad_v.append(v)
+                    else:
+                        q.add(d.quantize(Decimal('0.01'),
+                                         rounding=ROUND_HALF_UP))
+                for v in bad_v:
+                    fails.append(f'{where}: accepted value {v!r} is not a '
+                                 f'number on a numerical_question')
+                if len(q) > 1:
+                    fails.append(f'{where}: accepts {sorted(keys)} -- these '
+                                 f'are different numbers; an extra arm is '
+                                 f'legitimate only as an equivalent spelling '
+                                 f'(3.6 / 3.60) or the 2-dp rounding of the '
+                                 f'same value (0.375 / 0.38)')
 
             if qt == 'short_answer_question':
                 if not keys:
@@ -424,24 +481,42 @@ def check(work, base=None):
             # outcome nothing declares. And minvalue was never read at all, so
             # minvalue="100" -- every wrong answer scoring full marks -- passed
             # silently (BF-2026-050).
-            dv = re.search(r'<decvar([^>]*)>', body)
-            if not dv:
-                fails.append(f'{where}: no <decvar> -- SCORE is undeclared')
-            elif ('maxvalue="100"' not in dv.group(1)
-                  or 'minvalue="0"' not in dv.group(1)
-                  or 'varname="SCORE"' not in dv.group(1)):
-                fails.append(f'{where}: decvar is not '
-                             f'maxvalue=100 minvalue=0 varname=SCORE')
+            # re.search returns the FIRST match. This rule's message is a
+            # claim about *the* decvar, asserted against one of however many
+            # exist, so an item whose scoring declaration contradicts itself
+            # ships certified unambiguous. QTI 1.2 does not define a duplicate
+            # <decvar> for one variable, so which one Canvas honours cannot be
+            # settled from here -- and that ambiguity IS the defect: if it takes
+            # the last, a second declaration at maxvalue="0" caps the outcome
+            # and every correct student scores 0. Assert the cardinality first,
+            # then check every occurrence. Same treatment for the two other
+            # metadata rules that read the first match (BF-2026-062).
+            dvs = re.findall(r'<decvar([^>]*)>', body)
+            if len(dvs) != 1:
+                fails.append(f'{where}: {len(dvs)} <decvar> declarations -- '
+                             f'SCORE is declared '
+                             f'{"more than once" if dvs else "never"}, so '
+                             f'which bounds apply is undefined')
+            for a in dvs:
+                if ('maxvalue="100"' not in a or 'minvalue="0"' not in a
+                        or 'varname="SCORE"' not in a):
+                    fails.append(f'{where}: decvar is not '
+                                 f'maxvalue=100 minvalue=0 varname=SCORE')
 
             # Package totals compared the meta value to the item COUNT, which
             # assumes every item is worth 1 without ever checking it. An item at
             # 0 points is unscorable, and two compensating errors (0 and 2)
             # leave the package total correct.
-            pp = re.search(r'<fieldlabel>points_possible</fieldlabel>\s*'
-                           r'<fieldentry>([\d.]+)</fieldentry>', body)
-            if not pp or float(pp.group(1)) != 1.0:
-                fails.append(f'{where}: points_possible is '
-                             f'{pp.group(1) if pp else "absent"}, not 1')
+            pps = re.findall(r'<fieldlabel>points_possible</fieldlabel>\s*'
+                             r'<fieldentry>([\d.]+)</fieldentry>', body)
+            if len(pps) != 1:
+                fails.append(f'{where}: {len(pps)} points_possible fields -- '
+                             f'which one Canvas reads is undefined')
+            for v in pps:
+                if float(v) != 1.0:
+                    fails.append(f'{where}: points_possible is {v}, not 1')
+            if not pps:
+                fails.append(f'{where}: points_possible is absent, not 1')
 
             # Criterion 7 requires referenced images to RESOLVE and to use
             # Canvas's $IMS-CC-FILEBASE$ form, calling a plain src="media/..."
@@ -604,11 +679,49 @@ def check(work, base=None):
                     # tautology -- there the condition was true over all of the
                     # reals, here over half of them. Half a tautology is still
                     # not a test (BF-2026-061).
-                    if (len(re.findall(r'<vargte\b', cv))
-                            != len(re.findall(r'<varlte\b', cv))):
-                        fails.append(f'{where}: unpaired vargte/varlte -- a '
-                                     f'one-sided bound accepts an unbounded '
-                                     f'range of wrong answers')
+                    # The FOURTH instalment, and the first to read a value.
+                    # Four malformations survive a balanced tag census, all
+                    # injected and all passing the previous gate:
+                    #   [0, 1000000]   -- a live interval; a million wrong
+                    #                     answers score 100.
+                    #   <and><vargte>V</vargte></and><and><varlte>V</varlte></and>
+                    #                  -- counts balanced, bounds in SEPARATE
+                    #                     disjuncts of the top <or>, so the
+                    #                     semantics is "x >= V or x <= V",
+                    #                     true for every real. Verbatim the
+                    #                     BF-2026-058 tautology, reached with
+                    #                     that rule's predicate satisfied.
+                    #   [9.9, 9.9] on a key of 3.6 -- degenerate, well-formed,
+                    #                     and awards 100 for a wrong number.
+                    #   <vargt>/<varlt> -- strict, so the census reads 0 == 0
+                    #                     while "x > V and x < V" is EMPTY. The
+                    #                     exact arm is a STRING compare under
+                    #                     case="No", so "3.60" != "3.6": kill
+                    #                     the range and the trailing-zero
+                    #                     spelling the two-arm design exists to
+                    #                     accept is marked wrong. F5's worst
+                    #                     shape -- the failure lands on the
+                    #                     student who followed the instruction.
+                    exact = {dec(v) for v in re.findall(
+                        r'<varequal[^>]*>([^<]*)</varequal>', cv)} - {None}
+                    pairs = RANGE_AND.findall(cv)
+                    if len(CMP_OP.findall(cv)) != 2 * len(pairs):
+                        fails.append(f'{where}: a comparison operator sits '
+                                     f'outside an <and><vargte>V</vargte>'
+                                     f'<varlte>V</varlte></and> pair -- a lone '
+                                     f'bound is a half-line, and two bounds in '
+                                     f'separate disjuncts are "x >= V or '
+                                     f'x <= V", true for every number')
+                    for lo, hi in pairs:
+                        dlo, dhi = dec(lo), dec(hi)
+                        if dlo is None or dhi is None or dlo != dhi:
+                            fails.append(f'{where}: range bounds [{lo}, {hi}] '
+                                         f'are not one point -- every value in '
+                                         f'the interval scores 100')
+                        elif exact and dlo not in exact:
+                            fails.append(f'{where}: the range arm awards 100 '
+                                         f'for {lo}, which no <varequal> in '
+                                         f'this conditionvar accepts')
                     if '<not>' in cv:
                         fails.append(f'{where}: <not> inside a fill-in '
                                      f'conditionvar -- any non-matching entry, '
@@ -715,6 +828,37 @@ def check(work, base=None):
                     # (BF-2026-057).
                     r'<not>\s*<varequal\b[^>]*?\brespident="%s"[^>]*>([^<]*)</varequal>\s*</not>'
                     % re.escape(respident_of(body) or ''), body))
+                # "Negated" was implemented as "appears inside at least one
+                # <not>", with no regard for how many <not> ancestors the node
+                # has. Wrap an existing <not><varequal>WRONG</varequal></not>
+                # in a second <not> and the choice becomes REQUIRED, because
+                # not(not X) = X -- yet keys_of() strips <not>...</not>
+                # non-greedily so the outer swallows the inner and the key set
+                # is UNCHANGED, which leaves MIN_DISTRACTORS, the
+                # contiguous-run test, original_answer_ids and
+                # check_keys_vs_base all invariant; and this rule matches the
+                # INNER node and files the choice as negated. A student who
+                # reasons correctly, ticks the key and leaves the distractor
+                # alone, scores 0. Assert the tree rather than the connective:
+                # the scoring <and> may hold nothing but bare <varequal> and
+                # single-depth <not><varequal></not> nodes. The inner
+                # substitution must run FIRST, or stripping bare <varequal>
+                # leaves a bare <not></not> and false-positives on the clean
+                # corpus (BF-2026-062).
+                shape = re.search(
+                    r'<conditionvar>\s*<and>(.*?)</and>\s*</conditionvar>',
+                    body, re.S)
+                if shape:
+                    residue = re.sub(
+                        r'<varequal\b[^>]*>[^<]*</varequal>', '',
+                        re.sub(r'<not>\s*<varequal\b[^>]*>[^<]*</varequal>'
+                               r'\s*</not>', '', shape.group(1)))
+                    if residue.strip():
+                        fails.append(f'{where}: the scoring <and> holds more '
+                                     f'than bare <varequal> and single '
+                                     f'<not><varequal></not> nodes -- nesting '
+                                     f'silently changes which choices are '
+                                     f'required ({residue.strip()[:60]!r})')
                 for c in choice_idents:
                     if c not in keys and c not in negated:
                         fails.append(f'{where}: choice {c} is neither keyed '
@@ -761,6 +905,11 @@ def check(work, base=None):
                     fails.append(f'{where}: duplicate choice ident')
 
             # original_answer_ids must be a permutation of the real choices.
+            oais = re.findall(r'<fieldlabel>original_answer_ids</fieldlabel>'
+                              r'\s*<fieldentry>([^<]*)</fieldentry>', body)
+            if len(oais) > 1:
+                fails.append(f'{where}: {len(oais)} original_answer_ids fields '
+                             f'-- which one Canvas reads is undefined')
             oai = re.search(r'<fieldlabel>original_answer_ids</fieldlabel>\s*'
                             r'<fieldentry>([^<]*)</fieldentry>', body)
             # `if oai and choice_idents` made this inert on all 143 fill-in
@@ -799,7 +948,12 @@ def check(work, base=None):
         if not xs or not meta:
             continue
         _raw = open(xs[0], encoding='utf-8', newline='').read()
-        n = _raw.count('<item ident=')
+        # `<item ident=` was the prefix BOTH counts shared, so rewriting a tag
+        # as `<item title="..." ident="...">` hid the item from the raw count
+        # AND from ITEM.findall(), leaving the difference at 0 and the
+        # reconciliation unable to fire. `\b` does not match <itemmetadata> or
+        # <itemfeedback> (BF-2026-062).
+        n = len(re.findall(r'<item\b', _raw))
         # TWO NOTIONS OF "AN ITEM" live in this file, forty lines apart, and
         # nothing reconciles them. This raw count accepts any `<item ident=`;
         # ITEM.findall() up in the per-item loop demands ident-then-title,
@@ -835,10 +989,70 @@ def check(work, base=None):
                              f'points_possible {v} but {n} items')
 
 
+def check_items_vs_base(work, base, expect_total=None):
+    """No item may silently vanish, and the census must mean something.
+
+    check_keys_vs_base does `if wbody is None: continue` -- a baseline item that
+    is simply GONE from the build is skipped in silence. The only backstop was
+    the package rule points_possible == item count, which stays self-consistent
+    if the meta is edited in the same breath, so deleting an item and
+    decrementing its meta passed. Meanwhile build.sh's own comment says the
+    baseline is kept "so any item can be diffed against how it shipped", and it
+    was consulted for line endings and key text and never for whether the item
+    is still there.
+
+    The test cannot be count equality -- splits are legitimate, and the baseline
+    holds 157 items where the build holds 177. The real invariant is F7 ("every
+    part of the original stem must survive into exactly one of the halves") and
+    it is mechanical: every baseline item either survives by ident or becomes at
+    least two lettered halves in the same package. The 18 that disappear are the
+    split parents, each with its 1a/1b siblings present.
+
+    And the census: BF-2026-059 wrote the warning itself -- "the item census
+    still prints 177 TOTAL, so the tool looks healthy while a whole rule is
+    switched off" -- and BF-2026-061 quoted that line back while closing a
+    different hole. It is still printed and was still never asserted
+    (BF-2026-062).
+    """
+    IDENT = re.compile(r'<item\b[^>]*\bident="([^"]*)"')
+    total = 0
+    for d in sorted(glob.glob(os.path.join(base, '*/'))):
+        pkg = os.path.basename(d.rstrip('/'))
+        pick = lambda g: [x for x in g
+                          if 'manifest' not in os.path.basename(x)
+                          and 'meta' not in os.path.basename(x)]
+        bxs = pick(glob.glob(d + '*/*.xml'))
+        wxs = pick(glob.glob(os.path.join(work, pkg, '*', '*.xml')))
+        if not bxs:
+            continue
+        if not wxs:
+            fails.append(f'{pkg}: shipped in the baseline and is absent from '
+                         f'the build')
+            continue
+        wids = set(IDENT.findall(
+            open(wxs[0], encoding='utf-8', newline='').read()))
+        total += len(wids)
+        for i in IDENT.findall(
+                open(bxs[0], encoding='utf-8', newline='').read()):
+            if i in wids:
+                continue
+            if len([x for x in wids
+                    if re.fullmatch(re.escape(i) + r'[a-z]', x)]) < 2:
+                fails.append(f'{pkg}: item {i!r} shipped in the baseline and '
+                             f'is gone -- it neither survives by ident nor '
+                             f'splits into halves (F7), so students lose the '
+                             f'question and nothing else here notices')
+    if expect_total is not None and total != expect_total:
+        fails.append(f'corpus holds {total} items, expected {expect_total} -- '
+                     f'the census has never been asserted against anything')
+
+
 if __name__ == '__main__':
     _base = sys.argv[2] if len(sys.argv) > 2 else None
     if _base:
         check_line_endings(sys.argv[1], _base)
+        check_items_vs_base(sys.argv[1], _base,
+                            int(os.environ.get('QTI_EXPECT_ITEMS', 177)))
     check(sys.argv[1], _base)
     print('type census:')
     for k, v in sorted(stats.items(), key=lambda t: -t[1]):
