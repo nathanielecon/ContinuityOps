@@ -1576,3 +1576,41 @@ normalised it to match. It proved A1's marker inert four ways, including a
 stronger than the negative control alone. SELECTALL 10/10 with all 235 non-keyed
 choices worked and every weak case ruled explicitly. NUMERIC cold 10/10 on all
 108 keys.
+
+## 2026-08-07 — BF-2026-052 — two judges disagreed, and the gate's own text settles it against the one I had believed
+
+AUTHORED's cold read called `topic-1-6` Q2 a **duplicated instruction block**
+under criterion 7: the question sentence says "Round your answer to the nearest
+kilometer" and the accuracy-check paragraph says "Round to the nearest
+kilometer." I accepted that and wrote a guard in `do_format_sweep` to suppress
+the second copy.
+
+NUMERIC's round-C read reached the opposite conclusion and gave the reason:
+**F4 requires the second copy.** Its text is explicit — *"The accuracy-check
+paragraph names what kind of number to type — integer / whole number / decimal,
+**the rounding if any**, and the sign convention if the answer can be negative."*
+Criterion 1 separately requires the question sentence to match the assignment,
+which prints "(Round to nearest kilometer)". Both sentences are mandated, by
+different rules, and they say the identical thing; removing either breaks its own
+rule. Criterion 7's "duplicated instruction block" means a repeated *block* — the
+`Canvas accuracy check:` paragraph appearing twice — not an instruction restated
+in the two places two rules put it.
+
+So my guard was written to delete something the gate requires.
+
+**It also never worked**, which is how the disagreement surfaced at all. The
+pattern is `Round to the nearest [a-z]+` and the question sentence reads "Round
+**your answer** to the nearest kilometer", so the guard never matched and the
+build shipped unchanged. NUMERIC noticed the fix had not landed and said so
+rather than assuming the briefing was accurate — that is the second time this
+round a judge has caught a fix of mine that looked applied and was not.
+
+Guard removed. Confirmed byte-identical output, so the round-C verdicts taken
+against this build still stand. Inert code encoding a wrong intent is worse than
+either outcome: the next person to read it would have believed the duplicate was
+suppressed deliberately.
+
+**Recorded because it cuts against me:** I applied AUTHORED's finding without
+checking it against F4's text first. The finding was reasoned and specific and I
+treated that as sufficient. A judge's argument is a claim to verify, exactly as
+the judges are told to treat mine.

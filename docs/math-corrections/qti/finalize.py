@@ -697,18 +697,27 @@ def do_format_sweep(raw, log):
         # upstream and this sweep faithfully re-emitted the remains. They are
         # rewritten as whole sentences, keeping the instruction exactly
         # (BF-2026-050).
-        # `rest` is the stem OUTSIDE the instruction being rewritten. A clause
-        # that already stands in the question sentence must not be re-emitted
-        # into the accuracy-check paragraph: topic-1-6 Q2 ended up telling the
-        # student to round to the nearest kilometre TWICE in one stem, which is
-        # the duplicated instruction block criterion 7 names. Preserve the
-        # clause only when this sweep is the sole place it would survive.
-        rest = item.replace(m.group(0), '')
+        # The rounding clause is DELIBERATELY restated in the accuracy-check
+        # paragraph even though the question sentence already carries it.
+        #
+        # An earlier judge called that a duplicated instruction block under
+        # criterion 7 and I wrote a guard to suppress the second copy. F4
+        # settles it the other way, in terms: "The accuracy-check paragraph
+        # names what kind of number to type -- integer / whole number / decimal,
+        # THE ROUNDING IF ANY, and the sign convention". Criterion 1 separately
+        # requires the question sentence to match the assignment, which prints
+        # "(Round to nearest kilometer)". Both sentences are mandated by
+        # different rules, they say the identical thing, and removing either
+        # breaks its own rule -- so the guard was trying to delete something the
+        # gate requires. It never fired anyway, because the question sentence
+        # reads "Round YOUR ANSWER to the nearest kilometer" and the pattern
+        # below does not match that; inert code encoding a wrong intent is worse
+        # than either outcome, so it is gone (BF-2026-052).
         for pat, rewrite in ((r'Round to the nearest [a-z]+', None),
                              (r'omit the % symbol', 'Omit the % symbol.'),
                              (r'without x =', 'Enter the value of x, not "x =".')):
             k = re.search('(' + pat + ')', old, re.I)
-            if k and not re.search(pat, rest, re.I):
+            if k:
                 parts.append(rewrite or (k.group(1).rstrip('.') + '.'))
         parts.append(fmt)
         if neg:
