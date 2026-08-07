@@ -138,29 +138,41 @@ A slice is accepted only at **10/10**. No partial acceptance, no "10/10 with
 minor notes". Gate: `judge/JUDGE_RUBRIC_QTI.md` + `judge/FORMAT_ROUND.md`,
 frozen and identical for every judge, amended only before the round opened.
 
-| Slice | round A `2728bd5a` | round B cold `775b3982` | round C `4ee5bb50` | Accepted |
-|---|---|---|---|---|
-| **SELECTALL** (34 items) | **10** | **10** | items unchanged | **YES** |
-| FIGURES (A1/H6/H7 + media) | **10** | **10** | pending | pending (see scope) |
-| NUMERIC (108 keys) | **10** | **10** | pending | |
-| SHORTANS (35 items) | **10** | 9 | pending | |
-| AUTHORED (distractors + stems) | **10** | 8 | pending | |
-| STRUCT (177 items + the gate) | 9 | 9 | pending | |
-| G1b cold (18 items, content) | — | — | — | **yes**, at pre-round state |
+| Slice | A `2728bd5a` | B cold `775b3982` | C `4ee5bb50` | D cold `4ee5bb50` | Accepted |
+|---|---|---|---|---|---|
+| **SELECTALL** (34 items) | **10** | **10** | items unchanged | — | **YES** |
+| **FIGURES** (A1/H6/H7 + media) | 10 | **10** | **10** | — | **YES** |
+| **SHORTANS** (35 items) | 10 | 9 | **10** | **10** | **YES** |
+| **NUMERIC** (108 keys) | 10 | 10 | **10** | **10** | **YES** |
+| STRUCT (177 items + the gate) | 9 | 9 | 7 | pending | |
+| AUTHORED (distractors + stems) | 10 | 8 | 8 | pending | |
+| G1b cold (18 items, content) | — | — | — | — | **yes**, at pre-round state |
 
 **Acceptance is pinned to CONTENT, not to a package hash.** A hash covers files a
-slice never reads; two reads of byte-identical items are two reads of the same
-thing whatever else moved in the archive. Each row above was checked
-item-by-item across builds.
+slice never reads. Every row was checked item-by-item across builds, so a slice
+counts two reads only where the items it read were byte-identical.
 
-- **SELECTALL is accepted.** All 34 items are byte-identical across `2728bd5a`,
-  `775b3982` and `4ee5bb50`, and it scored 10/10 warm and 10/10 cold. Its cold
-  judge worked all 235 non-keyed choices and ruled every weak case explicitly.
-- **FIGURES** scored 10/10 twice, but the manifest changed between the two reads
-  (two-path mirror → three-path), so only the cold read covers the current
-  structure. Re-read in round C.
-- **NUMERIC, SHORTANS, AUTHORED, STRUCT** each had their slice change after a
-  read, so their counts restart at round C.
+**Four slices are accepted**, each on two 10/10 reads of the same content, the
+second from a judge that had not seen the slice:
+
+- **SELECTALL** — 34 items byte-identical across all four builds. Its cold judge
+  worked all 235 non-keyed choices and ruled every weak case explicitly.
+- **FIGURES** — the cold and round-C reads both cover the current three-path
+  media structure. Round C proved A1's marker inert with a *positive* control as
+  well as a negative one, which is what distinguishes "inert" from "detector
+  broken".
+- **SHORTANS** — accepted after its cold judge found `F2` promising "one or two
+  words" while accepting only one-word answers.
+- **NUMERIC** — accepted after AUTHORED overturned a ruling both earlier NUMERIC
+  judges had made about "whole number" over negative keys.
+
+**STRUCT has never scored 10.** Its three reads found the corpus clean on all 177
+items every time and took the point off the gate, which its brief puts in scope:
+twelve rules across BF-2026-050/051/053, each proved by injecting a bug and
+watching `validate.py` print "all checks pass". Its round-C finding was that four
+of my own rules were indented inside the select-all branch and ran on 34 of 177
+items — the third time a rule was logged as closed while covering a fraction of
+what it named.
 
 ### Round B overturned two rulings the warm judges had made
 
