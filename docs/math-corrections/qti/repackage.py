@@ -6,7 +6,7 @@ imsmanifest.xml plus one directory named for the assessment. Canvas rejects a
 package whose manifest is not at the root, so the archive is written from the
 package directory itself rather than from its parent.
 """
-import hashlib, os, sys, zipfile
+import hashlib, os, re, sys, zipfile
 import xml.etree.ElementTree as ET
 
 SRC = os.environ.get("QTI_SRC", "/tmp/qtiwork/pkg")
@@ -56,8 +56,13 @@ for pkg in sorted(os.listdir(SRC)):
     # published by Canvas. The symptom -- a broken image -- is identical to the
     # $IMS-CC-FILEBASE$ path-depth question, so it would have been diagnosed as
     # that and "fixed" somewhere it was not broken (BF-2026-048).
+    # `(^|/)media/`, not `"/media/" in r`: the substring form requires a slash
+    # BEFORE media, so a media directory at the ARCHIVE ROOT was invisible to
+    # this check -- and the archive root is one of the three places the
+    # $IMS-CC-FILEBASE$ mirrors now go, so the check would have gone silent on
+    # exactly the layout it exists to police (BF-2026-049).
     for r in rel:
-        if "/media/" in r and r not in declared:
+        if re.search(r"(^|/)media/", r) and r not in declared:
             failures.append(f"{pkg}: {r} is packaged but not declared in the "
                             f"manifest -- Canvas will not publish it")
 

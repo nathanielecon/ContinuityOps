@@ -1346,3 +1346,95 @@ is the cold round doing its job.
 A stale ledger is usually discussed as the risk of an unaccepted slice being
 mistaken for an accepted one. This was the opposite failure and it is also
 expensive: finished work that looks unfinished gets redone.
+
+## 2026-08-07 — BF-2026-049 — a diff review found four real bugs in the fixes from BF-2026-048, one of which made a fix inert
+
+I sent my own uncommitted diff to a reviewer before spending a judge round on it.
+That was worth doing: seven findings, four of them bugs, and one of them was that
+a fix I had just proved "falsifiable" was in fact unreachable.
+
+**The `choice_8` bounds check could never fire.** BF-2026-048 widened
+`'ABCDEFG'` to a 26-letter alphabet and added an overflow guard, and I tested it
+by calling `do_letter_prefix` directly with a synthetic `choice_8`. But the
+function's own regex is `choice_(\d)` — a *single* digit. Through the real code
+path the index caps at 8, so the guard is dead code and the wider alphabet buys
+nothing. Worse, `choice_10` and beyond never matched at all, so such a choice
+would ship with **no letter prefix** while its stem promises the diagram shows
+the same lettered options. Regex widened to `choice_(\d+)`; the guard is now
+reachable, and it also checks the lower bound, since `choice_0` gave `idx = -1`
+and `CHOICE_LETTERS[-1]` is a cheerful `Z`.
+
+Testing a function directly is not testing the path that calls it. That is the
+lesson, and it is the second time this round that a check I called falsifiable
+was measuring something other than what I claimed.
+
+**The overflow path threw away work.** It returned bare `raw`, discarding letters
+already applied to earlier choices in the same item — so an item that tripped the
+guard shipped with *zero* letters rather than a partial set, and silently, because
+`build.sh` does not gate on `finalize.py`'s log. Now returns the partial work.
+
+**`do_figstem` could rewrite the wrong element, in two different ways.** The
+original `(.*?)` ran from the stem's opening tag to the first `&lt;img` *anywhere
+in the item*, so an item whose stem had no image but whose choice did would have
+lost its stem, the intervening choices and their `response_label` openers in a
+single replace. I bounded the span to one `mattext` — and the bug simply moved,
+because `re.search` scans forward and re-anchored on the *choice's* `mattext`,
+rewriting the choice text instead. My own test caught the second form only because
+I wrote the adversarial case; the first fix had looked obviously sufficient. Now
+anchored to the first `text/html` mattext, and it refuses unless the image is
+inside that one.
+
+**`do_media` could copy a file onto itself.** The source glob `*/media/*.svg`
+also matched the mirror it had just created, and the only thing preventing a
+re-copy was a manifest-text guard — filesystem state and manifest state being
+separate, they can disagree. The reviewer reproduced it: restore only
+`imsmanifest.xml` from pristine, re-run, and `shutil.SameFileError` kills the
+build. Mirrors are now excluded from the source glob.
+
+**And the idempotency guard was wrong in a way that would have disabled the whole
+feature.** It tested `f'{d}/media/' in m` for each mirror dir; for the archive-root
+mirror `d` is `''`, so the test degenerated to `'/media/' in m`, which the
+*original* declaration already satisfies. The mirror would never have been written
+at all. Now keyed on the resource identifier.
+
+**`repackage.py`'s new reverse check was blind to the archive root.**
+`"/media/" in r` requires a slash *before* `media`, so `media/a1-....svg` at the
+archive root did not match — and the archive root is exactly where the new mirrors
+go, so the check that exists to police undeclared media would have gone silent on
+the layout it was written for. Now `(^|/)media/`.
+
+### The finding that mattered most: I hedged the wrong location
+
+BF-2026-048 claimed the `$IMS-CC-FILEBASE$` question had "exactly two candidate
+resolutions" and that both were satisfied. The reviewer pointed out that the code
+emitted at `web_resources/media/`, which is **neither** of the two candidates the
+docstring itself named — so the reading it was most worried about, the token
+resolving to the archive root, was left completely unhedged and every figure would
+still 404 under it.
+
+That is a docstring that argued for one thing while the code did another, and I
+wrote both. Corrected by widening rather than by picking: there are **three**
+plausible readings — `<quizfolder>/`, `web_resources/`, and the archive root — and
+each SVG is now emitted and declared at all three. Six extra copies of three 12 KB
+files is a trivial price for removing a question that cannot otherwise be settled
+without a live Canvas. Verified: nine SVG entries, all three copies of each file
+byte-identical, every one declared, manifest parses, resource identifiers unique.
+
+### Scope of the rebuild
+
+Only `imsmanifest.xml` in one package changed. **Every item-bearing XML is
+byte-identical** between the judged build `2728bd5a` and the corrected build
+`9041ff65`, so the content slices are reading identical items; the STRUCT and
+FIGURES slices, which inspect media and manifest directly, are re-judged against
+the new hash.
+
+### What the review confirmed rather than found
+
+Build reproducibility survives the mirrors: `repackage.py` pins
+`date_time=(1980,1,1,0,0,0)` and `external_attr = 0o644 << 16` on every member
+from `files_of()`, so `shutil.copy2`-created files inherit the pin like any other,
+and two consecutive builds still produce identical checksums. And the Shape A /
+Shape B split from BF-2026-048 misclassifies nothing: `respident="response1"`
+appears on exactly the 20 topic-* select-all items and nothing else, and
+`SPLIT_HALF` matches all 38 split-half titles and no bare-number or 6th-grade
+title.

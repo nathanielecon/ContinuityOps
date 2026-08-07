@@ -1053,17 +1053,26 @@ def do_letter_prefix(raw, pkg, title, log):
         log.append(f'  !! {pkg} {title}: item not found')
         return raw
     new, n = block, 0
-    for m in re.finditer(r'(<response_label ident="[^"]*choice_(\d)">\s*<material>'
+    # `choice_(\d+)`, not `choice_(\d)`. The single-digit form stopped matching
+    # at choice_9, so a choice_10 would silently ship with NO letter prefix while
+    # its stem promises the diagram shows the same lettered options -- and it
+    # also capped idx at 8, which made the bounds check below unreachable dead
+    # code. Widening the alphabet only helps once the regex can produce an index
+    # that overflows it (BF-2026-049).
+    for m in re.finditer(r'(<response_label ident="[^"]*choice_(\d+)">\s*<material>'
                          r'\s*<mattext[^>]*>)(.*?)(</mattext>)', block, re.S):
-        # Was 'ABCDEFG', which is exactly seven long: a choice_8 on A1/H6/H7
-        # raised IndexError and crashed the whole build, with nothing in the
-        # traceback pointing at the choice that caused it (BF-2026-048). Nobody
-        # has added an eighth choice, which is why this sat armed and unseen.
+        # Was 'ABCDEFG', exactly seven long: a choice_8 on A1/H6/H7 raised
+        # IndexError and crashed the build, with nothing in the traceback
+        # pointing at the choice that caused it (BF-2026-048).
         idx = int(m.group(2)) - 1
-        if idx >= len(CHOICE_LETTERS):
-            log.append(f'  !! {pkg} {title}: choice_{idx + 1} exceeds the '
+        if not 0 <= idx < len(CHOICE_LETTERS):
+            # Keep the letters already applied to earlier choices in this item.
+            # Returning bare `raw` discarded them, so an item that tripped this
+            # shipped with ZERO letters -- worse than the overflow, and silent,
+            # because build.sh does not gate on finalize.py's log.
+            log.append(f'  !! {pkg} {title}: choice_{idx + 1} outside the '
                        f'{len(CHOICE_LETTERS)}-letter alphabet')
-            return raw
+            return raw.replace(block, new)
         letter = CHOICE_LETTERS[idx]
         if m.group(3).lstrip().startswith(letter + '.'):
             continue
@@ -1414,6 +1423,11 @@ MARKER_FIXED = ('<marker id="arrow" markerWidth="18" markerHeight="14" '
                 'refX="17" refY="7" orient="auto" markerUnits="userSpaceOnUse">'
                 '<path d="M0,0 L0,14 L17,7 z" fill="#075985"/>')
 
+# Where the $IMS-CC-FILEBASE$ mirrors go, relative to the package root. The
+# empty string is the archive root itself. See do_media for why all of these
+# and not just one.
+MIRROR_DIRS = ('web_resources', '')
+
 
 def do_figstem(raw, pkg, title, text, log):
     """Reword a figure item's prose while leaving its <img> exactly as it is.
@@ -1427,11 +1441,28 @@ def do_figstem(raw, pkg, title, text, log):
     if block is None:
         log.append(f'  !! {pkg} {title}: item not found')
         return raw
-    m = re.search(r'(<mattext texttype="text/html">)(.*?)(\s*&lt;img\b)', block, re.S)
-    if not m:
+    # Operate on the FIRST text/html mattext only -- that is the stem -- and
+    # only if the image is inside it.
+    #
+    # Two bugs lived here. A bare `.*?` ran from the stem's opening tag to the
+    # first &lt;img ANYWHERE in the item, so an item whose stem had no image but
+    # whose choice did would lose its stem, the intervening choices, and their
+    # response_label openers in one replace. Bounding the span to a single
+    # mattext fixed that but not the second problem: re.search scans forward, so
+    # it simply re-anchored on the CHOICE's mattext and rewrote the choice text
+    # instead. Neither is reachable in this corpus -- all three &lt;img
+    # occurrences sit in the stem mattext of A1/H6/H7 -- but Shape A items carry
+    # 9-11 text/html mattexts each, so both are one authored image away from
+    # being live (BF-2026-049).
+    m = re.search(r'<mattext texttype="text/html">((?:(?!</mattext>).)*?)</mattext>',
+                  block, re.S)
+    if not m or '&lt;img' not in m.group(1):
         log.append(f'  !! {pkg} {title}: no prose-then-image stem')
         return raw
-    new = block.replace(m.group(0), m.group(1) + text + m.group(3))
+    inner = m.group(1)
+    new = block.replace(m.group(0),
+                        f'<mattext texttype="text/html">{text} '
+                        f'{inner[inner.index("&lt;img"):]}</mattext>')
     log.append(f'  figstem  {title:18s} diagram made supplementary')
     return raw.replace(block, new)
 
@@ -1452,15 +1483,32 @@ def do_media(pkgdir, pkg, log):
        inherits the defect. Fixing it now costs nothing and disarms it.
 
     2. Hedge the $IMS-CC-FILEBASE$ path depth. The src attributes say
-       `$IMS-CC-FILEBASE$/media/<f>.svg`; the manifest declares the files under
-       `<quizfolder>/media/`. If the token resolves to the package root -- which
-       is how Canvas's own exports read -- every figure imports broken. It cannot
-       be settled without a live Canvas, and there are exactly two candidate
-       resolutions, so satisfy BOTH: emit each file at the second location too
-       and declare it. Whichever way the token resolves, a file is there.
-       The src strings are left alone; criterion 7 prescribes that form.
+       `$IMS-CC-FILEBASE$/media/<f>.svg`; the files sit at `<quizfolder>/media/`.
+       The token stands for the root of the package's imported web content, and
+       nothing here can establish which directory Canvas maps that to.
+
+       THREE readings are plausible, not two -- an earlier draft of this
+       docstring said two and then mirrored to a location that was neither of
+       them, leaving the reading it was most worried about still unhedged
+       (BF-2026-049):
+
+         a) `<quizfolder>/`   -- the files already sit here
+         b) `web_resources/`  -- where Canvas's own CC exports put web content
+         c) the archive root  -- the literal reading of "package root"
+
+       So emit at all three and declare all three. Whichever way the token
+       resolves, a file is there. Six extra copies of three ~12 KB SVGs is a
+       trivial price for removing a question that cannot otherwise be answered
+       without a live Canvas. The src strings are untouched; criterion 7
+       prescribes that form corpus-wide.
     """
-    svgs = sorted(glob.glob(os.path.join(pkgdir, '*/media/*.svg')))
+    # Exclude the mirrors from the source glob, or a rerun copies a file onto
+    # itself. Reproduced as shutil.SameFileError killing the whole build when
+    # the manifest guard and the filesystem disagreed -- which they can, because
+    # they are separate state.
+    svgs = sorted(f for f in glob.glob(os.path.join(pkgdir, '*/media/*.svg'))
+                  if os.path.basename(os.path.dirname(os.path.dirname(f)))
+                  not in MIRROR_DIRS)
     if not svgs:
         return
 
@@ -1475,21 +1523,33 @@ def do_media(pkgdir, pkg, log):
     if not os.path.exists(man):
         return
     m = open(man, encoding='utf-8', newline='').read()
-    if 'web_resources/media/' in m:
-        return
 
-    mirror = os.path.join(pkgdir, 'web_resources', 'media')
-    os.makedirs(mirror, exist_ok=True)
-    hrefs = []
-    for f in svgs:
-        shutil.copy2(f, os.path.join(mirror, os.path.basename(f)))
-        hrefs.append('web_resources/media/' + os.path.basename(f))
-
+    # Look the resource up BEFORE writing anything. Bailing out after the copies
+    # left undeclared files on disk, which repackage.py's reverse check then
+    # hard-failed on with a message naming the symptom and not this cause.
     rid = re.search(r'<resource identifier="([^"]*_media)"', m)
     if not rid:
         log.append(f'  !! {pkg}: no _media resource to mirror')
         return
-    new_id = rid.group(1) + '_root'
+    new_id = rid.group(1) + '_mirror'
+
+    # Idempotency keys on the resource id, not on a path substring. Testing
+    # `f'{d}/media/' in m` was wrong for the archive-root mirror, where d is ''
+    # and the test degenerates to `'/media/' in m` -- which the ORIGINAL
+    # declaration already satisfies, so the mirror would never have been
+    # written at all.
+    if new_id in m:
+        return
+
+    hrefs = []
+    for d in MIRROR_DIRS:
+        mirror = os.path.join(pkgdir, *d.split('/')) if d else pkgdir
+        os.makedirs(os.path.join(mirror, 'media'), exist_ok=True)
+        for f in svgs:
+            shutil.copy2(f, os.path.join(mirror, 'media', os.path.basename(f)))
+            hrefs.append(f'{d}/media/' + os.path.basename(f) if d
+                         else 'media/' + os.path.basename(f))
+
     files = ''.join(f'<file href="{h}" />' for h in hrefs)
     block = (f'<resource identifier="{new_id}" type="webcontent" '
              f'href="{hrefs[0]}">{files}</resource>')
@@ -1498,7 +1558,8 @@ def do_media(pkgdir, pkg, log):
                   f'<dependency identifierref="{rid.group(1)}" />'
                   f'<dependency identifierref="{new_id}" />')
     open(man, 'w', encoding='utf-8', newline='').write(m)
-    log.append(f'  media    manifest         +{len(hrefs)} mirrored at web_resources/')
+    log.append(f'  media    manifest         +{len(hrefs)} mirrored at '
+               + ', '.join(d or '<archive root>' for d in MIRROR_DIRS))
 
 
 def do_grammar(raw, log):
