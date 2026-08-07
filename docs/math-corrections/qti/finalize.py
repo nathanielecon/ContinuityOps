@@ -680,11 +680,18 @@ def do_format_sweep(raw, log):
         parts = []
         # These are mathematical instructions, not formatting ones -- dropping
         # them would change the question, so they survive the sweep.
-        for pat in (r'Round to the nearest [a-z]+',
-                    r'omit the % symbol', r'without x ='):
+        # Carried verbatim, two of these read as fragments glued to the
+        # expression -- "5/6 = x/18 without x =." and "0.32 = ____ % omit the %
+        # symbol." -- because the clause that governed them was dropped
+        # upstream and this sweep faithfully re-emitted the remains. They are
+        # rewritten as whole sentences, keeping the instruction exactly
+        # (BF-2026-050).
+        for pat, rewrite in ((r'Round to the nearest [a-z]+', None),
+                             (r'omit the % symbol', 'Omit the % symbol.'),
+                             (r'without x =', 'Enter the value of x, not "x =".')):
             k = re.search('(' + pat + ')', old, re.I)
             if k:
-                parts.append(k.group(1).rstrip('.') + '.')
+                parts.append(rewrite or (k.group(1).rstrip('.') + '.'))
         parts.append(fmt)
         if any(v.startswith('-') for v in vals):
             parts.append(SIGN_SENTENCE)
@@ -1562,6 +1569,32 @@ def do_media(pkgdir, pkg, log):
                + ', '.join(d or '<archive root>' for d in MIRROR_DIRS))
 
 
+# Four stems were left as grammatical fragments when an earlier round stripped
+# the clause that governed them -- "5/6 = x/18 without x =." reads as a
+# sentence that stops halfway. The NUMERIC judge ruled these breach no gate
+# criterion, and that is right: the format is stated, true and complete. They
+# are still bad text in front of a student, and the instruction each fragment
+# was carrying ("don't type the % sign", "don't type x =") is already covered by
+# the format sentence that follows it (BF-2026-050).
+FRAGMENTS = {
+    '0.32 = ____ % omit the % symbol.': '0.32 = ____ % Find the missing number.',
+    '5/6 = x/18 without x =.': '5/6 = x/18 Find the value of x.',
+    'x + 7 = 18 without x =.': 'x + 7 = 18 Find the value of x.',
+    'x/4 = 6 without x =.': 'x/4 = 6 Find the value of x.',
+}
+
+
+def do_fragments(raw, log):
+    n = 0
+    for old, new in FRAGMENTS.items():
+        if esc(old) in raw:
+            raw = raw.replace(esc(old), esc(new))
+            n += 1
+    if n:
+        log.append(f'  fragment {n} stem fragments made whole sentences')
+    return raw
+
+
 def do_grammar(raw, log):
     n = len(re.findall(r'Enter select all', raw))
     if n:
@@ -1656,6 +1689,7 @@ def main(base):
         for (p, t), text in FIGURE_STEM.items():
             if p == pkg:
                 raw = do_figstem(raw, pkg, t, text, log)
+        raw = do_fragments(raw, log)
         raw = do_grammar(raw, log)
         raw = do_boiler(raw, log)
         raw = do_sign_sweep(raw, log)

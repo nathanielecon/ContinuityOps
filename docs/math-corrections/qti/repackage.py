@@ -56,15 +56,34 @@ for pkg in sorted(os.listdir(SRC)):
     # published by Canvas. The symptom -- a broken image -- is identical to the
     # $IMS-CC-FILEBASE$ path-depth question, so it would have been diagnosed as
     # that and "fixed" somewhere it was not broken (BF-2026-048).
-    # `(^|/)media/`, not `"/media/" in r`: the substring form requires a slash
-    # BEFORE media, so a media directory at the ARCHIVE ROOT was invisible to
-    # this check -- and the archive root is one of the three places the
-    # $IMS-CC-FILEBASE$ mirrors now go, so the check would have gone silent on
-    # exactly the layout it exists to police (BF-2026-049).
+    # Every packaged file must be declared -- not just media. BF-2026-048 named
+    # the one-directional gate as the bug and then closed it only for media,
+    # which left the general property unenforced; and the media predicate itself
+    # was wrong twice (a substring form that missed the archive root, then a
+    # path predicate at all). "Everything in the archive is declared" is what
+    # makes the archive trustworthy, and it needs no predicate (BF-2026-050).
     for r in rel:
-        if re.search(r"(^|/)media/", r) and r not in declared:
+        if r != "imsmanifest.xml" and r not in declared:
             failures.append(f"{pkg}: {r} is packaged but not declared in the "
                             f"manifest -- Canvas will not publish it")
+
+    # Duplicate resource identifiers, and dangling dependencies. This is the
+    # round that added a SECOND resource to a manifest, so it is exactly the
+    # round where a collision becomes possible. A duplicate identifier makes
+    # <dependency identifierref> ambiguous and Canvas resolves one resource and
+    # drops the other -- which would present as one of the $IMS-CC-FILEBASE$
+    # mirrors silently not publishing, the very failure the mirrors exist to
+    # rule out.
+    ids = [el.get("identifier") for el in man.iter()
+           if el.tag.endswith("resource") and el.get("identifier")]
+    for dup in {i for i in ids if ids.count(i) > 1}:
+        failures.append(f"{pkg}: duplicate resource identifier {dup!r} -- "
+                        f"dependency references to it are ambiguous")
+    for el in man.iter():
+        ref = el.get("identifierref")
+        if ref and ref not in ids:
+            failures.append(f"{pkg}: dependency identifierref {ref!r} "
+                            f"resolves to no resource")
 
     # Deterministic archives: zip stores each entry's mtime, and extracting to a
     # fresh temp dir stamps "now" on every file, so two builds of byte-identical

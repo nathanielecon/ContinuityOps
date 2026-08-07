@@ -83,6 +83,57 @@ def keys_of(body):
     return keys
 
 
+# A keyed choice may legitimately gain the drawn figure's row letter -- that is
+# the ONLY sanctioned change to keyed text on an item that stays select-all
+# (BF-2026-041). Everything else is a key move.
+LETTER_PREFIX = re.compile(r'^[A-Z]\.\s+')
+
+
+def keyed_texts(body):
+    """The keyed choices' visible TEXT, normalised. Text, not idents, because a
+    permutation renames nothing but a rebuild can reassign idents freely."""
+    keys = keys_of(body)
+    out = set()
+    for m in re.finditer(r'<response_label ident="([^"]*)">\s*<material>\s*'
+                         r'<mattext[^>]*>(.*?)</mattext>', body, re.S):
+        if m.group(1) in keys:
+            out.add(LETTER_PREFIX.sub('', plain(m.group(2))))
+    return out
+
+
+def check_keys_vs_base(rel, work_raw, base_raw):
+    """No key may silently move.
+
+    The pristine tree was passed in from the start and consulted only for line
+    endings, while the brief calls a silently-moved key "the worst defect
+    available here" -- the gate was handed exactly the evidence needed and never
+    looked at it (BF-2026-050).
+
+    Scope, stated because it is NOT total and should not be read as total:
+    items that keep their ident and are select-all in BOTH trees -- 24 of the 34
+    select-all items today. The other ten are products of a split or rebuild and
+    carry new idents, so there is nothing to compare them against by ident; a
+    base item's keys legitimately redistribute across its halves, and some
+    became numeric answers whose text will never match. Those are covered by the
+    type-specific rules here and by a judge working them by hand. An item whose
+    type changed is likewise skipped: comparing choice text across a conversion
+    compares two different things.
+    """
+    wi = {i: b for i, _, b in ITEM.findall(work_raw)}
+    for ident, title, bbody in ITEM.findall(base_raw):
+        wbody = wi.get(ident)
+        if wbody is None:
+            continue
+        if ('multiple_answers_question' not in bbody
+                or 'multiple_answers_question' not in wbody):
+            continue
+        was, now = keyed_texts(bbody), keyed_texts(wbody)
+        if was != now:
+            fails.append(
+                f'{rel} :: {title}: KEY MOVED. no longer keyed: '
+                f'{sorted(was - now)!r}; newly keyed: {sorted(now - was)!r}')
+
+
 def check(work, base=None):
     for f in sorted(glob.glob(os.path.join(work, '*/*/*.xml'))):
         if 'manifest' in f or 'meta' in f:
@@ -110,6 +161,8 @@ def check(work, base=None):
             continue
 
         # BF-029 -- line endings must match the pristine file exactly.
+        # And, since BF-2026-050, the pristine tree is used for what it was
+        # always there for: proving no key silently moved.
         if base:
             b = os.path.join(base, rel)
             if os.path.exists(b):
@@ -119,6 +172,8 @@ def check(work, base=None):
                     fails.append(f'{rel}: line-ending convention changed')
                 if b'\r\n' in wb and wb.count(b'\r\n') != wb.count(b'\n'):
                     fails.append(f'{rel}: mixed line endings')
+                check_keys_vs_base(rel, raw,
+                                   open(b, encoding='utf-8', newline='').read())
 
         for ident, title, body in ITEM.findall(raw):
             where = f'{rel} :: {title}'
@@ -165,10 +220,29 @@ def check(work, base=None):
                 if sv.strip() != '100':
                     fails.append(f'{where}: a correct answer scores '
                                  f'{sv.strip()}, not 100')
+            # `if dv and ...` skipped the whole check when <decvar> was ABSENT,
+            # which is the worse case: <setvar varname="SCORE"> then writes an
+            # outcome nothing declares. And minvalue was never read at all, so
+            # minvalue="100" -- every wrong answer scoring full marks -- passed
+            # silently (BF-2026-050).
             dv = re.search(r'<decvar([^>]*)>', body)
-            if dv and ('maxvalue="100"' not in dv.group(1)
-                       or 'varname="SCORE"' not in dv.group(1)):
-                fails.append(f'{where}: decvar is not maxvalue=100 varname=SCORE')
+            if not dv:
+                fails.append(f'{where}: no <decvar> -- SCORE is undeclared')
+            elif ('maxvalue="100"' not in dv.group(1)
+                  or 'minvalue="0"' not in dv.group(1)
+                  or 'varname="SCORE"' not in dv.group(1)):
+                fails.append(f'{where}: decvar is not '
+                             f'maxvalue=100 minvalue=0 varname=SCORE')
+
+            # Package totals compared the meta value to the item COUNT, which
+            # assumes every item is worth 1 without ever checking it. An item at
+            # 0 points is unscorable, and two compensating errors (0 and 2)
+            # leave the package total correct.
+            pp = re.search(r'<fieldlabel>points_possible</fieldlabel>\s*'
+                           r'<fieldentry>([\d.]+)</fieldentry>', body)
+            if not pp or float(pp.group(1)) != 1.0:
+                fails.append(f'{where}: points_possible is '
+                             f'{pp.group(1) if pp else "absent"}, not 1')
 
             if qt in ('multiple_answers_question', 'multiple_choice_question'):
                 n = len(choice_idents)
@@ -192,6 +266,23 @@ def check(work, base=None):
                     r'<mattext[^>]*>(.*?)</mattext>', body, re.S)]
                 if len(set(texts)) != len(texts):
                     fails.append(f'{where}: two choices share visible text')
+                # The CONNECTIVE, which nothing checked. Flip the single <and>
+                # to <or> and the conditionvar becomes a disjunction of one
+                # positive varequal and N negations -- so a student who selects
+                # NOTHING satisfies every negation, the disjunction is true, and
+                # setvar fires 100. The item scores full marks for essentially
+                # any submission. Every other rule here is invariant under that
+                # flip: keys_of() strips <not> and reads positives, the negation
+                # check still finds each choice inside a <not>, the distractor
+                # count and original_answer_ids are untouched. Same class as the
+                # wrong-respident <not> in BF-2026-043 -- a scoring block that
+                # looks right and enforces nothing (BF-2026-050).
+                for cv in re.findall(r'<conditionvar>(.*?)</conditionvar>', body, re.S):
+                    if re.search(r'<or\b', cv) or len(re.findall(r'<and\b', cv)) != 1:
+                        fails.append(f'{where}: conditionvar is not a single '
+                                     f'<and> -- an empty or partial selection '
+                                     f'can score 100')
+
                 # Scoring must only reference choices that exist.
                 for k in keys:
                     if k not in choice_idents:
