@@ -74,6 +74,24 @@ for pkg in sorted(os.listdir(SRC)):
     # drops the other -- which would present as one of the $IMS-CC-FILEBASE$
     # mirrors silently not publishing, the very failure the mirrors exist to
     # rule out.
+    # The mirrors are compared by NAME everywhere above -- every href resolves,
+    # every packaged file is declared -- and by BYTES nowhere. If two copies of
+    # a figure drift apart, all three still resolve and all three are still
+    # declared, so the package looks perfect while Canvas serves a DIFFERENT
+    # figure depending on which $IMS-CC-FILEBASE$ reading wins. Undiagnosable
+    # from the package. Drift in this path is demonstrated, not hypothetical:
+    # BF-2026-049 records do_media copying a file onto itself (BF-2026-051).
+    groups = {}
+    for full, r in members:
+        if re.search(r"(^|/)media/", r):
+            groups.setdefault(os.path.basename(r), []).append(full)
+    for name, paths in sorted(groups.items()):
+        digests = {hashlib.sha256(open(p, "rb").read()).hexdigest() for p in paths}
+        if len(digests) > 1:
+            failures.append(f"{pkg}: the {len(paths)} copies of {name} are not "
+                            f"byte-identical -- Canvas would serve different "
+                            f"figures depending on how the token resolves")
+
     ids = [el.get("identifier") for el in man.iter()
            if el.tag.endswith("resource") and el.get("identifier")]
     for dup in {i for i in ids if ids.count(i) > 1}:

@@ -641,6 +641,15 @@ def do_split(raw, pkg, title, halves, log):
 
 SIGN_SENTENCE = 'Include the negative sign if the answer is negative.'
 WHOLE = 'Enter your answer as a whole number.'
+# A whole number is {0, 1, 2, ...}; -15 is not one. Emitting WHOLE for a
+# negative key made the stem contradict ITSELF -- the next sentence is "Include
+# the negative sign if the answer is negative" -- and contradict the item's own
+# question, e.g. topic-1-6 P1Q1a asks "What INTEGER represents the unit rate of
+# their descent?" and then demanded a whole number for a key of -15. That is
+# exactly F5's shape: a stem property contradicted by the key, failing the
+# student who read the instruction. The right word already existed at NUM_INT
+# and this sweep, which runs last, was overwriting it (BF-2026-051).
+INTEGER = 'Enter your answer as an integer.'
 DECIMAL = 'Enter your answer as a decimal to two places, like 0.00.'
 FRACTION = 'Enter a simplified a/b, no spaces or mixed numbers.'
 
@@ -676,7 +685,9 @@ def do_format_sweep(raw, log):
                 continue
             old = m.group(1)
 
-        fmt = DECIMAL if any('.' in v for v in vals) else WHOLE
+        neg = any(v.strip().startswith('-') for v in vals)
+        fmt = (DECIMAL if any('.' in v for v in vals)
+               else INTEGER if neg else WHOLE)
         parts = []
         # These are mathematical instructions, not formatting ones -- dropping
         # them would change the question, so they survive the sweep.
@@ -686,14 +697,21 @@ def do_format_sweep(raw, log):
         # upstream and this sweep faithfully re-emitted the remains. They are
         # rewritten as whole sentences, keeping the instruction exactly
         # (BF-2026-050).
+        # `rest` is the stem OUTSIDE the instruction being rewritten. A clause
+        # that already stands in the question sentence must not be re-emitted
+        # into the accuracy-check paragraph: topic-1-6 Q2 ended up telling the
+        # student to round to the nearest kilometre TWICE in one stem, which is
+        # the duplicated instruction block criterion 7 names. Preserve the
+        # clause only when this sweep is the sole place it would survive.
+        rest = item.replace(m.group(0), '')
         for pat, rewrite in ((r'Round to the nearest [a-z]+', None),
                              (r'omit the % symbol', 'Omit the % symbol.'),
                              (r'without x =', 'Enter the value of x, not "x =".')):
             k = re.search('(' + pat + ')', old, re.I)
-            if k:
+            if k and not re.search(pat, rest, re.I):
                 parts.append(rewrite or (k.group(1).rstrip('.') + '.'))
         parts.append(fmt)
-        if any(v.startswith('-') for v in vals):
+        if neg:
             parts.append(SIGN_SENTENCE)
         parts.append(ONLY)
         new_text = ' '.join(parts)
@@ -986,7 +1004,17 @@ TOSHORT = {
     # PDF also blesses a second form for each ("subtract 8 (or -8)").
     ('6th-grade-review-section-1', 'F1'): (['coefficient', 'numerical coefficient'],
                                            WORDS, None),
-    ('6th-grade-review-section-1', 'F2'): (['variable', 'unknown'], WORDS, None),
+    # The stem promises "one or two words" and every accepted string was ONE
+    # word, so a student who typed the two-word phrase the source itself uses
+    # was marked wrong. The explanations PDF reads "The letter n stands for some
+    # unknown number" and "A variable is a letter that stands for an unknown
+    # number we can find." Having already conceded `unknown` -- which is not the
+    # key's word either -- the two-word form is correct by the identical
+    # argument. F1 one item earlier already accepts both `coefficient` and
+    # `numerical coefficient`, so this failed the author's own standard applied
+    # in the same file (BF-2026-051).
+    ('6th-grade-review-section-1', 'F2'): (
+        ['variable', 'unknown', 'unknown number', 'unknown value'], WORDS, None),
     ('6th-grade-review-section-1', 'F3'): (
         ['subtract 8', 'subtract8', 'subtraction', 'subtract', 'minus 8',
          'take away 8', 'subtract eight', 'subtracting 8', 'subtracting eight',

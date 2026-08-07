@@ -124,6 +124,24 @@ def check_keys_vs_base(rel, work_raw, base_raw):
         wbody = wi.get(ident)
         if wbody is None:
             continue
+        # Fill-in items FIRST, and they are the larger population -- 143 of 177,
+        # where the accepted value IS the key and one character moves it. The
+        # original check skipped them entirely and the docstring named only the
+        # select-all limit, so the omission it did not mention was the bigger
+        # one. Changing g6_s1_b1's key from 20 to 21 marks every correct student
+        # wrong, and the right answer was sitting in the pristine tree the whole
+        # time (BF-2026-051).
+        #
+        # Widening is legitimate (BF-2026-041/042 added accepted spellings), so
+        # the test is SUBSET, not equality: every pristine accepted value must
+        # still be accepted. A value that disappears is the defect.
+        if 'render_fib' in bbody and 'render_fib' in wbody:
+            lost = keys_of(bbody) - keys_of(wbody)
+            if lost:
+                fails.append(f'{rel} :: {title}: ACCEPTED VALUE DROPPED '
+                             f'{sorted(lost)!r} -- a student who gave the '
+                             f'pristine answer is now marked wrong')
+            continue
         if ('multiple_answers_question' not in bbody
                 or 'multiple_answers_question' not in wbody):
             continue
@@ -175,6 +193,15 @@ def check(work, base=None):
                 check_keys_vs_base(rel, raw,
                                    open(b, encoding='utf-8', newline='').read())
 
+        # Choice idents were checked for uniqueness; ITEM idents were not.
+        # Canvas keys imported questions by item ident, so a collision means one
+        # item silently replaces the other -- a 4-item quiz imports as 3 while
+        # assessment_meta still claims 4 points (BF-2026-051).
+        all_idents = [i for i, _, _ in ITEM.findall(raw)]
+        for dup in sorted({i for i in all_idents if all_idents.count(i) > 1}):
+            fails.append(f'{rel}: duplicate <item ident="{dup}"> -- Canvas keys '
+                         f'questions by ident, so one silently replaces the other')
+
         for ident, title, body in ITEM.findall(raw):
             where = f'{rel} :: {title}'
             qt = re.search(r'<fieldlabel>question_type</fieldlabel>\s*'
@@ -216,10 +243,18 @@ def check(work, base=None):
             # this: an item whose setvar holds 0 marks every correct student
             # wrong -- the exact harm the rubric's preamble names -- and is
             # invisible to every other rule here (BF-2026-047).
-            for sv in re.findall(r'<setvar[^>]*>([^<]*)</setvar>', body):
-                if sv.strip() != '100':
+            # The VALUE was checked and the VARIABLE was not, so this was closed
+            # halfway. <setvar varname="TOTAL">100</setvar> passed: SCORE is
+            # declared by <decvar> and then never written, so it stays at
+            # minvalue 0 and every correct student is marked wrong on that item
+            # (BF-2026-051).
+            for m in re.finditer(r'<setvar([^>]*)>([^<]*)</setvar>', body):
+                if 'varname="SCORE"' not in m.group(1):
+                    fails.append(f'{where}: setvar writes {m.group(1).strip()!r},'
+                                 f' not SCORE -- SCORE is never set, so it stays 0')
+                if m.group(2).strip() != '100':
                     fails.append(f'{where}: a correct answer scores '
-                                 f'{sv.strip()}, not 100')
+                                 f'{m.group(2).strip()}, not 100')
             # `if dv and ...` skipped the whole check when <decvar> was ABSENT,
             # which is the worse case: <setvar varname="SCORE"> then writes an
             # outcome nothing declares. And minvalue was never read at all, so
@@ -260,6 +295,22 @@ def check(work, base=None):
                 # BF-031 -- no key may sit at position 0.
                 if choice_idents and choice_idents[0] in keys:
                     fails.append(f'{where}: keyed choice is first (BF-031)')
+                # ...and no CONTIGUOUS RUN of keys. BF-031's own statement of
+                # the defect is "pick the first option, OR THE FIRST N, scored
+                # 100% without doing any mathematics", and only the first clause
+                # was enforced. Keys at positions 1,2,3 pass the position-0 test
+                # while "tick boxes 2, 3 and 4" still scores 100 with no
+                # reasoning. 8 items have more than one key (BF-2026-051).
+                kp = sorted(i for i, c in enumerate(choice_idents) if c in keys)
+                if len(kp) > 1 and kp == list(range(kp[0], kp[0] + len(kp))):
+                    fails.append(f'{where}: keys occupy a contiguous run {kp} '
+                                 f'-- "the first N" scores without reasoning')
+                # rcardinality: a select-all rendered Single is radio buttons,
+                # so a multi-key item becomes literally unscoreable -- 100 is
+                # unreachable no matter what the student does.
+                if 'rcardinality="Multiple"' not in body:
+                    fails.append(f'{where}: select-all is not '
+                                 f'rcardinality="Multiple" -- unscoreable')
                 # Duplicate visible text is a defect in every shape.
                 texts = [plain(t) for t in re.findall(
                     r'<response_label[^>]*>\s*<material>\s*'

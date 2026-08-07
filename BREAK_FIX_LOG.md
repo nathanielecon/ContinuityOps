@@ -1438,3 +1438,141 @@ Shape B split from BF-2026-048 misclassifies nothing: `respident="response1"`
 appears on exactly the 20 topic-* select-all items and nothing else, and
 `SPLIT_HALF` matches all 38 split-half titles and no bare-number or 6th-grade
 title.
+
+## 2026-08-07 — BF-2026-050 — the entry a cold judge caught me not writing
+
+STRUCT's cold read found that commit `e35c5e7` cites **BF-2026-050** in
+`validate.py`, `finalize.py`, `repackage.py` and `ACCEPTANCE.md`, and that this
+log ends at BF-2026-049. I wrote the code comments and the commit message and
+never wrote the entry. The log's own header says "Record the break before the
+next judge round," and the judge noted it could not run criterion 1's tracing
+test against an entry that does not exist.
+
+It scored the corpus clean anyway, because the substantive test — did a key move
+— it ran independently and passed. But a citation pointing at nothing is exactly
+the failure this log exists to prevent, and it took an outside reader to see it.
+
+What BF-2026-050 should have said, recorded now:
+
+**Six holes in the gate, found by STRUCT's round-A read and closed.** Each was
+proved by injecting a bug into a scratch copy and watching `validate.py` print
+`all checks pass`.
+
+1. **Nothing asserted the conditionvar's connective.** Flip the single `<and>`
+   to `<or>` and the block becomes a disjunction of one positive `varequal` and
+   N negations — so a student who selects **nothing** satisfies every negation,
+   the disjunction is true, and `setvar` fires 100. Every other rule is
+   invariant under that flip.
+2. **The pristine tree was consulted only for line endings**, while the brief
+   calls a silently-moved key the worst defect available. Now compares keyed
+   choice text against pristine.
+3. **`points_possible` was checked only as a package total** against the item
+   count, which assumes every item is worth 1 without checking. An item at 0 is
+   unscorable, and two compensating errors leave the total correct.
+4. **The `decvar` rule read `if dv and ...`**, so it skipped entirely when
+   `<decvar>` was absent — the worse case — and never read `minvalue`, so
+   `minvalue="100"` made every wrong answer score full marks.
+5. **Manifests were never globbed** by `validate.py` (`*/*/*.xml` misses
+   `<pkg>/imsmanifest.xml`), and duplicate resource identifiers were caught by
+   neither tool.
+6. **`repackage.py`'s reverse check covered only media**, when the property that
+   makes an archive trustworthy is that *every* packaged file is declared.
+
+**And four stem fragments repaired.** NUMERIC and AUTHORED independently flagged
+`0.32 = ____ % omit the % symbol.` and `5/6 = x/18 without x =.`, and both
+correctly ruled they breach no criterion. `do_format_sweep` preserves those
+clauses as mathematical instructions and was faithfully re-emitting the remains
+of a sentence whose governing clause had been dropped upstream. Rewritten as
+whole sentences keeping the instruction exactly.
+
+## 2026-08-07 — BF-2026-051 — the cold round found eight more, including two the warm judges had ruled acceptable
+
+The cold round is not a formality. Every slice was read by a judge that had not
+seen it, told explicitly that ratifying the first read makes the guarantee
+worthless. Three slices came back below 10.
+
+### AUTHORED overturned a ruling that two NUMERIC judges had made
+
+**17 numeric items told the student "Enter your answer as a whole number" for a
+negative key.** Both NUMERIC judges — the warm read and the cold one — examined
+this and ruled it not a defect, reasoning that F4 enumerates "integer / whole
+number / decimal" as interchangeable and that the following sentence supplies
+the sign convention.
+
+AUTHORED found the argument that settles it: the stem **contradicts itself and
+its own question**. `topic-1-6` Part 1 Question 1a asks *"What **integer**
+represents the unit rate of their descent?"* and then instructs *"Enter your
+answer as a **whole number**"*, key −15. `topic-1-8` P1Q1a is the same. Two
+sentences of one accuracy check disagree: "whole number" excludes negatives,
+"include the negative sign" requires one. That is precisely F5's shape — a stem
+property contradicted by the key, failing the student who read the instruction.
+
+The right word already existed in the codebase (`NUM_INT`, "Enter your answer as
+an integer"), and `do_format_sweep` — which runs last — was overwriting it,
+selecting `WHOLE` purely on `'.' not in v`. Now `INTEGER` whenever the key is
+negative. The 47 non-negative whole-number items are untouched.
+
+Worth recording as a process fact: a majority of judges is not evidence. Two
+independent reads reached the same wrong answer because they both reasoned from
+the gate's vocabulary list, and the third looked at what the item said about
+itself.
+
+**Two items told the student to round twice.** `topic-1-6` Q2 carries "Round
+your answer to the nearest kilometer." in the question sentence, and
+`do_format_sweep` re-emitted "Round to the nearest kilometer." into the accuracy
+check — a duplicated instruction block, which criterion 7 names. The preserve
+list now checks whether the clause still stands elsewhere in the stem and
+re-emits only when this sweep is the sole place it would survive.
+
+### SHORTANS: an item promised two words and accepted only one
+
+`F2` asks *"In n + 8 = 12, n is the ____. Your answer is one or two words."* and
+accepted exactly `variable` and `unknown`. The explanations PDF says *"The letter
+n stands for some **unknown number**"*. A student who reads "one or two words",
+reasons correctly, and types `unknown number` is marked wrong — the exact harm
+this project exists to prevent. The item had already conceded `unknown`, which is
+not the key's word either, so the two-word form follows by the identical
+argument; and `F1`, one item earlier in the same file, already accepts both
+`coefficient` and `numerical coefficient`. It failed the author's own standard
+applied one item away. Now accepts `unknown number` and `unknown value`.
+
+### STRUCT: six more gate holes, again each proved by injection
+
+1. **Multi-key contiguity.** BF-2026-031's own statement of the defect is "pick
+   the first option, **or the first N**", and only the first clause was enforced.
+   Keys at positions 1,2,3 passed while "tick boxes 2, 3 and 4" still scored 100
+   with no reasoning. 8 items have more than one key.
+2. **`setvar` checked its value but not its variable.** BF-2026-047 logged this
+   as closed; it was closed halfway. `<setvar varname="TOTAL">100</setvar>`
+   passed — SCORE is declared and then never written, so it stays at minvalue 0
+   and every correct student is marked wrong.
+3. **The key-move check skipped all 143 fill-in items** — the larger population,
+   and the one where the accepted value *is* the key and a single character moves
+   it. Changing `B1` from 20 to 21 passed, with the right answer sitting in the
+   pristine tree. My docstring stated the select-all limit and not this one, and
+   the omitted limit was the bigger. Now a subset test, since widening is
+   legitimate and a value *disappearing* is the defect.
+4. **`rcardinality` was never read.** A select-all rendered `Single` is radio
+   buttons, so a multi-key item becomes literally unscoreable — 100 unreachable.
+5. **Item idents were never checked for uniqueness** (only choice idents).
+   Canvas keys imported questions by item ident, so a collision makes one item
+   silently replace another: a 4-item quiz imports as 3 while the meta still
+   claims 4 points.
+6. **The media mirrors were compared by name and never by bytes.** If two copies
+   drift, all three still resolve and all three are still declared, so the gate
+   passes while Canvas serves a *different figure* depending on which
+   `$IMS-CC-FILEBASE$` reading wins — undiagnosable from the package. Not
+   hypothetical: BF-2026-049 records `do_media` copying a file onto itself.
+
+All twelve rules added across BF-2026-050 and BF-2026-051 fire on injection and
+pass on the real corpus.
+
+### What the cold round confirmed
+
+FIGURES 10/10, and it corrected a premise of mine: H6 and H7 already carried the
+corrected arrowhead in the pristine tree — A1 was the outlier, and the edit
+normalised it to match. It proved A1's marker inert four ways, including a
+**positive** control (injecting a `class="ray"` line changes 8,228 px), which is
+stronger than the negative control alone. SELECTALL 10/10 with all 235 non-keyed
+choices worked and every weak case ruled explicitly. NUMERIC cold 10/10 on all
+108 keys.
