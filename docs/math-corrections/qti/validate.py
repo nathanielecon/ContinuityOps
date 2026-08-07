@@ -363,6 +363,21 @@ def check(work, base=None):
             if not svs:
                 fails.append(f'{where}: no <setvar> -- SCORE is never '
                              f'written, so it stays at minvalue 0')
+            # ...and PER RESPCONDITION, not once per item. The value, action
+            # and varname clauses below already iterate every setvar; only the
+            # EXISTENCE clause was written against the item as a whole. Six
+            # items ship two respconditions -- D3, D4 and M3-M6, each pairing
+            # an exact-string condition with a numeric range -- so deleting the
+            # setvar from one of the two leaves `svs` non-empty and the item
+            # passes, while a student who satisfies that arm (typing `7.00`
+            # against a key of `7`) scores 0. The same "asserted once, needed
+            # at every site" shape as BF-2026-050 and -053 (BF-2026-060).
+            for rc_ in re.findall(r'<respcondition\b.*?</respcondition>',
+                                  body, re.S):
+                if '<setvar' not in rc_:
+                    fails.append(f'{where}: a <respcondition> writes no '
+                                 f'<setvar> -- a student who satisfies it '
+                                 f'scores 0')
             for attrs, value in svs:
                 # The THIRD instalment of this rule. BF-2026-047 checked the
                 # value, BF-2026-051 added the variable and called it "closed
@@ -443,6 +458,24 @@ def check(work, base=None):
                     fails.append(f'{where}: scoring uses respident {sorted(bad)} '
                                  f'but the item declares "{want}" -- those '
                                  f'conditions match nothing, so SCORE stays 0')
+                # IDENTITY was checked; PRESENCE was not. The rule above reads
+                # respident out of the operator and compares it, so an operator
+                # carrying no respident at all contributes nothing to `bad` and
+                # is invisible to it -- the mismatch it exists to catch is the
+                # louder half of the same defect. Only the negated side was
+                # covered, by the choice-negation rule further down, which
+                # requires each <not><varequal> to name the declared respident;
+                # the positive operators that actually award the score had no
+                # such check. An operator that names no response matches
+                # nothing, so the arm never fires and SCORE stays 0
+                # (BF-2026-060).
+                for op_ in re.findall(
+                        r'<var(?:equal|gte|lte|lt|gt)\b[^>]*>', body):
+                    if not re.search(r'\brespident="', op_):
+                        fails.append(f'{where}: scoring operator {op_!r} '
+                                     f'declares no respident -- it names no '
+                                     f'response, so the condition matches '
+                                     f'nothing')
 
             # multiple_choice_question is NOT select-all. Criterion 6's
             # amendment specifies exactly one keyed choice,
@@ -545,9 +578,6 @@ def check(work, base=None):
                     fails.append(f'{where}: {ndist} distractors '
                                  f'({n} choices, {n - ndist} keyed), '
                                  f'minimum is {MIN_DISTRACTORS}')
-                if len(set(choice_idents)) != n:
-                    fails.append(f'{where}: duplicate choice ident')
-
                 # ...and no CONTIGUOUS RUN of keys. BF-031's own statement of
                 # the defect is "pick the first option, OR THE FIRST N, scored
                 # 100% without doing any mathematics", and only the first clause
@@ -628,6 +658,17 @@ def check(work, base=None):
                     r'<mattext[^>]*>(.*?)</mattext>', body, re.S)]
                 if len(set(texts)) != len(texts):
                     fails.append(f'{where}: two choices share visible text')
+                # The FOURTH sibling, left behind when BF-2026-056 hoisted the
+                # other three out of the multiple_answers branch. Same rule,
+                # same reason, same hole: a multiple_choice_question could
+                # repeat a choice ident, and a repeated ident means the two
+                # <response_label>s are indistinguishable to scoring -- a
+                # <varequal> on it matches whichever Canvas resolves first, so
+                # selecting the other one is unscoreable. Hoisting three of
+                # four is how this class of defect keeps surviving its own fix
+                # (BF-2026-060).
+                if len(set(choice_idents)) != len(choice_idents):
+                    fails.append(f'{where}: duplicate choice ident')
 
             # original_answer_ids must be a permutation of the real choices.
             oai = re.search(r'<fieldlabel>original_answer_ids</fieldlabel>\s*'

@@ -2044,3 +2044,97 @@ Both fire on injection. Bytes unchanged, so the five accepted slices stand.
 the instrument. The judge this round also read the three generators to establish
 that the remaining regex-brittleness cases are genuinely unreachable, and declined
 to score them on evidence rather than assertion.
+
+---
+
+## 2026-08-07 — BF-2026-060 — Three coverage holes, all the same shape: a rule that reaches one site of several
+
+STRUCT's tenth read: **7/10, three defects.** Corpus clean on all 177 items for
+the tenth consecutive time, and `repackage.py` audited clean — no defect.
+
+Every one of the three is the recurring class this log keeps naming, and two of
+them are its dominant sub-case: *the same rule needed at two sites, present at
+one.* This is the sixth, seventh and eighth instalment.
+
+### 1. The `<setvar>` existence check ran once per item; the item is not the unit
+
+`validate.py` read every setvar in the item and checked its value, its action and
+its variable name **per setvar** — correctly. The existence clause alone was
+written against the whole item:
+
+```python
+svs = re.findall(r'<setvar([^>]*)>([^<]*)</setvar>', body)
+if not svs:
+    fails.append(...)
+```
+
+Six items ship **two** respconditions — `D3`, `D4` and `M3`–`M6`, each pairing an
+exact-string arm with a numeric-range arm so that `7.00` scores the same as `7`.
+Delete the setvar from one of the two and `svs` is still non-empty, so the item
+passes. A student who satisfies that arm — who types the equivalent spelling the
+arm exists to accept — **scores 0**. The rule that guarantees "a correct answer
+scores 100" was structurally incapable of seeing half the paths that award it.
+
+The three sibling clauses directly beneath it iterate `svs`. The existence clause
+sat two lines above them, reading the same list as a single boolean.
+
+### 2. Positive scoring operators were checked for respident *identity*, never *presence*
+
+The mismatch rule reads respident out of each operator and compares it against
+the item's declared one:
+
+```python
+bad = set(re.findall(r'<var(?:equal|gte|lte|lt|gt)\b[^>]*?\brespident="([^"]*)"',
+                     body)) - {want}
+```
+
+An operator carrying **no** respident at all contributes nothing to `bad`. It is
+invisible to the rule written to catch exactly this harm — the louder half of the
+defect was covered and the quieter half was not, because the check reads the
+attribute in order to test it and a missing attribute is never read.
+
+The negated side was covered, by the choice-negation rule further down, which
+requires each `<not><varequal>` to name the declared respident. So the operators
+that *award* the score were the unchecked ones. An operator naming no response
+matches nothing; the arm never fires; SCORE stays 0.
+
+Proved on both shapes — a positive `<varequal>` stripped of `respident` on a
+select-all (`topic-1-1` P1Q1a) and on a fill-in (`topic-1-5` P1Q1). The pre-fix
+gate reports **zero violations** on each.
+
+### 3. BF-2026-056 hoisted three of four siblings
+
+That round moved the key-is-a-real-choice, key-at-position-0 and
+duplicate-visible-text rules out of the `multiple_answers_question` branch into
+choice-bearing scope, because `multiple_choice_question` — which the rubric keeps
+ready — could otherwise name a non-existent key, key position 0, and repeat a
+choice's text, all unchecked.
+
+The duplicate **choice ident** rule, four lines from the ones that moved, stayed
+behind. A repeated ident makes two `<response_label>`s indistinguishable to
+scoring: a `<varequal>` on it matches whichever Canvas resolves first, so
+selecting the other is unscoreable. Hoisting three of four is how this class
+survives its own fix.
+
+Note on the proof: a naive injection also trips the `original_answer_ids`
+permutation rule, which would have made the new rule look redundant. The
+injection therefore rewrites `original_answer_ids` to stay consistent with the
+duplicated ident — the state a generator emitting the bug would actually produce.
+Against that, the pre-fix gate reports **zero violations**.
+
+### Verification
+
+| Injection | pre-fix gate | post-fix gate |
+|---|---|---|
+| `D3` second respcondition, setvar deleted | all checks pass | 1 violation, the setvar rule |
+| `D4` second respcondition, setvar deleted | all checks pass | 1 violation, the setvar rule |
+| `M3` second respcondition, setvar deleted | all checks pass | 1 violation, the setvar rule |
+| select-all positive `<varequal>`, respident stripped | all checks pass | 1 violation, the respident rule |
+| fill-in positive `<varequal>`, respident stripped | all checks pass | 1 violation, the respident rule |
+| `multiple_choice_question` with a repeated choice ident, `original_answer_ids` kept consistent | all checks pass | 1 violation, the duplicate-ident rule |
+
+Build hash unchanged at `4ee5bb50674db6fc` — no corpus byte moved, so the five
+accepted slices (SELECTALL, FIGURES, SHORTANS, NUMERIC, AUTHORED) stand.
+
+**Ten reads, ten clean corpora.** Every defect STRUCT has found in every round has
+been in the instrument, never in the 177 items.
