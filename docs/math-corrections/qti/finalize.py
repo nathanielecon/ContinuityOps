@@ -23,7 +23,7 @@ items stay byte-identical:
 Every keyed value below was recomputed from its own stem before being written
 here; none is copied from the choice text it replaces.
 """
-import glob, os, re, html, sys
+import glob, os, re, html, shutil, sys
 from decimal import Decimal, ROUND_HALF_UP
 
 # --------------------------------------------------------------------------
@@ -274,6 +274,28 @@ ADDWRONG = {
     # <= distractor, which fails on its other half.
     ('topic-sc-1', 'Part 1 Question 1'): ['10.6 ≥ 10.4 and 10.4 ≥ 10.6'],
     ('topic-sc-1', 'Part 2 Question 1'): ['9.8 ≤ 9.3 and 9.3 ≤ 9.8'],
+}
+
+# The three figure stems said "Use the graphic choices." -- which makes the
+# diagram load-bearing. It should not be. Whether the $IMS-CC-FILEBASE$ token
+# resolves to the figure is genuinely unknown (see do_media), and a stem that
+# points at a possibly-absent image tells a student to use something that may not
+# be on screen. The options are already written out verbatim as text, so say so:
+# the words are the answer choices, the diagram draws the same seven. Answerable
+# from the assignment alone either way -- criterion 5 (BF-2026-048).
+FIGURE_STEM = {
+    ('6th-grade-review-section-1', 'A1'):
+        ('Plot the point 4 on a number line. Each choice is written out below, '
+         'and the diagram shows the same seven options. Select all correct '
+         'choices; no units.'),
+    ('6th-grade-review-section-1', 'H6'):
+        ('Graph 6 &lt; y on a number line. Each choice is written out below, and '
+         'the diagram shows the same seven options. Select all correct graph '
+         'choices.'),
+    ('6th-grade-review-section-1', 'H7'):
+        ('Graph x &gt; 2 on a number line. Each choice is written out below, and '
+         'the diagram shows the same seven options. Select all correct graph '
+         'choices.'),
 }
 
 
@@ -1020,6 +1042,10 @@ def do_toshort(raw, pkg, title, spec, log):
 
 LETTERED = {('6th-grade-review-section-1', t) for t in ('A1', 'H6', 'H7')}
 
+# The row letters these items' figures are drawn with. Long enough that adding a
+# choice is a content decision rather than a crash, and checked at use anyway.
+CHOICE_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
 
 def do_letter_prefix(raw, pkg, title, log):
     block = item_block(raw, title)
@@ -1029,7 +1055,16 @@ def do_letter_prefix(raw, pkg, title, log):
     new, n = block, 0
     for m in re.finditer(r'(<response_label ident="[^"]*choice_(\d)">\s*<material>'
                          r'\s*<mattext[^>]*>)(.*?)(</mattext>)', block, re.S):
-        letter = 'ABCDEFG'[int(m.group(2)) - 1]
+        # Was 'ABCDEFG', which is exactly seven long: a choice_8 on A1/H6/H7
+        # raised IndexError and crashed the whole build, with nothing in the
+        # traceback pointing at the choice that caused it (BF-2026-048). Nobody
+        # has added an eighth choice, which is why this sat armed and unseen.
+        idx = int(m.group(2)) - 1
+        if idx >= len(CHOICE_LETTERS):
+            log.append(f'  !! {pkg} {title}: choice_{idx + 1} exceeds the '
+                       f'{len(CHOICE_LETTERS)}-letter alphabet')
+            return raw
+        letter = CHOICE_LETTERS[idx]
         if m.group(3).lstrip().startswith(letter + '.'):
             continue
         new = new.replace(m.group(0),
@@ -1367,6 +1402,105 @@ def do_shortsplit(raw, pkg, title, spec, log):
     return raw.replace(block, '\n'.join(out))
 
 
+# The corrected arrowhead, and the broken one it replaces. `markerUnits`
+# defaulting to "strokeWidth" scales the marker by the ray's stroke-width:5, so
+# a 9x6 path paints at 45x30, and refX="9" pins the tip at the circle -- putting
+# the body 45px the WRONG side of it. On a number line ink means membership, so
+# that wedge asserted 1.73 units the graph must leave blank (BF-2026-039).
+MARKER_BROKEN = ('<marker id="arrow" markerWidth="10" markerHeight="10" '
+                 'refX="9" refY="3" orient="auto" markerUnits="strokeWidth">'
+                 '<path d="M0,0 L0,6 L9,3 z" fill="#075985"/>')
+MARKER_FIXED = ('<marker id="arrow" markerWidth="18" markerHeight="14" '
+                'refX="17" refY="7" orient="auto" markerUnits="userSpaceOnUse">'
+                '<path d="M0,0 L0,14 L17,7 z" fill="#075985"/>')
+
+
+def do_figstem(raw, pkg, title, text, log):
+    """Reword a figure item's prose while leaving its <img> exactly as it is.
+
+    The stem is `<prose> &lt;img src=... /&gt;` in one mattext, so only the part
+    before the image is replaced. The img is preserved byte-for-byte: criterion 7
+    prescribes the $IMS-CC-FILEBASE$ form corpus-wide, and this change is about
+    the sentence, not the path.
+    """
+    block = item_block(raw, title)
+    if block is None:
+        log.append(f'  !! {pkg} {title}: item not found')
+        return raw
+    m = re.search(r'(<mattext texttype="text/html">)(.*?)(\s*&lt;img\b)', block, re.S)
+    if not m:
+        log.append(f'  !! {pkg} {title}: no prose-then-image stem')
+        return raw
+    new = block.replace(m.group(0), m.group(1) + text + m.group(3))
+    log.append(f'  figstem  {title:18s} diagram made supplementary')
+    return raw.replace(block, new)
+
+
+def do_media(pkgdir, pkg, log):
+    """Media stage -- the pipeline had none, so media could not be fixed at all.
+
+    Nothing in this pipeline ever read or wrote an SVG, and build.sh rebuilds
+    from a git ref rather than the working tree, so editing a figure inside the
+    shipped zip was silently discarded by the next build. That is why A1 still
+    carried the broken arrowhead long after H6/H7 were repaired.
+
+    Two jobs:
+
+    1. Normalise any figure still carrying the pre-BF-2026-039 marker. A1 is the
+       only one, and it is inert there ONLY because A1 happens to have no rays --
+       the record calls it a live trap, since any future edit that adds one
+       inherits the defect. Fixing it now costs nothing and disarms it.
+
+    2. Hedge the $IMS-CC-FILEBASE$ path depth. The src attributes say
+       `$IMS-CC-FILEBASE$/media/<f>.svg`; the manifest declares the files under
+       `<quizfolder>/media/`. If the token resolves to the package root -- which
+       is how Canvas's own exports read -- every figure imports broken. It cannot
+       be settled without a live Canvas, and there are exactly two candidate
+       resolutions, so satisfy BOTH: emit each file at the second location too
+       and declare it. Whichever way the token resolves, a file is there.
+       The src strings are left alone; criterion 7 prescribes that form.
+    """
+    svgs = sorted(glob.glob(os.path.join(pkgdir, '*/media/*.svg')))
+    if not svgs:
+        return
+
+    for f in svgs:
+        s = open(f, encoding='utf-8', newline='').read()
+        if MARKER_BROKEN in s:
+            open(f, 'w', encoding='utf-8', newline='').write(
+                s.replace(MARKER_BROKEN, MARKER_FIXED))
+            log.append(f'  media    {os.path.basename(f):32s} arrowhead normalised')
+
+    man = os.path.join(pkgdir, 'imsmanifest.xml')
+    if not os.path.exists(man):
+        return
+    m = open(man, encoding='utf-8', newline='').read()
+    if 'web_resources/media/' in m:
+        return
+
+    mirror = os.path.join(pkgdir, 'web_resources', 'media')
+    os.makedirs(mirror, exist_ok=True)
+    hrefs = []
+    for f in svgs:
+        shutil.copy2(f, os.path.join(mirror, os.path.basename(f)))
+        hrefs.append('web_resources/media/' + os.path.basename(f))
+
+    rid = re.search(r'<resource identifier="([^"]*_media)"', m)
+    if not rid:
+        log.append(f'  !! {pkg}: no _media resource to mirror')
+        return
+    new_id = rid.group(1) + '_root'
+    files = ''.join(f'<file href="{h}" />' for h in hrefs)
+    block = (f'<resource identifier="{new_id}" type="webcontent" '
+             f'href="{hrefs[0]}">{files}</resource>')
+    m = m.replace('</resources>', block + '</resources>')
+    m = m.replace(f'<dependency identifierref="{rid.group(1)}" />',
+                  f'<dependency identifierref="{rid.group(1)}" />'
+                  f'<dependency identifierref="{new_id}" />')
+    open(man, 'w', encoding='utf-8', newline='').write(m)
+    log.append(f'  media    manifest         +{len(hrefs)} mirrored at web_resources/')
+
+
 def do_grammar(raw, log):
     n = len(re.findall(r'Enter select all', raw))
     if n:
@@ -1457,6 +1591,10 @@ def main(base):
         for (p, t), text in STEM_FIX.items():
             if p == pkg:
                 raw = do_stemfix(raw, pkg, t, text, log)
+        # Before do_boiler, which appends the select-all instruction paragraph.
+        for (p, t), text in FIGURE_STEM.items():
+            if p == pkg:
+                raw = do_figstem(raw, pkg, t, text, log)
         raw = do_grammar(raw, log)
         raw = do_boiler(raw, log)
         raw = do_sign_sweep(raw, log)
@@ -1464,6 +1602,10 @@ def main(base):
         after = raw.count('<item ident=')
         out = raw.replace('\n', '\r\n') if crlf else raw
         open(path, 'w', encoding='utf-8', newline='').write(out)
+
+        # Media is a package-level concern, not an item-level one, so it runs
+        # against the extracted directory rather than the item XML.
+        do_media(d.rstrip('/'), pkg, log)
 
         if after != before:
             meta = os.path.join(os.path.dirname(path), 'assessment_meta.xml')

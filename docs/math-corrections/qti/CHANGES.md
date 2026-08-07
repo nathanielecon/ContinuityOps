@@ -333,38 +333,48 @@ Two figures I reported when recording the overturn do not survive measurement:
 The defect stands and the fix is right — 0.750 units of filled ink sat left of
 the 7 — but it stands on its own measurement, not on the comparison I drew.
 
-## Needs a Canvas import test before the figures can be trusted
+## The figures no longer depend on the unresolved path question
 
-**The `$IMS-CC-FILEBASE$` path depth is unverified.** The three image `src`
-attributes now read `$IMS-CC-FILEBASE$/media/<file>.svg`, while the manifest
-declares those files at
-`sixth_grade_review_section_1_accuracy_check/media/<file>.svg`.
+**This was recorded as unsettleable, and it was — the question, not the risk.**
+The `src` attributes read `$IMS-CC-FILEBASE$/media/<file>.svg` while the manifest
+declared those files only at
+`sixth_grade_review_section_1_accuracy_check/media/<file>.svg`. The token stands
+for the root of the package's imported web content, and Canvas's own exports put
+that content under `web_resources/`, so on that reading it resolves one segment
+short and the images import as broken links. There is no Canvas here and no
+reference export to compare against, so which reading is right cannot be
+established from this environment.
 
-The token stands for the root of the package's imported web content, and
-Canvas's own exports place that content under `web_resources/`. On that reading
-the token resolves to `media/<file>.svg` — one path segment short of where the
-files actually sit — and the images would import as broken links. The repair
-verified that stripping the token and rejoining under the quiz folder finds a
-file on disk, which assumes the mapping rather than testing it.
+It does not need to be. There are exactly **two** candidate resolutions, so both
+are now satisfied: each SVG is emitted at **both** paths and both are declared in
+the manifest. Whichever way Canvas resolves the token, a file is there. The `src`
+strings are untouched — criterion 7 prescribes that form corpus-wide.
 
-This is recorded as an open question rather than closed in either direction,
-because **it cannot be settled from this environment**: there is no Canvas to
-import into and no reference Canvas export in the repository to compare against.
-The judge that found it ruled it not a defect — the form present is the one this
-project's own rubric prescribes corpus-wide, and severity is low because all
-seven options in A1, H6 and H7 are also given verbatim as text choices, so each
-item is answerable and correctly scored with the image absent. A missing file
-yields a migration warning, not a failed import or a wrong key.
+**And the stems no longer lean on the figure.** The earlier ruling called this low
+severity because all seven options in `A1`, `H6` and `H7` are given verbatim as
+text, so each item is answerable and correctly scored with the image absent. That
+is right about scoring and wrong about the student: every one of those stems said
+*"Use the graphic choices."* A broken image left the stem pointing at something
+not on screen. They now say the choices are written out below and the diagram
+shows the same seven options — true whether or not the image renders, and what
+criterion 5 asks for.
 
-**To settle it:** import one package into Canvas and look at A1. If the figure is
-broken, the remedy is to move the three SVGs to `web_resources/media/` and point
-the manifest `<file href>` entries there, leaving the `src` strings unchanged.
-The same question applies identically to H6 and H7.
+**A1's arrowhead marker was fixed at the same time.** It still carried the
+pre-BF-2026-039 configuration (`markerUnits="strokeWidth"`, `refX="9"`), inert
+only because A1 has no rays. The record called it a live trap; it was really an
+unfixable one, because no pipeline stage touched media and `build.sh` rebuilds
+from a git ref, so any edit to the shipped SVG was discarded by the next build.
+A `do_media` stage closes both. Verified inert: A1 renders pixel-identical before
+and after.
 
-What is certain is that the original packages were broken here: they carried no
-`$IMS-CC-FILEBASE$` token at all — the token appears zero times in all 14 —
-and declared the SVGs inside the `imsqti_xmlv1p2` resource rather than as
-`webcontent`, so Canvas would never have published them to any resolvable path.
+What was already certain stays true — the original packages carried no
+`$IMS-CC-FILEBASE$` token at all (zero occurrences across all 14) and declared the
+SVGs inside the `imsqti_xmlv1p2` resource rather than as `webcontent`, so Canvas
+would never have published them to any resolvable path.
+
+**Still worth doing on first import:** open `A1` and confirm the figure renders.
+The mirror makes a broken link unlikely rather than impossible, and
+`verify_canvas_import.py` checks media presence when it is run for real.
 
 ## Item format: 43 free-response questions restored to numeric entry
 

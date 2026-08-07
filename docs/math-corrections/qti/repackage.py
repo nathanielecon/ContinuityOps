@@ -43,10 +43,23 @@ for pkg in sorted(os.listdir(SRC)):
 
     # Every href the manifest declares must resolve to a file actually present.
     man = ET.parse(os.path.join(d, "imsmanifest.xml")).getroot()
+    declared = set()
     for el in man.iter():
         href = el.get("href")
-        if href and href not in rel:
-            failures.append(f"{pkg}: manifest href does not resolve: {href}")
+        if href:
+            declared.add(href)
+            if href not in rel:
+                failures.append(f"{pkg}: manifest href does not resolve: {href}")
+
+    # ...and the reverse, which was missing. files_of() is a bare os.walk, so a
+    # media file that nothing declares gets packaged happily and is then never
+    # published by Canvas. The symptom -- a broken image -- is identical to the
+    # $IMS-CC-FILEBASE$ path-depth question, so it would have been diagnosed as
+    # that and "fixed" somewhere it was not broken (BF-2026-048).
+    for r in rel:
+        if "/media/" in r and r not in declared:
+            failures.append(f"{pkg}: {r} is packaged but not declared in the "
+                            f"manifest -- Canvas will not publish it")
 
     # Deterministic archives: zip stores each entry's mtime, and extracting to a
     # fresh temp dir stamps "now" on every file, so two builds of byte-identical

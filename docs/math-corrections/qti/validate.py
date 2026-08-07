@@ -15,20 +15,41 @@ import xml.etree.ElementTree as ET
 
 AUTOSCORED = {'numerical_question', 'multiple_answers_question',
               'short_answer_question', 'multiple_choice_question'}
-# The bar is DISTRACTORS, not choices. It was written as MIN_CHOICES = 7, which
-# on a single-key item permits six distractors -- weaker than the rubric
-# ("Shape A: >=8 choices") and weaker than the plan ("at least 7 close
-# distractors"), both of which agree with each other. 26 of 34 select-all items
-# sat below the documented bar and nothing could see it (BF-2026-043).
+# The bar is DISTRACTORS, not choices -- it was written as MIN_CHOICES = 7,
+# which on a single-key item permits six (BF-2026-043).
+#
+# It applies to SHAPE A ONLY, and getting that wrong is what produced three
+# standing warnings and eleven unnecessary distractors. The frozen rubric scopes
+# the rule explicitly:
+#
+#   Shape A (topic-*, respident="response1", _correct_N/_wrong_N idents):
+#       ">=8 choices" -- the bar lives here.
+#   Shape B (the two 6th-grade packages, respident="response", choice_N):
+#       "All 69 items have fewer than 8 choices. Do not score this as a defect."
+#   Split halves (Shape A): exempt by the criterion-6 amendment, because a half
+#       inherits only its own part's choices -- and the rubric refuses the
+#       alternative in terms: "padding every split half back to 8 means
+#       authoring distractors wholesale, and every authored distractor is fresh
+#       criterion-2 exposure, which is the trade this amendment refuses."
+#
+# A1/H6/H7 are Shape B, so they were never below any bar the gate sets, and the
+# FIGURE_ITEMS exemption that used to sit here was covering for this mistake
+# rather than for anything in the corpus (BF-2026-048).
 MIN_DISTRACTORS = 7
 
-# The only exemption, and it is deliberately noisy rather than silent: these
-# three items' choices are DRAWN FIGURES, so an extra distractor is an extra
-# SVG, not an extra string. Authoring figures before the Canvas import test has
-# confirmed the existing ones even render would be building on sand. They stay
-# at 6 distractors and are reported as warnings on every build until that test
-# runs; then they are authored up and this set goes away (BF-2026-043).
-FIGURE_ITEMS = {'A1', 'H6', 'H7'}
+# A split half's title ends in a letter glued to its question number --
+# "Part 1 Question 1a", "Part 2 Question 4b" -- where an unsplit item ends in
+# the bare number.
+SPLIT_HALF = re.compile(r'Question\s+\d+[a-z]$')
+
+
+def shape_a(body):
+    """Shape A is identified by its scoring declaration, not by package name.
+
+    Reading it off the item means a package that is renamed, or an item moved
+    between packages, still gets scored under the right shape.
+    """
+    return 'respident="response1"' in body
 
 ITEM = re.compile(r'<item ident="([^"]*)" title="([^"]*)">(.*?)</item>', re.S)
 LABEL = re.compile(r'<response_label ident="([^"]*)"')
@@ -155,15 +176,11 @@ def check(work, base=None):
                 # trap-safe way to count keys here (the rubric records that a
                 # naive regex makes every choice look keyed).
                 ndist = n - len(keys & set(choice_idents))
-                if ndist < MIN_DISTRACTORS:
-                    msg = (f'{where}: {ndist} distractors '
-                           f'({n} choices, {n - ndist} keyed), '
-                           f'minimum is {MIN_DISTRACTORS}')
-                    if title in FIGURE_ITEMS:
-                        warns.append(msg + ' -- FIGURE ITEM, exempt until the '
-                                           'Canvas import test confirms SVGs render')
-                    else:
-                        fails.append(msg)
+                if (ndist < MIN_DISTRACTORS and shape_a(body)
+                        and not SPLIT_HALF.search(title)):
+                    fails.append(f'{where}: {ndist} distractors '
+                                 f'({n} choices, {n - ndist} keyed), '
+                                 f'minimum is {MIN_DISTRACTORS}')
                 if len(set(choice_idents)) != n:
                     fails.append(f'{where}: duplicate choice ident')
                 # BF-031 -- no key may sit at position 0.

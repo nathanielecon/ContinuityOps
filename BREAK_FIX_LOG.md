@@ -1240,3 +1240,109 @@ hunt — a non-keyed choice that is actually TRUE — found **nothing** across a
 34 select-all items and all 27 new distractors. STRUCT confirmed no key moved
 anywhere against the pristine corpus, that the BF-2026-043 respident bug is
 genuinely gone corpus-wide, and that no key sits at position 0 (pristine: 47).
+
+## 2026-08-07 — BF-2026-048 — the gate was stricter than the frozen rubric, and I had been "fixing" the corpus to satisfy my own mistake
+
+The three standing warnings on `A1`, `H6`, `H7` were not a property of the
+corpus. They were a bug in `validate.py`.
+
+`JUDGE_RUBRIC_QTI.md` scopes the choice-count rule to **Shape A**. Of Shape B —
+the two 6th-grade packages, which is exactly where those three items live — it
+says: *"All 69 items have fewer than 8 choices. Do not score this as a defect."*
+Criterion 6 repeats it. My `MIN_DISTRACTORS = 7` applied corpus-wide, so it
+manufactured failures on items the frozen gate explicitly exempts, and I then
+suppressed them with a named `FIGURE_ITEMS` carve-out — covering for the bug
+rather than finding it.
+
+The rubric also refuses the remedy I had planned, in terms: *"padding every split
+half back to 8 means authoring distractors wholesale, and every authored
+distractor is fresh criterion-2 exposure, which is the trade this amendment
+refuses."* I had been one approval away from authoring three new SVG figures to
+satisfy a bar that does not exist.
+
+**Fixed properly.** `MIN_DISTRACTORS` now applies to Shape A only, identified by
+`respident="response1"` read off the item rather than by package name, and Shape A
+split halves are exempt per the criterion-6 amendment. `FIGURE_ITEMS` is deleted —
+the exemption stopped being needed rather than being worked around. Zero warnings.
+
+Proved falsifiable **in both directions**, which matters more than usual here
+because the failure mode was firing on the wrong shape: a Shape A non-split item
+dropped below the bar FAILS; a Shape A split half below it PASSES; a Shape B item
+below it PASSES.
+
+**What this says about last round.** "26 of 34 items below the documented bar"
+counted Shape B items the gate never covered. 11 of the 23 items I padded were
+Shape B, so those 11 additions were never required. They are not harmful — the
+SELECTALL and AUTHORED judges worked all 27 and confirmed every one is false — but
+the reasoning I gave for them was wrong, and a tidy story about enforcing a
+documented bar was covering an error about which bar applied.
+
+### Two traps that were armed and silent
+
+**`do_letter_prefix` crashed on an eighth choice.** `'ABCDEFG'[int(...) - 1]` is
+exactly seven long, so a `choice_8` on A1/H6/H7 raised `IndexError` and killed
+`finalize.py` outright, with nothing in the traceback pointing at the choice that
+caused it. Nobody had added one, which is precisely why it sat unseen — and I had
+been planning to add one. Widened, with a bounds check that logs the item.
+
+**`repackage.py`'s structural gate was one-directional.** It asserted every
+manifest `href` resolves to a real file and never the reverse, while `files_of()`
+is a bare `os.walk`. A media file that nothing declares was packaged happily and
+then never published by Canvas. The symptom — a broken image — is identical to the
+`$IMS-CC-FILEBASE$` path-depth question, so it would have been diagnosed as that
+and "fixed" somewhere it was not broken. Symmetric check added; caught on
+injection.
+
+### The pipeline could not touch media at all
+
+No stage read or wrote an SVG — `finalize.py` contained no reference to one — and
+`build.sh` rebuilds from a git ref rather than the working tree. So editing a
+figure inside the shipped zip was **silently discarded by the next build**. That
+is why `a1-number-line-options.svg` still carried the pre-BF-2026-039 arrowhead
+(`markerUnits="strokeWidth"`, `refX="9"`) long after H6/H7 were repaired: it was
+not overlooked, it was unfixable.
+
+Added `do_media`, and with it:
+
+**A1's marker normalised.** It was inert only because A1 happens to have no
+`class="ray"` elements; the record already called it a live trap, since any edit
+that adds a ray inherits a marker that scales 9×6 to 45×30 against
+`stroke-width:5` and paints a filled wedge across 1.73 units the graph must leave
+blank. Verified the fix is **provably inert**: A1 renders pixel-identical before
+and after, 35400 ink pixels both.
+
+**The `$IMS-CC-FILEBASE$` depth question closed by satisfying both answers.** The
+`src` attributes say `$IMS-CC-FILEBASE$/media/<f>.svg`; the manifest declared the
+files only under `<quizfolder>/media/`. There are exactly two candidate
+resolutions and no way to test which without a live Canvas — so each SVG is now
+emitted at **both** paths and both are declared. Whichever way the token resolves,
+a file is there. `src` strings unchanged; criterion 7 prescribes that form.
+
+**And the stems stopped depending on the figure.** All three said *"Use the
+graphic choices."* The earlier ruling called a broken image low severity because
+every option is also written out verbatim as text — right about scoring, wrong
+about the student, who is told to use something that may not be on screen. The
+stems now say the choices are written out below and the diagram shows the same
+seven options. True either way, and criterion 5 wants the item answerable from the
+assignment alone.
+
+Figures re-verified with the instrument G1b established, not a new one: `cairosvg`
+at scale 4, **exact RGB match on `#075985` with no tolerance** — tolerance is
+recorded as broken on these files, having swallowed label text at 40 and produced
+a false boundary from an antialiased tick. Ink spans x ∈ [310, 724.8] user units
+on both H6 and H7, unchanged. The negative control (`marker-end:none`) flips
+~5000 pixels confined to the ray far-ends and nothing else, so the detector still
+discriminates.
+
+### The acceptance ledger was stale in the direction nobody checks
+
+`ACCEPTANCE.md`'s content-round table left the `cold` column blank for T1-8, T1-9,
+SC-1, SC-2a, SC-2b, G1a, G2a and G2b. All eight cold reports were on disk, all at
+10/10. Reconciled every row against `judge/` rather than from memory: **all
+sixteen content slices carry two consecutive 10/10.** Two needed a second cold
+read because the first cold judge scored below 10 — T1-9 at 9, SC-1 at 8 — which
+is the cold round doing its job.
+
+A stale ledger is usually discussed as the risk of an unaccepted slice being
+mistaken for an accepted one. This was the opposite failure and it is also
+expensive: finished work that looks unfinished gets redone.

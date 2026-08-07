@@ -7,24 +7,41 @@ reading the slice fresh at high effort.
 Slices clean at r1 with no repair have no r2 round — their two reads are r1 and
 cold.
 
-| Slice | r1 | r2 | cold | Accepted |
-|---|---|---|---|---|
-| T1-1 | 6 | 10 | **10** | **yes** |
-| T1-2 | 7 | 10 | **10** | **yes** |
-| T1-3 | 8 | 10 | **10** | **yes** |
-| T1-4 | 9 | 10 | **10** | **yes** |
-| T1-5 | 7 | 10 | **10** | **yes** |
-| T1-6 | 8 | 10 | **10** | **yes** |
-| T1-7+10 | 10 | n/a | **10** | **yes** |
-| T1-8 | 5 | 10 | | |
-| T1-9 | 10 | n/a | | |
-| SC-1 | 5 | 10 | | |
-| SC-2a | 7 | 10 | | |
-| SC-2b | 7 | 10 | | |
-| G1a | 6 | 10 | | |
-| G1b | 6 | 9 -> 10 (r3) | **10** | **yes** (content, at pre-format-round state) |
-| G2a | 10 | n/a | | |
-| G2b | 8 | 10 | | |
+| Slice | r1 | r2 | r3/r4 | cold | cold2 | Accepted |
+|---|---|---|---|---|---|---|
+| T1-1 | 6 | 10 | | **10** | | **yes** |
+| T1-2 | 7 | 10 | | **10** | | **yes** |
+| T1-3 | 8 | 10 | | **10** | | **yes** |
+| T1-4 | 9 | 10 | | **10** | | **yes** |
+| T1-5 | 7 | 10 | | **10** | | **yes** |
+| T1-6 | 8 | 10 | | **10** | | **yes** |
+| T1-7+10 | 10 | n/a | | **10** | | **yes** |
+| T1-8 | 5 | 10 | | **10** | | **yes** |
+| T1-9 | 10 | 10 | | 9 | **10** | **yes** |
+| SC-1 | 5 | 10 | **10** (r3) | 8 | **10** | **yes** |
+| SC-2a | 7 | 10 | | **10** | | **yes** |
+| SC-2b | 7 | 10 | | **10** | | **yes** |
+| G1a | 6 | 10 | | **10** | | **yes** |
+| G1b | 6 | 9 | **10** (r3), **10** (r4) | 9 | **10** | **yes** |
+| G2a | 10 | n/a | | **10** | | **yes** |
+| G2b | 8 | 10 | | **10** | | **yes** |
+
+**All sixteen content slices carry two consecutive 10/10** — reconciled against
+the reports in `judge/`, not from memory (BF-2026-048). The previous version of
+this table left the `cold` column blank for T1-8, T1-9, SC-1, SC-2a, SC-2b, G1a,
+G2a and G2b, and those cold reports had existed on disk the whole time. A stale
+ledger is how an unaccepted slice gets mistaken for an accepted one; it can just
+as easily hide finished work and cause it to be redone.
+
+Two slices needed a second cold read because the first cold judge scored below
+10 — T1-9 (9) and SC-1 (8) — which is the loop behaving exactly as designed: the
+cold judge is not there to ratify.
+
+**Scope, and it is the whole point.** Every row above certifies the corpus **at
+the pre-format-round state**: the mathematics, keys, stems and figures. The
+answer-format round then changed types, stems and choice order across the corpus,
+so none of these rows certifies the shipped file. That is tracked separately in
+the answer-format ledger below, against a build hash.
 
 ## G1b cold read closed the outstanding bottleneck — 10/10
 
