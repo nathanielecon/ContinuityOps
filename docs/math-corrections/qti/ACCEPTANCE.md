@@ -138,24 +138,38 @@ A slice is accepted only at **10/10**. No partial acceptance, no "10/10 with
 minor notes". Gate: `judge/JUDGE_RUBRIC_QTI.md` + `judge/FORMAT_ROUND.md`,
 frozen and identical for every judge, amended only before the round opened.
 
-| Slice | r1 | r2 | final round | Accepted |
-|---|---|---|---|---|
-| NUMERIC (108 keys) | **10** | — | **10** | needs one more clean read |
-| SELECTALL (34 items) | 8 | pending | 9 | |
-| AUTHORED (distractors + stems) | 8 | pending | 8 | |
-| STRUCT / PERMUTE (177 items) | 9 | pending | 9 | |
-| SHORTANS (35 items) | 4 | 5 | 8 | |
-| T1-4 cold (14 items, fresh judge) | — | — | 9 | |
-| G1b cold (18 items, content) | — | **10** | — | **yes**, at pre-round state |
+| Slice | r1 | r2 | round A (2728bd5a) | round B cold (775b3982) | Accepted |
+|---|---|---|---|---|---|
+| NUMERIC (108 keys) | **10** | — | **10** | pending | |
+| SHORTANS (35 items) | 4 | 5 | **10** | pending | |
+| SELECTALL (34 items) | 8 | 9 | **10** | pending | |
+| AUTHORED (distractors + stems) | 8 | 8 | **10** | pending | |
+| STRUCT / PERMUTE (177 items) | 9 | 9 | 9 | pending | |
+| FIGURES (A1/H6/H7 + media) | — | — | **10** | pending | |
+| T1-4 cold (14 items, fresh judge) | — | — | 9 → folded into SHORTANS | — | |
+| G1b cold (18 items, content) | — | **10** | — | — | **yes**, at pre-round state |
 
-**No slice is accepted on the final round.** Every finding was applied, but a
-score is only evidence about the artifact that was judged, and the artifact
-changed underneath all six verdicts. Re-judging is required, and nothing here
-should be read as certifying the current build.
+**Verdicts are pinned to a build hash**, per `MASTER_PROMPT.md`: *"Record acceptances
+against a build hash. A rebuild that changes an accepted slice's text reopens it."*
 
-The one slice that scored 10/10 — NUMERIC, all 108 keys recomputed from their
-own stems — is the closest to accepted, and even it needs a second consecutive
-clean read to meet this project's bar.
+**Round A, build `2728bd5a`** — five slices at 10/10. STRUCT scored the *corpus*
+clean on all 177 items and took its point off the **gate**, which was in its slice
+by explicit instruction: six properties `validate.py` and `repackage.py` did not
+check, each proved by injecting a bug and watching the gate print "all checks
+pass". The worst was that nothing asserted the conditionvar's connective — flip
+the single `<and>` to `<or>` and a student who selects *nothing* scores 100, with
+every other rule invariant under the flip. All six are closed (BF-2026-050).
+
+**Between rounds** only `C4`, `E4`, `H1`, `H2` and one manifest changed, so
+SHORTANS and SELECTALL read byte-identical items across the two builds. The four
+stems were grammatical fragments that both NUMERIC and AUTHORED independently
+flagged and both correctly ruled breached no criterion; they were repaired anyway,
+because "true but ugly" is not the standard for text a student reads.
+
+**Round B is a cold round.** Per `COLD_BRIEF.md` each judge forms its own view
+before reading any prior report — *"If you merely ratify the first, the guarantee
+is worth nothing."* Two consecutive 10/10 against one identical hash accepts a
+slice; anything less returns it to the fixer.
 
 ### What the judges caught that nothing else would have
 
