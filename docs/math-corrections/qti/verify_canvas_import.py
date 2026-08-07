@@ -80,7 +80,12 @@ def read_expected():
         zf = zipfile.ZipFile(z)
         items, media = {}, set()
         for nm in zf.namelist():
-            if not nm.endswith('.xml') or 'manifest' in nm or 'meta' in nm:
+            # basename, not the whole zip entry path: a package whose quiz
+            # folder contained `meta` skipped every item and the checker
+            # reported a clean import of nothing (BF-2026-061).
+            bn = os.path.basename(nm)
+            if (not nm.endswith('.xml') or 'manifest' in bn
+                    or 'meta' in bn):
                 continue
             raw = zf.read(nm).decode('utf-8')
             for ident, title, body in ITEM.findall(raw):

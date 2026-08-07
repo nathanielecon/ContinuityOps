@@ -1165,6 +1165,21 @@ def do_widen(raw, pkg, title, vals, log):
     if block is None:
         log.append(f'  !! {pkg} {title}: item not found')
         return raw
+    # REFUSE rather than silently corrupt. The regex below is flat over the
+    # item -- the rubric's own trap table records that shape as the one that
+    # makes every choice look required -- and it does not strip <not> subtrees;
+    # resp_short then REPLACES the whole <resprocessing>. Pointed at a
+    # select-all this promotes the negated distractors to accepted answers.
+    # Pointed at a numeric item it discards the <vargte>/<varlte> arms and
+    # narrows the item to exact-string matching while question_type still reads
+    # numerical_question, so `7.00` against a key of `7` is rejected. Every
+    # current WIDEN target is a short answer with neither node, so no harm is
+    # live; the guard exists because the next one added need not be, and the
+    # damage would surface as a correct student marked wrong (BF-2026-061).
+    if '<not>' in block or '<vargte' in block or '<varlte' in block:
+        log.append(f'  !! {pkg} {title}: do_widen refuses -- the item carries '
+                   f'<not> or range bounds, which resp_short would discard')
+        return raw
     have = re.findall(r'<varequal[^>]*>([^<]*)</varequal>', block)
     allv = with_unicode_minus(list(dict.fromkeys(list(have) + vals)))
     new = re.sub(r'[ \t]*<resprocessing>.*?</resprocessing>',
@@ -1657,7 +1672,14 @@ def main(base):
     total = {'convert': 0, 'split': 0, 'short': 0, 'repair': 0, 'addwrong': 0}
     for d in sorted(glob.glob(os.path.join(base, '*/'))):
         xs = [f for f in glob.glob(d + '*/*.xml')
-              if 'manifest' not in f and 'meta' not in f]
+              # basename, not the whole path -- build.sh builds in
+              # `mktemp -d`, so an ancestor directory named `metadata` or
+              # `manifests` made this filter match every file and the stage
+              # silently processed nothing. Hardened at validate.py's two
+              # sites by BF-2026-059 and left at these four, so WHICH code
+              # paths ran still varied build to build (BF-2026-061).
+              if 'manifest' not in os.path.basename(f)
+                and 'meta' not in os.path.basename(f)]
         if not xs:
             continue
         path = xs[0]

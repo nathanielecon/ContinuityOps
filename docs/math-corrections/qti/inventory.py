@@ -43,7 +43,14 @@ def numeric(key):
 rows = []
 for d in sorted(glob.glob(sys.argv[1] + '/*/')):
     xs = [f for f in glob.glob(d + '*/*.xml')
-          if 'manifest' not in f and 'meta' not in f]
+          # basename, not the whole path -- build.sh builds in
+          # `mktemp -d`, so an ancestor directory named `metadata` or
+          # `manifests` made this filter match every file and the stage
+          # silently processed nothing. Hardened at validate.py's two
+          # sites by BF-2026-059 and left at these four, so WHICH code
+          # paths ran still varied build to build (BF-2026-061).
+          if 'manifest' not in os.path.basename(f)
+            and 'meta' not in os.path.basename(f)]
     if not xs:
         continue
     pkg = os.path.basename(d.rstrip('/')).replace(

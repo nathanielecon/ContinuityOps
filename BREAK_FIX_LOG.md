@@ -2138,3 +2138,187 @@ accepted slices (SELECTALL, FIGURES, SHORTANS, NUMERIC, AUTHORED) stand.
 
 **Ten reads, ten clean corpora.** Every defect STRUCT has found in every round has
 been in the instrument, never in the 177 items.
+
+---
+
+## 2026-08-07 — BF-2026-061 — Five more gate holes, and the fix from the round before was defeated by a guard two lines above it
+
+STRUCT's eleventh read, cold: **5/10, five defects.** Corpus clean on all 177
+items for the eleventh consecutive time, and `repackage.py` audited clean again.
+
+The judge did not accept `all checks pass` as an answer about the corpus. It
+wrote an independent auditor that walks the built tree with `ElementTree` and
+**executes** the QTI scoring trees rather than pattern-matching them —
+implementing `<and>`, `<or>`, `<not>`, `<other/>`, `<varequal>` under `case="No"`
+semantics and the four comparison operators over `Decimal`, walking each
+`<respcondition>` in document order, applying `Set`/`Add`/`Subtract`/`Multiply`/
+`Divide`, honouring `continue="No"` — then submitted real answers to all 177
+items and read the score back. For every choice item: the exact key set scores
+100, the empty selection scores 0, selecting every choice scores 0, the key set
+plus any one distractor scores 0 (each distractor tested individually), and the
+key set minus any one key scores 0 (each key tested individually). For every
+fill-in: each accepted value scores 100, a blank scores 0, and five adversarial
+probes score 0. Zero findings. That is a materially stronger statement than any
+previous round made about the corpus, and it shares no parsing assumption with
+`validate.py`, which uses `ElementTree` only for a well-formedness test and does
+everything else by regex.
+
+### 1. Nothing counted an item's scoring arms
+
+The connective rule's own message is *"conditionvar is not a single `<and>` -- an
+empty or partial selection can score 100"* — a property of the **item**, enforced
+per **conditionvar**. Append a second `<respcondition>` and every conditionvar is
+still a single `<and>`, so the rule is satisfied at every site it inspects while
+the property it names is false. Criterion 6 states the requirement outright for
+Shape A — *"exactly one `<respcondition>`"* — and no rule counted them.
+
+Worked: to a one-key select-all, append an arm whose conditionvar is
+`<and><not><varequal>KEY</varequal></not></and>`. A student who ticks nothing
+satisfies the negation, the arm fires, SCORE is Set to 100.
+
+The reason no other rule catches it is worth stating, because it is the same
+mechanism each time: `keys_of()` strips `<not>` subtrees before unioning, so the
+key set is **unchanged**, and every rule downstream reads that key set —
+`MIN_DISTRACTORS`, the contiguous-run test, `check_keys_vs_base`, the
+key-is-a-real-choice test. All invariant. A second arm that keys an *extra wrong
+choice* is caught, by two rules; the reachable form of the hole is precisely the
+one that leaves the key union alone.
+
+The two loops that do iterate respconditions — the `<other/>` guard and
+BF-2026-060's setvar clause — each ask a question *about a block*, and neither
+asks how many blocks there are.
+
+### 2. BF-2026-060's respident fix sits inside an unasserted guard, and is dead on 143 of 177 items
+
+Last round I added a presence check for `respident` on positive scoring
+operators, proved it on both shapes, and logged it closed. It is nested under
+`if want:`, where `want = respident_of(body)`, and **nothing asserts `want` is
+non-`None`.**
+
+This is verbatim the shape BF-2026-050 named at `decvar`: *"`if dv and ...`
+skipped the whole check when `<decvar>` was ABSENT, which is the worse case."*
+The lesson was applied to `decvar`, not here — and then a fix was layered on top
+of the unfixed guard one round later.
+
+`respident_of` was a single regex requiring `ident` to be the *first* attribute
+of a `response_lid`/`response_str`. Swap two attributes and it returns `None`,
+and both respident rules evaporate together. On a select-all the choice-negation
+loop fails closed by accident, because it uses `respident_of(body) or ''`, so it
+matches nothing and reports every distractor un-negated. **On a fill-in nothing
+else reads a respident at all** — and 143 of the 177 items are fill-ins. An
+operator naming a response that does not exist can never be true, `<setvar>`
+never runs, SCORE stays at `minvalue="0"`, and every student who types the right
+answer is told they are wrong. That is F5's "worst defect available here": the
+instruction that fails precisely the student who followed it.
+
+Fixed at both levels — the caller now asserts a readable declaration (the
+load-bearing half, which converts a silent skip into a failure whatever the
+cause), and `respident_of` no longer depends on attribute order or on the
+response element's flavour.
+
+### 3. An empty `<varequal></varequal>` makes a blank submission score 100
+
+The fill-in branch already carries a rule whose message reads *"`<not>` inside a
+fill-in conditionvar -- any non-matching entry, **including an empty box**,
+scores 100"*. So the gate knows that harm is worth a rule, and guarded only the
+node that produces it by negation. `keys_of()`'s `([^<]*)` matches the empty
+string, and every rule downstream treats `''` as a legitimate accepted value:
+`if not keys` sees a non-empty set; `numericish` is undisturbed because `''`
+holds no letter; and `check_keys_vs_base` is a **subset** test, so an *added*
+value is invisible to it by design.
+
+Canvas trims the submission before comparing, so a blank entry equals the empty
+accepted string and scores 100. On a select-all the key `''` would be caught by
+`k not in choice_idents` — the hole is exactly on the 143 fill-ins, again.
+
+### 4. An unpaired `<vargte>` accepts a half-line of wrong answers
+
+`resp_numeric` emits `<and><vargte>V</vargte><varlte>V</varlte></and>`, which is
+*x ≥ V and x ≤ V* — exactly *x = V*, written as a degenerate closed interval so
+`7.00` matches a key of `7`. BF-2026-058's rule asserts the **connective joining
+the pair** and is vacuous when only one bound is present. Delete the `<varlte>`
+and what remains is *x ≥ V*, the half-line [V, ∞): against a key of 3.6, a
+student who types `4`, `100` or `999999` scores 100. The item stops testing the
+answer and starts testing whether the student typed a large enough number.
+
+Same family as the tautology BF-2026-058 closed — there the condition was true
+over all of ℝ, here over half of it. Half a tautology is still not a test.
+
+### 5. Two irreconcilable counts of "an item", forty lines apart
+
+The per-item loop iterates `ITEM.findall(raw)`, whose pattern demands
+ident-then-title, single-spaced, with `>` immediately after. The package-total
+loop counts `raw.count('<item ident=')`. Nothing reconciles them, and **their
+difference is exactly the set of items that no per-item rule examines** — not one
+rule, all of them: type, `decvar`, `setvar`, respident, connectives, negation,
+`points_possible`, `original_answer_ids`, images, part labels.
+
+Worked: add one attribute to an item tag, set its SCORE to 0, and corrupt its
+`original_answer_ids`. The item now awards 0 to a student who selects exactly the
+right choice, and names an ident no `<response_label>` carries. Verdict: `all
+checks pass`, census silently `176 TOTAL`, package written.
+
+BF-2026-059 wrote the warning itself — *"the item census still prints 177 TOTAL,
+so the tool looks healthy while a whole rule is switched off"* — and the census
+stayed decoration. It is now asserted.
+
+### Two things the judge proved, declined to score, and was right about on both counts
+
+**The full-path `manifest`/`meta` predicate survives at four sites outside
+`validate.py`** — `finalize.py`, `permute.py`, `inventory.py`,
+`verify_canvas_import.py`. BF-2026-059 hardened it at `validate.py`'s two sites
+and left these. Declined **because it fails closed**: under a directory named
+`metadata`, `finalize.py` emits 1 log line instead of 81, `permute.py` reports
+`0 items permuted`, and `validate.py` then fails with **330 violations** (the
+pristine corpus keys the leading contiguous block, so BF-031's two rules fire on
+all 34 choice items), which aborts the build under `set -euo pipefail`. A broken
+build, not a bad artifact — correctly not scored.
+
+Fixed anyway, and for the reason the judge gave: **`build.sh` builds in
+`mktemp -d`**, so *which* code paths run is not deterministic across builds, and
+a pipeline whose coverage varies run to run is one whose green result does not
+mean the same thing twice. Verified identical coverage under three containing
+directory names — `normal`, `metadata`, `manifests` — all now 81 finalize lines,
+34 permuted, `all checks pass`.
+
+**`do_widen` reads a flat `<varequal>` regex that does not strip `<not>`**, then
+replaces the whole `<resprocessing>` via `resp_short`. Every current `WIDEN`
+target is a short answer with no `<not>` and no range bounds, so no harm is live
+— correctly not scored. But pointed at a select-all it would promote the negated
+distractors to accepted answers, and pointed at a numeric item it would discard
+the `<vargte>`/`<varlte>` arms and narrow the item to exact-string matching while
+`question_type` still reads `numerical_question`, a state `validate.py` accepts.
+It now refuses and logs `!!` rather than silently corrupting.
+
+### Verification
+
+| Injection | pre-fix gate | post-fix gate |
+|---|---|---|
+| select-all second arm, pure negation (`topic-1-1` P1Q1a) | all checks pass | the arm-count rule |
+| select-all second arm, subset of the keys (`topic-1-2` P1Q2) | all checks pass | the arm-count rule |
+| same, Shape B (`A1`) | all checks pass | the arm-count rule |
+| fill-in, declaration attributes reordered + bogus respident (`topic-1-5` P1Q1) | all checks pass | the identity rule, now reachable |
+| fill-in, `ident` removed from the declaration outright | all checks pass | the unreadable-declaration rule |
+| fill-in, empty `<varequal></varequal>` (`D3`) | all checks pass | the empty-key rule |
+| fill-in, unpaired `<vargte>` (`D3`) | all checks pass | the unpaired-bound rule |
+| item tag gains an attribute, SCORE set to 0, `original_answer_ids` corrupted | all checks pass, census 176 | the count-reconciliation rule |
+
+Each pre-fix run reports **zero** violations; each post-fix run reports exactly
+the injected defect and nothing else. Build hash unchanged at `4ee5bb50674db6fc`.
+
+**Eleven reads, eleven clean corpora.** The items have now survived eleven
+independent adversarial reads while the gate certifying them has failed all
+eleven. The residual risk to students is not in the 177 items; it is that a
+future edit passes a gate that cannot see it, which is what all five of these
+defects are instances of.
+
+### A correction to my own record, found while reconciling the ledger
+
+I have been carrying AUTHORED as **accepted**. It is not. The bar is two
+consecutive 10/10 on content that did not change between the reads. AUTHORED's
+verdicts are 10, 8, 8, 10 — and the two tens are separated by two eights and
+rendered against **different builds** (`2728bd5a` and `4ee5bb50`). It holds
+exactly one 10/10 at the pinned hash and needs a second. Four slices are
+accepted, not five. Recorded here rather than quietly fixed in the table,
+because a ledger that overstates acceptance is the specific failure D-5 was
+written to prevent.

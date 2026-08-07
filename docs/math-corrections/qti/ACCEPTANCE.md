@@ -138,22 +138,30 @@ A slice is accepted only at **10/10**. No partial acceptance, no "10/10 with
 minor notes". Gate: `judge/JUDGE_RUBRIC_QTI.md` + `judge/FORMAT_ROUND.md`,
 frozen and identical for every judge, amended only before the round opened.
 
-| Slice | A `2728bd5a` | B cold `775b3982` | C `4ee5bb50` | D `4ee5bb50` | E `4ee5bb50` | Accepted |
-|---|---|---|---|---|---|---|
-| **SELECTALL** (34 items) | **10** | **10** | unchanged | — | — | **YES** |
-| **FIGURES** (A1/H6/H7 + media) | 10 | **10** | **10** | — | — | **YES** |
-| **SHORTANS** (35 items) | 10 | 9 | **10** | **10** | — | **YES** |
-| **NUMERIC** (108 keys) | 10 | 10 | **10** | **10** | — | **YES** |
-| AUTHORED (distractors + stems) | 10 | 8 | 8 | **10** | pending | |
-| STRUCT (177 items + the gate) | 9 | 9 | 7 | 8 | pending | |
-| G1b cold (18 items, content) | — | — | — | — | — | **yes**, at pre-round state |
+| Slice | A `2728bd5a` | B cold `775b3982` | C `4ee5bb50` | D `4ee5bb50` | E `4ee5bb50` | F `4ee5bb50` | Accepted |
+|---|---|---|---|---|---|---|---|
+| **SELECTALL** (34 items) | **10** | **10** | unchanged | — | — | — | **YES** |
+| **FIGURES** (A1/H6/H7 + media) | 10 | **10** | **10** | — | — | — | **YES** |
+| **SHORTANS** (35 items) | 10 | 9 | **10** | **10** | — | — | **YES** |
+| **NUMERIC** (108 keys) | 10 | 10 | **10** | **10** | — | — | **YES** |
+| AUTHORED (distractors + stems) | 10 | 8 | 8 | **10** | — | pending | no — one 10 at the pinned hash, needs a second |
+| STRUCT (177 items + the gate) | 9 | 9 | 7 | 8 | 7 → 5 | pending | no |
+| G1b cold (18 items, content) | — | — | — | — | — | — | **yes**, at pre-round state |
 
 **Acceptance is pinned to CONTENT, not to a package hash.** A hash covers files a
 slice never reads. Every row was checked item-by-item across builds, so a slice
 counts two reads only where the items it read were byte-identical.
 
 **Four slices are accepted**, each on two 10/10 reads of the same content, the
-second from a judge that had not seen the slice:
+second from a judge that had not seen the slice. **AUTHORED is not among them**,
+and an earlier state of this file implied otherwise. Its verdicts are 10, 8, 8,
+10: the two tens are separated by two eights and were rendered against *different
+builds*, so they are neither consecutive nor against identical content. It holds
+exactly one 10/10 at `4ee5bb50` and needs a second. Corrected here rather than
+silently, because a ledger that overstates acceptance is the exact failure this
+reconciliation exists to prevent (BF-2026-061).
+
+The four:
 
 - **SELECTALL** — 34 items byte-identical across all four builds. Its cold judge
   worked all 235 non-keyed choices and ruled every weak case explicitly.
@@ -166,8 +174,9 @@ second from a judge that had not seen the slice:
 - **NUMERIC** — accepted after AUTHORED overturned a ruling both earlier NUMERIC
   judges had made about "whole number" over negative keys.
 
-**STRUCT has never scored 10.** Its three reads found the corpus clean on all 177
-items every time and took the point off the gate, which its brief puts in scope:
+**STRUCT has never scored 10, across eleven reads.** Every one of the eleven
+found the corpus clean on all 177 items and took the point off the gate, which
+its brief puts in scope:
 twelve rules across BF-2026-050/051/053, each proved by injecting a bug and
 watching `validate.py` print "all checks pass". Its round-C finding was that four
 of my own rules were indented inside the select-all branch and ran on 34 of 177
@@ -272,7 +281,16 @@ with every named method reachable (0 closure violations).
 - **The live Canvas import.** The script exists and self-tests; only running it
   against a real course settles whether conversion preserves meaning. See
   `TEACHER_ACTIONS.md`.
-- **`A1`, `H6`, `H7` sit at 6 distractors**, held deliberately until the import
-  test confirms their SVGs render. Reported as build warnings, never silent.
-- **Two consecutive 10/10 per slice**, this project's acceptance bar, is not yet
-  met by any slice.
+- **`A1`, `H6`, `H7` sit at 6 distractors.** This is no longer a warning and no
+  longer an exemption: the rubric scopes the choice-count rule to Shape A, these
+  three are Shape B, and the gate was corrected to match rather than carved
+  around. `FIGURE_ITEMS` is gone and the build reports zero warnings
+  (BF-2026-052).
+- **Two consecutive 10/10 per slice**, this project's acceptance bar, is met by
+  **four of six slices**. AUTHORED and STRUCT remain open — AUTHORED needs one
+  more read at `4ee5bb50`, STRUCT has never scored 10 and its findings have been
+  in the instrument every time.
+- **The gate itself is the open work.** Eleven consecutive STRUCT reads have
+  found the 177 items clean and `validate.py` holed. Twenty-odd rules have been
+  added across BF-2026-050…061, each proved by injecting the bug and watching the
+  previous gate print "all checks pass".

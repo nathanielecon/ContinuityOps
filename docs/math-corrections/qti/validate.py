@@ -51,7 +51,14 @@ def respident_of(body):
     names the wrong respident matches nothing, never fires <setvar>, and leaves
     SCORE at minvalue 0 for every correct student.
     """
-    m = re.search(r'<response_(?:lid|str) ident="([^"]*)"', body)
+    # Attribute ORDER is not part of the contract and neither is the response
+    # element's flavour. The old form demanded `ident` be the first attribute of
+    # a response_lid/response_str, so swapping two attributes returned None and
+    # switched off every rule built on this. The caller now asserts a non-None
+    # result, which is the load-bearing half; widening here removes the most
+    # likely cause rather than only reporting it (BF-2026-061).
+    m = re.search(r'<response_(?:lid|str|num|xy|grp)\b[^>]*?\bident="([^"]*)"',
+                  body)
     return m.group(1) if m else None
 
 
@@ -303,6 +310,22 @@ def check(work, base=None):
                 fails.append(f'{where}: retired Part 1/Part 2 sentence present')
 
             keys = keys_of(body)
+            # The <not> rule in the fill-in branch names "an empty box scores
+            # 100" as the harm it prevents, and guards only the node that
+            # produces that harm by NEGATION. An empty <varequal></varequal>
+            # produces it directly: Canvas trims the submission before
+            # comparing, so a blank entry equals the empty accepted string, the
+            # arm fires and SCORE is Set to 100. keys_of()'s ([^<]*) matches
+            # the empty string happily and every rule downstream then treats it
+            # as a legitimate accepted value -- `if not keys` sees a non-empty
+            # set, `numericish` is undisturbed because "" holds no letter, and
+            # check_keys_vs_base is a SUBSET test so an ADDED value is
+            # invisible to it by design. On a select-all the key `''` would be
+            # caught by `k not in choice_idents`; the hole is therefore exactly
+            # on the 143 fill-ins (BF-2026-061).
+            if any(not k.strip() for k in keys):
+                fails.append(f'{where}: an empty <varequal> is accepted -- a '
+                             f'blank submission scores 100')
             idents = LABEL.findall(body)
             choice_idents = [i for i in idents if i != 'answer1']
 
@@ -448,6 +471,25 @@ def check(work, base=None):
             # (BF-2026-051 rule 3 was the same mistake). Scope is the bug that
             # keeps recurring, so these sit here deliberately (BF-2026-053).
             want = respident_of(body)
+            # A GUARD, NEVER ASSERTED -- the BF-2026-050 shape one element out.
+            # That entry's lesson was "`if dv and ...` skipped the whole check
+            # when <decvar> was ABSENT, which is the worse case"; it was applied
+            # to decvar and not here, and then BF-2026-060 layered its
+            # respident-presence fix INSIDE this unfixed guard. respident_of is
+            # one regex requiring ident to be the first attribute of a
+            # response_lid/response_str, so reordering two attributes returns
+            # None and BOTH respident rules evaporate together. On a select-all
+            # the choice-negation loop below fails closed by accident (it uses
+            # `respident_of(body) or ''`, matches nothing and reports every
+            # distractor un-negated); on a FILL-IN nothing else reads a
+            # respident at all, so scoring goes wholly unchecked on 143 of the
+            # 177 items -- and an operator naming no live response never fires,
+            # so a correct student scores 0 (BF-2026-061).
+            if not want:
+                fails.append(f'{where}: no <response_lid>/<response_str> '
+                             f'declaring a respident this gate can read -- '
+                             f'every respident rule below is skipped, so the '
+                             f'item\'s scoring goes unchecked')
             if want:
                 # Comparison operators too: a numeric item scores through
                 # vargte/varlte, so checking only varequal leaves the range
@@ -549,10 +591,58 @@ def check(work, base=None):
                         fails.append(f'{where}: conditionvar joins the exact '
                                      f'value and the range with <and> -- an '
                                      f'equivalent spelling would be rejected')
+                    # ...and that the PAIR EXISTS. The rule above asserts the
+                    # connective joining two bounds and is vacuous when only one
+                    # is present. resp_numeric emits <and><vargte>V</vargte>
+                    # <varlte>V</varlte></and>, which is "x >= V and x <= V" --
+                    # exactly x = V, written as a degenerate closed interval so
+                    # that 7.00 matches a key of 7. Drop either bound and what
+                    # is left is a half-line: against a key of 3.6, "x >= 3.6"
+                    # scores 100 for 4, for 100, for 999999. The item stops
+                    # testing the answer and starts testing whether the student
+                    # typed a big enough number. Same family as BF-2026-058's
+                    # tautology -- there the condition was true over all of the
+                    # reals, here over half of them. Half a tautology is still
+                    # not a test (BF-2026-061).
+                    if (len(re.findall(r'<vargte\b', cv))
+                            != len(re.findall(r'<varlte\b', cv))):
+                        fails.append(f'{where}: unpaired vargte/varlte -- a '
+                                     f'one-sided bound accepts an unbounded '
+                                     f'range of wrong answers')
                     if '<not>' in cv:
                         fails.append(f'{where}: <not> inside a fill-in '
                                      f'conditionvar -- any non-matching entry, '
                                      f'including an empty box, scores 100')
+
+            # ITEM SCOPE, which nothing held. The connective rule below asserts
+            # "an empty or partial selection cannot score 100" and enforces it
+            # per <conditionvar>; append a SECOND <respcondition> and every
+            # conditionvar is still a single <and>, so the rule is satisfied at
+            # every site it inspects while the property its own message names is
+            # false at the item. Criterion 6 states it outright for Shape A --
+            # "exactly one <respcondition>" -- and no rule counted them. The two
+            # loops that do iterate respconditions (the <other/> guard and
+            # BF-2026-060's setvar clause) each ask a question ABOUT a block and
+            # neither asks how many blocks there are.
+            #   Worked: append to a one-key select-all an arm whose conditionvar
+            # is <and><not><varequal>KEY</varequal></not></and>. A student who
+            # ticks nothing satisfies the negation, the arm fires, SCORE is Set
+            # to 100. keys_of() strips <not> subtrees, so the key set is
+            # unchanged and MIN_DISTRACTORS, the contiguous-run test and
+            # check_keys_vs_base are all invariant. Every rule passes.
+            # Restricted to choice-bearing items deliberately: the rubric's
+            # second-arm carve-out is justified by equivalent-form alternates
+            # (3.6 / 3.60), which exist only for a TYPED value. A select-all
+            # answer is a set of idents, so a second arm necessarily awards 100
+            # for a different set (BF-2026-061).
+            if qt in ('multiple_answers_question', 'multiple_choice_question'):
+                rcs = re.findall(r'<respcondition\b.*?</respcondition>',
+                                 body, re.S)
+                if len(rcs) != 1:
+                    fails.append(f'{where}: {len(rcs)} <respcondition> blocks '
+                                 f'-- an all-or-nothing item scores through '
+                                 f'exactly one arm; a second arm awards 100 '
+                                 f'for a selection the first one rejects')
 
             if qt == 'multiple_answers_question':
                 # Every other autoscored type has a minimum-key rule -- numeric
@@ -708,7 +798,28 @@ def check(work, base=None):
         meta = glob.glob(d + '*/assessment_meta.xml')
         if not xs or not meta:
             continue
-        n = open(xs[0], encoding='utf-8', newline='').read().count('<item ident=')
+        _raw = open(xs[0], encoding='utf-8', newline='').read()
+        n = _raw.count('<item ident=')
+        # TWO NOTIONS OF "AN ITEM" live in this file, forty lines apart, and
+        # nothing reconciles them. This raw count accepts any `<item ident=`;
+        # ITEM.findall() up in the per-item loop demands ident-then-title,
+        # single-spaced, with `>` immediately after. Their DIFFERENCE is exactly
+        # the set of items that no per-item rule examines -- not one rule, all
+        # of them: type, decvar, setvar, respident, connectives, negation,
+        # points_possible, original_answer_ids, images, part labels -- while the
+        # package total stays self-consistent and the census still prints a
+        # plausible number. Add one attribute to an item tag and it becomes
+        # invisible to the whole gate; set its SCORE to 0 in the same edit and a
+        # student who answers correctly is told they are wrong, with `all checks
+        # pass` printed over it. BF-2026-059 wrote the warning itself -- "the
+        # item census still prints 177 TOTAL, so the tool looks healthy while a
+        # whole rule is switched off" -- and the census stayed decoration
+        # (BF-2026-061).
+        if n != len(ITEM.findall(_raw)):
+            fails.append(f'{os.path.basename(d.rstrip("/"))}: {n} `<item '
+                         f'ident=` in the file but {len(ITEM.findall(_raw))} '
+                         f'match the item pattern -- the difference is checked '
+                         f'by no rule in this gate')
         m = open(meta[0], encoding='utf-8', newline='').read()
         # The loop could only compare values it FOUND, so a meta declaring no
         # points_possible at all passed. The item-level twin forty lines up
