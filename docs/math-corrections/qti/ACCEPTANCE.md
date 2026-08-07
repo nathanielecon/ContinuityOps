@@ -138,15 +138,15 @@ A slice is accepted only at **10/10**. No partial acceptance, no "10/10 with
 minor notes". Gate: `judge/JUDGE_RUBRIC_QTI.md` + `judge/FORMAT_ROUND.md`,
 frozen and identical for every judge, amended only before the round opened.
 
-| Slice | A `2728bd5a` | B cold `775b3982` | C `4ee5bb50` | D cold `4ee5bb50` | Accepted |
-|---|---|---|---|---|---|
-| **SELECTALL** (34 items) | **10** | **10** | items unchanged | — | **YES** |
-| **FIGURES** (A1/H6/H7 + media) | 10 | **10** | **10** | — | **YES** |
-| **SHORTANS** (35 items) | 10 | 9 | **10** | **10** | **YES** |
-| **NUMERIC** (108 keys) | 10 | 10 | **10** | **10** | **YES** |
-| STRUCT (177 items + the gate) | 9 | 9 | 7 | pending | |
-| AUTHORED (distractors + stems) | 10 | 8 | 8 | pending | |
-| G1b cold (18 items, content) | — | — | — | — | **yes**, at pre-round state |
+| Slice | A `2728bd5a` | B cold `775b3982` | C `4ee5bb50` | D `4ee5bb50` | E `4ee5bb50` | Accepted |
+|---|---|---|---|---|---|---|
+| **SELECTALL** (34 items) | **10** | **10** | unchanged | — | — | **YES** |
+| **FIGURES** (A1/H6/H7 + media) | 10 | **10** | **10** | — | — | **YES** |
+| **SHORTANS** (35 items) | 10 | 9 | **10** | **10** | — | **YES** |
+| **NUMERIC** (108 keys) | 10 | 10 | **10** | **10** | — | **YES** |
+| AUTHORED (distractors + stems) | 10 | 8 | 8 | **10** | pending | |
+| STRUCT (177 items + the gate) | 9 | 9 | 7 | 8 | pending | |
+| G1b cold (18 items, content) | — | — | — | — | — | **yes**, at pre-round state |
 
 **Acceptance is pinned to CONTENT, not to a package hash.** A hash covers files a
 slice never reads. Every row was checked item-by-item across builds, so a slice
