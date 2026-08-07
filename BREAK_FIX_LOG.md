@@ -1801,3 +1801,79 @@ stand.
 corpus.** The corpus has been clean on all 177 items in all five reads. That is
 worth stating plainly: the artifacts have been stable and correct for a long
 time, and what kept scoring below 10 is the instrument that measures them.
+
+## 2026-08-07 — BF-2026-056 — two mutations that destroy scoring corpus-wide, and two failure modes I introduced with the last fix
+
+STRUCT's sixth read. Corpus clean on all 177 items for the sixth consecutive
+time; ten defects, all in the gate. Two of them are the worst kind found so far,
+because each admits a mutation that breaks scoring across the whole corpus while
+`validate.py` prints `all checks pass`.
+
+**An absent `<setvar>` was invisible.** The rule was written as a loop over
+`re.finditer`, so with no `<setvar>` at all the body never ran. Deleting every
+`<setvar>` from all 177 items passed, exit 0. `<decvar>` still declares SCORE, so
+it sits at `minvalue="0"` and **every correct student is marked wrong on every
+item**. The rule's own comment says it exists because "an item whose setvar holds
+0 marks every correct student wrong" — an absent one is strictly worse, and was
+the case it could not see. Same class as BF-2026-050's `if dv and ...`, one
+element over.
+
+**The fill-in connective was checked in one direction only.** BF-2026-053 added a
+`<not>`-inside-`<or>` test and its comment named the analogue in terms — "the same
+hazard as `<and>`-to-`<or>` on a select-all". The mirror flip was never checked.
+Turning a fill-in's `<or>` into `<and>` means no single typed string can satisfy
+it, the respcondition never fires, and everyone scores 0. 24 items hold more than
+one accepted value; the corpus-wide flip passed. The select-all arm guards its
+connective explicitly; the fill-in arm, 143 of 177 items, did not.
+
+**The part-label rule was wrong three ways at once.** `re.search` returned only
+the first match, so benign prose shadowed a real label later in the same stem —
+"Round to part a whole number. In Part B you found the total." passed, because
+the carve-out was tested against `part a` and `Part B` was never reached. That is
+the same mechanism BF-2026-055 logged and half-fixed: the carve-out was made
+case-sensitive but still applied to the wrong scope. The plural `s?` was a
+literal lowercase `s`, so `PARTS 1 AND 2` did not match at all. And it scanned the
+stem only — while **the historical defect lived in choice text** (`Part A: -15`,
+`Part B: 96 feet below sea level`), which is precisely what the splits were
+performed to remove, so the rule could not detect a regression to the state it
+exists to prevent.
+
+**`respident` had to be the first attribute.** The pattern required
+`<varequal respident=`, and XML attribute order carries no meaning; the corpus
+already emits both `<varequal respident="response">` and
+`<varequal respident="response" case="No">`. Writing `case="No" respident="…"`
+made the check go silent while its message claimed the conditions match nothing.
+
+**Three choice rules were unreachable for `multiple_choice_question`.** The
+amendment lists four requirements and the arm implemented three; the fourth — the
+single `<varequal>` names the keyed ident — sat in the select-all branch, along
+with the position-0 rule and the duplicate-visible-text rule whose own comment
+reads "a defect in **every shape**" from inside a branch that reached one. All
+three hoisted to choice-bearing scope.
+
+### The two I introduced last round
+
+Staging fixed a real problem and created two new ones, which is worth recording
+plainly rather than folded into the list above.
+
+**A malformed manifest leaked the staging directory.** The loop records a parse
+failure and then re-parses the same file unguarded, so `ParseError` aborted the
+process by traceback, past the cleanup, leaving a staging directory holding 13
+fully-built zips that no checksum vouches for. **And with a trailing slash on the
+output path** — `os.path.dirname("/x/out/")` returns `/x/out` — the staging
+directory was created *inside* the artifact directory, so the leak landed in the
+publish directory itself, once per failing run.
+
+**A stale artifact survived, covered by nothing.** Dropping a package from the
+source left its old zip in the output directory while `sha256sums.txt` was
+rewritten without it — the converse of the BF-2026-055 failure and the same broken
+guarantee: the publish directory served a build from a corpus nobody judged.
+
+**Counting three is not covering three.** `MIRROR_PREFIXES` is named and commented
+for locations and was consulted only for its length, so three copies in the wrong
+three places passed. Moving `web_resources/media/` to `bogus/media/` kept the
+count, the digests and every declaration intact while the `web_resources` reading
+of the token silently lost its file — verbatim the harm the count rule was written
+to prevent.
+
+All ten fire on injection; bytes unchanged, so the five accepted slices stand.

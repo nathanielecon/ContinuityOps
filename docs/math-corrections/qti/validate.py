@@ -259,15 +259,21 @@ def check(work, base=None):
             # correct`. The only false positive the earlier narrowing was
             # actually protecting against is prose like "part a whole", so
             # that one string is carved out and nothing else (BF-2026-055).
-            m_pl = re.search(r'\b[Pp][Aa][Rr][Tt]s?\s+(?:[A-Za-z]|[0-9]+|[IVXivx]+)\b',
-                             stem)
-            # The carve-out is case-SENSITIVE on purpose. With re.I it also
-            # swallowed the genuine label `PART A`, which is the exact thing
-            # the rule exists to catch -- the exemption for prose ('part a
-            # whole') only ever needed the all-lowercase form.
-            if m_pl and m_pl.group(0) != 'part a':
-                fails.append(f'{where}: stem references a part label '
-                             f'({m_pl.group(0)!r})')
+            # Three bugs at once. re.search took only the FIRST match, so
+            # benign prose ('part a whole') shadowed a real label later in
+            # the same stem. The plural `s?` was a literal lowercase s, so
+            # `PARTS 1` never matched. And it scanned the stem only -- while
+            # the historical defect lived in CHOICE text ('Part A: -15'),
+            # which is what the split was performed to remove, so the rule
+            # could not detect a regression to the state it exists to
+            # prevent (BF-2026-056).
+            for mt in re.findall(r'<mattext[^>]*>(.*?)</mattext>', body, re.S):
+                for m_pl in re.finditer(
+                        r'\b[Pp][Aa][Rr][Tt][Ss]?\s+(?:[A-Za-z]|[0-9]+|[IVXivx]+)\b',
+                        plain(mt)):
+                    if m_pl.group(0) != 'part a':
+                        fails.append(f'{where}: references a part label '
+                                     f'({m_pl.group(0)!r})')
 
             # The retired boilerplate must be gone everywhere.
             if 'Part 1 and Part 2 both must be correct' in stem:
@@ -314,13 +320,23 @@ def check(work, base=None):
             # declared by <decvar> and then never written, so it stays at
             # minvalue 0 and every correct student is marked wrong on that item
             # (BF-2026-051).
-            for m in re.finditer(r'<setvar([^>]*)>([^<]*)</setvar>', body):
-                if 'varname="SCORE"' not in m.group(1):
-                    fails.append(f'{where}: setvar writes {m.group(1).strip()!r},'
-                                 f' not SCORE -- SCORE is never set, so it stays 0')
-                if m.group(2).strip() != '100':
+            # An ABSENT setvar is worse than one holding 0, and the loop
+            # could not see it: with no <setvar> the body never ran.
+            # Deleting every setvar corpus-wide passed. <decvar> still
+            # declares SCORE, so it sits at minvalue 0 and every correct
+            # student is marked wrong on every item. Same class as
+            # BF-2026-050's `if dv and ...`, one element over (BF-2026-056).
+            svs = re.findall(r'<setvar([^>]*)>([^<]*)</setvar>', body)
+            if not svs:
+                fails.append(f'{where}: no <setvar> -- SCORE is never '
+                             f'written, so it stays at minvalue 0')
+            for attrs, value in svs:
+                if 'varname="SCORE"' not in attrs:
+                    fails.append(f'{where}: setvar writes {attrs.strip()!r}, '
+                                 f'not SCORE -- SCORE is never set, so it stays 0')
+                if value.strip() != '100':
                     fails.append(f'{where}: a correct answer scores '
-                                 f'{m.group(2).strip()}, not 100')
+                                 f'{value.strip()}, not 100')
             # `if dv and ...` skipped the whole check when <decvar> was ABSENT,
             # which is the worse case: <setvar varname="SCORE"> then writes an
             # outcome nothing declares. And minvalue was never read at all, so
@@ -378,7 +394,7 @@ def check(work, base=None):
                 # vargte/varlte, so checking only varequal leaves the range
                 # conditions unexamined.
                 bad = set(re.findall(
-                    r'<var(?:equal|gte|lte|lt|gt) respident="([^"]*)"', body)) - {want}
+                    r'<var(?:equal|gte|lte|lt|gt)\b[^>]*?\brespident="([^"]*)"', body)) - {want}
                 if bad:
                     fails.append(f'{where}: scoring uses respident {sorted(bad)} '
                                  f'but the item declares "{want}" -- those '
@@ -415,6 +431,18 @@ def check(work, base=None):
                 # the corpus's conditionvars are fill-in <or> and none of them
                 # was being examined.
                 for cv in re.findall(r'<conditionvar>(.*?)</conditionvar>', body, re.S):
+                    # The MIRROR of the select-all <and>-to-<or> flip, which
+                    # the comment above names and then did not check. Turning
+                    # a fill-in's <or> into <and> means no single typed string
+                    # can satisfy it, the respcondition never fires, and every
+                    # student scores 0. 24 items hold more than one accepted
+                    # value; the corpus-wide flip passed (BF-2026-056).
+                    if (len(re.findall(r'<varequal', cv)) > 1
+                            and not re.match(r'\s*<or\b', cv)):
+                        fails.append(f'{where}: fill-in conditionvar has '
+                                     f'multiple accepted values but is not a '
+                                     f'top-level <or> -- no single entry can '
+                                     f'satisfy it, so everyone scores 0')
                     if '<not>' in cv:
                         fails.append(f'{where}: <not> inside a fill-in '
                                      f'conditionvar -- any non-matching entry, '
@@ -433,9 +461,7 @@ def check(work, base=None):
                                  f'minimum is {MIN_DISTRACTORS}')
                 if len(set(choice_idents)) != n:
                     fails.append(f'{where}: duplicate choice ident')
-                # BF-031 -- no key may sit at position 0.
-                if choice_idents and choice_idents[0] in keys:
-                    fails.append(f'{where}: keyed choice is first (BF-031)')
+
                 # ...and no CONTIGUOUS RUN of keys. BF-031's own statement of
                 # the defect is "pick the first option, OR THE FIRST N, scored
                 # 100% without doing any mathematics", and only the first clause
@@ -446,12 +472,6 @@ def check(work, base=None):
                 if len(kp) > 1 and kp == list(range(kp[0], kp[0] + len(kp))):
                     fails.append(f'{where}: keys occupy a contiguous run {kp} '
                                  f'-- "the first N" scores without reasoning')
-                # Duplicate visible text is a defect in every shape.
-                texts = [plain(t) for t in re.findall(
-                    r'<response_label[^>]*>\s*<material>\s*'
-                    r'<mattext[^>]*>(.*?)</mattext>', body, re.S)]
-                if len(set(texts)) != len(texts):
-                    fails.append(f'{where}: two choices share visible text')
                 # The CONNECTIVE, which nothing checked. Flip the single <and>
                 # to <or> and the conditionvar becomes a disjunction of one
                 # positive varequal and N negations -- so a student who selects
@@ -470,9 +490,7 @@ def check(work, base=None):
                                      f'can score 100')
 
                 # Scoring must only reference choices that exist.
-                for k in keys:
-                    if k not in choice_idents:
-                        fails.append(f'{where}: key {k} is not a choice')
+
 
                 # Every non-keyed choice must actually be NEGATED, using the
                 # item's own respident. A <not> naming the wrong respident
@@ -489,6 +507,25 @@ def check(work, base=None):
                         fails.append(f'{where}: choice {c} is neither keyed '
                                      f'nor negated under the declared respident'
                                      f' -- selecting it would still score 100')
+
+            # These three apply to ANY choice-bearing item, and all three sat
+            # inside the multiple_answers branch -- so multiple_choice_question,
+            # which the rubric keeps ready, could name a non-existent key, put
+            # its key at position 0, and repeat a choice's visible text, all
+            # unchecked. The duplicate-text comment even said "a defect in every
+            # shape" from inside a branch that reached one (BF-2026-056).
+            if choice_idents:
+                for k in keys:
+                    if k not in choice_idents:
+                        fails.append(f'{where}: key {k} is not a choice')
+                # BF-031 -- no key may sit at position 0.
+                if choice_idents[0] in keys:
+                    fails.append(f'{where}: keyed choice is first (BF-031)')
+                texts = [plain(t) for t in re.findall(
+                    r'<response_label[^>]*>\s*<material>\s*'
+                    r'<mattext[^>]*>(.*?)</mattext>', body, re.S)]
+                if len(set(texts)) != len(texts):
+                    fails.append(f'{where}: two choices share visible text')
 
             # original_answer_ids must be a permutation of the real choices.
             oai = re.search(r'<fieldlabel>original_answer_ids</fieldlabel>\s*'

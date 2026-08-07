@@ -16,7 +16,12 @@ SRC = os.environ.get("QTI_SRC", "/tmp/qtiwork/pkg")
 OUT = sys.argv[1] if len(sys.argv) > 1 else "/tmp/qtiwork/out"
 os.makedirs(OUT, exist_ok=True)
 # Staging dir: nothing lands in OUT until every package has passed.
-STAGE = tempfile.mkdtemp(prefix="qti-stage-", dir=os.path.dirname(OUT) or ".")
+STAGE = tempfile.mkdtemp(
+    prefix="qti-stage-",
+    # abspath+rstrip, because os.path.dirname("/x/out/") returns "/x/out" --
+    # a trailing slash put the staging directory INSIDE the artifact
+    # directory, so a leak landed in OUT itself (BF-2026-056).
+    dir=os.path.dirname(os.path.abspath(OUT.rstrip(os.sep))) or ".")
 
 def files_of(root):
     out = []
@@ -45,6 +50,14 @@ for pkg in sorted(os.listdir(SRC)):
                 ET.parse(full)
             except Exception as e:
                 failures.append(f"{pkg}: {r} does not parse: {e}")
+
+    # A package that already failed to parse must not reach the unguarded
+    # re-parse below: a malformed imsmanifest.xml raised ParseError, aborted the
+    # process by traceback, and skipped the cleanup -- leaking a staging
+    # directory full of zips no checksum vouches for. That failure mode did not
+    # exist before staging; I introduced it (BF-2026-056).
+    if any(f.startswith(pkg + ":") for f in failures):
+        continue
 
     # Every href the manifest declares must resolve to a file actually present.
     man = ET.parse(os.path.join(d, "imsmanifest.xml")).getroot()
@@ -96,10 +109,24 @@ for pkg in sorted(os.listdir(SRC)):
     # survivors identical -- so the gate passed while one of the three
     # $IMS-CC-FILEBASE$ readings the mirrors exist to cover silently lost its
     # file (BF-2026-055).
+    # Counting three is not covering three. MIRROR_PREFIXES was consulted only
+    # for its LENGTH, so three copies in the wrong three places passed: moving
+    # web_resources/media/ to bogus/media/ kept the count, the digests and every
+    # declaration intact while the web_resources reading of the token silently
+    # lost its file -- verbatim the harm the rule was written to prevent
+    # (BF-2026-056).
     for name, paths in sorted(groups.items()):
-        if len(paths) != len(MIRROR_PREFIXES):
-            failures.append(f"{pkg}: {name} has {len(paths)} mirror copies, "
-                            f"expected {len(MIRROR_PREFIXES)}")
+        locs = {r.rsplit("/", 1)[0] + "/" if "/" in r else "" for r in
+                [os.path.relpath(p, d) for p in paths]}
+        want_fixed = {"media/", "web_resources/media/"}
+        missing = want_fixed - locs
+        if missing:
+            failures.append(f"{pkg}: {name} is missing its mirror at "
+                            f"{sorted(missing)} -- that $IMS-CC-FILEBASE$ "
+                            f"reading would 404")
+        if len(locs - want_fixed) != 1:
+            failures.append(f"{pkg}: {name} has {len(locs - want_fixed)} "
+                            f"quizfolder media copies, expected exactly 1")
         digests = {hashlib.sha256(open(p, "rb").read()).hexdigest() for p in paths}
         if len(digests) > 1:
             failures.append(f"{pkg}: the {len(paths)} copies of {name} are not "
@@ -155,6 +182,16 @@ if failures:
 for name in os.listdir(STAGE):
     shutil.move(os.path.join(STAGE, name), os.path.join(OUT, name))
 shutil.rmtree(STAGE, ignore_errors=True)
+
+# Drop any zip no row vouches for. Removing a package from SRC used to leave a
+# stale artifact in OUT with no checksum covering it at all -- the converse of
+# the BF-2026-055 failure, and the same broken guarantee: the publish directory
+# served a build from a corpus nobody judged (BF-2026-056).
+expected = {n for _, n, _ in rows}
+for f in sorted(os.listdir(OUT)):
+    if f.endswith(".zip") and f not in expected:
+        os.remove(os.path.join(OUT, f))
+        print(f"  removed stale artifact no checksum covers: {f}")
 
 with open(os.path.join(OUT, "sha256sums.txt"), "w") as fh:
     for sha, name, _ in rows:
