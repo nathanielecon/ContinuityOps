@@ -2988,3 +2988,168 @@ answers. Criteria 1–4, F5 and F6 are the mathematics slices' claims — all fi
 which are accepted — and it declined to certify them.
 
 **Fourteen reads, fourteen clean corpora.**
+
+---
+
+## 2026-08-07 — BF-2026-065 — Five rules that assert the contents and never the container
+
+STRUCT's fifteenth read, cold: **5/10, five defects.** Corpus clean on all 177
+items for the fifteenth consecutive time. `repackage.py` clean for the sixth
+round running.
+
+The judge used **both** auditing styles and named each one's blind spot: a
+pattern channel cannot see an unsatisfiable or over-permissive scoring tree, and
+an execution channel cannot see an item that accepts a wrong value, because it
+derives the accepted set from the artifact. It closed the second with an external
+witness — the `_correct_N` ident set on the 20 Shape A items, which the scoring
+tree never reads, 20/20 agreement — and the first with mutation sweeps.
+
+**Its positive controls caught two errors in its own instrument.** A naive
+`root.iter('item')` returns **0** on these files, because QTI 1.2 declares a
+default namespace — the same trap round N hit. And a *parallel* sweep silently
+corrupted its own results by sharing trial directories between workers, reporting
+23 passers where the isolated re-run reports 6, which is the number the code
+predicts. Every figure it quotes is from the isolated re-run. That is the third
+consecutive round where the control caught the instrument rather than the
+artifact.
+
+It also re-injected one exhibit per hole closed in BF-2026-057…-064 — eighteen —
+and re-swept BF-2026-064's 235 negated-ident candidates: **0 of 235 still pass**
+where 50 did. That fix reaches every one of its sites.
+
+### 1. The `<render_choice>` span is non-greedy, so both censuses go blind together — again
+
+BF-2026-064's own diagnosis of the round before it was that `original_answer_ids`
+was no backstop because *"BOTH sides went blind together."* It recurs on the fix
+that diagnosis produced, one level out. `(.*?)` stops at the **first**
+`</render_choice>`. Put an empty `<render_choice></render_choice>` after every
+real label and a ghost label after that: every real label stays inside the
+captured span, so keys and `original_answer_ids` are untouched — and the ghost
+falls outside every span, invisible to `choice_idents` **and** to the count that
+reconciles `choice_idents`. In the parsed tree the ghost is still a child of the
+real `<render_choice>`, so it is a genuine rendered choice, constrained by
+nothing. **34 of 34 select-all items pass**, and two selections score 100 where
+the clean item has exactly one.
+
+Fixed by counting over the **item** and subtracting only what a `<render_fib>`
+renders, so no span regex sits between the census and the truth, plus an
+assertion that the element is not nested. `permute.py` read the same element with
+a still narrower regex; widened too.
+
+**Recorded against myself.** My first two attempts to reproduce this both failed
+— I put the nested pair before the real labels, which trips "key is not a choice"
+— and I had begun to write that the judge's claim was not reproducible. It was my
+construction that was wrong. Swept properly: 34 of 34, exactly as reported. That
+is the second round running where the round-N caution applied to me rather than
+to the judge.
+
+### 2. BF-2026-064 counted the response declarations and never the answer boxes
+
+That entry states its own harm as *"the item ships with two rendered answer
+boxes, only one scored … the student who types the correct answer into the box
+Canvas does not bind scores 0"* — and the rule it added asserts the number of
+`<response_str>` **declarations**. The number of boxes is one granularity finer
+and was unasserted. Duplicate the `<render_fib>`, or add a second
+`<response_label>` inside it, and there is still exactly one declaration, one
+respident, `rcardinality="Single"` intact, and `choice_idents` empty so the
+choice-side rules never look.
+
+This is also the fill-in twin of the duplicate-choice-ident rule, whose message
+reads *"a repeated ident means the two `<response_label>`s are indistinguishable
+to scoring"* — scoped to choice-bearing items, so the 143 fill-ins, the larger
+population, had no equivalent. **143 of 143 on both exhibits.**
+
+### 3. `question_type` is the fifth first-match reader, and the one that dispatches
+
+BF-2026-062 closed three (`decvar`, `points_possible`, `original_answer_ids`) and
+stated the remedy as *"assert the cardinality first, then check every
+occurrence"*. BF-2026-064 closed the fourth and quoted BF-2026-060 back:
+*"hoisting three of four is how this class of defect keeps surviving its own
+fix."* This is the fifth — and it is not an ordinary metadata field. **Every
+type-specific rule in the loop branches on it.** A second field makes this gate
+validate one item and Canvas build another.
+
+The judge checked which direction is exploitable rather than assuming, as the
+round before had for `rids`: decoy-first fails closed; real-first-decoy-second
+passes on **177 of 177**. If Canvas takes the last, an accuracy check silently
+becomes a manually-graded essay and checks nothing.
+
+### 4. Fourteen rules assert the contents of the scoring block; none asserted the block
+
+`validate.py` never mentioned `<resprocessing>`. `<decvar>`, `<setvar>`,
+`<respcondition>` and `<conditionvar>` were all matched by regex over the whole
+item body, wherever they sat. The rubric states the location in terms —
+*"`maxvalue="100"` is on `<decvar>` in `<resprocessing><outcomes>`"* — and QTI 1.2
+puts `<respcondition>` inside `<resprocessing>`. An element outside its container
+takes no part in scoring, so every one of those rules' messages was false in
+exactly the way it warns about: *"no `<setvar>` — SCORE is never written, so it
+stays at minvalue 0"* was delivered as "a `<setvar>` exists somewhere in the
+item".
+
+Strip the wrapper and keep its children: the XML still parses, all fourteen rules
+pass, and enumerating all 256 selections gives **zero** scoring 100 where the
+clean item has exactly one. An unpassable item, certified — BF-2026-064 defect
+3's shape reached by a different route. **177 of 177**, and unwrapping
+`<outcomes>` alone also **177 of 177**.
+
+### 5. Unanswerable was asserted on the answer side at both shapes and never on the question side
+
+The gate fails an item whose answer widget is missing — *"choice-bearing item has
+no `<response_label>` — unanswerable"* and *"fill-in has no `<render_fib>` … every
+student scores 0"* — and asserted nothing about the item having a **question**.
+Empty the stem and Canvas renders a numbered question with an answer box and no
+text. **150 of 177 pass**, and the 27 that are caught are caught by a
+*neighbouring* rule — the negative-key sign-guidance clause, which needs its
+sentence in the stem — not by anything about the stem existing.
+
+This is also the only mechanically decidable half of F4, *"a student must be able
+to tell from the stem alone what to type"*, and it was not implemented.
+
+### Three hardenings the judge proved and declined; closed anyway
+
+- **The printed census is still not the asserted one.** BF-2026-062 closed *"the
+  census has never been asserted against anything"* by asserting a total computed
+  inside `check_items_vs_base` — a **different** regex over a **different**
+  traversal from the `stats` census that is printed. Two numbers again,
+  reconciled by nothing. The judge produced a build printing `176 TOTAL` beside
+  `all checks pass`. Reaching it needs `if not xs or not meta: continue` — a
+  guard never asserted, one more time — so both are closed.
+- **A self-closing `<setvar/>`** satisfies the per-respcondition substring census
+  and escapes all three clauses that parse setvars. Harmless here: the six
+  two-arm items pair `V` with `V.00` and each arm carries its own degenerate
+  range, so the surviving arm still accepts both spellings numerically. Closed
+  because a census and a parse disagreeing about what a `<setvar>` is is the same
+  shape as every other defect in this log.
+
+### Verification
+
+Seven sweeps over the full candidate space rather than single exhibits — 831
+exhibits in all. Every one passes the pre-fix gate and fails the post-fix gate:
+
+| exhibit | targets | pre-fix passes | post-fix catches |
+|---|---|---|---|
+| nested `<render_choice>` + ghost label | 34 | 34 | 34 |
+| duplicated `<render_fib>` | 143 | 143 | 143 |
+| two labels in one `<render_fib>` | 143 | 143 | 143 |
+| second `question_type` | 177 | 177 | 177 |
+| `<resprocessing>` unwrapped | 177 | 177 | 177 |
+| `<outcomes>` unwrapped | 177 | 177 | 177 |
+| empty stem | 177 | 150 | 177 |
+
+Build hash unchanged at `4ee5bb50674db6fc`.
+
+### On the corpus
+
+The judge enumerated all 2ⁿ selections on every one of the 34 select-all items —
+exactly one scores 100 on each — and on the 143 fill-ins confirmed every accepted
+spelling scores 100 (whitespace-trimmed and case-folded) while no adversarial
+entry does, across empty, blank, `0`, `±1`, `999999`, `abc`, key±1, key×10,
+−key, and a trailing-digit perturbation. It compared the 14 shipped zips
+entry-by-entry against its validated tree: **51 entries, 0 mismatches.**
+
+It stated its limit as every STRUCT judge now does: this is a structural verdict.
+Execution establishes which answers score 100, not that they are the
+mathematically right answers — criteria 1–4, F5 and F6 belong to the mathematics
+slices, all five of which are accepted.
+
+**Fifteen reads, fifteen clean corpora.**

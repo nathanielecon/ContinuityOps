@@ -28,7 +28,10 @@ from itertools import permutations
 
 LABEL = re.compile(r'<response_label\b.*?</response_label>', re.S)
 ITEM = re.compile(r'<item ident="[^"]*" title="[^"]*">.*?</item>', re.S)
-RENDER = re.compile(r'<render_choice>(.*?)</render_choice>', re.S)
+# `<render_choice\b[^>]*>`, not the bare tag: validate.py reads this same
+# element and the two regexes disagreeing about what it is has already
+# produced one defect (BF-2026-065).
+RENDER = re.compile(r'<render_choice\b[^>]*>(.*?)</render_choice>', re.S)
 
 
 def keyed_idents(item):

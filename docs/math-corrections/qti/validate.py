@@ -309,9 +309,30 @@ def check(work, base=None):
 
         for ident, title, body in ITEM.findall(raw):
             where = f'{rel} :: {title}'
-            qt = re.search(r'<fieldlabel>question_type</fieldlabel>\s*'
-                           r'<fieldentry>([^<]*)</fieldentry>', body)
-            qt = qt.group(1) if qt else '?'
+            # THE FIFTH first-match metadata reader, and the only one that
+            # DISPATCHES: every type-specific rule in this loop branches on it
+            # -- AUTOSCORED, rcardinality, render_fib, the operator whitelist,
+            # case="No", the conditionvar shape rules, the respcondition-count
+            # rule, original_answer_ids. A second field makes this gate validate
+            # one item and Canvas build another. BF-2026-062 closed three
+            # (decvar, points_possible, original_answer_ids) and stated the
+            # remedy as "assert the cardinality first, then check every
+            # occurrence"; BF-2026-064 closed the fourth and quoted BF-2026-060
+            # back -- "hoisting three of four is how this class of defect keeps
+            # surviving its own fix". QTI 1.2 does not define a duplicate
+            # question_type, so which one Canvas honours cannot be settled from
+            # here, and THAT AMBIGUITY IS THE DEFECT: if it takes the last (its
+            # importer assigns qtimetadatafield values in document order) an
+            # accuracy check silently becomes a manually-graded essay and checks
+            # nothing. Decoy-first fails closed; real-first-decoy-second passed
+            # on 177 of 177 (BF-2026-065).
+            qts = re.findall(r'<fieldlabel>question_type</fieldlabel>\s*'
+                             r'<fieldentry>([^<]*)</fieldentry>', body)
+            if len(qts) != 1:
+                fails.append(f'{where}: {len(qts)} question_type fields {qts} '
+                             f'-- which one Canvas builds is undefined, and '
+                             f'every type rule below is applied to the first')
+            qt = qts[0] if qts else '?'
             bump(qt)
 
             if qt not in AUTOSCORED:
@@ -320,6 +341,22 @@ def check(work, base=None):
             stem = re.search(r'<mattext texttype="text/html">(.*?)</mattext>',
                              body, re.S)
             stem = plain(stem.group(1)) if stem else ''
+            # The gate fails an item whose ANSWER widget is missing, at both
+            # shapes -- "choice-bearing item has no <response_label> --
+            # unanswerable" and "fill-in has no <render_fib> ... every student
+            # scores 0" -- and asserted nothing about the item having a
+            # QUESTION. Empty the stem and Canvas renders a numbered question
+            # with an answer box and no text. 150 of 177 passed; the 27 that
+            # were caught were caught by a NEIGHBOURING rule, the negative-key
+            # sign-guidance clause, which needs its sentence in the stem -- not
+            # by anything about the stem existing. This is also the only
+            # mechanically decidable half of F4, "a student must be able to tell
+            # from the stem alone what to type", and it was not implemented
+            # (BF-2026-065).
+            if not stem:
+                fails.append(f'{where}: the stem renders no text -- the student '
+                             f'is shown an answer widget and no question, so '
+                             f'the item is unanswerable')
 
             # One part per question. F2 is "No item stem may reference a part
             # label AT ALL", not "no Part A: prompt" -- the colon form missed
@@ -364,6 +401,44 @@ def check(work, base=None):
                    for mt in re.findall(r'<mattext[^>]*>(.*?)</mattext>',
                                         body, re.S)):
                 fails.append(f'{where}: retired Part 1/Part 2 sentence present')
+
+            # FOURTEEN rules assert the CONTENTS of the scoring block and
+            # none asserted the block. `validate.py` never mentioned
+            # <resprocessing>: decvar, setvar, respcondition and conditionvar
+            # were all matched by regex over the whole item body, wherever they
+            # sat. The rubric states the location in terms -- 'maxvalue="100"
+            # is on <decvar> in <resprocessing><outcomes>' -- and QTI 1.2 puts
+            # <respcondition> inside <resprocessing>. An element outside its
+            # container takes no part in scoring, so every one of those rules'
+            # messages was false in exactly the way it warns about: "no
+            # <setvar> -- SCORE is never written, so it stays at minvalue 0"
+            # was delivered as "a <setvar> exists somewhere in the item".
+            # Strip the <resprocessing> wrapper and keep its children: the XML
+            # still parses, every one of the fourteen rules passes, and
+            # enumerating all 256 selections gives ZERO scoring 100 where the
+            # clean item has exactly one. An unpassable item, certified.
+            # Passed on 177 of 177, and unwrapping <outcomes> alone also passed
+            # on 177 of 177 (BF-2026-065).
+            rps = re.findall(r'<resprocessing>(.*?)</resprocessing>', body, re.S)
+            if len(rps) != 1:
+                fails.append(f'{where}: {len(rps)} <resprocessing> blocks -- '
+                             f'scoring is undefined, so SCORE stays at '
+                             f'minvalue 0')
+            else:
+                for _tag in ('decvar', 'respcondition', 'setvar',
+                             'conditionvar'):
+                    if (len(re.findall(r'<%s\b' % _tag, body))
+                            != len(re.findall(r'<%s\b' % _tag, rps[0]))):
+                        fails.append(f'{where}: a <{_tag}> sits outside '
+                                     f'<resprocessing> -- it takes no part in '
+                                     f'scoring, so SCORE stays at minvalue 0')
+                ocs = re.findall(r'<outcomes>(.*?)</outcomes>', rps[0], re.S)
+                if (len(ocs) != 1
+                        or (len(re.findall(r'<decvar\b', rps[0]))
+                            != len(re.findall(r'<decvar\b', ocs[0])))):
+                    fails.append(f'{where}: <decvar> is not inside exactly one '
+                                 f'<resprocessing><outcomes> -- SCORE is not '
+                                 f'declared where Canvas reads it')
 
             keys = keys_of(body)
             # The <not> rule in the fill-in branch names "an empty box scores
@@ -411,13 +486,37 @@ def check(work, base=None):
             # this gate cannot read an ident from is a choice no rule below
             # examines, and widening LABEL alone would leave a label with NO
             # ident at all in the same silent state (BF-2026-064).
-            n_tags = sum(len(re.findall(r'<response_label\b', sp))
-                         for sp in choice_spans)
-            if n_tags != len(choice_idents):
-                fails.append(f'{where}: {n_tags} <response_label> tags render '
-                             f'but {len(choice_idents)} yield an ident this '
-                             f'gate can read -- the difference is checked by '
-                             f'no rule here')
+            # BOTH SIDES GO BLIND TOGETHER, one level out -- which is
+            # BF-2026-064's own diagnosis of the round before it, recurring on
+            # the fix that diagnosis produced. `(.*?)` stops at the FIRST
+            # </render_choice>, so nesting an empty <render_choice></render_choice>
+            # inside the real one puts every label after it outside every
+            # captured span: invisible to choice_idents AND to the count that
+            # reconciles choice_idents, so the reconciliation is satisfied. In
+            # the parsed tree that label is still a child of the real
+            # <render_choice> and is a genuine rendered choice, unconstrained by
+            # the scoring <and> -- a student ticks the key and it and scores 100
+            # on an all-or-nothing item. Passed on 34 of 34 select-all items.
+            # Count over the ITEM and subtract only what a <render_fib> renders,
+            # so no span regex sits between the census and the truth
+            # (BF-2026-065).
+            fib_spans = re.findall(r'<render_fib\b[^>]*>(.*?)</render_fib>',
+                                   body, re.S)
+            n_fiblab = sum(len(re.findall(r'<response_label\b', sp))
+                           for sp in fib_spans)
+            n_body = len(re.findall(r'<response_label\b', body))
+            if n_body - n_fiblab != len(choice_idents):
+                fails.append(f'{where}: {n_body - n_fiblab} <response_label> '
+                             f'tags sit outside a <render_fib> but '
+                             f'{len(choice_idents)} are inside a '
+                             f'<render_choice> span this gate can read -- the '
+                             f'difference is rendered as a choice and '
+                             f'constrained by no rule here')
+            if len(choice_spans) != len(re.findall(r'<render_choice\b', body)):
+                fails.append(f'{where}: <render_choice> elements are nested or '
+                             f'unbalanced -- the span regex stops at the first '
+                             f'</render_choice>, so the choices after it are '
+                             f'invisible to every rule below')
 
             # Sign guidance applies to EVERY fill-in, not just numeric entry --
             # F4 asks for "the sign convention if the answer can be negative" of
@@ -522,6 +621,21 @@ def check(work, base=None):
             # at every site" shape as BF-2026-050 and -053 (BF-2026-060).
             for rc_ in re.findall(r'<respcondition\b.*?</respcondition>',
                                   body, re.S):
+                # ...and it must be a setvar the three clauses below can
+                # PARSE. This clause is a substring census while those iterate
+                # only setvars matching ([^>]*)>([^<]*)</setvar>, so a
+                # self-closing <setvar action="Set" varname="SCORE"/> satisfies
+                # the census and escapes all three. Harmless on this corpus --
+                # the six two-arm items pair V with V.00 and each arm carries
+                # its own degenerate range, so the surviving arm still accepts
+                # both spellings numerically -- and closed because the census
+                # and the parse disagreeing about what a setvar is is the same
+                # shape as every other defect in this log (BF-2026-065).
+                if '<setvar' in rc_ and not re.search(
+                        r'<setvar[^>]*>[^<]*</setvar>', rc_):
+                    fails.append(f'{where}: a <setvar> in this <respcondition> '
+                                 f'is self-closing or empty -- the value, '
+                                 f'action and varname rules cannot read it')
                 if '<setvar' not in rc_:
                     fails.append(f'{where}: a <respcondition> writes no '
                                  f'<setvar> -- a student who satisfies it '
@@ -724,10 +838,32 @@ def check(work, base=None):
                 # the 49 fill-ins with no comparable baseline item, which the
                 # check_keys_vs_base assertion above cannot reach
                 # (BF-2026-063).
-                if not re.search(r'<render_fib\b', body):
-                    fails.append(f'{where}: fill-in has no <render_fib> -- no '
-                                 f'answer box is rendered, so the item is '
-                                 f'unanswerable and every student scores 0')
+                # BF-2026-064 asserted the number of response DECLARATIONS
+                # while stating its own harm as "the item ships with two
+                # rendered answer boxes, only one scored". The number of BOXES
+                # is one granularity finer and was unasserted: duplicate the
+                # <render_fib>, or add a second <response_label> inside it, and
+                # there is still exactly one declaration, one respident,
+                # rcardinality="Single" intact, and choice_idents empty so the
+                # choice-side rules never look. This is also the fill-in twin of
+                # the duplicate-choice-ident rule, whose message reads "a
+                # repeated ident means the two <response_label>s are
+                # indistinguishable to scoring" -- that rule is scoped to
+                # choice-bearing items, so the 143 fill-ins, the larger
+                # population, had no equivalent. Both passed on 143 of 143
+                # (BF-2026-065).
+                nfib = len(re.findall(r'<render_fib\b', body))
+                if nfib != 1:
+                    fails.append(f'{where}: {nfib} <render_fib> answer boxes '
+                                 f'under one response declaration -- Canvas '
+                                 f'renders indistinguishable blanks and only '
+                                 f'one is bound to the scored response')
+                for sp in re.findall(r'<render_fib\b[^>]*>(.*?)</render_fib>',
+                                     body, re.S):
+                    nl = len(re.findall(r'<response_label\b', sp))
+                    if nl != 1:
+                        fails.append(f'{where}: a <render_fib> renders {nl} '
+                                     f'<response_label> boxes, not 1')
                 # HARDENING, raised by a judge that proved the harm and then
                 # correctly declined to score it, on the ground that no
                 # generator emits these operators. The select-all branch
@@ -1142,7 +1278,17 @@ def check(work, base=None):
               if 'manifest' not in os.path.basename(x)
               and 'meta' not in os.path.basename(x)]
         meta = glob.glob(d + '*/assessment_meta.xml')
+        # A GUARD NEVER ASSERTED, one more time: delete a package's
+        # assessment_meta.xml and BOTH package rules skipped in silence, which
+        # is what made a build printing "176 TOTAL" alongside "all checks pass"
+        # reachable. repackage.py refuses such a package so nothing ships, which
+        # is why the judge declined to score it -- closed anyway, because a
+        # gate that relies on a later stage to be true is not the gate it says
+        # it is (BF-2026-065).
         if not xs or not meta:
+            fails.append(f'{os.path.basename(d.rstrip("/"))}: no '
+                         f'{"item xml" if not xs else "assessment_meta.xml"} '
+                         f'-- both package-total rules skip in silence')
             continue
         _raw = open(xs[0], encoding='utf-8', newline='').read()
         # `<item ident=` was the prefix BOTH counts shared, so rewriting a tag
@@ -1255,6 +1401,17 @@ if __name__ == '__main__':
     for k, v in sorted(stats.items(), key=lambda t: -t[1]):
         print(f'  {v:4d}  {k}')
     print(f'  {sum(stats.values()):4d}  TOTAL')
+    # BF-2026-062 closed "the census has never been asserted against anything"
+    # by asserting a total computed inside check_items_vs_base -- a DIFFERENT
+    # regex over a DIFFERENT traversal from the `stats` census printed here. Two
+    # numbers again, reconciled by nothing; a build printing "176 TOTAL"
+    # alongside "all checks pass" was reachable. Assert the one that is printed
+    # (BF-2026-065).
+    _want = int(os.environ.get('QTI_EXPECT_ITEMS', 177))
+    if sum(stats.values()) != _want:
+        fails.append(f'the printed census is {sum(stats.values())} items, '
+                     f'expected {_want} -- the number shown to a reader was '
+                     f'asserted against nothing')
     for i, files in sorted(seen_idents.items()):
         if len(files) > 1:
             fails.append(f'duplicate <item ident="{i}"> in {files} -- Canvas '
