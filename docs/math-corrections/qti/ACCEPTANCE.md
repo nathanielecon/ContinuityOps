@@ -138,38 +138,53 @@ A slice is accepted only at **10/10**. No partial acceptance, no "10/10 with
 minor notes". Gate: `judge/JUDGE_RUBRIC_QTI.md` + `judge/FORMAT_ROUND.md`,
 frozen and identical for every judge, amended only before the round opened.
 
-| Slice | r1 | r2 | round A (2728bd5a) | round B cold (775b3982) | Accepted |
-|---|---|---|---|---|---|
-| NUMERIC (108 keys) | **10** | — | **10** | pending | |
-| SHORTANS (35 items) | 4 | 5 | **10** | pending | |
-| SELECTALL (34 items) | 8 | 9 | **10** | pending | |
-| AUTHORED (distractors + stems) | 8 | 8 | **10** | pending | |
-| STRUCT / PERMUTE (177 items) | 9 | 9 | 9 | pending | |
-| FIGURES (A1/H6/H7 + media) | — | — | **10** | pending | |
-| T1-4 cold (14 items, fresh judge) | — | — | 9 → folded into SHORTANS | — | |
-| G1b cold (18 items, content) | — | **10** | — | — | **yes**, at pre-round state |
+| Slice | round A `2728bd5a` | round B cold `775b3982` | round C `4ee5bb50` | Accepted |
+|---|---|---|---|---|
+| **SELECTALL** (34 items) | **10** | **10** | items unchanged | **YES** |
+| FIGURES (A1/H6/H7 + media) | **10** | **10** | pending | pending (see scope) |
+| NUMERIC (108 keys) | **10** | **10** | pending | |
+| SHORTANS (35 items) | **10** | 9 | pending | |
+| AUTHORED (distractors + stems) | **10** | 8 | pending | |
+| STRUCT (177 items + the gate) | 9 | 9 | pending | |
+| G1b cold (18 items, content) | — | — | — | **yes**, at pre-round state |
 
-**Verdicts are pinned to a build hash**, per `MASTER_PROMPT.md`: *"Record acceptances
-against a build hash. A rebuild that changes an accepted slice's text reopens it."*
+**Acceptance is pinned to CONTENT, not to a package hash.** A hash covers files a
+slice never reads; two reads of byte-identical items are two reads of the same
+thing whatever else moved in the archive. Each row above was checked
+item-by-item across builds.
 
-**Round A, build `2728bd5a`** — five slices at 10/10. STRUCT scored the *corpus*
-clean on all 177 items and took its point off the **gate**, which was in its slice
-by explicit instruction: six properties `validate.py` and `repackage.py` did not
-check, each proved by injecting a bug and watching the gate print "all checks
-pass". The worst was that nothing asserted the conditionvar's connective — flip
-the single `<and>` to `<or>` and a student who selects *nothing* scores 100, with
-every other rule invariant under the flip. All six are closed (BF-2026-050).
+- **SELECTALL is accepted.** All 34 items are byte-identical across `2728bd5a`,
+  `775b3982` and `4ee5bb50`, and it scored 10/10 warm and 10/10 cold. Its cold
+  judge worked all 235 non-keyed choices and ruled every weak case explicitly.
+- **FIGURES** scored 10/10 twice, but the manifest changed between the two reads
+  (two-path mirror → three-path), so only the cold read covers the current
+  structure. Re-read in round C.
+- **NUMERIC, SHORTANS, AUTHORED, STRUCT** each had their slice change after a
+  read, so their counts restart at round C.
 
-**Between rounds** only `C4`, `E4`, `H1`, `H2` and one manifest changed, so
-SHORTANS and SELECTALL read byte-identical items across the two builds. The four
-stems were grammatical fragments that both NUMERIC and AUTHORED independently
-flagged and both correctly ruled breached no criterion; they were repaired anyway,
-because "true but ugly" is not the standard for text a student reads.
+### Round B overturned two rulings the warm judges had made
 
-**Round B is a cold round.** Per `COLD_BRIEF.md` each judge forms its own view
-before reading any prior report — *"If you merely ratify the first, the guarantee
-is worth nothing."* Two consecutive 10/10 against one identical hash accepts a
-slice; anything less returns it to the fixer.
+The cold round is not a formality, and this is the evidence. **AUTHORED cold
+found a defect that both NUMERIC judges had examined and cleared**: 17 items with
+a negative key said "Enter your answer as a whole number". Both NUMERIC reads
+reasoned from F4's vocabulary list and ruled it acceptable. AUTHORED read what
+the item said about *itself* — `topic-1-6` P1Q1a asks "What **integer**
+represents the unit rate of their descent?" and then demanded a whole number for
+a key of −15, with the next sentence requiring a negative sign. Two sentences of
+one accuracy check disagreeing is F5's exact shape.
+
+**A majority of judges is not evidence.** Two independent reads reached the same
+wrong answer because they reasoned from the same place.
+
+**SHORTANS cold** found `F2` promising "one or two words" while accepting only
+one-word answers, when its own explanations PDF calls n "some unknown number" —
+and `F1`, one item earlier in the same file, already accepted both `coefficient`
+and `numerical coefficient`. The item failed the author's own standard applied
+one item away.
+
+**STRUCT cold** found six further gate holes, each proved by injection, and
+caught that a commit cited `BF-2026-050` in four files while the log ended at
+`049`. Both entries are now written.
 
 ### What the judges caught that nothing else would have
 
