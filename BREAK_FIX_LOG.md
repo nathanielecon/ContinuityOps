@@ -3153,3 +3153,179 @@ mathematically right answers — criteria 1–4, F5 and F6 belong to the mathema
 slices, all five of which are accepted.
 
 **Fifteen reads, fifteen clean corpora.**
+
+---
+
+## 2026-08-07 — BF-2026-066 — The gate parsed every file, proved it was well-formed, and threw the tree away
+
+STRUCT's sixteenth read, cold: **5/10, four defects.** Corpus clean on all 177
+items for the sixteenth consecutive time.
+
+**And for the first time in six rounds, the previous round's fixes were found
+complete.** The judge re-injected one exhibit per hole closed in BF-2026-063,
+-064 and -065 — seventeen in all — and every one is caught at every applicable
+site. Rounds K through O each found the round before them incomplete; this round
+did not. These four are new ground: the same class arriving one level further
+out.
+
+### The class, restated by the judge better than I had it
+
+The gate asserted containment **exactly one level deep, at exactly two
+containers** — `<resprocessing>`'s children and `<outcomes>`'s children, both
+added by BF-2026-065 under the heading *"Five rules that assert the contents and
+never the container."* Every other positional fact in the QTI tree was asserted
+by a **census over serialised item text, and a census cannot say where an element
+sits.** The word `presentation` appeared **zero times** across all seven
+instrument files; so did `section` and `assessment` in `validate.py`.
+
+BF-2026-065's own sentence is the argument against it: *"an element outside its
+container takes no part in scoring."*
+
+And `validate.py` already had the answer in its hands. Line 283 called
+`ET.fromstring(raw.encode('utf-8'))`, used it to prove well-formedness, and
+**discarded the tree.** The parse was performed and never asked where anything
+sits.
+
+### 1. `<resprocessing>` asserted its contents and had no container of its own
+
+In QTI 1.2, `<resprocessing>` is a **sibling** of `<presentation>`, not a child.
+Move the whole block inside `</presentation>` and all fourteen contents rules
+pass — because all fourteen are **true**. The block is intact; it is merely in
+the wrong place. Response processing declared inside the presentation is not the
+item's response processing: `<setvar varname="SCORE">100</setvar>` is never
+evaluated, SCORE stays at `<decvar minvalue="0">`, and **every student who
+answers correctly is told they are wrong, on every item in every package.**
+
+That is verbatim the harm the gate's own message names — *"SCORE stays at
+minvalue 0"* — delivered as "a `<resprocessing>` exists somewhere in the item".
+Swept: **177 of 177**, `validate.py` prints `all checks pass` and `repackage.py`
+writes all 14 zips with fresh checksums. The gate certifies a corpus in which no
+item can score.
+
+### 2. The entire `<presentation>` subtree was asserted by body-wide census
+
+Six rules whose messages each promise a *rendering* property were regexes over
+the whole item. The sharpest is `nfib`, whose message reads *"N answer boxes
+**under one response declaration**"* — and the code counts the tag and never
+looks at what it is under.
+
+Three exhibits, each **177 of 177**:
+
+- **The render widget moved outside its `<response_*>`.** A fill-in becomes
+  literally `<response_str ident="response" rcardinality="Single"></response_str>`
+  followed by a floating `<render_fib>` — **verbatim BF-2026-063's own quoted
+  exhibit**, reproduced with -063's fix fully in place, because -063 closed it by
+  counting the tag over the item body where the property is containment inside
+  the response declaration.
+- **The response declaration moved outside `<presentation>`.** No widget renders
+  at all, while `respident_of`, `rids`, `rcardinality` and `nfib` are all
+  satisfied.
+- **The stem `<material>` moved outside `<presentation>`.** BF-2026-065 defect 5
+  closed *"an answer widget and no question"* one commit earlier, as a body-wide
+  `re.search`. The harm returns intact.
+
+### 3. `<item>` and `<itemmetadata>` had no containers either
+
+Canvas reads `assessment/section/item`. Delete the `<section>` wrapper and **the
+quiz imports with zero questions** while `validate.py` prints `177 TOTAL`, `all
+checks pass`, and `check_items_vs_base` confirms every baseline item survived —
+three separate censuses agreeing about items that will never reach a student.
+
+Move `question_type` out of `<itemmetadata>` into `<presentation>` and it still
+satisfies the exactly-one-`question_type` rule BF-2026-065 added, while Canvas
+finds none and the accuracy check **silently becomes a manually-graded item that
+checks nothing** — that entry's own stated harm, restored by relocation instead
+of duplication. **177 of 177**, and the same for `points_possible` and
+`original_answer_ids`.
+
+Fixed by keeping the parse and asserting the QTI 1.2 content model on the tree —
+a `PLACE` parent→permitted-children contract plus per-item structural
+assertions.
+
+### 4. Nothing identified which resource is the quiz; the one attribute that does was read on 1 package of 14
+
+`validate.py` never opens `imsmanifest.xml`. `repackage.py` never opens an item
+XML. **Between them, nothing tied the file that was validated to the file Canvas
+will import.** Every `repackage.py` rule is about *names* — each href resolves,
+each packaged file is declared, no identifier collides, no `identifierref`
+dangles — and none asks which resource is the quiz.
+
+`imsqti_xmlv1p2` was consulted exactly once in the whole instrument, **inside the
+media-mirror loop**, which iterates `groups` and so runs only on the one package
+that has media. Break the type on the **13 media-free packages** and both tools
+pass: verified, `repackage.py` writes all 14 zips and `validate.py` prints `all
+checks pass`, while Canvas would find no QTI resource and import no quiz. That is
+this project's recurring sub-shape — a lesson reaching some sites and not the
+rest — at its most extreme ratio yet: **1 of 14**.
+
+Second exhibit: point the QTI resource's `href` at `assessment_meta.xml`. Every
+href resolves, every file is declared, and the pre-fix `repackage.py` writes all
+14 packages. Caught now.
+
+### Verification
+
+Seven sweeps, corpus-wide rather than single exhibits, each asserting the
+mutation landed — the widget-relocation one asserted **in the parsed tree**, 177
+response declarations left holding no render element:
+
+| exhibit | scope | pre-fix | post-fix |
+|---|---|---|---|
+| `<resprocessing>` inside `</presentation>` | 177 items | all checks pass | caught, 357 violations |
+| render widget outside its `<response_*>` | 177 items | all checks pass | caught |
+| `<section>` wrapper deleted | 14 packages | all checks pass | caught, 194 violations |
+| `question_type` out of `<itemmetadata>` | 177 items | all checks pass | caught, 180 violations |
+| stem `<material>` out of `<presentation>` | 177 items | all checks pass | caught, 357 violations |
+| `imsqti_xmlv1p2` broken, media-free packages | 13 of 14 | 14 zips written | 13 caught |
+| QTI resource pointed at `assessment_meta.xml` | 2 packages | 14 zips written | caught |
+
+Build hash unchanged at `4ee5bb50674db6fc`.
+
+**Recorded against myself.** My first attempt at the widget-relocation sweep
+re-inserted the element *before* the closing tag — that is, back inside — so it
+was a no-op relocation that mutated 6 files and changed nothing. I read the
+"MISSED" result and had to check before concluding anything. Fixed by relocating
+after the closing tag and then asserting the outcome in the parsed tree rather
+than in the text. Third round running that a sweep of mine was wrong before the
+judge's claim was.
+
+### Declined, and one question finally retired
+
+**`SPLIT_HALF`** — the live instance this log has carried unfixed for two rounds.
+The judge did not defer it; it swept every Shape A select-all for distractor
+count and found **zero items below `MIN_DISTRACTORS`**, so the title-regex
+exemption exempts nothing today and no student harm is demonstrable. Retired
+rather than deferred.
+
+**`plain()` unescapes before stripping tags** — the exact trap `COLD_BRIEF.md`
+and `FORMAT_ROUND.md` both warn about. The judge self-tested the differential on
+a known trap string (it fires), then ran it over **all 458 `<mattext>` bodies: 0
+differ.** Latent instrument fragility, no live harm.
+
+**`<assessment ident>` / `<quiz identifier>` / the manifest resource identifier
+may all diverge** — three mutations, all passing both tools. Not scored, because
+the judge could not establish Canvas's binding behaviour from this environment
+and the standing rule requires a second independent path before claiming. That is
+the right call and it is the second thing this round left open on evidence rather
+than on convenience.
+
+### On the corpus
+
+A full namespace-aware path census over all 14 files yields exactly one shape:
+every one of the 177 items is `questestinterop/assessment/section/item`, with
+`itemmetadata`, `presentation` and `resprocessing` each exactly once as direct
+children; all 143 `render_fib` inside `response_str` inside `presentation`; all
+34 `render_choice` inside `response_lid`; all 177 `decvar` inside `outcomes`
+inside `resprocessing`. **The corpus sits correctly in every position the gate
+failed to check.**
+
+Exhaustive enumeration of all 2ⁿ selections on all 34 select-alls: exactly one
+winning selection each, never the empty selection, and on the 20 Shape A items
+that winner equals the `_correct_N` ident set — **20/20** against a witness the
+scoring tree never reads.
+
+Its positive controls again caught its own instrument first: naive
+`root.iter('item')` returns 0 on these files, and its first key-move probe
+reported `check_keys_vs_base` passing — because the probe swapped the text of two
+*distractors* rather than of a key and a distractor. Re-aimed, the rule fires.
+
+**Sixteen reads, sixteen clean corpora.**

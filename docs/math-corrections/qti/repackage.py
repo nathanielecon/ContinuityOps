@@ -137,6 +137,43 @@ for pkg in sorted(os.listdir(SRC)):
                             f"byte-identical -- Canvas would serve different "
                             f"figures depending on how the token resolves")
 
+    # THE QUIZ ITSELF WAS NEVER IDENTIFIED. Every rule above is about names
+    # resolving -- each href resolves, each packaged file is declared, no
+    # identifier collides -- and none asks which resource Canvas will read as
+    # the quiz. `type="imsqti_xmlv1p2"` was consulted exactly once in this file,
+    # inside the media-mirror loop, which iterates `groups` and so runs only on
+    # the ONE package that has media; the other 13 never evaluated it. That is
+    # this project's recurring sub-shape -- a lesson reaching some sites and not
+    # the rest -- at its most extreme ratio yet, 1 of 14. Break the type and the
+    # package passes both tools while Canvas finds no quiz resource and imports
+    # nothing. validate.py never opens the manifest and this file never opens an
+    # item XML, so nothing anywhere tied the file that was validated to the file
+    # that will be imported (BF-2026-066).
+    qress = [el for el in man.iter()
+             if el.tag.endswith("resource")
+             and el.get("type") == "imsqti_xmlv1p2"]
+    if len(qress) != 1:
+        failures.append(f"{pkg}: {len(qress)} resources of type "
+                        f"imsqti_xmlv1p2 -- Canvas reads the quiz from this "
+                        f"resource, so the package imports nothing or imports "
+                        f"an ambiguous quiz")
+    else:
+        qhrefs = ([qress[0].get("href")] if qress[0].get("href") else []) + \
+                 [fe.get("href") for fe in qress[0]
+                  if fe.tag.endswith("file") and fe.get("href")]
+        qhrefs = list(dict.fromkeys(qhrefs))
+        if len(qhrefs) != 1:
+            failures.append(f"{pkg}: the imsqti_xmlv1p2 resource names "
+                            f"{len(qhrefs)} files {qhrefs}")
+        else:
+            qbody = open(os.path.join(d, qhrefs[0]), encoding="utf-8").read()
+            if ("questestinterop" not in qbody
+                    or not re.findall(r"<item\b", qbody)):
+                failures.append(f"{pkg}: the imsqti_xmlv1p2 resource points at "
+                                f"{qhrefs[0]!r}, which holds no "
+                                f"<questestinterop> items -- the validated file "
+                                f"and the imported file are not the same file")
+
     ids = [el.get("identifier") for el in man.iter()
            if el.tag.endswith("resource") and el.get("identifier")]
     for dup in {i for i in ids if ids.count(i) > 1}:

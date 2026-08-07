@@ -105,6 +105,123 @@ ITEM = re.compile(r'<item ident="([^"]*)" title="([^"]*)">(.*?)</item>', re.S)
 # backstop (BF-2026-064).
 LABEL = re.compile(r'<response_label\b[^>]*?\bident="([^"]*)"')
 
+NSN = lambda e: e.tag.split('}')[-1]
+
+# The QTI 1.2 content model, as a parent -> permitted-children contract,
+# asserted on the PARSED tree.
+#
+# BF-2026-065 asserted the CONTENTS of <resprocessing> and of <outcomes> under
+# the heading "Five rules that assert the contents and never the container". It
+# did not assert where <resprocessing> ITSELF sits, and it said nothing whatever
+# about <presentation> -- before this entry the word appeared nowhere in any of
+# the seven instrument files, and neither did `section` or `assessment`. That
+# entry's own sentence is the argument against it: "an element outside its
+# container takes no part in scoring."
+#
+# The gate asserted containment exactly one level deep at exactly two
+# containers. EVERY other positional fact was a census over serialised item
+# text, and a census cannot say where an element sits. So:
+#   - <resprocessing> moved inside </presentation> keeps all fourteen contents
+#     rules TRUE -- the block is intact, it is merely in the wrong place -- and
+#     response processing declared inside the presentation is not the item's
+#     response processing. SCORE is never written, it stays at decvar
+#     minvalue 0, and every correct student is marked wrong on all 177 items.
+#   - <render_fib> moved outside its <response_str> reproduces BF-2026-063's own
+#     quoted exhibit verbatim, with -063's fix fully in place, because -063
+#     closed it by counting the tag over the item body where the property is
+#     containment inside the response declaration. The nfib message even says
+#     "under one response declaration" and the code never looks at what it is
+#     under.
+#   - <item> moved out of <section> imports a quiz with ZERO questions while
+#     three separate censuses agree that 177 items are present.
+#   - question_type moved out of <itemmetadata> satisfies the exactly-one rule
+#     BF-2026-065 added while Canvas finds none, so the accuracy check silently
+#     becomes a manually-graded item -- that entry's own stated harm, restored
+#     by relocation instead of duplication.
+# validate.py already parsed the file to prove well-formedness and threw the
+# tree away. It is kept now and asked where things are (BF-2026-066).
+PLACE = {
+    'questestinterop': {'assessment'},
+    'assessment':      {'qtimetadata', 'section'},
+    'section':         {'item', 'section'},
+    'item':            {'itemmetadata', 'presentation', 'resprocessing'},
+    'itemmetadata':    {'qtimetadata'},
+    'qtimetadata':     {'qtimetadatafield'},
+    'qtimetadatafield': {'fieldlabel', 'fieldentry'},
+    'presentation':    {'material', 'response_lid', 'response_str'},
+    'response_lid':    {'render_choice'},
+    'response_str':    {'render_fib'},
+    'render_choice':   {'response_label'},
+    'render_fib':      {'response_label'},
+    'response_label':  {'material'},
+    'material':        {'mattext'},
+    'resprocessing':   {'outcomes', 'respcondition'},
+    'outcomes':        {'decvar'},
+    'respcondition':   {'conditionvar', 'setvar', 'displayfeedback'},
+}
+ITEM_KIDS = {
+    'itemmetadata': 'question_type, points_possible and original_answer_ids are '
+                    'read from <item><itemmetadata>, so the item imports with '
+                    'no type and is not auto-scored',
+    'presentation': 'the item renders neither a question nor an answer widget',
+    'resprocessing': 'nothing scores the item -- SCORE stays at decvar '
+                     'minvalue 0 and every correct student is marked wrong',
+}
+
+
+def check_tree(rel, root):
+    for parent in root.iter():
+        allowed = PLACE.get(NSN(parent))
+        if allowed is None:
+            continue
+        for kid in parent:
+            if NSN(kid) not in allowed:
+                fails.append(f'{rel}: <{NSN(kid)}> sits inside <{NSN(parent)}>, '
+                             f'which QTI 1.2 does not put it in -- an element '
+                             f'outside its container takes no part in the item')
+    if NSN(root) != 'questestinterop':
+        fails.append(f'{rel}: root element is <{NSN(root)}>, not '
+                     f'<questestinterop>')
+    items = [e for e in root.iter() if NSN(e) == 'item']
+    housed = [e for s in root.iter() if NSN(s) == 'section'
+              for e in s if NSN(e) == 'item']
+    if len(items) != len(housed):
+        fails.append(f'{rel}: {len(items) - len(housed)} <item> elements are '
+                     f'not a child of a <section> -- Canvas reads '
+                     f'assessment/section/item, so those questions do not '
+                     f'import at all while the census still counts them')
+    for it in items:
+        title = it.get('title')
+        kids = [NSN(k) for k in it]
+        for req, harm in ITEM_KIDS.items():
+            if kids.count(req) != 1:
+                fails.append(f'{rel} :: {title}: {kids.count(req)} <{req}> '
+                             f'children of <item>, expected 1 -- {harm}')
+        for pres in [k for k in it if NSN(k) == 'presentation']:
+            pk = [NSN(k) for k in pres]
+            if pk.count('material') != 1:
+                fails.append(f'{rel} :: {title}: {pk.count("material")} stem '
+                             f'<material> children of <presentation> -- the '
+                             f'student is shown no question')
+            nr = len([k for k in pk
+                      if k in ('response_lid', 'response_str')])
+            if nr != 1:
+                fails.append(f'{rel} :: {title}: {nr} response declarations '
+                             f'inside <presentation> -- an answer widget '
+                             f'declared outside it is never rendered, so the '
+                             f'student cannot answer and scores 0')
+            for r in [k for k in pres
+                      if NSN(k) in ('response_lid', 'response_str')]:
+                nw = len([k for k in r
+                          if NSN(k) in ('render_choice', 'render_fib')])
+                if nw != 1:
+                    fails.append(f'{rel} :: {title}: <{NSN(r)}> holds {nw} '
+                                 f'render elements, expected 1 -- a '
+                                 f'<render_fib>/<render_choice> outside its '
+                                 f'response declaration is bound to no scored '
+                                 f'response')
+
+
 fails, warns, stats = [], [], {}
 # ident -> [files]. Module scope because the duplicate report runs after every
 # package has been walked; Canvas keys questions by ident across the whole
@@ -280,10 +397,13 @@ def check(work, base=None):
                              f'must be escaped; Canvas drops it silently')
 
         try:
-            ET.fromstring(raw.encode('utf-8'))
+            _root = ET.fromstring(raw.encode('utf-8'))
         except Exception as e:
             fails.append(f'{rel}: does not parse: {e}')
             continue
+        # The parse was performed and thrown away: it proved well-formedness and
+        # was never asked where anything sits (BF-2026-066).
+        check_tree(rel, _root)
 
         # Since BF-2026-050 the pristine tree is used for what it was always
         # there for: proving no key silently moved. The line-ending comparison
