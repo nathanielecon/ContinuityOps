@@ -1016,3 +1016,129 @@ passes after it, which is the right way round.
 
 No item changed type as a result. `H3`/`H4`/`H5` and the orderings keep the
 short-answer form the judge had already certified.
+
+## 2026-08-07 — BF-2026-043 — the distractor bar was enforced weaker than it was written, and a real bug shipped through the gap that hid it
+
+**The bar was documented twice and enforced neither way.** `validate.py` had
+`MIN_CHOICES = 7` — seven *choices*, which on a single-key item is six
+distractors. The rubric says "Shape A: ≥8 choices" and the plan says "≥7 close
+distractors". Those two agree with each other and disagree with the code.
+
+Measured: **26 of 34 select-all items sat below the documented bar** — 5
+distractors on four items, 6 on twenty-two. Every item was correct; they were
+thinner than advertised, and nothing could see it because the gate was the
+weaker statement.
+
+Fixed both ends. `validate.py` now counts `MIN_DISTRACTORS = 7` as choices minus
+the keyed set, using the existing `keys_of()` (which strips `<not>` blocks — the
+rubric records that a naive regex makes every choice look keyed). 27 distractors
+were authored across 23 items, each provably false against its own stem, with
+the reason recorded at the point of definition and each checked against the
+forbidden-near-miss list. Several obvious-looking additions are TRUE and were
+rejected for that reason: `(3 + b) + 9` is a value-true reordering rather than an
+associative rewrite, `27/99` is exactly the `3/11` the item asks for, and
+`-2 after all three turns` of 10, −4, −8 is simply the right answer.
+
+**Three items are held below the bar, loudly.** `A1`, `H6`, `H7` have drawn
+figures as choices, so a seventh distractor is a seventh SVG. Authoring figures
+before confirming the existing ones render in Canvas would be building on sand.
+They are reported as **warnings on every build** rather than passed silently, so
+the exemption cannot quietly become permanent.
+
+### The bug the gap hid
+
+Adding choices means touching three places — the visible label,
+`original_answer_ids`, and the `<and>` in `<respcondition>`. The first version of
+`do_addwrong` hardcoded `respident="response1"` in the negation it inserts. The
+6th-grade packages use `respident="response"`.
+
+A `<not>` naming the wrong respident **negates nothing**. The choice becomes
+optional: a student could select the new distractor and still score 100. That is
+not a cosmetic defect, it is a distractor that is not a distractor — and it
+landed in 11 items.
+
+`validate.py` did not catch it, and could not: `keys_of()` strips `<not>` blocks
+and reads only positives, so nothing in the gate had ever looked at whether a
+non-keyed choice is actually negated. Two fixes, not one:
+
+- `do_addwrong` now reads `respident` off the item instead of assuming it.
+- `validate.py` asserts **every non-keyed choice is negated under the item's own
+  respident**. Confirmed falsifiable by reintroducing the bug deliberately: the
+  new check fails 11 items, and passes once the fix is restored. A gate that
+  cannot fail proves nothing.
+
+The instrumentation lied too, and that is worth recording separately: the caller
+incremented the counter by `len(texts)` whether or not `do_addwrong` succeeded,
+so the build reported "27 distractors added" while 11 had silently failed on an
+unrecognised ident scheme. The count is now incremented by the function that
+does the work, only on the path that did it.
+
+## 2026-08-07 — BF-2026-044 — `topic-1-2` P1Q2 was missing its integer guard, and two of its choices were not outcomes
+
+**The guard was missing, not merely asymmetric.** The item asks which outcome is
+NOT possible when converting `x/y` to a decimal, and keys *"the decimal neither
+terminates nor repeats"*. That is impossible **only for a ratio of integers** —
+`π/1` neither terminates nor repeats. The stem guarded only `y ≠ 0`. Its Part 2
+twin says "where a and b are **integers** and b ≠ 0", so the author already knew
+the guard was needed; it was simply absent from Part 1.
+
+Added. Verified it changes no distractor's truth value: under integers, every
+other choice is a *possible* outcome (`1/4` terminates in two places, `1/3`
+repeats one digit, `1/7` repeats six) and stays correctly non-keyed. This is
+**not** the forbidden harmonisation — that rule protects the "which outcome is
+NOT possible" framing, which is untouched.
+
+**Two choices were category errors.** *"The sign does not matter here."* and
+*"The denominator alone determines answer."* are not outcomes, so neither can
+answer "which outcome is not possible". Replaced with real outcomes that are
+possible and therefore correctly non-keyed: a block of three repeating
+(`1/27 = 0.037037…`) and terminating after one place (`1/2 = 0.5`).
+
+## 2026-08-07 — BF-2026-045 — `L1` told a student they were wrong without telling them why
+
+The worksheet asks a bare **"Factor: 8x + 16 ="**; the answer key wants the
+complete GCF factorization. A student who wrote `4(2x + 4)` answered the question
+*as printed* — it does expand to `8x + 16` — and was marked wrong with no stated
+standard.
+
+The key is right and was not relaxed. Instead the stem now carries its own
+criterion: *"A factorization is complete only when the expression left inside the
+parentheses has no common factor of its own."* Stating it is not a giveaway,
+because applying it is the skill being tested, and it satisfies rubric criterion
+5 — answerable from the assignment alone.
+
+The worksheet wording is a paper defect and cannot be fixed from here. Recorded
+in the new `TEACHER_ACTIONS.md`, along with the two stale entries in the
+6th-grade explanations companion (it poses `M2` as `700.3 − 284.67` and answers
+`F4` for "undo ÷5"). **Verified neither leaks into the corpus:** `M2` keys
+`615.65`, correct for the current numbers, and `F4` accepts only the `divide by
+5` family — checked specifically for the companion's inverse creeping in when
+that list was widened in BF-2026-041. It did not.
+
+## 2026-08-07 — BF-2026-046 — the Canvas import test is now runnable
+
+It was recorded as "not verifiable in this environment" for the whole project.
+That was true of *running* it and false of *writing* it, and the distinction was
+worth more than it was given.
+
+Canvas converts a QTI 1.2 package to New Quizzes through the `qti_converter`
+content migration with `import_quizzes_next` set — the same path
+`canvas-quiz-wizard/canvas_manager.py:194` uses, and it defaults to New Quizzes
+rather than Classic. So the 14 packages as built are the correct input to New
+Quizzes; nothing needed regenerating, which also settles the open format
+question.
+
+`verify_canvas_import.py` runs that migration and checks what conversion can
+silently destroy: item counts, type mapping, **every accepted string** (35 items
+score by exact match, so one lost variant marks a correct student wrong), figure
+media, and migration issues. Credentials come from the environment, never argv.
+
+It ships with `--dry-run`, which does more than skip the network: it deliberately
+corrupts each input and asserts every check **fires**, reporting any that stay
+silent as inert. 4 of 4 fire today. A checker that has never failed is not
+evidence.
+
+Honest about its own limit: reading items back needs the New Quizzes items API,
+a different scope from the migration endpoints and not always granted to a
+personal token. When that read is unavailable the script says which claims it did
+**not** establish rather than printing a pass it did not earn.

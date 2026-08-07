@@ -196,6 +196,79 @@ SHORTANS = {
 }
 
 
+# --------------------------------------------------------------------------
+# F-1 -- additional distractors so every text select-all carries >=7.
+#
+# The bar was documented twice (rubric criterion 6: ">=8 choices"; the plan:
+# ">=7 close distractors") but validate.py enforced MIN_CHOICES = 7, i.e. six
+# distractors on a single-key item. 26 of 34 select-all items were below the
+# documented bar and nothing could see it.
+#
+# Every string below is FALSE as an answer to its own stem, with the reason
+# worked in the comment. Checked against the forbidden-near-miss list in
+# CHANGES.md -- several obvious-looking additions are TRUE and are recorded
+# there precisely so they are never authored in:
+#   (3 + b) + 9   value-true reordering, not an associative rewrite
+#   7a x 1        identically 7a
+#   27/99         = 3/11, the very value the item asks for
+#   -2 after all three turns of 10, -4, -8
+# --------------------------------------------------------------------------
+ADDWRONG = {
+    # 6y - 2y = 4y. -4y reverses the subtraction; it is not 4y.
+    ('6th-grade-review-section-1', 'F5'): ['-4y'],
+    # 3(y + 6) = 3y + 18. 3y + 9 adds 3 + 6 instead of multiplying.
+    ('6th-grade-review-section-1', 'G1'): ['3y + 9'],
+    # 8x and 1 are NOT like terms, and likeness is not why it is linear.
+    ('6th-grade-review-section-2', 'K1'): ['Yes; because 8x and 1 are like terms'],
+    # 2 x 3 x 15 = 90, but 15 is composite, so it is not a PRIME factorization.
+    # Same trap as the existing 9 x 10 and 2 x 45: the load-bearing word is "prime".
+    ('6th-grade-review-section-2', 'K2'): ['2 × 3 × 15'],
+    # the original expression with +0 appended -- not the two addends reversed.
+    ('6th-grade-review-section-2', 'K9'): ['8 + 5 + 0'],
+    # a^7 is a multiplied by itself 7 times, not 7 x a.
+    ('6th-grade-review-section-2', 'K10'): ['a^7'],
+    # b + (3 - 9) = b - 6. Grouping moved but the operation changed too.
+    ('6th-grade-review-section-2', 'K11'): ['b + (3 - 9)'],
+    # 2(4x + 8) = 8x + 16, but 4x + 8 still has a common factor of 4, so the
+    # factorization is not COMPLETE. Same category as the existing 4(2x + 4).
+    ('6th-grade-review-section-2', 'L1'): ['2(4x + 8)'],
+    # 7 - a is subtraction, not the same operation reversed.
+    ('6th-grade-review-section-2', 'N5'): ['7 - a'],
+    # x + (5 - 8) = x - 3. Grouping moved but the operation changed too.
+    ('6th-grade-review-section-2', 'N6'): ['x + (5 - 8)'],
+    # (12-4)-3 = 5 and 12-(4-3) = 11. "8 and 11" stops at the intermediate 12-4.
+    ('6th-grade-review-section-2', 'N7'): ['No; 8 and 11'],
+    # rises 18 then descends 18 -> +18 and -18. The second value is wrong.
+    ('topic-1-1', 'Part 1 Question 1a'): ['+18 and -17'],
+    # (+18)/(-18) = -1, not 1.
+    ('topic-1-1', 'Part 1 Question 1c'): ['Their quotient is 1.'],
+    # descends 24 then climbs 24 -> -24 and +24. Both negative is wrong.
+    ('topic-1-1', 'Part 2 Question 1a'): ['-24 and -24'],
+    ('topic-1-1', 'Part 2 Question 1c'): ['Their quotient is 1.'],
+    # 10x = 2.7272..., not 27. And 0.2727... = 3/11, so it IS a fraction.
+    ('topic-1-2', 'Part 1 Question 3'): [
+        'If x = 0.272727..., then 10x = 27.',
+        'Casey is correct because 0.272727... cannot be written as a fraction.'],
+    # 10x = 6.666..., not 6. And 0.666... = 2/3, so it IS a fraction.
+    ('topic-1-2', 'Part 2 Question 3'): [
+        'If x = 0.666..., then 10x = 6.',
+        'Lee is correct because 0.666... cannot be written as a fraction.'],
+    # the first move is +10, i.e. RIGHT. Three lefts describes -10, -4, -8.
+    ('topic-1-3', 'Part 1 Question 1a'): [
+        'Start at 0; move left 10, left 4, then left 8.'],
+    ('topic-1-3', 'Part 2 Question 1a'): [
+        'Start at 0; move left 12, left 5, then left 9.'],
+    # (-5)^2 = 25 and -5^2 = -25. -10 is 2 x -5, the multiply-by-the-exponent
+    # error; and they are not both -25, which is only the second one.
+    ('topic-1-6', 'Part 1 Question 4b'): ['(-5)^2 = -10', 'Both expressions equal -25.'],
+    ('topic-1-6', 'Part 2 Question 4b'): ['(-6)^2 = -12', 'Both expressions equal -36.'],
+    # 10.4 >= 10.6 is false, so the conjunction is false. Mirrors the existing
+    # <= distractor, which fails on its other half.
+    ('topic-sc-1', 'Part 1 Question 1'): ['10.6 ≥ 10.4 and 10.4 ≥ 10.6'],
+    ('topic-sc-1', 'Part 2 Question 1'): ['9.8 ≤ 9.3 and 9.3 ≤ 9.8'],
+}
+
+
 def with_unicode_minus(vals):
     """A student who copies the stem's rendered MathJax gets U+2212, not ASCII
     hyphen-minus, and Canvas compares bytes. Accepting both costs nothing and
@@ -674,6 +747,98 @@ def do_repair(raw, pkg, title, spec, log):
     return raw.replace(block, new)
 
 
+def do_addwrong(raw, pkg, title, texts, log, total):
+    """F-1 -- author additional distractors so every select-all carries >=7.
+
+    Unlike do_repair, this DOES add idents, so all three places that name a
+    choice have to move together or the item silently breaks:
+
+      1. <render_choice>        -- the visible choice
+      2. original_answer_ids    -- validate.py asserts this matches the real list
+      3. the <and> in <respcondition> -- a new choice that is not negated is
+         effectively OPTIONAL, and under all-or-nothing a student who selects it
+         still scores 100. An un-negated distractor is not a distractor.
+
+    Keyed idents are never touched, so the key set cannot drift. permute.py runs
+    after this and reorders both the labels and original_answer_ids together.
+    """
+    block = item_block(raw, title)
+    if block is None:
+        log.append(f'  !! {pkg} {title}: item not found')
+        return raw
+
+    idents = re.findall(r'<response_label ident="([^"]*)"', block)
+    if not idents:
+        log.append(f'  !! {pkg} {title}: no choices to pattern from')
+        return raw
+
+    # Two ident schemes coexist in this corpus and both must be handled:
+    # topic-* items use "<base>_wrong_N" / "<base>_correct_N"; the 6th-grade
+    # packages use a bare "choice_N". Derive from whichever the item uses
+    # rather than assuming, and never collide with an existing number.
+    wrongs = [i for i in idents if re.search(r'_wrong_(\d+)$', i)]
+    if wrongs:
+        stem_id = re.sub(r'_wrong_\d+$', '', wrongs[0]) + '_wrong_'
+        used = [int(re.search(r'_wrong_(\d+)$', i).group(1)) for i in wrongs]
+    elif all(re.fullmatch(r'choice_\d+', i) for i in idents):
+        stem_id = 'choice_'
+        used = [int(i.split('_')[1]) for i in idents]
+    else:
+        log.append(f'  !! {pkg} {title}: unrecognised ident scheme {idents[:2]}')
+        return raw
+    nxt = max(used) + 1
+
+    # Match the item's existing markup exactly -- some choices are text/plain
+    # and bare, others text/html wrapped in an escaped <p>.
+    sample = re.search(r'<response_label ident="[^"]*">\s*<material>\s*'
+                       r'<mattext texttype="([^"]*)">(.*?)</mattext>', block, re.S)
+    ttype = sample.group(1)
+    wrap = sample.group(2).lstrip().startswith('&lt;p&gt;')
+
+    # Indentation differs between packages, so anchor on the tag and reuse
+    # whatever leading whitespace that tag already has.
+    rc = re.search(r'([ \t]*)</render_choice>', block)
+    an = re.search(r'([ \t]*)</and>', block)
+    if not rc or not an:
+        log.append(f'  !! {pkg} {title}: no </render_choice> or </and>')
+        return raw
+    ind, aind = rc.group(1), an.group(1)
+
+    # Read respident off the item instead of assuming it. The 6th-grade
+    # packages use respident="response"; topic-* use "response1". A <not> that
+    # names the wrong one negates nothing, so the choice would be scored as
+    # optional and a student selecting it would still get 100.
+    ri = re.search(r'<varequal respident="([^"]*)"', block)
+    if not ri:
+        log.append(f'  !! {pkg} {title}: no varequal to read respident from')
+        return raw
+    respident = ri.group(1)
+
+    new, added = block, []
+    for off, text in enumerate(texts):
+        ident = f'{stem_id}{nxt + off}'
+        added.append(ident)
+        body = ('&lt;p&gt;' + esc(text) + '&lt;/p&gt;') if wrap else esc(text)
+        label = (f'{ind}  <response_label ident="{ident}">\n'
+                 f'{ind}    <material>\n'
+                 f'{ind}      <mattext texttype="{ttype}">{body}</mattext>\n'
+                 f'{ind}    </material>\n'
+                 f'{ind}  </response_label>\n')
+        new = new.replace(f'{ind}</render_choice>', label + f'{ind}</render_choice>', 1)
+
+    ids = re.search(r'(<fieldlabel>original_answer_ids</fieldlabel>\s*<fieldentry>)([^<]*)(</fieldentry>)', new)
+    new = new.replace(ids.group(0), ids.group(1) + ids.group(2) + ',' + ','.join(added) + ids.group(3))
+
+    nots = ''.join(f'{aind}  <not>\n'
+                   f'{aind}    <varequal respident="{respident}">{i}</varequal>\n'
+                   f'{aind}  </not>\n' for i in added)
+    new = new.replace(f'{aind}</and>', nots + f'{aind}</and>', 1)
+
+    total['addwrong'] += len(added)
+    log.append(f'  addwrong {title:18s} +{len(added)} distractors')
+    return raw.replace(block, new)
+
+
 # topic-1-1 Q1 -- Part A and Part B sit INLINE in one paragraph, which is why
 # both the recorded census and the first splitter missed these (BF-2026-032).
 # Part A itself asks two things: represent the pair, and find its sum. So each
@@ -954,6 +1119,25 @@ def _repairs():
                    'select the original expression, a reordered expression, or '
                    'a partly added-up expression.')
     return {
+        # F-3. The QTI stem is STRICTER than the worksheet, which asks a bare
+        # "Factor: 8x + 16 =". The QTI is right and the answer key agrees -- the
+        # worksheet is what is loose -- so the key must not be relaxed. But a
+        # student who wrote 4(2x + 4) on paper was being told they were wrong
+        # without being told why.
+        #
+        # Fix: make the stem carry its own standard. Stating the completeness
+        # criterion is not a giveaway, because applying it IS the skill being
+        # tested, and it satisfies rubric criterion 5 -- answerable from the
+        # assignment alone. No choice changes truth value: 4(2x + 4) and the
+        # added 2(4x + 8) both still equal 8x + 16 and are both still incomplete.
+        # (The worksheet's own wording is recorded in TEACHER_ACTIONS.md.)
+        ('6th-grade-review-section-2', 'L1'): (
+            esc('Factor completely by pulling out the greatest common factor: '
+                '8x + 16 = A factorization is complete only when the expression '
+                'left inside the parentheses has no common factor of its own. '
+                'Enter select all expressions that are the complete GCF '
+                'factorization.'),
+            {}),
         # 8 + 5 = 13. Removed: `8 + 5` (stem verbatim), `13`, `(8 + 5) + 0`,
         # `8 + (5 + 0)` -- all equal 13, all were scored wrong.
         ('6th-grade-review-section-2', 'K9'): (
@@ -992,11 +1176,36 @@ def _repairs():
         # re-keys them with no signal at the edit site -- which is how this
         # defect arose. Part 1 Question 2 is NOT touched; its "which outcome is
         # NOT possible" framing is what keeps its copies of these false.
+        # F-2. Two separate defects.
+        #
+        # (1) The GUARD WAS MISSING, not merely asymmetric. This item keys "the
+        #     decimal neither terminates nor repeats" as the IMPOSSIBLE outcome,
+        #     which is impossible only for a ratio of INTEGERS -- pi/1 neither
+        #     terminates nor repeats. Part 2's twin spells the guard out, so the
+        #     author already knew it was needed. Adding it changes no
+        #     distractor's truth value: every other choice is a possible outcome
+        #     under integers (1/4 terminates in two places, 1/3 repeats one
+        #     digit, 1/7 repeats six) and stays correctly non-keyed.
+        #
+        #     This is NOT the forbidden harmonisation. That rule protects the
+        #     "which outcome is NOT possible" framing, which is untouched here.
+        #
+        # (2) Two choices were CATEGORY ERRORS -- "The sign does not matter
+        #     here." and "The denominator alone determines answer." are not
+        #     outcomes at all, so neither can answer "which outcome is not
+        #     possible". Replaced with real outcomes that ARE possible and are
+        #     therefore correctly non-keyed: 1/27 = 0.037037... repeats a block
+        #     of three, and 1/2 = 0.5 terminates after one place.
         ('topic-1-2', 'Part 1 Question 2'): (
-            None,
+            wrap(['A student uses long division to convert a fraction '
+                  '\\(\\dfrac{x}{y}\\), where x and y are integers and '
+                  '\\(y\\neq 0\\), into a decimal. Which outcome is '
+                  '<strong>NOT possible</strong>?']) + check_para(SELECT_BOILER),
             {'wrong_3': 'The decimal terminates after two places.',
              'wrong_4': 'The decimal repeats a single digit forever.',
-             'wrong_5': 'The decimal repeats a block of six digits.'}),
+             'wrong_5': 'The decimal repeats a block of six digits.',
+             'wrong_6': 'The decimal repeats a block of three digits.',
+             'wrong_7': 'The decimal terminates after one place.'}),
         ('topic-1-2', 'Part 2 Question 2'): (
             wrap(['A student uses long division to convert a fraction '
                   '\\(\\dfrac{a}{b}\\), where a and b are integers and '
@@ -1146,7 +1355,7 @@ def do_boiler(raw, log):
 
 
 def main(base):
-    total = {'convert': 0, 'split': 0, 'short': 0, 'repair': 0}
+    total = {'convert': 0, 'split': 0, 'short': 0, 'repair': 0, 'addwrong': 0}
     for d in sorted(glob.glob(os.path.join(base, '*/'))):
         xs = [f for f in glob.glob(d + '*/*.xml')
               if 'manifest' not in f and 'meta' not in f]
@@ -1202,6 +1411,15 @@ def main(base):
             if p == pkg:
                 raw = do_split(raw, pkg, t, halves, log)
                 total['split'] += 1
+        # AFTER rebuild and split on purpose: both reconstruct the choice list
+        # from scratch, so distractors added earlier would be silently dropped.
+        # Several ADDWRONG targets (topic-1-1 Q1a/Q1c, topic-1-6 Q4b) do not
+        # even exist as items until those two have run.
+        for (p, t), texts in ADDWRONG.items():
+            if p == pkg:
+                # do_addwrong counts only what it actually applied -- counting
+                # len(texts) here would report successes it never verified.
+                raw = do_addwrong(raw, pkg, t, texts, log, total)
         for (p, t), text in STEM_FIX.items():
             if p == pkg:
                 raw = do_stemfix(raw, pkg, t, text, log)
@@ -1228,7 +1446,8 @@ def main(base):
             print(f'{pkg}:')
             print('\n'.join(log))
     print(f"\n{total['convert']} converted, {total['split']} split, "
-          f"{total['short']} expression items to short answer")
+          f"{total['short']} expression items to short answer, "
+          f"{total['addwrong']} distractors added")
 
 
 if __name__ == '__main__':

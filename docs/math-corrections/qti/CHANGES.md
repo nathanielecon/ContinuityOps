@@ -485,7 +485,9 @@ repair. Three routes, with the trade-off that makes it non-obvious:
 
 ## Known open items
 
-Neither is in this package set; both are recorded so they are not lost.
+Both are now recorded in `TEACHER_ACTIONS.md` with the exact corrections needed,
+and both were verified NOT to leak into the corpus (BF-2026-045). They are paper
+defects: the packages themselves are correct.
 
 - **The worksheet's L1 prompt is now looser than the QTI's.** Narrowing the QTI
   stem to "factor completely using the GCF" makes it stricter than the

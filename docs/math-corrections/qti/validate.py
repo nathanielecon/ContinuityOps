@@ -15,7 +15,20 @@ import xml.etree.ElementTree as ET
 
 AUTOSCORED = {'numerical_question', 'multiple_answers_question',
               'short_answer_question', 'multiple_choice_question'}
-MIN_CHOICES = 7
+# The bar is DISTRACTORS, not choices. It was written as MIN_CHOICES = 7, which
+# on a single-key item permits six distractors -- weaker than the rubric
+# ("Shape A: >=8 choices") and weaker than the plan ("at least 7 close
+# distractors"), both of which agree with each other. 26 of 34 select-all items
+# sat below the documented bar and nothing could see it (BF-2026-043).
+MIN_DISTRACTORS = 7
+
+# The only exemption, and it is deliberately noisy rather than silent: these
+# three items' choices are DRAWN FIGURES, so an extra distractor is an extra
+# SVG, not an extra string. Authoring figures before the Canvas import test has
+# confirmed the existing ones even render would be building on sand. They stay
+# at 6 distractors and are reported as warnings on every build until that test
+# runs; then they are authored up and this set goes away (BF-2026-043).
+FIGURE_ITEMS = {'A1', 'H6', 'H7'}
 
 ITEM = re.compile(r'<item ident="([^"]*)" title="([^"]*)">(.*?)</item>', re.S)
 LABEL = re.compile(r'<response_label ident="([^"]*)"')
@@ -104,8 +117,19 @@ def check(work, base=None):
 
             if qt in ('multiple_answers_question', 'multiple_choice_question'):
                 n = len(choice_idents)
-                if n < MIN_CHOICES:
-                    fails.append(f'{where}: {n} choices, minimum is {MIN_CHOICES}')
+                # keys_of() already strips <not> blocks, which is the only
+                # trap-safe way to count keys here (the rubric records that a
+                # naive regex makes every choice look keyed).
+                ndist = n - len(keys & set(choice_idents))
+                if ndist < MIN_DISTRACTORS:
+                    msg = (f'{where}: {ndist} distractors '
+                           f'({n} choices, {n - ndist} keyed), '
+                           f'minimum is {MIN_DISTRACTORS}')
+                    if title in FIGURE_ITEMS:
+                        warns.append(msg + ' -- FIGURE ITEM, exempt until the '
+                                           'Canvas import test confirms SVGs render')
+                    else:
+                        fails.append(msg)
                 if len(set(choice_idents)) != n:
                     fails.append(f'{where}: duplicate choice ident')
                 # BF-031 -- no key may sit at position 0.
@@ -121,6 +145,25 @@ def check(work, base=None):
                 for k in keys:
                     if k not in choice_idents:
                         fails.append(f'{where}: key {k} is not a choice')
+
+                # Every non-keyed choice must actually be NEGATED, using the
+                # item's own respident. A <not> naming the wrong respident
+                # negates nothing: the choice becomes optional and a student
+                # who selects it still scores 100. Nothing else here catches
+                # that -- keys_of() strips <not> blocks and only reads
+                # positives -- and a real bug shipped through the gap
+                # (BF-2026-043).
+                rid = re.search(r'<varequal respident="([^"]*)"', body)
+                if rid:
+                    negated = set(re.findall(
+                        r'<not>\s*<varequal respident="%s"[^>]*>([^<]*)</varequal>\s*</not>'
+                        % re.escape(rid.group(1)), body))
+                    for c in choice_idents:
+                        if c not in keys and c not in negated:
+                            fails.append(f'{where}: choice {c} is neither keyed '
+                                         f'nor negated under respident='
+                                         f'"{rid.group(1)}" -- selecting it '
+                                         f'would still score 100')
 
             # original_answer_ids must be a permutation of the real choices.
             oai = re.search(r'<fieldlabel>original_answer_ids</fieldlabel>\s*'

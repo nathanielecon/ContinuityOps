@@ -184,11 +184,27 @@ Verified: every accepted string in `topic-1-4` evaluates to its item's true
 distance (0 mismatches), and every one falls under a method its own stem names
 with every named method reachable (0 closure violations).
 
-### Still open — cannot be settled in this environment
+### The final round — BF-2026-043 … 046
 
-- **The Canvas import test.** Load-bearing for 35 short-answer items whose
-  scoring is byte-exact, and for the three SVG figure items. Nothing here proves
-  a package imports; the structural gate proves only that it is well-formed.
+- **The select-all bar is now enforced as written.** It was `MIN_CHOICES = 7`
+  where both the rubric and the plan say seven *distractors*; 26 of 34 items sat
+  below the documented bar. 27 distractors authored, gate now counts distractors.
+- **A real bug shipped through the gap that hid it** — a `<not>` naming the wrong
+  `respident` negates nothing, so 11 new distractors were scored as optional.
+  Fixed, and the gate now asserts every non-keyed choice is actually negated.
+  Confirmed falsifiable by reintroducing the bug.
+- **`topic-1-2` P1Q2** gained its missing integer guard and lost two choices that
+  were not outcomes at all.
+- **`L1`** now states the completeness criterion it grades against.
+- **`verify_canvas_import.py`** makes the import test runnable, with a
+  `--dry-run` that proves each assertion fires rather than assuming it does.
+
+### Still open
+
+- **The live Canvas import.** The script exists and self-tests; only running it
+  against a real course settles whether conversion preserves meaning. See
+  `TEACHER_ACTIONS.md`.
+- **`A1`, `H6`, `H7` sit at 6 distractors**, held deliberately until the import
+  test confirms their SVGs render. Reported as build warnings, never silent.
 - **Two consecutive 10/10 per slice**, this project's acceptance bar, is not yet
-  met by any slice. `topic-1-4` needs a fresh judge that has not seen the old
-  wording.
+  met by any slice.
