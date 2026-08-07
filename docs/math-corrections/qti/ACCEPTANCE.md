@@ -121,14 +121,24 @@ A slice is accepted only at **10/10**. No partial acceptance, no "10/10 with
 minor notes". Gate: `judge/JUDGE_RUBRIC_QTI.md` + `judge/FORMAT_ROUND.md`,
 frozen and identical for every judge, amended only before the round opened.
 
-| Slice | r1 | r2 | Accepted |
-|---|---|---|---|
-| NUMERIC (106 keys) | **10** | pending | |
-| SELECTALL (34 items) | 8 | pending | |
-| AUTHORED (40 distractors, 5 stems) | 8 | pending | |
-| PERMUTE (structure, 177 items) | 9 | pending | |
-| SHORTANS (35 items) | 4 | 5 | |
-| G1b cold (18 items, content) | — | **10** | **yes**, at pre-round state |
+| Slice | r1 | r2 | final round | Accepted |
+|---|---|---|---|---|
+| NUMERIC (108 keys) | **10** | — | **10** | needs one more clean read |
+| SELECTALL (34 items) | 8 | pending | 9 | |
+| AUTHORED (distractors + stems) | 8 | pending | 8 | |
+| STRUCT / PERMUTE (177 items) | 9 | pending | 9 | |
+| SHORTANS (35 items) | 4 | 5 | 8 | |
+| T1-4 cold (14 items, fresh judge) | — | — | 9 | |
+| G1b cold (18 items, content) | — | **10** | — | **yes**, at pre-round state |
+
+**No slice is accepted on the final round.** Every finding was applied, but a
+score is only evidence about the artifact that was judged, and the artifact
+changed underneath all six verdicts. Re-judging is required, and nothing here
+should be read as certifying the current build.
+
+The one slice that scored 10/10 — NUMERIC, all 108 keys recomputed from their
+own stems — is the closest to accepted, and even it needs a second consecutive
+clean read to meet this project's bar.
 
 ### What the judges caught that nothing else would have
 

@@ -1142,3 +1142,101 @@ Honest about its own limit: reading items back needs the New Quizzes items API,
 a different scope from the migration endpoints and not always granted to a
 personal token. When that read is unavailable the script says which claims it did
 **not** establish rather than printing a pass it did not earn.
+
+## 2026-08-07 — BF-2026-047 — six judges on the final round: four corpus defects, three holes in the gate itself
+
+Scores: NUMERIC **10/10** · SELECTALL **9/10** · T1-4 cold **9/10** ·
+STRUCT **9/10** · SHORTANS **8/10** · AUTHORED **8/10**. Every finding below is
+applied.
+
+### Two defects this round introduced
+
+**A raw `<strong>` inside `<mattext>` — mine, and the gate could not see it.**
+Rewriting `topic-1-2` P1Q2's stem, I passed `<strong>NOT possible</strong>`
+into `wrap()`, which interpolates paragraph bodies verbatim and escapes only the
+`<p>` it adds. Every other `mattext` body in the corpus carries its HTML escaped;
+this one mixed conventions inside a single body.
+
+A raw `<strong>` is **still well-formed XML** — it simply becomes a child
+element — so `ET.fromstring` passed it, and my own extraction scripts strip tags
+before printing, so it was invisible to every check I ran. Canvas takes the
+node's text content, so the emphasis silently disappears. The word that
+disappears is the **NOT** that inverts the entire question.
+
+`validate.py` now rejects raw `p|strong|em|b|i|br|img|span|div` inside any
+`mattext`. Confirmed falsifiable: reintroducing the bug fails the build.
+
+**`|-25+40|` and `|-18+45|` accepted in one order but not the mirror.** Found
+independently by SHORTANS and by the cold `topic-1-4` judge, which is the case
+for running both. The two proposed opposite fixes — add the mirrors, or delete
+the family — and the deletion is right for a reason neither stated: these strings
+were added in an earlier widening round when the stem was still form-*general*,
+where they genuinely were on-form. Under the method-naming stem of BF-2026-042
+they are not, since `-25+40` is a sum and neither named method produces it. They
+are a stale accept from superseded wording. Adding the mirrors instead would
+readmit sums generally and reopen the family, which is exactly what amended F1
+forbids. Ten sibling items carry no sum form. Accepted count 44 → 40 on each.
+
+The cold judge independently verified the thing that actually matters before
+deleting: **MISSING = none** — no correct, stem-led string is rejected anywhere
+in the slice — so the deletion costs no student anything.
+
+### One defect that predates this round, half-cured and never noticed
+
+**`topic-1-3` P1Q1a and P2Q1a still ended with their superseded prompt.**
+BF-2026-041 widened these stems because the split left them asking only for a
+number-line explanation while three choices are keyed, including an expression.
+The repair used `do_stemfix`, whose regex `&lt;p&gt;.*?&lt;/p&gt;` is non-greedy
+and replaced only the **first** paragraph. The old Part A prompt survived as
+paragraph 2 — the last instruction a student reads before the choice list.
+
+So the defect was recorded as fixed while remaining live in the shipped
+artifact, and in the worse position: a student who obeys the final sentence
+selects one of three keys and scores zero. `do_stemfix` now consumes every
+leading paragraph up to the Canvas boilerplate.
+
+### Three holes in the gate, each proved by injection
+
+STRUCT was told to audit `validate.py` rather than trust it, and demonstrated
+each of these by breaking a scratch copy and watching the gate print
+"all checks pass".
+
+1. **The respident check could only catch a scoring block disagreeing with
+   itself.** It seeded the expected respident from the first `<varequal>` in the
+   block — so a block that is internally consistent but *uniformly* wrong passed
+   silently, and by BF-2026-043's own reasoning that item scores nothing
+   correctly. Now read from the item's `<response_lid>` / `<response_str>`
+   declaration, with every respident in `<resprocessing>` asserted against it.
+2. **`keys_of()` read only the first `<conditionvar>`.** Six items ship two
+   `<respcondition>` blocks (trailing-zero alternates: 7 and 7.00). Every
+   key-derived rule — sign guidance, "no accepted value", "key is not a choice",
+   the distractor count — was blind to the second. Now a union over all blocks.
+3. **Nothing checked that a correct answer scores 100.** An item whose `setvar`
+   holds 0 marks every correct student wrong — the exact harm the rubric's
+   preamble names — and was invisible to every rule. Now asserted, along with
+   `decvar maxvalue="100" varname="SCORE"`.
+
+All three fire on injection and pass on the real corpus.
+
+### One maintenance hazard, fixed rather than merely ruled on
+
+STRUCT found `1_1_part_1_question_1_wrong_7` naming two different choices in two
+different items, created because `do_addwrong` numbered per-item while the
+splitter had already allocated from the same base. It ruled this **not** a
+defect, correctly — QTI scopes `response_label` idents to their own
+`<response_lid>`, and the pristine corpus reuses `choice_1..7` across items 138
+times by design.
+
+Fixed anyway, because the hazard is specific and real: BF-2026-036's own
+documented fix method is a file-wide ident replace, which here would silently
+edit an unrelated choice in another item. `do_addwrong` now allocates against
+every ident sharing that base anywhere in the file.
+
+### What the judges confirmed rather than found
+
+NUMERIC recomputed all 108 keys from their own stems and returned 10/10, ruling
+explicitly on three patterns that look like defects and are not. The primary
+hunt — a non-keyed choice that is actually TRUE — found **nothing** across all
+34 select-all items and all 27 new distractors. STRUCT confirmed no key moved
+anywhere against the pristine corpus, that the BF-2026-043 respident bug is
+genuinely gone corpus-wide, and that no key sits at position 0 (pristine: 47).

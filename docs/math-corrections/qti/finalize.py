@@ -160,8 +160,16 @@ SHORTANS = {
          '|40-25|', '|25-40|', '|-25--40|', '|-40--25|', '|-25 - (-40)|',
          '|-40 - (-25)|', '|(-25) - (-40)|', '|(-40) - (-25)|', '|40 - 25|',
          '|25 - 40|', '|-25 - -40|', '|-40 - -25|',
-         '|-40|-|-25|', '|-40| - |-25|', '|40|-|25|', '|40| - |25|',
-         '|-25+40|', '|-25 + 40|'],
+         '|-40|-|-25|', '|-40| - |-25|', '|40|-|25|', '|40| - |25|'],
+        # |-25+40| and its spaced twin were REMOVED here (BF-2026-047). They
+        # were added in an earlier widening round when the stem was still
+        # form-general ("uses absolute-value bars"), where they were genuinely
+        # on-form. Under the method-naming stem they are not: -25+40 is a SUM,
+        # and neither named method produces it. Keeping them accepted one
+        # ordering while rejecting the mirror |-40+25|, which is equally correct
+        # and equally reachable -- arbitrary, and the asymmetry is the defect.
+        # Adding the mirror instead would readmit sums generally and reopen the
+        # family, which is what F1 forbids. Ten sibling items carry no sum form.
         # form a admits two methods here too: the key lists 40-25, and a student
         # working from the signed elevations writes -25-(-40). Both stay on-form.
         (A_TWO, B_DIFF)),
@@ -190,8 +198,8 @@ SHORTANS = {
          '|45-18|', '|18-45|', '|-18--45|', '|-45--18|', '|-18 - (-45)|',
          '|-45 - (-18)|', '|(-18) - (-45)|', '|(-45) - (-18)|', '|45 - 18|',
          '|18 - 45|', '|-18 - -45|', '|-45 - -18|',
-         '|-45|-|-18|', '|-45| - |-18|', '|45|-|18|', '|45| - |18|',
-         '|-18+45|', '|-18 + 45|'],
+         '|-45|-|-18|', '|-45| - |-18|', '|45|-|18|', '|45| - |18|'],
+        # |-18+45| removed for the same reason as its Part 1 twin -- see above.
         (A_TWO, B_DIFF)),
 }
 
@@ -779,7 +787,14 @@ def do_addwrong(raw, pkg, title, texts, log, total):
     wrongs = [i for i in idents if re.search(r'_wrong_(\d+)$', i)]
     if wrongs:
         stem_id = re.sub(r'_wrong_\d+$', '', wrongs[0]) + '_wrong_'
-        used = [int(re.search(r'_wrong_(\d+)$', i).group(1)) for i in wrongs]
+        # Allocate against every ident sharing this base ANYWHERE in the file,
+        # not just this item's. A split leaves sibling halves (1a, 1c) drawing
+        # from one base, so numbering per-item hands the same string to two
+        # different choices. Harmless to Canvas -- idents scope to their own
+        # <response_lid> -- but a file-wide ident replace is the documented fix
+        # method in BF-2026-036, and it would silently edit the wrong choice.
+        used = [int(m.group(1))
+                for m in re.finditer(r'%s(\d+)"' % re.escape(stem_id), raw)]
     elif all(re.fullmatch(r'choice_\d+', i) for i in idents):
         stem_id = 'choice_'
         used = [int(i.split('_')[1]) for i in idents]
@@ -1096,8 +1111,19 @@ def do_stemfix(raw, pkg, title, text, log):
     if block is None:
         log.append(f'  !! {pkg} {title}: item not found')
         return raw
-    m = re.search(r'(<mattext texttype="text/html">)&lt;p&gt;.*?&lt;/p&gt;',
+    # Consume EVERY leading paragraph up to the Canvas boilerplate, not just the
+    # first. The old non-greedy single-<p> pattern left the superseded Part A
+    # prompt standing as paragraph 2 -- the last thing a student read before the
+    # choices -- so an item whose key includes an expression still ended with
+    # "Explain how to show the change ... using a number line." A student who
+    # obeyed that final sentence selected one of three keys and scored zero,
+    # which is the exact defect the stem fix was written to cure (BF-2026-047).
+    m = re.search(r'(<mattext texttype="text/html">)'
+                  r'(?:&lt;p&gt;(?!&lt;strong&gt;Canvas).*?&lt;/p&gt;)+',
                   block, re.S)
+    if not m:
+        log.append(f'  !! {pkg} {title}: no leading paragraph to replace')
+        return raw
     new = block.replace(m.group(0), m.group(1) + wrap([text]))
     log.append(f'  stemfix  {title:18s} widened to match its key')
     return raw.replace(block, new)
@@ -1200,7 +1226,15 @@ def _repairs():
             wrap(['A student uses long division to convert a fraction '
                   '\\(\\dfrac{x}{y}\\), where x and y are integers and '
                   '\\(y\\neq 0\\), into a decimal. Which outcome is '
-                  '<strong>NOT possible</strong>?']) + check_para(SELECT_BOILER),
+                  # wrap() interpolates its paragraph bodies VERBATIM and escapes
+                  # only the <p> it adds, so markup passed in here must already
+                  # be escaped. A raw <strong> becomes a child ELEMENT of
+                  # <mattext> rather than text: still well-formed XML, so the
+                  # gate passed it, but Canvas takes the node's text content and
+                  # the emphasis on NOT silently disappears -- and NOT is the
+                  # word that inverts this whole item.
+                  '&lt;strong&gt;NOT possible&lt;/strong&gt;?'])
+            + check_para(SELECT_BOILER),
             {'wrong_3': 'The decimal terminates after two places.',
              'wrong_4': 'The decimal repeats a single digit forever.',
              'wrong_5': 'The decimal repeats a block of six digits.',

@@ -47,11 +47,19 @@ def plain(s):
 
 
 def keys_of(body):
-    cv = re.search(r'<conditionvar>(.*?)</conditionvar>', body, re.S)
-    if not cv:
-        return set()
-    pos = re.sub(r'<not>.*?</not>', '', cv.group(1), flags=re.S)
-    return set(re.findall(r'<varequal[^>]*>([^<]*)</varequal>', pos))
+    """Union over ALL <conditionvar> blocks, not just the first.
+
+    Six items ship two <respcondition> blocks (trailing-zero alternates like
+    7 and 7.00). re.search saw only the first, so every key-derived rule --
+    sign guidance, "no accepted value", "key is not a choice", the distractor
+    count -- was blind to the second block. The corpus is clean today, so this
+    was a live hole rather than a live bug (BF-2026-047).
+    """
+    keys = set()
+    for cv in re.findall(r'<conditionvar>(.*?)</conditionvar>', body, re.S):
+        pos = re.sub(r'<not>.*?</not>', '', cv, flags=re.S)
+        keys |= set(re.findall(r'<varequal[^>]*>([^<]*)</varequal>', pos))
+    return keys
 
 
 def check(work, base=None):
@@ -60,6 +68,19 @@ def check(work, base=None):
             continue
         rel = os.path.relpath(f, work)
         raw = open(f, encoding='utf-8', newline='').read()
+
+        # Every <mattext> body in this corpus carries its HTML ESCAPED
+        # (&lt;p&gt;, &lt;strong&gt;). A raw <strong> written into one is
+        # still well-formed XML -- it just becomes a child ELEMENT -- so the
+        # parse below cannot see it, and it shipped once (BF-2026-047). Canvas
+        # takes the node's text content, so the markup silently vanishes; on the
+        # item it hit, the word that disappeared was the "NOT" that inverts the
+        # question. Mixed conventions inside one body are the tell.
+        for mt in re.findall(r'<mattext[^>]*>(.*?)</mattext>', raw, re.S):
+            stray = re.findall(r'</?(?:p|strong|em|b|i|br|img|span|div)\b[^>]*>', mt)
+            if stray:
+                fails.append(f'{rel}: raw HTML {stray[0]!r} inside <mattext> -- '
+                             f'must be escaped; Canvas drops it silently')
 
         try:
             ET.fromstring(raw.encode('utf-8'))
@@ -115,6 +136,19 @@ def check(work, base=None):
                 if not keys:
                     fails.append(f'{where}: short answer has no accepted value')
 
+            # A correct answer must actually be awarded 100. Nothing checked
+            # this: an item whose setvar holds 0 marks every correct student
+            # wrong -- the exact harm the rubric's preamble names -- and is
+            # invisible to every other rule here (BF-2026-047).
+            for sv in re.findall(r'<setvar[^>]*>([^<]*)</setvar>', body):
+                if sv.strip() != '100':
+                    fails.append(f'{where}: a correct answer scores '
+                                 f'{sv.strip()}, not 100')
+            dv = re.search(r'<decvar([^>]*)>', body)
+            if dv and ('maxvalue="100"' not in dv.group(1)
+                       or 'varname="SCORE"' not in dv.group(1)):
+                fails.append(f'{where}: decvar is not maxvalue=100 varname=SCORE')
+
             if qt in ('multiple_answers_question', 'multiple_choice_question'):
                 n = len(choice_idents)
                 # keys_of() already strips <not> blocks, which is the only
@@ -153,16 +187,27 @@ def check(work, base=None):
                 # that -- keys_of() strips <not> blocks and only reads
                 # positives -- and a real bug shipped through the gap
                 # (BF-2026-043).
-                rid = re.search(r'<varequal respident="([^"]*)"', body)
-                if rid:
+                # Read the expected respident from the DECLARATION, never from
+                # the scoring block. Seeding it from the first <varequal> only
+                # catches a scoring block that disagrees with itself; a block
+                # that is internally consistent but uniformly names the wrong
+                # respident scores nothing correctly and passed silently.
+                decl = re.search(r'<response_(?:lid|str) ident="([^"]*)"', body)
+                if decl:
+                    want = decl.group(1)
+                    bad = set(re.findall(r'<varequal respident="([^"]*)"', body)) - {want}
+                    if bad:
+                        fails.append(f'{where}: scoring uses respident '
+                                     f'{sorted(bad)} but the item declares '
+                                     f'"{want}" -- those conditions match nothing')
                     negated = set(re.findall(
                         r'<not>\s*<varequal respident="%s"[^>]*>([^<]*)</varequal>\s*</not>'
-                        % re.escape(rid.group(1)), body))
+                        % re.escape(want), body))
                     for c in choice_idents:
                         if c not in keys and c not in negated:
                             fails.append(f'{where}: choice {c} is neither keyed '
                                          f'nor negated under respident='
-                                         f'"{rid.group(1)}" -- selecting it '
+                                         f'"{want}" -- selecting it '
                                          f'would still score 100')
 
             # original_answer_ids must be a permutation of the real choices.
