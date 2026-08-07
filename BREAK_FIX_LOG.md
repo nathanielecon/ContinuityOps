@@ -2526,3 +2526,93 @@ instrument was the thing that turned out to be wrong.
 
 **Twelve reads, twelve clean corpora.** Every defect found in every round has
 been in the instrument, never in the 177 items.
+
+---
+
+## 2026-08-07 — AUTHORED accepted — 671 of 671 authored strings worked, no defect
+
+AUTHORED's second read at `4ee5bb50`, cold, **10/10**. The slice is accepted:
+two 10/10 verdicts, and every round between them was gate-only, so no corpus byte
+moved and the reads are consecutive in the sense the bar means.
+
+Two things about the method are worth keeping, because they are the reason to
+believe the verdict.
+
+**It refused to take the `ADDWRONG` table as the definition of "authored".** It
+extracted the pristine pre-project packages still sitting in `inbox/` from commit
+`6a07968` and diffed them item by item against the built ones — stems, choice
+texts, accepted-value lists. That found **65 authored strings the table does not
+list**, because `ADDWRONG` covers only the final round's 27 additions and earlier
+rounds replaced the rest. A judge that had trusted the table would have scored
+roughly a fifth of the slice and reported full coverage.
+
+**It worked all 235 non-keyed choices across all 34 select-all items**, not only
+the 92 authored ones, on the stated ground that a true *inherited* distractor
+sinks the same item under all-or-nothing scoring, and that scoring only its own
+half would have been a hole. That is the right instinct about slice boundaries
+and it is the opposite of the failure this log keeps recording.
+
+### The three places the slice could have shipped the worst defect in the corpus
+
+Three authored distractors are **value-true** — they evaluate to the key — and
+each is false only because of an authored sentence in its own stem. The judge
+worked all three completely, and each holds:
+
+- **`L1` `2(4x + 8)`** = 8x + 16, the expression being factored. False only under
+  the authored criterion sentence *"A factorization is complete only when the
+  expression left inside the parentheses has no common factor of its own"*: 4x + 8
+  has common factor 4. The same sentence disposes of the inherited `4(2x + 4)`
+  and does not touch the key, since x + 2 has no common factor. **Without that
+  sentence the item has three true choices and one key.**
+- **`K2` `2 × 3 × 15`** = 90. False only on the word **prime**, since 15 = 3 · 5.
+  The same word disposes of `9 × 10`, `3² × 10` and `2 × 45`.
+- **`K9` `8 + 5 + 0`** = 13. False only under the authored *"the same two addends
+  … in the opposite order; do not select the original expression or its computed
+  value"* — three addends, original order.
+
+### The subtlest distractor in the corpus, and why it is false
+
+`topic-1-2` P2Q2's *"With the denominator fixed, changing the numerator can never
+change whether the decimal terminates."* With b = 6: 1/6 = 0.1666… repeats, while
+3/6 = 1/2 = 0.5 terminates — reduction changes the effective denominator, so one
+counterexample defeats the universal claim. The authored stem phrase *"about the
+long division **and its result**"* is what brings the process-level statements
+into scope so they are false rather than merely off-topic.
+
+### The figures were parsed, not eyeballed
+
+The judge derived each SVG's tick-to-value map from the drawn coordinates: H6's
+axis puts 0 at x = 518 with 26 units per integer, so 6 sits at x = 674, and row A
+draws an open circle (`fill="white"`) there with the ray running 674 → 725 —
+rightward, i.e. *y > 6*, matching the companion's checked answer. Rows C and D run
+674 → 310, genuinely leftward. In A1, row F's dot at x = 475 gives
+(475 − 358)/26 = 4.5 exactly. All 21 authored row letters agree with the SVG row
+they name.
+
+### Eleven probes declined, each with its reasoning recorded
+
+The list is the valuable half of the report, and two entries stand out.
+
+**`topic-1-4` P1Q1b rejects `|5|+8` and `8+|5|` while accepting `|−8|+5`.** The
+asymmetry is principled: 5 equals its own distance from zero so bars there are
+optional, −8 does not, and the rejected forms require having already evaluated
+|−8| to 8 — which the same stem forbids. The judge read the asymmetry as evidence
+the list was reasoned rather than generated.
+
+**`F4` does not accept "multiply by 1/5"**, a mathematically valid inverse of ×5.
+Declined because the worksheet companion names ÷5 as *the* inverse in so many
+words and the stem's format example points at a single named operation — but
+flagged as **the single most fragile accepted list in the slice**. Recorded here
+rather than acted on: widening it would move corpus bytes and void five
+acceptances, and two independent judges have now examined `F4` and left it. If a
+student is ever marked wrong on that item, this entry is where to start.
+
+Two further honest flags it raised and declined: `topic-1-6` Q4b's inherited
+*"Square first in both expressions"* is the one place a reasonable student could
+argue, resolved against the item's own key; and `topic-1-6` P2Q1a pairs "integer"
+with "whole number" over a key of +20 — the identical shape over a *negative* key
+is the defect an earlier round caught, and the positive twin survives on its
+arithmetic rather than on its wording.
+
+**Five of six slices are now accepted.** STRUCT alone remains open, and every one
+of its twelve reads has found the corpus clean and the instrument holed.

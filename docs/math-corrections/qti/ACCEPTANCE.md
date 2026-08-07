@@ -144,8 +144,8 @@ frozen and identical for every judge, amended only before the round opened.
 | **FIGURES** (A1/H6/H7 + media) | 10 | **10** | **10** | — | — | — | **YES** |
 | **SHORTANS** (35 items) | 10 | 9 | **10** | **10** | — | — | **YES** |
 | **NUMERIC** (108 keys) | 10 | 10 | **10** | **10** | — | — | **YES** |
-| AUTHORED (distractors + stems) | 10 | 8 | 8 | **10** | — | pending | no — one 10 at the pinned hash, needs a second |
-| STRUCT (177 items + the gate) | 9 | 9 | 7 | 8 | 7 | 5 | no — 11 reads, never a 10 |
+| **AUTHORED** (distractors + stems) | 10 | 8 | 8 | **10** | — | **10** | **YES** |
+| STRUCT (177 items + the gate) | 9 | 9 | 7 | 8 | 7 | 5 | no — 12 reads, never a 10 |
 | G1b cold (18 items, content) | — | — | — | — | — | — | **yes**, at pre-round state |
 
 Columns C–F are all `4ee5bb50`: every round since C has been gate-only, so the
@@ -157,16 +157,21 @@ neither found anything in the corpus.
 slice never reads. Every row was checked item-by-item across builds, so a slice
 counts two reads only where the items it read were byte-identical.
 
-**Four slices are accepted**, each on two 10/10 reads of the same content, the
-second from a judge that had not seen the slice. **AUTHORED is not among them**,
-and an earlier state of this file implied otherwise. Its verdicts are 10, 8, 8,
-10: the two tens are separated by two eights and were rendered against *different
-builds*, so they are neither consecutive nor against identical content. It holds
-exactly one 10/10 at `4ee5bb50` and needs a second. Corrected here rather than
-silently, because a ledger that overstates acceptance is the exact failure this
-reconciliation exists to prevent (BF-2026-061).
+**Five slices are accepted**, each on two 10/10 reads of the same content, the
+second from a judge that had not seen the slice.
 
-The four:
+A note on how AUTHORED got there, because this file briefly claimed it before it
+was true. Its verdicts read 10, 8, 8, 10, and the first two tens are separated by
+two eights and were rendered against *different builds* — neither consecutive nor
+against identical content. It held exactly one 10/10 at `4ee5bb50` and needed a
+second. It now has one: a cold judge reproduced the hash, worked **671 authored
+strings out of 671**, and returned 10/10. Every round between the two reads was
+gate-only, so no corpus byte moved and the reads are consecutive in the sense the
+bar means. The premature claim is left recorded rather than tidied away, because
+a ledger that overstates acceptance is the exact failure this reconciliation
+exists to prevent (BF-2026-061).
+
+The five:
 
 - **SELECTALL** — 34 items byte-identical across all four builds. Its cold judge
   worked all 235 non-keyed choices and ruled every weak case explicitly.
@@ -178,6 +183,13 @@ The four:
   words" while accepting only one-word answers.
 - **NUMERIC** — accepted after AUTHORED overturned a ruling both earlier NUMERIC
   judges had made about "whole number" over negative keys.
+- **AUTHORED** — accepted on a cold read that established its own scope rather
+  than trusting the `ADDWRONG` table: it diffed the built packages against the
+  pristine originals still sitting in `inbox/`, and found 65 authored strings
+  that table does not list, because `ADDWRONG` covers only the final round's 27.
+  It then worked all 235 non-keyed choices across all 34 select-all items, not
+  just the 92 authored ones, on the ground that a true *inherited* distractor
+  sinks the same item under all-or-nothing scoring.
 
 **STRUCT has never scored 10, across eleven reads.** Every one of the eleven
 found the corpus clean on all 177 items and took the point off the gate, which
@@ -292,10 +304,11 @@ with every named method reachable (0 closure violations).
   around. `FIGURE_ITEMS` is gone and the build reports zero warnings
   (BF-2026-052).
 - **Two consecutive 10/10 per slice**, this project's acceptance bar, is met by
-  **four of six slices**. AUTHORED and STRUCT remain open — AUTHORED needs one
-  more read at `4ee5bb50`, STRUCT has never scored 10 and its findings have been
-  in the instrument every time.
-- **The gate itself is the open work.** Eleven consecutive STRUCT reads have
-  found the 177 items clean and `validate.py` holed. Twenty-odd rules have been
-  added across BF-2026-050…061, each proved by injecting the bug and watching the
-  previous gate print "all checks pass".
+  **five of six slices**. STRUCT alone remains open; it has never scored 10, and
+  its findings have been in the instrument every single time.
+- **The gate itself is the open work.** Twelve consecutive STRUCT reads have
+  found the 177 items clean and `validate.py` holed. Thirty-odd rules have been
+  added across BF-2026-050…062, each proved by injecting the bug and watching the
+  previous gate print "all checks pass". The corpus has now been read
+  adversarially by a dozen independent judges without a defect surviving; the
+  instrument has failed every one of those reads.
