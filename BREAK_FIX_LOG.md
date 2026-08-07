@@ -1933,3 +1933,59 @@ All fixes fire on injection; bytes unchanged, so the five accepted slices stand.
 the instrument. That is the honest summary: the artifacts have been correct and
 stable throughout, and what has taken seven rounds is making the tool that
 measures them tell the truth about its own coverage.
+
+## 2026-08-07 — BF-2026-058 — two mutations that make an item score 100 for doing nothing
+
+STRUCT's eighth read. Corpus clean on all 177 items for the eighth consecutive
+time. Three defects, all in the gate, two of them the same shape as the worst
+found so far: a mutation that flips an item from testing something to testing
+nothing, with the gate green.
+
+**A select-all with no keyed choice passed.** Every other autoscored type has a
+minimum-key rule — numeric and short answer fail on `not keys`, multiple choice on
+`!= 1` — and the one type scored by **conjunction** had none. With zero positives
+the conditionvar becomes a pure conjunction of negations, which a student who
+selects **nothing** satisfies in every conjunct: `setvar` fires 100 on an empty
+submission, and the student who picks the correct choice scores 0. That is
+verbatim the harm the adjacent connective rule names, reached through a different
+door.
+
+Every other select-all rule is invariant under it, which is why it survived:
+`ndist` is 8 − 0, the contiguous-run test needs two keys, `choice_idents[0] in
+keys` is false, `for k in keys` is a no-op, and the negation-coverage loop passes
+*because every choice is now negated*. Only `check_keys_vs_base` catches it,
+incidentally, and only for the 24 items with a comparable baseline — while its own
+docstring points at "the type-specific rules here" for the other ten. The rule it
+pointed at did not exist.
+
+**Flipping one inner connective made every numeric item unconditionally true.**
+The fill-in rule from BF-2026-056 asserts only the identity of the **top** node,
+under a guard that excludes 125 of 149 conditionvars, while the select-all rule it
+claims to mirror asserts the whole tree shape. Every numeric item nests
+`<and><vargte>V</vargte><varlte>V</varlte></and>` inside the top-level `<or>`.
+Change that inner `<and>` to `<or>` and the disjunct reads *x ≥ V or x ≤ V* — a
+tautology over the reals. **All 108 numeric items score 100 for any entry**, and
+the gate printed `all checks pass`.
+
+The block is emitted as an f-string literal from two generators, `finalize.py` and
+`to_numeric.py` — the same construct at two sites, guarded at neither, which is
+the pattern this log has now recorded four times.
+
+**A package declaring no `points_possible` passed.** The loop could only compare
+values it found, so an empty match set meant the body never ran. The item-level
+twin forty lines earlier handles absence explicitly. Same rule, two sites, absence
+handled at one — the third instance of that exact pairing in three rounds.
+
+Also hardened, though the judge correctly ruled it environmental rather than a
+corpus defect: `if 'manifest' in f or 'meta' in f` tested the whole path, so a
+work tree placed under a directory named `metadata` or `manifests` skipped every
+file, checked zero items, and printed `all checks pass`. Now a basename test.
+
+All four fire on injection; bytes unchanged, so the five accepted slices stand.
+
+**Eight reads, eight clean corpora.** Every STRUCT defect across all eight rounds
+has been in the instrument. The judge this round also did something worth
+recording: it found three further regex-brittleness cases, proved each, and then
+**declined to score them**, on the ground that no current generator can produce
+the input. That is the distinction between a hole and a defect being drawn
+correctly, by a judge told not to manufacture findings.

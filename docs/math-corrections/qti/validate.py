@@ -195,7 +195,10 @@ def check_line_endings(work, base):
 
 def check(work, base=None):
     for f in sorted(glob.glob(os.path.join(work, '*/*/*.xml'))):
-        if 'manifest' in f or 'meta' in f:
+        # basename, not the whole path: a work tree under a directory
+        # named `metadata` or `manifests` matched every file and
+        # checked zero items while still printing 'all checks pass'.
+        if 'manifest' in os.path.basename(f) or 'meta' in os.path.basename(f):
             continue
         rel = os.path.relpath(f, work)
         raw = open(f, encoding='utf-8', newline='').read()
@@ -474,12 +477,43 @@ def check(work, base=None):
                                      f'multiple accepted values but is not a '
                                      f'top-level <or> -- no single entry can '
                                      f'satisfy it, so everyone scores 0')
+                    # The select-all rule this mirrors asserts the whole tree
+                    # shape; this one asserted only the identity of the TOP node,
+                    # and only under a guard that excluded 125 of 149 fill-in
+                    # conditionvars. Every numeric item nests
+                    # <and><vargte>V</vargte><varlte>V</varlte></and> inside the
+                    # top-level <or>; flip that inner <and> to <or> and
+                    # "x >= V or x <= V" is a tautology over the reals, so EVERY
+                    # entry scores 100 and the item tests nothing. Emitted as an
+                    # f-string from two generators, guarded at neither
+                    # (BF-2026-058).
+                    for conn, inner in re.findall(
+                            r'<(and|or)>((?:(?!</?(?:and|or)\b).)*?)</\1>', cv, re.S):
+                        if (conn != 'and' and re.search(r'<vargte\b', inner)
+                                and re.search(r'<varlte\b', inner)):
+                            fails.append(f'{where}: a vargte/varlte range pair '
+                                         f'is joined by <{conn}> -- "x >= V or '
+                                         f'x <= V" is true for every number, so '
+                                         f'any entry scores 100')
                     if '<not>' in cv:
                         fails.append(f'{where}: <not> inside a fill-in '
                                      f'conditionvar -- any non-matching entry, '
                                      f'including an empty box, scores 100')
 
             if qt == 'multiple_answers_question':
+                # Every other autoscored type has a minimum-key rule -- numeric
+                # and short answer fail on `not keys`, multiple choice on
+                # `!= 1` -- and the one type scored by CONJUNCTION had none.
+                # With zero positives the conditionvar is a pure conjunction of
+                # negations, which a student who selects NOTHING satisfies in
+                # every conjunct: setvar fires 100 on an empty submission and
+                # the student who picks the right choice scores 0. Every other
+                # select-all rule is invariant under it (BF-2026-058).
+                if not keys:
+                    fails.append(f'{where}: select-all has no keyed choice -- '
+                                 f'the conditionvar is a conjunction of '
+                                 f'negations, so an empty submission satisfies '
+                                 f'every one and scores 100')
                 n = len(choice_idents)
                 # keys_of() already strips <not> blocks, which is the only
                 # trap-safe way to count keys here (the rubric records that a
@@ -606,7 +640,15 @@ def check(work, base=None):
             continue
         n = open(xs[0], encoding='utf-8', newline='').read().count('<item ident=')
         m = open(meta[0], encoding='utf-8', newline='').read()
-        for v in set(re.findall(r'<points_possible>([\d.]+)</points_possible>', m)):
+        # The loop could only compare values it FOUND, so a meta declaring no
+        # points_possible at all passed. The item-level twin forty lines up
+        # handles absence explicitly. Same rule, two sites, absence at one
+        # (BF-2026-058).
+        vs = set(re.findall(r'<points_possible>([\d.]+)</points_possible>', m))
+        if not vs:
+            fails.append(f'{os.path.basename(d.rstrip("/"))}: assessment_meta '
+                         f'declares no points_possible at all')
+        for v in vs:
             if abs(float(v) - n) > 1e-9:
                 fails.append(f'{os.path.basename(d.rstrip("/"))}: '
                              f'points_possible {v} but {n} items')
