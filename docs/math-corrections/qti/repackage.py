@@ -118,15 +118,19 @@ for pkg in sorted(os.listdir(SRC)):
     for name, paths in sorted(groups.items()):
         locs = {r.rsplit("/", 1)[0] + "/" if "/" in r else "" for r in
                 [os.path.relpath(p, d) for p in paths]}
-        want_fixed = {"media/", "web_resources/media/"}
-        missing = want_fixed - locs
-        if missing:
-            failures.append(f"{pkg}: {name} is missing its mirror at "
-                            f"{sorted(missing)} -- that $IMS-CC-FILEBASE$ "
+        # Assert all THREE locations, including the quiz folder's. The previous
+        # fix hardcoded two prefixes and left the third as a bare count -- so
+        # the identical hole survived on the very mirror MIRROR_PREFIXES is
+        # named for: moving <quizfolder>/media/ to bogus3/media/ kept the count
+        # at three and passed. The quiz folder is derived from the manifest
+        # rather than guessed (BF-2026-057).
+        qres = man.find('.//*[@type="imsqti_xmlv1p2"]')
+        qf = os.path.dirname(qres.get("href")) if qres is not None else ""
+        want = {p.replace("<quizfolder>", qf) for p in MIRROR_PREFIXES}
+        if locs != want:
+            failures.append(f"{pkg}: {name} mirrors sit at {sorted(locs)}, "
+                            f"expected {sorted(want)} -- a $IMS-CC-FILEBASE$ "
                             f"reading would 404")
-        if len(locs - want_fixed) != 1:
-            failures.append(f"{pkg}: {name} has {len(locs - want_fixed)} "
-                            f"quizfolder media copies, expected exactly 1")
         digests = {hashlib.sha256(open(p, "rb").read()).hexdigest() for p in paths}
         if len(digests) > 1:
             failures.append(f"{pkg}: the {len(paths)} copies of {name} are not "

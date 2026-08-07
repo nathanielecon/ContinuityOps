@@ -169,6 +169,30 @@ def check_keys_vs_base(rel, work_raw, base_raw):
                 f'{sorted(was - now)!r}; newly keyed: {sorted(now - was)!r}')
 
 
+def check_line_endings(work, base):
+    """BF-029, over EVERY file rather than the item XMLs alone.
+
+    This lived inside the item loop, which skips `imsmanifest.xml` and
+    `assessment_meta.xml` -- so it compared 14 of the 42 XML files and 2 of the
+    6 CRLF files. BF-029's own damage was `finalize.py` rewriting whole files in
+    the 6th-grade packages, which is precisely these, and the guarantee it
+    protects -- an untouched file stays byte-identical, so a reviewer can trust
+    the diff -- was unenforced for two thirds of them (BF-2026-057).
+    """
+    for f in sorted(glob.glob(os.path.join(work, '**', '*'), recursive=True)):
+        if not os.path.isfile(f):
+            continue
+        rel = os.path.relpath(f, work)
+        b = os.path.join(base, rel)
+        if not os.path.exists(b):
+            continue
+        bb, wb = open(b, 'rb').read(), open(f, 'rb').read()
+        if (b'\r\n' in bb) != (b'\r\n' in wb):
+            fails.append(f'{rel}: line-ending convention changed')
+        if b'\r\n' in wb and wb.count(b'\r\n') != wb.count(b'\n'):
+            fails.append(f'{rel}: mixed line endings')
+
+
 def check(work, base=None):
     for f in sorted(glob.glob(os.path.join(work, '*/*/*.xml'))):
         if 'manifest' in f or 'meta' in f:
@@ -203,18 +227,14 @@ def check(work, base=None):
             fails.append(f'{rel}: does not parse: {e}')
             continue
 
-        # BF-029 -- line endings must match the pristine file exactly.
-        # And, since BF-2026-050, the pristine tree is used for what it was
-        # always there for: proving no key silently moved.
+        # Since BF-2026-050 the pristine tree is used for what it was always
+        # there for: proving no key silently moved. The line-ending comparison
+        # moved OUT of this loop -- see check_line_endings -- because this loop
+        # skips every manifest and assessment_meta, which are exactly the files
+        # BF-029 damaged (BF-2026-057).
         if base:
             b = os.path.join(base, rel)
             if os.path.exists(b):
-                bb = open(b, 'rb').read()
-                wb = open(f, 'rb').read()
-                if (b'\r\n' in bb) != (b'\r\n' in wb):
-                    fails.append(f'{rel}: line-ending convention changed')
-                if b'\r\n' in wb and wb.count(b'\r\n') != wb.count(b'\n'):
-                    fails.append(f'{rel}: mixed line endings')
                 check_keys_vs_base(rel, raw,
                                    open(b, encoding='utf-8', newline='').read())
 
@@ -331,6 +351,17 @@ def check(work, base=None):
                 fails.append(f'{where}: no <setvar> -- SCORE is never '
                              f'written, so it stays at minvalue 0')
             for attrs, value in svs:
+                # The THIRD instalment of this rule. BF-2026-047 checked the
+                # value, BF-2026-051 added the variable and called it "closed
+                # halfway", and the action -- the operator applied to the value
+                # -- stayed unread. decvar sets minvalue="0", so SCORE starts at
+                # 0: action="Multiply" gives 0x100 = 0, "Divide" gives 0, and
+                # "Subtract" gives -100. Each passed corpus-wide while the
+                # message claimed a correct answer scores 100 (BF-2026-057).
+                if 'action="Set"' not in attrs:
+                    fails.append(f'{where}: setvar {attrs.strip()!r} is not '
+                                 f'action="Set" -- SCORE starts at minvalue 0, '
+                                 f'so any other action leaves it below 100')
                 if 'varname="SCORE"' not in attrs:
                     fails.append(f'{where}: setvar writes {attrs.strip()!r}, '
                                  f'not SCORE -- SCORE is never set, so it stays 0')
@@ -500,7 +531,14 @@ def check(work, base=None):
                 # positives -- and a real bug shipped through the gap
                 # (BF-2026-043).
                 negated = set(re.findall(
-                    r'<not>\s*<varequal respident="%s"[^>]*>([^<]*)</varequal>\s*</not>'
+                    # respident anywhere in the tag -- BF-2026-056 fixed this at
+                    # the mismatch rule and not here, so the two adjacent rules
+                    # disagreed about what a respident attribute is. With
+                    # case="No" written first (the majority spelling on positive
+                    # varequals) this reported every correct distractor as
+                    # un-negated: a false accusation, failing closed but untrue
+                    # (BF-2026-057).
+                    r'<not>\s*<varequal\b[^>]*?\brespident="%s"[^>]*>([^<]*)</varequal>\s*</not>'
                     % re.escape(respident_of(body) or ''), body))
                 for c in choice_idents:
                     if c not in keys and c not in negated:
@@ -514,12 +552,21 @@ def check(work, base=None):
             # its key at position 0, and repeat a choice's visible text, all
             # unchecked. The duplicate-text comment even said "a defect in every
             # shape" from inside a branch that reached one (BF-2026-056).
-            if choice_idents:
+            # `if choice_idents:` is "has choices", not "is choice-bearing" --
+            # so a select-all with its <render_choice> emptied passed: an
+            # unanswerable item whose original_answer_ids still names eight
+            # idents that no longer exist. Ten split halves passed
+            # unconditionally, since MIN_DISTRACTORS is the only rule that
+            # notices n == 0 and SPLIT_HALF exempts exactly them (BF-2026-057).
+            if qt in ('multiple_answers_question', 'multiple_choice_question'):
+                if not choice_idents:
+                    fails.append(f'{where}: choice-bearing item has no '
+                                 f'<response_label> -- unanswerable')
                 for k in keys:
                     if k not in choice_idents:
                         fails.append(f'{where}: key {k} is not a choice')
                 # BF-031 -- no key may sit at position 0.
-                if choice_idents[0] in keys:
+                if choice_idents and choice_idents[0] in keys:
                     fails.append(f'{where}: keyed choice is first (BF-031)')
                 texts = [plain(t) for t in re.findall(
                     r'<response_label[^>]*>\s*<material>\s*'
@@ -537,7 +584,7 @@ def check(work, base=None):
             listed = [x for x in oai.group(1).split(',') if x] if oai else None
             if not oai:
                 fails.append(f'{where}: original_answer_ids absent')
-            elif choice_idents:
+            elif qt in ('multiple_answers_question', 'multiple_choice_question'):
                 if sorted(listed) != sorted(choice_idents):
                     fails.append(f'{where}: original_answer_ids does not match '
                                  f'the choice list')
@@ -566,7 +613,10 @@ def check(work, base=None):
 
 
 if __name__ == '__main__':
-    check(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)
+    _base = sys.argv[2] if len(sys.argv) > 2 else None
+    if _base:
+        check_line_endings(sys.argv[1], _base)
+    check(sys.argv[1], _base)
     print('type census:')
     for k, v in sorted(stats.items(), key=lambda t: -t[1]):
         print(f'  {v:4d}  {k}')

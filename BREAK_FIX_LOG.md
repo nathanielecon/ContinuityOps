@@ -1877,3 +1877,59 @@ of the token silently lost its file — verbatim the harm the count rule was wri
 to prevent.
 
 All ten fire on injection; bytes unchanged, so the five accepted slices stand.
+
+## 2026-08-07 — BF-2026-057 — three rules logged as closed were closed at one site of two
+
+STRUCT's seventh read. Corpus clean on all 177 items for the seventh consecutive
+time; five defects, all in the gate. Three of them are rules this log already
+records as fixed — fixed at one of the two places that needed it.
+
+**`<setvar>`'s `action` was never read.** BF-2026-047 checked the value,
+BF-2026-051 added the variable and called that one "closed halfway", and the
+operator applied to the value stayed unread. `<decvar>` sets `minvalue="0"`, so
+SCORE starts at 0 and `action="Multiply"` gives 0×100 = 0, `"Divide"` gives 0,
+`"Subtract"` gives −100. Each passed **corpus-wide** while the failure message
+asserted that a correct answer scores 100. Third instalment of one rule.
+
+**The negation regex still pinned `respident` to the first attribute.**
+BF-2026-056 logged that as closed; it was closed at the mismatch rule and not at
+the negation rule twelve lines away, so the two adjacent rules disagreed about
+what a `respident` attribute is. Writing `case="No" respident="response1"` — the
+majority spelling on positive `<varequal>` elements — made the gate report every
+distractor as un-negated. That fails closed rather than open, but it would return
+a clean corpus to the fixer with a message that is **untrue**. Verified in both
+directions now: the reorder is accepted, and a genuinely wrong respident inside a
+`<not>` still fires.
+
+**The mirror rule asserted two of three locations.** BF-2026-056 recorded
+"counting three is not covering three" and then hardcoded `media/` and
+`web_resources/media/` while leaving the third as a bare count — so the identical
+hole survived on the very mirror `MIRROR_PREFIXES` is named for. Moving
+`<quizfolder>/media/` to `bogus3/media/` kept the count at three, kept every
+digest and declaration intact, and passed. The quiz folder is now derived from
+the manifest's own `imsqti_xmlv1p2` resource rather than guessed, and the
+constant is used for its contents.
+
+### Two more of the recurring class
+
+**An empty choice list passed.** `if choice_idents:` reads "has choices", not "is
+choice-bearing", so a select-all whose `<render_choice>` is emptied sailed
+through: an unanswerable item whose `original_answer_ids` still named eight
+idents that no longer existed. Ten split halves passed unconditionally, because
+`MIN_DISTRACTORS` is the only rule that notices `n == 0` and `SPLIT_HALF` exempts
+exactly those. Same shape as BF-2026-054's `if oai and choice_idents` and
+BF-2026-056's absent-`<setvar>` loop: **a rule that cannot see an absent thing.**
+
+**The line-ending rule reached 14 of 42 files.** It sat inside the item loop,
+which skips every `imsmanifest.xml` and `assessment_meta.xml` — and BF-029's
+original damage was `finalize.py` rewriting whole files in the 6th-grade
+packages, which is precisely those. It compared 2 of the 6 CRLF files. Hoisted to
+its own pass over every file in the tree; a CRLF→LF conversion in either a
+manifest or an `assessment_meta` is now caught.
+
+All fixes fire on injection; bytes unchanged, so the five accepted slices stand.
+
+**Seven reads, seven clean corpora.** Every STRUCT score has been held down by
+the instrument. That is the honest summary: the artifacts have been correct and
+stable throughout, and what has taken seven rounds is making the tool that
+measures them tell the truth about its own coverage.
