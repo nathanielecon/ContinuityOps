@@ -1,12 +1,18 @@
 # Things only a human with the source documents can fix
 
-Everything else in this project is fixed in the QTI packages themselves. The
-three items below are defects in the **paper materials**, not in the packages.
-The packages are already correct; if these are left alone, the screen and the
-paper disagree in front of a student.
+Everything else in this project is fixed in the QTI packages themselves.
 
-Nothing here is urgent enough to hold a release. All three are cases where a
-student who does the right thing gets a confusing signal.
+**Two things need you** — §1 and §2, both defects in the **paper materials**
+rather than in the packages. The packages are already correct; left alone, the
+screen and the paper disagree in front of a student. Neither is urgent enough to
+hold a release; both are cases where a student who does the right thing gets a
+confusing signal.
+
+**One thing needs a Canvas login** — §4, the import test. It is the only check in
+this project that cannot be run from the build environment.
+
+**§3 needs nothing.** It is kept because an earlier version of this file asked
+you to act on it and that request was based on my error.
 
 ---
 
@@ -52,21 +58,32 @@ things, with the screen being the stricter and more accurate one.
 
 ---
 
-## 3. The three figure items are held below the distractor bar
+## 3. The figure items — resolved, nothing for you to do
 
-`A1`, `H6` and `H7` carry **6 distractors** where every other select-all item
-carries 7. Their choices are drawn figures, so an extra distractor means an
-extra SVG, and authoring figures before confirming the existing ones even
-display in Canvas would be building on sand.
+An earlier draft of this file asked you to act here. That was based on a mistake
+of mine, now corrected, and it is recorded so the history stays honest.
 
-`validate.py` reports these three as warnings on every build rather than passing
-them silently, so the exemption cannot quietly become permanent.
+`A1`, `H6` and `H7` carry 6 distractors where the topic packages carry 7, and I
+had flagged that as a gap to close by drawing three new figures. It was not a
+gap. The judging rubric scopes the choice-count rule to the topic packages and
+says of the 6th-grade packages, which is where these three live: *"All 69 items
+have fewer than 8 choices. Do not score this as a defect."* My local checker was
+enforcing a bar the rubric deliberately does not set, and I had been about to
+author three SVG figures to satisfy it.
 
-**Action:** run the Canvas import test (`verify_canvas_import.py`, below). Once
-it confirms the SVGs render, the three items get their seventh distractor and
-the exemption is deleted from `validate.py`.
+Both the checker and the record are fixed. There is no exemption any more,
+because none is needed.
 
----
+Two real improvements did come out of looking:
+
+- **The three stems no longer depend on the diagram.** They used to say "Use the
+  graphic choices", which points a student at an image that might not load. Every
+  option was always written out in words as well, so they now say so. The items
+  are answerable either way.
+- **Each figure now ships at three locations inside the package**, because
+  Canvas's `$IMS-CC-FILEBASE$` token can resolve to any of three plausible
+  directories and there is no way to determine which without a live Canvas.
+  Satisfying all three costs six small duplicate files and removes the question.
 
 ## 4. The Canvas import test itself
 
