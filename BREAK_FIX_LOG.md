@@ -1682,3 +1682,48 @@ guard then never fired — its pattern could not span "Round **your answer** to 
 nearest kilometer" — so the corpus was never actually changed, and I reported a
 fix that had not landed. NUMERIC caught that. A judge's argument is a claim to
 verify, exactly as judges are told to treat mine.
+
+## 2026-08-07 — BF-2026-054 — the same bug a fourth time, found by the round that was sent to look for exactly it
+
+STRUCT's round-D brief said: the recurring bug is **scope**, three rules have been
+logged as closed while covering a fraction of what they name, go and check
+whether the latest fix is real and whether anything else is narrower than it
+claims. It confirmed the four lifted rules genuinely cover all four item shapes
+now — 14 of 14 injections caught — and then found three more of the same kind.
+
+**F2's part-label pattern, widened twice and still narrow.** It went
+`Part\s+[AB]\s*:` → `\bPart\s+[AB1-9]\b`, and still passed `part 1` (lowercase),
+`Part C`, `Part D`, `Part 10`, `Part II` — 15 of 30 injections green, identically
+on all three item shapes. **Lowercase is the live risk**, because the retired
+boilerplate this rule replaced was prose, and prose lowercases. Now
+`\b[Pp]art\s+(?:[A-Z]|[0-9]+|[IVX]+)\b`, with the letter class held uppercase-only
+so ordinary English ("part a whole") does not false-positive.
+
+**`original_answer_ids` was inert on 143 of 177 items.** The guard read
+`if oai and choice_idents`, and `choice_idents` excludes the `answer1` render
+label — so on every fill-in it is the empty list and the branch never ran.
+Rewriting a fill-in's `original_answer_ids` to `zzz_bogus` passed. The rule now
+has an explicit fill-in arm asserting Canvas's own convention, a single
+`choice_1`, which is uniform on all 94 fill-ins in the pristine tree.
+
+**Sign guidance was scoped to `numerical_question`.** F4 asks for "the sign
+convention if the answer can be negative" of any item where the student types the
+answer, and three short-answer items ship negative keys. Scrubbing the guidance
+from a numeric item failed the gate; the same scrub on the ordering items passed.
+Now covers both fill-in types, with two guards the judge identified as
+load-bearing and I verified: `numericish` excludes word answers where a minus is
+only an alias spelling (`F3` accepts `-8` beside "subtract 8"), and a **worked
+example counts as guidance** — "Type it like -5,0,2" and "write |4-(-9)|" tell a
+student what to type more concretely than the sentence does.
+
+**No corpus violation in any of the three.** The judge scanned every `<mattext>`
+for part labels under a case-insensitive pattern (zero hits), worked all three
+negative-key short-answer items by hand, and confirmed the `choice_1` convention.
+All six probes fire on injection; bytes unchanged, so the four acceptances stand.
+
+**Four rounds, four instances of the same mistake.** Not carelessness about what
+a rule should check — every one of these rules was correct about its property.
+Carelessness about *which items it reaches*: an indent, an emptiness guard, a
+type equality. The gate now covers all four shapes on every rule that names all
+four, and the way that was established was by injecting into a fill-in and a
+select-all separately, every time, rather than into whichever came to hand.

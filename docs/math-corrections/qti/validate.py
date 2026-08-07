@@ -238,7 +238,13 @@ def check(work, base=None):
             # One part per question. F2 is "No item stem may reference a part
             # label AT ALL", not "no Part A: prompt" -- the colon form missed
             # prose like "In Part B you found that..." (BF-2026-053).
-            if re.search(r'\bPart\s+[AB1-9]\b', stem):
+            # Widened twice. `Part\s+[AB]\s*:` missed prose references; then
+            # `\bPart\s+[AB1-9]\b` still missed lowercase `part 1`, `Part C`,
+            # `Part 10` and `Part II`. Lowercase is the live risk, because the
+            # retired boilerplate this replaced was prose and prose lowercases.
+            # The letter class stays uppercase-only so ordinary English -- "part
+            # a whole" -- does not false-positive (BF-2026-054).
+            if re.search(r'\b[Pp]art\s+(?:[A-Z]|[0-9]+|[IVX]+)\b', stem):
                 fails.append(f'{where}: stem references a part label')
 
             # The retired boilerplate must be gone everywhere.
@@ -249,10 +255,27 @@ def check(work, base=None):
             idents = LABEL.findall(body)
             choice_idents = [i for i in idents if i != 'answer1']
 
-            if qt == 'numerical_question':
-                if any(v.strip().startswith('-') for v in keys) and \
-                        not re.search(r'negative sign|minus sign', stem, re.I):
+            # Sign guidance applies to EVERY fill-in, not just numeric entry --
+            # F4 asks for "the sign convention if the answer can be negative" of
+            # any item where the student types the answer. Three short-answer
+            # items ship negative keys and none was examined (BF-2026-054).
+            #
+            # Two guards, both load-bearing. `numericish` excludes word answers
+            # where a minus is only an alias spelling (F3 accepts `-8` beside
+            # "subtract 8"), which would otherwise false-positive. And a worked
+            # example counts as guidance: the ordering items say "Type it like
+            # -5,0,2" and the topic-1-4 items say "write |4-(-9)|", which tell a
+            # student what to type more concretely than the sentence does.
+            if qt in ('numerical_question', 'short_answer_question'):
+                numericish = keys and not any(re.search(r'[A-Za-z]', v) for v in keys)
+                if (numericish
+                        and any(re.search(r'(^|[\s(,])[-−]\d', v) for v in keys)
+                        and not re.search(r'negative sign|minus sign'
+                                          r'|(?:type it like|write)[^.]*[-−]\d',
+                                          stem, re.I)):
                     fails.append(f'{where}: negative key, no sign guidance')
+
+            if qt == 'numerical_question':
                 if not keys:
                     fails.append(f'{where}: numeric item has no accepted value')
 
@@ -417,11 +440,25 @@ def check(work, base=None):
             # original_answer_ids must be a permutation of the real choices.
             oai = re.search(r'<fieldlabel>original_answer_ids</fieldlabel>\s*'
                             r'<fieldentry>([^<]*)</fieldentry>', body)
-            if oai and choice_idents:
-                listed = [x for x in oai.group(1).split(',') if x]
+            # `if oai and choice_idents` made this inert on all 143 fill-in
+            # items: choice_idents excludes the `answer1` label, so it is empty
+            # for them and the branch never ran. Rewriting a fill-in's
+            # original_answer_ids to anything at all passed (BF-2026-054).
+            listed = [x for x in oai.group(1).split(',') if x] if oai else None
+            if not oai:
+                fails.append(f'{where}: original_answer_ids absent')
+            elif choice_idents:
                 if sorted(listed) != sorted(choice_idents):
                     fails.append(f'{where}: original_answer_ids does not match '
                                  f'the choice list')
+            elif qt in ('numerical_question', 'short_answer_question'):
+                # Canvas's own export convention, uniform on all 94 fill-ins in
+                # the pristine tree: a single `choice_1` against the `answer1`
+                # render label. Not a permutation candidate, but it still has a
+                # right value and nothing was checking it.
+                if listed != ['choice_1']:
+                    fails.append(f'{where}: fill-in original_answer_ids is '
+                                 f"{listed!r}, not the convention ['choice_1']")
 
     # points_possible must equal the item count on every package.
     for d in sorted(glob.glob(os.path.join(work, '*/'))):
