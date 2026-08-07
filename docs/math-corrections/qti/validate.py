@@ -349,6 +349,16 @@ def check(work, base=None):
             # declares SCORE, so it sits at minvalue 0 and every correct
             # student is marked wrong on every item. Same class as
             # BF-2026-050's `if dv and ...`, one element over (BF-2026-056).
+            # <other/> is QTI's "everything else" condition. One awarding 100
+            # makes EVERY submission score full marks, and nothing looked for
+            # it. No generator emits it, so a judge correctly declined to score
+            # this -- but it is the same "scores 100 for anything" shape as the
+            # empty-key and tautological-range defects, and the guard is free
+            # (BF-2026-059).
+            for rc_ in re.findall(r'<respcondition\b.*?</respcondition>', body, re.S):
+                if '<other' in rc_ and '<setvar' in rc_:
+                    fails.append(f'{where}: an <other/> respcondition awards a '
+                                 f'score -- every submission would match it')
             svs = re.findall(r'<setvar([^>]*)>([^<]*)</setvar>', body)
             if not svs:
                 fails.append(f'{where}: no <setvar> -- SCORE is never '
@@ -495,6 +505,17 @@ def check(work, base=None):
                                          f'is joined by <{conn}> -- "x >= V or '
                                          f'x <= V" is true for every number, so '
                                          f'any entry scores 100')
+                    # ...and the TOP node too, not only the inner pair. Flipping
+                    # the outer <or> to <and> requires the entry to satisfy both
+                    # the exact string and the range, so "7.00" against a key of
+                    # "7" is rejected -- a correct student marked wrong. The
+                    # lesson from the inner case was "assert the tree, not the
+                    # top"; the converse needed saying too (BF-2026-059).
+                    if (re.search(r'<vargte\b', cv) and re.search(r'<varequal\b', cv)
+                            and not re.match(r'\s*<or\b', cv)):
+                        fails.append(f'{where}: conditionvar joins the exact '
+                                     f'value and the range with <and> -- an '
+                                     f'equivalent spelling would be rejected')
                     if '<not>' in cv:
                         fails.append(f'{where}: <not> inside a fill-in '
                                      f'conditionvar -- any non-matching entry, '
@@ -633,8 +654,16 @@ def check(work, base=None):
 
     # points_possible must equal the item count on every package.
     for d in sorted(glob.glob(os.path.join(work, '*/'))):
+        # basename, not the whole path -- the SAME predicate as line ~201 and
+        # the same bug, left behind when that one was fixed. With any ancestor
+        # directory containing "meta" or "manifest", xs was empty for every
+        # package, the loop `continue`d on all 14, and BOTH rules under it went
+        # silent while the census still printed 177 TOTAL. build.sh builds in
+        # `mktemp -d`, so which rules ran was not deterministic across builds
+        # (BF-2026-059).
         xs = [x for x in glob.glob(d + '*/*.xml')
-              if 'manifest' not in x and 'meta' not in x]
+              if 'manifest' not in os.path.basename(x)
+              and 'meta' not in os.path.basename(x)]
         meta = glob.glob(d + '*/assessment_meta.xml')
         if not xs or not meta:
             continue

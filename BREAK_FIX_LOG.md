@@ -1989,3 +1989,58 @@ recording: it found three further regex-brittleness cases, proved each, and then
 **declined to score them**, on the ground that no current generator can produce
 the input. That is the distinction between a hole and a defect being drawn
 correctly, by a judge told not to manufacture findings.
+
+## 2026-08-07 — BF-2026-059 — I fixed the predicate at one site and left its twin 435 lines below, in the same function
+
+STRUCT's ninth read: **9/10, one defect.** Corpus clean on all 177 items for the
+ninth consecutive time.
+
+The defect was mine, from the round before. BF-2026-058 hardened
+`if 'manifest' in f or 'meta' in f` to a basename test and I wrote a comment
+naming the exact failure it prevented. The identical predicate appears again 435
+lines later, in the package-total loop, filtering on the full path:
+
+```python
+xs = [x for x in glob.glob(d + '*/*.xml')
+      if 'manifest' not in x and 'meta' not in x]
+```
+
+With any ancestor directory containing `meta` or `manifest`, `xs` is empty for
+every package, the loop `continue`s on all 14, and **both** rules under it go
+silent — the `points_possible` comparison and the absence check added the same
+round. It fails **open**, and the item census still prints `177 TOTAL`, so the
+tool looks healthy while a whole rule is switched off.
+
+The judge's sharpest observation: **`build.sh` builds in `mktemp -d`**, a
+randomly-named directory. Whether these rules ran was therefore *not deterministic
+across builds*. A gate that silently varies its own coverage run to run is worse
+than one that is uniformly weaker, because a green result stops meaning the same
+thing twice.
+
+That is the fifth rule fixed at one of two sites, and this time both sites were
+the same predicate inside the same function. The recurring bug has never been
+about what a rule checks — it is always about where it reaches. Fixed, and proved
+under three containing directory names: `normal`, `metadata`, `manifests`, with
+both the wrong-total and absent-total cases firing under all three.
+
+### Two hardenings the judge proved and correctly declined to score
+
+Both were demonstrated and then not counted, on the ground that no generator can
+produce the input. That is the right call for scoring, and they are still worth
+closing, because both are the "scores 100 for anything" shape:
+
+- **An `<other/>` respcondition awarding 100.** `<other/>` is QTI's
+  everything-else condition; one that sets SCORE to 100 makes **every** submission
+  correct, and nothing looked for it.
+- **A numeric conditionvar's top-level `<or>` flipped to `<and>`.** The entry
+  would then have to satisfy both the exact string and the range, so `7.00`
+  against a key of `7` is rejected — a correct student marked wrong. The lesson
+  from BF-2026-058's inner case was "assert the tree, not the top"; the converse
+  needed saying too.
+
+Both fire on injection. Bytes unchanged, so the five accepted slices stand.
+
+**Nine reads, nine clean corpora.** Every defect in every STRUCT round has been in
+the instrument. The judge this round also read the three generators to establish
+that the remaining regex-brittleness cases are genuinely unreachable, and declined
+to score them on evidence rather than assertion.
