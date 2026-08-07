@@ -2616,3 +2616,178 @@ arithmetic rather than on its wording.
 
 **Five of six slices are now accepted.** STRUCT alone remains open, and every one
 of its twelve reads has found the corpus clean and the instrument holed.
+
+---
+
+## 2026-08-07 — BF-2026-063 — Three more, and one of them is last round's fix reaching one of its two sites
+
+STRUCT's thirteenth read, cold: **6/10, three defects.** Corpus clean on all 177
+items for the thirteenth consecutive time.
+
+The judge ran a null mutation and three known-live rules as positive controls
+before making any claim, and caught **two errors in its own harness** doing it: a
+`points_possible` probe that was actually hitting `cc_maxattempts`, and a
+mutation caught only by the line-ending rule because it injected `\n` into a CRLF
+file. Both were corrected and every result re-run with the mutation *asserted* to
+have applied and the file's own line-ending convention preserved. Recorded
+because it is the standing rule working before the fact rather than after it.
+
+### 1. BF-2026-062's value rule reads one conditionvar; the invariant is the item's
+
+One round ago this gate learned arithmetic, and its own comment named the exhibit
+it closed: *"`[9.9, 9.9]` on a key of 3.6 — degenerate, well-formed, and awards
+100 for a wrong number."* The code delivers that only when the range and the
+`<varequal>` sit in the **same** `<conditionvar>`:
+
+```python
+exact = {dec(v) for v in re.findall(
+    r'<varequal[^>]*>([^<]*)</varequal>', cv)} - {None}
+...
+elif exact and dlo not in exact:
+```
+
+Move the range into a conditionvar of its own and `exact` is empty, `exact and`
+short-circuits, and the rule is vacuous. That is the BF-2026-050 "guard never
+asserted" shape one element out — the shape this file quotes back at itself
+twice — landing on the fourth instalment of the rule it was quoted about.
+
+Worked on `D3` (key `3.6`): append a second respcondition holding only
+`<and><vargte>9.9</vargte><varlte>9.9</varlte></and>` and a student typing 9.9
+scores 100. `keys_of()` finds no `<varequal>` in the new arm, so the key set is
+**unchanged** at `{3.6, 3.60}`; the multi-key quantisation still collapses; the
+pair-existence and one-point rules both pass; the top-node rule needs a
+`<varequal>` in the same conditionvar, so it is vacuous too; the
+respcondition-count rule is scoped to choice-bearing items by explicit design;
+and `check_keys_vs_base` is a subset test by stated design, so an *added*
+accepted value is invisible to it in principle. Proved on both shapes — Shape B
+`D3` accepting 9.9, and `topic-1-2` P1Q1 accepting 999999.
+
+The control is what makes it precise: writing the identical wrong value as a
+`<varequal>` **is** caught. The fix from one round ago is live and reaches
+exactly one of its two sites.
+
+Fixed by taking `exact` from the item's own key set, which `keys_of()` already
+unions across every conditionvar and which BF-2026-062 already forces to collapse
+to one number. The guard is **dropped** rather than kept: an empty key set is
+already a failure at `if not keys`.
+
+### 2. `choice_idents` excluded the ident `answer1` corpus-wide
+
+One uncommented line: `choice_idents = [i for i in idents if i != 'answer1']`.
+
+`answer1` is not an arbitrary name. It is the label `finalize.py`'s `FIB` and
+`SHORT_FIB` constants stamp on every fill-in's `<render_fib>` — **143
+occurrences, the most common `response_label` ident in the corpus.** The
+exclusion exists so a fill-in's box is not miscounted as a choice, and it was
+written corpus-wide, so on a **choice-bearing** item a
+`<response_label ident="answer1">` was exempt from four rules at once: the
+negation rule, whose message promises *"selecting it would still score 100"*;
+`MIN_DISTRACTORS`; `original_answer_ids`; and the duplicate-ident rule
+BF-2026-060 hoisted into this very scope — two labels may both be named
+`answer1`, which is verbatim the defect -060 describes, because both are excluded
+before the set comparison runs.
+
+A ninth choice so named, left out of the scoring `<and>`, is **unconstrained**:
+the conditionvar requires every `correct_*` and negates every `wrong_*`, so a
+student who ticks the key *and* this extra choice satisfies every conjunct and
+scores 100 on an item whose stem says "select no incorrect choices."
+
+Reachable, not hypothetical: `do_convert` substitutes a `FIB` body carrying that
+ident into an item wholesale.
+
+Fixed by taking the choices from the element that renders them —
+`<render_choice>` — rather than by excluding a magic string. Byte-identical
+behaviour on the clean corpus: fill-ins have no `<render_choice>`, and no
+select-all label lies outside one.
+
+### 3. A `render_fib` guard switched off BF-2026-051's key check, and nothing asserted a fill-in has a box
+
+```python
+if 'render_fib' in bbody and 'render_fib' in wbody:
+    lost = keys_of(bbody) - keys_of(wbody)
+```
+
+The base-side conjunct is legitimate — the pristine item must be a fill-in for
+the comparison to mean anything. The **work-side** conjunct is a guard used as a
+silent skip. The rule's own comment is emphatic about what it is for: *"the
+accepted value IS the key and one character moves it … Changing `g6_s1_b1`'s key
+from 20 to 21 marks every correct student wrong, and the right answer was sitting
+in the pristine tree the whole time."* Delete that item's `<render_fib>` in the
+same edit and **that named exhibit passes.**
+
+Separately, nothing asserted that a fill-in renders an answer box at all. Strip
+`<render_fib>` and the item is
+`<response_str ident="response" rcardinality="Single"></response_str>`: Canvas
+renders no input, so the student cannot answer and scores 0 however well they
+know the mathematics — while `respident_of` still reads `response` and
+`rcardinality` is still a substring, so every respident rule and the cardinality
+rule pass. That is the fill-in analogue of the rule BF-2026-057 added after
+`if choice_idents:` proved to mean "has choices" rather than "is choice-bearing".
+
+Reachable: `do_convert`'s `<response_lid>` → `FIB` substitution no-ops silently
+if its anchor ever fails to match, and `item_block`'s own comment records that
+the two 6th-grade packages use a different, compact layout.
+
+Both closed — the skip is now an assertion, and the standalone rule also covers
+the 49 fill-ins with no comparable baseline item, which the assertion cannot
+reach.
+
+### Two hardenings the judge proved and correctly declined to score
+
+Both were demonstrated and then not counted, on the ground that no generator can
+emit them. Right call for scoring; closed anyway, because both are cheap and both
+are real harm.
+
+- **`<varsubstring respident="response">3</varsubstring>` in a fill-in's scoring
+  `<or>`** scores 100 for every entry *containing* a 3. The asymmetry the judge
+  identified is genuine: the select-all branch asserts a **whitelist** — its
+  scoring `<and>` may hold nothing but bare `<varequal>` and single-depth
+  `<not><varequal></not>` — and BF-2026-062 states the lesson as *"assert the
+  tree rather than the connective"*, while the fill-in branch stayed a set of
+  predicates over an open node set. The corpus uses exactly three operators
+  (`varequal` ×679, `vargte` ×116, `varlte` ×116), so the whitelist costs
+  nothing.
+- **`case="Yes"`** marks a student wrong for capitalising a word on the 35
+  exact-string items. `resp_short`'s docstring relies on case folding and no rule
+  asserted it.
+
+### Verification
+
+Eight injections. Each passes the pre-fix gate with **zero** violations; each
+fails the post-fix gate on exactly the injected defect. Build hash unchanged at
+`4ee5bb50674db6fc`.
+
+The judge separately re-injected one exhibit per hole closed in BF-2026-057
+through -062 — thirteen in all — and confirmed every fix still fires, with two
+exceptions it reported precisely: BF-2026-061's widened `respident_of` correctly
+*passes* an attribute-order swap, which is the fix working; and BF-2026-062's
+value rule is defect 1 above.
+
+### What it declined, and one measurement worth keeping
+
+Dropping accepted spellings from `K6` passes — **refuted as a defect** on
+inspection of the pristine tree: `K6` originally accepted only `7/4`, and `1 3/4`
+and `1.75` were added this round, so the subset test is behaving exactly as its
+docstring says. `cc_maxattempts` is unconstrained by the rubric. An entire extra
+package added to the build passes, because `check_items_vs_base` iterates the
+baseline — and adding a package is not a harm. `repackage.py` clean for the
+fourth round running.
+
+It also measured what `check_keys_vs_base` actually covers, rather than trusting
+its comment: **94 of 143 fill-ins and 24 of 34 select-alls**. The other 59 are
+split halves and rebuilds with new idents, and 21 type conversions. The docstring
+states that scope honestly, so it is not scored — but the number is now on the
+record instead of an impression.
+
+**On method.** The judge deliberately did **not** build an executor, citing round
+L's finding that an executor derives the accepted set from the artifact and so
+cannot see an item that accepts a wrong value — which is precisely defect 1,
+where 9.9 *is* accepted and 9.9 *does* score 100. It used a rule-checking
+`ElementTree` auditor instead, resolving negation by parity of `<not>` ancestors
+and comparing every range bound against the item's key set as a semantic
+invariant. Zero findings across all 177. One apparent hit was withdrawn as its
+own instrument error: it had used `Decimal.quantize`'s default `ROUND_HALF_EVEN`,
+giving `0.62`, where `finalize.py` and `validate.py` both use `ROUND_HALF_UP`,
+giving `0.63`.
+
+**Thirteen reads, thirteen clean corpora.**

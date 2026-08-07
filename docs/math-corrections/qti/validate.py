@@ -181,7 +181,23 @@ def check_keys_vs_base(rel, work_raw, base_raw):
         # Widening is legitimate (BF-2026-041/042 added accepted spellings), so
         # the test is SUBSET, not equality: every pristine accepted value must
         # still be accepted. A value that disappears is the defect.
-        if 'render_fib' in bbody and 'render_fib' in wbody:
+        # The BASE-side conjunct is legitimate -- the pristine item must be a
+        # fill-in for the comparison to mean anything. The WORK-side conjunct
+        # was a guard used as a silent skip: delete the built item's
+        # <render_fib> in the same edit that moves its key and this rule's own
+        # named exhibit passes -- g6_s1_b1's key from 20 to 21, which the
+        # comment above calls "marks every correct student wrong, and the right
+        # answer was sitting in the pristine tree the whole time". Reachable:
+        # do_convert's <response_lid> -> FIB substitution no-ops silently if its
+        # anchor ever fails to match, and item_block's own comment records that
+        # the two 6th-grade packages use a different, compact layout
+        # (BF-2026-063).
+        if 'render_fib' in bbody:
+            if 'render_fib' not in wbody:
+                fails.append(f'{rel} :: {title}: shipped as a fill-in and has '
+                             f'no <render_fib> in the build -- the accepted-'
+                             f'value comparison is skipped along with the box')
+                continue
             lost = keys_of(bbody) - keys_of(wbody)
             if lost:
                 fails.append(f'{rel} :: {title}: ACCEPTED VALUE DROPPED '
@@ -349,7 +365,29 @@ def check(work, base=None):
                 fails.append(f'{where}: an empty <varequal> is accepted -- a '
                              f'blank submission scores 100')
             idents = LABEL.findall(body)
-            choice_idents = [i for i in idents if i != 'answer1']
+            # Choices are the labels inside <render_choice>, not "every label
+            # that is not called answer1". `answer1` is not an invented string:
+            # it is the label finalize.py's FIB/SHORT_FIB constants stamp on
+            # every fill-in's <render_fib>, 143 occurrences, the most common
+            # response_label ident in the corpus. The exclusion exists so a
+            # fill-in's box is not miscounted as a choice -- and it was written
+            # CORPUS-WIDE, so on a choice-bearing item a
+            # <response_label ident="answer1"> was exempt from four rules at
+            # once: the negation rule (whose message promises "selecting it
+            # would still score 100"), MIN_DISTRACTORS, original_answer_ids,
+            # and the duplicate-ident rule BF-2026-060 hoisted here -- TWO
+            # labels may both be named answer1, which is verbatim the defect
+            # -060 describes, because both are excluded before the set
+            # comparison runs. Add such a label to a select-all, leave it out
+            # of the scoring <and>, and it is unconstrained: a student who ticks
+            # the key AND it satisfies every conjunct and scores 100 on an item
+            # whose stem says "select no incorrect choices". Reachable, not
+            # hypothetical -- do_convert substitutes a FIB body carrying that
+            # ident into an item wholesale (BF-2026-063).
+            choice_idents = [i for span in re.findall(
+                                 r'<render_choice>(.*?)</render_choice>',
+                                 body, re.S)
+                             for i in LABEL.findall(span)]
 
             # Sign guidance applies to EVERY fill-in, not just numeric entry --
             # F4 asks for "the sign convention if the answer can be negative" of
@@ -618,6 +656,51 @@ def check(work, base=None):
             elif qt in ('numerical_question', 'short_answer_question'):
                 if 'rcardinality="Single"' not in body:
                     fails.append(f'{where}: fill-in is not rcardinality="Single"')
+                # The fill-in twin of BF-2026-057's choice-bearing rule, which
+                # was added after `if choice_idents:` proved to mean "has
+                # choices" rather than "is choice-bearing". Nothing asserted
+                # that a fill-in renders an answer BOX. Strip <render_fib> and
+                # the item is <response_str ident="response"
+                # rcardinality="Single"></response_str>: Canvas renders no
+                # input, so the student cannot answer and scores 0 however well
+                # they know the mathematics -- while respident_of still reads
+                # `response` and rcardinality is still a substring, so every
+                # respident rule and the cardinality rule pass. This also covers
+                # the 49 fill-ins with no comparable baseline item, which the
+                # check_keys_vs_base assertion above cannot reach
+                # (BF-2026-063).
+                if not re.search(r'<render_fib\b', body):
+                    fails.append(f'{where}: fill-in has no <render_fib> -- no '
+                                 f'answer box is rendered, so the item is '
+                                 f'unanswerable and every student scores 0')
+                # HARDENING, raised by a judge that proved the harm and then
+                # correctly declined to score it, on the ground that no
+                # generator emits these operators. The select-all branch
+                # asserts a WHITELIST -- its scoring <and> may hold nothing but
+                # bare <varequal> and single-depth <not><varequal></not> --
+                # and BF-2026-062 states the lesson as "assert the tree rather
+                # than the connective", while this branch stayed a set of
+                # predicates over an open node set. A <varsubstring
+                # respident="response">3</varsubstring> scores 100 for every
+                # entry CONTAINING a 3. The corpus uses exactly three
+                # operators, varequal x679, vargte x116, varlte x116, so the
+                # whitelist costs nothing and closes the asymmetry.
+                bad_ops = {o for o in re.findall(r'<(var\w+)\b', body)
+                           if o not in ('varequal', 'vargte', 'varlte')}
+                if bad_ops:
+                    fails.append(f'{where}: fill-in scores through '
+                                 f'{sorted(bad_ops)} -- only varequal, vargte '
+                                 f'and varlte are exact; a substring or subset '
+                                 f'match awards 100 for a wrong entry')
+                # ...and case folding, which resp_short's docstring relies on
+                # and no rule asserted. case="Yes" on the 35 exact-string items
+                # marks a student wrong for capitalising a word (BF-2026-063).
+                for ve in re.findall(r'<varequal\b[^>]*>', body):
+                    if 'case="No"' not in ve:
+                        fails.append(f'{where}: {ve!r} is not case="No" -- an '
+                                     f'exact-string match that also folds case '
+                                     f'is what lets a correct answer through '
+                                     f'whatever the student capitalised')
                 # A <not> inside a fill-in's top-level <or> is the same hazard
                 # as <and>-to-<or> on a select-all: every entry that is not the
                 # negated string satisfies the disjunct, including an EMPTY
@@ -702,8 +785,27 @@ def check(work, base=None):
                     #                     accept is marked wrong. F5's worst
                     #                     shape -- the failure lands on the
                     #                     student who followed the instruction.
-                    exact = {dec(v) for v in re.findall(
-                        r'<varequal[^>]*>([^<]*)</varequal>', cv)} - {None}
+                    # ITEM SCOPE. `exact` was read from THIS conditionvar, so
+                    # a range arm sitting in a conditionvar of its OWN has
+                    # nothing to be compared against, `exact and ...`
+                    # short-circuits, and the rule is vacuous -- the BF-2026-050
+                    # "guard never asserted" shape one element out, on the very
+                    # rule that closed the [9.9, 9.9] exhibit one round ago.
+                    # Append to D3 (key 3.6) a second respcondition holding only
+                    # <and><vargte>9.9</vargte><varlte>9.9</varlte></and> and a
+                    # student typing 9.9 scores 100: keys_of() finds no
+                    # <varequal> in the new arm so the key set is unchanged, the
+                    # multi-key quantisation still collapses, the pair-existence
+                    # and one-point rules both pass, and the top-node rule needs
+                    # a <varequal> in the same cv so it is vacuous too. The
+                    # invariant belongs to the item -- keys_of() already unions
+                    # every conditionvar (BF-2026-047) and the multi-key rule
+                    # already forces those values to collapse to one number
+                    # (BF-2026-062). Decimal hashes by value, so 3.6 and 3.60
+                    # are one element. The guard is DROPPED rather than kept: an
+                    # empty key set is already a failure at `if not keys` for
+                    # both fill-in types (BF-2026-063).
+                    exact = {dec(v) for v in keys} - {None}
                     pairs = RANGE_AND.findall(cv)
                     if len(CMP_OP.findall(cv)) != 2 * len(pairs):
                         fails.append(f'{where}: a comparison operator sits '
@@ -718,10 +820,10 @@ def check(work, base=None):
                             fails.append(f'{where}: range bounds [{lo}, {hi}] '
                                          f'are not one point -- every value in '
                                          f'the interval scores 100')
-                        elif exact and dlo not in exact:
+                        elif dlo not in exact:
                             fails.append(f'{where}: the range arm awards 100 '
-                                         f'for {lo}, which no <varequal> in '
-                                         f'this conditionvar accepts')
+                                         f'for {lo}, which is not an accepted '
+                                         f'value of this item {sorted(keys)}')
                     if '<not>' in cv:
                         fails.append(f'{where}: <not> inside a fill-in '
                                      f'conditionvar -- any non-matching entry, '
