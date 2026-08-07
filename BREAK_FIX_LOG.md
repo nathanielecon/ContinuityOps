@@ -2791,3 +2791,200 @@ giving `0.62`, where `finalize.py` and `validate.py` both use `ROUND_HALF_UP`,
 giving `0.63`.
 
 **Thirteen reads, thirteen clean corpora.**
+
+---
+
+## 2026-08-07 — BF-2026-064 — Four rules that promise more than they deliver, three of them the same lesson at its fourth site
+
+STRUCT's fourteenth read, cold: **6/10, four defects.** Corpus clean on all 177
+items for the fourteenth consecutive time. `repackage.py` clean for the fifth
+round running.
+
+The judge replicated `build.sh`'s stages and **re-ran `repackage.py` from its own
+scratch tree to the same hash**, so its results are about the artifact that
+ships. Its harness aborts on `HARNESS ERROR: mutation applied to nothing` and
+asserts each touched file kept its own line-ending convention — two exhibits land
+in the CRLF packages.
+
+**It caught an error in its own auditor before making any claim.** Its first
+`ElementTree` run reported **0 findings on every known-defective corpus**: QTI 1.2
+declares a default namespace, so every tag arrives as
+`{…ims_qtiasiv1p2}item` and `root.iter('item')` matched nothing — the auditor
+walked zero items while printing a clean result. Found by positive control, fixed
+by stripping namespaces. This is the second round running where the control
+caught the instrument rather than the artifact.
+
+### 1. `LABEL` demanded `ident` be the first attribute, and BF-2026-063's fix inherited the blindness
+
+```python
+LABEL = re.compile(r'<response_label ident="([^"]*)"')
+```
+
+One round ago I replaced the magic-string exclusion `i != 'answer1'` with a
+census taken from `<render_choice>` — and populated the new census with the old
+regex. Write a rendered choice as `<response_label rshuffle="No" ident="choice_8">`
+and it is invisible to `choice_idents`, and therefore to every rule built on it.
+
+BF-2026-061 fixed exactly this at `respident_of` and wrote the principle into the
+file: *"Attribute ORDER is not part of the contract."* BF-2026-062 fixed it again
+at `<item`. **The lesson reached three of four sites.** BF-2026-063's own
+verification section records testing the attribute swap *on `respident_of`* and
+reporting it as the fix working — the sibling regex four lines below was never
+tested.
+
+`original_answer_ids` is no backstop, because it is compared against that same
+census: **both sides go blind together.** `MIN_DISTRACTORS` is a lower bound, so
+an *added* choice cannot trip it. `keys_of()` is unchanged, so the contiguous-run,
+phantom-key and `check_keys_vs_base` rules are all invariant. The
+duplicate-visible-text rule uses a *different*, order-agnostic regex, so it sees
+the text and finds no duplicate.
+
+Executed on `A1`: clean, `{choice_1}` scores 100 and `{choice_1, choice_4}`
+scores 0. Mutated, **`{choice_1, choice_8}` scores 100** — a student who ticks
+"Point at 4" and also "Point at 8" gets full marks on an all-or-nothing item. The
+control is exact: the identical choice with the attributes the other way round
+fires two rules.
+
+A label with **no `ident` at all** also passed, which widening `LABEL` alone does
+not fix — so the two notions of "a rendered choice" are now reconciled the way
+BF-2026-062 reconciled the two notions of "an item".
+
+### 2. BF-2026-062's tree-shape rule sat under a guard nothing asserts; one space defeats it
+
+`<and>` was matched **literally**, while the connective rule three lines above
+uses `<and\b`. Write the conjunction as `<and >` and the connective rule still
+counts one `<and`, finds no `<or`, and passes — while `shape` is `None` and the
+entire residue rule silently does not run.
+
+That is the sub-shape this file quotes at itself — *"`if dv and ...` skipped the
+whole check when `<decvar>` was ABSENT, which is the worse case"* — applied at
+`decvar`, then at `if want:`, then at `exact and ...`, and not here, on the rule
+that exists to stop nesting from changing which choices are required.
+
+With the guard defeated BF-2026-062's own exhibit returns. Double-wrap a `<not>`:
+¬¬X = X, so the distractor becomes **required**. `keys_of()` strips `<not>…</not>`
+non-greedily so the key set is unchanged; the negation regex matches the *inner*
+node so the choice is filed as negated; and the only rule that inspects nesting
+depth never runs. Executed: the student who plots the point correctly and ticks
+only the key scores **0**, and a wrong answer scores 100.
+
+### 3. The coverage rule asserted "neither", never "both" — an item nobody can pass
+
+Criterion 6 states a **partition** — every `correct_*` required, every `wrong_*`
+negated. The code enforced only that the two sets *cover* the choices. Nothing
+forbade a choice being in both.
+
+Add a bare `<varequal>` for an ident the same `<and>` already negates and the
+conjunction demands "`wrong_3` is selected **and** `wrong_3` is not selected".
+`keys_of()` reports it as a key, so coverage is satisfied; it *is* a rendered
+choice, so the phantom-key rule passes; and the residue rule whitelists both node
+shapes and never compares them.
+
+Executed on `topic-1-1` P1Q1a, enumerating all 2⁸ selections: **clean, exactly 1
+of 256 scores 100; mutated, 0 of 256.** The item is unpassable — every student who
+takes it is told they are wrong — and the gate prints `all checks pass` over it.
+
+I checked how *reachable* this is rather than accepting one exhibit, and swept
+every negated ident on every select-all item: **50 of 235 candidates pass the
+pre-fix gate entirely.** My first three attempts each tripped a neighbouring rule
+by accident — contiguous run, key at position 0, `check_keys_vs_base` — and I had
+briefly concluded the harm was unreachable. It was my search that was
+over-constrained, not the defect that was narrow. The judge's stated exhibit,
+`wrong_3`, is in the missed set.
+
+Given the tree-shape rule (once defect 2 is closed) the scoring `<and>` is a flat
+conjunction of literals, so "no literal appears with both polarities" is not a
+heuristic — it is a **complete** satisfiability test for that tree.
+
+Worth noting which way the blindness runs here: this defect **is** visible to an
+execution-based auditor, since the accepted set becomes empty. That cuts opposite
+to BF-2026-063 defect 1, where execution alone would have been fooled. Neither
+method dominates.
+
+### 4. "The respident the item DECLARES" was read from the first of however many
+
+`respident_of`'s docstring calls its result *"the only authority"* — a singular
+claim, asserted against `re.search`. BF-2026-062's fifth defect is titled *"Three
+metadata rules read the first occurrence and were silent about the rest"* and its
+remedy is *"assert the cardinality first, then check every occurrence"*.
+`decvar`, `points_possible` and `original_answer_ids` all got it. This is the
+fourth first-match reader and did not — BF-2026-060's own words: *"hoisting three
+of four is how this class of defect keeps surviving its own fix."*
+
+The judge checked which direction is exploitable rather than assuming. A decoy
+response **first** fails closed. The real response first and a second one after
+passes: the item ships with **two rendered answer boxes**, only one scored.
+
+**Reachability is in my own pipeline.** `finalize.py`'s two `<response_lid>` →
+`FIB`/`SHORT_FIB` substitutions carried no `count=1`. An item with two
+`<response_lid>` blocks is rewritten into two `<response_str ident="response">`
+blocks, each stamping a `<response_label ident="answer1">`. The judge ran that
+through the real pipeline — injected a duplicate into the pristine input for a
+`do_convert` target, ran the real `finalize.py` and `permute.py` — and the
+presentation emerged with two boxes, both named `response`. `all checks pass`.
+
+Canvas then renders two indistinguishable blanks for one question, and the
+student who types the correct answer into the box Canvas does not bind scores 0
+— decided by which box they clicked. Closed at the gate *and* at its origin: both
+`re.sub` calls now carry `count=1`, and the build hash is unchanged, confirming
+no item in the corpus has two response declarations.
+
+### Also closed: the boilerplate rule whose comment says "everywhere"
+
+`if 'Part 1 and Part 2 both must be correct' in stem` reads **one** `<mattext>`,
+three lines below a rule BF-2026-056 widened to scan all of them. The judge
+proved the narrowness and declined to score it, correctly: no harm reaches a
+student, because the sentence contains "Part 1" and "Part 2" so the part-label
+rule catches it in any `<mattext>`. Widened anyway — the comment is the promise,
+and a rule that relies on a neighbour to be true is not the rule it says it is.
+
+### Verification
+
+Six injections, each passing the pre-fix gate with **zero** violations and
+failing the post-fix gate on exactly the injected defect, plus the 235-candidate
+sweep above. Build hash unchanged at `4ee5bb50674db6fc`.
+
+### Declined, and worth keeping
+
+**`LETTER_PREFIX` asymmetry.** `keyed_texts` strips a leading `A. ` before
+comparing against the baseline; the duplicate-visible-text rule does not. So
+`A. 5` and `5` are one string to the key-move rule and two to the duplicate rule,
+and 21 of 281 choice texts carry such a prefix. Constructing harm needs a
+mathematically true unkeyed duplicate, which is criterion 2 and belongs to the
+mathematics slices. Recorded, not scored.
+
+**`SPLIT_HALF` as a title regex.** `Question\s+\d+[a-z]$` exempts an item from
+`MIN_DISTRACTORS` on the strength of its *title* — a magic-string proxy for a
+structural property, the same shape as the `answer1` defect. Retitling an item
+exempts it. Declined because distractor count is a design floor rather than a
+mis-scoring, and no student is harmed. It is the one known live instance of the
+class still standing.
+
+**Adding an accepted spelling to a short answer** stays invisible: the subset
+test is that way by stated design, and BF-2026-062 closed the numeric twin by
+quantisation while stating why the string case cannot follow — *"a NUMBER is
+comparable where a spelling is not"*. The judge tried and could not construct a
+mechanical invariant for it either.
+
+### On the corpus, and the limit of the claim
+
+The judge's auditor reads by element and attribute rather than by regex over
+serialised text, so it **cannot be fooled by the attribute-order and tag-spelling
+defects the gate was fooled by**. Zero findings on all 177, after being proved
+live against seven known-defective corpora. It exhaustively executed all 2ⁿ
+selections on every one of the 34 select-all items: exactly one scores 100 on
+each. On the 20 Shape A items it checked that unique winner against an
+**external witness** — the set of idents named `_correct_N`, which the scoring
+tree never reads — so that is a second channel rather than the artifact agreeing
+with itself. On the 14 Shape B items there is no ident channel, and it said so
+rather than dressing up a shape claim as a correctness claim.
+
+It also verified the shipped zips entry-by-entry against the validated tree: **0
+mismatches.**
+
+And it stated its own limit plainly: this is a *structural* verdict. Execution
+establishes which answers score 100, not that those are the mathematically right
+answers. Criteria 1–4, F5 and F6 are the mathematics slices' claims — all five of
+which are accepted — and it declined to certify them.
+
+**Fourteen reads, fourteen clean corpora.**

@@ -93,7 +93,17 @@ def shape_a(body):
     return 'respident="response1"' in body
 
 ITEM = re.compile(r'<item ident="([^"]*)" title="([^"]*)">(.*?)</item>', re.S)
-LABEL = re.compile(r'<response_label ident="([^"]*)"')
+# Attribute ORDER is not part of the contract. BF-2026-061 wrote that principle
+# at respident_of and BF-2026-062 reconciled it at `<item`; this regex -- which
+# censuses the CHOICES -- was the fourth site and stayed narrow, so
+# BF-2026-063's <render_choice> census inherited the very blindness it was
+# written to remove. Writing a rendered choice as
+# `<response_label rshuffle="No" ident="choice_8">` made it invisible to
+# choice_idents and therefore to the coverage rule whose message reads
+# "selecting it would still score 100" -- and original_answer_ids is compared
+# against that same census, so BOTH sides went blind together and it was no
+# backstop (BF-2026-064).
+LABEL = re.compile(r'<response_label\b[^>]*?\bident="([^"]*)"')
 
 fails, warns, stats = [], [], {}
 # ident -> [files]. Module scope because the duplicate report runs after every
@@ -343,8 +353,16 @@ def check(work, base=None):
                         fails.append(f'{where}: references a part label '
                                      f'({m_pl.group(0)!r})')
 
-            # The retired boilerplate must be gone everywhere.
-            if 'Part 1 and Part 2 both must be correct' in stem:
+            # The retired boilerplate must be gone everywhere -- and the code
+            # read ONE <mattext>, three lines below a rule BF-2026-056 widened
+            # to scan all of them. No harm reaches a student today, because the
+            # sentence contains "Part 1" and "Part 2" so the part-label rule
+            # catches it in any <mattext>; widened anyway, because the comment
+            # is the promise and a rule that relies on a neighbour to be true
+            # is not the rule it says it is (BF-2026-064).
+            if any('Part 1 and Part 2 both must be correct' in plain(mt)
+                   for mt in re.findall(r'<mattext[^>]*>(.*?)</mattext>',
+                                        body, re.S)):
                 fails.append(f'{where}: retired Part 1/Part 2 sentence present')
 
             keys = keys_of(body)
@@ -384,10 +402,22 @@ def check(work, base=None):
             # whose stem says "select no incorrect choices". Reachable, not
             # hypothetical -- do_convert substitutes a FIB body carrying that
             # ident into an item wholesale (BF-2026-063).
-            choice_idents = [i for span in re.findall(
-                                 r'<render_choice>(.*?)</render_choice>',
-                                 body, re.S)
+            choice_spans = re.findall(
+                r'<render_choice\b[^>]*>(.*?)</render_choice>', body, re.S)
+            choice_idents = [i for span in choice_spans
                              for i in LABEL.findall(span)]
+            # ...and reconcile the two notions of "a rendered choice", exactly
+            # as BF-2026-062 reconciled the two notions of "an item". A label
+            # this gate cannot read an ident from is a choice no rule below
+            # examines, and widening LABEL alone would leave a label with NO
+            # ident at all in the same silent state (BF-2026-064).
+            n_tags = sum(len(re.findall(r'<response_label\b', sp))
+                         for sp in choice_spans)
+            if n_tags != len(choice_idents):
+                fails.append(f'{where}: {n_tags} <response_label> tags render '
+                             f'but {len(choice_idents)} yield an ident this '
+                             f'gate can read -- the difference is checked by '
+                             f'no rule here')
 
             # Sign guidance applies to EVERY fill-in, not just numeric entry --
             # F4 asks for "the sign convention if the answer can be negative" of
@@ -583,6 +613,31 @@ def check(work, base=None):
             # mine has been logged as closed while covering only select-all
             # (BF-2026-051 rule 3 was the same mistake). Scope is the bug that
             # keeps recurring, so these sit here deliberately (BF-2026-053).
+            # THE FOURTH first-match reader. BF-2026-062's fifth defect is
+            # titled "Three metadata rules read the first occurrence and were
+            # silent about the rest" and its remedy is stated as "assert the
+            # cardinality first, then check every occurrence"; decvar,
+            # points_possible and original_answer_ids all got it and this did
+            # not -- BF-2026-060's own words, "hoisting three of four is how
+            # this class of defect keeps surviving its own fix". The exploitable
+            # direction is the real response FIRST and a decoy after: `want` is
+            # read from the real one, every operator names it, and the item
+            # ships with TWO rendered answer boxes of which only one is scored.
+            # Reachable in this pipeline, not hypothetical: finalize.py's two
+            # <response_lid> -> FIB substitutions carried no count=1, so an item
+            # with two <response_lid> blocks was rewritten into two
+            # <response_str ident="response"> blocks, each stamping a
+            # <response_label ident="answer1">. Canvas then renders two
+            # indistinguishable blanks and the student who types the right
+            # answer into the box it does not bind scores 0 (BF-2026-064).
+            rids = re.findall(
+                r'<response_(?:lid|str|num|xy|grp)\b[^>]*?\bident="([^"]*)"',
+                body)
+            if len(rids) != 1:
+                fails.append(f'{where}: {len(rids)} response declarations '
+                             f'{rids} -- the respident is read from the FIRST, '
+                             f'so any other response is unscored: a student '
+                             f'who answers in its box scores 0')
             want = respident_of(body)
             # A GUARD, NEVER ASSERTED -- the BF-2026-050 shape one element out.
             # That entry's lesson was "`if dv and ...` skipped the whole check
@@ -947,9 +1002,27 @@ def check(work, base=None):
                 # substitution must run FIRST, or stripping bare <varequal>
                 # leaves a bare <not></not> and false-positives on the clean
                 # corpus (BF-2026-062).
+                # The tag was matched LITERALLY while the connective rule
+                # above uses `<and\b`, so writing the conjunction as `<and >`
+                # left that rule counting one <and> and passing while `shape`
+                # went None and this whole rule silently did not run -- the
+                # BF-2026-050 "guard never asserted" shape, applied at decvar,
+                # then at `if want:`, then at `exact and ...`, and not here, on
+                # the rule that exists to stop nesting from changing which
+                # choices are required. With the guard defeated BF-2026-062's
+                # own exhibit returns: double-wrap a <not> and the distractor
+                # becomes REQUIRED, so the student who ticks only the key
+                # scores 0. The guard now needs asserting in its own right,
+                # because a stray element after </and> inside the
+                # <conditionvar> also defeats the match while satisfying the
+                # connective rule (BF-2026-064).
                 shape = re.search(
-                    r'<conditionvar>\s*<and>(.*?)</and>\s*</conditionvar>',
-                    body, re.S)
+                    r'<conditionvar>\s*<and\b[^>]*>(.*?)</and>\s*'
+                    r'</conditionvar>', body, re.S)
+                if not shape:
+                    fails.append(f'{where}: the conditionvar is not one <and> '
+                                 f'wrapping the whole scoring tree, so the '
+                                 f'tree-shape rule below never runs')
                 if shape:
                     residue = re.sub(
                         r'<varequal\b[^>]*>[^<]*</varequal>', '',
@@ -962,6 +1035,28 @@ def check(work, base=None):
                                      f'silently changes which choices are '
                                      f'required ({residue.strip()[:60]!r})')
                 for c in choice_idents:
+                    # Criterion 6 states a PARTITION -- every correct_*
+                    # required, every wrong_* negated -- and the loop below
+                    # enforced only that the two sets COVER the choices.
+                    # Nothing forbade a choice being in both. Add a bare
+                    # <varequal> for an ident the same <and> already negates and
+                    # the conjunction demands "wrong_3 is selected AND wrong_3
+                    # is not selected": keys_of() reports it as a key so
+                    # coverage is satisfied, it IS a rendered choice so the
+                    # phantom-key rule passes, and the residue rule whitelists
+                    # both node shapes and never compares them. Enumerating all
+                    # 2^8 selections, the clean item has exactly one scoring
+                    # 100 and the mutated item has NONE -- an unpassable item,
+                    # certified. Given the tree-shape rule above the scoring
+                    # <and> is a flat conjunction of literals, so "no literal
+                    # appears with both polarities" is not a heuristic: it is a
+                    # complete satisfiability test for that tree (BF-2026-064).
+                    if c in keys and c in negated:
+                        fails.append(f'{where}: choice {c} is BOTH required '
+                                     f'and negated -- the scoring <and> is a '
+                                     f'conjunction of literals, so a literal '
+                                     f'and its negation make it unsatisfiable '
+                                     f'and NO selection can score 100')
                     if c not in keys and c not in negated:
                         fails.append(f'{where}: choice {c} is neither keyed '
                                      f'nor negated under the declared respident'

@@ -560,7 +560,12 @@ def do_convert(raw, pkg, title, value, fmt, log, newstem=None):
         return raw
     else:
         new = BOILER_RE.sub(check_para(fmt), new)
-    new = re.sub(r'<response_lid.*?</response_lid>', FIB, new, flags=re.S)
+    # count=1. Without it an item carrying two <response_lid> blocks is
+    # rewritten into TWO <response_str ident="response"> blocks, so Canvas
+    # renders two indistinguishable blanks for one question and the student
+    # who answers in the box it does not bind scores 0 (BF-2026-064).
+    new = re.sub(r'<response_lid.*?</response_lid>', FIB, new, count=1,
+                 flags=re.S)
     new = re.sub(r'[ \t]*<resprocessing>.*?</resprocessing>',
                  resp_numeric(value), new, flags=re.S)
     if newstem is None:
@@ -1077,7 +1082,12 @@ def do_toshort(raw, pkg, title, spec, log):
         # stem that never says what to do with the inequality.
         m3 = re.search(r'(<mattext texttype="text/html">)', new)
         new = new.replace(m3.group(1), m3.group(1) + esc(prefix), 1)
-    new = re.sub(r'<response_lid.*?</response_lid>', SHORT_FIB, new, flags=re.S)
+    # count=1. Without it an item carrying two <response_lid> blocks is
+    # rewritten into TWO <response_str ident="response"> blocks, so Canvas
+    # renders two indistinguishable blanks for one question and the student
+    # who answers in the box it does not bind scores 0 (BF-2026-064).
+    new = re.sub(r'<response_lid.*?</response_lid>', SHORT_FIB, new, count=1,
+                 flags=re.S)
     new = re.sub(r'[ \t]*<resprocessing>.*?</resprocessing>',
                  resp_short(vals), new, flags=re.S)
     log.append(f'  toshort  {title:18s} -> {len(vals)} accepted')
