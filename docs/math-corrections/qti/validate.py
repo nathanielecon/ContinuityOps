@@ -184,7 +184,15 @@ def check(work, base=None):
         # item it hit, the word that disappeared was the "NOT" that inverts the
         # question. Mixed conventions inside one body are the tell.
         for mt in re.findall(r'<mattext[^>]*>(.*?)</mattext>', raw, re.S):
-            stray = re.findall(r'</?(?:p|strong|em|b|i|br|img|span|div)\b[^>]*>', mt)
+            # A NINE-TAG ENUMERATION, where the failure message states the
+            # general property. <sup> was the live gap: this is a mathematics
+            # corpus, and an unescaped 5<sup>2</sup> becomes a child element,
+            # so Canvas takes the node's text and the stem ships as "52" --
+            # the exact mechanism that ate the word NOT in BF-2026-047. Match
+            # any tag; every < that is genuinely text here is escaped, and
+            # this pattern finds zero hits across all 458 bodies
+            # (BF-2026-055).
+            stray = re.findall(r'</?[a-zA-Z][a-zA-Z0-9]*\b[^>]*>', mt)
             if stray:
                 fails.append(f'{rel}: raw HTML {stray[0]!r} inside <mattext> -- '
                              f'must be escaped; Canvas drops it silently')
@@ -244,8 +252,22 @@ def check(work, base=None):
             # retired boilerplate this replaced was prose and prose lowercases.
             # The letter class stays uppercase-only so ordinary English -- "part
             # a whole" -- does not false-positive (BF-2026-054).
-            if re.search(r'\b[Pp]art\s+(?:[A-Z]|[0-9]+|[IVX]+)\b', stem):
-                fails.append(f'{where}: stem references a part label')
+            # Widened four times. Still missed PART A, `Parts 1 and 2`,
+            # `In parts A and B`, `part b`, `Part iii` -- and the plural form
+            # also slipped past the retired-boilerplate rule below, so the
+            # exact sentence could return as `Parts 1 and 2 both must be
+            # correct`. The only false positive the earlier narrowing was
+            # actually protecting against is prose like "part a whole", so
+            # that one string is carved out and nothing else (BF-2026-055).
+            m_pl = re.search(r'\b[Pp][Aa][Rr][Tt]s?\s+(?:[A-Za-z]|[0-9]+|[IVXivx]+)\b',
+                             stem)
+            # The carve-out is case-SENSITIVE on purpose. With re.I it also
+            # swallowed the genuine label `PART A`, which is the exact thing
+            # the rule exists to catch -- the exemption for prose ('part a
+            # whole') only ever needed the all-lowercase form.
+            if m_pl and m_pl.group(0) != 'part a':
+                fails.append(f'{where}: stem references a part label '
+                             f'({m_pl.group(0)!r})')
 
             # The retired boilerplate must be gone everywhere.
             if 'Part 1 and Part 2 both must be correct' in stem:
@@ -323,6 +345,26 @@ def check(work, base=None):
                 fails.append(f'{where}: points_possible is '
                              f'{pp.group(1) if pp else "absent"}, not 1')
 
+            # Criterion 7 requires referenced images to RESOLVE and to use
+            # Canvas's $IMS-CC-FILEBASE$ form, calling a plain src="media/..."
+            # import-blocking wherever the image IS the question. Neither tool
+            # checked either half: pointing an <img> at a filename present in no
+            # mirror passed, and so did dropping the token. repackage.py walks
+            # manifest->file and file->manifest, but never item-XML->file
+            # (BF-2026-055).
+            for src in re.findall(r'<img[^>]*src="([^"]*)"', html.unescape(body)):
+                m_fb = re.fullmatch(r'\$IMS-CC-FILEBASE\$/media/(.+)', src)
+                if not m_fb:
+                    fails.append(f'{where}: <img src={src!r}> is not '
+                                 f'$IMS-CC-FILEBASE$/media/... -- import-blocking')
+                    continue
+                pkgdir = os.path.join(work, rel.split(os.sep)[0])
+                hits = glob.glob(os.path.join(pkgdir, '**', 'media', m_fb.group(1)),
+                                 recursive=True)
+                if not hits:
+                    fails.append(f'{where}: <img> target {m_fb.group(1)!r} exists '
+                                 f'in no media directory of this package')
+
             # --- ITEM SCOPE, and that is the whole point -------------------
             # These three were written for every item and then indented inside
             # the select-all branch, so they ran on 34 of 177 and the other 143
@@ -342,10 +384,27 @@ def check(work, base=None):
                                  f'but the item declares "{want}" -- those '
                                  f'conditions match nothing, so SCORE stays 0')
 
-            if qt in ('multiple_answers_question', 'multiple_choice_question'):
+            # multiple_choice_question is NOT select-all. Criterion 6's
+            # amendment specifies exactly one keyed choice,
+            # rcardinality="Single", no <not> blocks -- the opposite of
+            # what routing it through the select-all branch demanded. The
+            # type is unexercised (0 of 177), so nothing ships wrong, but
+            # the gate encoded the inverse of the rubric for a shape the
+            # rubric keeps ready on purpose (BF-2026-055).
+            if qt == 'multiple_answers_question':
                 if 'rcardinality="Multiple"' not in body:
                     fails.append(f'{where}: select-all is not '
                                  f'rcardinality="Multiple" -- unscoreable')
+            elif qt == 'multiple_choice_question':
+                if 'rcardinality="Single"' not in body:
+                    fails.append(f'{where}: multiple choice is not '
+                                 f'rcardinality="Single"')
+                if '<not>' in body:
+                    fails.append(f'{where}: multiple choice carries a '
+                                 f'<not> block')
+                if len(keys) != 1:
+                    fails.append(f'{where}: multiple choice has '
+                                 f'{len(keys)} keys, expected exactly 1')
             elif qt in ('numerical_question', 'short_answer_question'):
                 if 'rcardinality="Single"' not in body:
                     fails.append(f'{where}: fill-in is not rcardinality="Single"')
@@ -361,7 +420,7 @@ def check(work, base=None):
                                      f'conditionvar -- any non-matching entry, '
                                      f'including an empty box, scores 100')
 
-            if qt in ('multiple_answers_question', 'multiple_choice_question'):
+            if qt == 'multiple_answers_question':
                 n = len(choice_idents)
                 # keys_of() already strips <not> blocks, which is the only
                 # trap-safe way to count keys here (the rubric records that a
@@ -387,12 +446,6 @@ def check(work, base=None):
                 if len(kp) > 1 and kp == list(range(kp[0], kp[0] + len(kp))):
                     fails.append(f'{where}: keys occupy a contiguous run {kp} '
                                  f'-- "the first N" scores without reasoning')
-                # rcardinality: a select-all rendered Single is radio buttons,
-                # so a multi-key item becomes literally unscoreable -- 100 is
-                # unreachable no matter what the student does.
-                if 'rcardinality="Multiple"' not in body:
-                    fails.append(f'{where}: select-all is not '
-                                 f'rcardinality="Multiple" -- unscoreable')
                 # Duplicate visible text is a defect in every shape.
                 texts = [plain(t) for t in re.findall(
                     r'<response_label[^>]*>\s*<material>\s*'

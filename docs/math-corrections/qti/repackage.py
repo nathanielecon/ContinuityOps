@@ -6,12 +6,17 @@ imsmanifest.xml plus one directory named for the assessment. Canvas rejects a
 package whose manifest is not at the root, so the archive is written from the
 package directory itself rather than from its parent.
 """
-import hashlib, os, re, sys, zipfile
+import hashlib, os, re, shutil, sys, tempfile, zipfile
 import xml.etree.ElementTree as ET
+
+# The three directories a $IMS-CC-FILEBASE$/media/ reference could resolve to.
+MIRROR_PREFIXES = ("media/", "web_resources/media/", "<quizfolder>/media/")
 
 SRC = os.environ.get("QTI_SRC", "/tmp/qtiwork/pkg")
 OUT = sys.argv[1] if len(sys.argv) > 1 else "/tmp/qtiwork/out"
 os.makedirs(OUT, exist_ok=True)
+# Staging dir: nothing lands in OUT until every package has passed.
+STAGE = tempfile.mkdtemp(prefix="qti-stage-", dir=os.path.dirname(OUT) or ".")
 
 def files_of(root):
     out = []
@@ -85,7 +90,16 @@ for pkg in sorted(os.listdir(SRC)):
     for full, r in members:
         if re.search(r"(^|/)media/", r):
             groups.setdefault(os.path.basename(r), []).append(full)
+    # ...and that there are THREE of them. The digest rule asserts the copies
+    # AGREE and never that they all exist: deleting one mirror plus its <file>
+    # declaration left every href resolving, every file declared, and the two
+    # survivors identical -- so the gate passed while one of the three
+    # $IMS-CC-FILEBASE$ readings the mirrors exist to cover silently lost its
+    # file (BF-2026-055).
     for name, paths in sorted(groups.items()):
+        if len(paths) != len(MIRROR_PREFIXES):
+            failures.append(f"{pkg}: {name} has {len(paths)} mirror copies, "
+                            f"expected {len(MIRROR_PREFIXES)}")
         digests = {hashlib.sha256(open(p, "rb").read()).hexdigest() for p in paths}
         if len(digests) > 1:
             failures.append(f"{pkg}: the {len(paths)} copies of {name} are not "
@@ -108,7 +122,16 @@ for pkg in sorted(os.listdir(SRC)):
     # content produced different sha256s. Checksums are how this project proves
     # an artifact is the one that was judged, so that had to be pinned. Fixed
     # date and permissions; entries already sorted by path above.
-    zpath = os.path.join(OUT, f"{pkg}.zip")
+    # Build into a STAGING directory, never straight into OUT. The docstring
+    # above has always said "gate on structure before writing anything", and
+    # the code did not do it: the zip was written here inside the per-package
+    # loop while `failures` was not consulted until every package had been
+    # written. Proved by drifting one byte of an SVG and rebuilding -- the good
+    # zip was overwritten by the defective one, and sha256sums.txt survived
+    # from the previous run still vouching for a hash no longer present. That
+    # inverts this project's own doctrine that a checksum proves an artifact is
+    # the one a judge scored (BF-2026-055).
+    zpath = os.path.join(STAGE, f"{pkg}.zip")
     with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
         for full, r in members:
             info = zipfile.ZipInfo(r, date_time=(1980, 1, 1, 0, 0, 0))
@@ -121,10 +144,17 @@ for pkg in sorted(os.listdir(SRC)):
     rows.append((sha, f"{pkg}.zip", len(members)))
 
 if failures:
-    print("STRUCTURAL FAILURES — not writing checksums:")
+    print("STRUCTURAL FAILURES — nothing written:")
     for f in failures:
         print("  " + f)
+    shutil.rmtree(STAGE, ignore_errors=True)
     sys.exit(1)
+
+# Only now does anything in OUT change, so a failing run leaves the last good
+# artifacts and their checksums exactly as they were.
+for name in os.listdir(STAGE):
+    shutil.move(os.path.join(STAGE, name), os.path.join(OUT, name))
+shutil.rmtree(STAGE, ignore_errors=True)
 
 with open(os.path.join(OUT, "sha256sums.txt"), "w") as fh:
     for sha, name, _ in rows:

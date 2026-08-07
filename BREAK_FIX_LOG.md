@@ -1727,3 +1727,77 @@ Carelessness about *which items it reaches*: an indent, an emptiness guard, a
 type equality. The gate now covers all four shapes on every rule that names all
 four, and the way that was established was by injecting into a fill-in and a
 select-all separately, every time, rather than into whichever came to hand.
+
+## 2026-08-07 — BF-2026-055 — the gate wrote its artifacts before it checked them
+
+STRUCT's round-E read produced a rule-by-shape coverage matrix — every rule in
+both tools, proved by injection into a Shape A select-all, a Shape B select-all,
+a numeric item and a short-answer item **separately**, 150 injections. Six
+findings. The corpus was clean on all 177 items for the fifth consecutive read.
+
+**`repackage.py` wrote each zip before consulting `failures`.** The docstring has
+said "gate on structure before writing anything" since it was written, and the
+code did not do it: the write sits inside the per-package loop, and `failures` is
+not read until every package has been written. Only a missing manifest actually
+skipped a write.
+
+Proved by drifting one byte of an SVG and rebuilding into the same output
+directory: **the good zip was overwritten by the defective one, and
+`sha256sums.txt` survived from the earlier run still vouching for a hash that no
+longer existed.** That inverts this project's own doctrine — BF-2026-040 made the
+build byte-reproducible precisely so "a checksum proves an artifact is the one a
+judge scored", and a failing run was quietly producing the opposite.
+
+Now staged: packages are built into a temporary directory and moved into place
+only when every check has passed, so a failing run leaves the last good artifacts
+and their checksums exactly as they were. Verified — on a drifted rebuild the
+tool fails, the good zip is preserved byte-for-byte, and the checksum file is
+untouched.
+
+**The raw-HTML rule enumerated nine tags.** Its failure message states the
+general property; the pattern listed `p|strong|em|b|i|br|img|span|div`. Eighteen
+injections of `<sup> <sub> <li> <ul> <table> <a> <h1> <code> <hr>` passed on
+every shape. `<sup>` is the live one: this is a mathematics corpus, and an
+unescaped `5<sup>2</sup>` becomes a child element, so Canvas takes the node's
+text content and the stem ships as `52` — the exact mechanism that ate the word
+"NOT" in BF-2026-047. Now matches any tag; zero hits across all 458 bodies.
+
+**The part-label pattern, widened a fourth time — and my own carve-out was the
+bug.** It still missed `PART A`, `Parts 1 and 2`, `In parts A and B`, `part b`,
+`Part iii`; the plural form also slipped past the separate exact-string rule, so
+the retired boilerplate could return as "Parts 1 and 2 both must be correct".
+Widening it exposed something worse: the exemption I had added for prose ("part a
+whole") was case-insensitive, so it **suppressed the genuine label `PART A`** —
+the exact string the rule exists to catch. The carve-out is now case-sensitive
+and matches only the all-lowercase form. Eleven label forms fire; the prose case
+stays silent.
+
+**The `multiple_choice_question` rules encoded the inverse of the frozen rubric.**
+Criterion 6's amendment specifies, for that type, exactly one keyed choice,
+`rcardinality="Single"`, and no `<not>` blocks. `validate.py` routed it into the
+select-all branch and demanded `Multiple`, a single `<and>`, and every choice
+keyed-or-negated — rejecting a rubric-conformant item on five counts, one of them
+reported twice from a duplicated block. The type is unexercised (0 of 177) so
+nothing ships wrong, but the rubric keeps the clause ready on purpose. Split into
+its own arm; the duplicate deleted.
+
+**Image resolution was checked by neither tool.** Criterion 7 requires referenced
+images to resolve and to use the `$IMS-CC-FILEBASE$/media/…` form, calling a bare
+`src="media/…"` import-blocking where the image *is* the question. Pointing an
+`<img>` at a filename present in no mirror passed both tools; so did dropping the
+token. `repackage.py` walks manifest→file and file→manifest, and never
+item-XML→file. Now checked, both halves.
+
+**The mirror count was never asserted.** The digest rule proves the three copies
+*agree* and never that there are three. Deleting one mirror together with its
+`<file>` declaration left every href resolving, every packaged file declared, and
+the two survivors identical — so the gate passed while one of the three
+`$IMS-CC-FILEBASE$` readings the mirrors exist to cover silently lost its file.
+
+All fixes verified by injection; bytes unchanged, so the five accepted slices
+stand.
+
+**Five rounds, and every STRUCT finding has been in the gate rather than the
+corpus.** The corpus has been clean on all 177 items in all five reads. That is
+worth stating plainly: the artifacts have been stable and correct for a long
+time, and what kept scoring below 10 is the instrument that measures them.
