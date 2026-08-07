@@ -43,6 +43,18 @@ MIN_DISTRACTORS = 7
 SPLIT_HALF = re.compile(r'Question\s+\d+[a-z]$')
 
 
+def respident_of(body):
+    """The respident the item DECLARES, which is the only authority.
+
+    Reading it from the scoring block instead only catches a block that
+    disagrees with itself; a block that is internally consistent but uniformly
+    names the wrong respident matches nothing, never fires <setvar>, and leaves
+    SCORE at minvalue 0 for every correct student.
+    """
+    m = re.search(r'<response_(?:lid|str) ident="([^"]*)"', body)
+    return m.group(1) if m else None
+
+
 def shape_a(body):
     """Shape A is identified by its scoring declaration, not by package name.
 
@@ -55,6 +67,11 @@ ITEM = re.compile(r'<item ident="([^"]*)" title="([^"]*)">(.*?)</item>', re.S)
 LABEL = re.compile(r'<response_label ident="([^"]*)"')
 
 fails, warns, stats = [], [], {}
+# ident -> [files]. Module scope because the duplicate report runs after every
+# package has been walked; Canvas keys questions by ident across the whole
+# import, so a collision between two packages matters as much as one inside a
+# package (BF-2026-053).
+seen_idents = {}
 
 
 def bump(k):
@@ -197,10 +214,12 @@ def check(work, base=None):
         # Canvas keys imported questions by item ident, so a collision means one
         # item silently replaces the other -- a 4-item quiz imports as 3 while
         # assessment_meta still claims 4 points (BF-2026-051).
-        all_idents = [i for i, _, _ in ITEM.findall(raw)]
-        for dup in sorted({i for i in all_idents if all_idents.count(i) > 1}):
-            fails.append(f'{rel}: duplicate <item ident="{dup}"> -- Canvas keys '
-                         f'questions by ident, so one silently replaces the other')
+        # Tracked CORPUS-WIDE, not per file. Canvas keys imported questions by
+        # ident across the whole import, so a collision between two packages is
+        # just as fatal as one inside a package -- and the per-file version
+        # missed it entirely (BF-2026-053).
+        for i in [x for x, _, _ in ITEM.findall(raw)]:
+            seen_idents.setdefault(i, []).append(rel)
 
         for ident, title, body in ITEM.findall(raw):
             where = f'{rel} :: {title}'
@@ -216,9 +235,11 @@ def check(work, base=None):
                              body, re.S)
             stem = plain(stem.group(1)) if stem else ''
 
-            # One part per question.
-            if re.search(r'Part\s+[AB]\s*:', stem):
-                fails.append(f'{where}: stem still contains a Part A/B prompt')
+            # One part per question. F2 is "No item stem may reference a part
+            # label AT ALL", not "no Part A: prompt" -- the colon form missed
+            # prose like "In Part B you found that..." (BF-2026-053).
+            if re.search(r'\bPart\s+[AB1-9]\b', stem):
+                fails.append(f'{where}: stem references a part label')
 
             # The retired boilerplate must be gone everywhere.
             if 'Part 1 and Part 2 both must be correct' in stem:
@@ -278,6 +299,44 @@ def check(work, base=None):
             if not pp or float(pp.group(1)) != 1.0:
                 fails.append(f'{where}: points_possible is '
                              f'{pp.group(1) if pp else "absent"}, not 1')
+
+            # --- ITEM SCOPE, and that is the whole point -------------------
+            # These three were written for every item and then indented inside
+            # the select-all branch, so they ran on 34 of 177 and the other 143
+            # -- the larger population -- went unchecked. Twice now a rule of
+            # mine has been logged as closed while covering only select-all
+            # (BF-2026-051 rule 3 was the same mistake). Scope is the bug that
+            # keeps recurring, so these sit here deliberately (BF-2026-053).
+            want = respident_of(body)
+            if want:
+                # Comparison operators too: a numeric item scores through
+                # vargte/varlte, so checking only varequal leaves the range
+                # conditions unexamined.
+                bad = set(re.findall(
+                    r'<var(?:equal|gte|lte|lt|gt) respident="([^"]*)"', body)) - {want}
+                if bad:
+                    fails.append(f'{where}: scoring uses respident {sorted(bad)} '
+                                 f'but the item declares "{want}" -- those '
+                                 f'conditions match nothing, so SCORE stays 0')
+
+            if qt in ('multiple_answers_question', 'multiple_choice_question'):
+                if 'rcardinality="Multiple"' not in body:
+                    fails.append(f'{where}: select-all is not '
+                                 f'rcardinality="Multiple" -- unscoreable')
+            elif qt in ('numerical_question', 'short_answer_question'):
+                if 'rcardinality="Single"' not in body:
+                    fails.append(f'{where}: fill-in is not rcardinality="Single"')
+                # A <not> inside a fill-in's top-level <or> is the same hazard
+                # as <and>-to-<or> on a select-all: every entry that is not the
+                # negated string satisfies the disjunct, including an EMPTY
+                # box, so the item scores 100 for almost any submission. 136 of
+                # the corpus's conditionvars are fill-in <or> and none of them
+                # was being examined.
+                for cv in re.findall(r'<conditionvar>(.*?)</conditionvar>', body, re.S):
+                    if '<not>' in cv:
+                        fails.append(f'{where}: <not> inside a fill-in '
+                                     f'conditionvar -- any non-matching entry, '
+                                     f'including an empty box, scores 100')
 
             if qt in ('multiple_answers_question', 'multiple_choice_question'):
                 n = len(choice_idents)
@@ -346,28 +405,14 @@ def check(work, base=None):
                 # that -- keys_of() strips <not> blocks and only reads
                 # positives -- and a real bug shipped through the gap
                 # (BF-2026-043).
-                # Read the expected respident from the DECLARATION, never from
-                # the scoring block. Seeding it from the first <varequal> only
-                # catches a scoring block that disagrees with itself; a block
-                # that is internally consistent but uniformly names the wrong
-                # respident scores nothing correctly and passed silently.
-                decl = re.search(r'<response_(?:lid|str) ident="([^"]*)"', body)
-                if decl:
-                    want = decl.group(1)
-                    bad = set(re.findall(r'<varequal respident="([^"]*)"', body)) - {want}
-                    if bad:
-                        fails.append(f'{where}: scoring uses respident '
-                                     f'{sorted(bad)} but the item declares '
-                                     f'"{want}" -- those conditions match nothing')
-                    negated = set(re.findall(
-                        r'<not>\s*<varequal respident="%s"[^>]*>([^<]*)</varequal>\s*</not>'
-                        % re.escape(want), body))
-                    for c in choice_idents:
-                        if c not in keys and c not in negated:
-                            fails.append(f'{where}: choice {c} is neither keyed '
-                                         f'nor negated under respident='
-                                         f'"{want}" -- selecting it '
-                                         f'would still score 100')
+                negated = set(re.findall(
+                    r'<not>\s*<varequal respident="%s"[^>]*>([^<]*)</varequal>\s*</not>'
+                    % re.escape(respident_of(body) or ''), body))
+                for c in choice_idents:
+                    if c not in keys and c not in negated:
+                        fails.append(f'{where}: choice {c} is neither keyed '
+                                     f'nor negated under the declared respident'
+                                     f' -- selecting it would still score 100')
 
             # original_answer_ids must be a permutation of the real choices.
             oai = re.search(r'<fieldlabel>original_answer_ids</fieldlabel>\s*'
@@ -399,6 +444,12 @@ if __name__ == '__main__':
     for k, v in sorted(stats.items(), key=lambda t: -t[1]):
         print(f'  {v:4d}  {k}')
     print(f'  {sum(stats.values()):4d}  TOTAL')
+    for i, files in sorted(seen_idents.items()):
+        if len(files) > 1:
+            fails.append(f'duplicate <item ident="{i}"> in {files} -- Canvas '
+                         f'keys questions by ident, so one silently replaces '
+                         f'the other')
+
     if warns:
         print(f'\n{len(warns)} warnings:')
         for w in warns:

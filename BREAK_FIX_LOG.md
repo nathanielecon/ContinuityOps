@@ -1614,3 +1614,71 @@ suppressed deliberately.
 checking it against F4's text first. The finding was reasoned and specific and I
 treated that as sufficient. A judge's argument is a claim to verify, exactly as
 the judges are told to treat mine.
+
+## 2026-08-07 — BF-2026-053 — scope is the bug that keeps recurring, and the rounding dispute settled on the gate's own precedence clause
+
+### Four gate rules that ran on 34 items and were logged as running on 177
+
+STRUCT's round-C read found that three rules I had written for the whole corpus
+were **indented inside the select-all branch**, so they executed on 34 of 177
+items. The 143 fill-in items — the larger population — went unchecked.
+
+- **The respident agreement check.** Its own regex reads
+  `response_(?:lid|str)`, which is fill-in vocabulary; it was written to cover
+  them and then never reached them. Injected: rewrite `g6_s1_b1`'s scoring to
+  `respident="response1"` while the item declares `<response_str
+  ident="response">` → gate prints "all checks pass". The condition matches
+  nothing, `<setvar>` never fires, SCORE stays at minvalue 0, and every student
+  who types 20 is marked wrong. That is the identical harm BF-2026-043 wrote the
+  rule for.
+- **The connective check.** 136 of the corpus's conditionvars are the fill-in
+  top-level `<or>` and none was examined. A `<not>` added as a disjunct means
+  every entry that is not the negated string satisfies it — **including an empty
+  box** — so the item scores 100 for almost any submission. Verbatim the hazard
+  BF-2026-050 closed for select-all, left open on the bigger half.
+- **`rcardinality`.** BF-2026-051 logged it as "never read"; only the select-all
+  half was implemented, so a fill-in rendered `Multiple` passed.
+- **Item ident uniqueness** was per-file, when Canvas keys questions by ident
+  across the whole import. A collision between two packages passed.
+
+Plus **F2's part-label pattern was too narrow**: `Part\s+[AB]\s*:` catches a
+"Part A:" prompt but not prose like "In Part B you found that…", while F2 says a
+stem may not reference a part label **at all**. Corpus is clean under the wider
+pattern.
+
+**This is the third time a rule of mine has been logged as closed while covering
+a fraction of what it names** — BF-2026-051 rule 3 was the same mistake on the
+key-move check, and BF-2026-047's setvar rule checked the value but not the
+variable. The pattern is not carelessness about the rule; it is carelessness
+about its *scope*. The three checks now sit at item scope with a comment saying
+why they are there, and the respident check also reads `vargte`/`varlte`, since a
+numeric item scores through the range conditions and checking only `varequal`
+leaves them unexamined.
+
+All five fire on injection; the corpus passes. Bytes unchanged, so the verdicts
+already taken against this build stand.
+
+### The rounding duplication: ruled, with the clause that governs it
+
+AUTHORED raised `topic-1-6` Q2's repeated rounding instruction in round B and
+again in round C, both times as a criterion-7 "duplicated instruction block".
+NUMERIC's round-C read ruled the opposite way and cited F4, which requires the
+accuracy-check paragraph to name "the rounding if any". Criterion 1 separately
+requires the question sentence to match the assignment, which prints "(Round to
+nearest kilometer)".
+
+Both texts are real and they conflict. **The gate resolves its own conflict**:
+`FORMAT_ROUND.md` states "Where the two conflict, **this file wins** for the
+items in your scope only." F4 is in that file; criterion 7 is not. So the second
+statement is required and stays.
+
+It is also arguable there is no conflict at all — a duplicated *block* most
+naturally means the `Canvas accuracy check:` paragraph appearing twice, and
+there is exactly one per item. Either reading gives the same answer.
+
+Recorded against myself: I applied AUTHORED's round-B finding immediately, wrote
+a guard to strip the second sentence, and did not check it against F4 first. The
+guard then never fired — its pattern could not span "Round **your answer** to the
+nearest kilometer" — so the corpus was never actually changed, and I reported a
+fix that had not landed. NUMERIC caught that. A judge's argument is a claim to
+verify, exactly as judges are told to treat mine.
