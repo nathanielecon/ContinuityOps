@@ -3329,3 +3329,207 @@ reported `check_keys_vs_base` passing — because the probe swapped the text of 
 *distractors* rather than of a key and a distractor. Re-aimed, the rule fires.
 
 **Sixteen reads, sixteen clean corpora.**
+
+---
+
+## 2026-08-07 — BF-2026-067 — The scoring block Canvas reads, the file the gate reads, and the labels every judge reads
+
+STRUCT's seventeenth read, cold: **5/10, four defects.** Corpus clean on all 177
+items for the seventeenth consecutive time. Round P's completeness holds into Q —
+fourteen re-injected exhibits from BF-2026-064, -065 and -066, every one still
+caught.
+
+The judge used both auditing styles and covered each blind spot with the other:
+a mutation harness with per-trial isolated trees, and a **QTI 1.2 truth model**
+(`varequal` string equality under `case="No"`, `vargte`/`varlte` numeric,
+`not`/`and`/`or`/`other`) that *evaluates* scoring trees rather than
+pattern-matching them.
+
+**Two errors in its own instrument, caught by controls and reported rather than
+buried.** Its first broad sweep reported 197 of 197 mutations "caught" — every
+one by `corpus holds 0 items, expected 177`. Its trial directories were named
+after the mutation, e.g. `M1 second stem mattext [topic-sc-2_...]`, and
+`glob.glob` reads `[...]` as a **character class**: every package became
+invisible to the gate and the whole sweep measured nothing while printing
+failures. It sanitised the names and discarded the sweep. And its differential
+for the `plain()` question reported `0 of 458 differ` while its own self-test
+showed the detector was **inert**; it rebuilt the detector twice before trusting
+the number. That is the fifth round running where a control caught the judge's
+instrument rather than the artifact.
+
+### 1. The fill-in `<conditionvar>` never had a tree-shape rule; the select-all branch has had one since -062
+
+`PLACE`, the parsed-tree contract BF-2026-066 introduced, has **no entry for
+`conditionvar`, `and`, `or` or `not`**. Containment is asserted everywhere in the
+QTI tree *except inside the block that decides who gets 100.*
+
+Inside it, the two branches are not equals. The select-all branch got a genuine
+residue rule. The fill-in branch — after -056, -058, -059, -061, -062 and -063
+all worked on it — is still nothing but **predicates over an open node set**. Its
+own comments say the lesson aloud: BF-2026-058, *"The select-all rule this
+mirrors asserts the whole tree shape; this one asserted only the identity of the
+TOP node"*; BF-2026-059, *"the lesson from the inner case was 'assert the tree,
+not the top'."* Six instalments later the tree was still not asserted, on 143 of
+177 items.
+
+The grammar is closed — 13 items are a bare `<varequal>`, and 149 conditionvars
+are `or( (varequal | and(vargte,varlte))+ )`. Nest **one** extra `<and>` inside
+the top-level `<or>`, changing nothing else, and the disjunction of accepted
+spellings becomes a **conjunction** of them: the entry must equal `"0.375"` and
+`"0.38"` at once, and `x = 0.375 ∧ x = 0.38` is false for every real number. The
+satisfying set is empty, `<setvar>` never fires, SCORE stays at minvalue 0, and
+every student — including every student who is completely right — is marked
+wrong.
+
+Every predicate is invariant: `keys_of()` unions the same values, the
+quantisation still collapses `0.375`/`0.38`, the top node is still `<or>`,
+`CMP_OP == 2 × pairs` still holds, each pair is still one point and still an
+accepted value, and the inner-connective regex matches only **innermost**
+`and`/`or` pairs so it never sees the injected node. Swept: 136 conditionvars
+mutated, `all checks pass`, and the truth model finds **24 of the 143 fill-ins
+unpassable** — the 24 carrying more than one accepted value. BF-2026-064 defect
+4's harm on the larger population, because that fix was written for 34 items and
+never mirrored.
+
+### 2. BF-2026-066 closed "the file validated is not the file imported" with a proxy for identity
+
+That fix asserts the `imsqti_xmlv1p2` resource names one file containing
+`questestinterop` and at least one `<item`. That establishes the named file is
+**quiz-shaped**, never that it is **the** file this gate validated. Any quiz
+satisfies it — including a stale one.
+
+Underneath sat two censuses of "the files in this package", reconciled by
+nothing: `validate.py` globbed at **fixed depth** (`work/*/*/*.xml`) while
+`repackage.py` collects members with `os.walk` at **unbounded** depth. Anything
+one directory deeper is packaged, is required to be declared, ships inside the
+zip, and is invisible to every rule in the gate.
+
+Put a pre-round copy at `<pkg>/<quizfolder>/old/<quiz>.xml`, bind the QTI
+resource to it, and declare the current quiz on the dependency resource. Every
+href resolves, every packaged file is declared, the resource is unique and typed,
+and the file it names is a real quiz. **Verified: `validate.py` prints `all
+checks pass` on all 14, and `repackage.py` writes zips for 13 of the 14** — the
+one exception is the single package with media, caught only incidentally because
+the quiz-folder derivation feeds the mirror-location rule. The same 1-of-14 ratio
+BF-2026-066 recorded, on the fix BF-2026-066 produced.
+
+Canvas would import the pre-round corpus: the un-split multi-part items, the
+pre-conversion select-alls, the retired boilerplate — every defect this project
+exists to remove, shipped under a checksum a judge scored.
+
+Both halves of the fix are load-bearing and each was verified alone: the
+recursive glob catches a hidden file whose **content** is defective, and the new
+binding rule catches one that is **byte-identical** to the real file, which the
+glob alone cannot.
+
+### 3. Key-move protection reaches 10 of 20 Shape A items, and its docstring claims the other 10 are covered
+
+`check_keys_vs_base` is the only rule anywhere that stops a key moving on a
+select-all. Its docstring states its scope honestly and then makes a claim that
+is false: the other ten *"are covered by the type-specific rules here."*
+
+Not one type-specific rule constrains **which** choice is keyed. `keys_of()`
+reads the positives; `MIN_DISTRACTORS` counts them; the contiguous-run test looks
+at their positions; the coverage rule wants each choice keyed *or* negated;
+BF-2026-064's polarity rule forbids *both*. Every one is invariant under swapping
+a key with a distractor.
+
+Ten Shape A items have no baseline twin, being products of a split or rebuild.
+Swept one at a time so no neighbouring rule could mask another: **6 of the 10
+pass the gate outright**; the other 4 are caught incidentally by the
+contiguous-run, position-0 or polarity rules. On those 6, a student who reasons
+correctly and ticks the right choice scores **0**, and one who ticks the wrong
+choice scores 100.
+
+The rubric supplies the invariant that needs no baseline: *"the scoring key
+equals the `correct_*` ident set on all 88 items, zero exceptions. So the ident
+labels are the scoring truth."* Verified independently, 20 of 20. Asserted now,
+reaching all 20 — and it protects more than scoring: **every human judge on this
+project reads idents to decide which choice is keyed**, so a tree that disagrees
+with them silently voids every criterion 2, 3 and 4 verdict recorded on the item.
+
+### 4. The stem `<material>`'s `<mattext>` cardinality — the sixth first-match reader
+
+`stem = re.search(...)` reads the **first** match and nothing counted them. This
+sits three lines below the `question_type` rule whose own comment enumerates
+*"THE FIFTH first-match metadata reader"* and states the remedy as *"assert the
+cardinality first, then check every occurrence."* Four got it. The stem rule,
+added in the same entry as *"the only mechanically decidable half of F4"*, did
+not. `PLACE` permits `material → {mattext}` without bound, and the per-item rule
+counted `<material>` children of `<presentation>` and never `<mattext>` children
+of `<material>` — the container asserted and its contents not, the inverse of the
+shape BF-2026-065 was written to close.
+
+Duplicate the `<mattext>`: both tools pass, Canvas renders **both** paragraphs,
+and the gate measures only the first. Two consequences. Criterion 7 says outright
+*"No duplicated instruction block in a stem"* and **no rule in the instrument
+asserted it**. And F5 — the criterion whose worst shape is *"the failure lands on
+the student who followed the instruction"* — cannot see a correct format
+statement in paragraph one contradicted in paragraph two. 177 of 177.
+
+### Four guards the judge proved escape and declined to score; closed anyway
+
+- **An XML comment defeats every `X in body` substring test.** A comment is
+  invisible to `ElementTree` and visible to every regex, so
+  `<!-- rcardinality="Single" -->` satisfies the fill-in rule while the real
+  `<response_str>` says `Multiple` — **143 of 143 escaped**. `rcardinality` is
+  now read off the parsed element, where `check_tree` already has it. Declined
+  because no generator emits comments; closed because a substring is not an
+  attribute, and the shape generalises to every such test in the file.
+- **`quiz_type`** — a survey does not report a score and a practice quiz does not
+  reach the gradebook, so an accuracy check could silently stop checking.
+- **`shuffle_answers`** — `permute.py`'s docstring **rests** on this being false
+  and nothing asserted it, so BF-031's key-position guarantee had no anchor.
+- **The `<quiz identifier>` self-reference.** This is the leg of the open
+  identifier question that is decidable here without Canvas: `assessment_meta` is
+  internally self-referential, `<assignment><quiz_identifierref>` pointing back at
+  the enclosing `<quiz identifier>`. Rename the quiz and that reference dangles
+  **inside a single file**. All four escaped both tools on 14 of 14 and are now
+  asserted.
+
+### Verification
+
+Every exhibit swept corpus-wide, each asserting it landed:
+
+| exhibit | landed | pre-fix | post-fix |
+|---|---|---|---|
+| extra `<and>` in the fill-in `<or>` | 136 conditionvars | all checks pass | caught |
+| key ↔ distractor swap, per item | 10 items | 6 pass outright | 10 caught |
+| duplicated stem `<mattext>` | 177 items | all checks pass | caught |
+| byte-identical stale quiz one level deeper | 14 packages | all checks pass (13/14 also ship) | 14 caught |
+| XML comment vs `rcardinality` | 143 items | all checks pass | caught |
+| `quiz_type=survey` | 14 packages | all checks pass | caught |
+| `shuffle_answers=true` | 14 packages | all checks pass | caught |
+| `<quiz identifier>` renamed | 14 packages | all checks pass | caught |
+
+Build hash unchanged at `4ee5bb50674db6fc`.
+
+### One open question closed, one narrowed
+
+**`plain()` unescaping before stripping — CLOSED, refuted, on an argument rather
+than a count.** `validate.py` reads **raw file text**, one escaping layer further
+out than a parsed reader, and its `plain()` is `unescape → strip → unescape`. A
+parsed reader's prescribed `strip → unescape` is applied to `ElementTree`'s
+`.text`, and `.text` *is* `unescape(raw)`. The two are therefore the **same
+composition**, not two orders of it. The trap requires a bare `<letter` that is
+literal text at the layer being stripped, and that is unreachable by
+construction: a bare `<` in XML character data is not well-formed, so it arrives
+as `&lt;` (which after one unescape *is* the real HTML layer) or as `&amp;lt;`
+(decoded only by the second unescape, after stripping). The 458-body differential
+agrees, but the closure rests on the argument.
+
+**The identifier question — narrowed, not closed.** All four identifiers agree on
+14 of 14 today and all diverge freely past both tools. Canvas's binding semantics
+still cannot be established from this environment; the self-referential leg is
+closed above, and the rest stays open on evidence rather than on convenience.
+
+### On the corpus
+
+An execution audit that never imports or invokes `validate.py`: the **full power
+set** of every select-all item's choices — 7 to 10 choices, 128 to 1024
+selections each, complete and untruncated — gives exactly one selection scoring
+100 per item, always non-empty, and on all 20 Shape A items equal to the
+`_correct_*` ident set. On the 143 fill-ins every declared accepted value scores
+100 and no adversarial entry does. **Zero defects.**
+
+**Seventeen reads, seventeen clean corpora.**

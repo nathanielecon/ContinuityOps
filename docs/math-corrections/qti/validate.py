@@ -199,6 +199,16 @@ def check_tree(rel, root):
                              f'children of <item>, expected 1 -- {harm}')
         for pres in [k for k in it if NSN(k) == 'presentation']:
             pk = [NSN(k) for k in pres]
+            for mat in [k for k in pres if NSN(k) == 'material']:
+                nmt = len([k for k in mat if NSN(k) == 'mattext'])
+                if nmt != 1:
+                    fails.append(f'{rel} :: {title}: the stem <material> holds '
+                                 f'{nmt} <mattext> children, expected 1 -- '
+                                 f'criterion 7 forbids a duplicated instruction '
+                                 f'block, and `stem` reads only the FIRST, so '
+                                 f'the stem-exists and sign-guidance rules '
+                                 f'measure one paragraph while Canvas renders '
+                                 f'all of them')
             if pk.count('material') != 1:
                 fails.append(f'{rel} :: {title}: {pk.count("material")} stem '
                              f'<material> children of <presentation> -- the '
@@ -212,6 +222,25 @@ def check_tree(rel, root):
                              f'student cannot answer and scores 0')
             for r in [k for k in pres
                       if NSN(k) in ('response_lid', 'response_str')]:
+                # rcardinality is tested elsewhere as a SUBSTRING of the item
+                # body -- `'rcardinality="Single"' not in body` -- which is the
+                # magic-string-for-structural-property shape, and it generalises
+                # to every `X in body` test in this file. An XML comment is
+                # invisible to ElementTree and visible to every regex, so
+                # `<!-- rcardinality="Single" -->` satisfies the fill-in rule
+                # while the real <response_str> says Multiple: 18 of 18 escaped.
+                # Read it off the element, where the tree already has it. Not
+                # scored by the judge because no generator emits comments and
+                # the direct mutation is caught; asserted here because a
+                # substring is not an attribute (BF-2026-067).
+                want_card = ('Multiple' if NSN(r) == 'response_lid'
+                             else 'Single')
+                if r.get('rcardinality') != want_card:
+                    fails.append(f'{rel} :: {title}: <{NSN(r)}> declares '
+                                 f'rcardinality={r.get("rcardinality")!r}, '
+                                 f'expected {want_card!r} -- read from the '
+                                 f'element, not matched as a substring of the '
+                                 f'item')
                 nw = len([k for k in r
                           if NSN(k) in ('render_choice', 'render_fib')])
                 if nw != 1:
@@ -366,13 +395,20 @@ def check_line_endings(work, base):
 
 
 def check(work, base=None):
-    for f in sorted(glob.glob(os.path.join(work, '*/*/*.xml'))):
+    # RECURSIVE, not `*/*/*.xml`. repackage.py packages by os.walk at unbounded
+    # depth, so a fixed-depth glob made any XML one directory deeper invisible
+    # to every rule here while still shipping inside the zip. Two censuses of
+    # "the files in this package", reconciled by nothing (BF-2026-067).
+    checked = {}
+    for f in sorted(glob.glob(os.path.join(work, '*', '**', '*.xml'),
+                              recursive=True)):
         # basename, not the whole path: a work tree under a directory
         # named `metadata` or `manifests` matched every file and
         # checked zero items while still printing 'all checks pass'.
         if 'manifest' in os.path.basename(f) or 'meta' in os.path.basename(f):
             continue
         rel = os.path.relpath(f, work)
+        checked.setdefault(rel.split(os.sep)[0], set()).add(f)
         raw = open(f, encoding='utf-8', newline='').read()
 
         # Every <mattext> body in this corpus carries its HTML ESCAPED
@@ -1139,6 +1175,47 @@ def check(work, base=None):
                         fails.append(f'{where}: <not> inside a fill-in '
                                      f'conditionvar -- any non-matching entry, '
                                      f'including an empty box, scores 100')
+                    # ...and the TREE, which nothing asserted. Every rule above
+                    # is a PREDICATE over an open node set -- the top node, the
+                    # connective joining a bound pair, the pair's existence, the
+                    # bounds' values, an operator whitelist -- and the select-all
+                    # branch was given a residue rule for exactly this reason.
+                    # BF-2026-058's own comment: "The select-all rule this
+                    # mirrors asserts the whole tree shape; this one asserted
+                    # only the identity of the TOP node." BF-2026-059's: "the
+                    # lesson from the inner case was 'assert the tree, not the
+                    # top'." Six instalments later the fill-in tree -- 143 of
+                    # 177 items -- was still not asserted.
+                    #   The corpus grammar is closed: conditionvar -> varequal
+                    # | or( (varequal | and(vargte,varlte))+ ), 13 items of the
+                    # first form and 149 conditionvars of the second. Nest ONE
+                    # extra <and> inside the top-level <or> and the disjunction
+                    # of accepted spellings becomes a CONJUNCTION of them: the
+                    # entry must equal "0.375" and "0.38" at once, which no real
+                    # number does. Every predicate is invariant -- keys_of()
+                    # unions the same values, the quantisation still collapses
+                    # them, the top node is still <or>, CMP_OP == 2*pairs still
+                    # holds, each pair is still one point and still an accepted
+                    # value, and the inner-connective regex matches only
+                    # INNERMOST and/or pairs so it never sees the injected node.
+                    # 24 of the 143 fill-ins go UNPASSABLE -- BF-2026-064 defect
+                    # 4's harm on the larger population, because that fix was
+                    # written for 34 items and never mirrored (BF-2026-067).
+                    residue = re.sub(
+                        r'<and>\s*<vargte\b[^>]*>[^<]*</vargte>\s*'
+                        r'<varlte\b[^>]*>[^<]*</varlte>\s*</and>', '',
+                        re.sub(r'<varequal\b[^>]*>[^<]*</varequal>', '', cv))
+                    # count=2 is deliberate: a NESTED <or> leaves </or></or> in
+                    # the residue and is caught, so the rule fails closed.
+                    residue = re.sub(r'</?or>', '', residue, count=2)
+                    if residue.strip():
+                        fails.append(f'{where}: the fill-in conditionvar is not '
+                                     f'a top-level <or> of bare <varequal> and '
+                                     f'<and><vargte>V</vargte><varlte>V</varlte>'
+                                     f'</and> nodes -- extra nesting turns the '
+                                     f'disjunction of accepted spellings into a '
+                                     f'conjunction, and no entry can score 100 '
+                                     f'({residue.strip()[:60]!r})')
 
             # ITEM SCOPE, which nothing held. The connective rule below asserts
             # "an empty or partial selection cannot score 100" and enforces it
@@ -1290,6 +1367,42 @@ def check(work, base=None):
                                      f'<not><varequal></not> nodes -- nesting '
                                      f'silently changes which choices are '
                                      f'required ({residue.strip()[:60]!r})')
+                # Shape A choice idents ENCODE INTENT, and the rubric makes
+                # them the scoring truth: "the scoring key equals the correct_*
+                # ident set on all 88 items, zero exceptions."
+                # check_keys_vs_base is the only rule anywhere guarding a key
+                # from moving on a select-all, and it reaches 10 of the 20 Shape
+                # A items -- the other 10 are products of a split or rebuild and
+                # carry new idents. Its docstring claims those "are covered by
+                # the type-specific rules here", and NO type-specific rule
+                # constrains WHICH choice is keyed: keys_of() reads the
+                # positives, MIN_DISTRACTORS counts them, the contiguous-run
+                # test looks at their positions, the coverage rule wants each
+                # choice keyed OR negated, and BF-2026-064's polarity rule
+                # forbids both. Every one is invariant under swapping a key with
+                # a distractor -- which passed both tools on
+                # 1_1_part_1_question_1a, so a student who ticks the right
+                # choice scores 0 and one who ticks the wrong choice scores 100.
+                # This invariant needs no baseline, so it reaches all 20. It
+                # also protects every human verdict on the item: every judge
+                # reads idents to decide which choice is keyed (BF-2026-067).
+                if shape_a(body):
+                    cor = {c for c in choice_idents if '_correct_' in c}
+                    wro = {c for c in choice_idents if '_wrong_' in c}
+                    if cor | wro != set(choice_idents):
+                        fails.append(f'{where}: Shape A choices '
+                                     f'{sorted(set(choice_idents) - cor - wro)}'
+                                     f' are named neither _correct_N nor '
+                                     f'_wrong_N, so their intent is unreadable')
+                    elif keys & set(choice_idents) != cor:
+                        fails.append(
+                            f'{where}: the scoring key is '
+                            f'{sorted(keys & set(choice_idents))} but the '
+                            f'_correct_* idents are {sorted(cor)} -- the labels '
+                            f'every judge reads and the tree Canvas scores '
+                            f'disagree, so a student who reasons correctly '
+                            f'scores 0')
+
                 for c in choice_idents:
                     # Criterion 6 states a PARTITION -- every correct_*
                     # required, every wrong_* negated -- and the loop below
@@ -1442,6 +1555,43 @@ def check(work, base=None):
         # points_possible at all passed. The item-level twin forty lines up
         # handles absence explicitly. Same rule, two sites, absence at one
         # (BF-2026-058).
+        # Four assessment_meta invariants the judge proved escape both tools
+        # and declined to score, each because Canvas's handling could not be
+        # established from this environment. Each is uniform across 14 of 14
+        # packages, so asserting them costs nothing and they are recorded as
+        # corpus invariants rather than as guesses about Canvas (BF-2026-067):
+        #   quiz_type -- `survey` does not report a score and `practice_quiz`
+        #     does not reach the gradebook, so an accuracy check could silently
+        #     stop checking;
+        #   shuffle_answers -- permute.py's docstring RESTS on this being false
+        #     ("all 14 packages ship shuffle_answers=false") and nothing
+        #     asserted it, so BF-031's key-position guarantee had no anchor;
+        #   the <quiz identifier> self-reference -- assessment_meta is
+        #     internally self-referential, <assignment><quiz_identifierref>
+        #     pointing back at the enclosing <quiz identifier>. Renaming the
+        #     quiz leaves that reference DANGLING INSIDE A SINGLE FILE, which
+        #     needs no knowledge of Canvas to call a defect. This is the leg of
+        #     the open identifier question that is decidable here, and the judge
+        #     flagged it as such.
+        qt_ = re.search(r'<quiz_type>([^<]*)</quiz_type>', m)
+        if qt_ and qt_.group(1) != 'assignment':
+            fails.append(f'{os.path.basename(d.rstrip("/"))}: quiz_type is '
+                         f'{qt_.group(1)!r}, not "assignment" -- a survey does '
+                         f'not report a score and a practice quiz does not '
+                         f'reach the gradebook')
+        sh_ = re.search(r'<shuffle_answers>([^<]*)</shuffle_answers>', m)
+        if sh_ and sh_.group(1) != 'false':
+            fails.append(f'{os.path.basename(d.rstrip("/"))}: shuffle_answers '
+                         f'is {sh_.group(1)!r} -- permute.py rests on this '
+                         f'being false, so BF-031 loses its anchor')
+        qid = re.search(r'<quiz[^>]*\bidentifier="([^"]*)"', m)
+        qref = re.search(r'<quiz_identifierref>([^<]*)</quiz_identifierref>', m)
+        if qid and qref and qid.group(1) != qref.group(1):
+            fails.append(f'{os.path.basename(d.rstrip("/"))}: '
+                         f'quiz_identifierref {qref.group(1)!r} names no <quiz> '
+                         f'in this file (identifier is {qid.group(1)!r}) -- a '
+                         f'reference dangling inside a single document')
+
         vs = set(re.findall(r'<points_possible>([\d.]+)</points_possible>', m))
         if not vs:
             fails.append(f'{os.path.basename(d.rstrip("/"))}: assessment_meta '
@@ -1450,6 +1600,11 @@ def check(work, base=None):
             if abs(float(v) - n) > 1e-9:
                 fails.append(f'{os.path.basename(d.rstrip("/"))}: '
                              f'points_possible {v} but {n} items')
+
+    # What this gate actually opened, per package -- handed to
+    # check_manifest_binding so that "the file validated" is a measured set
+    # rather than an assumption (BF-2026-067).
+    return checked
 
 
 def check_items_vs_base(work, base, expect_total=None):
@@ -1510,13 +1665,71 @@ def check_items_vs_base(work, base, expect_total=None):
                      f'the census has never been asserted against anything')
 
 
+def check_manifest_binding(work, checked):
+    """The file this gate validated must be the file Canvas will import.
+
+    BF-2026-066 closed "nothing tied the file that was validated to the file
+    that will be imported" by asserting, in repackage.py, that the
+    imsqti_xmlv1p2 resource names a file containing `questestinterop` and at
+    least one `<item`. That is a PROXY FOR IDENTITY: it establishes the named
+    file is quiz-SHAPED, never that it is THE file this gate validated. Any
+    quiz satisfies it -- including a stale one.
+
+    Underneath sat two censuses of "the files in this package", reconciled by
+    nothing: validate.py globbed at FIXED depth (`work/*/*/*.xml`) while
+    repackage.py collects members with os.walk at UNBOUNDED depth. Put a
+    pre-round copy of the quiz at <pkg>/<quizfolder>/old/<quiz>.xml, declare it,
+    and point the qti resource's <file href> at it -- every href resolves, every
+    packaged file is declared, the mirrors agree, the resource is unique and
+    typed, and the file it names is a real quiz. Fourteen zips written under a
+    checksum a judge scored, and Canvas imports the PRE-ROUND corpus: the
+    un-split multi-part items, the pre-conversion select-alls, the retired
+    boilerplate. Every defect this project exists to remove, shipped.
+
+    Both halves are load-bearing: the recursive glob catches a hidden file whose
+    CONTENT is defective, and this rule catches a hidden file that is
+    byte-identical to the real one, which the glob alone cannot (BF-2026-067).
+    """
+    for d in sorted(glob.glob(os.path.join(work, '*/'))):
+        pkg = os.path.basename(d.rstrip('/'))
+        man = os.path.join(d, 'imsmanifest.xml')
+        if not os.path.exists(man):
+            fails.append(f'{pkg}: no imsmanifest.xml at the archive root -- '
+                         f'Canvas rejects the package and this gate cannot tell '
+                         f'which file it is meant to have validated')
+            continue
+        try:
+            root = ET.parse(man).getroot()
+        except Exception as e:
+            fails.append(f'{pkg}: imsmanifest.xml does not parse: {e}')
+            continue
+        qres = [el for el in root.iter()
+                if el.tag.split('}')[-1] == 'resource'
+                and el.get('type') == 'imsqti_xmlv1p2']
+        named = set()
+        for r in qres:
+            for h in ([r.get('href')] if r.get('href') else []) + \
+                     [f.get('href') for f in r
+                      if f.tag.split('}')[-1] == 'file' and f.get('href')]:
+                named.add(os.path.normpath(os.path.join(d, h)))
+        mine = {os.path.normpath(x) for x in checked.get(pkg, set())}
+        if named != mine:
+            fails.append(
+                f'{pkg}: the imsqti_xmlv1p2 resource names '
+                f'{sorted(os.path.relpath(x, d) for x in named)} but this gate '
+                f'validated {sorted(os.path.relpath(x, d) for x in mine)} -- '
+                f'the file that was checked is not the file Canvas will import, '
+                f'so every rule in this gate was applied to a document no '
+                f'student sees')
+
+
 if __name__ == '__main__':
     _base = sys.argv[2] if len(sys.argv) > 2 else None
     if _base:
         check_line_endings(sys.argv[1], _base)
         check_items_vs_base(sys.argv[1], _base,
                             int(os.environ.get('QTI_EXPECT_ITEMS', 177)))
-    check(sys.argv[1], _base)
+    check_manifest_binding(sys.argv[1], check(sys.argv[1], _base))
     print('type census:')
     for k, v in sorted(stats.items(), key=lambda t: -t[1]):
         print(f'  {v:4d}  {k}')
