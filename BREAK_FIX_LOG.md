@@ -3948,3 +3948,66 @@ Prose in the summaries is outside the diff and did reach me:
 Corpus unchanged at **199 items**, build `81e700c3f40bb7b5`. No QTI artifact
 touched; no acceptance verdict reopened. The round is not lost — it is re-run
 against the same build with a contract that can deliver.
+
+## 2026-08-08 — BF-2026-074 — The fix for an ambiguous vocabulary item offered the ambiguity as a choice
+
+`FIXER-A` was dispatched on the two SHORTANS open-vocabulary defects and
+returned a patch that was **not applied**.
+
+### What it did
+
+Adopted the right mechanism — close the response language in the stem, accept
+one string — and wrote the candidate list as:
+
+```text
+Answer with exactly one of these words: coefficient, factor, term, variable.
+```
+
+with `g6_s1_f1` accepting `{coefficient}` and `g6_s1_f2` accepting `{variable}`.
+
+### Why it is worse than the defect it repaired
+
+The original finding was that a student answering `factor` for the 7 in `7m` is
+**mathematically correct** and marked wrong. The patch keeps `factor` rejected
+and now prints it in the stem as a candidate. Before, a student had to think of
+`factor` unprompted; after, the item hands it to them and scores it zero. The
+same holds for `g6_s1_f2`: `n` in `n + 8 = 12` is a variable **and** a term of
+`n + 8`, and `term` is offered and rejected.
+
+**Enumeration in the stem closes a response language only if exactly one
+candidate is true.** A closed set containing two correct answers is not closure;
+it is a trap with a shorter list. That rule was not written anywhere in the gate
+or in the dispatch — my omission, and the fixer followed what it was given.
+
+This is the recurring class once more, now in the **remedy**: the device was
+applied at the granularity of *language closure* while the property that
+actually needed to hold was *unique truth*. Correct at one granularity, absent
+at the next one out.
+
+### Re-dispatched with
+
+Every non-keyed candidate must be provably false for that specific expression,
+with the falsity proof written out. For `f1`, distractors drawn from `variable`
+(7 is not a variable; `m` is), `exponent` (none present), `constant term` (7 is
+attached to `m`). For `f2`, from `coefficient` (no numeral multiplies `n`),
+`exponent`, `constant`.
+
+### A correction I issued and then retracted, on the record
+
+I also told the fixer its F1 stem had dropped `= 7 × m` from the source. It had
+not. Reading the built package shows the stem at `81e700c3f40bb7b5` is already
+`In 7m, the number 7 is the ____.` — the `= 7 × m` form came from the SHORTANS
+judge's worked explanation, not from the item. I had taken a judge's
+*explanatory* rendering for the artifact's own text without checking the
+artifact. Retracted on the PR before the fixer could act, because obeying it
+would have inserted text the source never had.
+
+The lesson is the project's own and I failed it here: **read the artifact, not a
+report about the artifact.**
+
+### Standing
+
+Corpus unchanged at **199 items**, build `81e700c3f40bb7b5`. The fixer's
+`e6607802d574131f` build exists only in its container and was never applied.
+`FIXER-B` is working `f3`, `f4` and `k6` in `finalize.py` concurrently, and both
+fixers are now scoped to disjoint `TOSHORT` keys so the patches cannot collide.
