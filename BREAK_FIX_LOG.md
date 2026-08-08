@@ -3825,3 +3825,55 @@ worked, and now passes.
 Corpus unchanged at **199 items**, build hash `81e700c3f40bb7b5`. This touches no
 QTI artifact — `SCAN_BRIEF.md` is worker instruction, not corpus — so no
 acceptance verdict is reopened.
+
+## 2026-08-08 — BF-2026-072 — The teacher's drop folder still held the corpus we spent the project correcting
+
+Found while fixing BF-2026-071. `validate.yml`'s whitespace step failed on
+`inbox/Inbox/validation-report.json`; reading that file to fix its line endings
+showed it describing `multiple_answers_question` items. The current corpus has
+none.
+
+### What is actually in there
+
+A census of `inbox/Inbox/*.zip` returns **157 items — 109 multiple-answer, 37
+numeric, 11 short answer**. That is the pristine select-all corpus, before any
+correction in this project. All 14 zips differ by sha256 from
+`docs/math-corrections/qti/zips/`; not one is current.
+
+`import-guide.md` sits beside them and is a step-by-step instruction to import
+each zip into Canvas. Its "Accuracy-Check Mapping" section asserts *"Correct
+selections collectively reproduce full answer-key result."*
+
+### Why this is the worst-severity shape available here
+
+Every live defect the project opened with is in these files: **BF-031** (all 47
+keys in the leading block with shuffle off, so picking the first N scored 100%),
+**D1** (six items shipping true statements as choices you must not select, so a
+correct student scores zero under all-or-nothing), **D2**, **D3**, **D4**, **D5**,
+**D6**. The folder does not merely hold stale artifacts — it holds defective
+artifacts under a guide telling a teacher to import them and a report asserting
+they match the answer key.
+
+`validation-report.json`'s `signature_match: true` entries are the trap in
+miniature: they are true, and they mean the packages match the **then-current**
+key. They say nothing about whether the key or the item type was right. A
+green-looking report over a defective corpus is the two-censuses-blind-together
+shape, one census having been retired without the other noticing.
+
+### Fix
+
+The zips are the author's own upload (`a5daaf5`, "Add files via upload"), so
+deleting them is not mine to do. The harm is the instruction, not the storage,
+so the warning goes at the point of harm: an unmissable superseded box at the
+top of `import-guide.md` naming every recorded defect, pointing at the corrected
+build, and **explicitly refusing to invite substitution** — because the 199-item
+corpus is better in every recorded respect but is *not certified*, and "better
+than a known-broken thing" has never been this project's bar.
+
+Nothing was deleted. The guide's original text is kept below the box.
+
+### Standing
+
+Corpus unchanged at **199 items**, build `81e700c3f40bb7b5`. No QTI artifact
+touched, so no acceptance verdict is reopened. The inbox is refreshed only after
+the mathematics slices reach 10/10 and `ACCEPTANCE.md` records it.
