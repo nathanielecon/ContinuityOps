@@ -1331,8 +1331,11 @@ STEM_INSTR = {
     # unrelated number, so it prescribes the three forms without hinting.
     ('6th-grade-review-section-2', 'K6'):
         'Enter the greater value. You may write it as a mixed number, an '
-        'improper fraction in simplest form, or a decimal with no trailing '
-        'zeros -- for example 2 1/2, 5/2, or 2.5.',
+        'improper fraction, or a decimal. For either fraction form, use '
+        'simplest form and / as the fraction bar; in a mixed number, put '
+        'exactly one space between the whole number and numerator and no '
+        'other spaces. For a decimal, use no trailing zeros -- for example '
+        '2 1/2, 5/2, or 2.5 (not 2.50).',
     ('6th-grade-review-section-1', 'E1'):
         'Type the greater of the two values exactly as it appears above.',
 }
@@ -1678,7 +1681,7 @@ EXPAND = {
    ('', 'expr', 'Write the complete factorization, the common factor first and '
         'the terms inside the parentheses in the order they appear. ' + NOSPACE
         + ' Example: for 6x + 9 write 3(2x+3).',
-    ['8@(x+2)', '8@(2+x)', '(x+2)@8', '(2+x)@8']),
+    ['8@(x+2)']),
  ]),
  ('6th-grade-review-section-2', 'N7'): (
    'Is subtraction associative? Compare (12 - 4) - 3 and 12 - (4 - 3).', [
