@@ -1132,17 +1132,17 @@ ORDER = ('Separate the numbers with commas, least first. Type it like '
 # and contradicted F4 one item later whose example stayed a numeral
 # (BF-2026-075).
 #
-# So: the example stays a numeral, the stem says both forms are allowed, and
-# both are accepted. F4 needs its own example because its answer carries `by`
-# and the `add 3` pattern would mislead a student into `divide 5`; the example
-# uses a different operation and number, so it prescribes the shape without
-# hinting the answer.
-OPNAME = ('Start with an action word, as in add 3: use the base verb, then the '
-          'number as a numeral or a word. Put one, two, or no spaces between '
-          'them.')
-OPNAME_BY = ('Start with an action word, as in multiply by 4: use the base verb, '
-             'the word by, then the number as a numeral or a word. Put one, two, '
-             'or no spaces at each gap, using the same spacing at both gaps.')
+# So: define the finite grammar first, using unrelated examples, then make the
+# accepted sets below equal that grammar. F4 permits each gap independently;
+# otherwise a correct mixed-spacing form such as `divide by5` is excluded.
+OPNAME = ('Use the base action verb followed by the number as a numeral or a '
+          'word. Use exactly zero, one, or two spaces between them. Unrelated '
+          'examples of every permitted pattern: add3, add 3, add  3, addthree, '
+          'add three, add  three.')
+OPNAME_BY = ('Use the base action verb, the word by, and the number as a numeral '
+             'or a word. At each of the two gaps independently, use exactly '
+             'zero, one, or two spaces. Unrelated examples: multiplyby4 and '
+             'multiply  by  four.')
 
 # F1/F2 -- AUTHOR'S RULING, and it overrides the engineering preference.
 #
@@ -1197,8 +1197,10 @@ TOSHORT = {
          'subtracteight', 'subtract  eight'],
         OPNAME, None),
     ('6th-grade-review-section-1', 'F4'): (
-        ['divide by 5', 'divideby5', 'divide  by  5', 'divide by five',
-         'dividebyfive', 'divide  by  five'], OPNAME_BY, None),
+        [f'divide{left}by{right}{number}'
+         for number in ('5', 'five')
+         for left in ('', ' ', '  ')
+         for right in ('', ' ', '  ')], OPNAME_BY, None),
     # H3/H4: the worksheet says "Solve:"; the conversion dropped it, leaving a
     # stem with no instruction verb at all. The flipped form is the SAME
     # statement -- and H5 teaches that flip one item later.
@@ -1209,7 +1211,9 @@ TOSHORT = {
         ['x<6', 'x < 6', 'x< 6', 'x <6', '6>x', '6 > x', '6> x', '6 >x'],
         INEQ, 'Solve: '),
     ('6th-grade-review-section-1', 'H5'): (
-        ['y>6', 'y > 6', 'y> 6', 'y >6'], INEQ, None),
+        ['y>6'],
+        ('Rewrite the inequality with y first. Type it with no spaces: if the '
+         'inequality were 4 < x, write x>4.'), None),
     ('topic-1-1', 'Part 1 Question 4'): (
         ['-3,-1,8', '-3, -1, 8', '-3,-1, 8', '-3, -1,8'], ORDER, None),
     ('topic-1-1', 'Part 2 Question 4'): (
