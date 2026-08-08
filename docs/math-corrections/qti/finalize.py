@@ -1098,23 +1098,40 @@ ORDER = ('Separate the numbers with commas, least first. Type it like '
          '-5,0,2 with no spaces.')
 OPNAME = 'Name the operation and the number, like: add 3.'
 
+# F1/F2 are vocabulary items, and a vocabulary answer family cannot be closed by
+# adding synonyms: SHORTANS showed `factor` correct-and-rejected on F1 and
+# `unknown quantity` correct-and-rejected on F2, and the next unenumerated
+# correct term is always outside any list you can finish writing. Closure comes
+# from the stem instead (BF-2026-074).
+#
+# The candidates must be MUTUALLY EXCLUSIVE -- exactly one true. A first attempt
+# offered `coefficient, factor, term, variable`, which kept `factor` rejected
+# while printing it as a choice, handing the student a true answer and scoring
+# it zero. That is worse than the defect it repaired. Every distractor below is
+# provably false for its own expression:
+#
+#   F1, the 7 in `7m`  -- `variable` false (7 is a numeral; `m` is the variable);
+#     `exponent` false (nothing is written as a power); `constant term` false
+#     (7 is bound multiplicatively to `m`, not standing alone). `factor` and
+#     `term` are deliberately ABSENT because both are defensible for 7.
+#   F2, the `n` in `n + 8 = 12` -- `exponent` false; `constant` false (`n`
+#     varies, 8 and 12 are the constants); `coefficient` false (`n` is not a
+#     numeral, and its implicit coefficient is 1). `term` is deliberately ABSENT
+#     because `n` is a term of `n + 8`.
+#
+# Cost of the device, recorded so it is not rediscovered as a defect: this makes
+# two items typed-multiple-choice, which runs against the round's direction of
+# travel toward free written response. It is accepted here only because Canvas
+# has no equivalence grader, so enumeration is the sole closure mechanism that
+# does not fail a correct student.
+VOCAB1 = ('Answer with exactly one of these choices: variable, coefficient, '
+          'exponent, constant term.')
+VOCAB2 = ('Answer with exactly one of these choices: exponent, constant, '
+          'variable, coefficient.')
+
 TOSHORT = {
-    # F3/F4: the old sentence promised "one or two words" while the key was three
-    # ("divide by 5"), so a student who obeyed the stem was scored wrong. The key
-    # PDF also blesses a second form for each ("subtract 8 (or -8)").
-    ('6th-grade-review-section-1', 'F1'): (['coefficient', 'numerical coefficient'],
-                                           WORDS, None),
-    # The stem promises "one or two words" and every accepted string was ONE
-    # word, so a student who typed the two-word phrase the source itself uses
-    # was marked wrong. The explanations PDF reads "The letter n stands for some
-    # unknown number" and "A variable is a letter that stands for an unknown
-    # number we can find." Having already conceded `unknown` -- which is not the
-    # key's word either -- the two-word form is correct by the identical
-    # argument. F1 one item earlier already accepts both `coefficient` and
-    # `numerical coefficient`, so this failed the author's own standard applied
-    # in the same file (BF-2026-051).
-    ('6th-grade-review-section-1', 'F2'): (
-        ['variable', 'unknown', 'unknown number', 'unknown value'], WORDS, None),
+    ('6th-grade-review-section-1', 'F1'): (['coefficient'], VOCAB1, None),
+    ('6th-grade-review-section-1', 'F2'): (['variable'], VOCAB2, None),
     ('6th-grade-review-section-1', 'F3'): (
         ['subtract 8', 'subtract8', 'subtraction', 'subtract', 'minus 8',
          'take away 8', 'subtract eight', 'subtracting 8', 'subtracting eight',
