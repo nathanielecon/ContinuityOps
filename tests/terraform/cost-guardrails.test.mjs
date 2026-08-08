@@ -29,7 +29,12 @@ test('apply is gated on a plan that reports actual changes', () => {
   // setup-terraform wrapper silently swallowed -detailed-exitcode's exit 2 on
   // run 31267293441, reading "10 to add" as "no changes" and skipping apply.
   assert.match(wf, /terraform show -json tfplan/);
-  assert.doesNotMatch(wf, /-detailed-exitcode/);
+  // Check executable lines only — comments documenting the defect are expected.
+  const executable = wf
+    .split('\n')
+    .filter((l) => !/^\s*#/.test(l))
+    .join('\n');
+  assert.doesNotMatch(executable, /-detailed-exitcode/);
 });
 
 test('terraform wrapper is disabled wherever exit status matters', () => {
