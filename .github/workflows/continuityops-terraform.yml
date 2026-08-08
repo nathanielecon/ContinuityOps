@@ -46,10 +46,9 @@ env:
   TF_VAR_aws_account_id: '000000000000'
   TF_STATE_BUCKET: continuityops-tfstate-000000000000
   TF_LOCK_TABLE: continuityops-tf-locks
-  # Budget/anomaly alert destination for the `account` root. Not committed —
-  # this repository is public. Set repository variable COPS_ALERT_EMAIL; the
-  # account apply fails closed without it, which is intended.
-  TF_VAR_alert_email: ${{ vars.COPS_ALERT_EMAIL }}
+  # NOTE: TF_VAR_alert_email is deliberately NOT set here. Workflow-level env
+  # reaches every job including `plan`, which runs on pull requests, and
+  # AGENTS.md forbids giving PR jobs secrets. It is set on the apply job only.
 
 jobs:
   plan:
@@ -102,6 +101,12 @@ jobs:
     env:
       # Dispatch-only; the chooser defaults to staging.
       COPS_ENV: ${{ github.event.inputs.environment || 'staging' }}
+      # Budget/anomaly alert destination for the `account` root. A SECRET, not a
+      # variable: this repository is public, so its Actions logs are public, and
+      # Terraform echoes variable values into plan output. GitHub masks secrets
+      # in logs; it does not mask variables. Scoped to this job so the
+      # PR-triggered plan job never receives it.
+      TF_VAR_alert_email: ${{ secrets.COPS_ALERT_EMAIL }}
     defaults:
       run:
         working-directory: terraform/envs/${{ env.COPS_ENV }}
