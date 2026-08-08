@@ -3877,3 +3877,74 @@ Nothing was deleted. The guide's original text is kept below the box.
 Corpus unchanged at **199 items**, build `81e700c3f40bb7b5`. No QTI artifact
 touched, so no acceptance verdict is reopened. The inbox is refreshed only after
 the mathematics slices reach 10/10 and `ACCEPTANCE.md` records it.
+
+## 2026-08-08 — BF-2026-073 — Four judges did the work and none of it arrived; the output contract was mine
+
+The rubric round for build `81e700c3f40bb7b5` dispatched four Codex Cloud judges
+— NUMERIC, SHORTANS, SOURCE-FIDELITY, STRUCT. All four ran, all four judged, all
+four reported. **Not one deliverable reached the repository.**
+
+| slice | container commit | context left | diff emitted |
+|---|---|---|---|
+| NUMERIC | `23ff088` | 8% | none |
+| SHORTANS | `a9f73123d1f0…` | — | none |
+| SOURCE-FIDELITY | `f48913d5aecd…` | — | none |
+| STRUCT | `ca848884b2fa…` | 5% | none |
+
+Every commit is unreachable: a Codex container has no git remote, so a commit
+inside it is written to a disk that is discarded. `git cat-file -t 23ff088`
+returns "Not a valid object name". The blob links in the summaries point at real
+shas on this branch with paths that do not exist there, so they render as
+plausible citations to nothing.
+
+### The defect is the contract, not the judges
+
+I asked each judge for three things at once: the full checklist, a complete
+per-item ledger (125 rows, 74 rows, 199 rows), **and** a `continuityops-patch-v1`
+block containing a unified diff of the same content. That is the deliverable
+twice over plus diff context, and it does not fit. Each judge spent its remaining
+budget on the ledger, then had nothing left for the diff — and additionally
+burned context discovering, separately and repeatedly, that `gh` is
+unauthenticated and `make_pr` does not exist, which I knew and had not told them.
+
+**This is the project's own recurring class, committed by the orchestrator.** The
+contract's name — `continuityops-patch-v1`, "emit a patch" — claimed a delivery
+mechanism whose precondition (enough context to render the diff after the
+analysis) was never asserted anywhere. A guard never itself asserted, so the rule
+it protects silently does not run. I have logged that shape more than twenty
+times against `validate.py` and then built it into the dispatch.
+
+### Fix
+
+Re-dispatched all four with the contract inverted:
+
+- **no diff, no commit** — the container's git is declared a dead end up front,
+  so no judge spends context rediscovering it;
+- the checklist returns as a fenced ` ```markdown ` block, which I commit;
+- **rules in full, exceptions only** — per-rule counts keep coverage auditable
+  without the passing rows, since a row that says "this one is fine" costs the
+  same as one that says "this one is broken";
+- a hard instruction to stop at 25% context and declare what was unchecked,
+  because a partial checklist that arrives beats a complete one that does not.
+
+### What survived, and it is not nothing
+
+Prose in the summaries is outside the diff and did reach me:
+
+- **NUMERIC proved a semantic hole by injection.** Changing `g6_s1_b1`'s stem
+  from `8 + 3 × 4` to `8 + 3 × 5` while keeping the key `20` **passes both
+  `validate.py` and `battery.py`** — 1,500 probes included. Neither gate can see
+  a stem/key mismatch. Expected in principle; now proved, and it is the hard
+  evidence for why a green build has never been sufficient here.
+- **STRUCT proved build reproducibility.** Two consecutive `./build.sh` runs
+  produced byte-identical `sha256sums.txt` under `cmp`.
+- **STRUCT reconciled the census independently**, following each manifest-selected
+  resource rather than trusting a shared total: 14 packages, 199 unique
+  package/item pairs, 199 globally unique item identifiers, 125 numerical, 74
+  short answer. That is the two-censuses-blind-together check, and it passed.
+
+### Standing
+
+Corpus unchanged at **199 items**, build `81e700c3f40bb7b5`. No QTI artifact
+touched; no acceptance verdict reopened. The round is not lost — it is re-run
+against the same build with a contract that can deliver.
