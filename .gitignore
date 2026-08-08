@@ -45,6 +45,10 @@ evidence/_bundle/
 .codex-last-message-*
 # Local stamp for scripts/Watch-CodexRefs.sh (never credentials)
 .codex-warm/
+# caveman plugin, vendored into the project by .codex/cloud-setup.sh. Ignored so
+# a fixer's unified diff never carries plugin files.
+.codex-plugins/
+.agents/plugins/marketplace.json
 *.log
 tmp/
 .cache/
