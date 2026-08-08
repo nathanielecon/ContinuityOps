@@ -1,5 +1,6 @@
 {
-  "_comment": "Additional permissions continuityops-gha needs to manage terraform/envs/account. Attach as an inline or managed policy on the role. Required because the role is NOT Terraform-managed (created out-of-band at bootstrap), so Terraform cannot grant these to itself. Verified missing on run 31267523721: AccessDeniedException on budgets:ModifyBudget and ce:CreateAnomalyMonitor.",
+  "_comment": "Additional permissions continuityops-gha needs to manage terraform/envs/account. Attached by terraform/envs/account/iam-gha-addon.tf (by role name — the role itself is never imported). Verified missing on run 31267523721: AccessDenied on budgets:ModifyBudget and ce:CreateAnomalyMonitor.",
+  "_tagging_note": "budgets:TagResource added after run 31272457415: the provider's default_tags block tags the budget, and tagging is a separate IAM action from ModifyBudget. Granting ModifyBudget alone gets you a second AccessDenied one call later.",
   "_scope_note": "Read-only cost inspection (ce:GetCostAndUsage etc.) is deliberately NOT here — that belongs to continuityops-agent-ro. This addon grants only what is needed to CREATE and maintain the guardrails themselves.",
   "Version": "2012-10-17",
   "Statement": [
@@ -14,7 +15,10 @@
         "budgets:DescribeBudgetActionsForBudget",
         "budgets:CreateBudgetAction",
         "budgets:UpdateBudgetAction",
-        "budgets:DeleteBudgetAction"
+        "budgets:DeleteBudgetAction",
+        "budgets:TagResource",
+        "budgets:UntagResource",
+        "budgets:ListTagsForResource"
       ],
       "Resource": "arn:aws:budgets::000000000000:budget/continuityops-*"
     },

@@ -182,7 +182,45 @@ resource "aws_budgets_budget_action" "freeze_provisioning" {
 
 # Free. Detects the exact shape of BF-2026-029: a step change from ~$0/day to
 # $14.40/day on a single service. The leak ran 21 days because nothing watched.
+#
+# IMPORTANT (run 31272457415): AWS permits exactly ONE dimensional (SERVICE)
+# anomaly monitor per account, and this account already has one — the create
+# failed with `ValidationException: Limit exceeded on dimensional spend monitor
+# creation`, NOT AccessDenied. So service-level anomaly *detection* is already
+# active account-wide; what is missing is a *subscription* routing its findings
+# to an inbox.
+#
+# Therefore this resource defaults to OFF. Creating it can never succeed while
+# another dimensional monitor exists, and a permanently-failing resource blocks
+# every apply of this root — including the budget, which is the guardrail that
+# actually enforces anything.
+variable "create_anomaly_monitor" {
+  type        = bool
+  default     = false
+  description = "Create a dimensional monitor. Only possible if the account has none; AWS allows one."
+}
+
+variable "existing_anomaly_monitor_arn" {
+  type        = string
+  default     = ""
+  description = <<-EOT
+    ARN of the account's existing dimensional monitor. When set, the alert
+    subscription attaches to it instead of creating a new monitor. Find it with:
+      aws ce get-anomaly-monitors --query 'AnomalyMonitors[].[MonitorArn,MonitorDimension]'
+    (ce:GetAnomalyMonitors is granted by the FinOps addon.)
+  EOT
+}
+
+locals {
+  anomaly_monitor_arn = var.create_anomaly_monitor ? one(aws_ce_anomaly_monitor.service[*].arn) : var.existing_anomaly_monitor_arn
+
+  # Subscribe only when we have a monitor to subscribe to.
+  create_anomaly_subscription = local.anomaly_monitor_arn != ""
+}
+
 resource "aws_ce_anomaly_monitor" "service" {
+  count = var.create_anomaly_monitor ? 1 : 0
+
   # Needs ce:CreateAnomalyMonitor from the addon; same ordering reason as the
   # budget above.
   depends_on = [aws_iam_role_policy_attachment.gha_finops_addon]
@@ -193,10 +231,12 @@ resource "aws_ce_anomaly_monitor" "service" {
 }
 
 resource "aws_ce_anomaly_subscription" "alerts" {
+  count = local.create_anomaly_subscription ? 1 : 0
+
   name      = "continuityops-anomaly-alerts"
   frequency = "DAILY"
 
-  monitor_arn_list = [aws_ce_anomaly_monitor.service.arn]
+  monitor_arn_list = [local.anomaly_monitor_arn]
 
   subscriber {
     type    = "EMAIL"
@@ -232,7 +272,10 @@ output "guardrails" {
     budget_notifications  = ["50%", "80%", "100%", "100% forecasted"]
     freeze_action_at      = "100% actual"
     freeze_denies_deletes = false
-    anomaly_detection     = "DAILY, >= $10 absolute impact"
     destroyed_by_teardown = false
+
+    anomaly_monitor_created = var.create_anomaly_monitor
+    anomaly_subscription    = local.create_anomaly_subscription ? "DAILY, >= $10 absolute impact" : "NOT WIRED — set existing_anomaly_monitor_arn"
+    anomaly_detection_note  = "The account already has a dimensional SERVICE monitor, so detection is active; only alert routing needs the subscription."
   }
 }
