@@ -43,6 +43,13 @@ python3 "$HERE/permute.py" "$WORK/pkg" | tail -1
 echo "== validate"
 python3 "$HERE/validate.py" "$WORK/pkg" "$WORK/base"
 
+echo "== answer battery"
+# Derives its probes from each item's own answer by rules the generator does
+# not share, so it cannot rubber-stamp expr_variants(). Found the Unicode-minus
+# gap on its first run, on items no transform touches (BF-2026-068).
+python3 "$HERE/battery.py" "$WORK/pkg" 2>/dev/null || \
+    QTI_BATTERY_SRC="$WORK/pkg" python3 "$HERE/battery.py" "$WORK/pkg"
+
 echo "== repackage"
 QTI_SRC="$WORK/pkg" python3 "$HERE/repackage.py" "$HERE/zips"
 

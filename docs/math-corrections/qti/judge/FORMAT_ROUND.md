@@ -40,8 +40,21 @@ statement, the deciding question is **whether the accepted set is closed**:
   will mark some correct student wrong, and widening the list is not a fix —
   each widening round only reveals more forms still rejected.
 
-A graph description or a justification is always `multiple_answers_question`;
-prose has no closed form.
+A graph description or a justification may be `short_answer_question` **when
+the stem enumerates the permitted answer space and that space is finite**.
+Where the stem cannot enumerate it, the item stays `multiple_answers_question`.
+Prose that invites free explanation is never closed; prose chosen from a stated,
+finite set is.
+
+*Amended — see BF-2026-068.* The original text read "a graph description or a
+justification is always `multiple_answers_question`; prose has no closed form."
+That banned conversion by TYPE, where the property actually doing the work is
+CLOSURE. "Write the circle type and the ray direction, separated by a comma —
+example: closed,left" is a graph description with exactly four possible answers;
+"explain how the two expressions differ" is not closed at any length. The rule
+now turns on the same question it asks of every other answer shape, and the
+author's instruction was to maximise written response wherever the format can be
+stated exactly.
 
 An item that could be answered by typing one number but is still select-all is a
 defect. So is a numeric-entry item whose answer is not a number.

@@ -29,9 +29,15 @@ CMP_OP = re.compile(r'<var(?:gte|lte|gt|lt)\b')
 
 
 def dec(s):
-    """The value as a NUMBER, or None if it is not one."""
+    """The value as a NUMBER, or None if it is not one.
+
+    U+2212 MINUS SIGN normalises to ASCII hyphen first: the corpus deliberately
+    accepts the Unicode twin of every negative value, and Decimal cannot parse
+    it, so without this the multi-key and range rules would read a legitimate
+    accepted value as 'not a number' (BF-2026-068).
+    """
     try:
-        return Decimal(s.strip())
+        return Decimal(s.strip().replace('\u2212', '-'))
     except (InvalidOperation, ValueError):
         return None
 
@@ -63,7 +69,7 @@ MIN_DISTRACTORS = 7
 # pass is meant to change it -- never to make a red build green. The
 # written-response pass moves it from 177 upward as select-all items expand
 # into whole-plus-parts families (BF-2026-068).
-EXPECT_ITEMS = 199
+EXPECT_ITEMS = 237
 
 # A split half's title ends in a letter glued to its question number --
 # "Part 1 Question 1a", "Part 2 Question 4b" -- where an unsplit item ends in

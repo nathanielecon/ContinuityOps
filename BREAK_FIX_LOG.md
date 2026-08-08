@@ -3533,3 +3533,107 @@ selections each, complete and untruncated — gives exactly one selection scorin
 100 and no adversarial entry does. **Zero defects.**
 
 **Seventeen reads, seventeen clean corpora.**
+
+---
+
+## 2026-08-08 — BF-2026-068 — The written-response pass: every item is now typed, and the battery found a defect the generator could not
+
+The author's instruction: as many written-response items as possible, splitting
+questions where that helps, on the condition that a student always knows the
+exact format and that exact format is accepted. Mathematical accuracy at 10/10;
+9.5 sufficient elsewhere.
+
+**Result: 34 select-all items are gone.** The corpus is 237 items — 156 numeric
+entry, 81 short answer, **zero multiple-answer** — up from 177 items of which 34
+were select-all. Every answer is produced by the student rather than recognised
+from a list.
+
+### The finding that shaped the design: enumeration cannot close a typed expression
+
+Measured before building anything. On `8(x+2)` I generated the accepted-string
+list three ways and tested each against forms a correct student might type:
+
+| approach | strings | correct accepted |
+|---|---|---|
+| every spacing combination | 448 | 90% |
+| curated spacing styles | 256 | 86% |
+| **stem pins "no spaces" + insurance twins** | **96** | **16/16, and 11/11 of the no-space forms** |
+
+The first two lose because spacing is unbounded — each widening round revealed
+more forms still rejected, which is the exact failure mode `FORMAT_ROUND` F1
+describes for open sets. What closes it is not a bigger list, it is the **stem**.
+With "use no spaces" and a worked example, the enumeration is complete over what
+remains: both operand orders, both inner-term orders, all four multiplication
+symbols. Spaced twins ride along as insurance for the student who ignores the
+line, and zero wrong answers are accepted in any configuration.
+
+A hand-enumerated list — the realistic alternative, four or five strings per item
+— accepts **62%** of plausible correct answers across the fourteen riskiest
+items. Two in five correct students marked wrong. That number is why this pass
+happened.
+
+### Parts and whole, and why the leak is the right way round
+
+Each converted family is **whole first, parts after**, at the author's ruling. A
+student meets the assembled form cold; the parts follow as scaffolding. The leak
+runs harmlessly — a student who can assemble the whole would have earned the
+parts anyway — and it is what caps the loss to **one mark of three** when a
+spacing variant slips past the accepted list on a typed expression.
+
+### F1 amended, and recorded
+
+The frozen rule banned conversion by TYPE: *"a graph description or a
+justification is always `multiple_answers_question`."* The property actually
+doing the work is CLOSURE. "Write the circle type and the ray direction,
+separated by a comma — example: closed,left" is a graph description with exactly
+four possible answers. "Explain how the two expressions differ" is not closed at
+any length. F1 now turns on closure for every answer shape, and says so.
+
+### A live corpus defect the split exposed
+
+`topic-1-2` P1Q3 and P2Q3 are twins, and they keyed **different derivations** —
+P1 the raw `99x = 27` (100x − x = 27), P2 the simplified `3x = 2`, which is
+`9x = 6` divided by three. Invisible while both were offered as select-all
+strings. Fatal the moment the student types the numbers: the same method applied
+to both yields 99,27 and 9,6, and P2 would have marked a correct student wrong.
+Both now key the raw derivation.
+
+### The battery, and what it caught
+
+The accepted lists are generated, and a generator is only as good as the forms
+its author imagined — an earlier draft of `expr_variants()` scored 100% against
+a battery its own author wrote, then failed **14 of 17** forms it had not been
+designed for. So `battery.py` derives its probes from each item's own answer by
+rules the generator does not share, and asserts the negative direction too.
+
+**On its first run it failed 42 checks.** Triaged: three classes were the
+battery crying wolf and were fixed in the battery — stripping spaces out of a
+phrase, swapping a commutative pair the stems now deliberately pin, and a naive
+regex that produced `x)8+(2`. One class was real.
+
+**The real one: every negative numeric key rejected the Unicode minus.**
+`with_unicode_minus()` was applied to every short-answer list and to no numeric
+one, so a student copying a negative value out of rendered MathJax types U+2212
+and is marked wrong. Fixing `resp_numeric()` closed it on generated items and
+left **eight items still failing** — pristine numeric items that no transform
+rewrites, shipping exactly as the original export made them. That is this log's
+recurring shape once more: a fix applied where the code happens to run rather
+than everywhere the property is required. Closed corpus-wide by `do_minus_sweep`,
+and `dec()` in the gate now normalises U+2212 so the twin parses as a number.
+
+`battery.py` now runs inside `build.sh`: **237 items, 2188 answers exercised**,
+every no-space correct form accepted, every wrong answer and blank rejected.
+
+### Two defects the gate caught while this was being built
+
+The symbol palettes put raw `<` and `>` inside a `<mattext>` and stopped a whole
+package parsing — `wrap()` takes already-escaped text and I passed it raw. And
+`EXPAND` ran before `do_split`, so the targets that are *products* of the split
+did not exist when it looked for them; the census assertion added in BF-2026-065
+is what made the resulting shortfall visible rather than silent.
+
+### Standing
+
+Build hash `6fc0a7c9c0553dea`. **All five content acceptances are void** — the
+corpus changed. Under the author's rule the mathematics slices must return to
+10/10 and structure may pass at 9.5.

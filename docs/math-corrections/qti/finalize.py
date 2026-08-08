@@ -490,8 +490,17 @@ def accepted(v):
 
 
 def resp_numeric(v, indent='        '):
+    """The Unicode-minus twin belongs here too, not only on short answer.
+
+    with_unicode_minus() was applied to every short-answer list and to no
+    numeric one, so a student who copies a negative value out of rendered
+    MathJax types U+2212 and is marked wrong on every negative-keyed numeric
+    item in the corpus -- including items this round never touched. Found by
+    the answer battery on its first run, which is the whole reason the battery
+    derives its probes independently of the generator (BF-2026-068).
+    """
     ors = []
-    for x in accepted(v):
+    for x in with_unicode_minus(accepted(v)):
         ors.append(f'<varequal respident="response" case="No">{x}</varequal>')
         ors.append(f'<and><vargte respident="response">{x}</vargte>'
                    f'<varlte respident="response">{x}</varlte></and>')
@@ -780,6 +789,40 @@ def do_format_sweep(raw, log):
         n += 1
     if n:
         log.append(f'  format   {n} numeric stems given an exact format')
+    return raw
+
+
+def do_minus_sweep(raw, log):
+    """Every negative numeric key gets its U+2212 twin, wherever it came from.
+
+    resp_numeric() was fixed to emit the twin, and that reached only the items
+    this pipeline GENERATES. The corpus also contains negative-keyed numeric
+    items that no transform rewrites -- they ship exactly as the pristine export
+    made them -- and on those a student who copies the value out of rendered
+    MathJax still typed U+2212 and was still marked wrong. Eight items, found by
+    the answer battery after the generator fix had already been declared done.
+    The same shape this log keeps recording: a fix applied where the code
+    happens to run rather than everywhere the property is required
+    (BF-2026-068).
+    """
+    n = 0
+    def fix(m):
+        nonlocal n
+        cv = m.group(0)
+        add = []
+        for val in re.findall(r'<varequal respident="response"[^>]*>'
+                              r'(-[\d.]+)</varequal>', cv):
+            twin = val.replace('-', '\u2212')
+            if twin not in cv:
+                add.append(f'<varequal respident="response" case="No">'
+                           f'{twin}</varequal>')
+        if not add:
+            return cv
+        n += 1
+        return cv.replace('</or>', ''.join(add) + '</or>')
+    raw = re.sub(r'<conditionvar><or>.*?</or></conditionvar>', fix, raw, flags=re.S)
+    if n:
+        log.append(f'  minus    {n} negative numeric keys gained a U+2212 twin')
     return raw
 
 
@@ -1594,6 +1637,127 @@ for _t, _v, _x, _y in (('K11', 'b', '3', '9'), ('N6', 'x', '5', '8')):
 
 
 
+# ---- topic-1-1 --------------------------------------------------------------
+for _pt, _s1, _s2, _v1, _v2 in (
+        ('Part 1', 'rises 18 meters from a point below sea level, then descends '
+                   '18 meters', 'submarine', '+18', '-18'),
+        ('Part 2', 'descends 24 meters from a trail marker, then climbs 24 '
+                   'meters', 'hiker', '-24', '+24')):
+    _ctx = 'A %s %s.' % (_s2, _s1)
+    EXPAND[('topic-1-1', '%s Question 1a' % _pt)] = (_ctx, [
+       ('', 'num', 'Write the signed number for the FIRST change. ' + PALETTE_NEG, _v1),
+       ('b', 'num', 'Write the signed number for the SECOND change. ' + PALETTE_NEG, _v2),
+    ])
+    EXPAND[('topic-1-1', '%s Question 1c' % _pt)] = (
+       _ctx + ' The two changes are additive inverses of each other.', [
+       ('', 'num', 'What is the sum of the two changes?', '0'),
+       ('b', 'short', 'Are their magnitudes the same or different? Write same or '
+            'different.', ['same', 'Same']),
+       ('c', 'short', 'Are their signs the same or opposite? Write same or '
+            'opposite.', ['opposite', 'Opposite']),
+    ])
+for _pt, _a, _b in (('Part 1', 'a', 'b'), ('Part 2', 'p', 'q')):
+    _lt, _gt = (_a, _b) if _pt == 'Part 1' else (_b, _a)
+    EXPAND[('topic-1-1', '%s Question 2' % _pt)] = (
+      'On a number line, zero is in the middle. Two mystery numbers %s and %s '
+      'satisfy %s + %s = 0, with one negative and one positive.' % (_a, _b, _a, _b), [
+       ('', 'short', 'Write an equation relating the ABSOLUTE VALUES of %s and %s. '
+            % (_a, _b) + NOSPACE + ' Use | | for absolute value. '
+            'Example: for m and n write |m|=|n|.',
+        ['|%s|=|%s|' % (_a, _b), '|%s|=|%s|' % (_b, _a),
+         '|%s| = |%s|' % (_a, _b), '|%s| = |%s|' % (_b, _a)]),
+       ('b', 'num', 'What is the value of %s + %s?' % (_a, _b), '0'),
+    ])
+# ---- topic-1-2 --------------------------------------------------------------
+for _pt, _x, _y in (('Part 1', 'x', 'y'), ('Part 2', 'a', 'b')):
+    EXPAND[('topic-1-2', '%s Question 2' % _pt)] = (
+      'A student uses long division to convert a fraction %s/%s, where %s and %s '
+      'are integers and %s is not zero, into a decimal.' % (_x, _y, _x, _y, _y), [
+       ('', 'short', 'Can the decimal go on forever WITHOUT ever repeating? '
+            'Write yes or no.', ['no', 'No']),
+       ('b', 'short', 'Every such decimal does one of two things. Write both, '
+            'separated by the word or, in this order: terminates or repeats.',
+        ['terminates or repeats', 'terminates, or repeats']),
+    ])
+# The twins keyed DIFFERENT derivations -- P1 the raw 99x = 27 and P2 the
+# simplified 3x = 2, which is 9x = 6 divided by 3. Invisible while both were
+# offered as select-all strings; fatal once the student types the numbers, since
+# the same method applied to both yields 99,27 and 9,6 and P2 would mark a
+# correct student wrong. Both now key the raw derivation (BF-2026-068).
+for _pt, _who, _dec, _mul, _lhs, _rhs, _frac in (
+        ('Part 1', 'Jordan', '0.272727...', '100', '99', '27', '3/11'),
+        ('Part 2', 'Mia',    '0.666...',    '10',  '9',  '6',  '2/3')):
+    EXPAND[('topic-1-2', '%s Question 3' % _pt)] = (
+      'In a class debate, %s says %s is rational; the other student says it is '
+      'not, because it never ends.' % (_who, _dec), [
+       ('', 'short', 'Which student is correct? Write their name.', [_who, _who.lower()]),
+       ('b', 'num', 'Let x = %s. Multiply by %s and subtract x. What number '
+            'multiplies x on the left?' % (_dec, _mul), _lhs),
+       ('c', 'num', 'And what number is on the right?', _rhs),
+       ('d', 'short', 'Write %s as a fraction in lowest terms. ' % _dec + NOSPACE
+            + ' Example: write 1/2.', [_frac]),
+    ])
+# ---- topic-1-3 --------------------------------------------------------------
+for _pt, _a, _b, _c, _mid, _fin in (('Part 1', '10', '4', '8', '6', '-2'),
+                                    ('Part 2', '12', '5', '9', '7', '-2')):
+    EXPAND[('topic-1-3', '%s Question 1a' % _pt)] = (
+      'In the first round of a game a player scores %s points, then loses %s '
+      'points, then loses %s points.' % (_a, _b, _c), [
+       ('', 'expr', 'Write the expression for the round, in the order the turns '
+            'happened, using signed numbers. ' + NOSPACE
+            + ' Example: for +5 then -2 write 5+(-2).',
+        ['%s+(-%s)+(-%s)' % (_a, _b, _c)]),
+       ('b', 'num', 'Write the signed number for the SECOND turn. ' + PALETTE_NEG, '-' + _b),
+       ('c', 'num', 'Write the signed number for the THIRD turn. ' + PALETTE_NEG, '-' + _c),
+       ('d', 'num', 'What is the score after the first two turns?', _mid),
+       ('e', 'num', 'What is the score at the end of the round? ' + PALETTE_NEG, _fin),
+    ])
+# ---- topic-1-6 --------------------------------------------------------------
+for _pt, _n, _pos, _neg in (('Part 1', '5', '25', '-25'), ('Part 2', '6', '36', '-36')):
+    EXPAND[('topic-1-6', '%s Question 4b' % _pt)] = (
+      'Compare (-%s)^2 and -%s^2.' % (_n, _n), [
+       ('', 'num', 'What is the value of (-%s)^2?' % _n, _pos),
+       ('b', 'num', 'What is the value of -%s^2? ' % _n + PALETTE_NEG, _neg),
+       ('c', 'short', 'In which expression is the negative sign squared? Write '
+            'with parentheses or without parentheses.',
+        ['with parentheses', 'with']),
+    ])
+# ---- topic-sc-1 -------------------------------------------------------------
+for _pt, _n1, _n2, _a1, _a2 in (('Part 1', '10.4', '10.6', 'cat', 'rabbit'),
+                                ('Part 2', '9.3', '9.8', 'dog', 'cat')):
+    EXPAND[('topic-sc-1', '%s Question 1' % _pt)] = (
+      'Your %s weighs %s pounds. The %s weighs %s pounds.' % (_a1, _n1, _a2, _n2), [
+       ('', 'short', 'Write a TRUE statement using the greater-than symbol. '
+            + NOSPACE + ' ' + PALETTE_CMP + ' Example: 7>3',
+        ['%s>%s' % (_n2, _n1), '%s > %s' % (_n2, _n1)]),
+       ('b', 'short', 'Now write a TRUE statement using the less-than symbol. '
+            + NOSPACE + ' ' + PALETTE_CMP + ' Example: 3<7',
+        ['%s<%s' % (_n1, _n2), '%s < %s' % (_n1, _n2)]),
+    ])
+for _pt, _f, _d in (('Part 1', '3/4', '0.75'), ('Part 2', '2/5', '0.4')):
+    EXPAND[('topic-sc-1', '%s Question 2' % _pt)] = (
+      'Compare the fraction %s with the decimal %s.' % (_f, _d), [
+       ('', 'short', 'Is %s less than, greater than, or equal to %s? Write less, '
+            'greater, or equal.' % (_f, _d), ['equal', 'Equal']),
+       ('b', 'num', 'Write %s as a decimal.' % _f, _d),
+       ('c', 'short', 'Write a symbol that makes %s __ %s a true statement. '
+            % (_f, _d) + PALETTE_CMP, ['=', '≥', '≤']),
+    ])
+# ---- topic-sc-2 -------------------------------------------------------------
+for _pt, _b, _each, _food in (('Part 1', '2', '4', 'cupcakes'),
+                              ('Part 2', '3', '9', 'muffins')):
+    EXPAND[('topic-sc-2', '%s Question 2a' % _pt)] = (
+      'A person makes %s^4 %s and divides them equally among %s^2 friends.'
+      % (_b, _food, _b), [
+       ('', 'expr', 'Write the expression for how many each friend gets, as one '
+            'power divided by another. ' + NOSPACE
+            + ' Example: for 5^3 shared among 5^1 write 5^3/5^1.',
+        ['%s^4/%s^2' % (_b, _b)]),
+       ('b', 'num', 'How many %s does each friend get?' % _food, _each),
+       ('c', 'num', 'Written as a single power of %s, what is the exponent?' % _b, '2'),
+    ])
+
+
 def do_expand(raw, pkg, title, spec, log):
     """One select-all item becomes N written-response items, whole first.
 
@@ -1974,6 +2138,7 @@ def main(base):
         raw = do_grammar(raw, log)
         raw = do_boiler(raw, log)
         raw = do_sign_sweep(raw, log)
+        raw = do_minus_sweep(raw, log)
         raw = do_format_sweep(raw, log)
         after = raw.count('<item ident=')
         out = raw.replace('\n', '\r\n') if crlf else raw
