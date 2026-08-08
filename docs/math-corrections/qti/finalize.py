@@ -707,7 +707,29 @@ WHOLE = 'Enter your answer as a whole number.'
 # student who read the instruction. The right word already existed at NUM_INT
 # and this sweep, which runs last, was overwriting it (BF-2026-051).
 INTEGER = 'Enter your answer as an integer.'
-DECIMAL = 'Enter your answer as a decimal to two places, like 0.00.'
+# The old wording was 'Enter your answer as a decimal to two places, like 0.00.'
+# The cold NUMERIC judge found eight items where that instruction contradicts the
+# item's own accepted set: `g6_s1_d3` accepts `3.6` and `3.60`, `g6_s2_m6`
+# accepts `9` and `9.00`, and so on. Its proposed fix was to narrow each set to
+# the padded form only.
+#
+# That is the harmful direction, and the same one `validate.py` refused on K6
+# (BF-2026-075). `3.6` and `3.60` are the same number; a student who types `3.6`
+# has solved the problem, and narrowing marks them wrong. The instruction is what
+# is wrong, not the acceptance.
+#
+# A census settles which: of the 17 items carrying this sentence, 15 have an
+# exact answer of two decimals or fewer, so demanding a padded second place asks
+# for a trailing zero that carries no information. The remaining two are worse
+# than reported -- `1_2_part_1_question_1` asks for the decimal equivalent of
+# 3/8, which is exactly `0.375`, so a two-place instruction forces an
+# APPROXIMATION to a question about exact equivalence.
+#
+# So the demand is dropped and the optional trailing zero is stated outright.
+# No numeric example is given: this constant is shared by 17 items, and any
+# concrete example risks colliding with some item's own answer, which is the
+# disclosure defect recorded as BF-2026-076.
+DECIMAL = ('Enter your answer as a decimal. A zero on the end is optional.')
 FRACTION = 'Enter a simplified a/b, no spaces or mixed numbers.'
 
 

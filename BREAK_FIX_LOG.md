@@ -4144,3 +4144,62 @@ false. Parallel phrasing with substituted variables is not that.
 
 Build `62634a766ad1af43` → `59465fa535d8e994`. Corpus unchanged at **199 items**,
 125 numeric and 74 short answer. Gate and battery green.
+
+## 2026-08-08 — BF-2026-078 — Eight items instructed a padding the answer did not need
+
+The cold NUMERIC judge scored the slice **8/10 FAIL** on 83 of 125 items
+independently recomputed — an evidenced partial verdict, which is what was asked
+for and is worth more than the unevidenced clean sheet the previous run gave.
+
+Eight items carry `Enter your answer as a decimal to two places, like 0.00.`
+while accepting a form that does not have two places:
+
+| ident | accepted |
+|---|---|
+| `g6_s1_d3` | `3.6`, `3.60` |
+| `g6_s1_d4` | `7`, `7.00` |
+| `g6_s2_m3` | `220.8`, `220.80` |
+| `g6_s2_m4` | `21.1`, `21.10` |
+| `g6_s2_m5` | `6.3`, `6.30` |
+| `g6_s2_m6` | `9`, `9.00` |
+| `1_2_part_1_question_1` | `0.375`, `0.38` |
+| `1_2_part_2_question_1` | `0.625`, `0.63` |
+
+All eight verified directly against the built packages.
+
+### The proposed fix was the harmful direction again
+
+The judge's remedy was to narrow each set to the padded form. `3.6` and `3.60`
+are the same number; a student who types `3.6` has solved the problem, and
+narrowing marks them wrong. This is the third time this round that a repair
+would have failed a correct student to satisfy a formatting sentence, and the
+second where the answer is to change the sentence.
+
+**A census decides which artifact is wrong.** Of the 17 items carrying that
+instruction, **15 have an exact answer of two decimals or fewer** — so demanding
+a padded second place asks for a trailing zero carrying no information. The
+instruction is the outlier, not the acceptance.
+
+### And two are worse than reported
+
+`1_2_part_1_question_1` asks for the decimal equivalent of `3/8`, which is
+**exactly `0.375`**. Instructing two places forces an *approximation* to a
+question about exact equivalence, and then the item accepts the rounded `0.38`
+as though it were the equivalent. The judge caught the contradiction but read it
+as over-acceptance; the deeper fault is that the instruction asks for the wrong
+mathematics on a terminating-decimal item.
+
+### Fix
+
+`DECIMAL` becomes `Enter your answer as a decimal. A zero on the end is
+optional.` No accepted set is narrowed and no student is failed.
+
+**No numeric example is given, deliberately.** The constant is shared by 17
+items, and any concrete example risks colliding with some item's own answer —
+which is precisely BF-2026-076, where a format example printed its item's answer
+three times.
+
+### Standing
+
+Build `59465fa535d8e994` → `5b18b8e2ca984802`. Corpus **199 items**, 125 numeric
+and 74 short answer, unchanged. Gate and battery green.
