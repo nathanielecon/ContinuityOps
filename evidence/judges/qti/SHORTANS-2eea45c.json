@@ -1,0 +1,62 @@
+{
+  "slice": "SHORTANS",
+  "build": "2eea45c03ca61ddf",
+  "verdict": "fail",
+  "merge_ready": "no",
+  "score": 9.4,
+  "items_in_slice": 74,
+  "items_worked": 4,
+  "items_worked_idents": [
+    "g6_s1_f1",
+    "g6_s1_f2",
+    "g6_s2_k6",
+    "g6_s2_l1"
+  ],
+  "rules": [
+    {"rule": "R3", "checked": 4, "pass": 4, "fail": 0, "not_checked": 70},
+    {"rule": "R4", "checked": 2, "pass": 0, "fail": 2, "not_checked": 72},
+    {"rule": "R5", "checked": 3, "pass": 0, "fail": 3, "not_checked": 71},
+    {"rule": "R11", "checked": 1, "pass": 0, "fail": 1, "not_checked": 73},
+    {"rule": "R13", "checked": 4, "pass": 0, "fail": 4, "not_checked": 70},
+    {"rule": "R15", "checked": 4, "pass": 4, "fail": 0, "not_checked": 70}
+  ],
+  "findings": [
+    {
+      "ident": "g6_s1_f1",
+      "rules": ["R5", "R13"],
+      "rejected_correct_string": "constant coefficient",
+      "accepted_set": ["coefficient", "numerical coefficient", "factor", "numerical factor", "multiplier", "numerical multiplier", "constant", "constant factor"],
+      "harm": "a student who correctly describes 7 in 7m as the constant coefficient types `constant coefficient` and scores 0 under literal matching",
+      "classification": "recurring accepted cost under AR-1"
+    },
+    {
+      "ident": "g6_s1_f2",
+      "rules": ["R5", "R13"],
+      "rejected_correct_string": "addend",
+      "accepted_set": ["variable", "unknown", "unknown number", "unknown value", "unknown quantity", "unknown variable", "missing number", "missing addend", "missing value"],
+      "harm": "n is one of the two addends in n + 8, but a student who types the permitted one-word answer `addend` scores 0 under literal matching",
+      "classification": "recurring accepted cost under AR-1"
+    },
+    {
+      "ident": "g6_s2_k6",
+      "rules": ["R4", "R5", "R11", "R13"],
+      "rejected_correct_string": "01.75",
+      "wrongly_accepted_strings": ["1  3/4", "1 3 /4", "1 3/ 4", "1 3 / 4"],
+      "accepted_set": ["7/4", "1 3/4", "1  3/4", "1 3 /4", "1 3/ 4", "1 3 / 4", "1.75"],
+      "harm": "the decimal rule permits the exact decimal `01.75`, which scores 0, while four accepted mixed-number strings violate the new exact-spacing rule and still receive credit"
+    },
+    {
+      "ident": "g6_s2_l1",
+      "rules": ["R4", "R13"],
+      "wrongly_accepted_strings": ["8 (x+2)", "8 * (x + 2)", "8( x + 2 )"],
+      "harm": "responses containing spaces receive credit even though the stem explicitly requires `Use no spaces`"
+    }
+  ],
+  "not_checked": [
+    "the other 70 short-answer items",
+    "fresh source-document fidelity for R2",
+    "live Canvas import and scoring",
+    "numerical-question items",
+    "rules not listed in the rules array outside the four targeted items"
+  ]
+}
