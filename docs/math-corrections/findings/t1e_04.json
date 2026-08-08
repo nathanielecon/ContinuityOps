@@ -1,0 +1,85 @@
+[
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 43,
+    "locator": "Topic SC-2 Question 4 > Question block (also Question 3, p.42)",
+    "category": "notation",
+    "severity": "low",
+    "quote": "Evaluate: 7⁰ =.",
+    "correction": "Evaluate: 7⁰ = ____.",
+    "why": "The fill-in blank after the equals sign was lost, leaving a dangling \"=\" immediately followed by a period.",
+    "occurrences": "p.43 Q4 (\"Evaluate: 7⁰ =.\") and p.42 Q3 (\"Evaluate using the power-of-a-power property: (4³)² =.\"); the same pattern also appears once on p.12, outside this assignment's range."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 42,
+    "locator": "Topic SC-2 Question 3 > Question block vs. its own Important words / step 4",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Evaluate using the power-of-a-power property: (4³)² =.",
+    "correction": "Evaluate using the power-of-a-power law: (4³)² = ____.",
+    "why": "This is the only place in the whole document that says \"property\"; the Important words entry two lines below and step 4 both call it \"the power-of-a-power law\", as does every other question in the section."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 40,
+    "locator": "Topic SC-2 Question 1 > Important words, \"expression\" and \"simplify\" bullets",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "An expression is a math phrase made with numbers and operation signs.",
+    "correction": "An expression is a math phrase made of numbers and operation signs.",
+    "why": "Page 40 is the sole outlier: 15 other pages say \"made of numbers and operation signs\", and the paired \"simplify\" bullet on this page likewise reads \"in a shorter form that has the same value\" where 11 other pages read \"in a shorter form with the same value\".",
+    "occurrences": "p.40 only (both bullets); contrast pp.41, 43, 45, 47, 48, 49, 50, 51, 52."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 41,
+    "locator": "Topic SC-2 Question 2 > Question block, Part A",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "Part A: What expression gives the total number of cupcakes each friend will get?",
+    "correction": "Part A: What expression gives the number of cupcakes each friend will get?",
+    "why": "\"total number\" contradicts \"each friend\" — the expression asked for is one friend's share (4), not the total (16)."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 41,
+    "locator": "Topic SC-2 Question 2 > Question block, Part B",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Part B: How many cupcakes will each person get?",
+    "correction": "Part B: How many cupcakes will each friend get?",
+    "why": "The stem, Part A, and the Final answer all say \"friend\"; \"person\" here could be read as including the baker (5 people, not 4), which would not give the checked answer of 4."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 47,
+    "locator": "Topic SC-2 Question 7 > Important words, \"reciprocal\" bullet",
+    "category": "notation",
+    "severity": "low",
+    "quote": "For example, flip 3²⁄1 to get its reciprocal 1⁄3².",
+    "correction": "For example, flip 9⁄1 to get its reciprocal 1⁄9.",
+    "why": "The two parallel reciprocal bullets in this section use the evaluated power (p.44: \"The reciprocal of 4⁄1 is 1⁄4\"; p.51: \"The reciprocal of 36⁄1 is 1⁄36\"), so leaving this one as an unevaluated 3² breaks the pattern and models a \"fraction\" whose numerator is itself a power."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 52,
+    "locator": "Topic SC-2 Question 12 > \"Work the problem one tiny step at a time\" heading",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "Work the problem one tiny step at a time",
+    "correction": "Keep the heading with its list (e.g. \\needspace or \\nopagebreak) so the numbered steps begin on the same page as the heading.",
+    "why": "The heading is orphaned at the bottom of p.52 with all twelve numbered steps pushed onto p.53, leaving roughly the bottom 40% of p.52 blank — the only question in the section whose heading is split from its list."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 43,
+    "locator": "Topic SC-2 > Important words glossary, \"base\" and \"exponent\" entries (pattern across Questions 1-12)",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "The base is the number being raised. Here the base is 7.",
+    "correction": "The base is the number used as a repeated factor. Here the base is 7.",
+    "why": "The same glossary term is defined four different ways within one section — \"the number used again and again as a factor\" (pp.40, 42, 43-Q5), \"the number used as a repeated factor\" (pp.41, 47, 48, 49, 52), \"the number or group being raised to a power\" (pp.45, 51), and \"the number being raised\" (p.43-Q4); \"exponent\" drifts the same way, with pp.47-49 dropping the closing \"as a factor\".",
+    "occurrences": "base: pp.40, 41, 42, 43 (x2), 45, 47, 48, 49, 50, 51, 52; exponent: pp.47, 48, 49 drop \"as a factor\"."
+  }
+]

@@ -1,0 +1,303 @@
+% Topic 1 — Independent Practice Part 2 Solutions — corrected edition.
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{mathdocs}
+
+\newcommand{\need}[1]{\par\noindent\runin{We Need:}#1\par}
+\newcommand{\know}[1]{\par\noindent\runin{We Know:}#1\par}
+\newcommand{\solve}[1]{\par\noindent\runin{We Solve:}#1\par}
+\newcommand{\ans}[1]{\par\noindent\runin{Answer:}#1\par}
+\newcommand{\parta}[1]{\par\noindent\runin{Part A:}#1\par}
+\newcommand{\partb}[1]{\par\noindent\runin{Part B:}#1\par}
+\newcommand{\difference}[1]{\par\noindent\runin{Difference:}#1\par}
+\newcommand{\checkline}[1]{\par\noindent\runin{Check:}#1\par}
+
+\newcommand{\butterfly}[4]{%
+  \begin{center}
+  \begin{tikzpicture}[baseline]
+    \node (a) at (0,0.9)  {$#1$};
+    \node (b) at (0,-0.9) {$#2$};
+    \node (c) at (2.6,0.9)  {$#3$};
+    \node (d) at (2.6,-0.9) {$#4$};
+    \draw[red,thick] (a) -- (d);
+    \draw[red,thick] (b) -- (c);
+    \draw (-0.35,0) -- (0.35,0);
+    \draw (2.25,0) -- (2.95,0);
+  \end{tikzpicture}
+  \par\smallskip
+  {\footnotesize Butterfly: multiply along each red line.}
+  \end{center}}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Topic 1 — Independent Practice Part 2 Solutions}\\[0.4em]
+  {\normalsize Brief checks. Use \textbf{We Need} $\to$ \textbf{We Know} $\to$ \textbf{We Solve} on your notebook.}
+\end{center}
+
+\lesson{Lesson 1-1: Relate Integers and Opposites}
+
+\question{Question 1}
+\need{The sum of a $24$ m descent and a $24$ m climb (Part A), and why the two changes are additive inverses (Part B).}
+\know{Descending is negative and climbing is positive. Additive inverses have the same size and opposite signs, so they add to zero.}
+\solve{$(-24) + (+24) = 0$}
+\ans{Part A: $(-24) + 24 = 0$; Part B: equal magnitude and opposite signs, so the two changes cancel}
+
+\question{Question 2}
+\need{An equation with $\abs{p}$ and $\abs{q}$.}
+\know{$p + q = 0$ means $q = -p$, so the distances from zero match.}
+\solve{$\abs{p} = \abs{q}$}
+\ans{$\abs{p} = \abs{q}$ (or equivalent)}
+
+\question{Question 3}
+\need{$\abs{-11}$}
+\know{Absolute value is distance from zero.}
+\solve{$\abs{-11} = 11$}
+\ans{$11$}
+
+\question{Question 4}
+\need{Order $-2$, $4$, $6$ least to greatest.}
+\know{On a number line, more left means smaller.}
+\solve{$-2$, $4$, $6$}
+\ans{$-2$, $4$, $6$}
+
+\lesson{Lesson 1-2: Understand Rational Numbers}
+
+\question{Question 1}
+\need{Decimal for $\tfrac{5}{8}$.}
+\know{Divide $5 \div 8$.}
+\solve{$5 \div 8 = 0.625$}
+\ans{$0.625$}
+
+\question{Question 2}
+\need{Which statement is \emph{always} right.}
+\know{A fraction (with nonzero denominator) becomes a decimal that either terminates or repeats.}
+\solve{B covers both possibilities, so B is always right. A fails for $\tfrac13$ and C fails for $\tfrac12$.}
+\ans{B}
+
+\question{Question 3}
+\need{Who is correct about $0.\overline{6}$, Mia or Lee.}
+\know{Let $x = 0.\overline{6}$. Then $10x - x = 9x$, and the repeating tails cancel.}
+\solve{$10x = 6.\overline{6}$, so $9x = 6$ and $x = \tfrac{6}{9} = \tfrac{2}{3}$. A repeating decimal is rational.}
+\ans{Mia; $0.\overline{6} = \tfrac{2}{3}$}
+
+\lesson{Lesson SC-1: Compare Rational Numbers}
+
+\question{Question 1}
+\need{Two comparisons of $9.3$ and $9.8$.}
+\know{On a number line, more right means greater.}
+\solve{$9.3 < 9.8$ and $9.8 > 9.3$}
+\ans{$9.3 < 9.8$ and $9.8 > 9.3$ (pounds OK)}
+
+\question{Question 2}
+\need{Symbols that fit $\tfrac{2}{5}$ and $0.4$.}
+\know{$\tfrac{2}{5} = 0.4$}
+\solve{$\tfrac{2}{5} = 0.4$ exactly, so of the four symbols offered ($<$, $>$, $=$, $\neq$) only $=$ is true.}
+\ans{$=$ (only)}
+
+\lesson{Lesson 1-3: Add Integers}
+
+\question{Question 1}
+\parta{Start at $0$. Move right $12$, left $5$, left $9$.}
+\partb{$12 + (-5) + (-9) = -2$}
+\ans{Part A: number-line moves as above; Part B: $-2$}
+
+\question{Question 2}
+\need{The sum of the three signed moves.}
+\know{Combine the positives and negatives.}
+\solve{$18 + 4 + (-25) = -3$}
+\ans{$-3$}
+
+\question{Question 3}
+\need{Balance after 8 months.}
+\know{Fee $\$8.75$ each month; $8 \times \$8.75 = \$70$.}
+\solve{$\$400 - \$70 = \$330$}
+\ans{$\$330$}
+
+\question{Question 4}
+\need{The sum.}
+\know{Opposite signs: subtract the distances, keep the sign of the larger.}
+\solve{$-8 + 14 = 6$}
+\ans{$6$}
+
+\lesson{Lesson 1-4: Subtract Integers}
+
+\question{Question 1}
+\need{Distance from $12\degF$ to $3\degF$.}
+\know{Distance is the absolute value of the difference.}
+\solve{$\abs{12-3} = 9$. Valid: $\abs{12-3}$, $\abs{3-12}$, $12-3$.}
+\ans{Distance $9\degF$; any correct distance expressions}
+
+\question{Question 2}
+\need{Distance between the two heights.}
+\know{Distance is the absolute value of the difference.}
+\solve{$\abs{280-210} = 70$. Valid: $\abs{280-210}$, $\abs{210-280}$, $280-210$.}
+\ans{Distance $70$ ft; any correct distance expressions}
+
+\question{Question 3}
+\need{Distance between the two depths.}
+\know{Distance is the absolute value of the difference.}
+\solve{$\abs{-18-(-45)} = 27$. Valid: $\abs{-18-(-45)}$, $\abs{-45-(-18)}$, $45-18$.}
+\ans{Distance $27$ ft; any correct distance expressions}
+
+\question{Question 4}
+\need{Total distance the elevator travels.}
+\know{Distance between two floors is the absolute value of their difference; add the legs.}
+\solve{$\abs{6-(-5)} = 11$ and $\abs{-2-6} = 8$; $11 + 8 = 19$.}
+\ans{$19$ floors}
+
+\lesson{Lesson 1-5: Add and Subtract Rational Numbers}
+
+\question{Question 1}
+\need{Balance after 5 months.}
+\know{Start $\$180$ (below $\$200$), so the fee applies each month.}
+\solve{$180 - 12 = 168$; $168 - 12 = 156$; $156 - 12 = 144$; $144 - 12 = 132$; $132 - 12 = 120$.}
+\ans{$\$120$}
+
+\question{Question 2}
+\need{Temperature after the two drops.}
+\know{Each drop is a negative change; add them to the start.}
+\solve{$-4.6 - 1.35 - 2.05 = -8.00$}
+\ans{$-8\degC$}
+
+\question{Question 3}
+\need{Vertical distance between the tower and the canyon floor.}
+\know{Distance is the absolute value of the difference; write the mixed number as a decimal first.}
+\solve{$3\tfrac{1}{4} = 3.25$; $\abs{3.25 - (-2.5)} = 5.75$.}
+\ans{$5.75$ miles}
+
+\lesson{Lesson 1-6: Multiply Integers}
+
+\question{Question 1}
+\parta{Ascent is positive: $20$ (or $+20$) feet per minute.}
+\partb{$20 \times 9 = 180$ feet above sea level.}
+\ans{Part A: $20$ (or $+20$); Part B: $180$ feet above sea level}
+
+\question{Question 2}
+\need{Height after $3.5$ minutes.}
+\know{An ascent rate is positive, so the product is positive.}
+\solve{$180.25 \times 3.5 = 630.875$ m $= 0.630875$ km $\approx 1$ km.}
+\ans{$1$ kilometer (nearest km; ascent)}
+
+\question{Question 3}
+\need{$(-6)^{2}$}
+\know{The parentheses mean the negative is part of the base.}
+\solve{$(-6)^{2} = (-6) \times (-6) = 36$}
+\ans{$36$}
+
+\question{Question 4}
+\need{$-6^{2}$}
+\know{Without parentheses, the exponent applies to $6$ only.}
+\solve{$-6^{2} = -(6^{2}) = -36$}
+\ans{$-36$}
+\difference{parentheses square the negative; without them, square first, then make negative.}
+
+\lesson{Lesson 1-7: Multiply Rational Numbers}
+
+\question{Question 1}
+\need{The product.}
+\know{Do the parentheses first, then multiply.}
+\solve{$-0.2(15 + 5) = -0.2 \times 20 = -4$}
+\ans{$-4$}
+
+\lesson{Lesson 1-8: Divide Integers}
+
+\question{Question 1}
+\parta{Unit rate $= 140 \div 5 = 28$ feet per minute.}
+\partb{$28 \times 3 = 84$ feet above sea level.}
+\ans{Part A: $28$ (or $+28$); Part B: $84$ feet above sea level}
+
+\question{Question 2}
+\need{The quotient.}
+\know{Opposite signs $\Rightarrow$ negative quotient.}
+\solve{$(-81) \div 9 = -9$}
+\ans{$-9$}
+
+\question{Question 3}
+\need{The quotient.}
+\know{Same signs $\Rightarrow$ positive quotient.}
+\solve{$(-56) \div (-7) = 8$}
+\ans{$8$}
+
+\question{Question 4}
+\need{$n$ in $\dfrac{-24}{8} = \dfrac{n}{-3}$.}
+\know{The fractions are equal. Use the butterfly method.}
+\butterfly{-24}{8}{n}{-3}
+\solve{Cross products: $(-24)(-3) = 8 \cdot n$, so $72 = 8n$ and $n = 9$.}
+\checkline{$(-24) \div 8 = -3$ and $9 \div (-3) = -3$.}
+\ans{$n = 9$}
+
+\lesson{Lesson 1-9: Divide Rational Numbers}
+
+\question{Question 1}
+\need{Each owner's share of the loss.}
+\know{Split the loss equally among the 5 owners.}
+\solve{$(-625.50) \div 5 = -125.10$}
+\ans{$-125.10$ (or $-\$125.10$ per owner)}
+
+\question{Question 2}
+\need{How many rest stops.}
+\know{$\mixed{16}{1}{2} = \tfrac{33}{2}$, $\mixed{2}{3}{4} = \tfrac{11}{4}$.}
+\solve{$\tfrac{33}{2} \div \tfrac{11}{4} = \tfrac{33}{2} \times \tfrac{4}{11} = 6$ intervals. Rest stops at the end of each interval (including the finish line) $\Rightarrow 6$.}
+\ans{$6$ rest stops}
+
+\lesson{Lesson 1-10: Solve Problems with Rational Numbers}
+
+\question{Question 1}
+\need{The difference in elevation.}
+\know{Subtracting a negative adds its opposite.}
+\solve{$320 - (-85) = 320 + 85 = 405$}
+\ans{$405$ feet}
+
+\lesson{Lesson SC-2: Use the Laws of Exponents}
+
+\question{Question 1}
+\solve{$2^{3} \times 2^{5} = 2^{3+5} = 2^{8} = 256$}
+\ans{$256$ square inches}
+
+\question{Question 2}
+\parta{$\dfrac{3^{4}}{3^{2}}$ or $3^{4-2}$ or $3^{2}$}
+\partb{$81 \div 9 = 9$ muffins each}
+\ans{Part A: $\dfrac{3^{4}}{3^{2}}$ (or equivalent); Part B: $9$ muffins per friend}
+
+\question{Question 3}
+\solve{$(2^{4})^{2} = 2^{4 \cdot 2} = 2^{8} = 256$}
+\ans{$256$}
+
+\question{Question 4}
+\solve{$5^{0} = 1$}
+\ans{$1$}
+
+\question{Question 5}
+\solve{$\dfrac{5^{5}}{5^{2}} \cdot 5^{0} \cdot 5^{-1} = 5^{5-2} \cdot 1 \cdot \tfrac{1}{5} = 5^{3} \cdot \tfrac{1}{5} = 125 \div 5 = 25$}
+\ans{$25$}
+
+\question{Question 6}
+\solve{$(3^{2})^{2} = 3^{4} = 81$, $(2 \cdot 3)^{2} = 6^{2} = 36$, and $\left(\tfrac{18}{3}\right)^{2} = 6^{2} = 36$. Then $81 \cdot 36 \div 36 = 81$.}
+\ans{$81$}
+
+\question{Question 7}
+\solve{$2^{0} + 2^{-3} = 1 + \tfrac{1}{2^{3}} = 1 + \tfrac{1}{8} = \mixed{1}{1}{8}$}
+\ans{$\tfrac{9}{8}$ or $\mixed{1}{1}{8}$}
+
+\question{Question 8}
+\solve{$\dfrac{10^{5}}{10^{3}} = 10^{5-3} = 10^{2} = 100$}
+\ans{$100$}
+
+\question{Question 9}
+\solve{$(4^{2})^{2} = 4^{2 \cdot 2} = 4^{4} = 256$}
+\ans{$256$}
+
+\question{Question 10}
+\solve{$(2 \cdot 3)^{2} = 6^{2} = 36$}
+\ans{$36$}
+
+\question{Question 11}
+\solve{$\left(\dfrac{15}{3}\right)^{2} = 5^{2} = 25$}
+\ans{$25$}
+
+\question{Question 12}
+\solve{$5^{3} \cdot 5^{2} = 5^{3+2} = 5^{5} = 3125$}
+\ans{$3125$}
+
+\end{document}

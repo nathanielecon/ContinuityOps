@@ -1,0 +1,304 @@
+% Topic 1 — Independent Practice Part 1 Solutions — corrected edition.
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{mathdocs}
+
+\newcommand{\need}[1]{\par\noindent\runin{We Need:}#1\par}
+\newcommand{\know}[1]{\par\noindent\runin{We Know:}#1\par}
+\newcommand{\solve}[1]{\par\noindent\runin{We Solve:}#1\par}
+\newcommand{\ans}[1]{\par\noindent\runin{Answer:}#1\par}
+\newcommand{\parta}[1]{\par\noindent\runin{Part A:}#1\par}
+\newcommand{\partb}[1]{\par\noindent\runin{Part B:}#1\par}
+\newcommand{\difference}[1]{\par\noindent\runin{Difference:}#1\par}
+\newcommand{\checkline}[1]{\par\noindent\runin{Check:}#1\par}
+
+% Butterfly (cross-multiplication) figure.
+\newcommand{\butterfly}[4]{%
+  \begin{center}
+  \begin{tikzpicture}[baseline]
+    \node (a) at (0,0.9)  {$#1$};
+    \node (b) at (0,-0.9) {$#2$};
+    \node (c) at (2.6,0.9)  {$#3$};
+    \node (d) at (2.6,-0.9) {$#4$};
+    \draw[red,thick] (a) -- (d);
+    \draw[red,thick] (b) -- (c);
+    \draw (-0.35,0) -- (0.35,0);
+    \draw (2.25,0) -- (2.95,0);
+  \end{tikzpicture}
+  \par\smallskip
+  {\footnotesize Butterfly: multiply along each red line.}
+  \end{center}}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Topic 1 — Independent Practice Part 1 Solutions}\\[0.4em]
+  {\normalsize Brief checks. Use \textbf{We Need} $\to$ \textbf{We Know} $\to$ \textbf{We Solve} on your notebook.}
+\end{center}
+
+\lesson{Lesson 1-1: Relate Integers and Opposites}
+
+\question{Question 1}
+\need{The sum of an $18$ m rise and an $18$ m descent (Part A), and why the two changes are additive inverses (Part B).}
+\know{Rising is positive and descending is negative. Additive inverses have the same size and opposite signs, so they add to zero.}
+\solve{$+18 + (-18) = 0$}
+\ans{Part A: $+18 + (-18) = 0$; Part B: equal magnitude and opposite signs, so the two changes cancel}
+
+\question{Question 2}
+\need{An equation with $\abs{a}$ and $\abs{b}$.}
+\know{$a + b = 0$ means $b = -a$, so the distances from zero match.}
+\solve{$\abs{a} = \abs{b}$}
+\ans{$\abs{a} = \abs{b}$ (or equivalent)}
+
+\question{Question 3}
+\need{$\abs{-9}$}
+\know{Absolute value is distance from zero.}
+\solve{$\abs{-9} = 9$}
+\ans{$9$}
+
+\question{Question 4}
+\need{Order $-3$, $8$, $-1$ least to greatest.}
+\know{On a number line, more left means smaller.}
+\solve{$-3$, $-1$, $8$}
+\ans{$-3$, $-1$, $8$}
+
+\lesson{Lesson 1-2: Understand Rational Numbers}
+
+\question{Question 1}
+\need{Decimal for $\tfrac{3}{8}$.}
+\know{Divide $3 \div 8$.}
+\solve{$3 \div 8 = 0.375$}
+\ans{$0.375$}
+
+\question{Question 2}
+\need{Which outcome is \emph{not} possible when $\tfrac{x}{y}$ (with $y \neq 0$) is converted by long division.}
+\know{A fraction with a nonzero denominator always gives a decimal that either terminates or repeats.}
+\solve{C is the impossible one: a decimal that neither terminates nor repeats is irrational, so it cannot come from a fraction.}
+\ans{C}
+
+\question{Question 3}
+\need{Who is correct about $0.\overline{27}$, Jordan or Casey.}
+\know{Let $x = 0.\overline{27}$. Then $100x - x = 99x$, and the repeating tails cancel.}
+\solve{$100x = 27.\overline{27}$, so $99x = 27$ and $x = \tfrac{27}{99} = \tfrac{3}{11}$. A repeating decimal is rational.}
+\ans{Jordan; $0.\overline{27} = \tfrac{3}{11}$}
+
+\lesson{Lesson SC-1: Compare Rational Numbers}
+
+\question{Question 1}
+\need{Two comparisons of $10.4$ and $10.6$.}
+\know{On a number line, more right means greater.}
+\solve{$10.4 < 10.6$ and $10.6 > 10.4$}
+\ans{$10.4 < 10.6$ and $10.6 > 10.4$ (pounds OK)}
+
+\question{Question 2}
+\need{Symbols that fit $\tfrac{3}{4}$ and $0.75$.}
+\know{$\tfrac{3}{4} = 0.75$}
+\solve{$\tfrac{3}{4} = 0.75$ exactly, so of the four symbols offered ($<$, $>$, $=$, $\neq$) only $=$ is true.}
+\ans{$=$ (only)}
+
+\lesson{Lesson 1-3: Add Integers}
+
+\question{Question 1}
+\parta{Start at $0$. Move right $10$, left $4$, left $8$.}
+\partb{$10 + (-4) + (-8) = -2$}
+\ans{Part A: number-line moves as above; Part B: $-2$}
+
+\question{Question 2}
+\need{The sum of the three signed moves.}
+\know{Combine the positives and negatives.}
+\solve{$15 + (-20) + 3 = -2$}
+\ans{$-2$}
+
+\question{Question 3}
+\need{Balance after 6 months.}
+\know{Fee $\$12.50$ each month; $6 \times \$12.50 = \$75$.}
+\solve{$\$500 - \$75 = \$425$}
+\ans{$\$425$}
+
+\question{Question 4}
+\need{The sum.}
+\know{Opposite signs: subtract the distances, keep the sign of the larger.}
+\solve{$-12 + 19 = 7$}
+\ans{$7$}
+
+\lesson{Lesson 1-4: Subtract Integers}
+
+\question{Question 1}
+\need{Distance from $5\degF$ to $-8\degF$.}
+\know{Distance $= \abs{5 - (-8)} = 13$.}
+\solve{Valid expressions include $\abs{5-(-8)}$, $\abs{-8-5}$, $5-(-8)$, $\abs{-8} + 5$.}
+\ans{Distance $13\degF$; any correct distance expressions}
+
+\question{Question 2}
+\need{Distance between the two heights.}
+\know{Distance is the absolute value of the difference.}
+\solve{$\abs{150-120} = 30$. Valid: $\abs{150-120}$, $\abs{120-150}$, $150-120$.}
+\ans{Distance $30$ ft; any correct distance expressions}
+
+\question{Question 3}
+\need{Distance between the two depths.}
+\know{Distance is the absolute value of the difference.}
+\solve{$\abs{-25-(-40)} = 15$. Valid: $\abs{-25-(-40)}$, $\abs{-40-(-25)}$, $40-25$.}
+\ans{Distance $15$ ft; any correct distance expressions}
+
+\question{Question 4}
+\need{Total distance the elevator travels.}
+\know{Distance between two floors is the absolute value of their difference; add the legs.}
+\solve{$\abs{8-(-3)} = 11$ and $\abs{-1-8} = 9$; $11 + 9 = 20$.}
+\ans{$20$ floors}
+
+\lesson{Lesson 1-5: Add and Subtract Rational Numbers}
+
+\question{Question 1}
+\need{Balance after 4 months.}
+\know{Start $\$200$ (below $\$250$), so the fee applies each month.}
+\solve{$200 - 15 = 185$; $185 - 15 = 170$; $170 - 15 = 155$; $155 - 15 = 140$.}
+\ans{$\$140$}
+
+\question{Question 2}
+\need{Temperature after the two drops.}
+\know{Each drop is a negative change; add them to the start.}
+\solve{$-3.75 - 2.4 - 1.85 = -8.00$}
+\ans{$-8\degC$}
+
+\question{Question 3}
+\need{Vertical distance between the lookout and the mountain base.}
+\know{Distance is the absolute value of the difference; write the mixed number as a decimal first.}
+\solve{$2\tfrac{1}{2} = 2.5$; $\abs{2.5 - (-1.75)} = 4.25$.}
+\ans{$4.25$ miles}
+
+\lesson{Lesson 1-6: Multiply Integers}
+
+\question{Question 1}
+\parta{Descent is negative: $-15$ feet per minute.}
+\partb{$(-15) \times 12 = -180$ feet ($180$ feet below sea level).}
+\ans{Part A: $-15$; Part B: $-180$ feet (below sea level)}
+
+\question{Question 2}
+\need{Change in height after $4.5$ seconds.}
+\know{A descent rate is negative, so the product is negative.}
+\solve{$(-250.50) \times 4.5 = -1127.25$ m $= -1.12725$ km $\approx -1$ km.}
+\ans{$-1$ kilometer (nearest km; descent)}
+
+\question{Question 3}
+\need{$(-5)^{2}$}
+\know{The parentheses mean the negative is part of the base.}
+\solve{$(-5)^{2} = (-5) \times (-5) = 25$}
+\ans{$25$}
+
+\question{Question 4}
+\need{$-5^{2}$}
+\know{Without parentheses, the exponent applies to $5$ only.}
+\solve{$-5^{2} = -(5^{2}) = -25$}
+\ans{$-25$}
+\difference{parentheses square the negative; without them, square first, then make negative.}
+
+\lesson{Lesson 1-7: Multiply Rational Numbers}
+
+\question{Question 1}
+\need{The product.}
+\know{Do the parentheses first, then multiply.}
+\solve{$-0.5(10 + 6) = -0.5 \times 16 = -8$}
+\ans{$-8$}
+
+\lesson{Lesson 1-8: Divide Integers}
+
+\question{Question 1}
+\parta{Unit rate $= (-168) \div 7 = -24$ feet per minute.}
+\partb{$(-24) \times 4 = -96$ feet ($96$ feet below sea level).}
+\ans{Part A: $-24$; Part B: $-96$ feet (below sea level)}
+
+\question{Question 2}
+\need{The quotient.}
+\know{Opposite signs $\Rightarrow$ negative quotient.}
+\solve{$(-96) \div 8 = -12$}
+\ans{$-12$}
+
+\question{Question 3}
+\need{The quotient.}
+\know{Same signs $\Rightarrow$ positive quotient.}
+\solve{$(-72) \div (-9) = 8$}
+\ans{$8$}
+
+\question{Question 4}
+\need{$n$ in $\dfrac{-18}{6} = \dfrac{n}{-4}$.}
+\know{The fractions are equal. Use the butterfly method.}
+\butterfly{-18}{6}{n}{-4}
+\solve{Cross products: $(-18)(-4) = 6 \cdot n$, so $72 = 6n$ and $n = 12$.}
+\checkline{$(-18) \div 6 = -3$ and $12 \div (-4) = -3$.}
+\ans{$n = 12$}
+
+\lesson{Lesson 1-9: Divide Rational Numbers}
+
+\question{Question 1}
+\need{Each owner's share of the loss.}
+\know{Split the loss equally among the 3 owners.}
+\solve{$(-450.75) \div 3 = -150.25$}
+\ans{$-150.25$ (or $-\$150.25$ per owner)}
+
+\question{Question 2}
+\need{How many water stations.}
+\know{$\mixed{15}{1}{2} = \tfrac{31}{2}$, $\mixed{3}{7}{8} = \tfrac{31}{8}$.}
+\solve{$\tfrac{31}{2} \div \tfrac{31}{8} = \tfrac{31}{2} \times \tfrac{8}{31} = 4$ intervals. Stations at the end of each interval (including the finish line) $\Rightarrow 4$.}
+\ans{$4$ water stations}
+
+\lesson{Lesson 1-10: Solve Problems with Rational Numbers}
+
+\question{Question 1}
+\need{The difference in elevation.}
+\know{Subtracting a negative adds its opposite.}
+\solve{$450 - (-120) = 450 + 120 = 570$}
+\ans{$570$ feet}
+
+\lesson{Lesson SC-2: Use the Laws of Exponents}
+
+\question{Question 1}
+\solve{$3^{2} \times 3^{4} = 3^{2+4} = 3^{6} = 729$}
+\ans{$729$ square inches}
+
+\question{Question 2}
+\parta{$\dfrac{2^{4}}{2^{2}}$ or $2^{4-2}$ or $2^{2}$}
+\partb{$16 \div 4 = 4$}
+\ans{Part A: $\dfrac{2^{4}}{2^{2}}$ (or equivalent); Part B: $4$ cupcakes per friend}
+
+\question{Question 3}
+\solve{$(4^{3})^{2} = 4^{3 \cdot 2} = 4^{6} = 4096$}
+\ans{$4096$}
+
+\question{Question 4}
+\solve{$7^{0} = 1$}
+\ans{$1$}
+
+\question{Question 5}
+\solve{$\dfrac{4^{5}}{4^{2}} \cdot 4^{0} \cdot 4^{-1} = 4^{5-2} \cdot 1 \cdot \tfrac{1}{4} = 4^{3} \cdot \tfrac{1}{4} = 64 \div 4 = 16$}
+\ans{$16$}
+
+\question{Question 6}
+\solve{$(2^{3})^{2} = 2^{6} = 64$, $(3 \cdot 2)^{2} = 6^{2} = 36$, and $\left(\tfrac{12}{2}\right)^{2} = 6^{2} = 36$. Then $64 \cdot 36 \div 36 = 64$.}
+\ans{$64$}
+
+\question{Question 7}
+\solve{$5^{0} = 1$, $3^{-2} = \tfrac{1}{9}$, and $\dfrac{2^{6} \cdot 2^{3}}{2^{7}} = 2^{6+3-7} = 2^{2} = 4$. Thus $1 + \tfrac{1}{9} + 4 = \mixed{5}{1}{9}$.}
+\ans{$\tfrac{46}{9}$ or $\mixed{5}{1}{9}$}
+
+\question{Question 8}
+\solve{$\dfrac{7^{4}}{7^{2}} \cdot 7^{0} = 7^{4-2} \cdot 1 = 7^{2} = 49$}
+\ans{$49$}
+
+\question{Question 9}
+\solve{$(3^{2})^{3} = 3^{2 \cdot 3} = 3^{6} = 729$}
+\ans{$729$}
+
+\question{Question 10}
+\solve{$(2 \cdot 5)^{3} = 10^{3} = 1000$}
+\ans{$1000$}
+
+\question{Question 11}
+\solve{$6^{-2} = \tfrac{1}{36}$ and $\left(\tfrac{8}{4}\right)^{3} = 2^{3} = 8$. Then $\tfrac{1}{36} + 8 = \tfrac{1}{36} + \tfrac{288}{36} = \tfrac{289}{36} = \mixed{8}{1}{36}$.}
+\ans{$\tfrac{289}{36}$ or $\mixed{8}{1}{36}$}
+
+\question{Question 12}
+\solve{$3^{4} \cdot 3^{2} = 3^{4+2} = 3^{6} = 729$}
+\ans{$729$}
+
+\end{document}

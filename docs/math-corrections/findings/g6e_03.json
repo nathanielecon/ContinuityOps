@@ -1,0 +1,53 @@
+[
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 32,
+    "locator": "J3 > Work the problem one tiny step at a time > step 5 (pattern: every unit-rate/conversion 'Check:' step in section J)",
+    "occurrences": "p.32 J3 step 5 ('hour ×3 hours'); p.33 J4 step 5 ('2 yards ×36 inches per yard'); p.33 J5 step 5 ('gallon ×5 gallons')",
+    "category": "spacing",
+    "severity": "low",
+    "quote": "Check: 70 miles per hour ×3 hours = 210 miles.",
+    "correction": "Check: 70 miles per hour × 3 hours = 210 miles.",
+    "why": "The multiplication sign has a space before it but none after, so it renders fused to the following number (×3), unlike every other × in the document (e.g. \"3 × 70 = 210\" two lines above)."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 37,
+    "locator": "K5 > Before leaving this question",
+    "category": "notation",
+    "severity": "medium",
+    "quote": "because 6/3 = 2 and 2/3 remains. Same mixed number.",
+    "correction": "because \\frac{6}{3} = 2 and \\frac{2}{3} remains. Same mixed number. (render 6/3 and 2/3 as stacked fractions to match the rest of the sentence)",
+    "why": "The same sentence renders 8/3 and 2/3 as stacked fractions and then switches to slash notation for 6/3 and 2/3, so one sentence shows two different fraction notations for the same kind of quantity."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 35,
+    "locator": "K2 > Work the problem one tiny step at a time > step 1",
+    "category": "punctuation",
+    "severity": "low",
+    "quote": "Factor 90 into any pair: 90 = 9 × 10, or better start dividing by small primes.",
+    "correction": "Factor 90 into any pair: 90 = 9 × 10, or better, start dividing by small primes.",
+    "why": "\"or better\" is a parenthetical and needs a closing comma; without it the line reads as \"or better start\" and garbles the instruction."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 27,
+    "locator": "H5 > Important words > second bullet",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "To flip an inequality means swap the two sides and reverse the symbol (< becomes >, or > becomes <).",
+    "correction": "To flip an inequality means swap the two sides and reverse the symbol (< becomes >, or > becomes <).  [set \"and\" in the same roman face as the rest of the sentence, or italicize it if emphasis is wanted]",
+    "why": "The word \"and\" is set in bold mid-sentence, but everywhere else in these Important-words bullets emphasis is italic (e.g. \"the endpoint is not included\" on p.27) and bold is reserved for section labels, so the bold \"and\" is an inconsistent emphasis style."
+  },
+  {
+    "doc": "6thGradeReviewExplanations",
+    "page": 39,
+    "locator": "K10 > What the question is asking",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "This question asks you to rewrite 7 × a by swapping the order of the two numbers being multiplied.",
+    "correction": "This question asks you to rewrite 7 × a by swapping the order of the two factors being multiplied.",
+    "why": "One of the two things being swapped is the variable a, not a number, and K10's own Important words (p.40) define a factor as \"a number (or variable) being multiplied\"."
+  }
+]

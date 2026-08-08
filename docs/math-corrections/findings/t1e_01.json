@@ -1,0 +1,135 @@
+[
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 2,
+    "locator": "Topic 1-1 Question 1 > Question block + Checked answer (mismatch continues onto p.3)",
+    "category": "inconsistency",
+    "severity": "high",
+    "quote": "A submarine rises 18 meters from a point below sea level, then descends 18 meters. Part A: Represent both changes with signed numbers and find their sum. Part B: Explain why the two changes are additive inverses.\nChecked answer: +18 + (−18) = 0; equal magnitude and opposite signs.",
+    "correction": "Question: A climber climbs 4.5 meters up. Name the move that is the additive inverse of that climb and explain why the two moves add to zero.\nChecked answer: −4.5 meters (4.5 meters downward); +4.5 + (−4.5) = 0.",
+    "why": "Every other block of this question is about a 4.5 m climb — 'What the question is asking' (\"undoes a climb of 4.5 meters\"), the Important words bullet \"A climb of 4.5 meters means moving up 4.5 meters\", steps 1–5 (\"+4.5 meters (up)\", \"the inverse move is −4.5 meters\", \"Check: +4.5 + (−4.5) = 0\"), and \"Final answer: 4.5 meters downward\", which is exactly what Topic1Part1Solutions gives (\"Answer: 4.5 meters downward\"); the submarine/18-meter stem and its Checked answer are the odd ones out, and the p.3 'Why this makes sense' line (\"The rise and descent cancel\") is left describing the wrong scenario as well."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 8,
+    "locator": "Topic 1-2 Question 3 (p.8–9, Jordan/Casey 0.27-repeating) vs Topic1Part1Solutions.txt §Topic 1-2",
+    "category": "inconsistency",
+    "severity": "medium",
+    "quote": "In a class debate, Jordan says 0.27 is rational because its digits repeat. Casey says it is not rational because it never ends. Which student is correct? Use a fraction or equation to support the claim.",
+    "correction": "Add a matching entry to Topic1Part1Solutions under \"Topic 1-2 Understand Rational Numbers\": \"Question 3 — We Solve: x = 0.27 repeating, 100x = 27.27..., 99x = 27, x = 27/99 = 3/11. Answer: Jordan; 3/11\" (or drop Question 3 from the companion).",
+    "why": "The answer key lists only Question 1 and Question 2 under Topic 1-2 (and the parallel Part 2 key likewise lists only two), so this third question has no counterpart in the key the students check against."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 8,
+    "locator": "Topic 1-2 Question 2 > Important words list and Work-the-problem steps 2–3",
+    "category": "formatting",
+    "severity": "medium",
+    "quote": "A fraction x/y means the top number x is divided by the bottom number y.",
+    "correction": "Use the same spaced list environment as every other question (or inline the fractions as x/y, 1/2, 1/3) so the stacked fractions do not collide with neighbouring lines.",
+    "why": "This page alone uses a compressed list with no inter-item spacing, so the display fractions overflow their lines in the render — the x of x/y rides into the \"Long division\" bullet above and the y drops into the \"The numerator\" bullet below, and in the steps the 2 of 1/2 (step 2) touches the 1 of 1/3 (step 3)."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 3,
+    "locator": "Topic 1-1 Question 2 > Important words > \"Absolute value\" bullet; repeats on p.4",
+    "category": "notation",
+    "severity": "medium",
+    "quote": "Absolute value of a number, written ||, is the distance from that number to zero. Distance is never negative.",
+    "correction": "Absolute value of a number, written |x|, is the distance from that number to zero. Distance is never negative.",
+    "why": "The bars are typeset empty, so they render as a single \"||\" glyph pair with nothing between them, which does not show students what absolute-value notation actually looks like.",
+    "occurrences": "p.3 (Q2 Important words) and p.4 (Q3 Important words: \"Absolute value || means distance from zero on the number line.\")"
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 4,
+    "locator": "Topic 1-1 Question 3 > Question line; same pattern throughout Q3 and Q2's numeric check",
+    "category": "notation",
+    "severity": "low",
+    "quote": "Evaluate: | − 9| =",
+    "correction": "Evaluate: |−9| =",
+    "why": "The sign inside the bars is typeset as a binary minus, so it renders with a full space on each side (\"| − 9|\"), reading as an incomplete subtraction rather than as negative nine.",
+    "occurrences": "p.4 Q3 Question line; p.4 Q2 step 7 and 'Why this makes sense' (\"| − 5| = 5 = |5|\"); p.5 Q3 steps 5 and 6 and 'Why this makes sense' (\"| − 9| = 9\", \"thinking | − 9| = −9\")"
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 10,
+    "locator": "Section heading above Question 1 of the SC-1 lesson",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Lesson SC-1: Compare Rational Numbers",
+    "correction": "Topic SC-1 Compare Rational Numbers",
+    "why": "Every other section heading in the companion uses the pattern \"Topic 1-N Title\" with no colon (\"Topic 1-1 Relate Integers and Opposites\", \"Topic 1-2 Understand Rational Numbers\", \"Topic 1-3 Add Integers\"), and the answer key names the later supporting-cluster section \"Topic SC-2 Use the Laws of Exponents\", so \"Lesson\" plus a colon is a one-off."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 11,
+    "locator": "Lesson SC-1 Question 2 > answer-choice row (stem sits at the foot of p.10)",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "=    <    >    ≤    ≥    ≠",
+    "correction": "Keep the choice row with its stem (e.g. \\nopagebreak / samepage) so the six symbols appear directly under \"Select all symbols that appropriately relate the two numbers.\"",
+    "why": "The page break strands the six selectable symbols alone at the top of p.11, with no question text on the page to say what they belong to."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 2,
+    "locator": "Topic 1-1 Question 1 > Important words > \"whole number\" bullet",
+    "category": "punctuation",
+    "severity": "low",
+    "quote": "A whole number is 0, 1, 2, 3, . . . It has no fraction or decimal part.",
+    "correction": "A whole number is 0, 1, 2, 3, . . .. It has no fraction or decimal part.",
+    "why": "The sentence ends at the ellipsis with no full stop before the next sentence begins with \"It\"; the parallel bullet on p.8 does close the ellipsis with a period."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 8,
+    "locator": "Topic 1-2 Question 2 > Important words > \"repeating decimal\" bullet",
+    "category": "punctuation",
+    "severity": "low",
+    "quote": "A repeating decimal goes on forever but in a repeating pattern, like 0.333 . . .",
+    "correction": "A repeating decimal goes on forever but in a repeating pattern, like 0.333 . . ..",
+    "why": "This is the only bullet on the page with no closing period, and it disagrees with the same definition on p.2, which renders \"like 0.333 . . ..\" with the sentence period after the ellipsis."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 13,
+    "locator": "Topic 1-3 Question 1 > Important words > \"unit\" bullet (vs p.4 Topic 1-1 Question 3 > Important words)",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "A unit is one single amount. On this number line, one unit is one point.",
+    "correction": "A unit on the number line is one tick-mark step from one integer to the next; on this number line one unit is one point.",
+    "why": "The same term is defined two different ways in the same companion — p.4 defines a unit as \"one tick-mark step from one integer to the next\", p.13 as \"one single amount\"."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 14,
+    "locator": "Topic 1-3 Question 2 > Important words > \"final score\" bullet",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "The final score is the value after all the adds are done.",
+    "correction": "The final score is the value after all the additions are done.",
+    "why": "\"Adds\" is not a noun; the parallel bullet on p.13 correctly reads \"after all the moves\"."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 1,
+    "locator": "Intro paragraph, second sentence",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Read every Important words box before you start the numbered steps.",
+    "correction": "Read every Important words list before you start the numbered steps.",
+    "why": "The companion never renders \"Important words\" as a box — it is a plain bold heading over a bulleted list on every question — so the instruction points at an element that does not exist."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 1,
+    "locator": "Whole document (assigned range pp.1–14 checked); corpus-wide pattern",
+    "category": "formatting",
+    "severity": "medium",
+    "quote": "Instructor support, online resources, and AI are allowed onexplanations only. On Independent Practice Parts 1 and 2, donotuse the internet or AI.",
+    "correction": "Re-generate the PDF so the text layer carries word boundaries across font switches (e.g. add explicit spacing / use a PDF/A-friendly toolchain), keeping the visual render unchanged.",
+    "why": "The rendered page is correct (\"allowed on explanations only\", \"do not use\"), but the PDF's copyable text layer fuses words at every bold/italic boundary (\"onexplanations\", \"donotuse\", \"circleit\", \"thenreworkuntil\", \"Nonzeromeans\", \"Afraction\", \"Awhole numberis\") and splits \"We\" into \"W e\", so anything pasted, screen-read, or searched out of the file is corrupted.",
+    "occurrences": "all pages / every bold or italic run in the document"
+  }
+]

@@ -1,0 +1,52 @@
+[
+ {"doc":"Topic1ExplanationsPart1 + both keys","page":2,"locator":"Lesson 1-1 Question 1 (companion worked steps; Part 1 key Q1; Part 2 key Q1)","category":"math","severity":"high",
+  "quote":"Companion steps: 'Write the climb as a signed move: +4.5 meters (up)'. Part 1 key: 'The additive inverse of a 4.5 m climb -> 4.5 meters downward'. Part 2 key: 'Additive inverse of a 3.5 m descent -> 3.5 meters upward'.",
+  "correction":"Part 1: +18 + (-18) = 0 (submarine rises 18 m, then descends 18 m). Part 2: (-24) + (+24) = 0 (hiker descends 24 m, then climbs 24 m).",
+  "why":"The assignment asks for the SUM of two signed moves and why they are additive inverses. The companion's own question stem said so correctly, but its worked steps and BOTH answer keys solved a single-move inverse question using 4.5 m and 3.5 m - numbers that appear nowhere in the assignment. Round 1 wrongly 'fixed' the correct stem to match the incorrect steps."},
+
+ {"doc":"Topic1Part1Solutions + Topic1Part2Solutions + companion","page":2,"locator":"Lesson SC-1 Question 2 (both keys and the companion's choice row)","category":"math","severity":"high",
+  "quote":"Answer: =, <=, >=",
+  "correction":"Answer: = (only)",
+  "why":"The assignment offers exactly four symbols to select from - <, >, =, and != - so <= and >= are not available choices. Since 3/4 = 0.75 exactly (and 2/5 = 0.4 in Part 2), the only true relation among the four offered is =. The companion additionally printed a six-symbol choice row that does not match the assignment."},
+
+ {"doc":"Topic1Part2Solutions","page":1,"locator":"Lesson 1-2 Question 3 absent","category":"inconsistency","severity":"high",
+  "quote":"key jumps from Lesson 1-2 Q2 straight to Lesson SC-1",
+  "correction":"Add Q3: let x = 0.6 repeating; 10x - x = 9x; 9x = 6; x = 6/9 = 2/3. Answer: Mia; 0.6 repeating = 2/3.",
+  "why":"The assignment's Part 2 Lesson 1-2 has a Question 3 (Mia vs Lee, 0.6 repeating) with no entry in the Part 2 key."},
+
+ {"doc":"Topic1Part2Solutions","page":2,"locator":"Lesson 1-4 Question 4 absent","category":"inconsistency","severity":"high",
+  "quote":"key jumps from Lesson 1-4 Q3 straight to Lesson 1-5",
+  "correction":"Add Q4: |6-(-5)| = 11 and |-2-6| = 8; 11 + 8 = 19. Answer: 19 floors.",
+  "why":"The assignment's Part 2 Lesson 1-4 has a Question 4 (elevator from floor -5 to 6 to -2) with no entry in the Part 2 key."},
+
+ {"doc":"Topic1Part2Solutions","page":3,"locator":"Lesson 1-5 Questions 2 and 3 absent","category":"inconsistency","severity":"high",
+  "quote":"key jumps from Lesson 1-5 Q1 straight to Lesson 1-6",
+  "correction":"Add Q2: -4.6 - 1.35 - 2.05 = -8.00 degC. Add Q3: 3 1/4 = 3.25; |3.25 - (-2.5)| = 5.75 miles.",
+  "why":"The assignment's Part 2 Lesson 1-5 has Questions 2 and 3, neither of which appears in the Part 2 key."},
+
+ {"doc":"Topic1Part2Solutions","page":5,"locator":"Lesson SC-2 Question 2 Part B","category":"inconsistency","severity":"medium",
+  "quote":"Part B: 9 cupcakes per friend",
+  "correction":"Part B: 9 muffins per friend",
+  "why":"Part 2's assignment item is muffins (3^4 muffins among 3^2 friends); cupcakes belongs to the Part 1 item."},
+
+ {"doc":"Topic1ExplanationsPart1 + both keys","page":1,"locator":"every lesson heading","category":"inconsistency","severity":"medium",
+  "quote":"Topic 1-1 Relate Integers and Opposites",
+  "correction":"Lesson 1-1: Relate Integers and Opposites",
+  "why":"The assignment heads every section 'Lesson 1-1:', 'Lesson SC-1:', 'Lesson SC-2:', and the weekly lesson plan agrees. 'Topic 1' is the UNIT ('Topic 1: Independent Practice Covering Lessons 1-1 to SC-2'), so the companion's 'Topic 1-N' headings conflated lesson with unit. Document titles keep 'Topic 1', where it is correct.",
+  "occurrences":"all 12 lesson headings in the companion and in both keys"},
+
+ {"doc":"6thGradeReviewExplanations","page":44,"locator":"M2 - superseded by the updated worksheet","category":"math","severity":"high",
+  "quote":"700.3 - 284.67 = 415.63",
+  "correction":"700.32 - 84.67 = 615.65, with the place-value decomposition and the check step reworked",
+  "why":"The updated worksheet changes M2's operands, so the previous answer and every worked step for that item are now wrong."},
+
+ {"doc":"6thGradeReviewExplanations","page":22,"locator":"F4 - superseded by the updated worksheet","category":"math","severity":"high",
+  "quote":"To undo /5, use the inverse operation -> multiply by 5",
+  "correction":"Undo x5, use inverse op: -> divide by 5",
+  "why":"The updated worksheet flips the operation, so the checked answer and every step of F4's explanation invert."},
+
+ {"doc":"6thGradeReviewExplanations","page":11,"locator":"C7 - superseded by the updated worksheet","category":"notation","severity":"medium",
+  "quote":"15% of 80 = 12",
+  "correction":"15% of $80 = $12",
+  "why":"The updated worksheet makes the quantity a money amount, so the answer must carry the dollar sign."}
+]

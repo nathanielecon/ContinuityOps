@@ -1,0 +1,948 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=0.9in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{needspace}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\sevhigh}[1]{\textcolor{red!75!black}{\textbf{#1}}}
+\newcommand{\sevmed}[1]{\textcolor{orange!80!black}{\textbf{#1}}}
+\newcommand{\sevlow}[1]{\textcolor{black!55}{#1}}
+\setlist[itemize]{leftmargin=1.4em,itemsep=2pt,topsep=3pt}
+\begin{document}
+\begin{center}
+{\LARGE\bfseries Deep Typographical Scan — Findings and Corrections}\\[0.4em]
+{\normalsize Seven-document 7th-grade mathematics set \quad$\cdot$\quad 10 parallel scanners, then reconciled against the source worksheets}
+\end{center}
+\vspace{0.6em}
+
+
+\section*{Two rounds}
+Round 1 scanned the five documents against each other. Round 2 re-checked
+everything against two authoritative sources supplied afterwards: the
+\textbf{Topic 1 Independent Practice} assignment that both answer keys answer,
+and a \textbf{revised 6th Grade Review} worksheet. Those sources overturned
+twelve round-1 findings and produced ten new ones, seven of them high severity.
+The most serious correction is to round 1 itself:
+
+\medskip\noindent\textbf{Lesson 1-1 Q1 was corrected backwards in round 1.}
+The assignment asks: ``A submarine rises 18 m from a point below sea level, then
+descends 18 m,'' with Part A (sum) and Part B (why they are additive inverses).
+The companion's \emph{question stem} said exactly that and was right; its
+\emph{worked steps} and \emph{both answer keys} solved a single-move inverse of a
+4.5 m climb --- a number found nowhere in the assignment. Round 1 read the two
+agreeing keys as evidence and rewrote the correct stem to match the wrong steps.
+Both keys were wrong in the same way, so they corroborated each other. The stem
+is restored and the steps and both keys now solve the assigned problem.
+
+\section*{Summary}
+\begin{center}\begin{tabular}{lrrrr}\toprule
+Document & High & Medium & Low & Total\\\midrule
+Topic 1 --- Explanations companion (Part 1) & 0 & 12 & 31 & 43\\
+Topic 1 --- Part 1 Solutions & 4 & 2 & 7 & 13\\
+Topic 1 --- Part 2 Solutions & 3 & 9 & 1 & 13\\
+6th Grade Review (worksheet) & 0 & 1 & 2 & 3\\
+6th Grade Review --- Explanations companion & 3 & 11 & 25 & 39\\
+\midrule
+\textbf{Total} & \textbf{10} & \textbf{35} & \textbf{66} & \textbf{111}\\
+\bottomrule\end{tabular}\end{center}
+\medskip\noindent\textbf{By category:} inconsistency (43), formatting (19), grammar (17), notation (15), math (11), spacing (5), punctuation (4).
+
+\section*{Method, and what was ruled out}
+Ten scanners each owned a page range and worked from the \emph{rendered} pages,
+not from extracted text. That distinction did most of the work here.
+
+\medskip\noindent\textbf{Ruled out: apparent word fusion.}
+Extracting these PDFs with \texttt{pypdf} yields run-together words
+(\texttt{onexplanations}, \texttt{donotuse}, \texttt{circleit},
+\texttt{Nonzeromeans}) and flattened exponents (\texttt{32 $\times$3 4} for
+$3^2\times3^4$). Taken at face value this looks like hundreds of spacing
+defects, and three scanners initially raised it as a corpus-wide text-layer
+fault. It is not a fault in the documents. The pages render correctly, and
+poppler's \texttt{pdftotext} extracts the same originals cleanly --- 0 fused
+words against \texttt{pypdf}'s 29 in the Topic~1 companion. The fusion is an
+artefact of one extractor's word-break heuristic, so the finding was withdrawn
+rather than ``fixed''. Nothing in the rebuild was changed on its account.
+
+\medskip\noindent\textbf{Withdrawn: the SC-lesson naming ``fix''.} Scanners
+flagged ``Lesson SC-1: Compare Rational Numbers'' as a one-off, since every
+numbered heading reads ``Topic 1-N'' with no colon, and it was normalised to
+``Topic SC-1''. The teacher's weekly lesson plan names the lesson
+\textbf{Lesson SC-1: Compare Rational Numbers (SC1-1)}, so the source was right
+and the normalisation was wrong. It has been reverted in all three documents,
+along with ``Topic SC-2: Use the Laws of Exponents''. The remaining
+Lesson~SC-1 / Topic~SC-2 asymmetry is left as the author wrote it and is noted
+here as a question for the teacher rather than silently resolved.
+
+\medskip\noindent\textbf{Withdrawn: ``on your notebook''.} Changed to ``in your
+notebook'', then reverted --- the lesson plan's own wording is ``Independent
+Practice \emph{on} notebook'', so this is the author's register, not an error.
+
+\medskip\noindent\textbf{Also checked and found sound.}
+\section*{Not applied --- logged as recommendations}
+Four findings propose restructuring an assignment rather than correcting an
+error, and changing them would desynchronise these documents from the
+Independent Practice worksheets that are not part of this set. They are recorded
+here and left alone:
+\begin{itemize}
+\item Merging the two single-item distributive-property sections (worksheet G and L) into one.
+\item Dropping the near-duplicate decimal items D3/D4 versus M5/M6.
+\item Part~2 Solutions SC-2 Q10, which duplicates Q6's middle term $(2\cdot3)^2$; the
+      matching Part~2 practice worksheet is not in this set, so its answer key was left as-is.
+\item Part~2 Solutions SC-2 Q11, which mirrors Q6's third term, for the same reason.
+\end{itemize}
+\newpage\section*{Topic 1 --- Explanations companion (Part 1)}
+\subsection*{Medium severity (12)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~3} \quad \sevmed{Medium} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic 1-1 Question 2 > Important words > "Absolute value" bullet; repeats on p.4\par
+\noindent\textbf{Occurrences: }p.3 (Q2 Important words) and p.4 (Q3 Important words: "Absolute value || means distance from zero on the number line.")\par
+\noindent\textbf{Found: }\textit{Absolute value of a number, written ||, is the distance from that number to zero. Distance is never negative.}\par
+\noindent\textbf{Corrected to: }Absolute value of a number, written |x|, is the distance from that number to zero. Distance is never negative.\par
+\noindent\textbf{Why: }The bars are typeset empty, so they render as a single "||" glyph pair with nothing between them, which does not show students what absolute-value notation actually looks like.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~8} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-2 Question 3 (p.8--9, Jordan/Casey 0.27-repeating) vs Topic1Part1Solutions.txt §Topic 1-2\par
+\noindent\textbf{Found: }\textit{In a class debate, Jordan says 0.27 is rational because its digits repeat. Casey says it is not rational because it never ends. Which student is correct? Use a fraction or equation to support the claim.}\par
+\noindent\textbf{Corrected to: }Add a matching entry to Topic1Part1Solutions under "Topic 1-2 Understand Rational Numbers": "Question 3 --- We Solve: x = 0.27 repeating, 100x = 27.27..., 99x = 27, x = 27/99 = 3/11. Answer: Jordan; 3/11" (or drop Question 3 from the companion).\par
+\noindent\textbf{Why: }The answer key lists only Question 1 and Question 2 under Topic 1-2 (and the parallel Part 2 key likewise lists only two), so this third question has no counterpart in the key the students check against.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~8} \quad \sevmed{Medium} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic 1-2 Question 2 > Important words list and Work-the-problem steps 2--3\par
+\noindent\textbf{Found: }\textit{A fraction x/y means the top number x is divided by the bottom number y.}\par
+\noindent\textbf{Corrected to: }Use the same spaced list environment as every other question (or inline the fractions as x/y, 1/2, 1/3) so the stacked fractions do not collide with neighbouring lines.\par
+\noindent\textbf{Why: }This page alone uses a compressed list with no inter-item spacing, so the display fractions overflow their lines in the render --- the x of x/y rides into the "Long division" bullet above and the y drops into the "The numerator" bullet below, and in the steps the 2 of 1/2 (step 2) touches the 1 of 1/3 (step 3).\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~20} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-4 Question 4 > Question block (and Topic 1-5 Questions 2 and 3 on p.22)\par
+\noindent\textbf{Occurrences: }p.20 Topic 1-4 Question 4; p.22 Topic 1-5 Question 2; p.22 Topic 1-5 Question 3\par
+\noindent\textbf{Found: }\textit{An elevator starts on floor $-$3, travels to floor 8, then returns to floor $-$1. What total distance does it travel?}\par
+\noindent\textbf{Corrected to: }either add Topic 1-4 Question 4 and Topic 1-5 Questions 2--3 to Topic1Part1Solutions, or drop them from the explanation companion\par
+\noindent\textbf{Why: }Topic1Part1Solutions lists only Questions 1--3 for Topic 1-4 and only Question 1 for Topic 1-5 (Topic1Part2Solutions matches that count), so three worked questions in the companion have no entry in the answer key.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~21} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-5 Question 1 > Important words > first five bullets\par
+\noindent\textbf{Occurrences: }p.21 only\par
+\noindent\textbf{Found: }\textit{A rational number can be written as a fraction with a nonzero bottom number, or as a terminating or repeating decimal.}\par
+\noindent\textbf{Corrected to: }delete the Nonzero, fraction a/b, terminating/repeating decimal and rational number bullets, keeping the balance, fee, below \$250, compare and < bullets that the problem actually uses\par
+\noindent\textbf{Why: }The first five vocabulary bullets (Nonzero, decimal, fraction a/b, terminating/repeating decimal, rational number) are copied from the Topic 1-2 fraction lesson and play no part in this repeated-\$15-bank-fee problem.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~22} \quad \sevmed{Medium} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic 1-5 Question 2 > Final answer / Why this makes sense boundary\par
+\noindent\textbf{Occurrences: }four places on p.22 --- "Final answer: $-$8$^\circ$C Why this makes sense" (Q2); "Checked answer: 4.25 miles What the question is asking", "...a negative decimal. Important words", and "Final answer: 4.25 miles Why this makes sense" (Q3)\par
+\noindent\textbf{Found: }\textit{Final answer: $-$8$^\circ$C Why this makes sense}\par
+\noindent\textbf{Corrected to: }Final answer: $-$8$^\circ$C\textbackslash\{\}n\textbackslash\{\}nWhy this makes sense\par
+\noindent\textbf{Why: }The bold section heading runs onto the end of the answer line instead of starting its own paragraph, so the reader sees "$-$8$^\circ$C Why this makes sense" as one sentence; every other question in the document breaks the line here.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~24} \quad \sevmed{Medium} \quad \textit{math}\par
+\noindent\textbf{Where: }Topic 1-6 Question 2 > Work the problem one tiny step at a time > step 3\par
+\noindent\textbf{Occurrences: }p.24 only\par
+\noindent\textbf{Found: }\textit{First find 250.50 $\times$ 4. Multiply the whole-number part: 25 $\times$ 4 = 100, so 250 $\times$ 4 = 1000.}\par
+\noindent\textbf{Corrected to: }First find 250.50 $\times$ 4. Multiply the whole-number part: 250 $\times$ 4 = 1000.\par
+\noindent\textbf{Why: }The whole-number part of 250.50 is 250, not 25, so labelling "25 $\times$ 4 = 100" as multiplying the whole-number part teaches a wrong place-value reading even though the final total is right.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~34} \quad \sevmed{Medium} \quad \textit{grammar}\par
+\noindent\textbf{Where: }Topic 1-8 Question 4 > Work the problem one tiny step at a time > step 7\par
+\noindent\textbf{Found: }\textit{Divide both sides by 6 (same operation under both sides of the equals):}\par
+\noindent\textbf{Corrected to: }Divide both sides by 6 (same operation to both sides of the equals sign):\par
+\noindent\textbf{Why: }"under both sides of the equals" uses the wrong preposition and drops the noun "sign", and it contradicts the document's own Important-words wording on p.33 ("You may do the same operation to both sides").\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~35} \quad \sevmed{Medium} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic 1-9 Question 1 > Checked answer (repeats in Final answer, p.36)\par
+\noindent\textbf{Occurrences: }p.35 Checked answer and p.36 Final answer (both blocks of Topic 1-9 Question 1)\par
+\noindent\textbf{Found: }\textit{Checked answer: $-$150.25 (or \$ $-$ 150.25 per owner)}\par
+\noindent\textbf{Corrected to: }Checked answer: $-$150.25 (or $-$\$150.25 per owner)\par
+\noindent\textbf{Why: }The dollar sign is typeset before a spaced binary minus, so it renders as "\$ $-$ 150.25" (dollars minus 150.25) instead of the negative amount $-$\$150.25.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~38} \quad \sevmed{Medium} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic 1-10 Question 1 > "Work the problem one tiny step at a time" heading (pattern; also p.28)\par
+\noindent\textbf{Occurrences: }p.28 (steps run onto p.29) and p.38 (steps run onto p.39)\par
+\noindent\textbf{Found: }\textit{Work the problem one tiny step at a time}\par
+\noindent\textbf{Corrected to: }Keep the heading with its numbered list (e.g. \textbackslash\{\}needspace or \textbackslash\{\}nopagebreak) so the steps start on the same page.\par
+\noindent\textbf{Why: }The heading is stranded as the last line of the page with all of its numbered steps on the next page, leaving roughly the bottom half of p.38 blank.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~39} \quad \sevmed{Medium} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic 1-10 Question 1 > number-line figure > "sea level: 0" tick label\par
+\noindent\textbf{Found: }\textit{sea level: 0}\par
+\noindent\textbf{Corrected to: }Shift the "sea level: 0" label (or the 570 ft measurement arrow) so they do not overlap.\par
+\noindent\textbf{Why: }The teal "570 ft" measurement line is drawn straight through the label, striking out the "l" of "level" in the rendered figure.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~40} \quad \sevmed{Medium} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic SC-2 onward > whole-section body type\par
+\noindent\textbf{Occurrences: }pp.40--53 (entire Topic SC-2 section)\par
+\noindent\textbf{Found: }\textit{A person is designing a rectangular poster. The area of the poster is given as the expression 3$^2$ $\times$ 3$^4$ square inches.}\par
+\noindent\textbf{Corrected to: }Set the Topic SC-2 section in the same 10.91 pt body type used on pp.1--39.\par
+\noindent\textbf{Why: }Body text drops from 10.91 pt (with \textasciitilde{}22 pt leading) to 9.96 pt (with \textasciitilde{}18.5 pt leading) starting at the Topic SC-2 heading, so the last quarter of the document is visibly smaller and tighter than the rest.\par\vspace{4pt}
+\subsection*{Low severity (31)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~1} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Intro paragraph, second sentence\par
+\noindent\textbf{Found: }\textit{Read every Important words box before you start the numbered steps.}\par
+\noindent\textbf{Corrected to: }Read every Important words list before you start the numbered steps.\par
+\noindent\textbf{Why: }The companion never renders "Important words" as a box --- it is a plain bold heading over a bulleted list on every question --- so the instruction points at an element that does not exist.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~2} \quad \sevlow{Low} \quad \textit{punctuation}\par
+\noindent\textbf{Where: }Topic 1-1 Question 1 > Important words > "whole number" bullet\par
+\noindent\textbf{Found: }\textit{A whole number is 0, 1, 2, 3, . . . It has no fraction or decimal part.}\par
+\noindent\textbf{Corrected to: }A whole number is 0, 1, 2, 3, . . .. It has no fraction or decimal part.\par
+\noindent\textbf{Why: }The sentence ends at the ellipsis with no full stop before the next sentence begins with "It"; the parallel bullet on p.8 does close the ellipsis with a period.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~4} \quad \sevlow{Low} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic 1-1 Question 3 > Question line; same pattern throughout Q3 and Q2's numeric check\par
+\noindent\textbf{Occurrences: }p.4 Q3 Question line; p.4 Q2 step 7 and 'Why this makes sense' ("| $-$ 5| = 5 = |5|"); p.5 Q3 steps 5 and 6 and 'Why this makes sense' ("| $-$ 9| = 9", "thinking | $-$ 9| = $-$9")\par
+\noindent\textbf{Found: }\textit{Evaluate: | $-$ 9| =}\par
+\noindent\textbf{Corrected to: }Evaluate: |$-$9| =\par
+\noindent\textbf{Why: }The sign inside the bars is typeset as a binary minus, so it renders with a full space on each side ("| $-$ 9|"), reading as an incomplete subtraction rather than as negative nine.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~8} \quad \sevlow{Low} \quad \textit{punctuation}\par
+\noindent\textbf{Where: }Topic 1-2 Question 2 > Important words > "repeating decimal" bullet\par
+\noindent\textbf{Found: }\textit{A repeating decimal goes on forever but in a repeating pattern, like 0.333 . . .}\par
+\noindent\textbf{Corrected to: }A repeating decimal goes on forever but in a repeating pattern, like 0.333 . . ..\par
+\noindent\textbf{Why: }This is the only bullet on the page with no closing period, and it disagrees with the same definition on p.2, which renders "like 0.333 . . .." with the sentence period after the ellipsis.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~11} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Lesson SC-1 Question 2 > answer-choice row (stem sits at the foot of p.10)\par
+\noindent\textbf{Found: }\textit{= < > $\le$ $\ge$ $\neq$}\par
+\noindent\textbf{Corrected to: }Keep the choice row with its stem (e.g. \textbackslash\{\}nopagebreak / samepage) so the six symbols appear directly under "Select all symbols that appropriately relate the two numbers."\par
+\noindent\textbf{Why: }The page break strands the six selectable symbols alone at the top of p.11, with no question text on the page to say what they belong to.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~13} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-3 Question 1 > Important words > "unit" bullet (vs p.4 Topic 1-1 Question 3 > Important words)\par
+\noindent\textbf{Found: }\textit{A unit is one single amount. On this number line, one unit is one point.}\par
+\noindent\textbf{Corrected to: }A unit on the number line is one tick-mark step from one integer to the next; on this number line one unit is one point.\par
+\noindent\textbf{Why: }The same term is defined two different ways in the same companion --- p.4 defines a unit as "one tick-mark step from one integer to the next", p.13 as "one single amount".\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~14} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }Topic 1-3 Question 2 > Important words > "final score" bullet\par
+\noindent\textbf{Found: }\textit{The final score is the value after all the adds are done.}\par
+\noindent\textbf{Corrected to: }The final score is the value after all the additions are done.\par
+\noindent\textbf{Why: }"Adds" is not a noun; the parallel bullet on p.13 correctly reads "after all the moves".\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~15} \quad \sevlow{Low} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic 1-3 Question 3 > Why this makes sense (and Topic 1-5 Question 1 steps on p.21)\par
+\noindent\textbf{Occurrences: }p.15 (Important words 'multiply' bullet, steps 5--6, Why this makes sense); p.21 (question says "\$15.00", the asking block says "\$15", steps 2--6 drop the \$ entirely)\par
+\noindent\textbf{Found: }\textit{Six fees of 12.50 make 75. Starting at 500 and removing 75 leaves 425.}\par
+\noindent\textbf{Corrected to: }Six fees of \$12.50 make \$75. Starting at \$500 and removing \$75 leaves \$425.\par
+\noindent\textbf{Why: }Money amounts carry a \$ in the question, the Checked answer and step 4 ("Total fees = \$75") but are bare in the prose and in steps 5--6, so the same quantities are written two ways within one question.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~16} \quad \sevlow{Low} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic 1-3 Question 4 > Important words > 'Absolute value' bullet\par
+\noindent\textbf{Occurrences: }recurs wherever a negative sits just inside an absolute-value bar: p.16 (| $-$ 12|), p.17 (| $-$ 8 $-$ 5|, | $-$ 13|, | $-$ 8| + 5, twice more in steps 10--11), p.19 (| $-$ 25 $-$ ($-$40)|, | $-$ 40 $-$ ($-$25)|), p.20 (| $-$ 25 $-$ ($-$40)|, | $-$ 40 + 25|, | $-$ 15|, | $-$ 1 $-$ 8|)\par
+\noindent\textbf{Found: }\textit{Absolute value means distance from zero. Here | $-$ 12| = 12 and |19| = 19.}\par
+\noindent\textbf{Corrected to: }Absolute value means distance from zero. Here |$-$12| = 12 and |19| = 19.\par
+\noindent\textbf{Why: }The leading minus inside the absolute-value bars is typeset as a binary operator (LaTeX \$|-12|\$), so it renders with a space on both sides and reads as "bar minus 12 bar" instead of "the absolute value of negative twelve"; it should be \$|\{-\}12|\$.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~18} \quad \sevlow{Low} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic 1-4 Question 1 > number-line figure > tick labels\par
+\noindent\textbf{Occurrences: }all four negative tick labels in the p.18 figure\par
+\noindent\textbf{Found: }\textit{-8 -6 -4 -2 0 2 4 5}\par
+\noindent\textbf{Corrected to: }$-$8 $-$6 $-$4 $-$2 0 2 4 5\par
+\noindent\textbf{Why: }The figure's tick labels use a short hyphen while every negative number in the surrounding prose and in the figure's own callouts ($-$8$^\circ$F) uses a true minus sign, so the same value is printed two different ways on one page.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~18} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic 1-4 Question 1 > number-line figure > right end of the label row\par
+\noindent\textbf{Occurrences: }p.18 figure only\par
+\noindent\textbf{Found: }\textit{0 2 4 5}\par
+\noindent\textbf{Corrected to: }label the axis every 2 units ($-$8, $-$6, $-$4, $-$2, 0, 2, 4, 6) and mark the 5$^\circ$F point with the callout only, not with an extra numeral\par
+\noindent\textbf{Why: }The axis is labelled every 2 units but an extra '5' is added for the endpoint, so '4' and '5' sit almost touching and the scale looks irregular.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~19} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic 1-4 Question 3 > 'Work the problem one tiny step at a time' heading, last line of page 19\par
+\noindent\textbf{Occurrences: }p.19 $\to$ p.20 only within pages 14--27\par
+\noindent\textbf{Found: }\textit{Work the problem one tiny step at a time}\par
+\noindent\textbf{Corrected to: }keep the heading with its list (force the page break before the heading) so steps 1--7 begin on the same page\par
+\noindent\textbf{Why: }The section heading is orphaned at the foot of p.19 with roughly half the page left blank while its numbered steps start on p.20.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~20} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }Topic 1-4 Question 4 > Why this makes sense\par
+\noindent\textbf{Occurrences: }p.20 only\par
+\noindent\textbf{Found: }\textit{Each leg crosses a whole-number number-line distance.}\par
+\noindent\textbf{Corrected to: }Each leg covers a whole number of floors, so the two distances add to 20.\par
+\noindent\textbf{Why: }"whole-number number-line distance" stacks two hyphenated modifiers on one noun and does not actually explain why 11 + 9 = 20.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~20} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic 1-4 Question 4 > Important words (and Topic 1-5 Questions 2--3 Important words on p.22)\par
+\noindent\textbf{Occurrences: }p.20 Topic 1-4 Q4 (both bullets); p.22 Topic 1-5 Q2 (both bullets); p.22 Topic 1-5 Q3 (both bullets)\par
+\noindent\textbf{Found: }\textit{Positive floors are above ground; negative floors are below ground.}\par
+\noindent\textbf{Corrected to: }Positive floors are above ground; negative floors are below ground. (with the defined terms italicised, e.g. "Positive floors\ldots", matching every other Important-words bullet)\par
+\noindent\textbf{Why: }Every other Important-words bullet in the document italicises the term being defined; the bullets in these three questions do not, breaking the document's own convention.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~25} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-6 Question 3 > Important words > 'To square' bullet\par
+\noindent\textbf{Occurrences: }p.25 vs p.26\par
+\noindent\textbf{Found: }\textit{To square means raise to the power 2: multiply the base by itself one time.}\par
+\noindent\textbf{Corrected to: }To square means raise to the power 2: multiply the base by itself.\par
+\noindent\textbf{Why: }"multiply the base by itself one time" is ambiguous (it can be read as using the base only once) and it contradicts the same term's definition one page later on p.26, "To square a base means raise it to exponent 2, or multiply the base by itself."\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~27} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }Topic 1-6 Question 4 > Work the problem one tiny step at a time > step 2\par
+\noindent\textbf{Found: }\textit{PEMDAS says E (Exponents) before applying the front minus.}\par
+\noindent\textbf{Corrected to: }PEMDAS says to do E (Exponents) before applying the front minus.\par
+\noindent\textbf{Why: }The sentence has no verb for what PEMDAS says to do, unlike the parallel bullet above it ("PEMDAS makes us do the exponent before the front minus").\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~30} \quad \sevlow{Low} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic 1-8 Question 1 > Work the problem one tiny step at a time > step 10\par
+\noindent\textbf{Found: }\textit{Check Part B: four minutes of $-$24 each is $-$24 $-$ 24 $-$ 24 $-$ 24 = $-$96.}\par
+\noindent\textbf{Corrected to: }Check Part B: four minutes of $-$24 each is ($-$24) + ($-$24) + ($-$24) + ($-$24) = $-$96.\par
+\noindent\textbf{Why: }Repeated addition of a negative is written with subtraction signs, which contradicts the document's own careful add/subtract-sign distinction (the value $-$96 is correct).\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~32} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-8 Question 3 > Important words > "cancel" bullet (vs. p.36 Topic 1-9 Question 2)\par
+\noindent\textbf{Found: }\textit{To cancel (here) means two negatives undo each other and leave a positive result.}\par
+\noindent\textbf{Corrected to: }To cancel signs (here) means two negatives undo each other and leave a positive result.\par
+\noindent\textbf{Why: }The same italicised term "cancel" is given two unrelated definitions four pages apart (sign cancellation on p.32, common-factor cancellation on p.36) without distinguishing the two senses by name.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~33} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }Topic 1-8 Question 4 > What the question is asking\par
+\noindent\textbf{Found: }\textit{This question asks for the number n that makes the two equal-parts-over-a-whole amounts equal.}\par
+\noindent\textbf{Corrected to: }This question asks for the number n that makes the two fractions equal.\par
+\noindent\textbf{Why: }"equal-parts-over-a-whole amounts" is an unexplained circumlocution for "fractions", a term the same page defines in Important words.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~35} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-9 Question 1 > Question block\par
+\noindent\textbf{Found: }\textit{A business owner loses \$450.75 as a result of a shipping delay. The 3 owners of the business have to share the loss equally.}\par
+\noindent\textbf{Corrected to: }A business loses \$450.75 as a result of a shipping delay. The 3 owners of the business have to share the loss equally.\par
+\noindent\textbf{Why: }The first sentence attributes the whole loss to one owner, then the next sentence says three owners share it; the loss belongs to the business, not to a single owner.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~36} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }Topic 1-9 Question 2 > Important words > "cancel" bullet\par
+\noindent\textbf{Found: }\textit{To cancel (cancel matching factors) means remove the same factor from a numerator and a denominator before multiplying.}\par
+\noindent\textbf{Corrected to: }To cancel matching factors means remove the same factor from a numerator and a denominator before multiplying.\par
+\noindent\textbf{Why: }The parenthetical simply repeats the word being defined, producing "To cancel (cancel ...) means".\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~37} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-9 Question 2 > Why this makes sense\par
+\noindent\textbf{Found: }\textit{Four spacings of 3 7/8 fit exactly into 15 1/2. One station at the end of each spacing gives 4 stations.}\par
+\noindent\textbf{Corrected to: }Four intervals of 3 7/8 fit exactly into 15 1/2. One station at the end of each interval gives 4 stations.\par
+\noindent\textbf{Why: }The summary switches to the undefined word "spacing", while the Important words box (p.36) and step 9 (p.37) both use the defined term "interval".\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~39} \quad \sevlow{Low} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic 1-10 Question 1 > number-line figure > tick labels below zero\par
+\noindent\textbf{Occurrences: }the "-120" and "-200" labels in the p.39 figure\par
+\noindent\textbf{Found: }\textit{-120}\par
+\noindent\textbf{Corrected to: }$-$120\par
+\noindent\textbf{Why: }The figure's negative tick labels use an ASCII hyphen, whereas every negative number in the body text (including $-$120 in step 1 on the same page) uses the longer math minus sign.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~40} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic SC-2 Question 1 > Important words, "expression" and "simplify" bullets\par
+\noindent\textbf{Occurrences: }p.40 only (both bullets); contrast pp.41, 43, 45, 47, 48, 49, 50, 51, 52.\par
+\noindent\textbf{Found: }\textit{An expression is a math phrase made with numbers and operation signs.}\par
+\noindent\textbf{Corrected to: }An expression is a math phrase made of numbers and operation signs.\par
+\noindent\textbf{Why: }Page 40 is the sole outlier: 15 other pages say "made of numbers and operation signs", and the paired "simplify" bullet on this page likewise reads "in a shorter form that has the same value" where 11 other pages read "in a shorter form with the same value".\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~41} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }Topic SC-2 Question 2 > Question block, Part A\par
+\noindent\textbf{Found: }\textit{Part A: What expression gives the total number of cupcakes each friend will get?}\par
+\noindent\textbf{Corrected to: }Part A: What expression gives the number of cupcakes each friend will get?\par
+\noindent\textbf{Why: }"total number" contradicts "each friend" --- the expression asked for is one friend's share (4), not the total (16).\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~41} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic SC-2 Question 2 > Question block, Part B\par
+\noindent\textbf{Found: }\textit{Part B: How many cupcakes will each person get?}\par
+\noindent\textbf{Corrected to: }Part B: How many cupcakes will each friend get?\par
+\noindent\textbf{Why: }The stem, Part A, and the Final answer all say "friend"; "person" here could be read as including the baker (5 people, not 4), which would not give the checked answer of 4.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~42} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic SC-2 Question 3 > Question block vs. its own Important words / step 4\par
+\noindent\textbf{Found: }\textit{Evaluate using the power-of-a-power property: (4$^3$)$^2$ =.}\par
+\noindent\textbf{Corrected to: }Evaluate using the power-of-a-power law: (4$^3$)$^2$ = \_\_\_\_.\par
+\noindent\textbf{Why: }This is the only place in the whole document that says "property"; the Important words entry two lines below and step 4 both call it "the power-of-a-power law", as does every other question in the section.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~43} \quad \sevlow{Low} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic SC-2 Question 4 > Question block (also Question 3, p.42)\par
+\noindent\textbf{Occurrences: }p.43 Q4 ("Evaluate: 7$^0$ =.") and p.42 Q3 ("Evaluate using the power-of-a-power property: (4$^3$)$^2$ =."); the same pattern also appears once on p.12, outside this assignment's range.\par
+\noindent\textbf{Found: }\textit{Evaluate: 7$^0$ =.}\par
+\noindent\textbf{Corrected to: }Evaluate: 7$^0$ = \_\_\_\_.\par
+\noindent\textbf{Why: }The fill-in blank after the equals sign was lost, leaving a dangling "=" immediately followed by a period.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~43} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic SC-2 > Important words glossary, "base" and "exponent" entries (pattern across Questions 1-12)\par
+\noindent\textbf{Occurrences: }base: pp.40, 41, 42, 43 (x2), 45, 47, 48, 49, 50, 51, 52; exponent: pp.47, 48, 49 drop "as a factor".\par
+\noindent\textbf{Found: }\textit{The base is the number being raised. Here the base is 7.}\par
+\noindent\textbf{Corrected to: }The base is the number used as a repeated factor. Here the base is 7.\par
+\noindent\textbf{Why: }The same glossary term is defined four different ways within one section --- "the number used again and again as a factor" (pp.40, 42, 43-Q5), "the number used as a repeated factor" (pp.41, 47, 48, 49, 52), "the number or group being raised to a power" (pp.45, 51), and "the number being raised" (p.43-Q4); "exponent" drifts the same way, with pp.47-49 dropping the closing "as a factor".\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~47} \quad \sevlow{Low} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic SC-2 Question 7 > Important words, "reciprocal" bullet\par
+\noindent\textbf{Found: }\textit{For example, flip 3$^2$⁄1 to get its reciprocal 1⁄3$^2$.}\par
+\noindent\textbf{Corrected to: }For example, flip 9⁄1 to get its reciprocal 1⁄9.\par
+\noindent\textbf{Why: }The two parallel reciprocal bullets in this section use the evaluated power (p.44: "The reciprocal of 4⁄1 is 1⁄4"; p.51: "The reciprocal of 36⁄1 is 1⁄36"), so leaving this one as an unevaluated 3$^2$ breaks the pattern and models a "fraction" whose numerator is itself a power.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~52} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic SC-2 Question 12 > "Work the problem one tiny step at a time" heading\par
+\noindent\textbf{Found: }\textit{Work the problem one tiny step at a time}\par
+\noindent\textbf{Corrected to: }Keep the heading with its list (e.g. \textbackslash\{\}needspace or \textbackslash\{\}nopagebreak) so the numbered steps begin on the same page as the heading.\par
+\noindent\textbf{Why: }The heading is orphaned at the bottom of p.52 with all twelve numbered steps pushed onto p.53, leaving roughly the bottom 40\% of p.52 blank --- the only question in the section whose heading is split from its list.\par\vspace{4pt}
+\newpage\section*{Topic 1 --- Part 1 Solutions}
+\subsection*{High severity (4)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~1} \quad \sevhigh{High} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-1 Question 1 > We Need / Answer\par
+\noindent\textbf{Found: }\textit{We Need: The additive inverse of a 4.5 m climb.}\par
+\noindent\textbf{Corrected to: }We Need: The sum of a +18 m rise and an 18 m descent (Part A), and why they are additive inverses (Part B).\par
+\noindent\textbf{Why: }Topic1ExplanationsPart1 states this question as "A submarine rises 18 meters ... then descends 18 meters" with Checked answer "+18 + (-18) = 0", so the answer key's 4.5 m climb / "4.5 meters downward" answers a different problem (the companion's own worked steps also drift to 4.5 m, so one of the two source blocks is wrong).\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~2} \quad \sevhigh{High} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-2 Understand Rational Numbers > Question 3 absent (key jumps Q2 -> Lesson SC-1)\par
+\noindent\textbf{Found: }\textit{We Solve: C is not right.}\par
+\noindent\textbf{Corrected to: }Add: Question 3 --- We Need: Who is correct about 0.27-repeating. We Know: 100x - x = 99x. We Solve: 99x = 27 so x = 27/99 = 3/11. Answer: Jordan; 0.27-repeating = 3/11\par
+\noindent\textbf{Why: }Topic1ExplanationsPart1 documents a Topic 1-2 Question 3 (Jordan vs Casey, Checked answer "Jordan; 0.27 = 3/11") that the answer key omits entirely, leaving students with no check for that item.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~3} \quad \sevhigh{High} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-4 Subtract Integers > Question 4 absent (key jumps Q3 -> Topic 1-5)\par
+\noindent\textbf{Found: }\textit{Answer: Distance 15 ft; any correct distance expressions}\par
+\noindent\textbf{Corrected to: }Add: Question 4 --- We Solve: |8 - (-3)| = 11 and |-1 - 8| = 9; 11 + 9 = 20. Answer: 20 floors\par
+\noindent\textbf{Why: }Topic1ExplanationsPart1 documents a Topic 1-4 Question 4 (elevator, Checked answer "20 floors") that the answer key omits.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~3} \quad \sevhigh{High} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-5 Add and Subtract Rational Numbers > Questions 2 and 3 absent (key jumps Q1 -> Topic 1-6)\par
+\noindent\textbf{Found: }\textit{Answer: \$140}\par
+\noindent\textbf{Corrected to: }Add: Question 2 --- We Solve: -3.75 - 2.4 - 1.85 = -8.00. Answer: -8 $^\circ$C. Question 3 --- We Solve: 2 1/2 = 2.5; |2.5 - (-1.75)| = 4.25. Answer: 4.25 miles\par
+\noindent\textbf{Why: }Topic1ExplanationsPart1 documents Topic 1-5 Questions 2 (Checked answer -8 $^\circ$C) and 3 (Checked answer 4.25 miles), both missing from the answer key; Topic 1-5 is the only multi-question topic reduced to a single item.\par\vspace{4pt}
+\subsection*{Medium severity (2)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~3} \quad \sevmed{Medium} \quad \textit{math}\par
+\noindent\textbf{Where: }Topic 1-6 Multiply Integers Question 2 > We Solve vs Answer\par
+\noindent\textbf{Found: }\textit{We Solve: 250.50 $\times$ 4.5 = 1127.25 m = 1.12725 km $\approx$ 1 km down.}\par
+\noindent\textbf{Corrected to: }We Solve: ($-$250.50) $\times$ 4.5 = $-$1127.25 m = $-$1.12725 km $\approx$ $-$1 km (down).\par
+\noindent\textbf{Why: }The stated computation is entirely positive and yields +1 km, but the Answer asserts "$-$1 kilometer"; the descent rate's negative sign is never introduced, so the intermediate step does not produce the answer given.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~5} \quad \sevmed{Medium} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic 1-9 Question 1 > Answer\par
+\noindent\textbf{Found: }\textit{Answer: $-$150.25 (or \$ $-$ 150.25 per owner)}\par
+\noindent\textbf{Corrected to: }Answer: $-$150.25 (or $-$\$150.25 per owner)\par
+\noindent\textbf{Why: }The dollar sign is typeset outside the math minus, rendering as "\$ $-$ 150.25" with binary-operator spacing, which reads as "dollars minus 150.25" rather than negative \$150.25; the companion writes "\$$-$150.25".\par\vspace{4pt}
+\subsection*{Low severity (7)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~2} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Lesson SC-1 Question 1 > Answer parenthetical\par
+\noindent\textbf{Occurrences: }Part 1 p.2 and Part 2 p.1 (same generic parenthetical)\par
+\noindent\textbf{Found: }\textit{Answer: 10.4 < 10.6 and 10.6 > 10.4 (units OK)}\par
+\noindent\textbf{Corrected to: }Answer: 10.4 < 10.6 and 10.6 > 10.4 (pounds OK)\par
+\noindent\textbf{Why: }Topic1ExplanationsPart1's Final answer for this item reads "(pounds OK)", naming the actual unit (cat and rabbit weights); the key's generic "(units OK)" loses the check the companion intends.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~3} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }pattern: irregular use of the We Need / We Know blocks within a single topic\par
+\noindent\textbf{Occurrences: }Part 1 p.3: 1-4 Q1 full vs Q2/Q3 bare; 1-5 Q1 has We Know but no We Need; p.2: 1-3 Q2 and Q4 have We Solve only; p.2: SC-1 Q1 has We Need but no We Know\par
+\noindent\textbf{Found: }\textit{Question 2 We Solve: |150 $-$ 120| = 30. Valid: |150 $-$ 120|, |120 $-$ 150|, 150 $-$ 120. Answer: Distance 30 ft; any correct distance expressions}\par
+\noindent\textbf{Corrected to: }Apply the same block set to every question within a topic (or state up front that later questions in a topic reuse the first question's We Need / We Know).\par
+\noindent\textbf{Why: }Within Topic 1-4 the first question carries We Need and We Know while Questions 2 and 3 carry neither, and the same irregularity recurs elsewhere, so the promised "We Need $\to$ We Know $\to$ We Solve" pattern is applied unpredictably.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~4} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }unlabelled trailing lines: "Difference:" (1-6 Q4) and "Check:" (1-8 Q4)\par
+\noindent\textbf{Occurrences: }Part 1 p.4 (Difference:) and p.5 (Check:); Part 2 p.3 (Difference:) and p.4 (Check:)\par
+\noindent\textbf{Found: }\textit{Difference: parentheses square the negative; without them, square first, then make negative.}\par
+\noindent\textbf{Corrected to: }Bold the label as with every other block: "**Difference:** parentheses square the negative; ..." and likewise "**Check:**".\par
+\noindent\textbf{Why: }Every other inline label in both documents (We Need:, We Know:, We Solve:, Answer:, Part A:, Part B:) is bold; "Difference:" and "Check:" are set in roman, so they do not read as block labels.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~4} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic 1-8 Question 4 (item split across the p.4/p.5 page break)\par
+\noindent\textbf{Found: }\textit{Butterfly: multiply along each red line.}\par
+\noindent\textbf{Corrected to: }Keep Question 4's We Need / We Know / figure / We Solve / Check / Answer on one page (as Part 2 does).\par
+\noindent\textbf{Why: }The butterfly figure and caption end page 4 while the We Solve, Check and Answer lines that use it start page 5, so the cross-product step is separated from the diagram it refers to; Part 2's parallel item is unbroken on p.4.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~5} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }Topic 1-9 Question 2 > We Solve\par
+\noindent\textbf{Occurrences: }Part 1 p.5 ("including finish") and Part 2 p.4 ("Rest stops at the end of each interval (including finish)")\par
+\noindent\textbf{Found: }\textit{Stations at the end of each interval (including finish) $\Rightarrow$ 4.}\par
+\noindent\textbf{Corrected to: }Stations at the end of each interval (including the finish line) $\Rightarrow$ 4.\par
+\noindent\textbf{Why: }"including finish" is missing its article; the source question says "and one at the finish line".\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~5} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic SC-2 Question 2 > Answer, Part B\par
+\noindent\textbf{Found: }\textit{Answer: Part A: 2$^4$/2$^2$ (or equivalent); Part B: 4}\par
+\noindent\textbf{Corrected to: }Answer: Part A: 2$^4$/2$^2$ (or equivalent); Part B: 4 cupcakes per friend\par
+\noindent\textbf{Why: }Topic1ExplanationsPart1's Final answer is "Part B: 4 cupcakes per friend"; the key drops the unit even though Question 1 on the same page does label its answer ("729 square inches").\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~6} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }Topic SC-2 Question 7 > Answer (compare Question 11)\par
+\noindent\textbf{Found: }\textit{Answer: 5 1/9}\par
+\noindent\textbf{Corrected to: }Answer: 46/9 or 5 1/9\par
+\noindent\textbf{Why: }Question 11 on the same page answers "289/36 or 8 1/36" and Part 2's Q7 answers "9/8 or 1 1/8", giving both improper and mixed forms; Q7 here gives only the mixed form, so equivalent forms are accepted inconsistently.\par\vspace{4pt}
+\newpage\section*{Topic 1 --- Part 2 Solutions}
+\subsection*{High severity (3)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~1} \quad \sevhigh{High} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Lesson 1-2 Question 3 absent\par
+\noindent\textbf{Found: }\textit{key jumps from Lesson 1-2 Q2 straight to Lesson SC-1}\par
+\noindent\textbf{Corrected to: }Add Q3: let x = 0.6 repeating; 10x - x = 9x; 9x = 6; x = 6/9 = 2/3. Answer: Mia; 0.6 repeating = 2/3.\par
+\noindent\textbf{Why: }The assignment's Part 2 Lesson 1-2 has a Question 3 (Mia vs Lee, 0.6 repeating) with no entry in the Part 2 key.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~2} \quad \sevhigh{High} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Lesson 1-4 Question 4 absent\par
+\noindent\textbf{Found: }\textit{key jumps from Lesson 1-4 Q3 straight to Lesson 1-5}\par
+\noindent\textbf{Corrected to: }Add Q4: |6-(-5)| = 11 and |-2-6| = 8; 11 + 8 = 19. Answer: 19 floors.\par
+\noindent\textbf{Why: }The assignment's Part 2 Lesson 1-4 has a Question 4 (elevator from floor -5 to 6 to -2) with no entry in the Part 2 key.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~3} \quad \sevhigh{High} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Lesson 1-5 Questions 2 and 3 absent\par
+\noindent\textbf{Found: }\textit{key jumps from Lesson 1-5 Q1 straight to Lesson 1-6}\par
+\noindent\textbf{Corrected to: }Add Q2: -4.6 - 1.35 - 2.05 = -8.00 degC. Add Q3: 3 1/4 = 3.25; |3.25 - (-2.5)| = 5.75 miles.\par
+\noindent\textbf{Why: }The assignment's Part 2 Lesson 1-5 has Questions 2 and 3, neither of which appears in the Part 2 key.\par\vspace{4pt}
+\subsection*{Medium severity (9)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~1} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-1 Question 1 > We Solve parenthetical\par
+\noindent\textbf{Found: }\textit{We Solve: Go 3.5 meters up (toward / above the surface).}\par
+\noindent\textbf{Corrected to: }We Solve: Go 3.5 meters up (toward / above the starting level).\par
+\noindent\textbf{Why: }The additive inverse of a descent returns you to the starting level, not necessarily above the water surface; Part 1's parallel line correctly says "(toward / below the starting level)", so Part 2 asserts an absolute position the problem does not support.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~1} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }pattern: We Need / We Know blocks present in Part 1 but dropped in Part 2's parallel items\par
+\noindent\textbf{Occurrences: }Part 2 p.1: 1-1 Q2, Q3, Q4 (no We Need, no We Know); 1-2 Q1 (neither); 1-2 Q2 (no We Need); SC-1 Q1 (no We Need). p.2: SC-1 Q2 (no We Need, no We Solve); 1-3 Q3 (neither); 1-4 Q1 (neither). p.3: 1-8 Q2 and Q3 lose the "Opposite signs $\Rightarrow$ negative quotient" / "Same signs $\Rightarrow$ positive quotient" We Know lines (p.4). p.4: 1-9 Q2 (no We Need).\par
+\noindent\textbf{Found: }\textit{Question 2 We Solve: p + q = 0 means |p| = |q|. Answer: |p| = |q| (or equivalent)}\par
+\noindent\textbf{Corrected to: }Restore the We Need: and We Know: lines for each listed item so both keys expose the same reasoning scaffold the header promises ("Use We Need $\to$ We Know $\to$ We Solve").\par
+\noindent\textbf{Why: }The header of both documents tells students to work in three blocks, but Part 2 supplies fewer blocks than Part 1 for twelve parallel items, so the two keys model different amounts of reasoning for the same lesson.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~2} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Lesson SC-1 Question 2 (only question in either document with no We Solve or Part line)\par
+\noindent\textbf{Found: }\textit{We Know: 2/5 = 0.4 Answer: =, $\le$, $\ge$}\par
+\noindent\textbf{Corrected to: }We Need: Symbols that fit 2/5 and 0.4. We Know: 2/5 = 0.4 We Solve: Equal numbers also satisfy $\le$ and $\ge$. Answer: =, $\le$, $\ge$\par
+\noindent\textbf{Why: }Part 1's parallel item has all four blocks; here the reasoning step that explains why $\le$ and $\ge$ also apply is missing, so the answer of three symbols is unjustified.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~2} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic 1-3 Question 1 > Part A\par
+\noindent\textbf{Found: }\textit{Part A: Move right 12, left 5, left 9 on a number line.}\par
+\noindent\textbf{Corrected to: }Part A: Start at 0. Move right 12, left 5, left 9.\par
+\noindent\textbf{Why: }Part 2 drops the "Start at 0." that Part 1 gives; without a starting point the number-line description does not determine the landing point that Part B's $-$2 depends on.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~3} \quad \sevmed{Medium} \quad \textit{math}\par
+\noindent\textbf{Where: }Topic 1-5 Question 1 > We Solve\par
+\noindent\textbf{Found: }\textit{We Solve: 180 $-$ 12 = 168; 156; 144; 132; 120.}\par
+\noindent\textbf{Corrected to: }We Solve: 180 $-$ 12 = 168; 168 $-$ 12 = 156; 156 $-$ 12 = 144; 144 $-$ 12 = 132; 132 $-$ 12 = 120.\par
+\noindent\textbf{Why: }Only the first subtraction is written out; the remaining four values are bare numbers, so the single stated step does not produce the asserted \$120 (Part 1's parallel line writes every subtraction in full).\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~3} \quad \sevmed{Medium} \quad \textit{math}\par
+\noindent\textbf{Where: }Topic 1-6 Questions 3 and 4 > We Solve\par
+\noindent\textbf{Occurrences: }Q3 and Q4, both p.3\par
+\noindent\textbf{Found: }\textit{We Solve: $-$6$^2$ = $-$36}\par
+\noindent\textbf{Corrected to: }Q3: We Solve: ($-$6)$^2$ = ($-$6) $\times$ ($-$6) = 36. Q4: We Solve: $-$6$^2$ = $-$(6$^2$) = $-$36\par
+\noindent\textbf{Why: }Part 2 omits the two intermediate steps that Part 1 shows (($-$5) $\times$ ($-$5) and $-$(5$^2$)); those steps are exactly what the shared "Difference:" note refers to, so as written each answer is asserted without the order-of-operations step that produces it.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~4} \quad \sevmed{Medium} \quad \textit{notation}\par
+\noindent\textbf{Where: }Topic 1-9 Question 1 > Answer\par
+\noindent\textbf{Found: }\textit{Answer: $-$125.10 (or \$ $-$ 125.10 per owner)}\par
+\noindent\textbf{Corrected to: }Answer: $-$125.10 (or $-$\$125.10 per owner)\par
+\noindent\textbf{Why: }Same defect as Part 1: the dollar sign is separated from the numeral by a spaced binary minus, so it reads as a subtraction rather than a negative money amount.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~5} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Lesson SC-2 Question 2 Part B\par
+\noindent\textbf{Found: }\textit{Part B: 9 cupcakes per friend}\par
+\noindent\textbf{Corrected to: }Part B: 9 muffins per friend\par
+\noindent\textbf{Why: }Part 2's assignment item is muffins (3\textasciicircum{}4 muffins among 3\textasciicircum{}2 friends); cupcakes belongs to the Part 1 item.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~6} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Topic SC-2 Question 10 (duplicates the middle term already worked in Question 6, p.5)\par
+\noindent\textbf{Found: }\textit{We Solve: (2 $\cdot$ 3)$^2$ = 6$^2$ = 36}\par
+\noindent\textbf{Corrected to: }Replace with the intended distinct power-of-a-product item (Part 1's parallel Q10 is (2 $\cdot$ 5)$^3$ = 10$^3$ = 1000).\par
+\noindent\textbf{Why: }Question 6 already contains the identical expression and value --- "(2 $\cdot$ 3)$^2$ = 6$^2$ = 36" --- so Q10 appears to have been copied from Q6's second term; Part 1's Q6/Q10 pair is distinct, and Part 2's Q11 (15/3)$^2$ likewise mirrors Q6's third term (18/3)$^2$.\par\vspace{4pt}
+\subsection*{Low severity (1)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~1} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }Topic 1-1 Question 1 > We Need / We Know\par
+\noindent\textbf{Found: }\textit{We Need: Additive inverse of a 3.5 m descent. We Know: Same distance, opposite direction.}\par
+\noindent\textbf{Corrected to: }We Need: The additive inverse of a 3.5 m descent. We Know: Additive inverse means same distance, opposite direction.\par
+\noindent\textbf{Why: }Part 2 drops the article and the subject that Part 1's parallel lines carry, leaving the We Know line as a bare fragment that never names what it is defining.\par\vspace{4pt}
+\newpage\section*{6th Grade Review (worksheet)}
+\subsection*{Medium severity (1)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~2} \quad \sevmed{Medium} \quad \textit{grammar}\par
+\noindent\textbf{Where: }Section H items 1--4\par
+\noindent\textbf{Occurrences: }H1 "x + 7 = 18", H2 "x/4 = 6", H3 "x + 3 > 8", H4 "x $-$ 4 < 2"\par
+\noindent\textbf{Found: }\textit{3. x + 3 > 8}\par
+\noindent\textbf{Corrected to: }3. Solve: x + 3 > 8\par
+\noindent\textbf{Why: }H1--H4 are bare equations/inequalities with no directive verb, and because H6 and H7 in the same section say "Graph \ldots", the student cannot tell whether items 1--4 are to be solved or graphed --- the companion's checked answers ("x = 11", "x > 5") show "Solve" was intended.\par\vspace{4pt}
+\subsection*{Low severity (2)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~2} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Section G item 1, versus Section L item 1\par
+\noindent\textbf{Occurrences: }G1 (p.2) vs L1 (p.3)\par
+\noindent\textbf{Found: }\textit{1. 3(y + 6) =}\par
+\noindent\textbf{Corrected to: }1. Expand: 3(y + 6) =\par
+\noindent\textbf{Why: }The parallel item in section L carries an explicit verb ("Factor: 8x + 16 =") while G1 has none, so the two distributive-property tasks are cued inconsistently.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~2} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Sections G and L (whole-section structure)\par
+\noindent\textbf{Occurrences: }G (p.2) and L (p.3)\par
+\noindent\textbf{Found: }\textit{G. Distributive Property}\par
+\noindent\textbf{Corrected to: }Merge G into L as "G. Distributive Property And Factoring" containing both 3(y + 6) = and Factor: 8x + 16 =\par
+\noindent\textbf{Why: }Two separate single-item sections four sections apart cover the same property, splitting one skill across the worksheet for no stated reason.\par\vspace{4pt}
+\newpage\section*{6th Grade Review --- Explanations companion}
+\subsection*{High severity (3)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~22} \quad \sevhigh{High} \quad \textit{math}\par
+\noindent\textbf{Where: }F4 - superseded by the updated worksheet\par
+\noindent\textbf{Found: }\textit{To undo /5, use the inverse operation -> multiply by 5}\par
+\noindent\textbf{Corrected to: }Undo x5, use inverse op: -> divide by 5\par
+\noindent\textbf{Why: }The updated worksheet flips the operation, so the checked answer and every step of F4's explanation invert.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~44} \quad \sevhigh{High} \quad \textit{math}\par
+\noindent\textbf{Where: }M2 - superseded by the updated worksheet\par
+\noindent\textbf{Found: }\textit{700.3 - 284.67 = 415.63}\par
+\noindent\textbf{Corrected to: }700.32 - 84.67 = 615.65, with the place-value decomposition and the check step reworked\par
+\noindent\textbf{Why: }The updated worksheet changes M2's operands, so the previous answer and every worked step for that item are now wrong.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~46} \quad \sevhigh{High} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }M4 (168.8 $\div$ 8) > long-division display above the caption\par
+\noindent\textbf{Found: }\textit{2 1 . 1 8 ) 1 6 8 . 8 Quotient digits sit above matching places; the decimal points line up.}\par
+\noindent\textbf{Corrected to: }Shift the quotient one column right so 2 sits above 6, 1 above 8, the quotient decimal point above the dividend decimal point, and the final 1 above the tenths 8.\par
+\noindent\textbf{Why: }In the render the quotient is set one place too far left --- 2 sits above the 1 (hundreds), 1 above the 6, and the quotient's decimal point above the 8 --- so the figure contradicts its own caption and step 3 ("Place the decimal point in the quotient directly above the decimal point in 168.8") and step 1 ("Write 2 in the tens place").\par\vspace{4pt}
+\subsection*{Medium severity (11)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~10} \quad \sevmed{Medium} \quad \textit{math}\par
+\noindent\textbf{Where: }C6 > What the question is asking\par
+\noindent\textbf{Occurrences: }page 10\par
+\noindent\textbf{Found: }\textit{then shrink the top and bottom by the same amount until nothing bigger than 1 divides both evenly}\par
+\noindent\textbf{Corrected to: }then divide the top and bottom by the same common factor until nothing bigger than 1 divides both evenly\par
+\noindent\textbf{Why: }"Shrink by the same amount" describes subtracting the same number from numerator and denominator (8$-$2 over 10$-$2 = 6/8, which is wrong), and it contradicts this same page's definition bullet "To simplify ... means divide the top and bottom by the same common factor."\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~11} \quad \sevmed{Medium} \quad \textit{notation}\par
+\noindent\textbf{Where: }C7 - superseded by the updated worksheet\par
+\noindent\textbf{Found: }\textit{15\% of 80 = 12}\par
+\noindent\textbf{Corrected to: }15\% of \$80 = \$12\par
+\noindent\textbf{Why: }The updated worksheet makes the quantity a money amount, so the answer must carry the dollar sign.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~16} \quad \sevmed{Medium} \quad \textit{spacing}\par
+\noindent\textbf{Where: }E2 > Work the problem one tiny step at a time, steps 3 and 5, and the displayed equation under the butterfly figure\par
+\noindent\textbf{Occurrences: }p.16 step 3 ("4 $\times$ 21 = 7$\times$?"), p.16 step 5 ("So 84 = 7$\times$?."), and the centered display line "84 = 7$\times$?" above the $\div$7 $\div$7 annotation\par
+\noindent\textbf{Found: }\textit{Cross multiply along the red lines: 4 $\times$ 21 = 7$\times$?.}\par
+\noindent\textbf{Corrected to: }Cross multiply along the red lines: 4 $\times$ 21 = 7 $\times$ ?.\par
+\noindent\textbf{Why: }The multiplication sign in "7$\times$?" is set tight with no spaces while the identical operation two characters earlier is spaced ("4 $\times$ 21"), so the same equation uses two different multiplication spacings.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~16} \quad \sevmed{Medium} \quad \textit{spacing}\par
+\noindent\textbf{Where: }E2 > Work the problem one tiny step at a time, step 8\par
+\noindent\textbf{Occurrences: }single\par
+\noindent\textbf{Found: }\textit{So 12 =?.}\par
+\noindent\textbf{Corrected to: }So ? = 12.\par
+\noindent\textbf{Why: }There is no space after the equals sign, so "=?" renders as a single glyph cluster that reads like a typo rather than "the missing number is 12"; every other step in the section spaces its equals sign.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~17} \quad \sevmed{Medium} \quad \textit{spacing}\par
+\noindent\textbf{Where: }E3 > Work the problem one tiny step at a time, step 2 (the proportion set-up)\par
+\noindent\textbf{Occurrences: }single (all three fusions are in the one displayed proportion in step 2)\par
+\noindent\textbf{Found: }\textit{One correct setup: [4 snacks / 20dollars] = [7snacks / xdollars].}\par
+\noindent\textbf{Corrected to: }One correct setup: [4 snacks / 20 dollars] = [7 snacks / x dollars].\par
+\noindent\textbf{Why: }Three of the four labels in the proportion are fused to their numbers in the render ("20dollars", "7snacks", "xdollars") while the first one ("4 snacks") is correctly spaced, so the same expression is typeset two different ways.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~25} \quad \sevmed{Medium} \quad \textit{formatting}\par
+\noindent\textbf{Where: }H2 > Work the problem one tiny step at a time, step 4, centered display above the "$\times$4 $\times$4" annotation\par
+\noindent\textbf{Occurrences: }single\par
+\noindent\textbf{Found: }\textit{x/4 = 6 (with $\times$4 $\times$4 written underneath)}\par
+\noindent\textbf{Corrected to: }Set the whole display at text size so the fraction matches: x/4 = 6\par
+\noindent\textbf{Why: }In the render the fraction x/4 is typeset at 8pt (script size) while the "= 6" beside it is 10.9pt and the blue "$\times$4 $\times$4" beneath it is 10pt, so the fraction is visibly shrunken inside its own equation --- every other step-4 display in section H (H1, H3, H4) is uniform size.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~37} \quad \sevmed{Medium} \quad \textit{notation}\par
+\noindent\textbf{Where: }K5 > Before leaving this question\par
+\noindent\textbf{Found: }\textit{because 6/3 = 2 and 2/3 remains. Same mixed number.}\par
+\noindent\textbf{Corrected to: }because \textbackslash\{\}frac\{6\}\{3\} = 2 and \textbackslash\{\}frac\{2\}\{3\} remains. Same mixed number. (render 6/3 and 2/3 as stacked fractions to match the rest of the sentence)\par
+\noindent\textbf{Why: }The same sentence renders 8/3 and 2/3 as stacked fractions and then switches to slash notation for 6/3 and 2/3, so one sentence shows two different fraction notations for the same kind of quantity.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~40} \quad \sevmed{Medium} \quad \textit{grammar}\par
+\noindent\textbf{Where: }K11 > What the question is asking (same sentence repeats in N6, p.51)\par
+\noindent\textbf{Occurrences: }p.40 (K11) and p.51 (N6)\par
+\noindent\textbf{Found: }\textit{This question asks you to rewrite (b + 3) + 9 by moving the curved marks to group the add in a different way.}\par
+\noindent\textbf{Corrected to: }... by moving the curved marks to group the addition in a different way.\par
+\noindent\textbf{Why: }"the add" is not a noun; the sentence needs "the addition" (or "the addends").\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~48} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }N2 (5/6 $-$ 1/3) > Important words, third bullet\par
+\noindent\textbf{Found: }\textit{Then subtract numerators and simplify.}\par
+\noindent\textbf{Corrected to: }To subtract fractions with the same denominator, subtract the numerators and keep the denominator.\par
+\noindent\textbf{Why: }A procedural sentence beginning "Then" is stranded in a vocabulary list with no antecedent --- it follows the "simplify" bullet, so it reads as simplify-then-subtract-then-simplify, and N2 never states the subtraction rule the way the parallel N1 states the addition rule.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~49} \quad \sevmed{Medium} \quad \textit{math}\par
+\noindent\textbf{Where: }N3 (5/8 $\times$ 4/15) > Work the problem one tiny step at a time, step 5\par
+\noindent\textbf{Found: }\textit{Also cancel: 5 and 15 share a factor of 5: 5/30 = 1/6 (because 5 $\div$ 5 = 1 and 30 $\div$ 5 = 6).}\par
+\noindent\textbf{Corrected to: }Also cancel: 5 and 30 share a factor of 5: 5/30 = 1/6 (because 5 $\div$ 5 = 1 and 30 $\div$ 5 = 6).\par
+\noindent\textbf{Why: }The fraction actually being reduced is 5/30, and the parenthetical divides by 30, so naming "5 and 15" misidentifies the numbers being cancelled.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~50} \quad \sevmed{Medium} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }N5 vs. K10 (pp. 39-40) --- duplicated question\par
+\noindent\textbf{Found: }\textit{N5 Question Rewrite using the commutative property: 7 $\times$ a = Checked answer: a $\times$ 7}\par
+\noindent\textbf{Corrected to: }Give N5 a different expression (as N6 does relative to K11, using (x + 5) + 8 rather than (b + 3) + 9), or cross-reference K10 instead of re-explaining it.\par
+\noindent\textbf{Why: }K10 on p.39 is the identical question with the identical numbers and answer, yet it gets a second full explanation under a different label with a different Important-words list (three bullets vs. two) --- mirroring the same verbatim duplication in the worksheet (K10 and N5).\par\vspace{4pt}
+\subsection*{Low severity (25)}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~1} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Intro paragraph under the title\par
+\noindent\textbf{Occurrences: }intro only, but describes all 70 Important words blocks in the document\par
+\noindent\textbf{Found: }\textit{Read every Important words box before you start the numbered steps.}\par
+\noindent\textbf{Corrected to: }Read every Important words section before you start the numbered steps.\par
+\noindent\textbf{Why: }The document never renders "Important words" as a box --- it is a plain bold heading followed by a bullet list --- so the promised "box" does not exist anywhere in the companion.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~1} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }A1 > closing block heading (pattern: "Before leaving this question" vs "Why this makes sense")\par
+\noindent\textbf{Occurrences: }"Before leaving this question" on pages 1, 7, 16, 18, 24, 25, 28, 30, 35, 37, 42, 44, 46, 47; "Why this makes sense" on all other question pages\par
+\noindent\textbf{Found: }\textit{Before leaving this question}\par
+\noindent\textbf{Corrected to: }Why this makes sense\par
+\noindent\textbf{Why: }The same structural slot (the closing commentary after "Final answer") is labelled two different ways across the companion --- 14 questions use "Before leaving this question" and 55 use "Why this makes sense" --- with no consistent rule (e.g. B3's "Why this makes sense" also contains a common-mistake caution).\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~3} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }B2 > Important words > third bullet\par
+\noindent\textbf{Occurrences: }B2 bullets for Subtract and Multiply (page 3)\par
+\noindent\textbf{Found: }\textit{Multiply means times, written $\times$.}\par
+\noindent\textbf{Corrected to: }Multiply means ``times,'' written $\times$.\par
+\noindent\textbf{Why: }The identical gloss one page earlier (B1) is punctuated "Multiply means ``times,'' written $\times$.", so the same defined term is presented two different ways on adjacent questions (B2 also drops the quotes on "take away" for Subtract).\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~3} \quad \sevlow{Low} \quad \textit{math}\par
+\noindent\textbf{Where: }B3 > What the question is asking\par
+\noindent\textbf{Occurrences: }page 3 (the same loose phrasing appears in the exponent bullet: "tells how many times to multiply the base by itself")\par
+\noindent\textbf{Found: }\textit{First build 2\textasciicircum{}4 as 2 times itself four times, then add 1. [rendered with 4 as a superscript]}\par
+\noindent\textbf{Corrected to: }First build 2\textasciicircum{}4 by using 2 as a factor four times, then add 1.\par
+\noindent\textbf{Why: }"2 times itself four times" literally describes 2 $\times$ 2 $\times$ 2 $\times$ 2 $\times$ 2 = 2\textasciicircum{}5; the document's own numbered steps and B3's closing paragraph correctly say "four factors of 2" / "four twos multiplied", so the summary line contradicts the worked steps.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~7} \quad \sevlow{Low} \quad \textit{punctuation}\par
+\noindent\textbf{Where: }C1 > Question block (vs 6thGradeReview.pdf p.1, C1)\par
+\noindent\textbf{Occurrences: }page 7\par
+\noindent\textbf{Found: }\textit{In 82.731, the tenths digit is \_\_\_\_\_\_\_\_\_\_.}\par
+\noindent\textbf{Corrected to: }In 82.731, the tenths digit is \_\_\_\_\_\_\_\_\_\_\par
+\noindent\textbf{Why: }The worksheet item it restates ends with no period after the answer blank, so the companion's restatement does not match the worksheet verbatim.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~7} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }C1 > What the question is asking\par
+\noindent\textbf{Occurrences: }page 7\par
+\noindent\textbf{Found: }\textit{This question asks which single number 0--9 sits in the first place after the dot in 82.731.}\par
+\noindent\textbf{Corrected to: }This question asks which single digit 0--9 sits in the first place after the dot in 82.731.\par
+\noindent\textbf{Why: }The very next block defines "A digit is a single symbol 0 through 9", and the question itself asks for the tenths digit, so calling it a "number" uses a different word for the term the page is about to define.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~8} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }C2 > Work the problem one tiny step at a time > step 1\par
+\noindent\textbf{Occurrences: }page 8\par
+\noindent\textbf{Found: }\textit{1. Write the numbers stacked, lining up the decimal points:}\par
+\noindent\textbf{Corrected to: }1. Write the numbers stacked, lining up the decimal points.\par
+\noindent\textbf{Why: }The colon introduces a stacked-addition display that is not printed until after step 8, so step 1 ends by pointing at nothing and step 2 follows immediately.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~8} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }C3 > Important words > fourth bullet\par
+\noindent\textbf{Occurrences: }page 8\par
+\noindent\textbf{Found: }\textit{To borrow (also called borrowing) means: when a top digit is too small to subtract, take 1 from the next higher place on the left.}\par
+\noindent\textbf{Corrected to: }To borrow (also called regrouping) means: when a top digit is too small to subtract, take 1 from the next higher place on the left.\par
+\noindent\textbf{Why: }"also called borrowing" gives the same word back as its own alternative name, which is vacuous; the standard second name for this operation is "regrouping" (contrast C6's plain gerund gloss "To simplify (simplifying)").\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~9} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }C4 > Work the problem one tiny step at a time > step 3\par
+\noindent\textbf{Occurrences: }page 9\par
+\noindent\textbf{Found: }\textit{3. Moving the point two places right: 0.32 $\to$ 32.}\par
+\noindent\textbf{Corrected to: }3. Move the point two places right: 0.32 $\to$ 32.\par
+\noindent\textbf{Why: }Every other step in C4 and the exactly parallel step in C5 ("Move the point two places left: 65.0 $\to$ 0.65.") are imperatives, so the gerund breaks the numbered-step parallelism.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~11} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }C6 > Important words > last bullet (carried over to top of page 11)\par
+\noindent\textbf{Occurrences: }page 11\par
+\noindent\textbf{Found: }\textit{The digit in tenths place means ``over 10.''}\par
+\noindent\textbf{Corrected to: }The digit in the tenths place means ``over 10.''\par
+\noindent\textbf{Why: }Missing the article "the"; the same page's step 1 correctly writes "8 in the tenths place".\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~11} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }C7 > Why this makes sense\par
+\noindent\textbf{Occurrences: }page 11\par
+\noindent\textbf{Found: }\textit{Fifteen percent is a little more than one tenth of 80. One tenth of 80 is 8, so 12 is a sensible size.}\par
+\noindent\textbf{Corrected to: }Fifteen percent of 80 is a little more than one tenth of 80. One tenth of 80 is 8, so 12 is a sensible size.\par
+\noindent\textbf{Why: }As written it equates the rate "fifteen percent" with the quantity "one tenth of 80" (= 8); the intended comparison is 15\% of 80 against one tenth of 80.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~16} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }E2 > Important words, sixth bullet\par
+\noindent\textbf{Occurrences: }single\par
+\noindent\textbf{Found: }\textit{Cross products are the two diagonal multiplies from the butterfly (a $\cdot$ d and b $\cdot$ c).}\par
+\noindent\textbf{Corrected to: }Cross products are the two diagonal products from the butterfly (a $\times$ d and b $\times$ c).\par
+\noindent\textbf{Why: }"multiplies" is a verb being used as a plural noun; the bullet is defining products, and the surrounding bullets correctly say "multiplies along the diagonals" as a verb.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~16} \quad \sevlow{Low} \quad \textit{notation}\par
+\noindent\textbf{Where: }E2 > Important words, sixth bullet\par
+\noindent\textbf{Occurrences: }single within E2; the doc otherwise reserves $\cdot$ for prime factorizations in section K\par
+\noindent\textbf{Found: }\textit{(a $\cdot$ d and b $\cdot$ c)}\par
+\noindent\textbf{Corrected to: }(a $\times$ d and b $\times$ c)\par
+\noindent\textbf{Why: }The centered-dot multiplication symbol appears only here in section E, while every worked step in E1--E4 and every other Important-words bullet writes multiplication as $\times$, so the student meets two symbols for the same operation inside one question.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~16} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }Closing-section heading, pattern across the document\par
+\noindent\textbf{Occurrences: }within pages 13--26: "Before leaving this question" at p.16 (E2), p.18 (E4), p.24 (H1), p.25 (H2); "Why this makes sense" at p.13 (D2, D3), p.14 (D4), p.15 (E1), p.17 (E3), p.19--22 (F1--F6), p.23 (G1), p.26 (H3, H4)\par
+\noindent\textbf{Found: }\textit{Before leaving this question}\par
+\noindent\textbf{Corrected to: }Why this makes sense\par
+\noindent\textbf{Why: }The final block of each worked question is headed "Why this makes sense" 55 times and "Before leaving this question" 14 times with no discernible rule, so structurally identical blocks carry two different labels.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~24} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }H2 > Question block (bold "Question" heading immediately followed by an inline fraction)\par
+\noindent\textbf{Occurrences: }worst at p.24 H2 (4pt overlap); the same collision, milder, at p.15 E2 ("Question" / 4-7) and p.18 E4 ("Question" / 5-6)\par
+\noindent\textbf{Found: }\textit{Question x/4 = 6}\par
+\noindent\textbf{Corrected to: }Add vertical space (or set the equation as a display) so the fraction's numerator clears the "Question" heading.\par
+\noindent\textbf{Why: }The numerator glyph sits inside the bounding box of the bold heading above it (heading spans y 650.4--661.3, numerator y 657.3--668.2, both starting at x$\approx$47), so the letter visibly collides with the descender of the "Q" in the render.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~27} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }H5 > Important words > second bullet\par
+\noindent\textbf{Found: }\textit{To flip an inequality means swap the two sides and reverse the symbol (< becomes >, or > becomes <).}\par
+\noindent\textbf{Corrected to: }To flip an inequality means swap the two sides and reverse the symbol (< becomes >, or > becomes <). [set "and" in the same roman face as the rest of the sentence, or italicize it if emphasis is wanted]\par
+\noindent\textbf{Why: }The word "and" is set in bold mid-sentence, but everywhere else in these Important-words bullets emphasis is italic (e.g. "the endpoint is not included" on p.27) and bold is reserved for section labels, so the bold "and" is an inconsistent emphasis style.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~32} \quad \sevlow{Low} \quad \textit{spacing}\par
+\noindent\textbf{Where: }J3 > Work the problem one tiny step at a time > step 5 (pattern: every unit-rate/conversion 'Check:' step in section J)\par
+\noindent\textbf{Occurrences: }p.32 J3 step 5 ('hour $\times$3 hours'); p.33 J4 step 5 ('2 yards $\times$36 inches per yard'); p.33 J5 step 5 ('gallon $\times$5 gallons')\par
+\noindent\textbf{Found: }\textit{Check: 70 miles per hour $\times$3 hours = 210 miles.}\par
+\noindent\textbf{Corrected to: }Check: 70 miles per hour $\times$ 3 hours = 210 miles.\par
+\noindent\textbf{Why: }The multiplication sign has a space before it but none after, so it renders fused to the following number ($\times$3), unlike every other $\times$ in the document (e.g. "3 $\times$ 70 = 210" two lines above).\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~35} \quad \sevlow{Low} \quad \textit{punctuation}\par
+\noindent\textbf{Where: }K2 > Work the problem one tiny step at a time > step 1\par
+\noindent\textbf{Found: }\textit{Factor 90 into any pair: 90 = 9 $\times$ 10, or better start dividing by small primes.}\par
+\noindent\textbf{Corrected to: }Factor 90 into any pair: 90 = 9 $\times$ 10, or better, start dividing by small primes.\par
+\noindent\textbf{Why: }"or better" is a parenthetical and needs a closing comma; without it the line reads as "or better start" and garbles the instruction.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~39} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }K10 > What the question is asking\par
+\noindent\textbf{Found: }\textit{This question asks you to rewrite 7 $\times$ a by swapping the order of the two numbers being multiplied.}\par
+\noindent\textbf{Corrected to: }This question asks you to rewrite 7 $\times$ a by swapping the order of the two factors being multiplied.\par
+\noindent\textbf{Why: }One of the two things being swapped is the variable a, not a number, and K10's own Important words (p.40) define a factor as "a number (or variable) being multiplied".\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~40} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }K10 > Work the problem one tiny step at a time, step 5\par
+\noindent\textbf{Found: }\textit{Numeric check with numbers: 7 $\times$ 3 = 21 and 3 $\times$ 7 = 21. Same product after the order switch.}\par
+\noindent\textbf{Corrected to: }Numeric check with a number for a: if a = 3, then 7 $\times$ 3 = 21 and 3 $\times$ 7 = 21. Same product after the order switch.\par
+\noindent\textbf{Why: }The step silently substitutes 3 for the variable a without saying so, while the identical question at N5 (p.51, step 5) and the neighbouring K11 (p.40, step 4) both state the substitution explicitly.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~42} \quad \sevlow{Low} \quad \textit{grammar}\par
+\noindent\textbf{Where: }L1 (Factor: 8x + 16) > What the question is asking\par
+\noindent\textbf{Found: }\textit{This question asks you to write 8x + 16 as a times pairing by pulling out a shared whole number that divides both parts evenly.}\par
+\noindent\textbf{Corrected to: }This question asks you to write 8x + 16 as a product by pulling out a shared whole number that divides both parts evenly.\par
+\noindent\textbf{Why: }"a times pairing" is not English and is not used anywhere else in the document, which says "product" (including in this question's own Important words: "Factored form means written as a product").\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~42} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }L1 > Work the problem one tiny step at a time, step 1\par
+\noindent\textbf{Found: }\textit{Look at coefficients (and constants): 8x and 16.}\par
+\noindent\textbf{Corrected to: }Look at the terms: 8x (coefficient 8) and the constant 16.\par
+\noindent\textbf{Why: }8x is a term, not a coefficient --- its coefficient is 8 --- so the labels do not match the two items listed.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~44} \quad \sevlow{Low} \quad \textit{spacing}\par
+\noindent\textbf{Where: }Binary operators set tight (no spaces) where the rest of the document sets them spaced\par
+\noindent\textbf{Occurrences: }p.44 (M2 check: 6+6+1, 5+4+1, 1+8+1, 4+2+1); p.41 (K11: "Writing 9+(b+3)"); p.50 (N5: "rewrite 7$\times$a by swapping"); p.51 (N6 step 5: "(2+5)+8 = 7+8 = 15 and 2+(5+8) = 2+13 = 15" and "Writing 8+(x+5)")\par
+\noindent\textbf{Found: }\textit{Tenths: 6+6+1 = 13 (write 3, carry 1). Ones: 5+4+1 = 10 (write 0, carry 1). Tens: 1+8+1 = 10}\par
+\noindent\textbf{Corrected to: }Tenths: 6 + 6 + 1 = 13 (write 3, carry 1). Ones: 5 + 4 + 1 = 10 (write 0, carry 1). Tens: 1 + 8 + 1 = 10\par
+\noindent\textbf{Why: }The same sentence sets "Hundredths: 3 + 7 = 10" with spaces but "6+6+1", "5+4+1", "1+8+1" and "4+2+1" without, and the same defect recurs elsewhere, giving visibly inconsistent operator spacing on the rendered page.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~44} \quad \sevlow{Low} \quad \textit{inconsistency}\par
+\noindent\textbf{Where: }M2 (700.3 $-$ 284.67) > Important words, fourth bullet vs. the numbered steps\par
+\noindent\textbf{Found: }\textit{Borrowing means taking 1 from a higher place value and rewriting it as 10 in the place to its right when the top digit is too small.}\par
+\noindent\textbf{Corrected to: }Drop the bullet, or replace it with a definition of the break-apart method the steps actually use (e.g. "Break apart means split the subtrahend into place-value parts and subtract one part at a time").\par
+\noindent\textbf{Why: }The nine worked steps subtract 200, 80, 4, 0.60 and 0.07 one part at a time and never borrow, so the only vocabulary term unique to this question is never used.\par\vspace{4pt}
+\needspace{5\baselineskip}
+\noindent\rule{\textwidth}{0.4pt}\par\nobreak\vspace{2pt}
+\noindent\textbf{p.~46} \quad \sevlow{Low} \quad \textit{formatting}\par
+\noindent\textbf{Where: }M5 > Important words, third bullet (also M6 p.47, fifth bullet)\par
+\noindent\textbf{Occurrences: }p.46 (M5, "To multiply decimals:"); p.47 (M6, "To divide by a decimal,")\par
+\noindent\textbf{Found: }\textit{To multiply decimals: multiply as if they were whole numbers, then place the decimal point by counting all decimal digits in the factors.}\par
+\noindent\textbf{Corrected to: }To <i>multiply decimals</i>: multiply as if they were whole numbers, then place the decimal point by counting all decimal digits in the factors.\par
+\noindent\textbf{Why: }Every other defined term in these sections is italicised on first use --- M1 "To <i>add decimals</i>", M2 "To <i>subtract decimals</i>", M3 "To <i>multiply decimals</i>" --- but M5's and M6's parallel bullets are set in roman.\par\vspace{4pt}
+\end{document}

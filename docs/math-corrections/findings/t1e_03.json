@@ -1,0 +1,157 @@
+[
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 27,
+    "locator": "Topic 1-6 Question 4 > Work the problem one tiny step at a time > step 2",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "PEMDAS says E (Exponents) before applying the front minus.",
+    "correction": "PEMDAS says to do E (Exponents) before applying the front minus.",
+    "why": "The sentence has no verb for what PEMDAS says to do, unlike the parallel bullet above it (\"PEMDAS makes us do the exponent before the front minus\")."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 30,
+    "locator": "Topic 1-8 Question 1 > Work the problem one tiny step at a time > step 10",
+    "category": "notation",
+    "severity": "low",
+    "quote": "Check Part B: four minutes of \u221224 each is \u221224 \u2212 24 \u2212 24 \u2212 24 = \u221296.",
+    "correction": "Check Part B: four minutes of \u221224 each is (\u221224) + (\u221224) + (\u221224) + (\u221224) = \u221296.",
+    "why": "Repeated addition of a negative is written with subtraction signs, which contradicts the document's own careful add/subtract-sign distinction (the value \u221296 is correct)."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 33,
+    "locator": "Topic 1-8 Question 4 > What the question is asking",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "This question asks for the number n that makes the two equal-parts-over-a-whole amounts equal.",
+    "correction": "This question asks for the number n that makes the two fractions equal.",
+    "why": "\"equal-parts-over-a-whole amounts\" is an unexplained circumlocution for \"fractions\", a term the same page defines in Important words."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 34,
+    "locator": "Topic 1-8 Question 4 > Work the problem one tiny step at a time > step 7",
+    "category": "grammar",
+    "severity": "medium",
+    "quote": "Divide both sides by 6 (same operation under both sides of the equals):",
+    "correction": "Divide both sides by 6 (same operation to both sides of the equals sign):",
+    "why": "\"under both sides of the equals\" uses the wrong preposition and drops the noun \"sign\", and it contradicts the document's own Important-words wording on p.33 (\"You may do the same operation to both sides\")."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 35,
+    "locator": "Topic 1-9 Question 1 > Checked answer (repeats in Final answer, p.36)",
+    "category": "notation",
+    "severity": "medium",
+    "quote": "Checked answer: \u2212150.25 (or $ \u2212 150.25 per owner)",
+    "correction": "Checked answer: \u2212150.25 (or \u2212$150.25 per owner)",
+    "why": "The dollar sign is typeset before a spaced binary minus, so it renders as \"$ \u2212 150.25\" (dollars minus 150.25) instead of the negative amount \u2212$150.25.",
+    "occurrences": "p.35 Checked answer and p.36 Final answer (both blocks of Topic 1-9 Question 1)"
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 35,
+    "locator": "Topic 1-9 Question 1 > Question block",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "A business owner loses $450.75 as a result of a shipping delay. The 3 owners of the business have to share the loss equally.",
+    "correction": "A business loses $450.75 as a result of a shipping delay. The 3 owners of the business have to share the loss equally.",
+    "why": "The first sentence attributes the whole loss to one owner, then the next sentence says three owners share it; the loss belongs to the business, not to a single owner."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 36,
+    "locator": "Topic 1-9 Question 2 > Important words > \"cancel\" bullet",
+    "category": "grammar",
+    "severity": "low",
+    "quote": "To cancel (cancel matching factors) means remove the same factor from a numerator and a denominator before multiplying.",
+    "correction": "To cancel matching factors means remove the same factor from a numerator and a denominator before multiplying.",
+    "why": "The parenthetical simply repeats the word being defined, producing \"To cancel (cancel ...) means\"."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 32,
+    "locator": "Topic 1-8 Question 3 > Important words > \"cancel\" bullet (vs. p.36 Topic 1-9 Question 2)",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "To cancel (here) means two negatives undo each other and leave a positive result.",
+    "correction": "To cancel signs (here) means two negatives undo each other and leave a positive result.",
+    "why": "The same italicised term \"cancel\" is given two unrelated definitions four pages apart (sign cancellation on p.32, common-factor cancellation on p.36) without distinguishing the two senses by name."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 37,
+    "locator": "Topic 1-9 Question 2 > Why this makes sense",
+    "category": "inconsistency",
+    "severity": "low",
+    "quote": "Four spacings of 3 7/8 fit exactly into 15 1/2. One station at the end of each spacing gives 4 stations.",
+    "correction": "Four intervals of 3 7/8 fit exactly into 15 1/2. One station at the end of each interval gives 4 stations.",
+    "why": "The summary switches to the undefined word \"spacing\", while the Important words box (p.36) and step 9 (p.37) both use the defined term \"interval\"."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 38,
+    "locator": "Topic 1-10 Question 1 > \"Work the problem one tiny step at a time\" heading (pattern; also p.28)",
+    "category": "formatting",
+    "severity": "medium",
+    "quote": "Work the problem one tiny step at a time",
+    "correction": "Keep the heading with its numbered list (e.g. \\needspace or \\nopagebreak) so the steps start on the same page.",
+    "why": "The heading is stranded as the last line of the page with all of its numbered steps on the next page, leaving roughly the bottom half of p.38 blank.",
+    "occurrences": "p.28 (steps run onto p.29) and p.38 (steps run onto p.39)"
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 39,
+    "locator": "Topic 1-10 Question 1 > number-line figure > \"sea level: 0\" tick label",
+    "category": "formatting",
+    "severity": "medium",
+    "quote": "sea level: 0",
+    "correction": "Shift the \"sea level: 0\" label (or the 570 ft measurement arrow) so they do not overlap.",
+    "why": "The teal \"570 ft\" measurement line is drawn straight through the label, striking out the \"l\" of \"level\" in the rendered figure."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 39,
+    "locator": "Topic 1-10 Question 1 > number-line figure > tick labels below zero",
+    "category": "notation",
+    "severity": "low",
+    "quote": "-120",
+    "correction": "\u2212120",
+    "why": "The figure's negative tick labels use an ASCII hyphen, whereas every negative number in the body text (including \u2212120 in step 1 on the same page) uses the longer math minus sign.",
+    "occurrences": "the \"-120\" and \"-200\" labels in the p.39 figure"
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 40,
+    "locator": "Topic SC-2 section heading",
+    "category": "formatting",
+    "severity": "low",
+    "quote": "Topic SC-2: Use the Laws of Exponents",
+    "correction": "Topic SC-2 Use the Laws of Exponents",
+    "why": "Every other topic heading in the companion (e.g. \"Topic 1-9 Divide Rational Numbers\" on p.35, \"Topic 1-10 Solve Problems with Rational Numbers\" on p.38) omits the colon, as does the matching heading in Topic1Part1Solutions."
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 40,
+    "locator": "Topic SC-2 onward > whole-section body type",
+    "category": "formatting",
+    "severity": "medium",
+    "quote": "A person is designing a rectangular poster. The area of the poster is given as the expression 3\u00b2 \u00d7 3\u2074 square inches.",
+    "correction": "Set the Topic SC-2 section in the same 10.91 pt body type used on pp.1\u201339.",
+    "why": "Body text drops from 10.91 pt (with ~22 pt leading) to 9.96 pt (with ~18.5 pt leading) starting at the Topic SC-2 heading, so the last quarter of the document is visibly smaller and tighter than the rest.",
+    "occurrences": "pp.40\u201353 (entire Topic SC-2 section)"
+  },
+  {
+    "doc": "Topic1ExplanationsPart1",
+    "page": 28,
+    "locator": "corpus-wide PDF text layer (copy/paste and extraction), not the visual render",
+    "category": "formatting",
+    "severity": "medium",
+    "quote": "Nonzeromeans not equal to zero.",
+    "correction": "Nonzero means not equal to zero.",
+    "why": "The pages render with correct spacing, but the PDF's copyable text layer fuses the word immediately after each italic/bold run (\"Nonzeromeans\", \"Afraction\", \"Aunitis\", \"Checked answer:Part A:\", etc.), so copied text and screen readers get run-together words.",
+    "occurrences": "every page of all five PDFs in the corpus; reported once here"
+  }
+]
