@@ -95,6 +95,32 @@ resource "aws_iam_policy" "agent_ro" {
         Resource = "*"
       },
       {
+        # Required for the AWS MCP Server's OAuth 2.1 browser sign-in. Without
+        # these the flow fails with "Ensure your IAM principal has
+        # signin:AuthorizeOAuth2Access and signin:CreateOAuth2Token permissions
+        # for your MCP server resource."
+        #
+        # AuthorizeOAuth2Access = interactive authorization-code sign-in.
+        # CreateOAuth2Token     = exchanging that code (or a refresh token) for
+        #                         an access token.
+        #
+        # Scoped to the MCP service principal, not "*", so this grants OAuth
+        # sign-in to the MCP server ONLY — not to arbitrary sign-in resources.
+        # AWS also publishes AWSMCPSignInOAuthAccessPolicy for this; the inline
+        # form is used here to keep the whole grant reviewable in one place.
+        #
+        # Note this is authentication, not authorization: it lets the identity
+        # obtain a session. What that session may DO is still bounded by the
+        # Allow/Deny statements above, so the read-only ceiling is unchanged.
+        Sid    = "McpServerOAuthSignIn"
+        Effect = "Allow"
+        Action = [
+          "signin:AuthorizeOAuth2Access",
+          "signin:CreateOAuth2Token",
+        ]
+        Resource = "arn:aws:signin:*:*:service-principal/aws-mcp.amazonaws.com"
+      },
+      {
         # Explicit Deny beats any Allow, including a broader policy attached to
         # this user later. Note that the AWS managed ReadOnlyAccess policy — the
         # obvious shortcut — DOES grant s3:GetObject.
