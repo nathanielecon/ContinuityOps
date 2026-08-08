@@ -11,6 +11,7 @@ import './orchestration/dispatch.test.mjs';
 import './integration/upstream-contracts.test.mjs';
 import './terraform/scaffold.test.mjs';
 import './terraform/cost-guardrails.test.mjs';
+import './terraform/teardown-script.test.mjs';
 import './workflows/hosted-ci.test.mjs';
 import './kubernetes/chart-contract.test.mjs';
 import './kubernetes/scenarios.test.mjs';
