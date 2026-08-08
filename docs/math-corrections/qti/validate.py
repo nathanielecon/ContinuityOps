@@ -70,6 +70,10 @@ MIN_DISTRACTORS = 7
 # written-response pass moves it from 177 upward as select-all items expand
 # into whole-plus-parts families (BF-2026-068).
 EXPECT_ITEMS = 199
+# The only question types this corpus may contain. Every item is auto-scored
+# written response; `multiple_answers_question` is deliberately absent and its
+# reappearance is a full-severity regression (BF-2026-079).
+EXPECT_TYPES = {'numerical_question', 'short_answer_question'}
 
 # A split half's title ends in a letter glued to its question number --
 # "Part 1 Question 1a", "Part 2 Question 4b" -- where an unsplit item ends in
@@ -1757,6 +1761,27 @@ if __name__ == '__main__':
         fails.append(f'the printed census is {sum(stats.values())} items, '
                      f'expected {_want} -- the number shown to a reader was '
                      f'asserted against nothing')
+    # BF-2026-079. The line above asserts the TOTAL and nothing about the SHAPE,
+    # which is coverage asserted where the criterion states a PARTITION -- the
+    # recurring defect class, and named as S-13 in CHECKLIST-STRUCT-81e700c3.md
+    # where it was marked NOT PROVED. It is now proved holed: a nixer patch that
+    # removed three TOSHORT entries reverted F3, F4 and H5 to
+    # `multiple_answers_question` and this gate printed "199 TOTAL" and
+    # "all checks pass" over a corpus containing three select-all items.
+    #
+    # Select-all is the type this whole round exists to remove: those items
+    # carry the D1 defects that score a correct student zero, and BF-031, where
+    # every key sat at position 0. Silently readmitting even one is a
+    # full-severity mathematical regression, not a structural nit. The total
+    # cannot see it because a type swap conserves the count.
+    _stray = {k: v for k, v in stats.items() if k not in EXPECT_TYPES}
+    if _stray:
+        fails.append(
+            f'question types outside the auto-scored written-response set: '
+            f'{_stray!r} -- the corpus must hold only {sorted(EXPECT_TYPES)}. '
+            f'A type swap conserves the total, so the census above cannot see '
+            f'this; select-all readmitted here is the item class that scores a '
+            f'correct student zero')
     for i, files in sorted(seen_idents.items()):
         if len(files) > 1:
             fails.append(f'duplicate <item ident="{i}"> in {files} -- Canvas '

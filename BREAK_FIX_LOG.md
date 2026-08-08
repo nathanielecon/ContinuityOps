@@ -4203,3 +4203,83 @@ three times.
 
 Build `59465fa535d8e994` → `5b18b8e2ca984802`. Corpus **199 items**, 125 numeric
 and 74 short answer, unchanged. Gate and battery green.
+
+## 2026-08-08 — BF-2026-079 — The census asserted the total and never the shape, and select-all walked back in
+
+The nixer's removal patch for `BF-SHORTANS-078-A` was tested locally before
+publishing. It removed the `TOSHORT` entries for `F3`, `F4` and `H5`, reverting
+them to their pristine definitions. `validate.py` printed:
+
+```text
+   199  TOTAL
+all checks pass
+```
+
+The corpus at that moment was:
+
+```text
+199 {'numerical_question': 125, 'short_answer_question': 71,
+     'multiple_answers_question': 3}
+```
+
+**Three select-all items were readmitted and the gate said the corpus was
+sound.** The battery quietly dropped from 199 written-response items to 196; the
+validator never reconciled the two.
+
+### The defect
+
+The census assertion added by BF-2026-065 checks the **total** — the number
+printed to a reader — and nothing about the **shape**. That is *coverage
+asserted where the criterion states a partition*, the recurring class in its
+sixth recorded shape. A type swap conserves the count, so a total can never see
+it.
+
+`CHECKLIST-STRUCT-81e700c3.md` names this precisely as **S-13**: *"The 199 items
+must partition into exactly 125 numerical and 74 short-answer items, with no
+overlap and no residual type. This exposes a coverage assertion that checks only
+`125 + 74 = 199` without proving disjointness and exhaustion."* The STRUCT judge
+marked it **NOT PROVED** and warned in writing that a later judge must not read
+silence as a pass. It was right, and the hole was open.
+
+### Why this is full severity, not structural
+
+`multiple_answers_question` is the type this entire round exists to remove.
+Those are the items carrying **D1** — true statements shipped as choices a
+student must not select, scoring a correct student zero — and **BF-031**, where
+all 47 keys sat at position 0 with shuffle off. Readmitting even one is a
+mathematical regression that reaches students, not a packaging nit.
+
+### Fix
+
+`EXPECT_TYPES = {'numerical_question', 'short_answer_question'}`, asserted
+against the same `stats` census that is printed, so the number shown to a reader
+and the shape asserted are one computation rather than two.
+
+### Falsifiability, both directions
+
+- **Positive control:** the unmodified corpus passes — `199 TOTAL`,
+  `all checks pass`, 1,497 answers exercised.
+- **Injection:** the *identical* nix that previously passed now fails with
+  `question types outside the auto-scored written-response set:
+  {'multiple_answers_question': 3}`, build exit 1.
+- **Restored:** green again.
+
+The injection is not synthetic. It is a real patch a real worker produced for a
+real repair unit, and it would have been published had it not been tested first.
+
+### How it was found, which is the transferable part
+
+Not by inspection. By **running the nixer's patch before publishing it** — and
+the nixer only produced a removal patch because the role was finally used as the
+author defined it: *nix the code the judge critiques impact, so the fixer
+rebuilds from a clean contract*. Three rounds of patching F3/F4 in place never
+surfaced this, because patching preserves the type and only nixing reverts it.
+
+The role I had been skipping is the one that found the hole.
+
+### Standing
+
+Corpus **199 items**, 125 numeric and 74 short answer, unchanged. Build
+`f84a0e3209274d51` unchanged — this touches `validate.py` only. The nixer's
+patch is **not applied**; it is correct as an intermediate reset but must land
+together with the fixer's rebuild, never alone.
