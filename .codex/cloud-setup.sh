@@ -14,6 +14,7 @@ export TF_IN_AUTOMATION=1
 TERRAFORM_VERSION="${TERRAFORM_VERSION:-1.15.5}"
 NODE_MAJOR="${NODE_MAJOR:-24}"
 RALPHY_VERSION="${RALPHY_VERSION:-4.7.2}"
+RTK_VERSION="${RTK_VERSION:-v0.42.4}"
 
 need_cmd() { command -v "$1" >/dev/null 2>&1; }
 
@@ -67,6 +68,35 @@ if ! need_cmd ralphy || ! ralphy --version 2>/dev/null | grep -q "$RALPHY_VERSIO
   sudo npm install --global "ralphy-cli@${RALPHY_VERSION}" --ignore-scripts --no-audit --no-fund
 fi
 
+echo "== RTK ${RTK_VERSION} (tool-output filter) =="
+# RTK is not on npm or crates.io; it ships as a release binary. Set
+# RTK_INSTALL_URL in the Codex environment to the release asset for
+# RTK_VERSION. Pin the version deliberately: the unpinned installer resolves
+# "latest" through an unauthenticated GitHub API call, which rate-limits in a
+# cloud container and then fails the whole setup under `set -e`.
+if need_cmd rtk && rtk --version 2>/dev/null | grep -q "${RTK_VERSION#v}"; then
+  echo "rtk ${RTK_VERSION} already present"
+elif [[ -n "${RTK_INSTALL_URL:-}" ]]; then
+  curl -fsSL "$RTK_INSTALL_URL" -o /tmp/rtk
+  sudo install -m 0755 /tmp/rtk /usr/local/bin/rtk
+  rm -f /tmp/rtk
+else
+  # Not fatal: RTK only compresses tool output. Every command it filters runs
+  # identically without it, so a worker without RTK is slower, never wrong.
+  echo "RTK_INSTALL_URL unset -- skipping. Workers will run commands unfiltered."
+fi
+
+echo "== caveman (output compression skill) =="
+# Compression for fixer and investigator roles only. Judges never compress --
+# see AGENTS-2.0.md section 3. Installs into the checked-out project as
+# .codex-plugins/caveman plus .agents/plugins/marketplace.json; both are
+# gitignored so a fixer's unified diff never carries plugin files.
+if [[ ! -d "${CODEX_PROJECT_DIR:-$PWD}/.codex-plugins/caveman" ]]; then
+  curl -fsSL https://raw.githubusercontent.com/yibie/caveman-codex/main/install.sh \
+    | bash -s -- --project "${CODEX_PROJECT_DIR:-$PWD}" \
+    || echo "caveman install failed -- workers fall back to uncompressed output."
+fi
+
 # Persist PATH hints for the agent phase (setup shell exports do not carry over).
 if [[ -f "$HOME/.bashrc" ]] || touch "$HOME/.bashrc"; then
   grep -q 'TF_IN_AUTOMATION' "$HOME/.bashrc" 2>/dev/null || \
@@ -81,4 +111,5 @@ pwsh -NoLogo -NoProfile -Command '$PSVersionTable.PSVersion.ToString()'
 terraform version
 aws --version
 ralphy --version 2>/dev/null || true
+rtk --version 2>/dev/null || echo "rtk: not installed (optional)"
 echo "Codex cloud setup complete."
