@@ -30,6 +30,13 @@ env:
 jobs:
   inventory:
     runs-on: ubuntu-latest
+    # REQUIRED. The continuityops-gha trust policy is scoped to this GitHub
+    # environment's OIDC subject (repo:...:environment:continuityops). A job
+    # without it gets "Not authorized to perform sts:AssumeRoleWithWebIdentity"
+    # — verified on run 31265813633, where the credential-free `plan` job failed
+    # exactly this way. That job is deliberately credential-free because it also
+    # runs on pull requests, and AGENTS.md forbids giving PR jobs cloud creds.
+    environment: continuityops
     timeout-minutes: 20
     steps:
       - name: Check out repository
