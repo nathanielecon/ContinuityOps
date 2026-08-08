@@ -59,6 +59,12 @@ AUTOSCORED = {'numerical_question', 'multiple_answers_question',
 # rather than for anything in the corpus (BF-2026-048).
 MIN_DISTRACTORS = 7
 
+# The corpus item count, asserted in two places. Bumped DELIBERATELY when a
+# pass is meant to change it -- never to make a red build green. The
+# written-response pass moves it from 177 upward as select-all items expand
+# into whole-plus-parts families (BF-2026-068).
+EXPECT_ITEMS = 199
+
 # A split half's title ends in a letter glued to its question number --
 # "Part 1 Question 1a", "Part 2 Question 4b" -- where an unsplit item ends in
 # the bare number.
@@ -1728,7 +1734,7 @@ if __name__ == '__main__':
     if _base:
         check_line_endings(sys.argv[1], _base)
         check_items_vs_base(sys.argv[1], _base,
-                            int(os.environ.get('QTI_EXPECT_ITEMS', 177)))
+                            int(os.environ.get('QTI_EXPECT_ITEMS', EXPECT_ITEMS)))
     check_manifest_binding(sys.argv[1], check(sys.argv[1], _base))
     print('type census:')
     for k, v in sorted(stats.items(), key=lambda t: -t[1]):
@@ -1740,7 +1746,7 @@ if __name__ == '__main__':
     # numbers again, reconciled by nothing; a build printing "176 TOTAL"
     # alongside "all checks pass" was reachable. Assert the one that is printed
     # (BF-2026-065).
-    _want = int(os.environ.get('QTI_EXPECT_ITEMS', 177))
+    _want = int(os.environ.get('QTI_EXPECT_ITEMS', EXPECT_ITEMS))
     if sum(stats.values()) != _want:
         fails.append(f'the printed census is {sum(stats.values())} items, '
                      f'expected {_want} -- the number shown to a reader was '
