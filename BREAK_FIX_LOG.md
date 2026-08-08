@@ -4011,3 +4011,66 @@ Corpus unchanged at **199 items**, build `81e700c3f40bb7b5`. The fixer's
 `e6607802d574131f` build exists only in its container and was never applied.
 `FIXER-B` is working `f3`, `f4` and `k6` in `finalize.py` concurrently, and both
 fixers are now scoped to disjoint `TOSHORT` keys so the patches cannot collide.
+
+## 2026-08-08 — BF-2026-076 — Four of us proposed a K6 instruction that prints the answer three times
+
+Closing the SHORTANS exceptions. `g6_s2_k6`'s repair was to stop the stem
+contradicting its accepted set by naming the permitted forms. The wording
+proposed — independently, by **my ruling, `FIXER-B`, and the Codex PR
+reviewer** — was:
+
+> Enter the greater value. You may write it as a mixed number like **1 3/4**, an
+> improper fraction like **7/4**, or a decimal like **1.75**.
+
+The item asks *"Which is greater: `1 3/4` or `(1)(3/4)`?"* The answer is
+`1 3/4`. **The instruction prints the correct answer three times.** A student who
+cannot compare the two values copies it out of the format sentence and scores
+full credit.
+
+That is self-answer disclosure — SOURCE `R5`, and the standing ruling that a
+part which gives away its answer is removed rather than kept. It would have been
+a worse defect than the superset it repaired, and it would have been invisible to
+every gate: `validate.py` and `battery.py` both pass it, because the accepted set
+and the scoring tree are correct. Only reading the stem against its own answer
+catches it.
+
+Caught before the build. Fixed by drawing the examples from an unrelated number:
+
+> ... as a mixed number, an improper fraction, or a decimal -- for example
+> `2 1/2`, `5/2`, or `2.5`.
+
+Same three forms prescribed, nothing hinted.
+
+**Worth recording that three independent agents converged on the same defect.**
+The project's standing warning is that a majority of judges is not evidence;
+this is the same failure in the fixer direction. All three of us were reasoning
+from the item's own accepted set, which is where the answer lives, so the
+examples came out of it automatically. Convergence measured agreement about
+*where we were looking*, not correctness.
+
+### Also landed in this pass
+
+- **F3/F4 closed in both directions.** Accepted narrowed to complete
+  operation-and-number answers, so the half-answers `subtract`, `subtraction`,
+  `-8`, `−8`, `division`, `divide` no longer score. Both number spellings kept
+  with their space-stripped twins.
+- **`battery.py` earned its keep again.** The first F3 attempt omitted
+  `subtract8` and the battery failed the build naming it: *"correct form
+  'subtract8' rejected (canonical 'subtract 8')"*. Canvas trims only outer
+  whitespace, so a student who omits the internal space has still answered
+  correctly.
+- **F4 needed its own example.** Its answer carries `by`, and the shared
+  `add 3` pattern would have led a student to `divide 5`. Its example uses a
+  different operation and number — `multiply by 4` — so it prescribes the shape
+  without hinting.
+
+### Standing
+
+Corpus **199 items**, 125 numeric and 74 short answer — unchanged. Build
+`81e700c3f40bb7b5` → `62634a766ad1af43`. Two packages changed, section-1 and
+section-2, plus the checksum manifest. Gate green, battery green across 1,497
+answers, and two consecutive builds byte-identical under `cmp`.
+
+All five SHORTANS exceptions are now closed. The four frozen checklists bind to
+the old hash and must be re-bound against `62634a766ad1af43` before any slice is
+scored.

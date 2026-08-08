@@ -1096,7 +1096,29 @@ INEQ = ('You may need to use >, <, or =. Type it with no spaces: if your answer 
 SYMBOL = 'Enter one symbol only: <, >, =, or ≠.'
 ORDER = ('Separate the numbers with commas, least first. Type it like '
          '-5,0,2 with no spaces.')
-OPNAME = 'Name the operation and the number, like: add 3.'
+# F3/F4 failed in BOTH directions (SHORTANS R4 and R5). They rejected correct
+# `subtraction by 8` / `division by 5`, and they accepted `subtract`,
+# `subtraction`, `-8`, `−8`, `division`, `divide` -- each naming only ONE of the
+# two things the stem demands, so a half-answer scored full credit.
+#
+# Widening the English phrasings cannot close this: `take 8 away`, `minus eight`
+# and the next construction are unbounded. Closure comes from the stem naming
+# the permitted forms. But closure does NOT mean one accepted string -- it means
+# a set that can be written down completely. A first attempt narrowed F3 to the
+# single `subtract eight` and rewrote the example from the source's numeral
+# (`add 3`) to a number word, which rejected `subtract 8`, the most natural form,
+# and contradicted F4 one item later whose example stayed a numeral
+# (BF-2026-075).
+#
+# So: the example stays a numeral, the stem says both forms are allowed, and
+# both are accepted. F4 needs its own example because its answer carries `by`
+# and the `add 3` pattern would mislead a student into `divide 5`; the example
+# uses a different operation and number, so it prescribes the shape without
+# hinting the answer.
+OPNAME = ('Name the operation and the number, like: add 3. Write the number as '
+          'a numeral or as a word.')
+OPNAME_BY = ('Name the operation and the number, like: multiply by 4. Write the '
+             'number as a numeral or as a word.')
 
 # F1/F2 are vocabulary items, and a vocabulary answer family cannot be closed by
 # adding synonyms: SHORTANS showed `factor` correct-and-rejected on F1 and
@@ -1132,14 +1154,17 @@ VOCAB2 = ('Answer with exactly one of these choices: exponent, constant, '
 TOSHORT = {
     ('6th-grade-review-section-1', 'F1'): (['coefficient'], VOCAB1, None),
     ('6th-grade-review-section-1', 'F2'): (['variable'], VOCAB2, None),
+    # Both spellings of the number, each with its space-stripped twin. Canvas
+    # trims only OUTER whitespace, so `subtract8` is a distinct byte string from
+    # `subtract 8` and a student who omits the space has still answered
+    # correctly. `battery.py` derives exactly these and rejected the first
+    # attempt that omitted them -- the instrument earning its keep.
     ('6th-grade-review-section-1', 'F3'): (
-        ['subtract 8', 'subtract8', 'subtraction', 'subtract', 'minus 8',
-         'take away 8', 'subtract eight', 'subtracting 8', 'subtracting eight',
-         'minus eight', 'take away eight', '-8'], OPNAME, None),
+        ['subtract 8', 'subtract8', 'subtract eight', 'subtracteight'],
+        OPNAME, None),
     ('6th-grade-review-section-1', 'F4'): (
-        ['divide by 5', 'divide by5', 'division', 'divide', 'dividing by 5',
-         'divide by five', 'dividing by five', 'divide 5', '/5', '÷5',
-         '÷ 5'], OPNAME, None),
+        ['divide by 5', 'divide by5', 'divideby5', 'divide by five',
+         'divide byfive', 'dividebyfive'], OPNAME_BY, None),
     # H3/H4: the worksheet says "Solve:"; the conversion dropped it, leaving a
     # stem with no instruction verb at all. The flipped form is the SAME
     # statement -- and H5 teaches that flip one item later.
@@ -1244,9 +1269,25 @@ def do_letter_prefix(raw, pkg, title, log):
 # Existing short-answer items whose accepted list is missing a form the answer
 # key itself prints.
 STEM_INSTR = {
+    # SHORTANS found K6 accepting `7/4` and `1.75` against its own sentence
+    # "Type it the same way it is written in the question", which permits only
+    # `1 3/4`. Two ways existed to make stem and acceptance agree. Narrowing the
+    # accepted set was tried first and `validate.py` refused it -- `7/4` is a
+    # PRISTINE answer, so dropping it would fail a student the original quiz
+    # accepted. The gate was right (BF-2026-075): the three strings are one
+    # number, and the item tests which of `1 3/4` and `(1)(3/4)` is greater, not
+    # mixed-number notation. So the instruction was never load-bearing and it is
+    # the instruction that changes.
+    # The format examples must NOT use this item's own answer. Naming the three
+    # forms as `1 3/4`, `7/4`, `1.75` -- which my own ruling, the fixer and the
+    # PR reviewer all independently proposed -- prints the correct answer three
+    # times in the instruction, so a student who cannot compare the two values
+    # simply copies it. That is self-answer disclosure (SOURCE R5) and would be a
+    # worse defect than the superset being repaired. The example below uses an
+    # unrelated number, so it prescribes the three forms without hinting.
     ('6th-grade-review-section-2', 'K6'):
-        'Answer with whichever of the two values is greater. Type it the same '
-        'way it is written in the question.',
+        'Enter the greater value. You may write it as a mixed number, an '
+        'improper fraction, or a decimal -- for example 2 1/2, 5/2, or 2.5.',
     ('6th-grade-review-section-1', 'E1'):
         'Type the greater of the two values exactly as it appears above.',
 }
@@ -1269,7 +1310,13 @@ WIDEN = {
     # K6 asks which is greater, 1 3/4 or (1)(3/4). The key is 7/4 -- but the
     # explanations PDF answers "1 3/4", and the item's boilerplate format line
     # ("no mixed numbers") forbids typing it. The key's own answer scored zero.
-    ('6th-grade-review-section-2', 'K6'): ['1 3/4', '1.75', '7/4'],
+    # All three pristine forms kept -- they are one number, and dropping `7/4`
+    # is what `validate.py` refused (BF-2026-075). The mixed-number spacings are
+    # insurance: Canvas trims only OUTER whitespace, so every internal spacing a
+    # student might type is a distinct byte string. `battery.py` does not derive
+    # these, so they are added deliberately rather than on its prompting.
+    ('6th-grade-review-section-2', 'K6'): [
+        '1 3/4', '1  3/4', '1 3 /4', '1 3/ 4', '1 3 / 4', '1.75', '7/4'],
 }
 
 
