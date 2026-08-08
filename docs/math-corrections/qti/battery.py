@@ -49,10 +49,38 @@ def variants(a):
     out.add(a.replace('-', '−'))                           # Unicode minus
     return {v for v in out if v.strip()}
 
-# Probes that must score 0. Any that the item legitimately accepts is dropped
-# per item -- several items key 0 or -1, and a fixed list flagged those as
-# false accepts on the first run.
-WRONG = ['', '   ', '0', 'xyzzy', '999999', '-1', '1', 'yes']
+# Probes that must score 0.
+#
+# The previous form of this list was filtered per item -- `[x for x in WRONG if
+# x not in fold]` -- and then tested for membership in `fold`. The comprehension
+# had already removed every element that could satisfy the test, so the branch
+# was UNREACHABLE for all 237 items and the build printed "every wrong answer
+# and blank rejected" on the strength of an assertion that never ran. A guard
+# used as a silent skip, and a printed claim the code never earned: the same
+# shape as BF-2026-059 and -065, this time in the instrument I wrote to catch
+# that shape. Found by a judge reading the source rather than the build log
+# (BF-2026-069).
+#
+# Two fixes. Generic probes are now only strings no item could legitimately
+# key -- 0, 1 and -1 were removed because several items key exactly those, which
+# is what tempted the bogus filter in the first place. And NEAR-MISS probes are
+# derived per item from the correct answer, because a fixed generic list can
+# never detect over-acceptance: the false accepts that actually exist are always
+# one edit away from the right answer, never `xyzzy`.
+WRONG = ['', '   ', 'xyzzy', 'zzzz', '999999999']
+
+
+def near_misses(a):
+    """Wrong answers one edit from the right one. These are what over-acceptance
+    actually looks like -- a generated list that reaches one character too far."""
+    out = set()
+    if re.fullmatch(r'-?\d+(\.\d+)?', a.strip()):
+        v = a.strip()
+        out.add(v[1:] if v.startswith('-') else '-' + v)      # sign flipped
+        m = re.match(r'^(-?)(\d)', v)                          # first digit + 1
+        if m:
+            out.add(f'{m.group(1)}{(int(m.group(2)) + 1) % 10}{v[m.end():]}')
+    return {x for x in out if x and x != a.strip()}
 
 def main(zdir):
     fails, checked, items = [], 0, 0
@@ -96,10 +124,13 @@ def main(zdir):
                         # only NO-SPACE forms are guaranteed -- the stems pin it
                         fails.append(f'{pkg} {title}: correct form {v!r} rejected '
                                      f'(canonical {canon!r})')
-                for w in [x for x in WRONG if x.strip().lower() not in fold]:
+                # Assert against the REAL accepted set, not a set the probe
+                # list was pre-filtered against.
+                for w in WRONG + sorted(near_misses(canon)):
                     checked += 1
                     if w.strip().lower() in fold:
-                        fails.append(f'{pkg} {title}: wrong answer {w!r} accepted')
+                        fails.append(f'{pkg} {title}: wrong answer {w!r} '
+                                     f'accepted (canonical {canon!r})')
     print(f'{items} written-response items, {checked} answers exercised')
     if fails:
         print(f'\nBATTERY FAILURES -- {len(fails)}:')

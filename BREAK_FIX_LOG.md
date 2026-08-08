@@ -3637,3 +3637,64 @@ is what made the resulting shortfall visible rather than silent.
 Build hash `6fc0a7c9c0553dea`. **All five content acceptances are void** — the
 corpus changed. Under the author's rule the mathematics slices must return to
 10/10 and structure may pass at 9.5.
+
+---
+
+## 2026-08-08 — BF-2026-069 — The battery's negative direction never ran, and the build printed the claim anyway
+
+The rubric round returned four frozen checklists. Before any of their findings,
+one of them caught a live defect in the instrument I had written **to catch this
+exact shape**, two commits earlier.
+
+`battery.py` asserted the negative direction like this:
+
+```python
+for w in [x for x in WRONG if x.strip().lower() not in fold]:
+    if w.strip().lower() in fold:
+        fails.append(...)
+```
+
+The comprehension removes every element that could satisfy the test. **The branch
+was unreachable for all 237 items.** Meanwhile the module docstring claimed *"It
+also asserts the negative direction: a blank entry and a set of wrong answers
+must all score 0. A battery that only checks acceptance would pass an item that
+accepts everything"* — and `build.sh` printed *"every wrong answer and blank
+rejected"* on the strength of an assertion that never executed.
+
+A guard used as a silent skip, and a printed claim the code never earned. That is
+BF-2026-059 and BF-2026-065 exactly, occurring inside the tool built to detect
+it. I introduced it while fixing the battery's *over-reach* — I filtered the
+probe list to drop values an item legitimately keys, then tested membership in
+the set I had just filtered against, and never re-proved the branch still fired.
+The lesson this log keeps recording is that a fix must be re-proved after the
+edit, not before it.
+
+**Two fixes, because the dead branch was hiding a second weakness.**
+
+Even reachable, a fixed generic probe list cannot detect over-acceptance: the
+false accepts that actually exist are always one edit from the right answer,
+never `xyzzy`. So the negative direction now carries **near-miss probes derived
+per item** — the sign flipped, the leading digit incremented — asserted against
+the real accepted set. And the generic list dropped `0`, `1` and `-1`, which
+several items legitimately key; those were what tempted the bogus filter in the
+first place.
+
+**Proved falsifiable, which the previous version never was.** Injecting a near
+miss — `L1b` keys `8`, add `9` to its accepted list — the battery now reports
+`wrong answer '9' accepted (canonical '8')`. Clean corpus still green: 237
+items, 1799 answers exercised.
+
+The judge that found it was reading the source rather than the build log. That is
+the whole argument for the frozen-rubric round: three of the four checklists
+contain conditions on the *instruments*, not just the corpus, and this one was
+decidable by inspection alone.
+
+### Also this round: RTK
+
+`rtk` (Rust Token Killer) is wired into the project — it filters command output
+before it reaches an agent's context. Measured here: `ls -R` over
+`docs/math-corrections` goes 3181 → 273 bytes. It compresses **tool output**, not
+agent reasoning, which is the distinction that matters: the earlier delegation
+policy refused compressed judges because *"the reasoning IS the artifact"*, and
+RTK takes the tokens out of build logs and directory walks instead. Both concerns
+are satisfied at once.
