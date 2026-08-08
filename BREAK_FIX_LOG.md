@@ -3698,3 +3698,84 @@ agent reasoning, which is the distinction that matters: the earlier delegation
 policy refused compressed judges because *"the reasoning IS the artifact"*, and
 RTK takes the tokens out of build logs and directory walks instead. Both concerns
 are satisfied at once.
+
+---
+
+## 2026-08-08 — BF-2026-070 — The scaffold gave the answer away, and the author ruled it out
+
+Four rulings from the author, applied.
+
+### 1. "Not acceptable. Remove parts if give hints."
+
+The AUTHORED checklist established that every one of the 14 packages ships
+`<one_question_at_a_time>false</one_question_at_a_time>`, so all items render on
+one page. The "whole first, parts after" ordering was a reading convention with
+**no enforcement behind it** — a student answering the whole-form item could read
+its own scaffolding two boxes below.
+
+Where the parts' answers **compose** the whole's, that is a free answer key. The
+mechanical rule applied: drop a part whenever the whole-form accepted string is a
+syntactic composition of the parts' keys.
+
+| family | parts dropped | composed |
+|---|---|---|
+| `G1` | 3, 18 | `3y+18` |
+| `K9` | 5, 8 | `5+8` |
+| `K10`/`N5` | a, 7 | `a*7` |
+| `K11`/`N6` | 3, 9 | `b+(3+9)` |
+| `L1` | 8, `x+2` | `8(x+2)` |
+| `F5` | 4 | `4y` |
+| `K2` | exponent form | restates the factor list |
+| `1-3` | −4, −8 | `10+(-4)+(-8)` |
+| `H7` | the circle value 2 | already in the stem |
+
+`N7` keeps its parts: `5` and `11` do not compose `no`, and computing both sides
+**is** the work the source asks for. That distinction is the rule — a part that
+hands over the answer goes, a part that is the method stays.
+
+Four more parts went for a different reason: their own **context states their
+answer**. `1-1 Q2b` asked "what is the value of a + b?" under a context reading
+"two mystery numbers a and b satisfy **a + b = 0**". `sc-1 Q2b` asked for 3/4 as
+a decimal under a context printing **0.75**. And `1-2 Q2b`'s task sentence was
+*"Write both, separated by the word or, in this order: terminates or repeats"* —
+the instruction and the answer were the same words.
+
+### 2. "Stick with what source asked unless splitting to facilitate grading."
+
+Two families led with something the source does not ask:
+
+- **`H6`** emitted the algebraic rewrite first and the graph second, when the
+  source says *"Graph 6 < y on a number line."* Worse, `H5` two items earlier in
+  the same package already asks for the rewrite. Now the graph description is the
+  item and the rewrite is gone.
+- **`1-6 Q4b`** emitted two values first and the explanation last, when the source
+  says *"Compare (−5)² and −5². Explain briefly how the two expressions differ."*
+  The two values also duplicated `Q3` and `Q4a`. Now the explanation is the item.
+
+### 3. "Remove dupes."
+
+`1-3`'s "score at the end of the round" duplicated the package's existing final-
+score item; `sc-2`'s "how many each friend gets" duplicated its existing twin;
+`1-1 Q1c`'s whole duplicated `Q1b`. All removed.
+
+**One duplicate stands, deliberately.** `N5` and `K10` are byte-identical, and the
+NUMERIC checklist established this is **source-faithful** — the rendered worksheet
+poses the same problem under both the K and N labels. Criterion 1 keeps it.
+Recorded so the next reader does not "fix" a faithful stem.
+
+### 4. The doubled instruction
+
+`do_expand` appended `PALETTE_NEG` whenever a key was negative, including on the
+ten parts whose author had already written that sentence into the task — a
+duplicated instruction block, which criterion 7 names outright. Now appended only
+when absent. Zero stems carry it twice.
+
+### Standing
+
+Corpus **237 → 199 items**: 125 numeric entry, 74 short answer, still zero
+select-all. Build hash `81e700c3f40bb7b5`. Gate green, battery green.
+
+The four frozen checklists were written against the 237-item build, so their
+per-item conditions must be re-derived against this one before scoring — per
+`MASTER_PROMPT` §6, coverage is frozen but a corpus change forces re-derivation
+rather than amendment.

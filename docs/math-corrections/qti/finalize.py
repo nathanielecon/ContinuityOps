@@ -1548,26 +1548,19 @@ EXPAND = {
  ('6th-grade-review-section-1', 'F5'): ('Combine like terms: 6y - 2y', [
    ('', 'expr', 'Write the simplified expression. ' + NOSPACE
         + ' Example: for 3x + 5x write 8x.', ['4y', '4@y']),
-   ('b', 'num', 'What is the coefficient of y in the simplified expression?', '4'),
  ]),
  ('6th-grade-review-section-1', 'G1'): ('3(y + 6)', [
    ('', 'expr', 'Write the expanded expression, the y term first. ' + NOSPACE
         + ' Example: for 2(x + 4) write 2x+8.', ['3y+18']),
-   ('b', 'num', 'What is the coefficient of y after expanding?', '3'),
-   ('c', 'num', 'What is the constant term after expanding?', '18'),
  ]),
  ('6th-grade-review-section-2', 'K2'): ('Prime factorization of 90', [
    ('', 'short', 'Write the prime factors from smallest to largest, separated '
         'by commas. ' + NOSPACE + ' Example: for 12 write 2,2,3.',
     ['2,3,3,5', '2, 3, 3, 5']),
-   ('b', 'expr', 'Now write it using an exponent for the repeated factor. '
-        + NOSPACE + ' Example: for 12 write 2^2*3.', ['2@3^2@5']),
  ]),
  ('6th-grade-review-section-2', 'K9'): ('Rewrite using the commutative property: 8 + 5', [
    ('', 'expr', 'Write the same two addends joined by the same operation in the '
         'opposite order. ' + NOSPACE + ' Example: for 2 + 7 write 7+2.', ['5+8']),
-   ('b', 'num', 'Which addend comes first in your rewritten expression?', '5'),
-   ('c', 'num', 'Which addend comes second?', '8'),
  ]),
  ('6th-grade-review-section-2', 'L1'): (
    'Factor completely by pulling out the greatest common factor: 8x + 16. '
@@ -1577,9 +1570,6 @@ EXPAND = {
         'the terms inside the parentheses in the order they appear. ' + NOSPACE
         + ' Example: for 6x + 9 write 3(2x+3).',
     ['8@(x+2)', '8@(2+x)', '(x+2)@8', '(2+x)@8']),
-   ('b', 'num', 'What is the greatest common factor of 8x and 16?', '8'),
-   ('c', 'expr', 'What expression is left inside the parentheses? ' + NOSPACE,
-    ['x+2', '2+x']),
  ]),
  ('6th-grade-review-section-2', 'N7'): (
    'Is subtraction associative? Compare (12 - 4) - 3 and 12 - (4 - 3).', [
@@ -1595,9 +1585,7 @@ EXPAND[('6th-grade-review-section-1', 'A1')] = (
    ('b', 'num', 'A second point is 4 units to the LEFT of 0. Write its coordinate.', '-4'),
 ])
 EXPAND[('6th-grade-review-section-1', 'H6')] = ('Graph 6 < y on a number line.', [
-   ('', 'short', 'Rewrite 6 < y with y on the left. ' + NOSPACE + ' ' + PALETTE_CMP
-        + ' Example: for 3 < x write x>3.', ['y>6']),
-   ('b', 'short', 'Describe the graph you would draw: write the circle type and '
+   ('', 'short', 'Describe the graph you would draw: write the circle type and '
         'the ray direction, separated by a comma. ' + NOSPACE
         + ' Example: closed,left', ['open,right', 'open, right']),
 ])
@@ -1605,7 +1593,6 @@ EXPAND[('6th-grade-review-section-1', 'H7')] = ('Graph x > 2 on a number line.',
    ('', 'short', 'Describe the graph you would draw: write the circle type and '
         'the ray direction, separated by a comma. ' + NOSPACE
         + ' Example: closed,left', ['open,right', 'open, right']),
-   ('b', 'num', 'At what value does the circle sit?', '2'),
 ])
 # ---- 6th-grade review, section 2 -------------------------------------------
 EXPAND[('6th-grade-review-section-2', 'K1')] = ('Is 8x + 1 a linear expression?', [
@@ -1619,9 +1606,6 @@ for _p, _t, _var, _num in (('K10', 'K10', 'a', '7'), ('N5', 'N5', 'a', '7')):
             'the opposite order. ' + NOSPACE
             + ' Use * for multiply. Example: for 3 × b write b*3.',
         ['%s@%s' % (_var, _num)]),
-       ('b', 'short', 'Which factor comes first in your rewritten expression?',
-        [_var]),
-       ('c', 'num', 'Which factor comes second?', _num),
     ])
 for _t, _v, _x, _y in (('K11', 'b', '3', '9'), ('N6', 'x', '5', '8')):
     EXPAND[('6th-grade-review-section-2', _t)] = (
@@ -1631,8 +1615,6 @@ for _t, _v, _x, _y in (('K11', 'b', '3', '9'), ('N6', 'x', '5', '8')):
        ('', 'expr', 'Write the regrouped expression. ' + NOSPACE
             + ' Example: for (n + 2) + 6 write n+(2+6).',
         ['%s+(%s+%s)' % (_v, _x, _y)]),
-       ('b', 'num', 'Which number is now first inside the parentheses?', _x),
-       ('c', 'num', 'Which number is now second inside the parentheses?', _y),
     ])
 
 
@@ -1650,7 +1632,6 @@ for _pt, _s1, _s2, _v1, _v2 in (
     ])
     EXPAND[('topic-1-1', '%s Question 1c' % _pt)] = (
        _ctx + ' The two changes are additive inverses of each other.', [
-       ('', 'num', 'What is the sum of the two changes?', '0'),
        ('b', 'short', 'Are their magnitudes the same or different? Write same or '
             'different.', ['same', 'Same']),
        ('c', 'short', 'Are their signs the same or opposite? Write same or '
@@ -1666,7 +1647,6 @@ for _pt, _a, _b in (('Part 1', 'a', 'b'), ('Part 2', 'p', 'q')):
             'Example: for m and n write |m|=|n|.',
         ['|%s|=|%s|' % (_a, _b), '|%s|=|%s|' % (_b, _a),
          '|%s| = |%s|' % (_a, _b), '|%s| = |%s|' % (_b, _a)]),
-       ('b', 'num', 'What is the value of %s + %s?' % (_a, _b), '0'),
     ])
 # ---- topic-1-2 --------------------------------------------------------------
 for _pt, _x, _y in (('Part 1', 'x', 'y'), ('Part 2', 'a', 'b')):
@@ -1675,9 +1655,6 @@ for _pt, _x, _y in (('Part 1', 'x', 'y'), ('Part 2', 'a', 'b')):
       'are integers and %s is not zero, into a decimal.' % (_x, _y, _x, _y, _y), [
        ('', 'short', 'Can the decimal go on forever WITHOUT ever repeating? '
             'Write yes or no.', ['no', 'No']),
-       ('b', 'short', 'Every such decimal does one of two things. Write both, '
-            'separated by the word or, in this order: terminates or repeats.',
-        ['terminates or repeats', 'terminates, or repeats']),
     ])
 # The twins keyed DIFFERENT derivations -- P1 the raw 99x = 27 and P2 the
 # simplified 3x = 2, which is 9x = 6 divided by 3. Invisible while both were
@@ -1707,20 +1684,15 @@ for _pt, _a, _b, _c, _mid, _fin in (('Part 1', '10', '4', '8', '6', '-2'),
             'happened, using signed numbers. ' + NOSPACE
             + ' Example: for +5 then -2 write 5+(-2).',
         ['%s+(-%s)+(-%s)' % (_a, _b, _c)]),
-       ('b', 'num', 'Write the signed number for the SECOND turn. ' + PALETTE_NEG, '-' + _b),
-       ('c', 'num', 'Write the signed number for the THIRD turn. ' + PALETTE_NEG, '-' + _c),
        ('d', 'num', 'What is the score after the first two turns?', _mid),
-       ('e', 'num', 'What is the score at the end of the round? ' + PALETTE_NEG, _fin),
     ])
 # ---- topic-1-6 --------------------------------------------------------------
 for _pt, _n, _pos, _neg in (('Part 1', '5', '25', '-25'), ('Part 2', '6', '36', '-36')):
     EXPAND[('topic-1-6', '%s Question 4b' % _pt)] = (
       'Compare (-%s)^2 and -%s^2.' % (_n, _n), [
-       ('', 'num', 'What is the value of (-%s)^2?' % _n, _pos),
-       ('b', 'num', 'What is the value of -%s^2? ' % _n + PALETTE_NEG, _neg),
-       ('c', 'short', 'In which expression is the negative sign squared? Write '
-            'with parentheses or without parentheses.',
-        ['with parentheses', 'with']),
+       ('', 'short', 'Explain how the two expressions differ: in which one is the '
+            'negative sign squared? Write with parentheses or without '
+            'parentheses.', ['with parentheses', 'with']),
     ])
 # ---- topic-sc-1 -------------------------------------------------------------
 for _pt, _n1, _n2, _a1, _a2 in (('Part 1', '10.4', '10.6', 'cat', 'rabbit'),
@@ -1739,7 +1711,6 @@ for _pt, _f, _d in (('Part 1', '3/4', '0.75'), ('Part 2', '2/5', '0.4')):
       'Compare the fraction %s with the decimal %s.' % (_f, _d), [
        ('', 'short', 'Is %s less than, greater than, or equal to %s? Write less, '
             'greater, or equal.' % (_f, _d), ['equal', 'Equal']),
-       ('b', 'num', 'Write %s as a decimal.' % _f, _d),
        ('c', 'short', 'Write a symbol that makes %s __ %s a true statement. '
             % (_f, _d) + PALETTE_CMP, ['=', '≥', '≤']),
     ])
@@ -1753,7 +1724,6 @@ for _pt, _b, _each, _food in (('Part 1', '2', '4', 'cupcakes'),
             'power divided by another. ' + NOSPACE
             + ' Example: for 5^3 shared among 5^1 write 5^3/5^1.',
         ['%s^4/%s^2' % (_b, _b)]),
-       ('b', 'num', 'How many %s does each friend get?' % _food, _each),
        ('c', 'num', 'Written as a single power of %s, what is the exponent?' % _b, '2'),
     ])
 
@@ -1781,7 +1751,13 @@ def do_expand(raw, pkg, title, spec, log):
         if kind == 'num':
             vals = [ans]
             fmt = (INTEGER if not '.' in ans else DECIMAL)
-            if ans.strip().startswith(('-', '\u2212')):
+            # ...unless the task sentence already says it. Appending
+            # unconditionally put "Include the negative sign if the answer is
+            # negative." twice in one stem on every part whose author had
+            # already written it, which criterion 7 names as a duplicated
+            # instruction block (BF-2026-070).
+            if (ans.strip().startswith(('-', '\u2212'))
+                    and PALETTE_NEG not in task):
                 fmt += ' ' + PALETTE_NEG
             body, qtype, resp = FIB, 'numerical_question', resp_numeric(ans)
         else:

@@ -69,7 +69,7 @@ MIN_DISTRACTORS = 7
 # pass is meant to change it -- never to make a red build green. The
 # written-response pass moves it from 177 upward as select-all items expand
 # into whole-plus-parts families (BF-2026-068).
-EXPECT_ITEMS = 237
+EXPECT_ITEMS = 199
 
 # A split half's title ends in a letter glued to its question number --
 # "Part 1 Question 1a", "Part 2 Question 4b" -- where an unsplit item ends in
