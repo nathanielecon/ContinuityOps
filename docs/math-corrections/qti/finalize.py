@@ -1186,11 +1186,12 @@ OPNAME_BY = ('Use exactly one of these two patterns: a base action verb followed
 TOSHORT = {
     ('6th-grade-review-section-1', 'F1'): (
         ['coefficient', 'numerical coefficient', 'factor', 'numerical factor',
-         'multiplier', 'numerical multiplier'],
+         'multiplier', 'numerical multiplier', 'constant', 'constant factor'],
         WORDS, None),
     ('6th-grade-review-section-1', 'F2'): (
         ['variable', 'unknown', 'unknown number', 'unknown value',
-         'unknown quantity', 'unknown variable'], WORDS, None),
+         'unknown quantity', 'unknown variable', 'missing number',
+         'missing addend', 'missing value'], WORDS, None),
     # Both spellings of the number, each with its space-stripped twin. Canvas
     # trims only OUTER whitespace, so `subtract8` is a distinct byte string from
     # `subtract 8` and a student who omits the space has still answered
