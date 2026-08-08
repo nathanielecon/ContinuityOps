@@ -1,2 +1,11 @@
 *.zip binary
 *.pdf binary
+
+# This folder is Windows/OneDrive-synced (see desktop.ini), so text dropped here
+# arrives with CRLF. `validate.yml`'s whitespace step reads a CR as trailing
+# whitespace and fails the whole job, which is how validation-report.json and
+# sha256sums.txt held CI red. Normalise on commit so the next drop cannot
+# reintroduce it. The zips and PDFs above stay binary and are untouched.
+*.json text eol=lf
+*.txt text eol=lf
+*.md text eol=lf
