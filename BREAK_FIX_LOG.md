@@ -4074,3 +4074,73 @@ answers, and two consecutive builds byte-identical under `cmp`.
 All five SHORTANS exceptions are now closed. The four frozen checklists bind to
 the old hash and must be re-bound against `62634a766ad1af43` before any slice is
 scored.
+
+## 2026-08-08 — BF-2026-077 — Author's ruling on F1/F2, and a defect report that was not a defect
+
+### 1. F1/F2 — the author ruled for open production
+
+SHORTANS found both items rejecting a mathematically correct answer: `factor`
+for the 7 in `7m`, `unknown quantity` for the `n` in `n + 8 = 12`. Closure was
+attempted by enumerating candidates in the stem; the first list contained two
+true answers and was rejected (BF-2026-074), the second used mutually exclusive
+candidates and shipped.
+
+The cold SOURCE judge then failed both. The source presents a blank and asks the
+student to **produce** the term; an enumerated list asks them to **recognise**
+it, and a student who cannot recall `coefficient` can still reach it by
+eliminating three visibly false options. The judge declined to grant a
+source-fidelity exception on its own authority, which was correct.
+
+Put to the author with the trade stated plainly — nothing is at once
+source-faithful, auto-gradable, and incapable of failing a correct student.
+**The author chose to restore open production.** The candidate lists are gone
+and the blanks are back.
+
+Accepted sets are widened as far as the mathematics allows, that being the only
+remaining lever for protecting correct students:
+
+- `g6_s1_f1` — `coefficient`, `numerical coefficient`, `factor`,
+  `numerical factor`. 7 is the numerical coefficient of `m` and equally a factor
+  of the product; both families are true.
+- `g6_s1_f2` — `variable`, `unknown`, `unknown number`, `unknown value`,
+  `unknown quantity`.
+
+**Residual risk, accepted on the record:** the set is wide but not provably
+closed. A further correct synonym may exist unlisted, and Canvas compares bytes,
+so such a student is marked wrong. That is the stated cost of the ruling, not an
+oversight. It must not be "repaired" by silently reintroducing an enumerated
+stem. Only the author may revisit it.
+
+### 2. The topic-1-2 Q2 "harmonisation" was not a defect
+
+The cold SOURCE judge reported `1_2_part_2_question_2` as asking Part 1's
+question, the two stems being identical but for `x/y` versus `a/b`. I verified
+the text, agreed, and dispatched `FIXER-C` to rewrite Part 2.
+
+**The author overturned it: they are two separate questions, and the near-identical
+wording is correct.** Part 1 and Part 2 are parallel practice sets throughout
+this corpus — the same exercise posed twice with variables or numbers changed,
+so a student can check one and then the other. `x/y` versus `a/b` is that
+intended variation. `FIXER-C` was cancelled before it edited anything.
+
+**The lesson is mine and it is not the judge's error.** I confirmed the textual
+fact and inherited the judge's *interpretation* along with it. Establishing that
+two strings differ only in variable letters says nothing about whether that is
+defective; the corpus is full of the pattern — `1_6_part_1_question_3` keys
+`(-5)² = 25` and its Part 2 twin keys `(-6)² = 36` — and one census of how
+common near-identical Part 1/Part 2 pairs are would have killed the reading. I
+checked the exhibit and not the population. That is the same
+reason-from-one-exhibit failure this project has recorded against its own
+mutation harnesses, committed here against a document.
+
+**Standing rule added:** near-identical Part 1/Part 2 items are the expected
+structure of this corpus, not a duplication or harmonisation defect. The
+forbidden-harmonisation rule protects something narrower: `topic-1-2` P1Q2's
+*"which outcome is NOT possible"* framing must not be flattened into P2Q2's
+framing or vice versa, because that negation is what makes its distractors
+false. Parallel phrasing with substituted variables is not that.
+
+### Standing
+
+Build `62634a766ad1af43` → `59465fa535d8e994`. Corpus unchanged at **199 items**,
+125 numeric and 74 short answer. Gate and battery green.

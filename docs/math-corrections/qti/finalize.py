@@ -1120,40 +1120,48 @@ OPNAME = ('Name the operation and the number, like: add 3. Write the number as '
 OPNAME_BY = ('Name the operation and the number, like: multiply by 4. Write the '
              'number as a numeral or as a word.')
 
-# F1/F2 are vocabulary items, and a vocabulary answer family cannot be closed by
-# adding synonyms: SHORTANS showed `factor` correct-and-rejected on F1 and
-# `unknown quantity` correct-and-rejected on F2, and the next unenumerated
-# correct term is always outside any list you can finish writing. Closure comes
-# from the stem instead (BF-2026-074).
+# F1/F2 -- AUTHOR'S RULING, and it overrides the engineering preference.
 #
-# The candidates must be MUTUALLY EXCLUSIVE -- exactly one true. A first attempt
-# offered `coefficient, factor, term, variable`, which kept `factor` rejected
-# while printing it as a choice, handing the student a true answer and scoring
-# it zero. That is worse than the defect it repaired. Every distractor below is
-# provably false for its own expression:
+# History, so this is not re-litigated. SHORTANS found both items rejecting a
+# mathematically correct answer: `factor` for the 7 in `7m`, `unknown quantity`
+# for the `n` in `n + 8 = 12`. A vocabulary family cannot be closed by adding
+# synonyms, so closure was attempted by enumerating candidates in the stem. The
+# first attempt offered a list containing two true answers and was rejected
+# (BF-2026-074); the second used mutually exclusive candidates and shipped.
 #
-#   F1, the 7 in `7m`  -- `variable` false (7 is a numeral; `m` is the variable);
-#     `exponent` false (nothing is written as a power); `constant term` false
-#     (7 is bound multiplicatively to `m`, not standing alone). `factor` and
-#     `term` are deliberately ABSENT because both are defensible for 7.
-#   F2, the `n` in `n + 8 = 12` -- `exponent` false; `constant` false (`n`
-#     varies, 8 and 12 are the constants); `coefficient` false (`n` is not a
-#     numeral, and its implicit coefficient is 1). `term` is deliberately ABSENT
-#     because `n` is a term of `n + 8`.
+# The cold SOURCE judge then failed both items: the source presents a blank and
+# asks the student to PRODUCE the term, while an enumerated list asks them to
+# RECOGNISE it. A student who cannot recall `coefficient` can still reach it by
+# eliminating three visibly false options. That is a different cognitive task,
+# and the judge correctly declined to grant a source-fidelity exception on its
+# own authority.
 #
-# Cost of the device, recorded so it is not rediscovered as a defect: this makes
-# two items typed-multiple-choice, which runs against the round's direction of
-# travel toward free written response. It is accepted here only because Canvas
-# has no equivalence grader, so enumeration is the sole closure mechanism that
-# does not fail a correct student.
-VOCAB1 = ('Answer with exactly one of these choices: variable, coefficient, '
-          'exponent, constant term.')
-VOCAB2 = ('Answer with exactly one of these choices: exponent, constant, '
-          'variable, coefficient.')
+# Put to the author with the trade stated plainly -- no option is at once
+# source-faithful, auto-gradable and incapable of failing a correct student.
+# **The author chose to restore open production.** So the candidate lists are
+# gone and the blanks are back.
+#
+# The accepted sets are therefore widened as far as the mathematics allows,
+# which is the only lever left for protecting correct students under this
+# ruling. Every term below is genuinely true of its own expression:
+#   F1, the 7 in `7m = 7 x m` -- it is the numerical coefficient of `m`, and it
+#     is equally a factor of the product. Both families accepted.
+#   F2, the `n` in `n + 8 = 12` -- it is the variable, and it is the unknown
+#     quantity/number/value the equation determines. All accepted.
+#
+# KNOWN AND ACCEPTED RESIDUAL RISK: this set is wide but not provably closed.
+# Some further correct synonym may exist that is not listed, and Canvas compares
+# bytes, so such a student is marked wrong. That possibility is the stated cost
+# of the ruling, not an oversight, and it must not be "fixed" by silently
+# reintroducing an enumerated stem. Only the author may revisit it.
 
 TOSHORT = {
-    ('6th-grade-review-section-1', 'F1'): (['coefficient'], VOCAB1, None),
-    ('6th-grade-review-section-1', 'F2'): (['variable'], VOCAB2, None),
+    ('6th-grade-review-section-1', 'F1'): (
+        ['coefficient', 'numerical coefficient', 'factor', 'numerical factor'],
+        WORDS, None),
+    ('6th-grade-review-section-1', 'F2'): (
+        ['variable', 'unknown', 'unknown number', 'unknown value',
+         'unknown quantity'], WORDS, None),
     # Both spellings of the number, each with its space-stripped twin. Canvas
     # trims only OUTER whitespace, so `subtract8` is a distinct byte string from
     # `subtract 8` and a student who omits the space has still answered
