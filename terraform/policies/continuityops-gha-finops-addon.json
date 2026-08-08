@@ -1,0 +1,51 @@
+{
+  "_comment": "Additional permissions continuityops-gha needs to manage terraform/envs/account. Attach as an inline or managed policy on the role. Required because the role is NOT Terraform-managed (created out-of-band at bootstrap), so Terraform cannot grant these to itself. Verified missing on run 31267523721: AccessDeniedException on budgets:ModifyBudget and ce:CreateAnomalyMonitor.",
+  "_scope_note": "Read-only cost inspection (ce:GetCostAndUsage etc.) is deliberately NOT here — that belongs to continuityops-agent-ro. This addon grants only what is needed to CREATE and maintain the guardrails themselves.",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ManageBudgetsAndActions",
+      "Effect": "Allow",
+      "Action": [
+        "budgets:ViewBudget",
+        "budgets:ModifyBudget",
+        "budgets:DescribeBudget",
+        "budgets:DescribeBudgetAction",
+        "budgets:DescribeBudgetActionsForBudget",
+        "budgets:CreateBudgetAction",
+        "budgets:UpdateBudgetAction",
+        "budgets:DeleteBudgetAction"
+      ],
+      "Resource": "arn:aws:budgets::000000000000:budget/continuityops-*"
+    },
+    {
+      "Sid": "ManageCostAnomalyDetection",
+      "Effect": "Allow",
+      "Action": [
+        "ce:CreateAnomalyMonitor",
+        "ce:GetAnomalyMonitors",
+        "ce:UpdateAnomalyMonitor",
+        "ce:DeleteAnomalyMonitor",
+        "ce:CreateAnomalySubscription",
+        "ce:GetAnomalySubscriptions",
+        "ce:UpdateAnomalySubscription",
+        "ce:DeleteAnomalySubscription",
+        "ce:TagResource",
+        "ce:UntagResource",
+        "ce:ListTagsForResource"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "PassBudgetActionRoleToBudgetsOnly",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::000000000000:role/continuityops-budget-action",
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "budgets.amazonaws.com"
+        }
+      }
+    }
+  ]
+}
