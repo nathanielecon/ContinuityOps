@@ -69,21 +69,27 @@ if ! need_cmd ralphy || ! ralphy --version 2>/dev/null | grep -q "$RALPHY_VERSIO
 fi
 
 echo "== RTK ${RTK_VERSION} (tool-output filter) =="
-# RTK is not on npm or crates.io; it ships as a release binary. Set
-# RTK_INSTALL_URL in the Codex environment to the release asset for
-# RTK_VERSION. Pin the version deliberately: the unpinned installer resolves
-# "latest" through an unauthenticated GitHub API call, which rate-limits in a
-# cloud container and then fails the whole setup under `set -e`.
+# rtk-ai/rtk ships release binaries; its default branch is master, not main.
+# The installer honours RTK_VERSION and RTK_INSTALL_DIR from the environment.
+#
+# Pin the version deliberately. Unpinned, the installer resolves "latest" by
+# following the /releases/latest redirect and falls back to an unauthenticated
+# api.github.com call, which rate-limits in a cloud container. Its own error
+# text says so: "set RTK_VERSION=vX.Y.Z to pin".
+#
+# Installed to /usr/local/bin rather than the installer's ~/.local/bin default,
+# because the agent phase runs a different shell from setup and $HOME/.local/bin
+# is not reliably on its PATH.
 if need_cmd rtk && rtk --version 2>/dev/null | grep -q "${RTK_VERSION#v}"; then
   echo "rtk ${RTK_VERSION} already present"
-elif [[ -n "${RTK_INSTALL_URL:-}" ]]; then
-  curl -fsSL "$RTK_INSTALL_URL" -o /tmp/rtk
-  sudo install -m 0755 /tmp/rtk /usr/local/bin/rtk
-  rm -f /tmp/rtk
 else
-  # Not fatal: RTK only compresses tool output. Every command it filters runs
-  # identically without it, so a worker without RTK is slower, never wrong.
-  echo "RTK_INSTALL_URL unset -- skipping. Workers will run commands unfiltered."
+  # Not fatal. RTK filters tool output only -- every command it wraps runs
+  # identically without it, so a worker missing RTK is slower, never wrong.
+  RTK_INSTALL_DIR=/tmp/rtk-install RTK_VERSION="$RTK_VERSION" \
+    bash -c 'curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | bash' \
+    && sudo install -m 0755 /tmp/rtk-install/rtk /usr/local/bin/rtk \
+    || echo "rtk install failed -- workers will run commands unfiltered."
+  rm -rf /tmp/rtk-install
 fi
 
 echo "== caveman (output compression skill) =="
