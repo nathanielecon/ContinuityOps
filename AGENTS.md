@@ -293,9 +293,16 @@ Stop and request human action for:
   `node scripts/assert-cloud-seat-gh-token.mjs` → expect **PASS** on a **new**
   agent after secret refresh. If Actions / PR merge **403** → **stop**; tell
   owner to restart the seat (do not chase AWS).
-- Loop (no human after bootstrap): PR → ContinuityOps Terraform **plan** →
-  merge `main` → auto **apply** (push). `workflow_dispatch` apply = fallback only.
-  Environment `continuityops`: no required reviewers / wait timer.
+- Loop: PR → ContinuityOps Terraform **plan** → merge `main` → **stop**. Apply is
+  **`workflow_dispatch`-only and human-initiated** — merging never provisions.
+  Do **not** restore a `push:`/`main` apply trigger (BF-2026-029): environment
+  `continuityops` has no required reviewers and no wait timer, so a push-driven
+  apply is an unreviewed provisioning path. A fmt-only commit took it and the lab
+  billed for 21 days.
+- **Cost rule:** every dispatched apply owns its teardown. Dispatch
+  `teardown.yml` (`environment`, `confirm=teardown`) when the lab work is done —
+  do not leave `staging` up. Hosted evidence is tip-inherited (README), so a live
+  cluster is **not** required to hold an L4 claim.
 - Durable state: `terraform/ci-bootstrap/ensure-tfstate.sh` then S3 backend
   (`continuityops-tfstate-000000000000` / `continuityops-tf-locks`).
 - Proven apply (owner-confirmed): run

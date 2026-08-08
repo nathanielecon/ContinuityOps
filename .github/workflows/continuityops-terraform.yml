@@ -1,14 +1,11 @@
 # ContinuityOps live AWS: GitHub OIDC → continuityops-gha (not CursorCloudAgent).
-# Loop: PR → plan → merge to main → apply (no human dispatch after bootstrap).
+# Loop: PR → plan → human-dispatched apply. Merging to main never applies
+# (BF-2026-029): a fmt-only commit re-provisioned the lab and it billed for
+# 21 days. Apply is workflow_dispatch-only, by design.
 name: ContinuityOps Terraform
 
 on:
   pull_request:
-    paths:
-      - 'terraform/**'
-      - '.github/workflows/continuityops-terraform.yml'
-  push:
-    branches: [main]
     paths:
       - 'terraform/**'
       - '.github/workflows/continuityops-terraform.yml'
@@ -91,14 +88,12 @@ jobs:
 
   apply:
     name: Terraform apply
-    if: >
-      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      (github.event_name == 'workflow_dispatch' && inputs.action == 'apply')
+    if: github.event_name == 'workflow_dispatch' && inputs.action == 'apply'
     runs-on: ubuntu-latest
     environment: continuityops
     timeout-minutes: 120
     env:
-      # Push to main applies staging; dispatch may choose staging or recovery-lab.
+      # Dispatch-only; the chooser defaults to staging.
       COPS_ENV: ${{ github.event.inputs.environment || 'staging' }}
     defaults:
       run:
