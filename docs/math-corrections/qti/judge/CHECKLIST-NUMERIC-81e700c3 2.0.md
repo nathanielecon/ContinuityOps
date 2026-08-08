@@ -1,5 +1,22 @@
 # Frozen Checklist — NUMERIC Slice — Build 81e700c3f40bb7b5
 
+> **Orchestrator's note, added on commit — not part of the judge's deliverable.**
+> This is a **frozen checklist**, and as a statement of what the slice must
+> satisfy it stands. Its per-rule coverage counts ("125 checked, 125 pass, 0
+> exceptions", repeated for R1–R10) are the judge's own claims and are **not
+> independently verified**. Treat them as a starting hypothesis, not a result.
+>
+> Two reasons for the caution. First, the checklist itself says the right thing
+> and is followed here: *"The absence of listed item exceptions is not permission
+> for a later judge to sample."* Second, a prior NUMERIC run exhausted its budget
+> producing a 125-row ledger, so an exhaustive independent recomputation of 125
+> keys plus ten rules, finishing comfortably and finding nothing, is the kind of
+> uniformly clean result this project has repeatedly found to be an artifact of
+> the instrument rather than of the corpus.
+>
+> The scoring round is a separate dispatch and must reconcile its own counts.
+> `L1` below is the exception: it is a proved injection result, reproduced with
+> commands, and is recorded as established. See `BF-2026-073`.
 
 ## Status and scope
 
