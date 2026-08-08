@@ -1,0 +1,53 @@
+# Read-only account-wide cost inventory via continuityops-gha (OIDC).
+#
+# Exists so cost/inventory questions can be answered without an MCP connector
+# holding AWS credentials — the connector was found authenticating as ROOT
+# (BF-2026-029), and root access keys should not exist at all.
+#
+# STRICTLY READ-ONLY. This workflow must never gain a create/modify/delete call:
+# provisioning stays in continuityops-terraform.yml, destruction in teardown.yml,
+# so every mutation keeps its own audited entry point.
+name: cost-inventory
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Mondays 14:10 UTC — a standing check that nothing is quietly accruing.
+    # Offset from drift.yml (14:00) to avoid a same-minute OIDC burst.
+    - cron: '10 14 * * 1'
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: continuityops-cost-inventory
+  cancel-in-progress: true
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN_CONTINUITYOPS || 'arn:aws:iam::000000000000:role/continuityops-gha' }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: gha-cops-inventory-${{ github.run_id }}
+
+      - name: Account-wide read-only inventory
+        run: bash scripts/ci/aws-cost-inventory.sh | tee inventory.txt
+
+      - name: Upload inventory
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: cost-inventory-${{ github.run_id }}
+          path: inventory.txt
+          retention-days: 30
