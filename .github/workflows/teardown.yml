@@ -73,6 +73,11 @@ jobs:
         uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           terraform_version: 1.5.7
+          # The wrapper is unreliable about propagating terraform's exit status
+          # (proven on run 31267293441). On a teardown that means a FAILED destroy
+          # could report success and leave resources billing while the run shows
+          # green — the exact silent-failure shape as BF-2026-029.
+          terraform_wrapper: false
 
       - name: Caller identity
         run: aws sts get-caller-identity

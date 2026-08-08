@@ -24,8 +24,31 @@ test('apply never triggers on push to main', () => {
 
 test('apply is gated on a plan that reports actual changes', () => {
   const wf = read('.github/workflows/continuityops-terraform.yml');
-  assert.match(wf, /-detailed-exitcode/);
   assert.match(wf, /steps\.guard\.outputs\.changes\s*==\s*'true'/);
+  // Decision must come from the plan file, not an exit code: the
+  // setup-terraform wrapper silently swallowed -detailed-exitcode's exit 2 on
+  // run 31267293441, reading "10 to add" as "no changes" and skipping apply.
+  assert.match(wf, /terraform show -json tfplan/);
+  assert.doesNotMatch(wf, /-detailed-exitcode/);
+});
+
+test('terraform wrapper is disabled wherever exit status matters', () => {
+  // The wrapper does not reliably propagate terraform's exit status. On apply
+  // that silently no-ops; on destroy a failure could report success and leave
+  // resources billing.
+  for (const f of [
+    '.github/workflows/continuityops-terraform.yml',
+    '.github/workflows/teardown.yml',
+  ]) {
+    const wf = read(f);
+    const setups = wf.match(/hashicorp\/setup-terraform/g) ?? [];
+    const disabled = wf.match(/terraform_wrapper:\s*false/g) ?? [];
+    assert.equal(
+      disabled.length,
+      setups.length,
+      `${f}: ${setups.length} setup-terraform step(s) but ${disabled.length} with terraform_wrapper: false`,
+    );
+  }
 });
 
 test('teardown runs on a schedule so nothing survives unattended', () => {

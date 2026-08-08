@@ -75,6 +75,12 @@ jobs:
         uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           terraform_version: 1.5.7
+          # REQUIRED. The default wrapper does not propagate `plan
+          # -detailed-exitcode`'s exit code 2, so the no-op guard read "no
+          # changes" against a plan of "10 to add" and skipped the apply
+          # (run 31267293441). Left on, it silently turns every apply into a
+          # no-op — nothing could ever be provisioned.
+          terraform_wrapper: false
 
       - name: Caller identity
         run: aws sts get-caller-identity
@@ -125,6 +131,12 @@ jobs:
         uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           terraform_version: 1.5.7
+          # REQUIRED. The default wrapper does not propagate `plan
+          # -detailed-exitcode`'s exit code 2, so the no-op guard read "no
+          # changes" against a plan of "10 to add" and skipped the apply
+          # (run 31267293441). Left on, it silently turns every apply into a
+          # no-op — nothing could ever be provisioned.
+          terraform_wrapper: false
 
       - name: Caller identity
         run: aws sts get-caller-identity
@@ -139,23 +151,33 @@ jobs:
       # No-op guard (BF-2026-029). Path filters cannot tell a `terraform fmt`
       # commit from a real change — commit 2ab4f2e was 32 insertions / 32
       # deletions of pure whitespace and still re-provisioned the lab. A plan
-      # can tell: -detailed-exitcode returns 0 for no changes, 2 for changes,
-      # 1 for error. Apply only on 2, so a cosmetic diff provably cannot spend
-      # money even if a push trigger is ever reintroduced.
+      # can tell.
+      #
+      # Decision comes from `terraform show -json`, NOT from the plan exit code.
+      # Exit codes travel through the setup-terraform wrapper and a CLI flag;
+      # the plan file is ground truth. The wrapper already broke -detailed-exitcode
+      # once (run 31267293441: "10 to add" read as "no changes"), and that failure
+      # was SILENT — apply skipped, job green. A guard whose failure mode is
+      # "quietly does nothing" is worse than no guard, so it no longer depends on
+      # the wrapper behaving.
       - name: Terraform plan (no-op guard)
         id: guard
         run: |
-          set +e
-          terraform plan -input=false -no-color -detailed-exitcode -out=tfplan
-          code=$?
-          set -e
-          case "$code" in
-            0) echo "changes=false" >> "$GITHUB_OUTPUT"
-               echo "No changes. Skipping apply." ;;
-            2) echo "changes=true"  >> "$GITHUB_OUTPUT"
-               echo "Changes detected. Apply will run." ;;
-            *) echo "plan failed with exit ${code}" >&2; exit "$code" ;;
-          esac
+          set -euo pipefail
+          terraform plan -input=false -no-color -out=tfplan
+
+          # Any action other than a lone ["no-op"] counts as a real change.
+          changed="$(terraform show -json tfplan \
+            | jq '[.resource_changes[]? | select(.change.actions != ["no-op"])] | length')"
+
+          echo "resource changes: ${changed}"
+          if [ "${changed}" -gt 0 ]; then
+            echo "changes=true" >> "$GITHUB_OUTPUT"
+            echo "Changes detected. Apply will run."
+          else
+            echo "changes=false" >> "$GITHUB_OUTPUT"
+            echo "No resource changes. Skipping apply."
+          fi
 
       - name: Terraform apply
         if: steps.guard.outputs.changes == 'true'
