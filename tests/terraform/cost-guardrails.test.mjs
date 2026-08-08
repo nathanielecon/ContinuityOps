@@ -109,6 +109,51 @@ test('alert email is never committed to this public repo', () => {
   assert.doesNotMatch(decl, /^\s*default\s*=/m);
 });
 
+test('deploy role gets its addon by attachment, never by import', () => {
+  const tf = read('terraform/envs/account/iam-gha-addon.tf');
+  // Attaching by name means the role's OIDC trust policy is never read, planned
+  // or modified. Importing or redeclaring it risks locking CI out of the account.
+  assert.match(tf, /aws_iam_role_policy_attachment"\s+"gha_finops_addon"/);
+  assert.doesNotMatch(tf, /resource\s+"aws_iam_role"\s+"gha/);
+  assert.doesNotMatch(tf, /assume_role_policy/);
+  assert.doesNotMatch(tf, /import\s*\{/);
+});
+
+test('addon policy is sourced from the JSON file, not duplicated in HCL', () => {
+  const tf = read('terraform/envs/account/iam-gha-addon.tf');
+  assert.match(tf, /continuityops-gha-finops-addon\.json/);
+  // Only Version + Statement forwarded — IAM rejects the file's _comment keys.
+  assert.match(tf, /Version\s+=\s+local\.gha_addon_raw\.Version/);
+  assert.match(tf, /Statement\s+=\s+local\.gha_addon_raw\.Statement/);
+});
+
+test('guardrails wait for the permission that creates them', () => {
+  const main = read('terraform/envs/account/main.tf');
+  // Both failed twice on AccessDenied before this ordering existed.
+  for (const res of ['aws_budgets_budget" "monthly', 'aws_ce_anomaly_monitor" "service']) {
+    const start = main.indexOf(res);
+    assert.ok(start > 0, `${res} not found`);
+    const block = main.slice(start, start + 400);
+    assert.match(
+      block,
+      /depends_on\s*=\s*\[aws_iam_role_policy_attachment\.gha_finops_addon\]/,
+      `${res} must depend on the addon attachment`,
+    );
+  }
+});
+
+test('addon grants no data access', () => {
+  const raw = JSON.parse(read('terraform/policies/continuityops-gha-finops-addon.json'));
+  const flat = JSON.stringify(raw.Statement);
+  const forbidden = ['s3:GetObject', 'kms:Decrypt', 'secretsmanager:', 'dynamodb:GetItem'];
+  const bad = forbidden.filter((a) => flat.includes(a));
+  assert.deepEqual(bad, [], `addon must not grant data access: ${bad}`);
+  // PassRole must be constrained to the budgets service, not open.
+  const pass = raw.Statement.find((s) => JSON.stringify(s.Action).includes('iam:PassRole'));
+  assert.ok(pass, 'PassRole statement expected');
+  assert.equal(pass.Condition.StringEquals['iam:PassedToService'], 'budgets.amazonaws.com');
+});
+
 test('anomaly threshold fires below one day of an idle extended-support cluster', () => {
   const main = read('terraform/envs/account/main.tf');
   assert.match(main, /aws_ce_anomaly_monitor/);

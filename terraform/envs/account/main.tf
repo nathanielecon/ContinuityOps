@@ -43,6 +43,11 @@ locals {
 # ---------------------------------------------------------------------------
 
 resource "aws_budgets_budget" "monthly" {
+  # The deploy role has no budgets:ModifyBudget until the addon is attached
+  # (runs 31267523721 and 31271867281 both failed here). Terraform cannot infer
+  # that ordering, so state it.
+  depends_on = [aws_iam_role_policy_attachment.gha_finops_addon]
+
   name         = "continuityops-monthly"
   budget_type  = "COST"
   limit_amount = local.budget_limit_usd
@@ -178,6 +183,10 @@ resource "aws_budgets_budget_action" "freeze_provisioning" {
 # Free. Detects the exact shape of BF-2026-029: a step change from ~$0/day to
 # $14.40/day on a single service. The leak ran 21 days because nothing watched.
 resource "aws_ce_anomaly_monitor" "service" {
+  # Needs ce:CreateAnomalyMonitor from the addon; same ordering reason as the
+  # budget above.
+  depends_on = [aws_iam_role_policy_attachment.gha_finops_addon]
+
   name              = "continuityops-service-monitor"
   monitor_type      = "DIMENSIONAL"
   monitor_dimension = "SERVICE"
