@@ -10,9 +10,10 @@ Usage:  validate.py <work-tree> [<pristine-baseline-tree>]
 The baseline is optional; when given, the line-ending regression check (BF-029)
 runs too.
 """
-import glob, html, os, re, sys
+import glob, html, os, re, shutil, subprocess, sys, tempfile
 import xml.etree.ElementTree as ET
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
+from fractions import Fraction
 
 # resp_numeric emits <and><vargte>V</vargte><varlte>V</varlte></and> -- "x >= V
 # and x <= V", i.e. exactly x = V, written as a degenerate closed interval so
@@ -410,6 +411,132 @@ def check_line_endings(work, base):
             fails.append(f'{rel}: mixed line endings')
 
 
+def differing_region(expected, actual):
+    """Return the first differing byte ranges in two byte strings."""
+    start = 0
+    limit = min(len(expected), len(actual))
+    while start < limit and expected[start] == actual[start]:
+        start += 1
+    eend, aend = len(expected), len(actual)
+    while (eend > start and aend > start
+           and expected[eend - 1] == actual[aend - 1]):
+        eend -= 1
+        aend -= 1
+    return start, eend, aend
+
+
+def check_declared_transform_write_set(work, base):
+    """Reject every byte outside the deterministic transformation write-set.
+
+    The declared transformation is finalize.py followed by permute.py. Rebuild
+    that result from the pristine baseline, then compare the entire tree. This
+    keeps authorized edits available without treating an entire QTI file as an
+    authorization to edit every item inside it (BF-2026-080 / S-43).
+    """
+    expected_root = tempfile.mkdtemp(prefix='qti-declared-write-set-')
+    try:
+        expected = os.path.join(expected_root, 'pkg')
+        shutil.copytree(base, expected)
+        here = os.path.dirname(os.path.abspath(__file__))
+        for script in ('finalize.py', 'permute.py'):
+            run = subprocess.run(
+                [sys.executable, os.path.join(here, script), expected],
+                stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+                text=True, check=False)
+            if run.returncode:
+                fails.append(f'declared transformation {script} failed while '
+                             f'reconstructing its write-set: {run.stderr.strip()}')
+                return
+
+        expected_files = {
+            os.path.relpath(p, expected) for p in
+            glob.glob(os.path.join(expected, '**', '*'), recursive=True)
+            if os.path.isfile(p)
+        }
+        work_files = {
+            os.path.relpath(p, work) for p in
+            glob.glob(os.path.join(work, '**', '*'), recursive=True)
+            if os.path.isfile(p)
+        }
+        for rel in sorted(expected_files | work_files):
+            ep, wp = os.path.join(expected, rel), os.path.join(work, rel)
+            if rel not in expected_files:
+                fails.append(f'{rel}: file is outside the declared '
+                             f'finalize.py/permute.py write-set')
+                continue
+            if rel not in work_files:
+                fails.append(f'{rel}: file required by the declared '
+                             f'finalize.py/permute.py result is missing')
+                continue
+            eb, wb = open(ep, 'rb').read(), open(wp, 'rb').read()
+            if eb != wb:
+                start, eend, wend = differing_region(eb, wb)
+                fails.append(
+                    f'{rel}: bytes outside the declared transformation '
+                    f'write-set differ at expected[{start}:{eend}] versus '
+                    f'work[{start}:{wend}]')
+    finally:
+        shutil.rmtree(expected_root, ignore_errors=True)
+
+
+def numeric_equivalents(value):
+    """Cheap exact representations used by the disclosure rule."""
+    value = value.strip().replace('\u2212', '-')
+    out = set()
+    try:
+        if re.fullmatch(r'-?\d+\s+\d+/\d+', value):
+            whole, frac = value.split()
+            n, d = map(int, frac.split('/'))
+            sign = -1 if whole.startswith('-') else 1
+            q = Fraction(abs(int(whole)) * d + n, d) * sign
+        elif re.fullmatch(r'-?\d+/\d+', value):
+            q = Fraction(value)
+        elif re.fullmatch(r'-?(?:\d+(?:\.\d*)?|\.\d+)', value):
+            q = Fraction(Decimal(value))
+        else:
+            return out
+    except (ArithmeticError, InvalidOperation, ValueError):
+        return out
+    out.add(value)
+    out.add(f'{q.numerator}/{q.denominator}')
+    if abs(q.numerator) > q.denominator:
+        whole, rem = divmod(abs(q.numerator), q.denominator)
+        out.add(('-' if q < 0 else '') + f'{whole} {rem}/{q.denominator}')
+    den = q.denominator
+    while den % 2 == 0:
+        den //= 2
+    while den % 5 == 0:
+        den //= 5
+    if den == 1:
+        out.add(format(Decimal(q.numerator) / Decimal(q.denominator), 'f'))
+    return {x for x in out if x and not x.endswith(' 0/1')}
+
+
+def instruction_region(stem):
+    """Return appended response instructions, excluding the question body."""
+    markers = tuple(re.finditer(
+        r'(?:(?<=^)|(?<=[.!?])\s)(?:Answer|Enter|Type|Write|Start)\b',
+        stem, re.I))
+    return stem[markers[-1].start():] if markers else ''
+
+
+def check_answer_disclosure(where, stem, keys):
+    """Reject an operative answer printed in the appended format sentence."""
+    region = instruction_region(stem)
+    if not region:
+        return
+    folded = region.casefold().replace('\u2212', '-')
+    disclosed = set()
+    for key in keys:
+        for candidate in numeric_equivalents(key):
+            if candidate.casefold() in folded:
+                disclosed.add(candidate)
+    if disclosed:
+        fails.append(f'{where}: instruction region discloses accepted answer '
+                     f'{sorted(disclosed)!r} -- a student can copy the answer '
+                     f'from the format sentence without solving the item')
+
+
 def check(work, base=None):
     # RECURSIVE, not `*/*/*.xml`. repackage.py packages by os.walk at unbounded
     # depth, so a fixed-depth glob made any XML one directory deeper invisible
@@ -613,6 +740,7 @@ def check(work, base=None):
                                  f'declared where Canvas reads it')
 
             keys = keys_of(body)
+            check_answer_disclosure(where, stem, keys)
             # The <not> rule in the fill-in branch names "an empty box scores
             # 100" as the harm it prevents, and guards only the node that
             # produces that harm by NEGATION. An empty <varequal></varequal>
@@ -1743,6 +1871,7 @@ if __name__ == '__main__':
     _base = sys.argv[2] if len(sys.argv) > 2 else None
     if _base:
         check_line_endings(sys.argv[1], _base)
+        check_declared_transform_write_set(sys.argv[1], _base)
         check_items_vs_base(sys.argv[1], _base,
                             int(os.environ.get('QTI_EXPECT_ITEMS', EXPECT_ITEMS)))
     check_manifest_binding(sys.argv[1], check(sys.argv[1], _base))

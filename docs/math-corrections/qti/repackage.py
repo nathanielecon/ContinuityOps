@@ -44,6 +44,13 @@ for pkg in sorted(os.listdir(SRC)):
     if "imsmanifest.xml" not in rel:
         failures.append(f"{pkg}: no imsmanifest.xml at archive root")
         continue
+    manifest_members = [r for r in rel
+                        if os.path.basename(r).lower() == "imsmanifest.xml"]
+    if manifest_members != ["imsmanifest.xml"]:
+        failures.append(f"{pkg}: imsmanifest.xml members are "
+                        f"{manifest_members!r}, expected exactly "
+                        f"['imsmanifest.xml'] at the archive root")
+        continue
     for full, r in members:
         if r.endswith(".xml"):
             try:
@@ -60,7 +67,9 @@ for pkg in sorted(os.listdir(SRC)):
         continue
 
     # Every href the manifest declares must resolve to a file actually present.
-    man = ET.parse(os.path.join(d, "imsmanifest.xml")).getroot()
+    manifest_path = os.path.join(d, "imsmanifest.xml")
+    manifest_bytes = open(manifest_path, "rb").read()
+    man = ET.parse(manifest_path).getroot()
     declared = set()
     for el in man.iter():
         href = el.get("href")
@@ -207,6 +216,15 @@ for pkg in sorted(os.listdir(SRC)):
             info.external_attr = 0o644 << 16
             with open(full, "rb") as fh:
                 z.writestr(info, fh.read())
+
+    # Bind the member written to the bytes parsed above. Reading it back from
+    # the staged archive makes this assertion independent of the member loop.
+    with zipfile.ZipFile(zpath) as z:
+        written_manifest = z.read("imsmanifest.xml")
+    if written_manifest != manifest_bytes:
+        failures.append(f"{pkg}: archived imsmanifest.xml differs from the "
+                        f"manifest parsed during packaging")
+        continue
 
     sha = hashlib.sha256(open(zpath, "rb").read()).hexdigest()
     rows.append((sha, f"{pkg}.zip", len(members)))

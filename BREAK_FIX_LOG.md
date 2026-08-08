@@ -4283,3 +4283,72 @@ Corpus **199 items**, 125 numeric and 74 short answer, unchanged. Build
 `f84a0e3209274d51` unchanged — this touches `validate.py` only. The nixer's
 patch is **not applied**; it is correct as an intermediate reset but must land
 together with the fixer's rebuild, never alone.
+
+## 2026-08-08 — BF-2026-080 — Two proved gate holes closed, and the first gate for a defect class that had none
+
+`FIXER-STRUCT` repaired the two holes the STRUCT judge proved by injection and
+built the rule proposed alongside them.
+
+### S-22 — a declared nested manifest was accepted
+
+Proved at all 14 packages: copy the root manifest to `nested/imsmanifest.xml`,
+declare it as a `<file href>`, and `repackage.py` packaged it. The gate required
+*a* root manifest and never rejected another member with that basename, so it
+certified a stronger property than it enforced.
+
+Fixed by requiring the set of members whose basename is `imsmanifest.xml` to
+equal exactly `['imsmanifest.xml']`, **and** by reading the written member back
+out of the staged archive and comparing it to the bytes parsed during packaging
+— so the assertion is independent of the loop that wrote it.
+
+### S-43 — edits outside the transformation write-set passed
+
+Proved: change a title string inside an `assessment_meta.xml`, leave everything
+else alone, and `validate.py` exited 0 **with the pristine baseline supplied**.
+It compared line-ending conventions per baseline file but never required byte
+identity for a file finalization was not authorized to edit.
+
+Fixed by reconstructing the declared transformation — `finalize.py` then
+`permute.py` — from the pristine baseline into a temporary tree, then requiring
+the candidate to match it byte for byte, reporting the file and the exact
+differing byte ranges. That is stronger than a write-set list, because it derives
+the authorized result rather than trusting a declaration of it.
+
+### The answer-disclosure detector — a class that had no gate at all
+
+`BF-2026-076` recorded a stem whose format example printed its own answer three
+times. **No gate could see it**: `validate.py` and `battery.py` both pass such an
+item, because its accepted set and scoring tree are perfectly correct. Only
+reading the stem against its own key catches it, and three independent agents
+proposed that exact wording.
+
+The rule extracts each item's operative accepted strings, derives cheap exact
+equivalents (mixed number ↔ improper fraction ↔ terminating decimal via
+`Fraction`), and searches **only the appended instruction region** — never the
+question body. That distinction is load-bearing: `K6` asks *"Which is greater:
+1 3/4 or (1)(3/4)?"* and legitimately displays its own answer as an operand. A
+naive whole-stem search would flag it forever and be switched off.
+
+**Independently verified rather than taken on report.** Re-injecting BF-2026-076's
+exact wording fails the build:
+
+```text
+K6: instruction region discloses accepted answer ['1 3/4', '1.75', '7/4']
+-- a student can copy the answer from the format sentence without solving the item
+```
+
+Note it caught all three representations, not just the literal one — the
+equivalence derivation works. Positive control: unmodified corpus passes,
+1,497 answers exercised. Restored: green.
+
+### Standing
+
+Build `247ae86e286f20db` unchanged — this touches `validate.py` and
+`repackage.py` only, never the corpus. Census 199, 125 numeric and 74 short
+answer, zero multiple-answer.
+
+Of the two defect classes previously outside the instrument's reach, **one is now
+inside it.** The remaining one is the stem/key semantic mismatch proved by `L1`:
+mutating an item's arithmetic while keeping its key still passes everything.
+That needs the independently frozen semantic ledger the STRUCT judge proposed,
+and it is not built.
