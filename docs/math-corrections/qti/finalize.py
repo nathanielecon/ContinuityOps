@@ -1137,12 +1137,16 @@ ORDER = ('Separate the numbers with commas, least first. Type it like '
 # and the `add 3` pattern would mislead a student into `divide 5`; the example
 # uses a different operation and number, so it prescribes the shape without
 # hinting the answer.
-OPNAME = ('Start with an action word, as in add 3: use the base verb, then the '
-          'number as a numeral or a word. Put one, two, or no spaces between '
-          'them.')
-OPNAME_BY = ('Start with an action word, as in multiply by 4: use the base verb, '
-             'the word by, then the number as a numeral or a word. Put one, two, '
-             'or no spaces at each gap, using the same spacing at both gaps.')
+OPNAME = ('Use exactly one of these two patterns: a base action verb followed by '
+          'the number, like multiply 4; or an operation noun followed by the '
+          'word by and the number, like multiplication by 4. Write the number '
+          'as a numeral or a word. At each gap independently, use either one '
+          'space or no space.')
+OPNAME_BY = ('Use exactly one of these two patterns: a base action verb followed '
+             'by the word by and the number, like multiply by 4; or an operation '
+             'noun followed by the word by and the number, like multiplication '
+             'by 4. Write the number as a numeral or a word. At each gap '
+             'independently, use either one space or no space.')
 
 # F1/F2 -- AUTHOR'S RULING, and it overrides the engineering preference.
 #
@@ -1193,12 +1197,17 @@ TOSHORT = {
     # correctly. `battery.py` derives exactly these and rejected the first
     # attempt that omitted them -- the instrument earning its keep.
     ('6th-grade-review-section-1', 'F3'): (
-        ['subtract 8', 'subtract8', 'subtract  8', 'subtract eight',
-         'subtracteight', 'subtract  eight'],
+        [f'subtract{gap}{number}'
+         for number in ('8', 'eight') for gap in (' ', '')] +
+        [f'subtraction{left}by{right}{number}'
+         for number in ('8', 'eight') for left in (' ', '')
+         for right in (' ', '')],
         OPNAME, None),
     ('6th-grade-review-section-1', 'F4'): (
-        ['divide by 5', 'divideby5', 'divide  by  5', 'divide by five',
-         'dividebyfive', 'divide  by  five'], OPNAME_BY, None),
+        [f'{operation}{left}by{right}{number}'
+         for operation in ('divide', 'division')
+         for number in ('5', 'five') for left in (' ', '')
+         for right in (' ', '')], OPNAME_BY, None),
     # H3/H4: the worksheet says "Solve:"; the conversion dropped it, leaving a
     # stem with no instruction verb at all. The flipped form is the SAME
     # statement -- and H5 teaches that flip one item later.
