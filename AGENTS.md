@@ -303,6 +303,19 @@ Stop and request human action for:
   `teardown.yml` (`environment`, `confirm=teardown`) when the lab work is done —
   do not leave `staging` up. Hosted evidence is tip-inherited (README), so a live
   cluster is **not** required to hold an L4 claim.
+- **`staging` is ephemeral by default (BF-2026-030).** `teardown.yml` destroys it
+  nightly at 06:00 UTC. If you find the lab gone, that is the schedule working, not
+  a fault — re-dispatch apply. To hold it for a session set repository variable
+  `COPS_LAB_KEEP_ALIVE=true`, and unset it when done.
+- **`terraform/envs/account` is not disposable.** It holds the budget guardrails and
+  Cost Anomaly Detection, and is absent from `teardown.yml` by design. Never destroy
+  it, never move its contents into `staging`, and never add `account` to a teardown
+  option list. Its apply needs `TF_VAR_alert_email` (repo variable
+  `COPS_ALERT_EMAIL`) and fails closed without it.
+- **EKS `cluster_version` must stay in standard support.** Enforced by
+  `scripts/ci/assert-eks-standard-support.mjs`. Extended support bills $0.60/hr
+  against $0.10 — 6×. Do not lower the pin to clear an apply error; raise it to
+  another standard-support version and update the script's calendar.
 - Durable state: `terraform/ci-bootstrap/ensure-tfstate.sh` then S3 backend
   (`continuityops-tfstate-000000000000` / `continuityops-tf-locks`).
 - Proven apply (owner-confirmed): run

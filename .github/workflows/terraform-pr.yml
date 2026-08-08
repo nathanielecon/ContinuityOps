@@ -22,16 +22,27 @@ jobs:
       - name: Assert PR job is credential-free
         run: node scripts/ci/assert-pr-readonly.mjs
 
+      - name: Assert EKS version is in standard support (BF-2026-029)
+        run: node scripts/ci/assert-eks-standard-support.mjs
+
       - name: Static terraform scaffold tests
         # Node 22: `node --test tests/terraform/` (trailing slash) fails MODULE_NOT_FOUND.
         run: node --test tests/terraform/*.mjs
 
       - name: Terraform fmt/validate when CLI available
+        # Validates EVERY env root, not just staging. envs/account holds the cost
+        # guardrails (BF-2026-029); a schema error there would silently ship a
+        # budget that never deploys, which is how budgets.json became decorative
+        # in the first place.
         run: |
           if command -v terraform >/dev/null 2>&1; then
             terraform fmt -check -recursive terraform
-            terraform -chdir=terraform/envs/staging init -backend=false
-            terraform -chdir=terraform/envs/staging validate
+            for root in terraform/envs/*/; do
+              echo "::group::validate ${root}"
+              terraform -chdir="${root}" init -backend=false
+              terraform -chdir="${root}" validate
+              echo "::endgroup::"
+            done
           else
             echo "terraform CLI absent on runner path — static tests already cover scaffold (L1)"
           fi

@@ -15,8 +15,12 @@ variable "subnet_ids" {
 }
 
 variable "cluster_version" {
+  # Must stay in EKS *standard* support ($0.10/cluster/hour). Extended support
+  # bills $0.60 — 6x — and 1.32 silently sat there from 2026-03-23, which is most
+  # of BF-2026-029's $295. Enforced by scripts/ci/assert-eks-standard-support.mjs;
+  # do not lower this without checking that script's calendar.
   type    = string
-  default = "1.32"
+  default = "1.34"
 }
 
 locals {

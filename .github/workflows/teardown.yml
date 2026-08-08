@@ -1,7 +1,22 @@
 # ContinuityOps lab teardown — terraform destroy via continuityops-gha (OIDC).
+#
+# Teardown is the SAFE direction and is therefore automated (BF-2026-029);
+# apply is the risky direction and stays human-dispatched. A nightly destroy that
+# fires when you did not want it costs ten minutes of re-apply; a stray apply that
+# nobody notices cost $295.
+#
+# The nightly schedule targets `staging` only. `account` is deliberately absent
+# from the options below — it holds the budget guardrails and must never be
+# destroyed by this workflow.
+#
+# Escape hatch: set repository variable COPS_LAB_KEEP_ALIVE=true to skip the
+# scheduled run while keeping manual dispatch available. Unset it when done.
 name: teardown
 
 on:
+  schedule:
+    # 06:00 UTC nightly. Anything left running dies within ~24h, not 21 days.
+    - cron: '0 6 * * *'
   workflow_dispatch:
     inputs:
       environment:
@@ -19,7 +34,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: continuityops-teardown-${{ github.event.inputs.environment }}
+  group: continuityops-teardown-${{ github.event.inputs.environment || 'staging' }}
   cancel-in-progress: false
 
 env:
@@ -31,11 +46,15 @@ env:
 
 jobs:
   destroy:
-    if: github.event.inputs.confirm == 'teardown'
+    # Scheduled runs carry no inputs, so they cannot satisfy the confirm gate;
+    # they get their own branch guarded by the keep-alive variable instead.
+    if: >
+      (github.event_name == 'schedule' && vars.COPS_LAB_KEEP_ALIVE != 'true') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.confirm == 'teardown')
     runs-on: ubuntu-latest
     environment: continuityops
     env:
-      COPS_ENV: ${{ github.event.inputs.environment }}
+      COPS_ENV: ${{ github.event.inputs.environment || 'staging' }}
     defaults:
       run:
         working-directory: terraform/envs/${{ env.COPS_ENV }}

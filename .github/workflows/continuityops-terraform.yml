@@ -27,6 +27,9 @@ on:
         options:
           - staging
           - recovery-lab
+          # Account-level cost guardrails. Apply once, then leave alone; it is
+          # deliberately absent from teardown.yml so it survives lab teardowns.
+          - account
 
 permissions:
   contents: read
@@ -43,6 +46,10 @@ env:
   TF_VAR_aws_account_id: '000000000000'
   TF_STATE_BUCKET: continuityops-tfstate-000000000000
   TF_LOCK_TABLE: continuityops-tf-locks
+  # Budget/anomaly alert destination for the `account` root. Not committed —
+  # this repository is public. Set repository variable COPS_ALERT_EMAIL; the
+  # account apply fails closed without it, which is intended.
+  TF_VAR_alert_email: ${{ vars.COPS_ALERT_EMAIL }}
 
 jobs:
   plan:
@@ -124,5 +131,27 @@ jobs:
       - name: Terraform init
         run: terraform init -input=false -reconfigure
 
+      # No-op guard (BF-2026-029). Path filters cannot tell a `terraform fmt`
+      # commit from a real change — commit 2ab4f2e was 32 insertions / 32
+      # deletions of pure whitespace and still re-provisioned the lab. A plan
+      # can tell: -detailed-exitcode returns 0 for no changes, 2 for changes,
+      # 1 for error. Apply only on 2, so a cosmetic diff provably cannot spend
+      # money even if a push trigger is ever reintroduced.
+      - name: Terraform plan (no-op guard)
+        id: guard
+        run: |
+          set +e
+          terraform plan -input=false -no-color -detailed-exitcode -out=tfplan
+          code=$?
+          set -e
+          case "$code" in
+            0) echo "changes=false" >> "$GITHUB_OUTPUT"
+               echo "No changes. Skipping apply." ;;
+            2) echo "changes=true"  >> "$GITHUB_OUTPUT"
+               echo "Changes detected. Apply will run." ;;
+            *) echo "plan failed with exit ${code}" >&2; exit "$code" ;;
+          esac
+
       - name: Terraform apply
-        run: terraform apply -input=false -auto-approve -no-color
+        if: steps.guard.outputs.changes == 'true'
+        run: terraform apply -input=false -auto-approve -no-color tfplan

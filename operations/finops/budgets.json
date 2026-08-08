@@ -1,6 +1,8 @@
 {
   "schema_version": "1.0",
-  "monthly_budget_usd": 500,
+  "_note": "Consumed by terraform/envs/account (jsondecode) — editing this file and re-applying changes the real AWS Budget. Previously documentation only.",
+  "_threshold_rationale": "Lowered 500 -> 100 after BF-2026-029. The incident totalled ~$295 across two months and never crossed 100% of a $500 monthly cap, so the cap could not have fired. $100 allows roughly six days of legitimate lab uptime at ~$16/day while still catching a runaway month early.",
+  "monthly_budget_usd": 100,
   "alerts": [
     {
       "threshold_percent": 50,
