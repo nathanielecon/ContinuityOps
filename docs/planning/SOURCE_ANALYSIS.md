@@ -4,21 +4,21 @@
 
 ### Project A
 
-- [`PROJECT_A_PLAN.md`](https://github.com/nathanielecon/cloud/blob/main/project-a/PROJECT_A_PLAN.md)
-- [`PROJECT_A_ADDITIONS.md`](https://github.com/nathanielecon/cloud/blob/main/project-a/PROJECT_A_ADDITIONS.md)
-- [`orchestration.md`](https://github.com/nathanielecon/cloud/blob/main/project-a/docs/architecture/orchestration.md)
-- [`BREAK_FIX_LOG.md`](https://github.com/nathanielecon/cloud/blob/main/BREAK_FIX_LOG.md)
-- commit [`spec: add Project A gap-closure requirements`](https://github.com/nathanielecon/cloud/commit/5bd4fc0e2a3bbddb895412c05c2d8dcd9e31ac72)
+- [`PROJECT_A_PLAN.md`](https://github.com/nathanielecon/aws-landing-zone-lab/blob/main/project-a/PROJECT_A_PLAN.md)
+- [`PROJECT_A_ADDITIONS.md`](https://github.com/nathanielecon/aws-landing-zone-lab/blob/main/project-a/PROJECT_A_ADDITIONS.md)
+- [`orchestration.md`](https://github.com/nathanielecon/aws-landing-zone-lab/blob/main/project-a/docs/architecture/orchestration.md)
+- [`BREAK_FIX_LOG.md`](https://github.com/nathanielecon/aws-landing-zone-lab/blob/main/BREAK_FIX_LOG.md)
+- commit [`spec: add Project A gap-closure requirements`](https://github.com/nathanielecon/aws-landing-zone-lab/commit/5bd4fc0e2a3bbddb895412c05c2d8dcd9e31ac72)
 
 ### Project C
 
-- [`PLAN.md`](https://github.com/nathanielecon/project-c-cloud/blob/main/PLAN.md)
-- [`AGENTS.md`](https://github.com/nathanielecon/project-c-cloud/blob/main/AGENTS.md)
-- [`docs/orchestration.md`](https://github.com/nathanielecon/project-c-cloud/blob/main/docs/orchestration.md)
-- [`STATUS.md`](https://github.com/nathanielecon/project-c-cloud/blob/main/STATUS.md)
-- [`ISSUES.md`](https://github.com/nathanielecon/project-c-cloud/blob/main/ISSUES.md)
-- [`DECISIONS.md`](https://github.com/nathanielecon/project-c-cloud/blob/main/DECISIONS.md)
-- Phase 2–4 retrospectives under [`docs/retrospectives/`](https://github.com/nathanielecon/project-c-cloud/tree/main/docs/retrospectives)
+- [`PLAN.md`](https://github.com/nathanielecon/local-first-governed-cicd/blob/main/PLAN.md)
+- [`AGENTS.md`](https://github.com/nathanielecon/local-first-governed-cicd/blob/main/AGENTS.md)
+- [`docs/orchestration.md`](https://github.com/nathanielecon/local-first-governed-cicd/blob/main/docs/orchestration.md)
+- [`STATUS.md`](https://github.com/nathanielecon/local-first-governed-cicd/blob/main/STATUS.md)
+- [`ISSUES.md`](https://github.com/nathanielecon/local-first-governed-cicd/blob/main/ISSUES.md)
+- [`DECISIONS.md`](https://github.com/nathanielecon/local-first-governed-cicd/blob/main/DECISIONS.md)
+- Phase 2–4 retrospectives under [`docs/retrospectives/`](https://github.com/nathanielecon/local-first-governed-cicd/tree/main/docs/retrospectives)
 
 The connected repositories are private. Links require repository access.
 

@@ -70,8 +70,8 @@ flowchart TD
 ContinuityOps is a production-style cloud operations capstone. It does not
 rewrite upstream work:
 
-- **Project A** (`nathanielecon/cloud`) — infrastructure and governance reference
-- **Project C** (`nathanielecon/project-c-cloud`) — application and delivery reference
+- **Project A** (`nathanielecon/aws-landing-zone-lab`) — infrastructure and governance reference
+- **Project C** (`nathanielecon/local-first-governed-cicd`) — application and delivery reference
 - **ContinuityOps** — runtime operations: Kubernetes, serverless, observability,
   incidents, recovery, security ops, agent-assisted GitHub workflows, performance,
   and cost control
