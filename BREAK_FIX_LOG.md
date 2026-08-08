@@ -3779,3 +3779,49 @@ The four frozen checklists were written against the 237-item build, so their
 per-item conditions must be re-derived against this one before scoring — per
 `MASTER_PROMPT` §6, coverage is frozen but a corpus change forces re-derivation
 rather than amendment.
+
+## 2026-08-08 — BF-2026-071 — The one example of "STRICT JSON" in the brief was not JSON
+
+`contracts` has been red on PR #180 since `2682e63` (2026-08-05). The check
+parses every ` ```json ` fenced block in every Markdown file; one block failed:
+
+```
+FAIL docs/math-corrections/SCAN_BRIEF.md block 0: Expecting property name
+enclosed in double quotes: line 5 column 36
+parsed OK: 371, failed: 1
+```
+
+### The defect is not the CI failure
+
+`SCAN_BRIEF.md` §"Output format — STRICT" tells a worker to return JSON, then
+illustrates it with a block carrying two `//` comments annotating the permitted
+values of `category` and `severity`. So the sole exemplar of strict JSON in the
+brief was not parseable JSON, and a worker that copied the shape it was shown
+emitted a parse error — while having followed the instruction exactly.
+
+This is the recurring class again, in its **exemplar** shape: the specification
+said one thing and the artifact demonstrating it did another, and nothing
+reconciled the two. The CI check was the only thing looking, and it was reporting
+the symptom (a fence that will not parse) rather than the cause (a brief that
+teaches the wrong output).
+
+### Fix
+
+Relabelling the fence `jsonc` would have turned the check green and left the
+brief still teaching invalid JSON. Instead the exemplar is now valid JSON and the
+two enumerations moved to prose beneath it, with a sentence recording why — so
+the next reader does not "tidy" the comments back in.
+
+### Falsifiability
+
+The gate is proved live rather than by injection: the same script that reported
+`371 OK / 1 failed` on the pre-fix tree reports `372 OK / 0 failed` on the
+post-fix tree. Same block total, one block moved from fail to pass, nothing else
+changed. A check that had never fired would prove nothing; this one fired, was
+worked, and now passes.
+
+### Standing
+
+Corpus unchanged at **199 items**, build hash `81e700c3f40bb7b5`. This touches no
+QTI artifact — `SCAN_BRIEF.md` is worker instruction, not corpus — so no
+acceptance verdict is reopened.

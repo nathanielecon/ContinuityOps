@@ -54,13 +54,23 @@ return the same JSON as your final text. Schema per finding:
   "doc": "Topic1ExplanationsPart1",
   "page": 2,
   "locator": "Topic 1-1 Question 1 > Question block",
-  "category": "inconsistency",     // spelling|grammar|punctuation|spacing|math|inconsistency|notation|formatting
-  "severity": "high",              // high (changes meaning/answer) | medium (confusing) | low (cosmetic)
+  "category": "inconsistency",
+  "severity": "high",
   "quote": "exact text as rendered",
   "correction": "exact replacement text",
   "why": "one sentence"
 }
 ```
+
+The exemplar is itself valid JSON, deliberately: it previously carried `//`
+comments, which meant the one example of "STRICT" JSON in this brief was not
+JSON, and a worker copying it emitted a parse error. The enumerations those
+comments held are below instead.
+
+- `category` — one of `spelling`, `grammar`, `punctuation`, `spacing`, `math`,
+  `inconsistency`, `notation`, `formatting`.
+- `severity` — `high` (changes meaning or the answer), `medium` (confusing),
+  `low` (cosmetic).
 
 Rules:
 - `quote` must be verbatim from the rendered page, long enough to locate uniquely.
