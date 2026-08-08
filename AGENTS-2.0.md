@@ -219,7 +219,82 @@ both by reading what the item said about itself.
 
 ---
 
-## 11. What is blocked outside this environment
+## 11. Model policy — GPT-5.4 medium
+
+**Every worker and judge on this workstream runs GPT-5.4, medium reasoning.**
+Author's instruction, recorded here because it was previously carried only in
+dispatch prose and turned out to be wrong.
+
+**What was actually running.** The `WORKER_ROSTER 2.0` self-report was added
+because the supervisor could not answer "what model are the workers on?" — it had
+been writing "all workers are 5.4 medium" into dispatches without verifying it.
+On the first round under the contract, all four lanes reported **`GPT-5.6 Sol`**
+with `reasoning: unknown`. Not a misconfiguration: `AGENTS.md:37` specifies
+"GPT-5.6 Sol medium" for the junior supervisor seat, so the environment was
+running what the older contract asked for. Nothing was broken; the claim was
+simply never checked.
+
+**This section supersedes that for QTI work.** Where `AGENTS.md` says 5.6 Sol
+and this file says 5.4, **this file governs the QTI workstream** — §0 already
+establishes that precedence. `AGENTS.md` is unedited and still governs the DR
+and Terraform streams.
+
+**Configuration is author-side and cannot be done from a session.** The model is
+selected on the **Codex environment**, not the policy page — the policy page
+silently drops model fields (openai/codex#24032). Environment settings live at
+`chatgpt.com/codex/settings/environments`.
+
+**Verification is not optional.** After changing it, the next worker's
+self-report is the evidence. If it still reads `GPT-5.6 Sol`, the setting did not
+take, and no amount of writing "5.4 medium" into a dispatch changes what is
+running. **Do not record the model as changed until a worker reports it.**
+
+Recorded as data rather than as an argument: GPT-5.6 Sol produced the full
+74-item SHORTANS read that moved the slice from 6.0 to 9.2, the nixer report with
+disjoint repair units, and the `S-43` write-set reconstruction. With `model` now
+on every reply, the lanes are a usable comparison — each slice has a frozen
+rubric and a numeric score, so defects-found per round is measurable across
+models rather than impressionistic.
+
+`reasoning: unknown` is expected and correct. Workers cannot introspect their
+reasoning level, and the contract requires `unknown` over a guess.
+
+---
+
+## 12. Seeding a lane — the PR reference is load-bearing
+
+A lane is seeded **once**. After that the routers carry it, and a per-round
+dispatch from the supervisor means something is wrong.
+
+Seeding has three parts, and all three have been got wrong:
+
+1. **A `codex-dispatch` labelled issue.** `classify-comment` requires
+   `github.event.issue.pull_request == null`. A dispatch made on a PR routes
+   nowhere — this cost eleven rounds of hand-driving before it was noticed.
+2. **An `@codex` mention posted as a comment.** A mention in the issue *body*
+   does not trigger the App. Three lanes sat at zero comments for fourteen
+   minutes because of this.
+3. **A resolvable worker PR reference in the issue body.** This is the one-line
+   fix. `d037-verdict` resolves the PR by grepping the issue body for
+   `pull/<n>` or `#<n>`; finding none, it opens a `JR-EXCEPTION-d037-missing-pr`
+   and pages instead of routing. Issues #188 and #189 are exactly that — the
+   router behaving correctly by refusing to guess, on a seed that gave it
+   nothing to find.
+
+So a judge lane issue must carry a line the router can resolve, updated as the
+lane's current work PR changes:
+
+```
+Worker PR: #187
+```
+
+Without it a `fail` verdict pages the chief instead of opening a fixer, which
+converts an automatic hop into a human one — the precise thing this pipeline
+exists to remove.
+
+---
+
+## 13. What is blocked outside this environment
 
 - **The live Canvas import.** `verify_canvas_import.py` is written and self-tests
   green, but needs a URL, token and scratch course that must not live in this
