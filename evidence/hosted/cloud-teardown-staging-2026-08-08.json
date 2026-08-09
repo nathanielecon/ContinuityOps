@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "recorded_utc": "2026-08-08T01:00:51Z",
+  "run_id": "31231087928",
+  "url": "https://github.com/nathanielecon/ContinuityOps/actions/runs/31231087928",
+  "workflow": "teardown",
+  "environment": "staging",
+  "conclusion": "success",
+  "result": "Destroy complete! Resources: 26 destroyed.",
+  "note": "Closes BF-2026-029. Recorded retroactively on 2026-08-08 from the run log — see provenance below.",
+
+  "provenance": {
+    "capture_method": "extracted from the GitHub Actions run log after the fact",
+    "why_retroactive": "The teardown was dispatched to stop an active $14.40/day burn before any AWS read access existed in the session. No live pre-teardown probe was taken.",
+    "why_no_live_probe_was_possible": "The Kubernetes chart was never installed into the cluster (no helm install or kubectl apply exists in .github/ or scripts/; scripts/kubernetes/reset-scenario.mjs states live apply is out of scope). The cluster served no public endpoint, and its API server requires authentication, so there was nothing equivalent to an HTTP smoke capture.",
+    "strength": "Terraform's own destroy record with real AWS resource identifiers is the authoritative account of what existed. It is stronger than a screenshot for provenance and weaker only in that it shows resources being removed rather than serving traffic.",
+    "retention_risk": "GitHub Actions logs expire (~90 days). This file exists so the record survives that expiry."
+  },
+
+  "resources_destroyed": {
+    "count": 26,
+    "eks": {
+      "cluster_name": "cops-staging",
+      "cluster_arn": "arn:aws:eks:us-east-1:000000000000:cluster/cops-staging",
+      "cluster_endpoint": "https://87A61EA426D8A1509C63D0C8C608A4F1.gr7.us-east-1.eks.amazonaws.com",
+      "node_group": "cops-staging:cops-staging-ng",
+      "cluster_role": "cops-staging-eks-cluster",
+      "node_role": "cops-staging-eks-node",
+      "node_group_destroy_duration": "8m22s",
+      "cluster_destroy_duration": "3m12s"
+    },
+    "network": {
+      "vpc_id": "vpc-0b306a0aac0f3ac6d",
+      "cidr": "10.20.0.0/16",
+      "note": "Live lab VPC (no NAT)",
+      "public_subnet_ids": ["subnet-05167424e64a70d8b", "subnet-0b603c00c4ff2c4f6"],
+      "private_subnet_ids": ["subnet-0d99cacfde004f21b", "subnet-090953783bf6ec20e"],
+      "internet_gateway": "igw-098976649453e6961",
+      "route_table": "rtb-00f62fcc2a7e31e6c"
+    },
+    "serverless": {
+      "lambda_function": "continuityops-worker-staging",
+      "lambda_role": "continuityops-staging-lambda",
+      "queue_arn": "arn:aws:sqs:us-east-1:000000000000:continuityops-worker-staging",
+      "dlq_arn": "arn:aws:sqs:us-east-1:000000000000:continuityops-worker-staging-dlq",
+      "redrive_max_receive_count": 3,
+      "event_source_mapping": "54d27fc0-7474-4858-a157-09c4bd810413"
+    },
+    "observability": {
+      "log_groups": [
+        "/continuityops/staging/live-marker",
+        "/continuityops/staging/lab-drill-rto"
+      ]
+    }
+  },
+
+  "retained_deliberately": {
+    "state_bucket": "continuityops-tfstate-000000000000",
+    "lock_table": "continuityops-tf-locks",
+    "reason": "Cents per month; keeps the lab re-appliable on demand."
+  },
+
+  "cost_evidence": {
+    "billed_rate_usd_per_cluster_hour": 0.6,
+    "rate_explanation": "Kubernetes 1.32 left EKS standard support on 2026-03-23, so the control plane billed extended support at $0.60/hr rather than $0.10 — 6x the repository's own cost model.",
+    "continuous_uptime": "2026-07-18T13:16:29Z through 2026-08-08T01:00:47Z = 491.7 hours",
+    "uptime_source": "Creation stamp embedded in the destroyed IAM role name cops-staging-eks-cluster-20260718131629731200000007",
+    "eks_control_plane_charge_usd": 295.02,
+    "verified_stop": {
+      "method": "Cost Explorer daily granularity by service",
+      "eks_2026_08_06": 14.4,
+      "eks_2026_08_07": 14.4,
+      "eks_2026_08_08": 0.582,
+      "interpretation": "$0.582 / $0.60 = 0.97 hours, consistent with the 01:00:47Z teardown to within four minutes."
+    }
+  },
+
+  "claim_impact": "None. README records hosted evidence as tip-inherited from recorded runs rather than re-applied on every tip, so no claim in docs/claims/matrix.json depended on the cluster remaining live.",
+  "related": ["BF-2026-029", "BF-2026-030", "BF-2026-031", "BF-2026-032", "BF-2026-033"]
+}
