@@ -42,7 +42,7 @@ performance **L1**, Azure live **out** (D-046). See [`docs/claims/matrix.json`](
 ## Architecture
 
 ContinuityOps separates agentic code construction from live cloud authority.
-Protected GitHub Actions OIDC is the intended cloud control plane; agent-assisted
+Protected, manually dispatched GitHub Actions OIDC is the cloud control plane; agent-assisted
 remediation has **no default mutation authority** and routes changes through a
 protected environment gate (placeholders retained under D-044).
 
@@ -70,8 +70,8 @@ flowchart TD
 ContinuityOps is a production-style cloud operations capstone. It does not
 rewrite upstream work:
 
-- **Project A** (`nathanielecon/cloud`) — infrastructure and governance reference
-- **Project C** (`nathanielecon/project-c-cloud`) — application and delivery reference
+- **AWS Landing Zone Lab** (`nathanielecon/aws-landing-zone-lab`) — infrastructure and governance reference
+- **Local-First Governed CI/CD** (`nathanielecon/local-first-governed-cicd`) — application and delivery reference
 - **ContinuityOps** — runtime operations: Kubernetes, serverless, observability,
   incidents, recovery, security ops, agent-assisted GitHub workflows, performance,
   and cost control
@@ -89,3 +89,9 @@ rewrite upstream work:
 - Honest **A3 ceilings** in the claims matrix (Azure out; performance L1; SBOM L2; agentic L3)
 - Agentic remediation = hosted-control evidence + proposal; no in-pod AWS credentials
 - Lab drill/RTO + teardown evidenced; no production drills; no known-good rollback claim
+
+> Three independent, evidence-backed cloud engineering labs; presented as a reinforcing portfolio, not a claim of one sustained customer-production platform.
+
+## License
+
+Apache-2.0. See [`LICENSE`](LICENSE).
