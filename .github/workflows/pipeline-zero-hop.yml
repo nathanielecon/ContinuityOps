@@ -14,9 +14,6 @@ on:
     types: [opened, synchronize, ready_for_review]
     paths:
       - 'evidence/judges/**'
-  schedule:
-    # Keep-warm stamp check (~every 6h; smoke when >9h)
-    - cron: '15 */6 * * *'
   workflow_dispatch:
     inputs:
       hop:
