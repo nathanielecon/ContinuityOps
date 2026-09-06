@@ -2,6 +2,9 @@
 
 ![ContinuityOps architecture](docs/portfolio/continuityops-infographic.png)
 
+Earlier diagrams were removed because they contained third-party brand marks;
+current figures use generic symbols.
+
 > A governed cloud-operations lab that moves an immutable workload through
 > protected GitHub OIDC delivery, managed Kubernetes and serverless contracts,
 > correlated observability, reproducible incident drills, and verified recovery
