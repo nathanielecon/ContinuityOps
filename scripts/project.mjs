@@ -140,7 +140,7 @@ export class ContractError extends Error {
 
 export function readPlan(path = PLAN_PATH) {
   const text = readFileSync(path, 'utf8');
-  const match = text.match(/```json\n([\s\S]*?)\n```/);
+  const match = text.match(/```json\r?\n([\s\S]*?)\r?\n```/);
   if (!match) throw new ContractError('PLAN.md 缺少权威 JSON 块', 'plan_json_missing');
   return JSON.parse(match[1]);
 }

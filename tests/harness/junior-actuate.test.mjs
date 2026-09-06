@@ -4,8 +4,9 @@ import { spawnSync } from 'node:child_process';
 import { writeFileSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const script = new URL('../../scripts/parse-junior-actuate.py', import.meta.url).pathname;
+const script = fileURLToPath(new URL('../../scripts/parse-junior-actuate.py', import.meta.url));
 
 function run(mode, text) {
   const dir = mkdtempSync(join(tmpdir(), 'co-actuate-'));
